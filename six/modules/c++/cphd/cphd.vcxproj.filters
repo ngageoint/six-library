@@ -105,6 +105,9 @@
     <ClInclude Include="include\cphd\Wideband.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\cphd\DataWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -183,6 +186,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Wideband.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\DataWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

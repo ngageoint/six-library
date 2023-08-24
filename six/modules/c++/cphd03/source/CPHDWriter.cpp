@@ -34,22 +34,6 @@
 
 namespace cphd03
 {
-void CPHDWriter::initializeDataWriter()
-{
-    //! Get the correct dataWriter.
-    //  The CPHD file needs to be big endian.
-    auto endianness = std::endian::native; // "conditional expression is constant"
-    if (endianness == std::endian::big)
-    {
-        mDataWriter = std::make_unique<cphd::DataWriterBigEndian>(mStream, mNumThreads);
-    }
-    else
-    {
-        mDataWriter = std::make_unique<cphd::DataWriterLittleEndian>(mStream, mNumThreads, mScratchSpaceSize);
-    }
-}
-
-
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> stream,
                        size_t numThreads,
@@ -58,28 +42,22 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mElementSize(metadata.data.getNumBytesPerSample()),
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
-    mStream(stream),
-    mCPHDSize(0),
-    mVBMSize(0)
+    mStream(stream)
 {
-    initializeDataWriter();
+    //! Get the correct dataWriter.
+    //  The CPHD file needs to be big endian.
+    mDataWriter = cphd::make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        const std::string& pathname,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
-    mMetadata(metadata),
-    mElementSize(metadata.data.getNumBytesPerSample()),
-    mScratchSpaceSize(scratchSpaceSize),
-    mNumThreads(numThreads),
-    mCPHDSize(0),
-    mVBMSize(0)
-{
-    // Create file stream to write
-    mStream = std::make_shared<io::FileOutputStream>(pathname);
-
-    initializeDataWriter();
+    CPHDWriter(metadata,
+        std::make_shared<io::FileOutputStream>(pathname),  // Create file stream to write
+        numThreads,
+        scratchSpaceSize)
+{   
 }
 
 template <typename T>
@@ -112,38 +90,38 @@ void CPHDWriter::addImage(const T* image,
 }
 
 template
-void CPHDWriter::addImage<std::complex<int8_t> >(
-    const std::complex<int8_t>* image,
+void CPHDWriter::addImage<cphd::zint8_t >(
+    const cphd::zint8_t* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<int16_t> >(
-    const std::complex<int16_t>* image,
+void CPHDWriter::addImage<cphd::zint16_t >(
+    const cphd::zint16_t* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<float> >(
-    const std::complex<float>* image,
+void CPHDWriter::addImage<cphd::zfloat >(
+    const cphd::zfloat* image,
     const types::RowCol<size_t>& dims,
     const sys::ubyte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<int8_t> >(
-        const std::complex<int8_t>* image,
+void CPHDWriter::addImage<cphd::zint8_t >(
+        const cphd::zint8_t* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<int16_t> >(
-        const std::complex<int16_t>* image,
+void CPHDWriter::addImage<cphd::zint16_t >(
+        const cphd::zint16_t* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
 template
-void CPHDWriter::addImage<std::complex<float> >(
-        const std::complex<float>* image,
+void CPHDWriter::addImage<cphd::zfloat >(
+        const cphd::zfloat* image,
         const types::RowCol<size_t>& dims,
         const std::byte* vbmData);
 
@@ -241,18 +219,18 @@ void CPHDWriter::writeCPHDData(const T* data,
 }
 
 template
-void CPHDWriter::writeCPHDData<std::complex<int8_t> >(
-        const std::complex<int8_t>* data,
+void CPHDWriter::writeCPHDData<cphd::zint8_t >(
+        const cphd::zint8_t* data,
         size_t numElements);
 
 template
-void CPHDWriter::writeCPHDData<std::complex<int16_t> >(
-        const std::complex<int16_t>* data,
+void CPHDWriter::writeCPHDData<cphd::zint16_t >(
+        const cphd::zint16_t* data,
         size_t numElements);
 
 template
-void CPHDWriter::writeCPHDData<std::complex<float> >(
-        const std::complex<float>* data,
+void CPHDWriter::writeCPHDData<cphd::zfloat >(
+        const cphd::zfloat* data,
         size_t numElements);
 
 void CPHDWriter::write(const std::string& classification,

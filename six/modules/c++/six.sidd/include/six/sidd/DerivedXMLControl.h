@@ -19,12 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_DERIVED_XML_CONTROL_H__
-#define __SIX_DERIVED_XML_CONTROL_H__
+#pragma once
+#ifndef SIX_six_sidd_DerivedXMLControl_h_INCLUDED_
+#define SIX_six_sidd_DerivedXMLControl_h_INCLUDED_
+
+#include <std/optional>
+#include <std/filesystem>
 
 #include <six/XMLControl.h>
 #include <six/Enums.h>
 
+#include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser.h>
 
 namespace six
@@ -54,6 +59,9 @@ struct DerivedXMLControl : public XMLControl
 
     static std::unique_ptr<DerivedXMLParser> getParser_(const std::string& strVersion); // for unit-testing
 
+    std::unique_ptr<Data> fromXML(const xml::lite::Document&, std::optional<six::sidd300::ISMVersion>) const;
+    std::unique_ptr<xml::lite::Document> toXML(const Data&, std::optional<six::sidd300::ISMVersion>) const;
+
 protected:
     /*!
      *  Returns a new allocated DOM document, created from the DerivedData*
@@ -67,12 +75,14 @@ protected:
     virtual Data* fromXMLImpl(const xml::lite::Document* doc);
     virtual std::unique_ptr<Data> fromXMLImpl(const xml::lite::Document&) const override;
 
+    virtual std::unique_ptr<Data> validateXMLImpl(const xml::lite::Document&,
+        const std::vector<std::filesystem::path>&, logging::Logger&) const override;
+
 private:
     std::unique_ptr<DerivedXMLParser>
-    getParser(const std::string& strVersion) const;
+    getParser(Version version, std::optional<six::sidd300::ISMVersion>) const;
 };
 }
 }
 
-#endif
-
+#endif // SIX_six_sidd_DerivedXMLControl_h_INCLUDED_

@@ -137,7 +137,7 @@ int main(int argc, char** argv)
                 != sio::lite::FileHeader::COMPLEX_FLOAT)
             throw except::Exception(Ctxt("Expected a complex float SIO image!"));
 
-        // And that its std::complex<float>-able
+        // And that its six::zfloat-able
         if (fileHeader->getElementSize() != 8)
             throw except::Exception(
                                     Ctxt(

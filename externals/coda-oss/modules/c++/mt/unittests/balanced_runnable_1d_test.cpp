@@ -20,6 +20,8 @@
  *
  */
 #include <mt/BalancedRunnable1D.h>
+#include <sys/OS.h>
+
 #include "TestCase.h"
 
 class IncOp

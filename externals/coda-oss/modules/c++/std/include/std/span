@@ -18,18 +18,16 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
+#pragma once
 #ifndef CODA_OSS_std_span_INCLUDED_
 #define CODA_OSS_std_span_INCLUDED_
-#pragma once
 
 #include "coda_oss/span.h"
-#include "coda_oss/CPlusPlus.h"
 
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_span
-    #if CODA_OSS_cpp20
-        #include <span>
-        #define CODA_OSS_NO_std_span 1  // part of C++20
+    #if CODA_OSS_HAVE_std_span_ // set in coda_oss/span.h
+        #define CODA_OSS_NO_std_span 1  // no need to muck with `std`
     #else
         #define CODA_OSS_NO_std_span 0  // use our own
     #endif
@@ -39,7 +37,14 @@
 namespace std // This is slightly uncouth: we're not supposed to augment "std".
 {
     using coda_oss::span;
+    
+    using coda_oss::as_bytes;
+    using coda_oss::as_writable_bytes;
 }
-#endif  // CODA_OSS_DEFINE_std_span_
+#ifndef __cpp_lib_span
+#define __cpp_lib_span 202002L // https://en.cppreference.com/w/cpp/feature_test
+#endif
+
+#endif  // CODA_OSS_NO_std_span
 
 #endif  // CODA_OSS_std_span_INCLUDED_

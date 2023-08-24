@@ -24,6 +24,7 @@
 #include <assert.h>
 
 #include <sstream>
+#include <stdexcept>
 
 #include <gsl/gsl.h>
 
@@ -38,21 +39,50 @@ namespace six
 {
 namespace sidd
 {
-static const char VERSION[] = "3.0.0";
+constexpr Version VERSION = Version::v3_0_0;
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
-inline static xml::lite::Uri getISMUri()
+
+// There is a need to support two different versions of ISM with SIDD 3.0 :-(
+inline static xml::lite::Uri getISMUri(six::sidd300::ISMVersion ismVersion)
 {
-    return xml::lite::Uri("urn:us:gov:ic:ism:201609");
+    switch (ismVersion)
+    {
+    case six::sidd300::ISMVersion::v201609: return xml::lite::Uri("urn:us:gov:ic:ism:201609");
+    case six::sidd300::ISMVersion::v13: return xml::lite::Uri("urn:us:gov:ic:ism:13");
+    default: break;
+    }
+
+    throw std::logic_error("Unhandled 'six::sidd::ISMVersion' case.");
+}
+
+inline static auto getDESVersion(six::sidd300::ISMVersion ismVersion) // TODO: should this value be fixed?
+{
+    // SIDD 3.0 is tied to IC-ISM v201609 ... well, except that we need to support v13 too.
+    switch (ismVersion)
+    {
+    case six::sidd300::ISMVersion::v201609: return "201609"; // note that the specification also allows for "201609-<custom>"
+    case six::sidd300::ISMVersion::v13: return "13";
+    default: break;
+    }
+    throw std::logic_error("Unhandled 'ISMVersion' case.");
+}
+static void setDESVersion(xml::lite::Element& classElem, six::sidd300::ISMVersion ismVersion)
+{
+    //! from ism:ISMRootNodeAttributeGroup
+    classElem.attribute("DESVersion") = getDESVersion(ismVersion);
 }
 
 //DerivedXMLParser300::DerivedXMLParser300(std::unique_ptr<logging::Logger>&& log) :
 //    DerivedXMLParser(VERSION,
 //        std::make_unique<six::SICommonXMLParser10x>(versionToURI(VERSION), false, SI_COMMON_URI, *log),
 //        std::move(log)) {  }
-DerivedXMLParser300::DerivedXMLParser300(logging::Logger& log) :
+DerivedXMLParser300::DerivedXMLParser300(logging::Logger& log, six::sidd300::ISMVersion ismVersion) :
     DerivedXMLParser(VERSION,
         std::make_unique<six::SICommonXMLParser10x>(versionToURI(VERSION), false, SI_COMMON_URI, log),
-        log) {  }
+        log)
+    { 
+        mISMVersion = ismVersion;
+    }
 
 DerivedData* DerivedXMLParser300::fromXML(
         const xml::lite::Document* doc) const
@@ -218,7 +248,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     root->setNamespacePrefix("", getDefaultURI());
     root->setNamespacePrefix("si", xml::lite::Uri(SI_COMMON_URI));
     root->setNamespacePrefix("sfa", xml::lite::Uri(SFA_URI));
-    root->setNamespacePrefix("ism", getISMUri());
+    root->setNamespacePrefix("ism", getISMUri(mISMVersion));
 
     return doc;
 }
@@ -794,12 +824,9 @@ XMLElem DerivedXMLParser300::convertDerivedClassificationToXML(
 {
     assert(parent != nullptr);
 
-    const auto ismUri = getISMUri();
+    const auto ismUri = getISMUri(mISMVersion);
     auto& classElem = DerivedXMLParser200::convertDerivedClassificationToXML(*this, classification, ismUri, *parent);
-
-    //! from ism:ISMRootNodeAttributeGroup
-    // SIDD 3.0 is tied to IC-ISM v201609
-    classElem.attribute("DESVersion") = "201609"; // note that the specification also allows for "201609-<custom>"
+    setDESVersion(classElem, mISMVersion);
 
     return &classElem;
 }

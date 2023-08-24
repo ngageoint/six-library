@@ -39,9 +39,7 @@
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 
-// error 4996: '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
-#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
-#include <complex>
+#include <types/Complex.h>
 
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'

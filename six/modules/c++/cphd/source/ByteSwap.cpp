@@ -21,59 +21,36 @@
  */
 #include <cphd/ByteSwap.h>
 
+#include <stdint.h>
+
 #include <string>
-#include <std/memory>
+#include <memory>
+#include <type_traits>
+#include <std/span>
+#include <std/cstddef>
+#include <tuple>
+#include <type_traits>
 
 #include <sys/Conf.h>
+#include <sys/ByteSwap.h>
+#include <sys/ByteSwapValue.h>
+#include <sys/Span.h>
+#include <sys/Runnable.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
+#include <mt/ThreadedByteSwap.h>
 #include <nitf/coda-oss.hpp>
+
+#include <cphd/Types.h>
 
 namespace
 {
-// TODO: Maybe this should go in sys/Conf.h
-//       It's more flexible in that it properly handles float's - you can't
-//       just call sys::byteSwap(floatVal) because the compiler may change the
-//       byte-swapped float value into a valid IEEE value beforehand.
-// TODO: If we're really looking to optimize this, could specialize it for
-//       sizes of 2, 4, and 8 to eliminate the for loop
 template <typename T>
-inline
-void byteSwap(const void* in, T& out)
+inline void byteSwap(const void* in, T& out)
 {
-    const std::byte* const inPtr = static_cast<const std::byte*>(in);
-    std::byte* const outPtr = reinterpret_cast<std::byte*>(&out);
-
-    for (size_t ii = 0, jj = sizeof(T) - 1; ii < jj; ++ii, --jj)
-    {
-        outPtr[ii] = inPtr[jj];
-        outPtr[jj] = inPtr[ii];
-    }
+    auto const inBytes = sys::make_span<std::byte>(in, sizeof(T));
+    out = sys::byteSwapValue<T>(inBytes);
 }
-
-class ByteSwapRunnable : public sys::Runnable
-{
-public:
-    ByteSwapRunnable(void* buffer,
-                     size_t elemSize,
-                     size_t startElement,
-                     size_t numElements) :
-        mBuffer(static_cast<std::byte*>(buffer) + startElement * elemSize),
-        mElemSize(static_cast<unsigned short>(elemSize)),
-        mNumElements(numElements)
-    {
-    }
-
-    virtual void run()
-    {
-        sys::byteSwap(mBuffer, mElemSize, mNumElements);
-    }
-
-private:
-    std::byte* const mBuffer;
-    const unsigned short mElemSize;
-    const size_t mNumElements;
-};
 
 inline const std::byte* calc_offset(const void* input_, size_t offset)
 {
@@ -81,41 +58,38 @@ inline const std::byte* calc_offset(const void* input_, size_t offset)
     return input + offset;
 }
 
-template <typename InT>
-class ByteSwapAndPromoteRunnable : public sys::Runnable
+template <typename ComplexInT>
+struct ByteSwapAndPromoteRunnable final : public sys::Runnable
 {
-public:
     ByteSwapAndPromoteRunnable(const void* input,
                              size_t startRow,
                              size_t numRows,
                              size_t numCols,
-                             std::complex<float>* output) :
-        mInput(calc_offset(input, startRow * numCols * sizeof(std::complex<InT>))),
+                             cphd::zfloat* output) :
+        mInput(calc_offset(input, startRow * numCols * sizeof(ComplexInT))),
         mDims(numRows, numCols),
         mOutput(output + startRow * numCols)
     {
     }
 
-    virtual void run()
+    void run() override
     {
-        InT real(0);
-        InT imag(0);
+        using value_type = typename ComplexInT::value_type;
+        value_type real(0);
+        value_type imag(0);
 
         for (size_t row = 0, inIdx = 0, outIdx = 0; row < mDims.row; ++row)
         {
-            for (size_t col = 0;
-                 col < mDims.col;
-                 ++col, inIdx += sizeof(std::complex<InT>), ++outIdx)
+            for (size_t col = 0; col < mDims.col; ++col, inIdx += sizeof(ComplexInT), ++outIdx)
             {
                 // Have to be careful here - can't treat mInput as a
-                // std::complex<InT> directly in case InT is a float (see
+                // std::complex_t<InT> directly in case InT is a float (see
                 // explanation in byteSwap() comments)
                 const auto input = calc_offset(mInput, inIdx);
                 byteSwap(input, real);
-                byteSwap(calc_offset(input, sizeof(InT)), imag);
+                byteSwap(calc_offset(input, sizeof(value_type)), imag);
 
-                mOutput[outIdx] = std::complex<float>(real,
-                                                      imag);
+                mOutput[outIdx] = cphd::zfloat(real, imag);
             }
         }
     }
@@ -123,31 +97,31 @@ public:
 private:
     const std::byte* const mInput;
     const types::RowCol<size_t> mDims;
-    std::complex<float>* const mOutput;
+    cphd::zfloat* const mOutput;
 };
 
 
-template <typename InT>
-class ByteSwapAndScaleRunnable : public sys::Runnable
+template <typename ComplexInT>
+struct ByteSwapAndScaleRunnable final : public sys::Runnable
 {
-public:
     ByteSwapAndScaleRunnable(const void* input,
                              size_t startRow,
                              size_t numRows,
                              size_t numCols,
                              const double* scaleFactors,
-                             std::complex<float>* output) :
-        mInput(calc_offset(input, startRow * numCols * sizeof(std::complex<InT>))),
+                             cphd::zfloat* output) :
+        mInput(calc_offset(input, startRow * numCols * sizeof(ComplexInT))),
         mDims(numRows, numCols),
         mScaleFactors(scaleFactors + startRow),
         mOutput(output + startRow * numCols)
     {
     }
 
-    virtual void run()
+    void run() override
     {
-        InT real(0);
-        InT imag(0);
+        using value_type = typename ComplexInT::value_type;
+        value_type real(0);
+        value_type imag(0);
 
         for (size_t row = 0, inIdx = 0, outIdx = 0; row < mDims.row; ++row)
         {
@@ -155,16 +129,16 @@ public:
 
             for (size_t col = 0;
                  col < mDims.col;
-                 ++col, inIdx += sizeof(std::complex<InT>), ++outIdx)
+                 ++col, inIdx += sizeof(ComplexInT), ++outIdx)
             {
                 // Have to be careful here - can't treat mInput as a
-                // std::complex<InT> directly in case InT is a float (see
+                // std::ComplexInT directly in case InT is a float (see
                 // explanation in byteSwap() comments)
                 const auto input = calc_offset(mInput, inIdx);
                 byteSwap(input, real);
-                byteSwap(calc_offset(input, sizeof(InT)), imag);
+                byteSwap(calc_offset(input, sizeof(value_type)), imag);
 
-                mOutput[outIdx] = std::complex<float>(
+                mOutput[outIdx] = cphd::zfloat(
                         static_cast<float>(real * scaleFactor),
                         static_cast<float>(imag * scaleFactor));
             }
@@ -175,18 +149,18 @@ private:
     const std::byte* const mInput;
     const types::RowCol<size_t> mDims;
     const double* const mScaleFactors;
-    std::complex<float>* const mOutput;
+    cphd::zfloat* const mOutput;
 };
 
-template <typename InT>
+template <typename ComplexInT>
 void byteSwapAndPromote(const void* input,
                       const types::RowCol<size_t>& dims,
                       size_t numThreads,
-                      std::complex<float>* output)
+                      cphd::zfloat* output)
 {
     if (numThreads <= 1)
     {
-        ByteSwapAndPromoteRunnable<InT>(input, 0, dims.row, dims.col,output).run();
+        ByteSwapAndPromoteRunnable<ComplexInT>(input, 0, dims.row, dims.col,output).run();
     }
     else
     {
@@ -200,7 +174,7 @@ void byteSwapAndPromote(const void* input,
                                      startRow,
                                      numRowsThisThread))
         {
-            auto scaler = std::make_unique<ByteSwapAndPromoteRunnable<InT>>(
+            auto scaler = std::make_unique<ByteSwapAndPromoteRunnable<ComplexInT>>(
                     input,
                     startRow,
                     numRowsThisThread,
@@ -218,7 +192,7 @@ void byteSwapAndScale(const void* input,
                       const types::RowCol<size_t>& dims,
                       const double* scaleFactors,
                       size_t numThreads,
-                      std::complex<float>* output)
+                      cphd::zfloat* output)
 {
     if (numThreads <= 1)
     {
@@ -254,56 +228,27 @@ void byteSwapAndScale(const void* input,
 
 namespace cphd
 {
-void byteSwap(void* buffer,
-              size_t elemSize,
-              size_t numElements,
-              size_t numThreads)
+void byteSwap(void* buffer, size_t elemSize, size_t numElements, size_t numThreads)
 {
-    if (numThreads <= 1)
-    {
-        sys::byteSwap(buffer,
-                      static_cast<unsigned short>(elemSize),
-                      numElements);
-    }
-    else
-    {
-        mt::ThreadGroup threads;
-        const mt::ThreadPlanner planner(numElements, numThreads);
-
-        size_t threadNum(0);
-        size_t startElement(0);
-        size_t numElementsThisThread(0);
-        while (planner.getThreadInfo(threadNum++,
-                                     startElement,
-                                     numElementsThisThread))
-        {
-            auto thread = std::make_unique<ByteSwapRunnable>(
-                    buffer,
-                    elemSize,
-                    startElement,
-                    numElementsThisThread);
-            threads.createThread(std::move(thread));
-        }
-        threads.joinAll();
-    }
+    return mt::threadedByteSwap(buffer, elemSize, numElements, numThreads);
 }
 
 void byteSwapAndPromote(const void* input,
                       size_t elementSize,
                       const types::RowCol<size_t>& dims,
                       size_t numThreads,
-                      std::complex<float>* output)
+                      cphd::zfloat* output)
 {
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndPromote<int8_t>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<cphd::zint8_t>(input, dims, numThreads, output);
         break;
     case 4:
-        ::byteSwapAndPromote<int16_t>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<cphd::zint16_t>(input, dims, numThreads, output);
         break;
     case 8:
-        ::byteSwapAndPromote<float>(input, dims, numThreads, output);
+        ::byteSwapAndPromote<cphd::zfloat>(input, dims, numThreads, output);
         break;
     default:
         throw except::Exception(Ctxt(
@@ -316,20 +261,20 @@ void byteSwapAndScale(const void* input,
                       const types::RowCol<size_t>& dims,
                       const double* scaleFactors,
                       size_t numThreads,
-                      std::complex<float>* output)
+                      cphd::zfloat* output)
 {
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndScale<int8_t>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<cphd::zint8_t>(input, dims, scaleFactors, numThreads,
                                         output);
         break;
     case 4:
-        ::byteSwapAndScale<int16_t>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<cphd::zint16_t>(input, dims, scaleFactors, numThreads,
                                          output);
         break;
     case 8:
-        ::byteSwapAndScale<float>(input, dims, scaleFactors, numThreads,
+        ::byteSwapAndScale<cphd::zfloat>(input, dims, scaleFactors, numThreads,
                                   output);
         break;
     default:

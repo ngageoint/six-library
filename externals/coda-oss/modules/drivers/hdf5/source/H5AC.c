@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,8 +13,6 @@
 /*-------------------------------------------------------------------------
  *
  * Created:             H5AC.c
- *                      Jul  9 1997
- *                      Robb Matzke
  *
  * Purpose:             Functions in this file implement a cache for
  *                      things which exist on disk.  All "things" associated
@@ -130,9 +127,6 @@ static const H5AC_class_t *const H5AC_class_s[] = {
  * Return:      Success:        non-negative
  *              Failure:        negative
  *
- * Programmer:  Quincey Koziol
- *              Saturday, January 18, 2003
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -150,8 +144,8 @@ H5AC_init(void)
         const char *s; /* String for environment variables */
 
         s = HDgetenv("H5_COLL_API_SANITY_CHECK");
-        if (s && HDisdigit(*s)) {
-            long env_val               = HDstrtol(s, NULL, 0);
+        if (s && isdigit(*s)) {
+            long env_val               = strtol(s, NULL, 0);
             H5_coll_api_sanity_check_g = (0 == env_val) ? FALSE : TRUE;
         }
     }
@@ -168,9 +162,6 @@ H5AC_init(void)
  * Return:      Success:        Positive if anything was done that might
  *                              affect other interfaces; zero otherwise.
  *              Failure:        Negative.
- *
- * Programmer:  Quincey Koziol
- *              Thursday, July 18, 2002
  *
  *-------------------------------------------------------------------------
  */
@@ -195,8 +186,6 @@ H5AC_term_package(void)
  *
  * Return:      TRUE if a cache image load is pending, and FALSE otherwise.
  *
- * Programmer:  John Mainzer, 1/10/17
- *
  *-------------------------------------------------------------------------
  */
 hbool_t
@@ -208,8 +197,8 @@ H5AC_cache_image_pending(const H5F_t *f)
     FUNC_ENTER_NOAPI_NOINIT_NOERR
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
+    assert(f);
+    assert(f->shared);
     cache_ptr = f->shared->cache;
 
     ret_value = H5C_cache_image_pending(cache_ptr);
@@ -229,9 +218,6 @@ H5AC_cache_image_pending(const H5F_t *f)
  *
  *              Failure:        Negative
  *
- * Programmer:  Robb Matzke
- *              Jul  9 1997
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -247,19 +233,19 @@ H5AC_create(const H5F_t *f, H5AC_cache_config_t *config_ptr, H5AC_cache_image_co
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Check arguments */
-    HDassert(f);
-    HDassert(NULL == f->shared->cache);
-    HDassert(config_ptr != NULL);
-    HDassert(image_config_ptr != NULL);
-    HDassert(image_config_ptr->version == H5AC__CURR_CACHE_IMAGE_CONFIG_VERSION);
+    assert(f);
+    assert(NULL == f->shared->cache);
+    assert(config_ptr != NULL);
+    assert(image_config_ptr != NULL);
+    assert(image_config_ptr->version == H5AC__CURR_CACHE_IMAGE_CONFIG_VERSION);
     HDcompile_assert(NELMTS(H5AC_class_s) == H5AC_NTYPES);
     HDcompile_assert(H5C__MAX_NUM_TYPE_IDS == H5AC_NTYPES);
 
     /* Validate configurations */
     if (H5AC_validate_config(config_ptr) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Bad cache configuration")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Bad cache configuration");
     if (H5AC_validate_cache_image_config(image_config_ptr) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Bad cache image configuration")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Bad cache image configuration");
 
 #ifdef H5_HAVE_PARALLEL
     if (H5F_HAS_FEATURE(f, H5FD_FEAT_HAS_MPI)) {
@@ -268,18 +254,17 @@ H5AC_create(const H5F_t *f, H5AC_cache_config_t *config_ptr, H5AC_cache_image_co
         int      mpi_size;
 
         if (MPI_COMM_NULL == (mpi_comm = H5F_mpi_get_comm(f)))
-            HGOTO_ERROR(H5E_VFL, H5E_CANTGET, FAIL, "can't get MPI communicator")
+            HGOTO_ERROR(H5E_VFL, H5E_CANTGET, FAIL, "can't get MPI communicator");
 
         if ((mpi_rank = H5F_mpi_get_rank(f)) < 0)
-            HGOTO_ERROR(H5E_VFL, H5E_CANTGET, FAIL, "can't get mpi rank")
+            HGOTO_ERROR(H5E_VFL, H5E_CANTGET, FAIL, "can't get mpi rank");
 
         if ((mpi_size = H5F_mpi_get_size(f)) < 0)
-            HGOTO_ERROR(H5E_VFL, H5E_CANTGET, FAIL, "can't get mpi size")
+            HGOTO_ERROR(H5E_VFL, H5E_CANTGET, FAIL, "can't get mpi size");
 
         if (NULL == (aux_ptr = H5FL_CALLOC(H5AC_aux_t)))
-            HGOTO_ERROR(H5E_CACHE, H5E_CANTALLOC, FAIL, "Can't allocate H5AC auxiliary structure")
+            HGOTO_ERROR(H5E_CACHE, H5E_CANTALLOC, FAIL, "Can't allocate H5AC auxiliary structure");
 
-        aux_ptr->magic                   = H5AC__H5AC_AUX_T_MAGIC;
         aux_ptr->mpi_comm                = mpi_comm;
         aux_ptr->mpi_rank                = mpi_rank;
         aux_ptr->mpi_size                = mpi_size;
@@ -287,7 +272,7 @@ H5AC_create(const H5F_t *f, H5AC_cache_config_t *config_ptr, H5AC_cache_image_co
         aux_ptr->dirty_bytes_threshold   = H5AC__DEFAULT_DIRTY_BYTES_THRESHOLD;
         aux_ptr->dirty_bytes             = 0;
         aux_ptr->metadata_write_strategy = H5AC__DEFAULT_METADATA_WRITE_STRATEGY;
-#if H5AC_DEBUG_DIRTY_BYTES_CREATION
+#ifdef H5AC_DEBUG_DIRTY_BYTES_CREATION
         aux_ptr->dirty_bytes_propagations      = 0;
         aux_ptr->unprotect_dirty_bytes         = 0;
         aux_ptr->unprotect_dirty_bytes_updates = 0;
@@ -307,18 +292,18 @@ H5AC_create(const H5F_t *f, H5AC_cache_config_t *config_ptr, H5AC_cache_image_co
 
         if (mpi_rank == 0) {
             if (NULL == (aux_ptr->d_slist_ptr = H5SL_create(H5SL_TYPE_HADDR, NULL)))
-                HGOTO_ERROR(H5E_CACHE, H5E_CANTCREATE, FAIL, "can't create dirtied entry list")
+                HGOTO_ERROR(H5E_CACHE, H5E_CANTCREATE, FAIL, "can't create dirtied entry list");
 
             if (NULL == (aux_ptr->c_slist_ptr = H5SL_create(H5SL_TYPE_HADDR, NULL)))
-                HGOTO_ERROR(H5E_CACHE, H5E_CANTCREATE, FAIL, "can't create cleaned entry list")
+                HGOTO_ERROR(H5E_CACHE, H5E_CANTCREATE, FAIL, "can't create cleaned entry list");
         } /* end if */
 
-        /* construct the candidate slist for all processes.
+        /* construct the candidate skip list for all processes.
          * when the distributed strategy is selected as all processes
          * will use it in the case of a flush.
          */
         if (NULL == (aux_ptr->candidate_slist_ptr = H5SL_create(H5SL_TYPE_HADDR, NULL)))
-            HGOTO_ERROR(H5E_CACHE, H5E_CANTCREATE, FAIL, "can't create candidate entry list")
+            HGOTO_ERROR(H5E_CACHE, H5E_CANTCREATE, FAIL, "can't create candidate entry list");
 
         if (aux_ptr->mpi_rank == 0)
             f->shared->cache = H5C_create(H5AC__DEFAULT_MAX_CACHE_SIZE, H5AC__DEFAULT_MIN_CLEAN_SIZE,
@@ -343,12 +328,12 @@ H5AC_create(const H5F_t *f, H5AC_cache_config_t *config_ptr, H5AC_cache_image_co
 #endif /* H5_HAVE_PARALLEL */
 
     if (NULL == f->shared->cache)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTALLOC, FAIL, "memory allocation failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTALLOC, FAIL, "memory allocation failed");
 
 #ifdef H5_HAVE_PARALLEL
     if (aux_ptr != NULL)
         if (H5C_set_prefix(f->shared->cache, prefix) < 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_CANTALLOC, FAIL, "H5C_set_prefix() failed")
+            HGOTO_ERROR(H5E_CACHE, H5E_CANTALLOC, FAIL, "H5C_set_prefix() failed");
 #endif /* H5_HAVE_PARALLEL */
 
     /* Turn on metadata cache logging, if being used
@@ -358,11 +343,11 @@ H5AC_create(const H5F_t *f, H5AC_cache_config_t *config_ptr, H5AC_cache_image_co
     if (H5F_USE_MDC_LOGGING(f))
         if (H5C_log_set_up(f->shared->cache, H5F_MDC_LOG_LOCATION(f), H5C_LOG_STYLE_JSON,
                            H5F_START_MDC_LOG_ON_ACCESS(f)) < 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "mdc logging setup failed")
+            HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "mdc logging setup failed");
 
     /* Set the cache parameters */
     if (H5AC_set_cache_auto_resize_config(f->shared->cache, config_ptr) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "auto resize configuration failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "auto resize configuration failed");
 
     /* Don't need to get the current H5C image config here since the
      * cache has just been created, and thus f->shared->cache->image_ctl
@@ -375,13 +360,13 @@ H5AC_create(const H5F_t *f, H5AC_cache_config_t *config_ptr, H5AC_cache_image_co
     int_ci_config.save_resize_status = image_config_ptr->save_resize_status;
     int_ci_config.entry_ageout       = image_config_ptr->entry_ageout;
     if (H5C_set_cache_image_config(f, f->shared->cache, &int_ci_config) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "auto resize configuration failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "auto resize configuration failed");
 
 done:
     /* If currently logging, generate a message */
     if (f->shared->cache->log_info->logging)
         if (H5C_log_write_create_cache_msg(f->shared->cache, ret_value) < 0)
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
 #ifdef H5_HAVE_PARALLEL
     /* if there is a failure, try to tidy up the auxiliary structure */
@@ -393,8 +378,7 @@ done:
                 H5SL_close(aux_ptr->c_slist_ptr);
             if (aux_ptr->candidate_slist_ptr != NULL)
                 H5SL_close(aux_ptr->candidate_slist_ptr);
-            aux_ptr->magic = 0;
-            aux_ptr        = H5FL_FREE(H5AC_aux_t, aux_ptr);
+            aux_ptr = H5FL_FREE(H5AC_aux_t, aux_ptr);
         } /* end if */
     }     /* end if */
 #endif    /* H5_HAVE_PARALLEL */
@@ -411,17 +395,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Robb Matzke
- *              Jul  9 1997
- *
- * Changes:
- *
- *             In the parallel case, added code to setup the MDC slist
- *             before the call to H5AC__flush_entries() and take it down
- *             afterwards.
- *
- *                                            JRM -- 7/29/20
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -437,9 +410,9 @@ H5AC_dest(H5F_t *f)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
 
 #if H5AC_DUMP_STATS_ON_CLOSE
     /* Dump debugging info */
@@ -448,37 +421,25 @@ H5AC_dest(H5F_t *f)
 
     /* Check if log messages are being emitted */
     if (H5C_get_logging_status(f->shared->cache, &log_enabled, &curr_logging) < 0)
-
-        HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to get logging status")
-    if (log_enabled && curr_logging) {
-
-        if (H5C_log_write_destroy_cache_msg(f->shared->cache) < 0)
-
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
-    }
+        HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to get logging status");
 
     /* Tear down logging */
     if (log_enabled) {
+        if (curr_logging)
+            if (H5C_log_write_destroy_cache_msg(f->shared->cache) < 0)
+                HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
         if (H5C_log_tear_down(f->shared->cache) < 0)
-
-            HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "mdc logging tear-down failed")
-    }
+            HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "metadata cache logging tear-down failed");
+    } /* end if */
 
 #ifdef H5_HAVE_PARALLEL
-
     /* destroying the cache, so clear all collective entries */
     if (H5C_clear_coll_entries(f->shared->cache, FALSE) < 0)
-
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "H5C_clear_coll_entries() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "can't clear collective entries");
 
     aux_ptr = (H5AC_aux_t *)H5C_get_aux_ptr(f->shared->cache);
-
     if (aux_ptr) {
-
-        /* Sanity check */
-        HDassert(aux_ptr->magic == H5AC__H5AC_AUX_T_MAGIC);
-
         /* If the file was opened R/W, attempt to flush all entries
          * from rank 0 & Bcast clean list to other ranks.
          *
@@ -489,7 +450,7 @@ H5AC_dest(H5F_t *f)
          * H5AC__flush_entries() and disable it afterwards, as the
          * skip list will be disabled after the previous flush.
          *
-         * Note that H5C_dest() does slist setup and take down as well.
+         * Note that H5C_dest() does skip list setup and take down as well.
          * Unfortunately, we can't do the setup and take down just once,
          * as H5C_dest() is called directly in the test code.
          *
@@ -497,59 +458,44 @@ H5AC_dest(H5F_t *f)
          * point, so the overhead should be minimal.
          */
         if (H5F_ACC_RDWR & H5F_INTENT(f)) {
-
-            /* enable and load the slist */
+            /* enable and load the skip list */
             if (H5C_set_slist_enabled(f->shared->cache, TRUE, FALSE) < 0)
-
-                HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "set slist enabled failed")
+                HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "can't enable skip list");
 
             if (H5AC__flush_entries(f) < 0)
+                HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't flush");
 
-                HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't flush")
-
-            /* disable the slist -- should be empty */
+            /* disable the skip list -- should be empty */
             if (H5C_set_slist_enabled(f->shared->cache, FALSE, FALSE) < 0)
-
-                HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "disable slist failed")
-        }
-    }
-#endif /* H5_HAVE_PARALLEL */
+                HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "can't disable skip list");
+        } /* end if */
+    }     /* end if */
+#endif    /* H5_HAVE_PARALLEL */
 
     /* Destroy the cache */
     if (H5C_dest(f) < 0)
-
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTFREE, FAIL, "can't destroy cache")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTFREE, FAIL, "can't destroy cache");
 
     f->shared->cache = NULL;
 
 #ifdef H5_HAVE_PARALLEL
-
     if (aux_ptr != NULL) {
-
         if (aux_ptr->d_slist_ptr != NULL) {
-
-            HDassert(H5SL_count(aux_ptr->d_slist_ptr) == 0);
+            assert(H5SL_count(aux_ptr->d_slist_ptr) == 0);
             H5SL_close(aux_ptr->d_slist_ptr);
-
         } /* end if */
 
         if (aux_ptr->c_slist_ptr != NULL) {
-
-            HDassert(H5SL_count(aux_ptr->c_slist_ptr) == 0);
+            assert(H5SL_count(aux_ptr->c_slist_ptr) == 0);
             H5SL_close(aux_ptr->c_slist_ptr);
-
         } /* end if */
 
         if (aux_ptr->candidate_slist_ptr != NULL) {
-
-            HDassert(H5SL_count(aux_ptr->candidate_slist_ptr) == 0);
+            assert(H5SL_count(aux_ptr->candidate_slist_ptr) == 0);
             H5SL_close(aux_ptr->candidate_slist_ptr);
-
         } /* end if */
 
-        aux_ptr->magic = 0;
-        aux_ptr        = H5FL_FREE(H5AC_aux_t, aux_ptr);
-
+        aux_ptr = H5FL_FREE(H5AC_aux_t, aux_ptr);
     }  /* end if */
 #endif /* H5_HAVE_PARALLEL */
 
@@ -565,9 +511,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Vailin Choi
- *              Dec 2013
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -578,19 +521,19 @@ H5AC_evict(H5F_t *f)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
 
     /* Evict all entries in the cache except the pinned superblock entry */
     if (H5C_evict(f) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTFREE, FAIL, "can't evict cache")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTFREE, FAIL, "can't evict cache");
 
 done:
     /* If currently logging, generate a message */
     if (f->shared->cache->log_info->logging)
         if (H5C_log_write_evict_cache_msg(f->shared->cache, ret_value) < 0)
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_evict() */
@@ -604,9 +547,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              6/30/06
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -617,21 +557,21 @@ H5AC_expunge_entry(H5F_t *f, const H5AC_class_t *type, haddr_t addr, unsigned fl
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
-    HDassert(type);
-    HDassert(type->serialize);
-    HDassert(H5F_addr_defined(addr));
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
+    assert(type);
+    assert(type->serialize);
+    assert(H5_addr_defined(addr));
 
     if (H5C_expunge_entry(f, type, addr, flags) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTEXPUNGE, FAIL, "H5C_expunge_entry() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTEXPUNGE, FAIL, "H5C_expunge_entry() failed");
 
 done:
     /* If currently logging, generate a message */
     if (f->shared->cache->log_info->logging)
         if (H5C_log_write_expunge_entry_msg(f->shared->cache, addr, type->id, ret_value) < 0)
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_expunge_entry() */
@@ -650,9 +590,6 @@ done:
  * Return:      Non-negative on success/Negative on failure if there was a
  *              request to flush all items and something was protected.
  *
- * Programmer:  Robb Matzke
- *              Jul  9 1997
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -663,30 +600,30 @@ H5AC_flush(H5F_t *f)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
 
 #ifdef H5_HAVE_PARALLEL
     /* flushing the cache, so clear all collective entries */
     if (H5C_clear_coll_entries(f->shared->cache, FALSE) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "H5C_clear_coll_entries() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "H5C_clear_coll_entries() failed");
 
     /* Attempt to flush all entries from rank 0 & Bcast clean list to other ranks */
     if (H5AC__flush_entries(f) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't flush")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't flush");
 #endif /* H5_HAVE_PARALLEL */
 
     /* Flush the cache */
     /* (Again, in parallel - writes out the superblock) */
     if (H5C_flush_cache(f, H5AC__NO_FLAGS_SET) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't flush cache")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't flush cache");
 
 done:
     /* If currently logging, generate a message */
     if (f->shared->cache->log_info->logging)
         if (H5C_log_write_flush_cache_msg(f->shared->cache, ret_value) < 0)
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_flush() */
@@ -707,9 +644,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              4/27/06
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -727,12 +661,12 @@ H5AC_get_entry_status(const H5F_t *f, haddr_t addr, unsigned *status)
 
     FUNC_ENTER_NOAPI(FAIL)
 
-    if ((f == NULL) || (!H5F_addr_defined(addr)) || (status == NULL))
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Bad param(s) on entry")
+    if ((f == NULL) || (!H5_addr_defined(addr)) || (status == NULL))
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Bad param(s) on entry");
 
     if (H5C_get_entry_status(f, addr, NULL, &in_cache, &is_dirty, &is_protected, &is_pinned, &is_corked,
                              &is_flush_dep_parent, &is_flush_dep_child, &image_is_up_to_date) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_entry_status() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_entry_status() failed");
 
     if (in_cache) {
         *status |= H5AC_ES__IN_CACHE;
@@ -767,9 +701,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Robb Matzke
- *              Jul  9 1997
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -780,26 +711,26 @@ H5AC_insert_entry(H5F_t *f, const H5AC_class_t *type, haddr_t addr, void *thing,
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
-    HDassert(type);
-    HDassert(type->serialize);
-    HDassert(H5F_addr_defined(addr));
-    HDassert(thing);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
+    assert(type);
+    assert(type->serialize);
+    assert(H5_addr_defined(addr));
+    assert(thing);
 
     /* Check for invalid access request */
     if (0 == (H5F_INTENT(f) & H5F_ACC_RDWR))
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "no write intent on file")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "no write intent on file");
 
 #if H5AC_DO_TAGGING_SANITY_CHECKS
     if (!H5C_get_ignore_tags(f->shared->cache) && H5AC__verify_tag(type) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTTAG, FAIL, "Bad tag value")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTTAG, FAIL, "Bad tag value");
 #endif /* H5AC_DO_TAGGING_SANITY_CHECKS */
 
     /* Insert entry into metadata cache */
     if (H5C_insert_entry(f, type, addr, thing, flags) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTINS, FAIL, "H5C_insert_entry() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTINS, FAIL, "H5C_insert_entry() failed");
 
 #ifdef H5_HAVE_PARALLEL
     {
@@ -808,12 +739,12 @@ H5AC_insert_entry(H5F_t *f, const H5AC_class_t *type, haddr_t addr, void *thing,
         if (NULL != (aux_ptr = (H5AC_aux_t *)H5C_get_aux_ptr(f->shared->cache))) {
             /* Log the new entry */
             if (H5AC__log_inserted_entry((H5AC_info_t *)thing) < 0)
-                HGOTO_ERROR(H5E_CACHE, H5E_CANTINS, FAIL, "H5AC__log_inserted_entry() failed")
+                HGOTO_ERROR(H5E_CACHE, H5E_CANTINS, FAIL, "H5AC__log_inserted_entry() failed");
 
             /* Check if we should try to flush */
             if (aux_ptr->dirty_bytes >= aux_ptr->dirty_bytes_threshold)
                 if (H5AC__run_sync_point(f, H5AC_SYNC_POINT_OP__FLUSH_TO_MIN_CLEAN) < 0)
-                    HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't run sync point")
+                    HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't run sync point");
         } /* end if */
     }
 #endif /* H5_HAVE_PARALLEL */
@@ -823,7 +754,7 @@ done:
     if (f->shared->cache->log_info->logging)
         if (H5C_log_write_insert_entry_msg(f->shared->cache, addr, type->id, flags,
                                            ((H5C_cache_entry_t *)thing)->size, ret_value) < 0)
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_insert_entry() */
@@ -837,9 +768,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              7/6/15
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -850,12 +778,12 @@ H5AC_load_cache_image_on_next_protect(H5F_t *f, haddr_t addr, hsize_t len, hbool
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
 
     if (H5C_load_cache_image_on_next_protect(f, addr, len, rw) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTLOAD, FAIL, "call to H5C_load_cache_image_on_next_protect failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTLOAD, FAIL, "call to H5C_load_cache_image_on_next_protect failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -869,9 +797,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              5/16/06
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -884,7 +809,7 @@ H5AC_mark_entry_dirty(void *thing)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(thing);
+    assert(thing);
 
     /* Set up entry & cache pointers */
     entry_ptr = (H5AC_info_t *)thing;
@@ -898,19 +823,19 @@ H5AC_mark_entry_dirty(void *thing)
         if ((!entry_ptr->is_dirty) && (!entry_ptr->is_protected) && (entry_ptr->is_pinned) &&
             (NULL != aux_ptr))
             if (H5AC__log_dirtied_entry(entry_ptr) < 0)
-                HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKDIRTY, FAIL, "can't log dirtied entry")
+                HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKDIRTY, FAIL, "can't log dirtied entry");
     }
 #endif /* H5_HAVE_PARALLEL */
 
     if (H5C_mark_entry_dirty(thing) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKDIRTY, FAIL, "can't mark pinned or protected entry dirty")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKDIRTY, FAIL, "can't mark pinned or protected entry dirty");
 
 done:
     /* If currently logging, generate a message */
     if (cache_ptr != NULL && cache_ptr->log_info != NULL)
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_mark_entry_dirty_msg(cache_ptr, entry_ptr, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_mark_entry_dirty() */
@@ -922,9 +847,6 @@ done:
  *              entry MUST be pinned.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  Quincey Koziol
- *              7/23/16
  *
  *-------------------------------------------------------------------------
  */
@@ -938,7 +860,7 @@ H5AC_mark_entry_clean(void *thing)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(thing);
+    assert(thing);
 
     entry_ptr = (H5AC_info_t *)thing;
     cache_ptr = entry_ptr->cache_ptr;
@@ -951,19 +873,19 @@ H5AC_mark_entry_clean(void *thing)
         if ((!entry_ptr->is_dirty) && (!entry_ptr->is_protected) && (entry_ptr->is_pinned) &&
             (NULL != aux_ptr))
             if (H5AC__log_cleaned_entry(entry_ptr) < 0)
-                HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKCLEAN, FAIL, "can't log cleaned entry")
+                HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKCLEAN, FAIL, "can't log cleaned entry");
     }
 #endif /* H5_HAVE_PARALLEL */
 
     if (H5C_mark_entry_clean(thing) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKCLEAN, FAIL, "can't mark pinned or protected entry clean")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKCLEAN, FAIL, "can't mark pinned or protected entry clean");
 
 done:
     /* If currently logging, generate a message */
     if (cache_ptr != NULL && cache_ptr->log_info != NULL)
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_mark_entry_clean_msg(cache_ptr, entry_ptr, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_mark_entry_clean() */
@@ -975,9 +897,6 @@ done:
  *              entry MUST be either pinned, protected, or both.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  Quincey Koziol
- *              12/22/16
  *
  *-------------------------------------------------------------------------
  */
@@ -991,21 +910,21 @@ H5AC_mark_entry_unserialized(void *thing)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(thing);
+    assert(thing);
 
     /* Set up entry & cache pointers */
     entry_ptr = (H5AC_info_t *)thing;
     cache_ptr = entry_ptr->cache_ptr;
 
     if (H5C_mark_entry_unserialized(thing) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKUNSERIALIZED, FAIL, "can't mark entry unserialized")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKUNSERIALIZED, FAIL, "can't mark entry unserialized");
 
 done:
     /* If currently logging, generate a message */
     if (cache_ptr != NULL && cache_ptr->log_info != NULL)
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_mark_unserialized_entry_msg(cache_ptr, entry_ptr, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_mark_entry_unserialized() */
@@ -1017,9 +936,6 @@ done:
  *              entry MUST be pinned.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  Quincey Koziol
- *              12/22/16
  *
  *-------------------------------------------------------------------------
  */
@@ -1033,20 +949,20 @@ H5AC_mark_entry_serialized(void *thing)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(thing);
+    assert(thing);
 
     entry_ptr = (H5AC_info_t *)thing;
     cache_ptr = entry_ptr->cache_ptr;
 
     if (H5C_mark_entry_serialized(thing) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKSERIALIZED, FAIL, "can't mark entry serialized")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKSERIALIZED, FAIL, "can't mark entry serialized");
 
 done:
     /* If currently logging, generate a message */
     if (cache_ptr != NULL && cache_ptr->log_info != NULL)
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_mark_serialized_entry_msg(cache_ptr, entry_ptr, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_mark_entry_serialized() */
@@ -1058,9 +974,6 @@ done:
  *              file address changed.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  Robb Matzke
- *              Jul  9 1997
  *
  *-------------------------------------------------------------------------
  */
@@ -1075,35 +988,35 @@ H5AC_move_entry(H5F_t *f, const H5AC_class_t *type, haddr_t old_addr, haddr_t ne
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared->cache);
-    HDassert(type);
-    HDassert(H5F_addr_defined(old_addr));
-    HDassert(H5F_addr_defined(new_addr));
-    HDassert(H5F_addr_ne(old_addr, new_addr));
+    assert(f);
+    assert(f->shared->cache);
+    assert(type);
+    assert(H5_addr_defined(old_addr));
+    assert(H5_addr_defined(new_addr));
+    assert(H5_addr_ne(old_addr, new_addr));
 
 #ifdef H5_HAVE_PARALLEL
     /* Log moving the entry */
     if (NULL != (aux_ptr = (H5AC_aux_t *)H5C_get_aux_ptr(f->shared->cache)))
         if (H5AC__log_moved_entry(f, old_addr, new_addr) < 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_CANTUNPROTECT, FAIL, "can't log moved entry")
+            HGOTO_ERROR(H5E_CACHE, H5E_CANTUNPROTECT, FAIL, "can't log moved entry");
 #endif /* H5_HAVE_PARALLEL */
 
     if (H5C_move_entry(f->shared->cache, type, old_addr, new_addr) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTMOVE, FAIL, "H5C_move_entry() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTMOVE, FAIL, "H5C_move_entry() failed");
 
 #ifdef H5_HAVE_PARALLEL
     /* Check if we should try to flush */
     if (NULL != aux_ptr && aux_ptr->dirty_bytes >= aux_ptr->dirty_bytes_threshold)
         if (H5AC__run_sync_point(f, H5AC_SYNC_POINT_OP__FLUSH_TO_MIN_CLEAN) < 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't run sync point")
+            HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't run sync point");
 #endif /* H5_HAVE_PARALLEL */
 
 done:
     /* If currently logging, generate a message */
     if (f->shared->cache->log_info->logging)
         if (H5C_log_write_move_entry_msg(f->shared->cache, old_addr, new_addr, type->id, ret_value) < 0)
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_move_entry() */
@@ -1115,9 +1028,6 @@ done:
  *              at the time of call, and must be unpinned.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  John Mainzer
- *              4/27/06
  *
  *-------------------------------------------------------------------------
  */
@@ -1131,22 +1041,22 @@ H5AC_pin_protected_entry(void *thing)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(thing);
+    assert(thing);
 
     entry_ptr = (H5AC_info_t *)thing;
     cache_ptr = entry_ptr->cache_ptr;
-    HDassert(cache_ptr);
+    assert(cache_ptr);
 
     /* Pin entry */
     if (H5C_pin_protected_entry(thing) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTPIN, FAIL, "can't pin entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTPIN, FAIL, "can't pin entry");
 
 done:
     /* If currently logging, generate a message */
     if (cache_ptr != NULL && cache_ptr->log_info != NULL)
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_pin_entry_msg(cache_ptr, entry_ptr, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_pin_protected_entry() */
@@ -1164,9 +1074,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              7/3/15
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -1177,12 +1084,12 @@ H5AC_prep_for_file_close(H5F_t *f)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
 
     if (H5C_prep_for_file_close(f) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "cache prep for file close failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "cache prep for file close failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -1192,13 +1099,12 @@ done:
  *
  * Function:    H5AC_prep_for_file_flush
  *
- * Purpose:     This function should be called just prior to the first
+ * Purpose:     Handle any setup required prior to metadata cache flush.
+ *
+ *              This function should be called just prior to the first
  *              call to H5AC_flush() during a file flush.
  *
- *              Its purpose is to handly any setup required prior to
- *              metadata cache flush.
- *
- *              Initially, this means setting up the slist prior to the
+ *              Initially, this means setting up the skip list prior to the
  *              flush.  We do this in a separate call because
  *              H5F__flush_phase2() make repeated calls to H5AC_flush().
  *              Handling this detail in separate calls allows us to avoid
@@ -1206,11 +1112,6 @@ done:
  *              repeatedly.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  John Mainzer
- *              5/5/20
- *
- * Changes:     None.
  *
  *-------------------------------------------------------------------------
  */
@@ -1222,18 +1123,15 @@ H5AC_prep_for_file_flush(H5F_t *f)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
 
     if (H5C_set_slist_enabled(f->shared->cache, TRUE, FALSE) < 0)
-
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "slist enabled failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "can't enable skip list");
 
 done:
-
     FUNC_LEAVE_NOAPI(ret_value)
-
 } /* H5AC_prep_for_file_flush() */
 
 /*-------------------------------------------------------------------------
@@ -1243,14 +1141,11 @@ done:
  * Purpose:     This function should be called just after the last
  *              call to H5AC_flush() during a file flush.
  *
- *              Its purpose is to perform any necessary cleanup after the
- *              metadata cache flush.
- *
  *              The objective of the call is to allow the metadata cache
  *              to do any necessary necessary cleanup work after a cache
  *              flush.
  *
- *              Initially, this means taking down the slist after the
+ *              Initially, this means taking down the skip list after the
  *              flush.  We do this in a separate call because
  *              H5F__flush_phase2() make repeated calls to H5AC_flush().
  *              Handling this detail in separate calls allows us to avoid
@@ -1258,11 +1153,6 @@ done:
  *              repeatedly.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  John Mainzer
- *              5/5/20
- *
- * Changes:     None.
  *
  *-------------------------------------------------------------------------
  */
@@ -1274,18 +1164,15 @@ H5AC_secure_from_file_flush(H5F_t *f)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
 
     if (H5C_set_slist_enabled(f->shared->cache, FALSE, FALSE) < 0)
-
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "slist enabled failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "can't disable skip list");
 
 done:
-
     FUNC_LEAVE_NOAPI(ret_value)
-
 } /* H5AC_secure_from_file_flush() */
 
 /*-------------------------------------------------------------------------
@@ -1296,9 +1183,6 @@ done:
  *              cache.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  Quincey Koziol
- *              3/24/09
  *
  *-------------------------------------------------------------------------
  */
@@ -1312,16 +1196,16 @@ H5AC_create_flush_dependency(void *parent_thing, void *child_thing)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(parent_thing);
-    HDassert(child_thing);
+    assert(parent_thing);
+    assert(child_thing);
 
     entry_ptr = (H5AC_info_t *)parent_thing;
     cache_ptr = entry_ptr->cache_ptr;
-    HDassert(cache_ptr);
+    assert(cache_ptr);
 
     /* Create the flush dependency */
     if (H5C_create_flush_dependency(parent_thing, child_thing) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTDEPEND, FAIL, "H5C_create_flush_dependency() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTDEPEND, FAIL, "H5C_create_flush_dependency() failed");
 
 done:
     /* If currently logging, generate a message */
@@ -1329,7 +1213,7 @@ done:
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_create_fd_msg(cache_ptr, (H5AC_info_t *)parent_thing,
                                             (H5AC_info_t *)child_thing, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_create_flush_dependency() */
@@ -1352,9 +1236,6 @@ done:
  * Return:      Success:        Ptr to the object.
  *              Failure:        NULL
  *
- * Programmer:  Robb Matzke
- *              Sep  2 1997
- *
  *-------------------------------------------------------------------------
  */
 void *
@@ -1366,34 +1247,34 @@ H5AC_protect(H5F_t *f, const H5AC_class_t *type, haddr_t addr, void *udata, unsi
     FUNC_ENTER_NOAPI(NULL)
 
     /* Sanity check */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
-    HDassert(type);
-    HDassert(type->serialize);
-    HDassert(H5F_addr_defined(addr));
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
+    assert(type);
+    assert(type->serialize);
+    assert(H5_addr_defined(addr));
 
     /* Check for unexpected flags -- H5C__FLUSH_COLLECTIVELY_FLAG
      * only permitted in the parallel case.
      */
 #ifdef H5_HAVE_PARALLEL
-    HDassert(0 == (flags &
-                   (unsigned)(~(H5C__READ_ONLY_FLAG | H5C__FLUSH_LAST_FLAG | H5C__FLUSH_COLLECTIVELY_FLAG))));
+    assert(0 == (flags &
+                 (unsigned)(~(H5C__READ_ONLY_FLAG | H5C__FLUSH_LAST_FLAG | H5C__FLUSH_COLLECTIVELY_FLAG))));
 #else  /* H5_HAVE_PARALLEL */
-    HDassert(0 == (flags & (unsigned)(~(H5C__READ_ONLY_FLAG | H5C__FLUSH_LAST_FLAG))));
+    assert(0 == (flags & (unsigned)(~(H5C__READ_ONLY_FLAG | H5C__FLUSH_LAST_FLAG))));
 #endif /* H5_HAVE_PARALLEL */
 
     /* Check for invalid access request */
     if ((0 == (H5F_INTENT(f) & H5F_ACC_RDWR)) && (0 == (flags & H5C__READ_ONLY_FLAG)))
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, NULL, "no write intent on file")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, NULL, "no write intent on file");
 
 #if H5AC_DO_TAGGING_SANITY_CHECKS
     if (!H5C_get_ignore_tags(f->shared->cache) && H5AC__verify_tag(type) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTTAG, NULL, "Bad tag value")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTTAG, NULL, "Bad tag value");
 #endif /* H5AC_DO_TAGGING_SANITY_CHECKS */
 
     if (NULL == (thing = H5C_protect(f, type, addr, udata, flags)))
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTPROTECT, NULL, "H5C_protect() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTPROTECT, NULL, "H5C_protect() failed");
 
     /* Set return value */
     ret_value = thing;
@@ -1406,7 +1287,7 @@ done:
         if (f->shared->cache->log_info->logging)
             if (H5C_log_write_protect_entry_msg(f->shared->cache, (H5AC_info_t *)thing, type->id, flags,
                                                 fake_ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, NULL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, NULL, "unable to emit log message");
     }
 
     FUNC_LEAVE_NOAPI(ret_value)
@@ -1418,9 +1299,6 @@ done:
  * Purpose:     Resize a pinned or protected entry.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  John Mainzer
- *              7/5/06
  *
  *-------------------------------------------------------------------------
  */
@@ -1434,11 +1312,11 @@ H5AC_resize_entry(void *thing, size_t new_size)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(thing);
+    assert(thing);
 
     entry_ptr = (H5AC_info_t *)thing;
     cache_ptr = entry_ptr->cache_ptr;
-    HDassert(cache_ptr);
+    assert(cache_ptr);
 
 #ifdef H5_HAVE_PARALLEL
     /* Log the generation of dirty bytes of metadata iff:
@@ -1475,24 +1353,6 @@ H5AC_resize_entry(void *thing, size_t new_size)
      *    amounts of dirty metadata creation in other areas -- which will
      *    cause aux_ptr->dirty_bytes to be incremented.
      *
-     *    The bottom line is that this code is probably OK, but the above
-     *    points should be kept in mind.
-     *
-     * One final observation:  This comment is occasioned by a bug caused
-     * by moving the call to H5AC__log_dirtied_entry() after the call to
-     * H5C_resize_entry(), and then only calling H5AC__log_dirtied_entry()
-     * if entry_ptr->is_dirty was false.
-     *
-     * Since H5C_resize_entry() marks the target entry dirty unless there
-     * is not change in size, this had the effect of not calling
-     * H5AC__log_dirtied_entry() when it should be, and corrupting
-     * the cleaned and dirtied lists used by rank 0 in the parallel
-     * version of the metadata cache.
-     *
-     * The point here is that you should be very careful when working with
-     * this code, and not modify it unless you fully understand it.
-     *
-     *                                          JRM -- 2/28/22
      */
 
     if ((!entry_ptr->is_dirty) && (entry_ptr->size != new_size)) {
@@ -1507,21 +1367,21 @@ H5AC_resize_entry(void *thing, size_t new_size)
         if (NULL != aux_ptr) {
 
             if (H5AC__log_dirtied_entry(entry_ptr) < 0)
-                HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKDIRTY, FAIL, "can't log dirtied entry")
+                HGOTO_ERROR(H5E_CACHE, H5E_CANTMARKDIRTY, FAIL, "can't log dirtied entry");
         }
     }
 #endif /* H5_HAVE_PARALLEL */
 
     /* Resize the entry */
     if (H5C_resize_entry(thing, new_size) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTRESIZE, FAIL, "can't resize entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTRESIZE, FAIL, "can't resize entry");
 
 done:
     /* If currently logging, generate a message */
     if (cache_ptr != NULL && cache_ptr->log_info != NULL)
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_resize_entry_msg(cache_ptr, entry_ptr, new_size, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_resize_entry() */
@@ -1533,9 +1393,6 @@ done:
  *              the time of call, and must be pinned.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  John Mainzer
- *              4/11/06
  *
  *-------------------------------------------------------------------------
  */
@@ -1549,22 +1406,22 @@ H5AC_unpin_entry(void *thing)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(thing);
+    assert(thing);
 
     entry_ptr = (H5AC_info_t *)thing;
     cache_ptr = entry_ptr->cache_ptr;
-    HDassert(cache_ptr);
+    assert(cache_ptr);
 
     /* Unpin the entry */
     if (H5C_unpin_entry(thing) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTUNPIN, FAIL, "can't unpin entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTUNPIN, FAIL, "can't unpin entry");
 
 done:
     /* If currently logging, generate a message */
     if (cache_ptr != NULL && cache_ptr->log_info != NULL)
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_unpin_entry_msg(cache_ptr, entry_ptr, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_unpin_entry() */
@@ -1575,9 +1432,6 @@ done:
  * Purpose:     Destroy a flush dependency between two entries.
  *
  * Return:      Non-negative on success/Negative on failure
- *
- * Programmer:  Quincey Koziol
- *              3/24/09
  *
  *-------------------------------------------------------------------------
  */
@@ -1591,16 +1445,16 @@ H5AC_destroy_flush_dependency(void *parent_thing, void *child_thing)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(parent_thing);
-    HDassert(child_thing);
+    assert(parent_thing);
+    assert(child_thing);
 
     entry_ptr = (H5AC_info_t *)parent_thing;
     cache_ptr = entry_ptr->cache_ptr;
-    HDassert(cache_ptr);
+    assert(cache_ptr);
 
     /* Destroy the flush dependency */
     if (H5C_destroy_flush_dependency(parent_thing, child_thing) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTUNDEPEND, FAIL, "H5C_destroy_flush_dependency() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTUNDEPEND, FAIL, "H5C_destroy_flush_dependency() failed");
 
 done:
     /* If currently logging, generate a message */
@@ -1608,7 +1462,7 @@ done:
         if (cache_ptr->log_info->logging)
             if (H5C_log_write_destroy_fd_msg(cache_ptr, (H5AC_info_t *)parent_thing,
                                              (H5AC_info_t *)child_thing, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_destroy_flush_dependency() */
@@ -1645,9 +1499,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Robb Matzke
- *              Sep  2 1997
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -1663,16 +1514,16 @@ H5AC_unprotect(H5F_t *f, const H5AC_class_t *type, haddr_t addr, void *thing, un
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
-    HDassert(type);
-    HDassert(type->deserialize);
-    HDassert(type->image_len);
-    HDassert(H5F_addr_defined(addr));
-    HDassert(thing);
-    HDassert(((H5AC_info_t *)thing)->addr == addr);
-    HDassert(((H5AC_info_t *)thing)->type == type);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
+    assert(type);
+    assert(type->deserialize);
+    assert(type->image_len);
+    assert(H5_addr_defined(addr));
+    assert(thing);
+    assert(((H5AC_info_t *)thing)->addr == addr);
+    assert(((H5AC_info_t *)thing)->type == type);
 
     dirtied =
         (hbool_t)(((flags & H5AC__DIRTIED_FLAG) == H5AC__DIRTIED_FLAG) || (((H5AC_info_t *)thing)->dirtied));
@@ -1685,44 +1536,44 @@ H5AC_unprotect(H5F_t *f, const H5AC_class_t *type, haddr_t addr, void *thing, un
         size_t curr_size = 0;
 
         if ((type->image_len)(thing, &curr_size) < 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_CANTGETSIZE, FAIL, "Can't get size of thing")
+            HGOTO_ERROR(H5E_CACHE, H5E_CANTGETSIZE, FAIL, "Can't get size of thing");
 
         if (((H5AC_info_t *)thing)->size != curr_size)
-            HGOTO_ERROR(H5E_CACHE, H5E_BADSIZE, FAIL, "size of entry changed")
+            HGOTO_ERROR(H5E_CACHE, H5E_BADSIZE, FAIL, "size of entry changed");
     } /* end if */
 
 #ifdef H5_HAVE_PARALLEL
     if (NULL != (aux_ptr = (H5AC_aux_t *)H5C_get_aux_ptr(f->shared->cache))) {
         if (dirtied && ((H5AC_info_t *)thing)->is_dirty == FALSE)
             if (H5AC__log_dirtied_entry((H5AC_info_t *)thing) < 0)
-                HGOTO_ERROR(H5E_CACHE, H5E_CANTUNPROTECT, FAIL, "can't log dirtied entry")
+                HGOTO_ERROR(H5E_CACHE, H5E_CANTUNPROTECT, FAIL, "can't log dirtied entry");
 
         if (deleted && aux_ptr->mpi_rank == 0) {
             if (H5AC__log_deleted_entry((H5AC_info_t *)thing) < 0) {
                 /* If we fail to log the deleted entry, push an error but still
                  * participate in a possible sync point ahead
                  */
-                HDONE_ERROR(H5E_CACHE, H5E_CANTUNPROTECT, FAIL, "H5AC__log_deleted_entry() failed")
+                HDONE_ERROR(H5E_CACHE, H5E_CANTUNPROTECT, FAIL, "H5AC__log_deleted_entry() failed");
             }
         }
     }  /* end if */
 #endif /* H5_HAVE_PARALLEL */
 
     if (H5C_unprotect(f, addr, thing, flags) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTUNPROTECT, FAIL, "H5C_unprotect() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTUNPROTECT, FAIL, "H5C_unprotect() failed");
 
 #ifdef H5_HAVE_PARALLEL
     /* Check if we should try to flush */
     if ((aux_ptr != NULL) && (aux_ptr->dirty_bytes >= aux_ptr->dirty_bytes_threshold))
         if (H5AC__run_sync_point(f, H5AC_SYNC_POINT_OP__FLUSH_TO_MIN_CLEAN) < 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't run sync point")
+            HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Can't run sync point");
 #endif /* H5_HAVE_PARALLEL */
 
 done:
     /* If currently logging, generate a message */
     if (f->shared->cache->log_info->logging)
         if (H5C_log_write_unprotect_entry_msg(f->shared->cache, addr, type->id, flags, ret_value) < 0)
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_unprotect() */
@@ -1733,9 +1584,6 @@ done:
  * Purpose:     Wrapper function for H5C_get_cache_auto_resize_config().
  *
  * Return:      SUCCEED on success, and FAIL on failure.
- *
- * Programmer:  John Mainzer
- *              3/10/05
  *
  *-------------------------------------------------------------------------
  */
@@ -1751,22 +1599,13 @@ H5AC_get_cache_auto_resize_config(const H5AC_t *cache_ptr, H5AC_cache_config_t *
     /* Check args */
     if ((cache_ptr == NULL) || (config_ptr == NULL) ||
         (config_ptr->version != H5AC__CURR_CACHE_CONFIG_VERSION))
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Bad cache_ptr or config_ptr on entry")
-#ifdef H5_HAVE_PARALLEL
-    {
-        H5AC_aux_t *aux_ptr;
-
-        aux_ptr = (H5AC_aux_t *)H5C_get_aux_ptr(cache_ptr);
-        if ((aux_ptr != NULL) && (aux_ptr->magic != H5AC__H5AC_AUX_T_MAGIC))
-            HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Bad aux_ptr on entry")
-    }
-#endif /* H5_HAVE_PARALLEL */
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Bad cache_ptr or config_ptr on entry");
 
     /* Retrieve the configuration */
     if (H5C_get_cache_auto_resize_config((const H5C_t *)cache_ptr, &internal_config) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_cache_auto_resize_config() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_cache_auto_resize_config() failed");
     if (H5C_get_evictions_enabled((const H5C_t *)cache_ptr, &evictions_enabled) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_resize_enabled() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_resize_enabled() failed");
 
     /* Set the information to return */
     if (internal_config.rpt_fcn == NULL)
@@ -1827,9 +1666,6 @@ done:
  *
  * Return:      SUCCEED on success, and FAIL on failure.
  *
- * Programmer:  John Mainzer
- *              3/11/05
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -1842,7 +1678,7 @@ H5AC_get_cache_size(const H5AC_t *cache_ptr, size_t *max_size_ptr, size_t *min_c
 
     if (H5C_get_cache_size((const H5C_t *)cache_ptr, max_size_ptr, min_clean_size_ptr, cur_size_ptr,
                            cur_num_entries_ptr) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_cache_size() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_cache_size() failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -1855,9 +1691,6 @@ done:
  *
  * Return:      SUCCEED on success, and FAIL on failure.
  *
- * Programmer:  John Mainzer
- *              3/11/05
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -1868,7 +1701,7 @@ H5AC_get_cache_flush_in_progress(H5AC_t *cache_ptr, hbool_t *flush_in_progress_p
     FUNC_ENTER_NOAPI(FAIL)
 
     if (H5C_get_cache_flush_in_progress((H5C_t *)cache_ptr, flush_in_progress_ptr) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_cache_flush_in_progress() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_cache_flush_in_progress() failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -1881,9 +1714,6 @@ done:
  *
  * Return:      SUCCEED on success, and FAIL on failure.
  *
- * Programmer:  John Mainzer
- *              3/10/05
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -1894,7 +1724,7 @@ H5AC_get_cache_hit_rate(const H5AC_t *cache_ptr, double *hit_rate_ptr)
     FUNC_ENTER_NOAPI(FAIL)
 
     if (H5C_get_cache_hit_rate((const H5C_t *)cache_ptr, hit_rate_ptr) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_cache_hit_rate() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_get_cache_hit_rate() failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -1908,8 +1738,6 @@ done:
  *
  * Return:      SUCCEED on success, and FAIL on failure.
  *
- * Programmer:  John Mainzer, 3/10/05
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -1920,7 +1748,7 @@ H5AC_reset_cache_hit_rate_stats(H5AC_t *cache_ptr)
     FUNC_ENTER_NOAPI(FAIL)
 
     if (H5C_reset_cache_hit_rate_stats((H5C_t *)cache_ptr) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_reset_cache_hit_rate_stats() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_reset_cache_hit_rate_stats() failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -1933,9 +1761,6 @@ done:
  *
  * Return:      SUCCEED on success, and FAIL on failure.
  *
- * Programmer:  John Mainzer
- *              3/10/05
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -1947,23 +1772,14 @@ H5AC_set_cache_auto_resize_config(H5AC_t *cache_ptr, const H5AC_cache_config_t *
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(cache_ptr);
+    assert(cache_ptr);
 
     if (cache_ptr == NULL)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "bad cache_ptr on entry")
-#ifdef H5_HAVE_PARALLEL
-    {
-        H5AC_aux_t *aux_ptr;
-
-        aux_ptr = (H5AC_aux_t *)H5C_get_aux_ptr(cache_ptr);
-        if ((aux_ptr != NULL) && (aux_ptr->magic != H5AC__H5AC_AUX_T_MAGIC))
-            HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "bad aux_ptr on entry")
-    }
-#endif /* H5_HAVE_PARALLEL */
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "bad cache_ptr on entry");
 
     /* Validate external configuration */
     if (H5AC_validate_config(config_ptr) != SUCCEED)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Bad cache configuration")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Bad cache configuration");
 
     /* If the cache config struct is being used to control logging, perform
      * the open/close operations. Note that this is the only place where the
@@ -1973,7 +1789,7 @@ H5AC_set_cache_auto_resize_config(H5AC_t *cache_ptr, const H5AC_cache_config_t *
     /* close */
     if (config_ptr->close_trace_file)
         if (H5C_log_tear_down((H5C_t *)cache_ptr) < 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "mdc logging tear-down failed")
+            HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "mdc logging tear-down failed");
 
     /* open */
     if (config_ptr->open_trace_file) {
@@ -1982,18 +1798,18 @@ H5AC_set_cache_auto_resize_config(H5AC_t *cache_ptr, const H5AC_cache_config_t *
          * output is generated when logging is controlled by the H5P calls.
          */
         if (H5C_log_set_up((H5C_t *)cache_ptr, config_ptr->trace_file_name, H5C_LOG_STYLE_TRACE, TRUE) < 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "mdc logging setup failed")
+            HGOTO_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "mdc logging setup failed");
     }
 
     /* Convert external configuration to internal representation */
     if (H5AC__ext_config_2_int_config(config_ptr, &internal_config) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5AC__ext_config_2_int_config() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5AC__ext_config_2_int_config() failed");
 
     /* Set configuration */
     if (H5C_set_cache_auto_resize_config(cache_ptr, &internal_config) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_set_cache_auto_resize_config() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_set_cache_auto_resize_config() failed");
     if (H5C_set_evictions_enabled(cache_ptr, config_ptr->evictions_enabled) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_set_evictions_enabled() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_set_evictions_enabled() failed");
 
 #ifdef H5_HAVE_PARALLEL
     {
@@ -2012,7 +1828,7 @@ done:
     /* If currently logging, generate a message */
     if (cache_ptr->log_info->logging)
         if (H5C_log_write_set_cache_config_msg(cache_ptr, config_ptr, ret_value) < 0)
-            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+            HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_set_cache_auto_resize_config() */
@@ -2034,9 +1850,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              4/6/05
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -2049,9 +1862,9 @@ H5AC_validate_config(const H5AC_cache_config_t *config_ptr)
 
     /* Check args */
     if (config_ptr == NULL)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "NULL config_ptr on entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "NULL config_ptr on entry");
     if (config_ptr->version != H5AC__CURR_CACHE_CONFIG_VERSION)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Unknown config version")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Unknown config version");
 
     /* don't bother to test trace_file_name unless open_trace_file is TRUE */
     if (config_ptr->open_trace_file) {
@@ -2063,30 +1876,30 @@ H5AC_validate_config(const H5AC_cache_config_t *config_ptr)
          */
         name_len = HDstrlen(config_ptr->trace_file_name);
         if (name_len == 0)
-            HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "config_ptr->trace_file_name is empty")
+            HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "config_ptr->trace_file_name is empty");
         else if (name_len > H5AC__MAX_TRACE_FILE_NAME_LEN)
-            HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "config_ptr->trace_file_name too long")
+            HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "config_ptr->trace_file_name too long");
     } /* end if */
 
     if ((config_ptr->evictions_enabled == FALSE) &&
         ((config_ptr->incr_mode != H5C_incr__off) || (config_ptr->flash_incr_mode != H5C_flash_incr__off) ||
          (config_ptr->decr_mode != H5C_decr__off)))
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Can't disable evictions while auto-resize is enabled")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Can't disable evictions while auto-resize is enabled");
 
     if (config_ptr->dirty_bytes_threshold < H5AC__MIN_DIRTY_BYTES_THRESHOLD)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "dirty_bytes_threshold too small")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "dirty_bytes_threshold too small");
     else if (config_ptr->dirty_bytes_threshold > H5AC__MAX_DIRTY_BYTES_THRESHOLD)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "dirty_bytes_threshold too big")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "dirty_bytes_threshold too big");
 
     if ((config_ptr->metadata_write_strategy != H5AC_METADATA_WRITE_STRATEGY__PROCESS_0_ONLY) &&
         (config_ptr->metadata_write_strategy != H5AC_METADATA_WRITE_STRATEGY__DISTRIBUTED))
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "config_ptr->metadata_write_strategy out of range")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "config_ptr->metadata_write_strategy out of range");
 
     if (H5AC__ext_config_2_int_config(config_ptr, &internal_config) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5AC__ext_config_2_int_config() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5AC__ext_config_2_int_config() failed");
 
     if (H5C_validate_resize_config(&internal_config, H5C_RESIZE_CFG__VALIDATE_ALL) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "error(s) in new config")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "error(s) in new config");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2110,9 +1923,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              6/25/15
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -2125,10 +1935,10 @@ H5AC_validate_cache_image_config(H5AC_cache_image_config_t *config_ptr)
 
     /* Check args */
     if (config_ptr == NULL)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "NULL config_ptr on entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "NULL config_ptr on entry");
 
     if (config_ptr->version != H5AC__CURR_CACHE_IMAGE_CONFIG_VERSION)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Unknown image config version")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "Unknown image config version");
 
     /* don't need to get the current H5C image config here since the
      * default values of fields not in the H5AC config will always be
@@ -2140,7 +1950,7 @@ H5AC_validate_cache_image_config(H5AC_cache_image_config_t *config_ptr)
     internal_config.entry_ageout       = config_ptr->entry_ageout;
 
     if (H5C_validate_cache_image_config(&internal_config) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "error(s) in new cache image config")
+        HGOTO_ERROR(H5E_CACHE, H5E_BADVALUE, FAIL, "error(s) in new cache image config");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2161,8 +1971,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure.
  *
- * Programmer:  John Mainzer, 5/15/04
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -2182,13 +1990,11 @@ H5AC__check_if_write_permitted(const H5F_t
 
 #ifdef H5_HAVE_PARALLEL
     /* Sanity checks */
-    HDassert(f != NULL);
-    HDassert(f->shared != NULL);
-    HDassert(f->shared->cache != NULL);
+    assert(f != NULL);
+    assert(f->shared != NULL);
+    assert(f->shared->cache != NULL);
     aux_ptr = (H5AC_aux_t *)H5C_get_aux_ptr(f->shared->cache);
     if (aux_ptr != NULL) {
-        HDassert(aux_ptr->magic == H5AC__H5AC_AUX_T_MAGIC);
-
         if ((aux_ptr->mpi_rank == 0) ||
             (aux_ptr->metadata_write_strategy == H5AC_METADATA_WRITE_STRATEGY__DISTRIBUTED))
             write_permitted = aux_ptr->write_permitted;
@@ -2215,9 +2021,6 @@ H5AC__check_if_write_permitted(const H5F_t
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              1/26/06
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -2229,7 +2032,7 @@ H5AC__ext_config_2_int_config(const H5AC_cache_config_t *ext_conf_ptr, H5C_auto_
 
     if ((ext_conf_ptr == NULL) || (ext_conf_ptr->version != H5AC__CURR_CACHE_CONFIG_VERSION) ||
         (int_conf_ptr == NULL))
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Bad ext_conf_ptr or inf_conf_ptr on entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Bad ext_conf_ptr or inf_conf_ptr on entry");
 
     int_conf_ptr->version = H5C__CURR_AUTO_SIZE_CTL_VER;
     if (ext_conf_ptr->rpt_fcn_enabled)
@@ -2276,9 +2079,6 @@ done:
  *
  * Return:      SUCCEED on success, FAIL otherwise.
  *
- * Programmer:  Mike McGreevy
- *              December 1, 2009
- *
  *------------------------------------------------------------------------------
  */
 herr_t
@@ -2289,13 +2089,13 @@ H5AC_ignore_tags(const H5F_t *f)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
 
     /* Set up a new metadata tag */
     if (H5C_ignore_tags(f->shared->cache) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "H5C_ignore_tags() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "H5C_ignore_tags() failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2307,9 +2107,6 @@ done:
  * Purpose:     Sets the metadata tag property in the provided property list.
  *
  * Return:      void
- *
- * Programmer:  Mike McGreevy
- *              December 1, 2009
  *
  *------------------------------------------------------------------------------
  */
@@ -2337,9 +2134,6 @@ H5AC_tag(haddr_t metadata_tag, haddr_t *prev_tag)
  *
  * Return:      SUCCEED on success, FAIL otherwise.
  *
- * Programmer:  Mike McGreevy
- *              March 17, 2010
- *
  *------------------------------------------------------------------------------
  */
 herr_t
@@ -2350,12 +2144,12 @@ H5AC_retag_copied_metadata(const H5F_t *f, haddr_t metadata_tag)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(f);
-    HDassert(f->shared);
+    assert(f);
+    assert(f->shared);
 
     /* Call cache-level function to re-tag entries with the COPIED tag */
     if (H5C_retag_entries(f->shared->cache, H5AC__COPIED_TAG, metadata_tag) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "Can't retag metadata")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTSET, FAIL, "Can't retag metadata");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2369,9 +2163,6 @@ done:
  *
  * Return:      SUCCEED on success, FAIL otherwise.
  *
- * Programmer:  Mike McGreevy
- *              May 19, 2010
- *
  *------------------------------------------------------------------------------
  */
 herr_t
@@ -2384,12 +2175,12 @@ H5AC_flush_tagged_metadata(H5F_t *f, haddr_t metadata_tag)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Assertions */
-    HDassert(f);
-    HDassert(f->shared);
+    assert(f);
+    assert(f->shared);
 
     /* Call cache level function to flush metadata entries with specified tag */
     if (H5C_flush_tagged_entries(f, metadata_tag) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Cannot flush metadata")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Cannot flush metadata");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2398,14 +2189,15 @@ done:
 /*------------------------------------------------------------------------------
  * Function:    H5AC_evict_tagged_metadata()
  *
- * Purpose:     Wrapper for cache level function which flushes all metadata
+ * Purpose:     Wrapper for cache level function which evicts all metadata
  *              that contains the specific tag.
  *
+ *              The match_global parameter determines if the global file
+ *              data (e.g., global heaps, shared object header messages)
+ *              should be checked. This is false when closing objects
+ *              and true when flushing.
+ *
  * Return:      SUCCEED on success, FAIL otherwise.
- *
- * Programmer:  Mike McGreevy
- *              May 19, 2010
- *
  *------------------------------------------------------------------------------
  */
 herr_t
@@ -2418,12 +2210,12 @@ H5AC_evict_tagged_metadata(H5F_t *f, haddr_t metadata_tag, hbool_t match_global)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Assertions */
-    HDassert(f);
-    HDassert(f->shared);
+    assert(f);
+    assert(f->shared);
 
     /* Call cache level function to evict metadata entries with specified tag */
     if (H5C_evict_tagged_entries(f, metadata_tag, match_global) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Cannot evict metadata")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Cannot evict metadata");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2437,8 +2229,6 @@ done:
  *
  * Return:      SUCCEED on success, FAIL otherwise.
  *
- * Programmer:  Vailin Choi; May 2016
- *
  *------------------------------------------------------------------------------
  */
 herr_t
@@ -2451,12 +2241,12 @@ H5AC_expunge_tag_type_metadata(H5F_t *f, haddr_t tag, int type_id, unsigned flag
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Assertions */
-    HDassert(f);
-    HDassert(f->shared);
+    assert(f);
+    assert(f->shared);
 
     /* Call cache level function to expunge entries with specified tag and type id */
     if (H5C_expunge_tag_type_metadata(f, tag, type_id, flags) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Cannot expunge tagged type entries")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTFLUSH, FAIL, "Cannot expunge tagged type entries");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2468,9 +2258,6 @@ done:
  * Purpose:     Get the tag for a metadata cache entry.
  *
  * Return:      SUCCEED/FAIL
- *
- * Programmer:  Dana Robinson
- *              Fall 2016
  *
  *------------------------------------------------------------------------------
  */
@@ -2484,12 +2271,12 @@ H5AC_get_tag(const void *thing, haddr_t *tag)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Assertions */
-    HDassert(thing);
-    HDassert(tag);
+    assert(thing);
+    assert(tag);
 
     /* Call cache level function to get the tag */
     if (H5C_get_tag(thing, tag) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTTAG, FAIL, "Cannot get tag for metadata cache entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTTAG, FAIL, "Cannot get tag for metadata cache entry");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2502,8 +2289,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Vailin Choi; Jan 2014
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -2514,11 +2299,11 @@ H5AC_cork(H5F_t *f, haddr_t obj_addr, unsigned action, hbool_t *corked)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(f);
-    HDassert(f->shared);
-    HDassert(f->shared->cache);
-    HDassert(H5F_addr_defined(obj_addr));
-    HDassert(action == H5AC__SET_CORK || action == H5AC__UNCORK || action == H5AC__GET_CORKED);
+    assert(f);
+    assert(f->shared);
+    assert(f->shared->cache);
+    assert(H5_addr_defined(obj_addr));
+    assert(action == H5AC__SET_CORK || action == H5AC__UNCORK || action == H5AC__GET_CORKED);
 
     /*  Skip the search on "tag_list" when there are no "corked" objects.
      *  This is done to mitigate the slow down when closing objects.
@@ -2526,15 +2311,15 @@ H5AC_cork(H5F_t *f, haddr_t obj_addr, unsigned action, hbool_t *corked)
      *  in the future.
      */
     if (action == H5AC__GET_CORKED) {
-        HDassert(corked);
+        assert(corked);
         if (H5C_get_num_objs_corked(f->shared->cache) == 0) {
             *corked = FALSE;
-            HGOTO_DONE(SUCCEED)
+            HGOTO_DONE(SUCCEED);
         }
     }
 
     if (H5C_cork(f->shared->cache, obj_addr, action, corked) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Cannot perform the cork action")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "Cannot perform the cork action");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2551,9 +2336,6 @@ done:
  *
  * Return:      SUCCEED or FAIL.
  *
- * Programmer:  Mike McGreevy
- *              October 20, 2010
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -2569,7 +2351,7 @@ H5AC__verify_tag(const H5AC_class_t *type)
 
     /* Verify legal tag value */
     if (H5C_verify_tag(type->id, tag) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "tag verification failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "tag verification failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2586,9 +2368,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Quincey Koziol
- *              9/8/15
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -2599,13 +2378,13 @@ H5AC_get_entry_ring(const H5F_t *f, haddr_t addr, H5AC_ring_t *ring)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity check */
-    HDassert(f);
-    HDassert(H5F_addr_defined(addr));
-    HDassert(ring);
+    assert(f);
+    assert(H5_addr_defined(addr));
+    assert(ring);
 
     /* Retrieve the ring value for the entry at address */
     if (H5C_get_entry_ring(f, addr, ring) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "Can't retrieve ring for entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "Can't retrieve ring for entry");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2619,9 +2398,6 @@ done:
  *
  * Return:      void
  *
- * Programmer:  Quincey Koziol
- *              Tuesday, September 8, 2015
- *
  *-------------------------------------------------------------------------
  */
 void
@@ -2629,7 +2405,7 @@ H5AC_set_ring(H5AC_ring_t ring, H5AC_ring_t *orig_ring)
 {
     FUNC_ENTER_NOAPI_NOINIT_NOERR
 
-    /* Note: orig_ring can be NULL so don't check it with HDassert() */
+    /* Note: orig_ring can be NULL so don't check it with assert() */
 
     /* Get the current ring value and return that (if orig_ring is NOT null) */
     if (orig_ring)
@@ -2664,9 +2440,6 @@ H5AC_set_ring(H5AC_ring_t ring, H5AC_ring_t *orig_ring)
  * Return:      Success:        Non-negative
  *              Failure:        Negative
  *
- * Programmer:  Quincey Koziol
- *              September 17, 2016
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -2678,11 +2451,11 @@ H5AC_unsettle_entry_ring(void *_entry)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(entry);
+    assert(entry);
 
     /* Unsettle the entry's ring */
     if (H5C_unsettle_entry_ring(entry) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTREMOVE, FAIL, "can't remove entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTREMOVE, FAIL, "can't remove entry");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2710,9 +2483,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  John Mainzer
- *              10/15/16
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -2723,7 +2493,7 @@ H5AC_unsettle_ring(H5F_t *f, H5C_ring_t ring)
     FUNC_ENTER_NOAPI(FAIL)
 
     if (FAIL == (ret_value = H5C_unsettle_ring(f, ring)))
-        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_unsettle_ring() failed")
+        HGOTO_ERROR(H5E_CACHE, H5E_SYSTEM, FAIL, "H5C_unsettle_ring() failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -2737,9 +2507,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Quincey Koziol
- *              September 17, 2016
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -2752,20 +2519,20 @@ H5AC_remove_entry(void *_entry)
     FUNC_ENTER_NOAPI(FAIL)
 
     /* Sanity checks */
-    HDassert(entry);
+    assert(entry);
     cache = entry->cache_ptr;
-    HDassert(cache);
+    assert(cache);
 
     /* Remove the entry from the cache*/
     if (H5C_remove_entry(entry) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTREMOVE, FAIL, "can't remove entry")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTREMOVE, FAIL, "can't remove entry");
 
 done:
     /* If currently logging, generate a message */
     if (cache != NULL && cache->log_info != NULL)
         if (cache->log_info->logging)
             if (H5C_log_write_remove_entry_msg(cache, entry, ret_value) < 0)
-                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message")
+                HDONE_ERROR(H5E_CACHE, H5E_LOGGING, FAIL, "unable to emit log message");
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* H5AC_remove_entry() */
@@ -2777,8 +2544,6 @@ done:
  *
  * Return:      SUCCEED on success, and FAIL on failure.
  *
- * Programmer:  Vailin Choi; March 2017
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -2789,7 +2554,7 @@ H5AC_get_mdc_image_info(const H5AC_t *cache_ptr, haddr_t *image_addr, hsize_t *i
     FUNC_ENTER_NOAPI(FAIL)
 
     if (H5C_get_mdc_image_info((const H5C_t *)cache_ptr, image_addr, image_len) < 0)
-        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "can't retrieve cache image info")
+        HGOTO_ERROR(H5E_CACHE, H5E_CANTGET, FAIL, "can't retrieve cache image info");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)

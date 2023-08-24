@@ -27,31 +27,37 @@
 #include <map>
 #include <string>
 #include <functional>
-#include <std/memory>
+#include <memory>
 #include <algorithm>
 #include <iterator>
 #include <utility>
 #include <stdexcept>
+#include <numeric>
+#include <std/numbers>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
 #include <math/Utilities.h>
 #include <math/poly/Fit.h>
 #include <mem/ScopedAlignedArray.h>
+#include <gsl/gsl.h>
+#include <str/Manip.h>
+#include <str/EncodedStringView.h>
+#include <sys/Conf.h>
+#include <sys/Span.h>
+#include <types/RowCol.h>
+#include <units/Angles.h>
+
 #include <six/NITFReadControl.h>
 #include <six/sicd/SICDWriteControl.h>
 #include <six/Utilities.h>
 #include <six/sicd/ComplexXMLControl.h>
 #include <six/sicd/SICDMesh.h>
-#include <str/Manip.h>
-#include <str/EncodedStringView.h>
-#include <sys/Conf.h>
-#include <types/RowCol.h>
-#include <units/Angles.h>
 #include <six/sicd/AreaPlaneUtility.h>
 #include <six/sicd/GeoLocator.h>
 #include <six/sicd/ImageData.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
+#include <six/sicd/DataParser.h>
 
 namespace fs = std::filesystem;
 
@@ -79,32 +85,60 @@ six::Region buildRegion(const types::RowCol<size_t>& offset,
 }
 }
 
-std::complex<long double> six::sicd::Utilities::from_AMP8I_PHS8I(uint8_t input_amplitude, uint8_t input_value, const six::AmplitudeTable* pAmplitudeTable)
+static auto toComplex_(double A, uint8_t phase)
 {
-    long double A = 0.0;
-    if (pAmplitudeTable != nullptr)
-    {
-        // A = AmpTable( input_amplitude )
-        auto& AmpTable = *(pAmplitudeTable);
-        A = AmpTable.index(input_amplitude);
-    }
-    else
-    {
-        // A = input_amplitude(i.e. 0 to 255)
-        A = input_amplitude;
-    }
-
     // The phase values should be read in (values 0 to 255) and converted to float by doing:
     // P = (1 / 256) * input_value
-    const long double P = (1.0 / 256.0) * input_value;
+    const double P = (1.0 / 256.0) * phase;
 
     // To convert the amplitude and phase values to complex float (i.e. real and imaginary):
     // S = A * cos(2 * pi * P) + j * A * sin(2 * pi * P)
-    const auto angle = units::Radians<long double>{ 2 * M_PI * P };
-    long double sin_angle, cos_angle;
+    const auto angle = units::Radians<double>{ 2 * std::numbers::pi * P };
+    double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
     std::complex<long double> S(A * cos_angle, A * sin_angle);
     return S;
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
+{   
+    // A = input_amplitude(i.e. 0 to 255)
+    const double A = amplitude;
+    return toComplex_(A, phase);
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable& amplitudeTable)
+{
+    const double A = amplitudeTable.index(amplitude);
+    return toComplex_(A, phase);
+}
+std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable)
+{
+    if (pAmplitudeTable != nullptr)
+    {
+        return toComplex(amplitude, phase, *pAmplitudeTable);
+    }
+    else
+    {
+        return toComplex(amplitude, phase);
+    }
+}
+
+static auto iota_0_256_()
+{
+    static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
+
+    std::vector<uint8_t> retval;
+    retval.reserve(UINT8_MAX + 1);
+    for (size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loop.
+    {
+        retval.push_back(gsl::narrow<uint8_t>(i));
+    }
+    assert(retval.size() == UINT8_MAX + 1);
+    return retval;
+}
+std::vector<uint8_t> six::sicd::Utilities::iota_0_256()
+{
+    static const auto retval = iota_0_256_();
+    return retval;
 }
 
 namespace
@@ -172,27 +206,25 @@ class SICD_readerAndConverter final
 
         // There's type mangling going on here.
         // We're taking std::vector<uint8_t> and saying it's packed with std::pair<uint8_t, uint8_t>.
-        static_assert(sizeof(uint8_t) * 2 == sizeof(six::sicd::AMP8I_PHS8I_t), "expected packed layout in pair");
-        auto packed = reinterpret_cast<const six::sicd::AMP8I_PHS8I_t*>(tempVector.data());
+        static_assert(sizeof(uint8_t) * 2 == sizeof(six::AMP8I_PHS8I_t), "expected packed layout in pair");
+        auto packed = reinterpret_cast<const six::AMP8I_PHS8I_t*>(tempVector.data());
 
         // Reuse image data's conversion to complex.
-        static const ptrdiff_t kDefaultCutoff = 0;
         size_t count = (elementsPerRow * rowsToRead) / 2;
-        std::span<const six::sicd::AMP8I_PHS8I_t> input(packed, count);
-        std::span<std::complex<float>> output(bufferPtr, input.size());
-        six::sicd::ImageData::from_AMP8I_PHS8I(lookup, input, output, kDefaultCutoff);
+        auto const input = sys::make_span(packed, count);
+        auto const output = sys::make_span(bufferPtr, input.size());
+        six::sicd::ImageData::toComplex(lookup, input, output);
     }
     const types::RowCol<size_t>& offset;
-    std::complex<float>* buffer;
-    std::unique_ptr<six::sicd::input_amplitudes_t> lookupScope;
-    const six::sicd::input_amplitudes_t& lookup;
+    six::zfloat* buffer;
+    const six::Amp8iPhs8iLookup_t& lookup;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
 			    const types::RowCol<size_t>& offset, const types::RowCol<size_t>& extent,
                 size_t elementsPerRow,
-			    std::complex<float>* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
-      : offset(offset), buffer(buffer), lookupScope(nullptr), lookup(six::sicd::ImageData::get_RE32F_IM32F_values(pAmplitudeTable, lookupScope))
+			    six::zfloat* buffer,  const six::AmplitudeTable* pAmplitudeTable = nullptr)
+      : offset(offset), buffer(buffer), lookup(six::sicd::ImageData::getLookup(pAmplitudeTable))
     {
         SICDreader<T>(reader, imageNumber, offset, extent, elementsPerRow,
             [&](size_t elementsPerRow, size_t row, size_t rowsToRead, const std::vector<T>& tempVector)
@@ -567,7 +599,7 @@ template<typename TComplexDataPtr>
 static void readSicd_(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          TComplexDataPtr& complexData,
-                         std::vector<std::complex<float>>& widebandData)
+                         std::vector<six::zfloat>& widebandData)
 {
     six::sicd::NITFReadComplexXMLControl reader;
     reader.load(sicdPathname, &schemaPaths);
@@ -589,14 +621,14 @@ static void readSicd_(const std::string& sicdPathname,
 void Utilities::readSicd(const std::string& sicdPathname,
                          const std::vector<std::string>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float>>& widebandData)
+                         std::vector<six::zfloat>& widebandData)
 {
     readSicd_(sicdPathname, schemaPaths, complexData, widebandData);
 }
 void Utilities::readSicd(const fs::path& sicdPathname,
                          const std::vector<fs::path>& schemaPaths,
                          std::unique_ptr<ComplexData>& complexData,
-                        std::vector<std::complex<float>>& widebandData)
+                        std::vector<six::zfloat>& widebandData)
 {
     std::vector<std::string> schemaPaths_;
     std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
@@ -615,7 +647,7 @@ static void readSicd_(const std::string& sicdPathname,
                          size_t orderX,
                          size_t orderY,
                          TComplexDataPtr& complexData,
-                         std::vector<std::complex<float>>& widebandData,
+                         std::vector<six::zfloat>& widebandData,
                          six::Poly2D& outputRowColToSlantRow,
                          six::Poly2D& outputRowColToSlantCol,
                          TNoiseMeshPtr& noiseMesh,
@@ -648,7 +680,7 @@ void Utilities::readSicd(const std::string& sicdPathname,
                          size_t orderX,
                          size_t orderY,
                          std::unique_ptr<ComplexData>& complexData,
-                         std::vector<std::complex<float>>& widebandData,
+                         std::vector<six::zfloat>& widebandData,
                          six::Poly2D& outputRowColToSlantRow,
                          six::Poly2D& outputRowColToSlantCol,
                          std::unique_ptr<NoiseMesh>& noiseMesh,
@@ -706,13 +738,13 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
-                                std::complex<float>* buffer)
+                                six::zfloat* buffer)
 {
     const PixelType pixelType = complexData.getPixelType();
     constexpr size_t imageNumber = 0;
 
     const size_t requiredBufferBytes =
-            sizeof(std::complex<float>) * extent.area();
+            sizeof(six::zfloat) * extent.area();
 
     if (buffer == nullptr)
     {
@@ -756,7 +788,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
 }
 void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
-                                std::complex<float>* buffer)
+                                six::zfloat* buffer)
 {
     const types::RowCol<size_t> offset(0, 0);
     const auto extent = getExtent(complexData);
@@ -767,7 +799,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
-                                std::vector<std::complex<float>>& buffer)
+                                std::vector<six::zfloat>& buffer)
 {
     const size_t requiredNumElements = extent.area();
     buffer.resize(requiredNumElements);
@@ -780,7 +812,7 @@ void Utilities::getWidebandData(NITFReadControl& reader,
 
 void Utilities::getWidebandData(NITFReadControl& reader,
                                 const ComplexData& complexData,
-                                std::vector<std::complex<float>>& buffer)
+                                std::vector<six::zfloat>& buffer)
 {
     const types::RowCol<size_t> offset{};
     const auto extent = getExtent(complexData);
@@ -792,7 +824,7 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
                                 const ComplexData& complexData,
                                 const types::RowCol<size_t>& offset,
                                 const types::RowCol<size_t>& extent,
-                                std::complex<float>* buffer)
+                                six::zfloat* buffer)
 {
     six::sicd::NITFReadComplexXMLControl reader;
     reader.load(sicdPathname);
@@ -802,7 +834,7 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
 void Utilities::getWidebandData(const std::string& sicdPathname,
                                 const std::vector<std::string>& schemaPaths,
                                 const ComplexData& complexData,
-                                std::complex<float>* buffer)
+                                six::zfloat* buffer)
 {
     const types::RowCol<size_t> offset{};
     const auto extent = getExtent(complexData);
@@ -814,7 +846,7 @@ void Utilities::getRawData(NITFReadControl& reader,
     const ComplexData& complexData,
     const types::RowCol<size_t>& offset,
     const types::RowCol<size_t>& extent,
-    std::vector<std::complex<float>>& buffer)
+    std::vector<six::zfloat>& buffer)
 {
     const auto pixelType = complexData.getPixelType();
     if (pixelType != PixelType::RE32F_IM32F)
@@ -951,26 +983,23 @@ bool Utilities::isClockwise(const std::vector<RowColInt>& vertices,
     return (area > 0);
 }
 
-template<typename TReturn, typename TSchemaPaths>
-TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& schemaPaths, logging::Logger& log)
-{
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<ComplexXMLControl>();
-
-    auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
-    return TReturn(static_cast<ComplexData*>(data.release()));
-}
 std::unique_ptr<ComplexData> Utilities::parseData(
         ::io::InputStream& xmlStream,
         const std::vector<std::string>& schemaPaths,
         logging::Logger& log)
 {
-    return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, schemaPaths, log);
+    XMLControlRegistry xmlRegistry;
+    xmlRegistry.addCreator<ComplexXMLControl>();
+
+    auto pData = six::parseData(xmlRegistry, xmlStream, schemaPaths, log);
+    return std::unique_ptr<ComplexData>(static_cast<ComplexData*>(pData.release()));
 }
 std::unique_ptr<ComplexData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
-    return Utilities_parseData<std::unique_ptr<ComplexData>>(xmlStream, pSchemaPaths, log);
+    DataParser parser(pSchemaPaths, &log);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(xmlStream);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
@@ -984,11 +1013,9 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(
 std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::FileInputStream inStream(pathname.string());
-    return parseData(inStream, pSchemaPaths, *logger);
+    DataParser parser(pSchemaPaths, pLogger);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(pathname);
 }
 
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(
@@ -1002,18 +1029,14 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
-    return std::unique_ptr<ComplexData>(result.release());
+    return parseDataFromString(xmlStr, &schemaPaths, &log);
 }
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::U8StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, pSchemaPaths, *log);
+    DataParser parser(pSchemaPaths, pLogger);
+    parser.preserveCharacterData(false); // existing behavior
+    return parser.fromXML(xmlStr);
 }
 
 std::string Utilities::toXMLString(const ComplexData& data,
@@ -1030,13 +1053,8 @@ std::string Utilities::toXMLString(const ComplexData& data,
 std::u8string Utilities::toXMLString(const ComplexData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<ComplexXMLControl>();
-
-    logging::NullLogger nullLogger;
-    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
+    const DataParser dataParser(pSchemaPaths, pLogger);
+    return dataParser.toXML(data);
 }
 
 static void update_for_SICD_130(ComplexData& data)
@@ -1193,6 +1211,20 @@ static std::unique_ptr<ComplexData> createFakeComplexData_(const std::string& st
     data->collectionInformation.reset(new CollectionInformation());
     data->collectionInformation->setClassificationLevel("UNCLASSIFIED");
     data->collectionInformation->radarMode = six::RadarModeType::SPOTLIGHT;
+
+    auto& parameters = data->collectionInformation->parameters;
+    six::Parameter param;
+    param.setName("TestParameter");
+    param.setValue("setValue() for TestParameter");
+    parameters.push_back(param);
+
+    // By default, XML parsing in CODA-OSS trims whitespace, see preserveCharacterData
+    param.setName("TestParameterEmpty");
+    param.setValue("");
+    parameters.push_back(param);
+    param.setName("TestParameterThreeSpaces");
+    param.setValue("   ");
+    parameters.push_back(param);
 
     if (!strVersion.empty()) // TODO: better check for version; this avoid changing any existing test code
     {
@@ -1593,19 +1625,19 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
     return reader.interleaved();
 }
 
-static void writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths_, const six::sicd::ComplexData& data, const std::complex<float>* image_)
+static void writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths_, const six::sicd::ComplexData& data, const six::zfloat* image_)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFWriteControl writer(data.unique_clone());
     writer.setLogger(logging::setupLogger("out"));
 
-    const std::span<const std::complex<float>> image(image_, getExtent(data).area());
+    const std::span<const six::zfloat> image(image_, getExtent(data).area());
     std::vector<fs::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
     writer.save_image(image, pathname, schemaPaths);
 }
-void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, std::span<const std::complex<float>> image)
+void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, std::span<const six::zfloat> image)
 {
     if (image.size() != getExtent(data).area())
     {
@@ -1613,7 +1645,7 @@ void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::str
     }
     ::writeAsNITF(pathname, schemaPaths, data, image.data());
 }
-void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexData& data, std::span<const std::complex<float>> image)
+void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexData& data, std::span<const six::zfloat> image)
 {
     std::vector<std::string> schemaPaths_;
     std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
@@ -1624,9 +1656,9 @@ void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path
     writeAsNITF(pathname, schemaPaths, image.data, image.image);
 }
 
-std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const types::RowCol<size_t>& dims)
+std::vector<six::zfloat> six::sicd::testing::make_complex_image(const types::RowCol<size_t>& dims)
 {
-    std::vector<std::complex<float>> image;
+    std::vector<six::zfloat> image;
     image.reserve(dims.area());
     for (size_t r = 0; r < dims.row; r++)
     {
@@ -1638,23 +1670,21 @@ std::vector<std::complex<float>> six::sicd::testing::make_complex_image(const ty
     return image;
 }
 
-std::vector<std::byte> six::sicd::testing::to_bytes(const ComplexImageResult& result, ptrdiff_t cutoff)
+std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& result)
 {
     const auto& image = result.widebandData;
-    const auto bytes = six::as_bytes(image);
+    const auto bytes = sys::as_bytes(image);
 
     std::vector<std::byte> retval;
     const auto& data = *(result.pComplexData);
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
         retval.resize(image.size() * data.getNumBytesPerPixel());
-        const std::span<std::byte> pRetval(retval.data(), retval.size());
-        data.convertPixels(bytes, pRetval, cutoff);
+        data.convertPixels(bytes, sys::make_span(retval));
     }
     else
     {
-        auto pBytes = bytes.data();
-        retval.insert(retval.begin(), pBytes, pBytes + bytes.size());
+        retval.insert(retval.begin(), bytes.begin(), bytes.end());
     }
 
     return retval;

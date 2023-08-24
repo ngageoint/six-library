@@ -29,6 +29,7 @@
 #include <std/filesystem>
 #include <vector>
 #include <std/string>
+#include <map>
 
 #include <scene/sys_Conf.h>
 #include <xml/lite/Element.h>
@@ -145,6 +146,7 @@ public:
 
     //! \return Suported version to uri mapping
     static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
+    static void getVersionUriMap(std::map<Version, xml::lite::Uri>&);
 
 protected:
     logging::Logger *mLog = nullptr;
@@ -179,7 +181,7 @@ private:
     getParser(const xml::lite::Uri&) const;
 
     // Given the URI get associated version
-    std::string uriToVersion(const xml::lite::Uri&) const;
+    Version uriToVersion(const xml::lite::Uri&) const;
 };
 }
 

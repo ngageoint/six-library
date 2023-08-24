@@ -22,12 +22,14 @@
 #include "six/sidd/Utilities.h"
 
 #include <stdexcept>
+#include <set>
 
 #include <str/EncodedStringView.h>
 
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
 #include "six/sidd/DerivedDataBuilder.h"
+#include "six/sidd/DataParser.h"
 
 namespace
 {
@@ -525,24 +527,22 @@ std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     return projModel;
 }
 
-template<typename TReturn, typename TSchemaPaths>
-TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& schemaPaths, logging::Logger& log)
+std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+        const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<DerivedXMLControl>();
 
     auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
-    return TReturn(static_cast<DerivedData*>(data.release()));
+    return std::unique_ptr<DerivedData>(static_cast<DerivedData*>(data.release()));
 }
-std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
-        const std::vector<std::string>& schemaPaths, logging::Logger& log)
-{
-    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
-}
+
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
-    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
+    DataParser dataParser(log, pSchemaPaths);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(xmlStream);
 }
 
 std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
@@ -554,11 +554,9 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pat
 std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::FileInputStream inStream(pathname.string());
-    return parseData(inStream, pSchemaPaths, *logger);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(pathname);
 }
 
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
@@ -576,12 +574,9 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& x
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::U8StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, pSchemaPaths, *log);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(xmlStr);
 }
 
 std::string Utilities::toXMLString(const DerivedData& data,
@@ -597,13 +592,9 @@ std::string Utilities::toXMLString(const DerivedData& data,
 std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<DerivedXMLControl>();
-
-    logging::NullLogger nullLogger;
-    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.toXML(data);
 }
 
 static void createPredefinedFilter(six::sidd::Filter& filter)
@@ -677,7 +668,20 @@ static void initDED(mem::ScopedCopyablePtr<six::sidd::DigitalElevationData>& ded
     ded->nullValue = -32768;
 }
 
-static void initProductCreation(six::sidd::ProductCreation& productCreation, const std::string& strVersion)
+static int32_t getDESVersion(six::sidd300::ISMVersion ismVersion)
+{
+    if (ismVersion == six::sidd300::ISMVersion::v13)
+    {
+        return 13;
+    }
+    if (ismVersion == six::sidd300::ISMVersion::v201609)
+    {
+        return 201609;
+    }
+    throw std::invalid_argument("Unknown 'ISMVersion' value.");
+}
+
+static void initProductCreation(six::sidd::ProductCreation& productCreation, Version siddVersion, six::sidd300::ISMVersion ismVersion)
 {
     productCreation.productName = "ProductName";
     productCreation.productClass = "Unclassified";
@@ -686,18 +690,18 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, con
     productCreation.productCreationExtensions.push_back(parameter);
 
     productCreation.classification.securityExtensions.push_back(parameter);
-    if (strVersion != "3.0.0")
+    if (siddVersion != Version::v3_0_0)
     {
         productCreation.classification.desVersion = 234; // existing code
     }
     else
     {
-        productCreation.classification.desVersion = 201609; // SIDD 3.0
+        productCreation.classification.desVersion = getDESVersion(ismVersion);        
     }
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
-    if (strVersion == "1.0.0")
+    if (siddVersion == Version::v1_0_0)
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
     }
@@ -901,7 +905,7 @@ static void initGeoData(six::GeoDataBase& geoData)
     geoData.geoInfos.push_back(newGeoInfo);
 }
 
-static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures, const std::string& strVersion)
+static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures, Version siddVersion)
 {
     // The first collection is corresponds to the parent image
     six::sidd::Collection& collection = *exFeatures.collections[0];
@@ -935,7 +939,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     polarization->txPolarization = six::PolarizationSequenceType::V;
     polarization->rcvPolarization = six::PolarizationSequenceType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
-    if (strVersion == "1.0.0")
+    if (siddVersion == Version::v1_0_0)
     {
         polarization->processed = six::BooleanType::IS_TRUE;
     }
@@ -953,7 +957,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     collection.geometry->extensions.push_back(param);
 
     collection.phenomenology.reset(new six::sidd::Phenomenology());
-    if (strVersion != "3.0.0")
+    if (siddVersion != Version::v3_0_0)
     {
         // [-180, 180) before SIDD 3.0
         collection.phenomenology->shadow = six::AngleMagnitude(-1.5, 3.7);
@@ -975,7 +979,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     exFeatures.product[0].north = 58.332;
     exFeatures.product[0].extensions.push_back(param);
 
-    if (strVersion == "2.0.0")
+    if (siddVersion == Version::v2_0_0)
     {
         exFeatures.product[0].ellipticity = 12.0;
         exFeatures.product[0].polarization.resize(1);
@@ -1116,14 +1120,12 @@ static void initProductProcessing(six::sidd::ProductProcessing& processing)
 
 static void populateData(six::sidd::DerivedData& siddData, const std::string& lutType = "Mono")
 {
-    const auto strVersion = siddData.getVersion();
+    const auto siddVersion = siddData.getSIDDVersion();
 
     constexpr bool smallImage = true;
-
-    siddData.setVersion(strVersion);
     const auto elementSize = static_cast<size_t>(lutType == "Mono" ? 2 : 3);
 
-    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
+    if ((siddVersion == Version::v2_0_0) || (siddVersion == Version::v3_0_0))
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
@@ -1148,7 +1150,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     //siddData.setImageCorners(makeUpCornersFromDMS());
 
     // Can certainly be init'ed in a function
-    initProductCreation(*siddData.productCreation, strVersion);
+    initProductCreation(*siddData.productCreation, siddVersion, siddData.getISMVersion());
 
     // Or directly if preferred
     siddData.display->decimationMethod = DecimationMethod::BRIGHTEST_PIXEL;
@@ -1205,7 +1207,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     planeProjection->productPlane.rowUnitVector = six::Vector3(0.0);
     planeProjection->productPlane.colUnitVector = six::Vector3(0.0);
 
-    initExploitationFeatures(*siddData.exploitationFeatures, strVersion);
+    initExploitationFeatures(*siddData.exploitationFeatures, siddVersion);
     initDED(siddData.digitalElevationData);
     initProductProcessing(*siddData.productProcessing);
     initDownstreamReprocessing(*siddData.downstreamReprocessing);
@@ -1274,10 +1276,10 @@ static void update_for_SIDD_300(DerivedData& data) // n.b., much of this was add
     populateData(data);
 }
 
-static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& strVersion)
+static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddVersion, const six::sidd300::ISMVersion* pISMVersion = nullptr)
 {
     std::unique_ptr<DerivedData> data;
-    if (!strVersion.empty()) // preserve behavior of existing code
+    if (pSiddVersion != nullptr) // preserve behavior of existing code
     {
         //-----------------------------------------------------------
         // Make the object.  You could do this directly, but this way
@@ -1313,11 +1315,18 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& st
         data = std::make_unique<DerivedData>();
     }
 
-    if (!strVersion.empty())
+    if (pSiddVersion != nullptr)
     {
-        data->setVersion(strVersion);
+        if (pISMVersion != nullptr)
+        {
+            data->setSIDDVersion(*pSiddVersion, *pISMVersion);
+        }
+        else
+        {
+            data->setSIDDVersion(*pSiddVersion);
+        }       
     }
-    data->productCreation.reset(new ProductCreation());
+
     data->productCreation->classification.classification = "U";
     data->display.reset(new Display());
     data->geographicAndTarget.reset(new GeographicAndTarget());
@@ -1373,24 +1382,36 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const std::string& st
     data->exploitationFeatures->product[0].resolution.row = 0;
     data->exploitationFeatures->product[0].resolution.col = 0;
 
-    if (!strVersion.empty()) // TODO: better check for version; this avoid changing any existing test code
+    if (pSiddVersion != nullptr) // TODO: better check for version; this avoid changing any existing test code
     {
         update_for_SIDD_300(*data);
     }
 
     return data;
 }
-std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(const std::string& strVersion)
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion)
 {
-    if ((strVersion == "2.0.0") || (strVersion == "3.0.0"))
+    if (siddVersion == Version::v3_0_0)
     {
-        return createFakeDerivedData_(strVersion);
+        throw std::invalid_argument("Must use ISMVersion overload.");
     }
-    throw std::invalid_argument("strVersion = '" + strVersion + "' is not supported.");
+    if (siddVersion == Version::v2_0_0)
+    {
+        return createFakeDerivedData_(&siddVersion);
+    }
+    throw std::invalid_argument("SIDD version = '" + to_string(siddVersion) + "' is not supported.");
+}
+std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersion)
+{
+    if (siddVersion != Version::v3_0_0)
+    {
+        return createFakeDerivedData(siddVersion);
+    }
+    return createFakeDerivedData_(&siddVersion, &ismVersion);
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData()
 {
-    return std::unique_ptr<DerivedData>(createFakeDerivedData_("").release());
+    return createFakeDerivedData_(nullptr);
 }
 
 }

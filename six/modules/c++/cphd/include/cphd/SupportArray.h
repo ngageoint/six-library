@@ -20,16 +20,20 @@
  *
  */
 
-#ifndef __CPHD_SUPPORT_ARRAY_H__
-#define __CPHD_SUPPORT_ARRAY_H__
+#pragma once
+#ifndef SIX_cphd_SupportArray_h_INCLUDED_
+#define SIX_cphd_SupportArray_h_INCLUDED_
+
+#include <stddef.h>
 
 #include <ostream>
 #include <vector>
 #include <unordered_map>
-#include <stddef.h>
+
+#include <six/XsElement.h>
+
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
-
 
 namespace cphd
 {
@@ -112,6 +116,14 @@ private:
 };
 
 /*!
+ *  \struct DwellTimeArray
+ *
+ *  DTA(m,n) Array of COD times(sec) and Dwell Times(sec) for points
+ *  on reference surface. Array coordinates are image area coordinates(IAX, IAY).
+ */
+using DwellTimeArray = SupportArrayParameter;
+
+/*!
  *  \struct AdditionalSupportArray
  *
  *  \brief Addiitonal support array custom parameters
@@ -190,14 +202,15 @@ struct AdditionalSupportArray : SupportArrayParameter
  *  array(s) content and grid coordinates.
  *  See section 2.3
  */
-struct SupportArray
+struct SupportArray final
 {
     //! Equality operators
     bool operator==(const SupportArray& other) const
     {
-        return iazArray == other.iazArray &&
-                antGainPhase == other.antGainPhase &&
-                addedSupportArray == other.addedSupportArray;
+        return (iazArray == other.iazArray)
+            && (antGainPhase == other.antGainPhase)
+            && (dwellTimeArray == other.dwellTimeArray)
+            && (addedSupportArray == other.addedSupportArray);
     }
     bool operator!=(const SupportArray& other) const
     {
@@ -210,6 +223,9 @@ struct SupportArray
     //! Get AGP support array by unique id
     SupportArrayParameter getAGPSupportArray(const std::string& key) const;
 
+    //! Get Dwell Time array by unique id
+    SupportArrayParameter getDWTSupportArray(const std::string& key) const;
+
     //! Get AGP support array by unique id
     AdditionalSupportArray getAddedSupportArray(const std::string& key) const;
 
@@ -218,6 +234,9 @@ struct SupportArray
 
     //! Vector of AGP type arrays
     std::vector<SupportArrayParameter> antGainPhase;
+
+    //! Dwell Time Array
+    std::vector<DwellTimeArray> dwellTimeArray; // new in CPHD 1.1.0
 
     //! Map of additonally defined support arrays
     std::unordered_map<std::string, AdditionalSupportArray> addedSupportArray;
@@ -229,4 +248,4 @@ std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a);
 std::ostream& operator<< (std::ostream& os, const SupportArray& s);
 }
 
-#endif
+#endif // SIX_cphd_SupportArray_h_INCLUDED_

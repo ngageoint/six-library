@@ -20,157 +20,28 @@
  *
  */
 
-#ifndef __CPHD_CPHD_WRITER_H__
-#define __CPHD_CPHD_WRITER_H__
+#ifndef SIX_cphd_CPHDWriter_h_INCLUDED_
+#define SIX_cphd_CPHDWriter_h_INCLUDED_
 #pragma once
 
 #include <string>
 #include <vector>
 
-#include <scene/sys_Conf.h>
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
+
+#include <scene/sys_Conf.h>
+
+#include <cphd/Types.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Metadata.h>
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>
+#include <cphd/DataWriter.h>
 
 namespace cphd
 {
-
-/*
- *  \class DataWriter
- *
- *  \brief Class to handle writing to file and byte swapping
- */
-struct DataWriter
-{
-    /*
-     *  \func DataWriter
-     *  \brief Constructor
-     *
-     *  \param stream The seekable output stream to be written
-     *  \param numThreads Number of threads for parallel processing
-     */
-    DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
-               size_t numThreads);
-
-    /*
-     *  Destructor
-     */
-    virtual ~DataWriter();
-
-    /*
-     *  \func operator()
-     *  \brief Overload operator performs write and endian swap
-     *
-     *  \param data Pointer to the data that will be written to the filestream
-     *  \param numElements Total number of elements in array
-     *  \param elementSize Size of each element
-     */
-    virtual void operator()(const sys::ubyte* data,
-                            size_t numElements,
-                            size_t elementSize) = 0;
-    virtual void operator()(const std::byte* data,
-                            size_t numElements,
-                            size_t elementSize)
-    {
-        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
-    }
-
-protected:
-    //! Output stream of CPHD
-    std::shared_ptr<io::SeekableOutputStream> mStream;
-    //! Number of threads for parallelism
-    const size_t mNumThreads;
-};
-
-/*
- *  \class DataWriterLittleEndian
- *
- *  \brief Class to handle writing to output stream and byte swapping
- *
- *  For little endian to big endian storage
- */
-struct DataWriterLittleEndian final : public DataWriter
-{
-    /*
-     *  \func DataWriterLittleEndian
-     *  \brief Constructor
-     *
-     *  \param stream The seekable output stream to be written
-     *  \param numThreads Number of threads for parallel processing
-     *  \param scratchSize Size of buffer to be used for scratch space
-     */
-    DataWriterLittleEndian(std::shared_ptr<io::SeekableOutputStream> stream,
-                           size_t numThreads,
-                           size_t scratchSize);
-
-    /*
-     *  \func operator()
-     *  \brief Overload operator performs write and endian swap
-     *
-     *  \param data Pointer to the data that will be written to the filestream
-     *  \param numElements Total number of elements in array
-     *  \param elementSize Size of each element
-     */
-    void operator()(const sys::ubyte* data,
-                            size_t numElements,
-                            size_t elementSize) override;
-    void operator()(const std::byte* data,
-                            size_t numElements,
-                            size_t elementSize) override
-    {
-        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
-    }
-
-
-private:
-    // Scratch space buffer
-    std::vector<std::byte> mScratch;
-};
-
-/*
- *  \class DataWriterBigEndian
- *
- *  \brief Class to handle writing to file
- *
- *  No byte swap. Already big endian.
- */
-struct DataWriterBigEndian final : public DataWriter
-{
-    /*
-     *  \func DataWriter
-     *  \brief Constructor
-     *
-     *  \param stream The seekable output stream to be written
-     *  \param numThreads Number of threads for parallel processing
-     */
-    DataWriterBigEndian(std::shared_ptr<io::SeekableOutputStream> stream,
-                        size_t numThreads);
-
-    /*
-     *  \func operator()
-     *  \brief Overload operator performs write
-     *
-     *  No endian swapping is necessary. Already Big Endian.
-     *
-     *  \param data Pointer to the data that will be written to the filestream
-     *  \param numElements Total number of elements in array
-     *  \param elementSize Size of each element
-     */
-    void operator()(const sys::ubyte* data,
-                            size_t numElements,
-                            size_t elementSize) override;
-    void operator()(const std::byte* data,
-                            size_t numElements,
-                            size_t elementSize) override
-    {
-        (*this)(reinterpret_cast<const sys::ubyte*>(data), numElements, elementSize);
-    }
-};
-
 
 /*
  *  \class CPHDWriter
@@ -179,7 +50,7 @@ struct DataWriterBigEndian final : public DataWriter
  *  Used to write a CPHD file. You must be able to provide the
  *  appropriate metadata and vector based metadata.
  */
-struct CPHDWriter
+struct CPHDWriter final
 {
     /*
      *  \func Constructor
@@ -233,15 +104,22 @@ struct CPHDWriter
             size_t numThreads = 0,
             size_t scratchSpaceSize = 4 * 1024 * 1024);
 
+    CPHDWriter() = delete;
+    CPHDWriter(const CPHDWriter&) = delete;
+    CPHDWriter& operator=(const CPHDWriter&) = delete;
+    CPHDWriter(CPHDWriter&&) = delete;
+    CPHDWriter& operator=(CPHDWriter&&) = delete;
+    ~CPHDWriter() = default;
+
     /*
      *  \func write
      *  \brief Writes the complete CPHD into the file.
      *
      *  This only works with valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
-     *      std::complex<float>
-     *      std::complex<int16_t>
-     *      std::complex<int8_t>
+     *      cphd::zfloat
+     *      chpd::zint16_t
+     *      cphd::zint8_t
      *
      *  \param pvpBlock The vector based metadata to write.
      *  \param widebandData .The wideband data to write to disk
@@ -332,9 +210,9 @@ struct CPHDWriter
      *  using this method. This only works with
      *  valid CPHDWriter data types:
      *      std:: ubyte*  (for compressed data)
-     *      std::complex<float>
-     *      std::complex<int16_t>
-     *      std::complex<int8_t>
+     *      cphd::zfloat
+     *      chpd::zint16_t
+     *      cphd::zint8_t
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data
@@ -350,6 +228,10 @@ struct CPHDWriter
     void close()
     {
         mStream->close();
+    }
+    std::shared_ptr<io::SeekableOutputStream> getStream() const
+    {
+        return mStream;
     }
 
 private:
@@ -387,7 +269,6 @@ private:
 
     //! DataWriter object
     std::unique_ptr<DataWriter> mDataWriter;
-    void initializeDataWriter();
 
     // Book-keeping element
     //! metadata information
@@ -407,4 +288,4 @@ private:
 };
 }
 
-#endif
+#endif // SIX_cphd_CPHDWriter_h_INCLUDED_

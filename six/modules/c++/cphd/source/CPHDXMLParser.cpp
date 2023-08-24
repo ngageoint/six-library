@@ -19,14 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/CPHDXMLParser.h>
+
 #include <set>
+#include <tuple>
+
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <str/Convert.h>
 #include <six/Utilities.h>
 #include <six/SICommonXMLParser.h>
-#include <cphd/CPHDXMLParser.h>
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>
 #include <cphd/Types.h>
@@ -69,12 +72,13 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     toXML(metadata.data, root);
     toXML(metadata.channel, root);
     toXML(metadata.pvp, root);
+    toXML(metadata.dwell, root);
+    toXML(metadata.referenceGeometry, root);
+
     if (metadata.supportArray.get())
     {
         toXML(*(metadata.supportArray), root);
     }
-    toXML(metadata.dwell, root);
-    toXML(metadata.referenceGeometry, root);
     if (metadata.antenna.get())
     {
         toXML(*(metadata.antenna), root);
@@ -99,6 +103,7 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     {
         toXML(*(metadata.matchInfo), root);
     }
+
     //set the XMLNS
     root->setNamespacePrefix("", getDefaultURI());
 
@@ -328,6 +333,32 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
     return dataXML;
 }
 
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<PolRef>& o, xml::lite::Element& parent)
+{
+    XMLElem pXML = nullptr;
+    if (has_value(o))
+    {
+        pXML = newElement(o.tag(), &parent);
+        std::ignore = create(parser(), value(o).ampH, *pXML);
+        std::ignore = create(parser(), value(o).ampV, *pXML);
+        std::ignore = create(parser(), value(o).phaseV, *pXML);
+    }
+
+    return pXML;
+}
+
+XMLElem CPHDXMLParser::toXML(const Polarization& obj, xml::lite::Element& parent)
+{
+    auto polXML = newElement("Polarization", &parent);
+    createString("TxPol", obj.txPol, polXML);
+    createString("RcvPol", obj.rcvPol, polXML);
+
+    toXML(obj.txPolRef, *polXML); // added in CPHD 1.1.0
+    toXML(obj.rcvPolRef, *polXML); // added in CPHD 1.1.0
+
+    return polXML;
+}
+
 XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
 {
     XMLElem channelXML = newElement("Channel", parent);
@@ -348,9 +379,8 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
         {
             createBooleanType("SignalNormal", channel.parameters[ii].signalNormal, parametersXML);
         }
-        XMLElem polXML = newElement("Polarization", parametersXML);
-        createString("TxPol", channel.parameters[ii].polarization.txPol, polXML);
-        createString("RcvPol", channel.parameters[ii].polarization.rcvPol, polXML);
+        std::ignore = toXML(channel.parameters[ii].polarization, *parametersXML);
+
         createDouble("FxC", channel.parameters[ii].fxC, parametersXML);
         createDouble("FxBW", channel.parameters[ii].fxBW, parametersXML);
         createOptionalDouble("FxBWNoise", channel.parameters[ii].fxBWNoise, parametersXML);
@@ -372,6 +402,9 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
         XMLElem dwellTimesXML = newElement("DwellTimes", parametersXML);
         createString("CODId", channel.parameters[ii].dwellTimes.codId, dwellTimesXML);
         createString("DwellId", channel.parameters[ii].dwellTimes.dwellId, dwellTimesXML);
+        std::ignore = create(parser(), channel.parameters[ii].dwellTimes.dtaId, *dwellTimesXML);
+        std::ignore = create(parser(), channel.parameters[ii].dwellTimes.useDTA, *dwellTimesXML);
+
         if(!six::Init::isUndefined(channel.parameters[ii].imageArea))
         {
             XMLElem imageAreaXML = newElement("ImageArea", parametersXML);
@@ -438,6 +471,43 @@ XMLElem CPHDXMLParser::toXML(const Channel& channel, XMLElem parent)
     return channelXML;
 }
 
+XMLElem CPHDXMLParser::toXML(const six::XsElement<PerVectorParameterXYZ>& v, xml::lite::Element& parent)
+{
+    return createPVPType(v.tag(), v.value().param, &parent);
+}
+XMLElem CPHDXMLParser::toXML(const six::XsElement<PerVectorParameterEB>& v, xml::lite::Element& parent)
+{
+    return createPVPType(v.tag(), v.value().param, &parent);
+}
+
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<TxAntenna>& o, xml::lite::Element& parent)
+{
+    XMLElem pXML = nullptr;
+    if (has_value(o))
+    {
+        pXML = newElement(o.tag(), &parent);
+        std::ignore = toXML(value(o).txACX, *pXML);
+        std::ignore = toXML(value(o).txACY, *pXML);
+        std::ignore = toXML(value(o).txEB, *pXML);
+    }
+
+    return pXML;
+}
+
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<RcvAntenna>& o, xml::lite::Element& parent)
+{
+    XMLElem pXML = nullptr;
+    if (has_value(o))
+    {
+        pXML = newElement(o.tag(), &parent);
+        std::ignore = toXML(value(o).rcvACX, *pXML);
+        std::ignore = toXML(value(o).rcvACY, *pXML);
+        std::ignore = toXML(value(o).rcvEB, *pXML);
+    }
+
+    return pXML;
+}
+
 XMLElem CPHDXMLParser::toXML(const Pvp& pvp, XMLElem parent)
 {
     XMLElem pvpXML = newElement("PVP", parent);
@@ -486,6 +556,10 @@ XMLElem CPHDXMLParser::toXML(const Pvp& pvp, XMLElem parent)
     {
         createPVPType("SIGNAL", pvp.signal, pvpXML);
     }
+
+    std::ignore = toXML(pvp.txAntenna, *pvpXML);
+    std::ignore = toXML(pvp.rcvAntenna, *pvpXML);
+
     for (auto it = pvp.addedPVP.begin(); it != pvp.addedPVP.end(); ++it)
     {
         createAPVPType("AddedPVP", it->second, pvpXML);
@@ -494,36 +568,30 @@ XMLElem CPHDXMLParser::toXML(const Pvp& pvp, XMLElem parent)
     return pvpXML;
 }
 
+void CPHDXMLParser::createSupportArray(const std::vector<SupportArrayParameter>& supportArray,
+    const std::string& tag, xml::lite::Element& parent)
+{
+    for (auto&& param : supportArray)
+    {
+        XMLElem pXML = newElement(tag, &parent);
+        createInt("Identifier", param.getIdentifier(), pXML);
+        createString("ElementFormat", param.elementFormat, pXML);
+        createDouble("X0", param.x0, pXML);
+        createDouble("Y0", param.y0, pXML);
+        createDouble("XSS", param.xSS, pXML);
+        createDouble("YSS", param.ySS, pXML);
+
+    }
+}
+
 //Assumes optional handled by caller
 XMLElem CPHDXMLParser::toXML(const SupportArray& supports, XMLElem parent)
 {
     XMLElem supportsXML = newElement("SupportArray", parent);
-    if (!supports.iazArray.empty())
-    {
-        for (size_t ii = 0; ii < supports.iazArray.size(); ++ii)
-        {
-            XMLElem iazArrayXML = newElement("IAZArray", supportsXML);
-            createInt("Identifier", supports.iazArray[ii].getIdentifier(), iazArrayXML);
-            createString("ElementFormat", supports.iazArray[ii].elementFormat, iazArrayXML);
-            createDouble("X0", supports.iazArray[ii].x0, iazArrayXML);
-            createDouble("Y0", supports.iazArray[ii].y0, iazArrayXML);
-            createDouble("XSS", supports.iazArray[ii].xSS, iazArrayXML);
-            createDouble("YSS", supports.iazArray[ii].ySS, iazArrayXML);
-        }
-    }
-    if (!supports.antGainPhase.empty())
-    {
-        for (size_t ii = 0; ii < supports.antGainPhase.size(); ++ii)
-        {
-            XMLElem antGainPhaseXML = newElement("AntGainPhase", supportsXML);
-            createInt("Identifier", supports.antGainPhase[ii].getIdentifier(), antGainPhaseXML);
-            createString("ElementFormat", supports.antGainPhase[ii].elementFormat, antGainPhaseXML);
-            createDouble("X0", supports.antGainPhase[ii].x0, antGainPhaseXML);
-            createDouble("Y0", supports.antGainPhase[ii].y0, antGainPhaseXML);
-            createDouble("XSS", supports.antGainPhase[ii].xSS, antGainPhaseXML);
-            createDouble("YSS", supports.antGainPhase[ii].ySS, antGainPhaseXML);
-        }
-    }
+    createSupportArray(supports.iazArray, "IAZArray", *supportsXML);
+    createSupportArray(supports.antGainPhase, "AntGainPhase", *supportsXML);
+    createSupportArray(supports.dwellTimeArray, "DwellTimeArray", *supportsXML); // added in CPHD 1.1.0
+
     if (!supports.addedSupportArray.empty())
     {
         for (auto it = supports.addedSupportArray.begin(); it != supports.addedSupportArray.end(); ++it)
@@ -637,6 +705,46 @@ XMLElem CPHDXMLParser::toXML(const ReferenceGeometry& refGeo, XMLElem parent)
     return refGeoXML;
 }
 
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>& o, xml::lite::Element& parent)
+{
+    XMLElem retval = nullptr;
+    if (has_value(o))
+    {
+        retval = newElement(o.tag(), &parent);
+        std::ignore = create(parser(), value(o).dcxsf, *retval);
+        std::ignore = create(parser(), value(o).dcysf, *retval);
+    }
+
+    return retval;
+}
+
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>& o, xml::lite::Element& parent)
+{
+    XMLElem retval = nullptr;
+    if (has_value(o))
+    {
+        retval = newElement(o.tag(), &parent);
+        std::ignore = create(parser(), value(o).dcxsf, *retval);
+        std::ignore = create(parser(), value(o).dcysf, *retval);
+    }
+
+    return retval;
+}
+
+XMLElem CPHDXMLParser::toXML(const six::XsElement_minOccurs0<AntPattern::AntPolRef>& o, xml::lite::Element& parent)
+{
+    XMLElem retval = nullptr;
+    if (has_value(o))
+    {
+        retval = newElement(o.tag(), &parent);
+        std::ignore = create(parser(), value(o).ampX, *retval);
+        std::ignore = create(parser(), value(o).ampY, *retval);
+        std::ignore = create(parser(), value(o).phaseY, *retval);
+    }
+
+    return retval;
+}
+
 XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
 {
     XMLElem antennaXML = newElement("Antenna", parent);
@@ -649,6 +757,7 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         createString("Identifier", antenna.antCoordFrame[ii].identifier, antCoordFrameXML);
         mCommon.createPolyXYZ("XAxisPoly", antenna.antCoordFrame[ii].xAxisPoly, antCoordFrameXML);
         mCommon.createPolyXYZ("YAxisPoly", antenna.antCoordFrame[ii].yAxisPoly, antCoordFrameXML);
+        create(parser(), antenna.antCoordFrame[ii].useACFPVP, *antCoordFrameXML);
     }
     for (size_t ii = 0; ii < antenna.antPhaseCenter.size(); ++ii)
     {
@@ -667,20 +776,31 @@ XMLElem CPHDXMLParser::toXML(const Antenna& antenna, XMLElem parent)
         {
             createBooleanType("EBFreqShift", antenna.antPattern[ii].ebFreqShift, antPatternXML);
         }
+        std::ignore = toXML(antenna.antPattern[ii].ebFreqShiftSF, *antPatternXML);
+
         if (!six::Init::isUndefined(antenna.antPattern[ii].mlFreqDilation))
         {
             createBooleanType("MLFreqDilation", antenna.antPattern[ii].mlFreqDilation, antPatternXML);
         }
+        std::ignore = toXML(antenna.antPattern[ii].mlFreqDilationSF, *antPatternXML);
+
         if (!six::Init::isUndefined(antenna.antPattern[ii].gainBSPoly))
         {
             mCommon.createPoly1D("GainBSPoly", antenna.antPattern[ii].gainBSPoly, antPatternXML);
         }
+
+        std::ignore = toXML(antenna.antPattern[ii].antPolRef, *antPatternXML);
+
         XMLElem ebXML = newElement("EB", antPatternXML);
         mCommon.createPoly1D("DCXPoly", antenna.antPattern[ii].eb.dcxPoly, ebXML);
         mCommon.createPoly1D("DCYPoly", antenna.antPattern[ii].eb.dcyPoly, ebXML);
+        create(parser(), antenna.antPattern[ii].eb.useEBPVP, *ebXML);
+
         XMLElem arrayXML = newElement("Array", antPatternXML);
         mCommon.createPoly2D("GainPoly", antenna.antPattern[ii].array.gainPoly, arrayXML);
         mCommon.createPoly2D("PhasePoly", antenna.antPattern[ii].array.phasePoly, arrayXML);
+        create(parser(), antenna.antPattern[ii].array.antGPId, *arrayXML);
+
         XMLElem elementXML = newElement("Element", antPatternXML);
         mCommon.createPoly2D("GainPoly", antenna.antPattern[ii].element.gainPoly, elementXML);
         mCommon.createPoly2D("PhasePoly", antenna.antPattern[ii].element.phasePoly, elementXML);
@@ -803,6 +923,7 @@ XMLElem CPHDXMLParser::toXML(const ErrorParameters& errParams, XMLElem parent)
         XMLElem txPlatXML = newElement("TxPlatform", biXML);
         createErrorParamPlatform("TxPlatform", errParams.bistatic->txPlatform, txPlatXML);
         XMLElem radarTxXML = newElement("RadarSensor", txPlatXML);
+        create(parser(), errParams.bistatic->txPlatform.radarSensor.delayBias, *radarTxXML);
         createOptionalDouble("ClockFreqSF", errParams.bistatic->txPlatform.radarSensor.clockFreqSF, radarTxXML);
         createDouble("CollectionStartTime", errParams.bistatic->txPlatform.radarSensor.collectionStartTime, radarTxXML);
 
@@ -907,16 +1028,16 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
     XMLElem pvpXML            = getFirstAndOnly(root, "PVP");
     XMLElem dwellXML          = getFirstAndOnly(root, "Dwell");
     XMLElem refGeoXML         = getFirstAndOnly(root, "ReferenceGeometry");
+
     XMLElem supportArrayXML   = getOptional(root, "SupportArray");
     XMLElem antennaXML        = getOptional(root, "Antenna");
     XMLElem txRcvXML          = getOptional(root, "TxRcv");
     XMLElem errParamXML       = getOptional(root, "ErrorParameters");
     XMLElem productInfoXML    = getOptional(root, "ProductInfo");
-    XMLElem matchInfoXML      = getOptional(root, "MatchInfo");
-
     std::vector<XMLElem> geoInfoXMLVec;
     root->getElementsByTagName("GeoInfo", geoInfoXMLVec);
     cphd->geoInfo.resize(geoInfoXMLVec.size());
+    XMLElem matchInfoXML = getOptional(root, "MatchInfo");
 
     // Parse XML for each section
     fromXML(collectionIDXML, cphd->collectionID);
@@ -927,6 +1048,7 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
     fromXML(pvpXML, cphd->pvp);
     fromXML(dwellXML, cphd->dwell);
     fromXML(refGeoXML, cphd->referenceGeometry);
+
     if(supportArrayXML)
     {
         cphd->supportArray.reset(new SupportArray());
@@ -952,14 +1074,14 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
         cphd->productInfo.reset(new ProductInfo());
         fromXML(productInfoXML, *(cphd->productInfo));
     }
-    if(matchInfoXML)
-    {
-        cphd->matchInfo.reset(new MatchInformation());
-        fromXML(matchInfoXML, *(cphd->matchInfo));
-    }
     for (size_t ii = 0; ii < geoInfoXMLVec.size(); ++ii)
     {
         fromXML(geoInfoXMLVec[ii], cphd->geoInfo[ii]);
+    }
+    if (matchInfoXML)
+    {
+        cphd->matchInfo.reset(new MatchInformation());
+        fromXML(matchInfoXML, *(cphd->matchInfo));
     }
 
     return cphd;
@@ -1076,13 +1198,15 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* globalXML, Global& global)
     }
 
     // IonoParameters
-    const xml::lite::Element* ionoXML = getOptional(globalXML, "IonoParameters");
-    if (ionoXML)
+    if (const auto ionoXML = getOptional(globalXML, "IonoParameters"))
     {
         // Optional
         global.ionoParameters.reset(new IonoParameters());
         parseDouble(getFirstAndOnly(ionoXML, "TECV"), global.ionoParameters->tecv);
-        parseDouble(getFirstAndOnly(ionoXML, "F2Height"), global.ionoParameters->f2Height);
+        if (const auto f2HeightXML = getOptional(ionoXML, "F2Height"))
+        {
+            parseDouble(f2HeightXML, global.ionoParameters->f2Height);
+        }        
     }
 }
 
@@ -1288,12 +1412,9 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* dataXML, Data& data)
 void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& channel)
 {
     parseString(getFirstAndOnly(channelXML, "RefChId"), channel.refChId);
-    parseBooleanType(getFirstAndOnly(channelXML, "FXFixedCPHD"),
-                     channel.fxFixedCphd);
-    parseBooleanType(getFirstAndOnly(channelXML, "TOAFixedCPHD"),
-                     channel.toaFixedCphd);
-    parseBooleanType(getFirstAndOnly(channelXML, "SRPFixedCPHD"),
-                     channel.srpFixedCphd);
+    parseBooleanType(getFirstAndOnly(channelXML, "FXFixedCPHD"), channel.fxFixedCphd);
+    parseBooleanType(getFirstAndOnly(channelXML, "TOAFixedCPHD"), channel.toaFixedCphd);
+    parseBooleanType(getFirstAndOnly(channelXML, "SRPFixedCPHD"), channel.srpFixedCphd);
 
     std::vector<XMLElem> parametersXML;
     channelXML->getElementsByTagName("Parameters", parametersXML);
@@ -1307,6 +1428,40 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& chann
     if(addedParametersXML)
     {
         mCommon.parseParameters(addedParametersXML, "Parameter", channel.addedParameters);
+    }
+}
+
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement<PerVectorParameterXYZ>& v) const
+{
+    auto& param = value(v).param;
+    const auto offset = parsePVPType(parent, param);
+    setOffset(param, offset);
+}
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement<PerVectorParameterEB>& v) const
+{
+    auto& param = value(v).param;
+    const auto offset = parsePVPType(parent, param);
+    setOffset(param, offset);
+}
+
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<TxAntenna>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o = TxAntenna{};
+        parse(*pXML, value(o).txACX);
+        parse(*pXML, value(o).txACY);
+        parse(*pXML, value(o).txEB);
+    }
+}
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<RcvAntenna>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o = RcvAntenna{};
+        parse(*pXML, value(o).rcvACX);
+        parse(*pXML, value(o).rcvACY);
+        parse(*pXML, value(o).rcvEB);
     }
 }
 
@@ -1337,6 +1492,9 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* pvpXML, Pvp& pvp)
     parseOptionalPVPType(pvpXML, "TOAE2", pvp, pvp.toaE2);
     parseOptionalPVPType(pvpXML, "TDIonoSRP", pvp, pvp.tdIonoSRP);
     parseOptionalPVPType(pvpXML, "SIGNAL", pvp, pvp.signal);
+
+    parse(*pvpXML, pvp.txAntenna);
+    parse(*pvpXML, pvp.rcvAntenna);
 
     std::vector<XMLElem> addedParamsXML;
     const std::string str = "AddedPVP";
@@ -1425,23 +1583,26 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* refGeoXML, ReferenceGeomet
     }
 }
 
+std::vector<SupportArrayParameter> CPHDXMLParser::parseSupportArray(const std::string& tag, const xml::lite::Element& parent) const
+{
+    std::vector<XMLElem> elements;
+    parent.getElementsByTagName(tag, elements);
+    std::vector<SupportArrayParameter> supportArray;
+    supportArray.reserve(elements.size());
+    for (const auto& element : elements)
+    {
+        SupportArrayParameter param;
+        parseSupportArrayParameter(element, param, false /*additionalFlag*/);
+        supportArray.push_back(std::move(param));
+    }
+    return supportArray;
+}
+
 void CPHDXMLParser::fromXML(const xml::lite::Element* supportArrayXML, SupportArray& supportArray)
 {
-    std::vector<XMLElem> iazArrayXMLVec;
-    supportArrayXML->getElementsByTagName("IAZArray", iazArrayXMLVec);
-    supportArray.iazArray.resize(iazArrayXMLVec.size());
-    for (size_t ii = 0; ii < iazArrayXMLVec.size(); ++ii)
-    {
-        parseSupportArrayParameter(iazArrayXMLVec[ii], supportArray.iazArray[ii], false);
-    }
-
-    std::vector<XMLElem> antGainPhaseXMLVec;
-    supportArrayXML->getElementsByTagName("AntGainPhase", antGainPhaseXMLVec);
-    supportArray.antGainPhase.resize(antGainPhaseXMLVec.size());
-    for (size_t ii = 0; ii < antGainPhaseXMLVec.size(); ++ii)
-    {
-        parseSupportArrayParameter(antGainPhaseXMLVec[ii], supportArray.antGainPhase[ii], false);
-    }
+    supportArray.iazArray = parseSupportArray("IAZArray", *supportArrayXML);
+    supportArray.antGainPhase = parseSupportArray("AntGainPhase", *supportArrayXML);
+    supportArray.dwellTimeArray = parseSupportArray("DwellTimeArray", *supportArrayXML);
 
     std::vector<XMLElem> addedSupportArrayXMLVec;
     supportArrayXML->getElementsByTagName("AddedSupportArray", addedSupportArrayXMLVec);
@@ -1465,6 +1626,36 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* supportArrayXML, SupportAr
     }
 }
 
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o = AntPattern::EBFreqShiftSF{};
+        six::getFirstAndOnly(parser(), *pXML, value(o).dcxsf);
+        six::getFirstAndOnly(parser(), *pXML, value(o).dcysf);
+    }
+}
+
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o = AntPattern::MLFreqDilationSF{};
+        six::getFirstAndOnly(parser(), *pXML, value(o).dcxsf);
+        six::getFirstAndOnly(parser(), *pXML, value(o).dcysf);
+    }
+}
+
+void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<AntPattern::AntPolRef>& o) const
+{
+    if (const auto pXML = getOptional(parent, o.tag()))
+    {
+        o = AntPattern::AntPolRef{};
+        six::getFirstAndOnly(parser(), *pXML, value(o).ampX);
+        six::getFirstAndOnly(parser(), *pXML, value(o).ampY);
+        six::getFirstAndOnly(parser(), *pXML, value(o).phaseY);
+    }
+}
 
 void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& antenna)
 {
@@ -1491,6 +1682,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         parseString(getFirstAndOnly(antCoordFrameXMLVec[ii], "Identifier"), antenna.antCoordFrame[ii].identifier);
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "XAxisPoly"), antenna.antCoordFrame[ii].xAxisPoly);
         mCommon.parsePolyXYZ(getFirstAndOnly(antCoordFrameXMLVec[ii], "YAxisPoly"), antenna.antCoordFrame[ii].yAxisPoly);
+        std::ignore = six::parse(parser(), *antCoordFrameXMLVec[ii], antenna.antCoordFrame[ii].useACFPVP);
     }
 
     // Parse AntPhaseCenter
@@ -1520,26 +1712,34 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         parseString(getFirstAndOnly(antPatternXMLVec[ii], "Identifier"), antenna.antPattern[ii].identifier);
         parseDouble(getFirstAndOnly(antPatternXMLVec[ii], "FreqZero"), antenna.antPattern[ii].freqZero);
         parseOptionalDouble(antPatternXMLVec[ii], "GainZero", antenna.antPattern[ii].gainZero);
+
         XMLElem ebFreqShiftXML = getOptional(antPatternXMLVec[ii], "EBFreqShift");
         if(ebFreqShiftXML)
         {
             parseBooleanType(ebFreqShiftXML, antenna.antPattern[ii].ebFreqShift);
         }
+        parse(*antPatternXMLVec[ii], antenna.antPattern[ii].ebFreqShiftSF);
+
         XMLElem mlFreqDilationXML = getOptional(antPatternXMLVec[ii], "MLFreqDilation");
         if(mlFreqDilationXML)
         {
             parseBooleanType(mlFreqDilationXML, antenna.antPattern[ii].mlFreqDilation);
         }
+        parse(*antPatternXMLVec[ii], antenna.antPattern[ii].mlFreqDilationSF);
+
         XMLElem gainBSPoly = getOptional(antPatternXMLVec[ii], "GainBSPoly");
         if(gainBSPoly)
         {
             mCommon.parsePoly1D(gainBSPoly, antenna.antPattern[ii].gainBSPoly);
         }
 
+        parse(*antPatternXMLVec[ii], antenna.antPattern[ii].antPolRef);
+
         // Parse EB
         XMLElem ebXML = getFirstAndOnly(antPatternXMLVec[ii], "EB");
         mCommon.parsePoly1D(getFirstAndOnly(ebXML, "DCXPoly"), antenna.antPattern[ii].eb.dcxPoly);
         mCommon.parsePoly1D(getFirstAndOnly(ebXML, "DCYPoly"), antenna.antPattern[ii].eb.dcyPoly);
+        std::ignore = six::parse(parser(), *ebXML, antenna.antPattern[ii].eb.useEBPVP);
 
         // Parse Array
         XMLElem arrayXML = getFirstAndOnly(antPatternXMLVec[ii], "Array");
@@ -1550,6 +1750,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem elementXML = getFirstAndOnly(antPatternXMLVec[ii], "Element");
         mCommon.parsePoly2D(getFirstAndOnly(elementXML, "GainPoly"), antenna.antPattern[ii].element.gainPoly);
         mCommon.parsePoly2D(getFirstAndOnly(elementXML, "PhasePoly"), antenna.antPattern[ii].element.phasePoly);
+        std::ignore = six::parse(parser(), *elementXML, antenna.antPattern[ii].element.antGPId);
 
         // Parse GainPhaseArray
         std::vector<XMLElem> gainPhaseArrayXMLVec;
@@ -1951,6 +2152,8 @@ void CPHDXMLParser::parseChannelParameters(
     XMLElem dwellTimesXML = getFirstAndOnly(paramXML, "DwellTimes");
     parseString(getFirstAndOnly(dwellTimesXML, "CODId"), param.dwellTimes.codId);
     parseString(getFirstAndOnly(dwellTimesXML, "DwellId"), param.dwellTimes.dwellId);
+    std::ignore = six::parse(parser(), *dwellTimesXML, param.dwellTimes.dtaId);
+    std::ignore = six::parse(parser(), *dwellTimesXML, param.dwellTimes.useDTA);
 
     XMLElem imageAreaXML = getOptional(paramXML, "ImageArea");
     if(imageAreaXML)
@@ -2039,20 +2242,38 @@ void CPHDXMLParser::parseChannelParameters(
     }
 
     // Polarization
+    parsePolarization(*paramXML, param.polarization);
+}
+
+void CPHDXMLParser::parse(const xml::lite::Element& polarizationXML, six::XsElement_minOccurs0<PolRef>& o) const
+{
+    if (const auto pXML = getOptional(polarizationXML, o.tag()))
+    {
+        o = PolRef{};
+        six::getFirstAndOnly(parser(), *pXML, value(o).ampH);
+        six::getFirstAndOnly(parser(), *pXML, value(o).ampV);
+        six::getFirstAndOnly(parser(), *pXML, value(o).phaseV);
+    }
+}
+
+void CPHDXMLParser::parsePolarization(const xml::lite::Element& paramXML, Polarization& polarization) const
+{
     std::vector<XMLElem> PolarizationXML;
-    paramXML->getElementsByTagName("Polarization", PolarizationXML);
+    paramXML.getElementsByTagName("Polarization", PolarizationXML);
     for (size_t ii = 0; ii < PolarizationXML.size(); ++ii)
     {
         const xml::lite::Element* TxPolXML = getFirstAndOnly(PolarizationXML[ii], "TxPol");
-        param.polarization.txPol = PolarizationType::toType(TxPolXML->getCharacterData());
+        polarization.txPol = PolarizationType::toType(TxPolXML->getCharacterData());
 
         const xml::lite::Element* RcvPolXML = getFirstAndOnly(PolarizationXML[ii], "RcvPol");
-        param.polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
-    }
+        polarization.rcvPol = PolarizationType::toType(RcvPolXML->getCharacterData());
 
+        parse(*(PolarizationXML[ii]), polarization.txPolRef); // added in CPHD 1.1.0
+        parse(*(PolarizationXML[ii]), polarization.rcvPolRef); // added in CPHD 1.1.0
+    }
 }
 
-void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, PVPType& param) const
+size_t CPHDXMLParser::parsePVPType(const xml::lite::Element& paramXML, PVPType& param) const
 {
     size_t size;
     size_t offset;
@@ -2063,19 +2284,20 @@ void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, P
     if (param.getSize() != size)
     {
         std::ostringstream ostr;
-        ostr << "Specified size: " << size
-             << " does not match default size: "
-             << param.getSize();
+        ostr << "Specified size: " << size << " does not match default size: " << param.getSize();
         throw except::Exception(Ctxt(ostr.str()));
     }
     if (param.getFormat() != format)
     {
         std::ostringstream ostr;
-        ostr << "Specified format: " << format
-             << " does not match default format: "
-             << param.getFormat();
+        ostr << "Specified format: " << format << " does not match default format: " << param.getFormat();
         throw except::Exception(Ctxt(ostr.str()));
     }
+    return offset;
+}
+void CPHDXMLParser::parsePVPType(Pvp& pvp, const xml::lite::Element* paramXML, PVPType& param) const
+{
+    const auto offset = parsePVPType(*paramXML, param);
     pvp.setOffset(offset, param);
 }
 
@@ -2101,7 +2323,6 @@ bool CPHDXMLParser::parseOptionalPVPType(const xml::lite::Element* parent, const
     }
     return false;
 }
-
 
 void CPHDXMLParser::parsePlatformParams(const xml::lite::Element* platXML, Bistatic::PlatformParams& plat) const
 {
@@ -2171,6 +2392,7 @@ void CPHDXMLParser::parsePlatform(const xml::lite::Element* platXML, ErrorParame
 {
     parsePosVelErr(getFirstAndOnly(platXML, "PosVelErr"), plat.posVelErr);
     XMLElem radarSensorXML = getFirstAndOnly(platXML, "RadarSensor");
+    six::parse(parser(), *radarSensorXML, plat.radarSensor.delayBias);
     parseOptionalDouble(radarSensorXML, "ClockFreqSF", plat.radarSensor.clockFreqSF);
     parseDouble(getFirstAndOnly(radarSensorXML, "CollectionStartTime"), plat.radarSensor.collectionStartTime);
 }

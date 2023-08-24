@@ -235,7 +235,7 @@ void readMeshes(const std::string& sicdPathname,
     const size_t orderY = 3;
 
     std::unique_ptr<six::sicd::ComplexData> complexData;
-    std::vector<std::complex<float> > widebandData;
+    std::vector<six::zfloat > widebandData;
 
     six::Poly2D outputRowColToSlantRow;
     six::Poly2D outputRowColToSlantCol;

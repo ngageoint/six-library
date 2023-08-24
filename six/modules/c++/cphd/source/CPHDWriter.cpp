@@ -39,81 +39,6 @@
 
 namespace cphd
 {
-DataWriter::DataWriter(std::shared_ptr<io::SeekableOutputStream> stream,
-                       size_t numThreads) :
-    mStream(stream),
-    mNumThreads(numThreads == 0 ? std::thread::hardware_concurrency() : numThreads)
-{
-}
-
-DataWriter::~DataWriter()
-{
-}
-
-DataWriterLittleEndian::DataWriterLittleEndian(
-        std::shared_ptr<io::SeekableOutputStream> stream,
-        size_t numThreads,
-        size_t scratchSize) :
-    DataWriter(stream, numThreads),
-    mScratch(scratchSize)
-{
-}
-
-void DataWriterLittleEndian::operator()(const sys::ubyte* data,
-                                        size_t numElements,
-                                        size_t elementSize)
-{
-    size_t dataProcessed = 0;
-    const size_t dataSize = numElements * elementSize;
-    while (dataProcessed < dataSize)
-    {
-        const size_t dataToProcess =
-                std::min(mScratch.size(), dataSize - dataProcessed);
-
-        memcpy(mScratch.data(), data + dataProcessed, dataToProcess);
-
-        cphd::byteSwap(mScratch.data(),
-                       elementSize,
-                       dataToProcess / elementSize,
-                       mNumThreads);
-
-        mStream->write(mScratch.data(), dataToProcess);
-
-        dataProcessed += dataToProcess;
-    }
-}
-
-DataWriterBigEndian::DataWriterBigEndian(
-        std::shared_ptr<io::SeekableOutputStream> stream, size_t numThreads) :
-    DataWriter(stream, numThreads)
-{
-}
-
-void DataWriterBigEndian::operator()(const sys::ubyte* data,
-                                     size_t numElements,
-                                     size_t elementSize)
-{
-    mStream->write(data,
-                   numElements * elementSize);
-}
-
-void CPHDWriter::initializeDataWriter()
-{
-    // Get the correct dataWriter.
-    // The CPHD file needs to be big endian.
-    auto endianness = std::endian::native; // "conditional expression is constant"
-    if (endianness == std::endian::big)
-    {
-        mDataWriter = std::make_unique<DataWriterBigEndian>(mStream, mNumThreads);
-    }
-    else
-    {
-        mDataWriter = std::make_unique<DataWriterLittleEndian>(mStream,
-            mNumThreads,
-            mScratchSpaceSize);
-    }
-}
-
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,
@@ -127,7 +52,9 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mSchemaPaths(schemaPaths),
     mStream(outStream)
 {
-    initializeDataWriter();
+    // Get the correct dataWriter.
+    // The CPHD file needs to be big endian.
+    mDataWriter = make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
@@ -135,16 +62,12 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
                        const std::vector<std::string>& schemaPaths,
                        size_t numThreads,
                        size_t scratchSpaceSize) :
-    mMetadata(metadata),
-    mElementSize(metadata.data.getNumBytesPerSample()),
-    mScratchSpaceSize(scratchSpaceSize),
-    mNumThreads(numThreads),
-    mSchemaPaths(schemaPaths)
+    CPHDWriter(metadata,
+        std::make_shared<io::FileOutputStream>(pathname), // Initialize output stream
+        schemaPaths,
+        numThreads,
+        scratchSpaceSize)
 {
-    // Initialize output stream
-    mStream = std::make_shared<io::FileOutputStream>(pathname);
-
-    initializeDataWriter();
 }
 
 void CPHDWriter::writeMetadata(size_t supportSize,
@@ -153,8 +76,9 @@ void CPHDWriter::writeMetadata(size_t supportSize,
 {
     const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
 
-    // update header version, or remains default if unset
-    mHeader.setVersion(mMetadata.getVersion());
+    Version cphdVersion;
+    mMetadata.getVersion(cphdVersion);
+    mHeader.setVersion(cphdVersion);
 
     // update classification and release info
     if (!six::Init::isUndefined(
@@ -255,34 +179,34 @@ template void CPHDWriter::write<std::byte>(const PVPBlock& pvpBlock,
                                             const std::byte* widebandData,
                                             const std::byte* supportData);
 
-template void CPHDWriter::write<std::complex<int8_t>>(
+template void CPHDWriter::write<cphd::zint8_t>(
     const PVPBlock& pvpBlock,
-    const std::complex<int8_t>* widebandData,
+    const cphd::zint8_t* widebandData,
     const sys::ubyte* supportData);
 
-template void CPHDWriter::write<std::complex<int16_t>>(
+template void CPHDWriter::write<cphd::zint16_t>(
     const PVPBlock& pvpBlock,
-    const std::complex<int16_t>* widebandData,
+    const cphd::zint16_t* widebandData,
     const sys::ubyte* supportData);
 
-template void CPHDWriter::write<std::complex<float>>(
+template void CPHDWriter::write<cphd::zfloat>(
     const PVPBlock& pvpBlock,
-    const std::complex<float>* widebandData,
+    const cphd::zfloat* widebandData,
     const sys::ubyte* supportData);
 
-template void CPHDWriter::write<std::complex<int8_t>>(
+template void CPHDWriter::write<cphd::zint8_t>(
         const PVPBlock& pvpBlock,
-        const std::complex<int8_t>* widebandData,
+        const cphd::zint8_t* widebandData,
         const std::byte* supportData);
 
-template void CPHDWriter::write<std::complex<int16_t>>(
+template void CPHDWriter::write<cphd::zint16_t>(
         const PVPBlock& pvpBlock,
-        const std::complex<int16_t>* widebandData,
+        const cphd::zint16_t* widebandData,
         const std::byte* supportData);
 
-template void CPHDWriter::write<std::complex<float>>(
+template void CPHDWriter::write<cphd::zfloat>(
         const PVPBlock& pvpBlock,
-        const std::complex<float>* widebandData,
+        const cphd::zfloat* widebandData,
         const std::byte* supportData);
 
 void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
@@ -375,16 +299,16 @@ template void CPHDWriter::writeCPHDData(const std::byte* data,
                                         size_t numElements,
                                         size_t channel);
 
-template void CPHDWriter::writeCPHDData<std::complex<int8_t>>(
-        const std::complex<int8_t>* data,
+template void CPHDWriter::writeCPHDData<cphd::zint8_t>(
+        const cphd::zint8_t* data,
         size_t numElements,
         size_t channel);
 
-template void CPHDWriter::writeCPHDData<std::complex<int16_t>>(
-        const std::complex<int16_t>* data,
+template void CPHDWriter::writeCPHDData<cphd::zint16_t>(
+        const cphd::zint16_t* data,
         size_t numElements,
         size_t channel);
 
-template void CPHDWriter::writeCPHDData<std::complex<float>>(
-        const std::complex<float>* data, size_t numElements, size_t channel);
+template void CPHDWriter::writeCPHDData<cphd::zfloat>(
+        const cphd::zfloat* data, size_t numElements, size_t channel);
 }

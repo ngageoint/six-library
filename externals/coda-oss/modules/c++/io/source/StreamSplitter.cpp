@@ -40,7 +40,7 @@ StreamSplitter::StreamSplitter(io::InputStream& inputStream,
     mNumDelimitersProcessed(0),
     mBufferStorage(bufferSize),
     mBufferCapacity(mBufferStorage.size()),
-    mBuffer(mBufferStorage.empty() ? NULL : &mBufferStorage[0]),
+    mBuffer(mBufferStorage.empty() ? nullptr : &mBufferStorage[0]),
     mInputStream(inputStream),
     mStreamEmpty(false)
 {

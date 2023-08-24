@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_SIDD_DERIVED_XML_PARSER_H__
-#define __SIX_SIDD_DERIVED_XML_PARSER_H__
+#pragma once
+#ifndef SIX_six_sidd_DerivedXMLParser_h_INCLUDED_
+#define SIX_six_sidd_DerivedXMLParser_h_INCLUDED_
 
 #include <six/XMLControl.h>
 #include <six/sidd/DerivedData.h>
@@ -58,13 +59,13 @@ struct DerivedXMLParser : public six::XMLParser
         XMLElem parent = nullptr) const;
 
 protected:
-    DerivedXMLParser(const std::string& version,
+    DerivedXMLParser(Version,
         std::unique_ptr<six::SICommonXMLParser>&& comParser,
         logging::Logger* log = nullptr, bool ownLog = false);
-    DerivedXMLParser(const std::string& version,
+    DerivedXMLParser(Version,
         std::unique_ptr<six::SICommonXMLParser>&&,
         std::unique_ptr<logging::Logger>&&);
-    DerivedXMLParser(const std::string& version,
+    DerivedXMLParser(Version,
         std::unique_ptr<six::SICommonXMLParser>&&,
         logging::Logger&);
 
@@ -235,10 +236,9 @@ protected:
     XMLElem parsePlaneProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
     XMLElem parseCylindricalProjection(const xml::lite::Element* projElem, const Measurement& measurement) const;
 
-    static
-    std::string versionToURI(const std::string& strVersion)
+    static std::string versionToURI(Version siddVersion)
     {
-        return ("urn:SIDD:" + strVersion);
+        return "urn:SIDD:" + to_string(siddVersion);
     }
 
 private:
@@ -247,4 +247,4 @@ private:
 }
 }
 
-#endif
+#endif // SIX_six_sidd_DerivedXMLParser_h_INCLUDED_

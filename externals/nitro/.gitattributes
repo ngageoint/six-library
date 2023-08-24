@@ -4,3 +4,105 @@ conanfile.py text eol=lf
 CMakeLists.txt text eol=lf
 *.cmake text eol=lf
 *.in text eol=lf
+
+# Modern tools on Windows can handle Linux LF
+# See https://stackoverflow.com/a/13154031/8877 for details
+* text=auto eol=lf
+.git?*	    text
+
+# Leave known Windows-only text files as CR/LF
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+*.vcxproj.filters text eol=crlf
+*.ruleset text eol=crlf
+
+# Text file formats
+*.txt	text eol=lf
+*.md	text eol=lf
+*.tex	text eol=lf
+*.?ml	text eol=lf
+*.kmz	  binary
+
+# Programming languages
+*.htm?	text eol=lf
+*.css	text eol=lf
+*.c	text eol=lf
+*.cc	text eol=lf
+*.c??	text eol=lf
+*.c??m	text eol=lf
+*.ccm	text eol=lf
+*.C	text eol=lf
+*.h??	text eol=lf
+*.h	text eol=lf
+*.hh	text eol=lf
+*.ixx	text eol=lf
+*.mpp	text eol=lf
+*.py	text eol=lf
+*.pyc	binary
+# .f and .f90
+*.f*	text eol=lf
+*.m	text eol=lf
+*.java	text eol=lf
+*.cs	text eol=lf
+*.vb	text eol=lf
+*.js	text eol=lf
+*.ts	text eol=lf
+*.pl	text eol=lf
+*.sh	text eol=lf
+*.csh	text eol=lf
+
+######################
+# Known binary files
+
+# from various unit_test/ directories
+*.dat  	       binary
+*.*hdr	       binary
+*.flat	       binary
+*.sig	       binary
+*.bin	       binary
+
+# images
+*.bmp	binary
+*.ico	binary
+*.tiff	binary
+*.tif	binary
+*.gif	binary
+*.jpg	binary
+*.jpeg	binary
+*.png	binary
+# SVG images are XML
+*.svg	text eol=lf
+*.raw	binary
+*.hei*	binary
+
+# music
+*.mp3	binary
+*.m4a	binary
+*.wav	binary
+*.wma	binary
+
+# video
+*.m4v	binary
+*.avi	binary
+*.wmv	binary
+*.mkv	binary
+
+# documents
+*.pdf	  binary
+*.dvi	  binary
+*.doc*	  binary
+*.xls*	  binary
+*.ppt*	  binary
+
+*.h5	  binary
+*.sio	  binary
+*.ntf	  binary
+*.nitf	  binary
+*.si?d	  binary
+
+# containers
+*.zip	  binary
+*.gz	  binary
+*.tar	  binary
+*.tgz	  binary
+*.jar	  binary

@@ -42,7 +42,7 @@ namespace cphd03
  *  \brief Used to write a CPHD file. You must be able to provide the
  *         appropriate metadata and vector based metadata.
  */
-struct CPHDWriter
+struct CPHDWriter final
 {
     /*
      *  \func Constructor
@@ -90,13 +90,20 @@ struct CPHDWriter
                size_t numThreads = 0,
                size_t scratchSpaceSize = 4 * 1024 * 1024);
 
+    CPHDWriter() = delete;
+    CPHDWriter(const CPHDWriter&) = delete;
+    CPHDWriter& operator=(const CPHDWriter&) = delete;
+    CPHDWriter(CPHDWriter&&) = delete;
+    CPHDWriter& operator=(CPHDWriter&&) = delete;
+    ~CPHDWriter() = default;
+
     /*
      *  \func addImage
      *  \brief Pushes a new image to the file for writing. This only works with
      *         valid CPHDWriter data types:
-     *              std::complex<float>
-     *              std::complex<int16_t>
-     *              std::complex<int8_t>
+     *              cphd::zfloat
+     *              cphd::zint16_t
+     *              cphd::zint8_t
      *
      *  \param image The image to be added. This should be sized to match the
      *         dims parameter.
@@ -140,9 +147,9 @@ struct CPHDWriter
      *         method. If you do not need to write the data in chunks,
      *         you may instead use addImage and write. This only works with
      *         valid CPHDWriter data types:
-     *              std::complex<float>
-     *              std::complex<int16_t>
-     *              std::complex<int8_t>
+     *              cphd::zfloat
+     *              cphd::zint16_t
+     *              cphd::zint8_t
      *
      *  \param data The data to write to disk.
      *  \param numElements The number of elements in data. Treat the data
@@ -168,10 +175,11 @@ struct CPHDWriter
 
     void close()
     {
-        if (mStream.get())
-        {
-            mStream->close();
-        }
+        mStream->close();
+    }
+    std::shared_ptr<io::SeekableOutputStream> getStream() const
+    {
+        return mStream;
     }
 
 private:
@@ -187,7 +195,6 @@ private:
                            size_t size);
 
     std::unique_ptr<cphd::DataWriter> mDataWriter;
-    void initializeDataWriter();
 
     Metadata mMetadata;
     const size_t mElementSize;
@@ -199,8 +206,8 @@ private:
     std::vector<const std::byte*> mCPHDData;
     std::vector<const std::byte*> mVBMData;
 
-    size_t mCPHDSize;
-    size_t mVBMSize;
+    size_t mCPHDSize = 0;
+    size_t mVBMSize = 0;
 };
 }
 

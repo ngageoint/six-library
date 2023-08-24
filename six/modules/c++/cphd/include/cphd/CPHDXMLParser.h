@@ -98,11 +98,21 @@ private:
     XMLElem toXML(const Global& obj, XMLElem parent);
     XMLElem toXML(const SceneCoordinates& obj, XMLElem parent);
     XMLElem toXML(const Data& obj, XMLElem parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<PolRef>&, xml::lite::Element& parent);
+    XMLElem toXML(const Polarization&, xml::lite::Element& parent);
     XMLElem toXML(const Channel& obj, XMLElem parent);
+    XMLElem toXML(const six::XsElement<PerVectorParameterXYZ>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement<PerVectorParameterEB>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<TxAntenna>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<RcvAntenna>&, xml::lite::Element& parent);
     XMLElem toXML(const Pvp& obj, XMLElem parent);
+    void createSupportArray(const std::vector<SupportArrayParameter>&, const std::string& tag, xml::lite::Element& parent);
     XMLElem toXML(const SupportArray& obj, XMLElem parent);
     XMLElem toXML(const Dwell& obj, XMLElem parent);
     XMLElem toXML(const ReferenceGeometry& obj, XMLElem parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>&, xml::lite::Element& parent);
+    XMLElem toXML(const six::XsElement_minOccurs0<AntPattern::AntPolRef>&, xml::lite::Element& parent);
     XMLElem toXML(const Antenna& obj, XMLElem parent);
     XMLElem toXML(const TxRcv& obj, XMLElem parent);
     XMLElem toXML(const ErrorParameters& obj, XMLElem parent);
@@ -155,6 +165,7 @@ private:
     void parseIAExtent(const xml::lite::Element* extentXML, ImageAreaYExtent& extent) const;
     void parseChannelParameters(const xml::lite::Element* paramXML,
                                 ChannelParameter& param) const;
+    size_t parsePVPType(const xml::lite::Element&, PVPType&) const;
     void parsePVPType(Pvp& p, const xml::lite::Element* paramXML, PVPType& param) const;
     void parsePVPType(Pvp& p, const xml::lite::Element* paramXML) const;
     bool parseOptionalPVPType(const xml::lite::Element* parent, const std::string& tag, Pvp& p, PVPType& param) const;
@@ -164,7 +175,18 @@ private:
     void parsePlatform(const xml::lite::Element* platXML,  ErrorParameters::Bistatic::Platform& plat) const;
     void parseSupportArrayParameter(const xml::lite::Element* paramXML, SupportArrayParameter& param,
                                     bool additionalFlag) const;
+    std::vector<SupportArrayParameter> parseSupportArray(const std::string& tag, const xml::lite::Element&) const;
     void parseTxRcvParameter(const xml::lite::Element* paramXML, ParameterType& param) const;
+    void parsePolarization(const xml::lite::Element& polarizationXML, Polarization&) const;
+
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<PolRef>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::EBFreqShiftSF>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::MLFreqDilationSF>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<AntPattern::AntPolRef>&) const;
+    void parse(const xml::lite::Element&, six::XsElement<PerVectorParameterXYZ>&) const;
+    void parse(const xml::lite::Element&, six::XsElement<PerVectorParameterEB>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<TxAntenna>&) const;
+    void parse(const xml::lite::Element&, six::XsElement_minOccurs0<RcvAntenna>&) const;
 
 private:
     six::SICommonXMLParser10x mCommon;

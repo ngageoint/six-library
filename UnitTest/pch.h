@@ -86,6 +86,8 @@
 #pragma comment(lib, "sys-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "str-c++")
+#pragma comment(lib, "xerces-c")
+#pragma comment(lib, "xml.lite-c++.lib")
 
 #pragma warning(push)
 #pragma warning(disable: 4800) // Implicit conversion from '...' to bool.Possible information loss

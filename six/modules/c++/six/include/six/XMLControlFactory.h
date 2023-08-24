@@ -27,7 +27,9 @@
 #include <std/filesystem>
 #include <std/string>
 
+#ifdef SWIGPYTHON
 #include <mem/AutoPtr.h>
+#endif
 
 #include <scene/sys_Conf.h>
 
@@ -96,12 +98,14 @@ struct XMLControlRegistry
 
     void addCreator(const std::string& identifier,
         std::unique_ptr<XMLControlCreator>&& creator);
+    #ifdef SWIGPYTHON
     void addCreator_(const std::string& identifier,
         mem::AutoPtr<XMLControlCreator> creator)
     {
         std::unique_ptr<XMLControlCreator> scopedCreator(creator.release());
         addCreator(identifier, std::move(scopedCreator));
     }
+    #endif
 
     /*!
      * Takes ownership of creator
@@ -118,12 +122,14 @@ struct XMLControlRegistry
     {
         addCreator(dataType.toString(), std::move(creator));
     }
+    #ifdef SWIGPYTHON
     void addCreator_(DataType dataType,
                     mem::AutoPtr<XMLControlCreator> creator_)
     {
         std::unique_ptr<XMLControlCreator> creator(creator_.release());
         addCreator(dataType, std::move(creator));
     }
+    #endif
 
     /*!
      * Takes ownership of creator

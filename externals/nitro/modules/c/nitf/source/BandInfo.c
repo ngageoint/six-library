@@ -80,7 +80,7 @@ NITFAPI(void) nitf_BandInfo_destruct(nitf_BandInfo ** info)
     _NITF_DESTRUCT_FIELD(&(*info), NITF_NLUTS);
     _NITF_DESTRUCT_FIELD(&(*info), NITF_NELUT);
 
-    if (&(*info)->lut)
+    if ((*info)->lut)
     {
         nitf_LookupTable_destruct(&(*info)->lut);
     }
