@@ -435,24 +435,24 @@ std::wstring str::toWString(const str::W1252string& s)
     return toWString_(s, false /*is_utf8*/);
 }
 
-coda_oss::u8string str::to_u8string(std::string::const_pointer p_, size_t sz)
+coda_oss::u8string str::u8FromString(const std::string& s)
 {
     #if _WIN32
-    const auto p = cast<str::W1252string::const_pointer>(p_); // std::string is Windows-1252 on Windows
+    const auto p = c_str<str::W1252string>(s); // std::string is Windows-1252 on Windows
     #else
-    const auto p = cast<coda_oss::u8string::const_pointer>(p_); // assume std::string is UTF-8 on any non-Windows platform
+    const auto p = c_str<coda_oss::u8string>(s); // assume std::string is UTF-8 on any non-Windows platform
     #endif
-    return str::to_u8string(p, sz);
+    return str::to_u8string(p, s.length());
 }
 
-coda_oss::u8string str::to_u8string(std::wstring::const_pointer p_, size_t sz)
-{   
+coda_oss::u8string str::u8FromWString(const std::wstring& s)
+{
     #if _WIN32
-    const auto p = cast<std::u16string::const_pointer>(p_); // std::wstring is UTF-16 on Windows
+    const auto p = c_str<std::u16string>(s); // std::wstring is UTF-16 on Windows
     #else
-    const auto p = cast<std::u32string::const_pointer>(p_); // assume std::wstring is UTF-32 on any non-Windows platform
+    const auto p = c_str<std::u32string>(s); // assume std::wstring is UTF-32 on any non-Windows platform
     #endif   
-    return str::to_u8string(p, sz);
+    return str::to_u8string(p, s.length());
 }
 
 /***********************************************************************************/

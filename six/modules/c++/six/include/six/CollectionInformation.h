@@ -118,7 +118,7 @@ struct CollectionInformation
     virtual std::string getClassificationLevel() const;
     inline virtual void setClassificationLevel(const std::string& classification)
     {
-        mClassification = str::to_u8string(classification);
+        mClassification = str::u8FromString(classification);
     }
 
     virtual void getClassificationLevel(std::u8string&) const;

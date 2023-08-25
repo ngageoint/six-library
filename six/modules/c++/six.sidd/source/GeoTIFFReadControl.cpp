@@ -59,7 +59,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
                     str::trim(curStr);
                     if (!curStr.empty())
                     {
-                        entries.emplace_back(str::to_u8string(curStr));
+                        entries.emplace_back(str::u8FromString(curStr));
                         curStr.clear();
                     }
                 }
@@ -75,7 +75,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
         str::trim(curStr);
         if (!curStr.empty())
         {
-           entries.emplace_back(str::to_u8string(curStr));
+           entries.emplace_back(str::u8FromString(curStr));
         }
     }
 }

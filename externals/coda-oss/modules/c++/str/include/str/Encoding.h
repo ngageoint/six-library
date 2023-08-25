@@ -84,8 +84,11 @@ inline auto to_w1252string(const coda_oss::u8string& s)
     return to_w1252string(s.c_str(), s.length());
 }
 
-CODA_OSS_API coda_oss::u8string to_u8string(std::string::const_pointer, size_t); // platform determines Windows-1252 or UTF-8 input
-CODA_OSS_API coda_oss::u8string to_u8string(std::wstring::const_pointer, size_t); // platform determines UTF16 or UTF-32 input
+// These two routines are "dangerous" as they make it easy to convert
+// a `char*` **already** in UTF-8 encoding to UTF-8; the result is garbage.
+// Use u8FromString() or u8FromWString() which is a bit more explicit.
+coda_oss::u8string to_u8string(std::string::const_pointer, size_t) = delete;
+coda_oss::u8string to_u8string(std::wstring::const_pointer, size_t) = delete;
 
 template<typename CharT>
 inline auto to_u8string(const std::basic_string<CharT>& s)
@@ -101,12 +104,6 @@ template <typename CharT>
 inline auto to_u32string(const std::basic_string<CharT>& s)
 {
     return to_u32string(s.c_str(), s.length());
-}
-
-template <typename CharT>
-inline coda_oss::u8string to_u8string(const CharT* p)
-{
-    return to_u8string(std::basic_string<CharT>(p));
 }
 
 }
