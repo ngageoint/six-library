@@ -115,11 +115,11 @@ TEST_CASE(testXmlCreateWhitespace)
     xml::lite::MinidomParser xmlParser;
     auto& document = getDocument(xmlParser);
 
-    const auto text = str::EncodedStringView("     ").u8string();
+    const auto text = str::u8FromString("     ");
     auto documents_ = document.createElement(xml::lite::QName(""_u, "text"), text);
     auto& documents = *documents_;
-    auto strXml = str::EncodedStringView(print(documents)).u8string();
-    const auto expected = str::EncodedStringView("<text>").u8string() + text + str::EncodedStringView("</text>").u8string();
+    auto strXml = str::u8FromString(print(documents));
+    const auto expected = str::u8FromString("<text>") + text + str::u8FromString("</text>");
     TEST_ASSERT(strXml == expected);
 
     {
@@ -130,8 +130,8 @@ TEST_CASE(testXmlCreateWhitespace)
         const auto& root = getRootElement(getDocument(xmlParser));
         std::u8string actual;
         root.getCharacterData(actual);
-        static const auto blank = str::EncodedStringView("").u8string();
-        TEST_ASSERT(actual == blank); // preserveCharacterData == false
+        static const coda_oss::u8string empty;
+        TEST_ASSERT(actual == empty);  // preserveCharacterData == false
     }
     {
         io::U8StringStream input;
