@@ -50,8 +50,6 @@
 #include "coda_oss/string.h"
 
 #include <config/Exports.h>
-#include "str/EncodedString.h"
-#include "str/EncodedStringView.h"
 #include "XMLReader.h"
 #include "io/StandardStreams.h"
 #include "Document.h"
