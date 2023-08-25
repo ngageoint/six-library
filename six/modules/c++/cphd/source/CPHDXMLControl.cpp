@@ -27,11 +27,12 @@
 #include <memory>
 #include <iterator>
 #include <stdexcept>
+#include <std/string>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <xml/lite/MinidomParser.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 
 #include <six/XMLControl.h>
 #include <six/XmlLite.h>
@@ -89,7 +90,7 @@ std::string CPHDXMLControl::toXMLString_(
     bool prettyPrint)
 {
     const auto result = toXMLString(metadata, schemaPaths, prettyPrint);
-    return str::EncodedStringView(result).native();
+    return str::toString(result);
 }
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
@@ -161,7 +162,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    return fromXML(str::EncodedStringView(xmlString).u8string(), schemaPaths);
+    return fromXML(str::to_u8string(xmlString), schemaPaths);
 }
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString,
     const std::vector<std::filesystem::path>& schemaPaths)

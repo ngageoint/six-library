@@ -29,7 +29,6 @@
 #include <utility>
 #include <std/optional>
 
-#include <str/EncodedStringView.h>
 #include <xml/lite/Element.h>
 #include <xml/lite/QName.h>
 
@@ -150,7 +149,7 @@ inline std::ostream& operator<<(std::ostream& os, const XsElement<T>& v)
 template <>
 inline std::ostream& operator<<(std::ostream& os, const XsElement<std::u8string>& v)
 {
-    os << "\t" << v.tag() << "\t: " << str::EncodedStringView(v).native();
+    os << "\t" << v.tag() << "\t: " << str::toString(v);
     return os;
 }
 

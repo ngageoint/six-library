@@ -35,7 +35,7 @@
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <import/sys.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 #include <sys/Span.h>
 
 #include <import/six.h>
@@ -240,7 +240,7 @@ static void sicd_French_xml_raw_()
     TEST_ASSERT_EQ(characterData.length(), expectedLength);
     TEST_ASSERT_EQ(characterData, expectedCharData);
 
-    const auto u8_expectedCharData8 = str::EncodedStringView::fromUtf8(classificationText_utf_8()).u8string();
+    const auto u8_expectedCharData8 = str::to_u8string(classificationText_utf_8());
     expectedLength = u8_expectedCharData8.length();
 
     std::u8string u8_characterData;

@@ -1296,7 +1296,7 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
     std::u8string classification_u8;
     if (parseString(classificationXML, classification_u8))
     {
-        collInfo->setClassificationLevel(str::EncodedString(classification_u8));
+        collInfo->setClassificationLevel(classification_u8);
     }
     else
     {
