@@ -273,15 +273,14 @@ static coda_oss::u8string encodeXml(const std::string& xml)
     std::cmatch m;
     if (std::regex_search(xml.c_str(), m, reUtf8))
     {
-        coda_oss::u8string retval(str::c_str<coda_oss::u8string>(xml), xml.length());
-        return retval;
+        return str::str<coda_oss::u8string>(xml);
     }
 
     // Maybe this is poor XML with Windows-1252 encoding :-(
     const std::regex reWindows1252("<\?.*encoding=.*['\"]?.*windows-1252.*['\"]?.*\?>", std::regex::icase);
     if (std::regex_search(xml.c_str(), m, reWindows1252))
     {
-        return to_u8string(str::c_str<str::W1252string>(xml), xml.length());
+        return to_u8string(str::str<str::W1252string>(xml));
     }
 
     // No "... encoding= ..."; let u8FromString() deal with it   
@@ -301,7 +300,7 @@ bool ValidatorXerces::validate(const std::string& xml,
 
     // Can't process as "native" (UTF-8 on Linux, Windows-1252 on Windows).
     // Must be Windows-1252 on Linux.
-    return validate(str::c_str<str::W1252string>(xml), xmlID, errors);
+    return validate(str::str<str::W1252string>(xml), xmlID, errors);
 }
 bool ValidatorXerces::validate(const coda_oss::u8string& xml,
                                const std::string& xmlID,

@@ -41,21 +41,33 @@
 namespace str
 {
 template <typename TReturn, typename TChar>
-inline TReturn cast(const TChar* s)
+inline auto cast(const TChar* s)
 {
     // This is OK as UTF-8 can be stored in std::string
     // Note that casting between the string types will CRASH on some
-    // implementations. NO: reinterpret_cast<const std::string&>(value)
+    // implementations. NO: reinterpret_cast<const std::string&>(value).
+    // Instead, use c_str() or str(), below.
     const void* const pStr = s;
     auto const retval = static_cast<TReturn>(pStr);
     static_assert(sizeof(*retval) == sizeof(*s), "sizeof(*TReturn) != sizeof(*TChar)"); 
     return retval;
 }
 template <typename TBasicStringT, typename TChar>
-inline typename TBasicStringT::const_pointer c_str(const std::basic_string<TChar>& s)
+inline auto c_str(const std::basic_string<TChar>& s)
 {
     using return_t = typename TBasicStringT::const_pointer;
     return cast<return_t>(s.c_str());
+}
+template <typename TBasicStringT, typename TChar>
+inline TBasicStringT str(const std::basic_string<TChar>& s)
+{
+    return TBasicStringT(c_str<TBasicStringT>(s), s.length()); // avoid extra strlen() call
+}
+template <typename TBasicStringT, typename TChar>
+inline TBasicStringT make_string(TChar* p)
+{
+    using return_t = typename TBasicStringT::const_pointer;
+    return cast<return_t>(p); // copy into RV
 }
 
 // When the encoding is important, we want to "traffic" in coda_oss::u8string (UTF-8), not

@@ -49,7 +49,7 @@ static const std::string& strXml()
 }
 static auto from_utf8(const std::string& utf8)
 {
-    return coda_oss::u8string(str::c_str<coda_oss::u8string>(utf8), utf8.length());
+    return str::str<coda_oss::u8string>(utf8);
 }
 static const std::u8string& text8()
 {
@@ -86,7 +86,7 @@ static const auto& strUtf8Xml8()
 } 
 static const std::string& strUtf8Xml()
 {
-    static const std::string retval = str::c_str<std::string>(strUtf8Xml8());
+    static const auto retval = str::str<std::string>(strUtf8Xml8());
     return retval;
 } 
 
@@ -205,7 +205,7 @@ TEST_CASE(testXmlPrintSimple)
 
 static auto from_windows1252(const std::string& w1252)
 {
-    return to_u8string(str::c_str<str::W1252string>(w1252), w1252.length());
+    return to_u8string(str::str<str::W1252string>(w1252));
 }
 
 TEST_CASE(testXmlPrintUtf8)
@@ -425,7 +425,7 @@ static bool find_string(io::FileInputStream& stream, const std::string& s)
 
 static std::string as_utf8(const coda_oss::u8string& s)
 {
-    return std::string(str::c_str<std::string>(s), s.length());
+    return str::str<std::string>(s);
 }
 
 TEST_CASE(testReadEmbeddedXml)
