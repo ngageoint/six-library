@@ -34,7 +34,6 @@
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
 #include <gsl/gsl.h>
-#include <str/EncodedStringView.h>
 #include <sys/Span.h>
 
 #include <six/XMLControlFactory.h>
@@ -569,7 +568,7 @@ void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPat
         const Data* data = getContainer()->getData(ii);
 
         const auto xml = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
-        desStrs[ii] = str::EncodedStringView(xml).native();
+        desStrs[ii] = str::toString(xml);
         nitf::SegmentWriter deWriter = mWriter.newDEWriter(gsl::narrow<int>(ii));
         nitf::SegmentMemorySource segSource(desStrs[ii], 0, 0, false);
         deWriter.attachSource(segSource);

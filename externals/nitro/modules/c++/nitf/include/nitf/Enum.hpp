@@ -32,7 +32,6 @@
 #include <new> // std::nothrow
 
 #include "str/Manip.h"
-#include "str/EncodedStringView.h"
 
 namespace nitf
 {
