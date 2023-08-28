@@ -58,7 +58,7 @@ std::string sys::OSWin32::getPlatformName() const
     {
         platform = "Unknown Windows OS";
     }
-    return FmtX("%s: %d.%d [build: %d], %s", platform.c_str(),
+    return str::Format("%s: %d.%d [build: %d], %s", platform.c_str(),
                 info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber,
                 info.szCSDVersion);
 }
