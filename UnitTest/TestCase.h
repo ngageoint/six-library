@@ -5,7 +5,7 @@
 
 #include "CppUnitTest.h"
 #include <include/TestCase.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 
 #undef TEST_CHECK
 #undef TEST_ASSERT
@@ -89,7 +89,7 @@ inline void assert_almost_eq(const std::string& testName, long double X1, long d
 #define TEST_ASSERT_EQ_MSG(msg, X1, X2) testName, Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(msg.c_str()); TEST_ASSERT_EQ(X1, X2)
 
 #undef TEST_FAIL
-#define TEST_FAIL(msg) { (void)testName; const str::EncodedStringView vw(msg); Microsoft::VisualStudio::CppUnitTestFramework::Assert::Fail(vw.wstring().c_str()); }
+#define TEST_FAIL(msg) { (void)testName; const auto vw(str::toWString(msg)); Microsoft::VisualStudio::CppUnitTestFramework::Assert::Fail(vw.c_str()); }
 
 #undef TEST_EXCEPTION
 #undef TEST_THROWS

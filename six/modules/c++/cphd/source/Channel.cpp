@@ -21,7 +21,9 @@
  */
 #include <cphd/Channel.h>
 
-#include <str/EncodedStringView.h>
+#include <std/string>
+
+#include <str/Encoding.h>
 
 #include <six/Init.h>
 

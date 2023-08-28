@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 
-#include <string>
+#include <std/string>
 #include <iostream>
 #include <string>
 #include <utility>
@@ -35,7 +35,7 @@
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <import/sys.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 #include <sys/Span.h>
 
 #include <import/six.h>
@@ -152,13 +152,13 @@ TEST_CASE(valid_six_50x50)
     valid_six_50x50_(testName, &schemaPaths_); // "validate" against schema (use a default path)
 }
 
-inline static std::string classificationText_iso8859_1()
+inline static std::string classificationText_asIso8859_1()
 {
-    return std::string("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+    return "NON CLASSIFI\xc9 / UNCLASSIFIED";  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
 }
-inline static std::string classificationText_utf_8()
+inline static std::string classificationText_asUtf8()
 {
-    return std::string("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+    return "NON CLASSIFI\xc3\x89 / UNCLASSIFIED";  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
 }
 
 TEST_CASE(sicd_French_xml)
@@ -169,7 +169,7 @@ TEST_CASE(sicd_French_xml)
     const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths_, pComplexData);
     const six::Data* pData = pComplexData.get();
 
-    const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8() : classificationText_iso8859_1();
+    const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_asUtf8() : classificationText_asIso8859_1();
     const auto& classification = pData->getClassification();
     const auto actual = classification.getLevel();
     TEST_ASSERT_EQ(actual, expectedCassificationText);
@@ -218,9 +218,8 @@ static bool find_string(io::FileInputStream& stream, const std::string& s)
     stream.seek(pos, io::Seekable::START);
     return false;
 }
-static void sicd_French_xml_raw_()
+TEST_CASE(sicd_French_xml_raw)
 {
-    static const std::string testName("test_valid_six");
     // This is a binary file with XML burried in it somewhere
     const auto path = six::testing::getNitfPath("sicd_French_xml.nitf");
 
@@ -234,23 +233,19 @@ static void sicd_French_xml_raw_()
     const auto& classificationXML = root.getElementByTagName("Classification", true /*recurse*/);
 
     // UTF-8 characters in sicd_French_xml.nitf
-    const auto expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8() : classificationText_iso8859_1();
+    const auto expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_asUtf8() : classificationText_asIso8859_1();
     auto expectedLength = expectedCharData.length();
     const auto characterData = classificationXML.getCharacterData();
     TEST_ASSERT_EQ(characterData.length(), expectedLength);
     TEST_ASSERT_EQ(characterData, expectedCharData);
 
-    const auto u8_expectedCharData8 = str::EncodedStringView::fromUtf8(classificationText_utf_8()).u8string();
+    const std::u8string u8_expectedCharData8 = str::c_str<std::u8string>(classificationText_asUtf8());
     expectedLength = u8_expectedCharData8.length();
 
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
     TEST_ASSERT_EQ(u8_characterData.length(), expectedLength);
     TEST_ASSERT(u8_characterData == u8_expectedCharData8);
-}
-TEST_CASE(sicd_French_xml_raw)
-{
-    sicd_French_xml_raw_();
 }
 
 static void test_assert(const six::sicd::ComplexData& complexData,

@@ -28,7 +28,7 @@
 #include <sys/Path.h>
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 #include <six/XMLControlFactory.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexXMLControl.h>

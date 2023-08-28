@@ -21,8 +21,6 @@
  */
 #include <six/sicd/Antenna.h>
 
-#include <str/EncodedStringView.h>
-
 #include <six/Utilities.h>
 
 namespace six

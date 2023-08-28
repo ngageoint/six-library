@@ -28,6 +28,7 @@
 #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
 #pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
 #pragma warning(disable: 26822) // Dereferencing a null pointer 'me' (lifetime.1).
+#pragma warning(disable: 5267) // definition of implicit copy constructor for '...' is deprecated because it has a user-provided destructor
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).

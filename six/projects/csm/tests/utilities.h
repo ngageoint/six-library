@@ -23,7 +23,6 @@
 #include <std/filesystem>
 #include <std/string>
 
-#include <str/EncodedStringView.h>
 #include <six/Utilities.h>
 #include <NitfIsd.h>
 
@@ -138,7 +137,7 @@ inline std::unique_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
 
     // The DES's data is just the XML string
     const auto xml = six::toXMLString(data, &registry);
-    des.setData(str::EncodedStringView(xml).native());
+    des.setData(str::toString(xml));
     nitfIsd->addFileDes(des);
 
     return nitfIsd;
