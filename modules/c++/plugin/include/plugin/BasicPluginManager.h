@@ -279,7 +279,7 @@ public:
                 for (unsigned int i = 0; ops[i] != nullptr; i++)
                     oss << ops[i] << ":";
                 eh->onPluginVersionUnsupported(
-                    FmtX("For plugin supporting ops %s version [%d.%d] not supported (%d.%d)",
+                    str::Format("For plugin supporting ops %s version [%d.%d] not supported (%d.%d)",
                          oss.str().c_str(), majorVersion, minorVersion,
                          mMajorVersion, mMinorVersion
                         )

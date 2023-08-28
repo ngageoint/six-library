@@ -106,10 +106,7 @@ public:
     {
         if (index >= mValues.size())
             throw except::IndexOutOfRangeException(
-                                                   Ctxt(
-                                                        FmtX(
-                                                             "Invalid index: %d",
-                                                             index)));
+                                                   Ctxt(FmtX("Invalid index: %d", index)));
         return str::toType<T>(mValues[index]);
     }
 

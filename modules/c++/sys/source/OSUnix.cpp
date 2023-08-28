@@ -143,7 +143,7 @@ std::string sys::OSUnix::getPlatformName() const
     if (uname(&name) == -1)
         throw sys::SystemException("Uname failed");
 
-    return FmtX("%s (%s): %s [build: %s]", name.sysname, name.machine,
+    return str::Format("%s (%s): %s [build: %s]", name.sysname, name.machine,
                 name.release, name.version);
 }
 
