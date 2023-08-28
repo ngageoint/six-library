@@ -32,6 +32,7 @@
 #include <new> // std::nothrow
 
 #include "str/Manip.h"
+#include "str/Encoding.h"
 
 namespace nitf
 {
