@@ -129,6 +129,10 @@ inline std::string format(const char* format, int i1, int i2, unsigned long ul)
 {
     return Format(format, i1, i2, ul);
 }
+inline std::string format(const char* format, int i1, int i2, int i3)
+{
+    return Format(format, i1, i2, i3);
+}
 inline std::string format(const char* format, const std::string& s1, const std::string& s2, uint32_t ui)
 {
     return Format(format, s1.c_str(), s2.c_str(), ui);
