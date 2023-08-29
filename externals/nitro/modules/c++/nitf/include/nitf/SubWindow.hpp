@@ -119,12 +119,7 @@ private:
     std::optional<std::vector<uint32_t>> bandList;
 };
 
-// This template<template> syntax allows an arbitary TContainer<uint32_t> to be passed
-// rather than requiring that it be std::vector<uint32_t>.  Note that the container
-// must support data() and size().
-template<template<typename, typename...> typename TContainer, typename ...TAlloc>
-inline void setBands(SubWindow& subWindow,
-    TContainer<uint32_t, TAlloc...>& bandList) // std::vector<T> really has another template parameter
+inline void setBands(SubWindow& subWindow, std::vector<uint32_t>& bandList)
 {
     subWindow.setBandList(bandList.data());
     subWindow.setNumBands(gsl::narrow<uint32_t>(bandList.size()));

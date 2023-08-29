@@ -104,10 +104,10 @@ CODA_OSS_disable_warning_pop
 // change we want to rebuild everything anyway.
 #include "gsl/gsl.h"
 #include "config/Exports.h"
+#include "mem/SharedPtr.h"
+#include "sys/filesystem.h"
 #include "except/Throwable.h"
 #include "sys/Conf.h"
-#include "sys/filesystem.h"
-#include "mem/SharedPtr.h"
 
 #include "xml/lite/xerces_.h"
 #pragma comment(lib, "xerces-c")

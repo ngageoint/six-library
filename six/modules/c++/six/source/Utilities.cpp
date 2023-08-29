@@ -27,7 +27,6 @@
 
 #include <logging/NullLogger.h>
 #include <math/Utilities.h>
-#include <str/EncodedStringView.h>
 #include <nitf/PluginRegistry.hpp>
 #include <sys/FileFinder.h>
 #include "six/Init.h"
@@ -718,8 +717,7 @@ std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    const str::EncodedStringView view(xmlStr);
-    auto result = parseDataFromString(xmlReg, view.u8string(), dataType, &schemaPaths, &log);
+    auto result = parseDataFromString(xmlReg, str::u8FromString(xmlStr), dataType, &schemaPaths, &log);
     return std::unique_ptr<Data>(result.release());
 }
 

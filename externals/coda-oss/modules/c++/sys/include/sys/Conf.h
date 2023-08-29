@@ -156,8 +156,6 @@ namespace sys
 
 #include "except/Exception.h"
 
-#define FmtX str::format
-
 #define SYS_FUNC NativeLayer_func__
 
 #define Ctxt(MESSAGE) except::Context(__FILE__, __LINE__, SYS_FUNC, \
