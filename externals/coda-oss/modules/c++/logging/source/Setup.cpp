@@ -33,9 +33,9 @@
 #include "logging/XMLFormatter.h"
 
 std::unique_ptr<logging::Logger>
-logging::setupLogger(const std::filesystem::path& program_, 
+logging::setupLogger(const path& program_, 
                      const std::string& logLevel, 
-                     const std::filesystem::path& logFile_,
+                     const path& logFile_,
                      const std::string& logFormat,
                      size_t logCount,
                      size_t logBytes)

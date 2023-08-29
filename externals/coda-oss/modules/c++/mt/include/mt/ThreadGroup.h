@@ -84,9 +84,6 @@ struct CODA_OSS_API ThreadGroup
     *  \param runnable unique_ptr to sys::Runnable
     */
     void createThread(std::unique_ptr<sys::Runnable>&& runnable);
-    #if CODA_OSS_autoptr_is_std
-    void createThread(std::unique_ptr<sys::Runnable> runnable);
-    #endif
 
     /*!
      * Waits for all threads to complete.
@@ -164,13 +161,6 @@ private:
                 mt::ThreadGroup& parentThreadGroup,
                 std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit =
                         std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
-        #if CODA_OSS_autoptr_is_std
-        ThreadGroupRunnable(
-                std::unique_ptr<sys::Runnable> runnable,
-                mt::ThreadGroup& parentThreadGroup,
-                std::unique_ptr<CPUAffinityThreadInitializer> threadInit =
-                        std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
-        #endif
 
         ThreadGroupRunnable(const ThreadGroupRunnable&) = delete;
         ThreadGroupRunnable& operator=(const ThreadGroupRunnable&) = delete;

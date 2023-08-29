@@ -54,7 +54,7 @@ typedef nitf_Off Off;
 typedef nitf_AccessFlags AccessFlags;
 typedef nitf_CreationFlags CreationFlags;
 
-using byte = std::byte;
+using byte = sys::byte;
 
 using Version = nitf_Version;
 using FieldType = nitf_FieldType;

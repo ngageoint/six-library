@@ -223,13 +223,12 @@
     <ClInclude Include="sio.lite\include\sio\lite\UserDataDictionary.h" />
     <ClInclude Include="std\include\import\std.h" />
     <ClInclude Include="str\include\str\Convert.h" />
-    <ClInclude Include="str\include\str\EncodedString.h" />
-    <ClInclude Include="str\include\str\EncodedStringView.h" />
     <ClInclude Include="str\include\str\Encoding.h" />
     <ClInclude Include="str\include\str\Format.h" />
     <ClInclude Include="str\include\str\Manip.h" />
     <ClInclude Include="str\include\str\Tokenizer.h" />
     <ClInclude Include="str\include\str\utf8.h" />
+    <ClInclude Include="str\include\str\W1252string.h" />
     <ClInclude Include="sys\include\sys\AbstractOS.h" />
     <ClInclude Include="sys\include\sys\AtomicCounter.h" />
     <ClInclude Include="sys\include\sys\AtomicCounterCpp11.h" />
@@ -422,8 +421,6 @@
     <ClCompile Include="sio.lite\source\SioFileWriter.cpp" />
     <ClCompile Include="sio.lite\source\StreamReader.cpp" />
     <ClCompile Include="str\source\Convert.cpp" />
-    <ClCompile Include="str\source\EncodedString.cpp" />
-    <ClCompile Include="str\source\EncodedStringView.cpp" />
     <ClCompile Include="str\source\Encoding.cpp" />
     <ClCompile Include="str\source\Format.cpp" />
     <ClCompile Include="str\source\Manip.cpp" />

@@ -24,13 +24,13 @@
 
 #if !defined(USE_IO_STREAMS)
 
-io::FileOutputStreamOS::FileOutputStreamOS(const std::filesystem::path& str,
+io::FileOutputStreamOS::FileOutputStreamOS(const path& str,
         int creationFlags)
 {
     mFile.create(str.string(), sys::File::WRITE_ONLY, creationFlags);
 }
 
-void io::FileOutputStreamOS::create(const std::filesystem::path& str_,
+void io::FileOutputStreamOS::create(const path& str_,
                                     int creationFlags)
 {
     const auto str = str_.string();

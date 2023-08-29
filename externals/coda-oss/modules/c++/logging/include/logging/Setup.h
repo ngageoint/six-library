@@ -25,14 +25,14 @@
 
 #include <memory>
 #include <string>
-#include <std/filesystem>
 
 #include "mem/SharedPtr.h"
 #include "logging/Logger.h"
+#include "sys/filesystem.h"
 
 namespace logging
 {
-using path = std::filesystem::path; // still used in SWIG bindings
+using path = coda_oss::filesystem::path; // still used in SWIG bindings
 
 /*!
  *  \fn setupLogger
@@ -49,9 +49,9 @@ using path = std::filesystem::path; // still used in SWIG bindings
  *  \param logBytes - number of bytes per rotating log (default: 0 no rotation)
  */
 std::unique_ptr<logging::Logger> setupLogger(
-    const std::filesystem::path& program, 
+    const path& program, 
     const std::string& logLevel = "warning", 
-    const std::filesystem::path& logFile = "console",
+    const path& logFile = "console",
     const std::string& logFormat = "[%p] (%d) %m",
     size_t logCount = 0,
     size_t logBytes = 0);
