@@ -40,8 +40,9 @@
 #pragma warning(disable: 6262) // Function uses '...' bytes of stack : exceeds analyze : stacksize '...'.Consider moving some data to heap.
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
+#pragma warning(disable: 5267) // definition of implicit copy constructor for '...' is deprecated because it has a user-provided destructor
 
-// too hard to get write with older C++11 compilers
+// too hard to get right with older C++11 compilers
 #pragma warning(disable: 26497) // The function '...' could be marked constexpr if compile-time evaluation is desired(f.4).
 
 
