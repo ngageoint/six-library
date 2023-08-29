@@ -152,8 +152,7 @@ std::string xml::lite::Attributes::getValue(const QName& qname) const
     {
         const auto uri = qname.getUri().value;
         const auto localName = qname.getName();
-        throw except::NoSuchKeyException(Ctxt(FmtX("(uri: %s, localName: %s",
-                                                   uri.c_str(), localName.c_str())));
+        throw except::NoSuchKeyException(Ctxt(FmtX("(uri: %s, localName: %s", uri, localName)));
     }
     return retval;
 }

@@ -28,11 +28,6 @@
 
 #include "TestCase.h"
 
-inline std::string to_string(const std::string& value)
-{
-    return value;
-}
-
 TEST_CASE(testTrim)
 {
     std::string s = "  test   ";
