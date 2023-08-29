@@ -215,7 +215,7 @@ int main(int argc, char **argv)
                 const auto result_ = j2kReader.readRegion(0, 0, width, height, buf);
                 const std::span<const uint8_t> result(result_.data(), result_.size());
 
-                const auto namePrefix = str::format("image-%d", (i + 1));
+                const auto namePrefix = FmtX("image-%d", (i + 1));
                 // TODO: Update write to only output tiles in read region
                 writeFile(0, 0, width, height, result, namePrefix);
                 writeJ2K(0, 0, width, height, result, container, namePrefix);

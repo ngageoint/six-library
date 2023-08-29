@@ -271,7 +271,7 @@ void test_j2k_nitf_read_region_(const std::string& testName,
         const auto result_ = j2kReader.readRegion(0, 0, width, height, buf);
         const auto result = sys::make_const_span(result_);
 
-        const auto namePrefix = str::format("image-%d", (i + 1));
+        const auto namePrefix = FmtX("image-%d", (i + 1));
         // TODO: Update write to only output tiles in read region
         writeFile(0, 0, width, height, result, namePrefix);
         writeJ2K(0, 0, width, height, result, container, namePrefix);
