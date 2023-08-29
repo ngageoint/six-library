@@ -5,7 +5,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(coda-oss)
 
-set(CMAKE_CXX_STANDARD 17)
+project(coda-oss)
+
+set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED true)
 
 if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
@@ -22,13 +24,9 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
     # we'll dial-back warnings as necessary.
     if (MSVC)
-       add_compile_options(/WX) # warnings as errors
-       add_compile_options(/MP) # multi-processor compile
-
-       if (ENABLE_ASAN)
-            # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
-            add_compile_options(/fsanitize=address)
-       endif()
+        # set warning level to /W3
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
     elseif (UNIX)
        add_compile_options(-Werror) # warnings as errors
 

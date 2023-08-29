@@ -28,24 +28,14 @@
 #include <byteswap.h>  // "These functions are GNU extensions."
 #endif
 
+#include<bit>
 #include <type_traits>
 
 #include "coda_oss/namespace_.h"
 namespace coda_oss
 {
-    // https://en.cppreference.com/w/cpp/types/endian
-    enum class endian
-    {
-    #ifdef _WIN32
-        little = 0,
-        big = 1,
-        native = little
-    #else
-        little = __ORDER_LITTLE_ENDIAN__,
-        big = __ORDER_BIG_ENDIAN__,
-        native = __BYTE_ORDER__
-    #endif
-    };
+    using std::endian;
+
 
     // https://en.cppreference.com/w/cpp/numeric/byteswap
     namespace details
