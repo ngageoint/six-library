@@ -75,12 +75,6 @@
     <ClInclude Include="str\include\str\Convert.h">
       <Filter>str</Filter>
     </ClInclude>
-    <ClInclude Include="str\include\str\EncodedString.h">
-      <Filter>str</Filter>
-    </ClInclude>
-    <ClInclude Include="str\include\str\EncodedStringView.h">
-      <Filter>str</Filter>
-    </ClInclude>
     <ClInclude Include="str\include\str\Encoding.h">
       <Filter>str</Filter>
     </ClInclude>
@@ -711,9 +705,6 @@
     <ClInclude Include="sys\include\sys\MutexCpp11.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="mem\include\mem\AutoPtr.h">
-      <Filter>mem</Filter>
-    </ClInclude>
     <ClInclude Include="mem\include\mem\ComplexView.h">
       <Filter>mem</Filter>
     </ClInclude>
@@ -744,28 +735,13 @@
     <ClInclude Include="coda_oss\include\coda_oss\numbers.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="hdf5.lite\source\H5.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
     <ClInclude Include="hdf5.lite\source\hdf5.lite.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\HDF5Exception.h">
       <Filter>hdf5.lite</Filter>
     </ClInclude>
     <ClInclude Include="hdf5.lite\include\hdf5\lite\highfive.h">
       <Filter>hdf5.lite</Filter>
     </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\Info.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\Read.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
     <ClInclude Include="hdf5.lite\include\hdf5\lite\SpanRC.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\Write.h">
       <Filter>hdf5.lite</Filter>
     </ClInclude>
     <ClInclude Include="zip\include\zip\GZipInputStream.h">
@@ -960,14 +936,20 @@
     <ClInclude Include="xml.lite\include\xml\lite\xerces_.h">
       <Filter>xml.lite</Filter>
     </ClInclude>
-    <ClInclude Include="hdf5.lite\include\hdf5\lite\H5_.h">
-      <Filter>hdf5.lite</Filter>
-    </ClInclude>
     <ClInclude Include="mt\include\import\mt.h">
       <Filter>mt</Filter>
     </ClInclude>
     <ClInclude Include="include\UnitTest.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\H5_.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\AutoPtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="str\include\str\W1252string.h">
+      <Filter>str</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -985,12 +967,6 @@
       <Filter>except</Filter>
     </ClCompile>
     <ClCompile Include="str\source\Convert.cpp">
-      <Filter>str</Filter>
-    </ClCompile>
-    <ClCompile Include="str\source\EncodedString.cpp">
-      <Filter>str</Filter>
-    </ClCompile>
-    <ClCompile Include="str\source\EncodedStringView.cpp">
       <Filter>str</Filter>
     </ClCompile>
     <ClCompile Include="str\source\Encoding.cpp">
@@ -1311,19 +1287,7 @@
     <ClCompile Include="sys\source\File.cpp">
       <Filter>sys</Filter>
     </ClCompile>
-    <ClCompile Include="hdf5.lite\source\H5.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
     <ClCompile Include="hdf5.lite\source\hdf5.lite.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
-    <ClCompile Include="hdf5.lite\source\Info.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
-    <ClCompile Include="hdf5.lite\source\Read.cpp">
-      <Filter>hdf5.lite</Filter>
-    </ClCompile>
-    <ClCompile Include="hdf5.lite\source\Write.cpp">
       <Filter>hdf5.lite</Filter>
     </ClCompile>
     <ClCompile Include="zip\source\GZipInputStream.cpp">
@@ -1442,9 +1406,6 @@
     <Filter Include="gsl">
       <UniqueIdentifier>{619ad1da-f21c-4027-9b5d-23f08225b96f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="coda_oss">
-      <UniqueIdentifier>{59f3d9a1-06d3-4779-aef2-cc55223c3017}</UniqueIdentifier>
-    </Filter>
     <Filter Include="std">
       <UniqueIdentifier>{3051f4b6-dad4-47ea-b4bd-d25d9e09f782}</UniqueIdentifier>
     </Filter>
@@ -1528,6 +1489,9 @@
     </Filter>
     <Filter Include="unique">
       <UniqueIdentifier>{79aa73a7-ed0d-4826-b7ed-c8d91d96998a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="coda_oss">
+      <UniqueIdentifier>{59f3d9a1-06d3-4779-aef2-cc55223c3017}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

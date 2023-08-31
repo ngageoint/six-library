@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,19 +13,16 @@
 /*-------------------------------------------------------------------------
  *
  * Created:             H5ACpublic.h
- *                      Jul 10 1997
- *                      Robb Matzke
  *
- * Purpose:             Public include file for cache functions.
+ * Purpose:             Public include file for cache functions
  *
  *-------------------------------------------------------------------------
  */
 #ifndef H5ACpublic_H
 #define H5ACpublic_H
 
-/* Public headers needed by this file */
-#include "H5public.h"
-#include "H5Cpublic.h"
+#include "H5public.h"  /* Generic Functions                        */
+#include "H5Cpublic.h" /* Cache                                    */
 
 /****************************************************************************
  *
@@ -467,7 +463,7 @@ typedef struct H5AC_cache_config_t {
     /* general configuration fields: */
     //! <!-- [H5AC_cache_config_t_general_snip] -->
     int version;
-    /**< Integer field indicating the the version of the H5AC_cache_config_t
+    /**< Integer field indicating the version of the H5AC_cache_config_t
      * in use. This field should be set to #H5AC__CURR_CACHE_CONFIG_VERSION
      * (defined in H5ACpublic.h). */
 
@@ -563,7 +559,7 @@ typedef struct H5AC_cache_config_t {
      * The value must lie in the interval [0.0, 1.0]. 0.01 is a good place to
      * start in the serial case. In the parallel case, a larger value is needed
      * -- see the overview of the metadata cache in the
-     * “Metadata Caching in HDF5” section of the -- <em>HDF5 User’s Guide</em>
+     * “Metadata Caching in HDF5” section of the -- <em>\ref UG</em>
      * for details. */
 
     size_t max_size;

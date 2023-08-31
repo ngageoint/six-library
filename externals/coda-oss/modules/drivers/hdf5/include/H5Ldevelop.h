@@ -2,10 +2,10 @@
  * Copyright by The HDF Group.                                               *
  * All rights reserved.                                                      *
  *                                                                           *
- * This file is part of HDF5. The full HDF5 copyright notice, including      *
+ * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
  * the COPYING file, which can be found at the root of the source code       *
- * distribution tree, or in https://support.hdfgroup.org/ftp/HDF5/releases.  *
+ * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -29,6 +29,16 @@
  * \brief Current version of the H5L_class_t struct
  */
 #define H5L_LINK_CLASS_T_VERS 1
+
+/**
+ * \brief Version of external link format
+ */
+#define H5L_EXT_VERSION 0
+
+/**
+ * \brief Valid flags for external links
+ */
+#define H5L_EXT_FLAGS_ALL 0
 
 /*******************/
 /* Public Typedefs */

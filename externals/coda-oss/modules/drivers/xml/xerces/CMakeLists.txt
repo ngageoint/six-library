@@ -59,8 +59,8 @@ else()
     message("XML_HOME not specified, so XercesC will be built")
     coda_fetch_driver(
         NAME ${TARGET_NAME}
-        ARCHIVE "xerces-c-3.2.3.tar"
-        HASH "SHA256=61981c7a464e33913a093e0dfe7daf8a45f21e46b1924eb97f92bdbb746e2e6e"
+        ARCHIVE "xerces-c-3.2.4.tar"
+        HASH "SHA256=9b374fe066b0ae65a606a39dd67f1bd98c0ef505ec1baf45ce012cc2371999d8"
     )
 
     set(HAVE_INTTYPES_H true)
@@ -206,11 +206,11 @@ else()
     set(PACKAGE xerces-c)
     set(PACKAGE_BUGREPORT "")
     set(PACKAGE_NAME "xerces-c")
-    set(PACKAGE_STRING "xerces-c 3.2.3")
+    set(PACKAGE_STRING "xerces-c 3.2.4")
     set(PACKAGE_TARNAME "xerces-c")
     set(PACKAGE_URL "")
-    set(PACKAGE_VERSION "3.2.3")
-    set(VERSION "3.2.3")
+    set(PACKAGE_VERSION "3.2.4")
+    set(VERSION "3.2.4")
 
     # extra defines for Xerces_autoconf_config.hpp
     set(XERCES_USE_MSGLOADER_INMEMORY 1)

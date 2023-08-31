@@ -40,7 +40,7 @@ modules/drivers/jpeg/jpeg-9/
 modules/drivers/jpeg/jpeg-9d/
 modules/drivers/j2k/openjpeg/openjpeg-2.3.*_mod/
 modules/drivers/pcre/pcre2-10.*/
-modules/drivers/uuid/e2fsprogs-1.*-uuid/
+modules/drivers/uuid/e2fsprogs-1.*.*/
 modules/drivers/xml/xerces/xerces-c-*/
 modules/drivers/zlib/zlib-1.2.*/
 
