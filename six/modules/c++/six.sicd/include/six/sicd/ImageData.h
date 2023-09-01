@@ -99,11 +99,13 @@ struct ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
-    static void testing_fromComplex_(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>); // for unit-tests
+    static std::vector<AMP8I_PHS8I_t> testing_fromComplex_(std::span<const six::zfloat>); // for unit-tests
 
     static void toComplex(const six::Amp8iPhs8iLookup_t& lookup, std::span<const AMP8I_PHS8I_t>, std::span<six::zfloat>);
     void toComplex(std::span<const AMP8I_PHS8I_t>, std::span<six::zfloat>) const;
+    std::vector<six::zfloat> toComplex(std::span<const AMP8I_PHS8I_t>) const;
     void fromComplex(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+    std::vector<AMP8I_PHS8I_t> fromComplex(std::span<const six::zfloat>) const;
 
     /*!
      * Create a lookup table for converting from AMP8I_PHS8I to complex.
