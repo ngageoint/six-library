@@ -159,12 +159,12 @@ struct CPHDWriter final
      *  \param id The unique identifier of the support array
      */
     template <typename T>
-    void writeSupportData(const T* data,
+    void writeSupportData(const T* data_,
                           const std::string& id)
     {
-        writeSupportDataImpl(reinterpret_cast<const std::byte*>(data),
-                             mMetadata.data.getSupportArrayById(id).numRows * mMetadata.data.getSupportArrayById(id).numCols,
-                             mMetadata.data.getSupportArrayById(id).bytesPerElement);
+        const auto size = mMetadata.data.getSupportArrayById(id).size_bytes();
+	const auto data = sys::make_span<const std::byte>(data_, size);
+        writeSupportDataImpl(data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
     }
 
     /*

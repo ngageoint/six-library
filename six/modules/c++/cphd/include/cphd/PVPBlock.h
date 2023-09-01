@@ -250,6 +250,8 @@ struct PVPBlock
      */
     void getPVPdata(size_t channel,
                     std::vector<std::byte>& data) const;
+    void getPVPdata(size_t channel,
+                    std::vector<sys::ubyte>& data) const; // for existing SWIG bindings
 
     /*
      *  \func getPVPdata
