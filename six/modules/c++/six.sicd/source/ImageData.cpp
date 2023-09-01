@@ -256,7 +256,7 @@ void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const
     };
     transform(inputs, results, toComplex_);
 }
-void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results) const
+std::vector<six::zfloat> ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
@@ -264,12 +264,9 @@ void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<six::
     }
 
     const auto& values = getLookup(amplitudeTable.get());
-    toComplex(values, inputs, results);
-}
-std::vector<six::zfloat> ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs) const
-{
+
     std::vector<six::zfloat> retval(inputs.size());
-    toComplex(inputs, sys::make_span(retval));
+    toComplex(values, inputs, sys::make_span(retval));
     return retval;
 }
 

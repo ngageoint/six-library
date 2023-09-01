@@ -140,16 +140,16 @@ static void test_assert_eq(const std::string& testName,
     }
 }
 
-inline static void from_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
-    const std::vector<AMP8I_PHS8I_t>& inputs, std::vector<six::zfloat>& results)
+inline static auto from_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
+    const std::vector<AMP8I_PHS8I_t>& inputs)
 {
-    imageData.toComplex(sys::make_span(inputs), sys::make_span(results));
+    return imageData.toComplex(sys::make_span(inputs));
 }
 
 inline static void to_AMP8I_PHS8I(const six::sicd::ImageData& imageData,
     const std::vector<six::zfloat>& inputs, std::vector<AMP8I_PHS8I_t>& results)
 {
-    imageData.fromComplex(sys::make_span(inputs), sys::make_span(results));
+    results = imageData.fromComplex(sys::make_span(inputs));
 }
 
 TEST_CASE(test_8bit_ampphs)
@@ -171,8 +171,7 @@ TEST_CASE(test_8bit_ampphs)
         }
     }
 
-    std::vector<six::zfloat> actuals(inputs.size());
-    from_AMP8I_PHS8I(imageData, inputs, actuals);
+    const auto actuals = from_AMP8I_PHS8I(imageData, inputs);
     TEST_ASSERT(actuals == expecteds);
 
 
@@ -240,8 +239,7 @@ static Pair<uint64_t> to_AMP8I_PHS8I(const six::sicd::ImageData& imageData, cons
     // image is far too big to call to_AMP8I_PHS8I() with DEBUG code
     const auto size = sys::debug ? widebandData.size() / 200 : widebandData.size();
     const std::span<const six::zfloat> widebandData_(widebandData.data(), size);
-    std::vector<AMP8I_PHS8I_t> results(widebandData_.size());
-    imageData.fromComplex(widebandData_, std::span< AMP8I_PHS8I_t>(results.data(), results.size()));
+    const auto results = imageData.fromComplex(widebandData_);
 
     Pair<uint64_t> retval{ 0, 0 };
     for (const auto& r : results)
@@ -392,12 +390,10 @@ static std::vector<six::zfloat> adjust_image(const six::sicd::ComplexData& compl
     // Convert from AMP8I_PHS8I to that when we convert to AMP8I_PHS8I for writing
     // we'll end up with the "[***...***]" in the file
     void* image_data = image.data();
-    std::span<AMP8I_PHS8I_t> from_(static_cast<AMP8I_PHS8I_t*>(image_data), getExtent(complexData).area());
-    adjust_image(from_);
+    std::span<AMP8I_PHS8I_t> from(static_cast<AMP8I_PHS8I_t*>(image_data), getExtent(complexData).area());
+    adjust_image(from);
 
-    std::span<const AMP8I_PHS8I_t> from(from_.data(), from_.size());
-    std::vector<six::zfloat> retval(from.size());
-    complexData.imageData->toComplex(from, std::span<six::zfloat>(retval.data(), retval.size()));
+    const auto retval = complexData.imageData->toComplex(sys::make_const_span(from));
     return retval;
 }
 static std::vector<six::zfloat> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
