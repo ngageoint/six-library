@@ -121,6 +121,11 @@ struct DataWriterLittleEndian final : public DataWriter
      *  \param elementSize Size of each element
      */
     void operator()(std::span<const std::byte>, size_t elementSize) override;
+    void operator()(const sys::ubyte* data, size_t numElements, size_t elementSize) // for existing SWIG bindings
+    {
+      DataWriter* const pThis = this;
+      (*pThis)(data, numElements, elementSize);
+    }
 
 private:
     // Scratch space buffer
@@ -163,6 +168,11 @@ struct DataWriterBigEndian final : public DataWriter
      *  \param elementSize Size of each element
      */
     void operator()(std::span<const std::byte>, size_t elementSize) override;
+    void operator()(const sys::ubyte* data, size_t numElements, size_t elementSize) // for existing SWIG bindings
+    {
+      DataWriter* const pThis = this;
+      (*pThis)(data, numElements, elementSize);
+    }
 };
 
 // Create the appropriate DataWriter instance using std::endian::native.  There are fancier

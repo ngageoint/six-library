@@ -192,9 +192,9 @@ template void CPHDWriter::write<std::byte>(const PVPBlock&, const std::byte* wid
 template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
 template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
 template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
-template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
-template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
-template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
 
 void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
 {

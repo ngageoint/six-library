@@ -134,6 +134,7 @@ struct SupportBlock final
      */
     // Same as above but allocates the memory
     std::vector<std::byte> read(const std::string& id, size_t numThreads) const;
+    void read(const std::string& id, size_t numThreads, mem::ScopedArray<sys::ubyte>&) const; // for existing SWIG bindings
 
     /*
      *  \func readAll
@@ -148,6 +149,7 @@ struct SupportBlock final
      *
      */
     std::vector<std::byte> readAll(size_t numThreads) const;
+    void readAll(size_t numThreads, mem::ScopedArray<sys::ubyte>&) const; // for existing SWIG bindings
 
 private:
     //! Initialize mOffsets for each array
