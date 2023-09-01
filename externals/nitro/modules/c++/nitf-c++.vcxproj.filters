@@ -412,7 +412,6 @@
     <ClInclude Include="nitf\include\nitf\WriterOptions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cpp.h" />
     <ClInclude Include="nitf\include\nitf\exports.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

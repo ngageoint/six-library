@@ -1,6 +1,17 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include <mt/CriticalSection.h>
+#include <mt/ThreadPlanner.h>
+#include <mt/ThreadGroup.h>
+#include <mt/BalancedRunnable1D.h>
+#include <mt/CPUAffinityInitializer.h>
+#include <mt/CPUAffinityThreadInitializer.h>
+#include <mt/RequestQueue.h>
+#include <mt/ThreadPoolException.h>
+#include <mt/GenerationThreadPool.h>
+#include <mt/ThreadedByteSwap.h>
+
 namespace mt
 {
 

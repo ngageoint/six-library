@@ -26,6 +26,8 @@
 
 #include "logging/LoggerFactory.h"
 
+#include <import/sys.h>
+
  std::shared_ptr<logging::Logger>
 logging::LoggerManager::getLoggerSharedPtr(const std::string& name)
 {

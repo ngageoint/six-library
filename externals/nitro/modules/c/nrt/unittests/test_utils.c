@@ -473,8 +473,6 @@ TEST_CASE(test_matlab_dms)
 
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
     CHECK(testParseZeroDegrees);
     CHECK(testParseZeroMinutes);
     CHECK(testParseErrorGeographicString);

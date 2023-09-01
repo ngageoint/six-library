@@ -19,30 +19,66 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __CPHD_CHANNEL_H__
-#define __CPHD_CHANNEL_H__
 
-#include <string>
+#pragma once
+#ifndef SIX_cphd_Channel_h_INCLUDED_
+#define SIX_cphd_Channel_h_INCLUDED_
+
+#include <std/string>
 #include <vector>
+#include <std/optional>
+
+#include <six/XsElement.h>
+
 #include <cphd/Types.h>
 #include <cphd/Enums.h>
 #include <cphd/SceneCoordinates.h>
 
 namespace cphd
 {
+/*
+*  \struct PolRefType
+*
+*  \brief Polarization parameters for the pulse for the reference signal vector.
+* (New in CPHD 1.1.0)
+*/
+struct PolRef final
+{
+    bool operator==(const PolRef& other) const
+    {
+        return (ampH == other.ampH)
+            && (ampV == other.ampV)
+            && (phaseV == other.phaseV);
+    }
+    bool operator!=(const PolRef& other) const
+    {
+        return !(*this == other);
+    }
+
+    //! E-field relative amplitude in H direction
+    six::XsElement<ZeroToOne> ampH{ "AmpH" };
+
+    //! E-field relative amplitude in V direction
+    six::XsElement<ZeroToOne> ampV{ "AmpV" };
+
+    //! Relative phase of the V E-field relative to the H E-field
+    six::XsElement<NegHalfToHalf> phaseV{ "PhaseV" };
+};
 
 /*
  *  \struct Polarization
  *
  *  \brief Polarization of the signals that formed the signal array.
  */
-struct Polarization
+struct Polarization final
 {
     //! Equality operator
     bool operator==(const Polarization& other) const
     {
-        return txPol == other.txPol &&
-               rcvPol == other.rcvPol;
+        return (txPol == other.txPol)
+            && (rcvPol == other.rcvPol)
+            && (txPolRef == other.txPolRef)
+            && (rcvPolRef == other.rcvPolRef);
     }
     bool operator!=(const Polarization& other) const
     {
@@ -54,6 +90,12 @@ struct Polarization
 
     //! Receive polarization for the channel.
     PolarizationType rcvPol;
+
+    //! Transmit polarization parameters for the transmit pulse for the reference signal vector  (v_CH_REF). See Section 7.2.5.
+    six::XsElement_minOccurs0<PolRef> txPolRef { "TxPolRef" }; // new in CPHD 1.1.0
+
+    //! Receive polarization parameters for the received signals for the reference signal vector (v_CH_REF). See Section 7.2.5.
+    six::XsElement_minOccurs0<PolRef> rcvPolRef { "RcvPolRef" }; // new in CPHD 1.1.0
 };
 
 /*
@@ -147,8 +189,10 @@ struct DwellTimes
     // Equality operator
     bool operator==(const DwellTimes& other) const
     {
-        return codId == other.codId &&
-                dwellId == other.dwellId;
+        return (codId == other.codId)
+            && (dwellId == other.dwellId)
+            && (dtaId == other.dtaId)
+            && (useDTA == other.useDTA);
     }
     bool operator!=(const DwellTimes& other) const
     {
@@ -162,6 +206,14 @@ struct DwellTimes
     //! Identifier of the dwell Time polynomial that
     //! maps reference surface position to dwell time
     std::string dwellId;
+
+    //! Identifier of the Dwell Time support array that specifies COD times and
+    //! Dwell Times for a grid of points on the reference surface
+    six::XsElement_minOccurs0<std::u8string> dtaId { "DTAId" }; // new in CPHD 1.1.0
+
+    //! Indicates the provided Dwell Time array provides a more
+    //! accurate description dwell times for the channel.
+    six::XsElement_minOccurs0<bool> useDTA { "UseDTA" }; // new in CPHD 1.1.0
 };
 
 /*
@@ -520,6 +572,7 @@ struct Channel
 };
 
 //! Ostream operators
+std::ostream& operator<< (std::ostream& os, const PolRef& p);
 std::ostream& operator<< (std::ostream& os, const Polarization& p);
 std::ostream& operator<< (std::ostream& os, const TOAExtended& t);
 std::ostream& operator<< (std::ostream& os, const DwellTimes& d);
@@ -531,4 +584,4 @@ std::ostream& operator<< (std::ostream& os, const ChannelParameter& c);
 std::ostream& operator<< (std::ostream& os, const Channel& c);
 }
 
-#endif
+#endif // SIX_cphd_Channel_h_INCLUDED_

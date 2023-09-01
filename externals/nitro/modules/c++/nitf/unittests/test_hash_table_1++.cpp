@@ -151,8 +151,6 @@ TEST_CASE(test_hash_table_iterator)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
     TEST_CHECK(test_hash_table_1);
     TEST_CHECK(test_hash_table_iterator);
 )

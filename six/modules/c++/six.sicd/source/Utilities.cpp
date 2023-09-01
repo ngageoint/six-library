@@ -42,7 +42,7 @@
 #include <mem/ScopedAlignedArray.h>
 #include <gsl/gsl.h>
 #include <str/Manip.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 #include <sys/Conf.h>
 #include <sys/Span.h>
 #include <types/RowCol.h>
@@ -1023,7 +1023,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
         const std::vector<std::string>& schemaPaths_,
         logging::Logger& log)
 {
-    const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
+    const auto xmlStr = str::u8FromString(xmlStr_);
 
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
@@ -1048,7 +1048,7 @@ std::string Utilities::toXMLString(const ComplexData& data,
         [](const std::string& s) { return s; });
 
     const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::EncodedStringView(result).native();
+    return str::toString(result);
 }
 std::u8string Utilities::toXMLString(const ComplexData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)

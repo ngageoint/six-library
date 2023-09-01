@@ -32,6 +32,7 @@
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 #pragma warning(disable: 5039) // '...' : pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#pragma warning(disable: 5267) // definition of implicit copy constructor for '...' is deprecated because it has a user-provided destructor
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
@@ -63,7 +64,6 @@
 #include <import/mt.h>
 #pragma warning(pop)
 #include <import/str.h>
-#include <str/EncodedStringView.h>
 #include <import/logging.h>
 #include <math/Utilities.h>
 #include <xml/lite/Element.h>
@@ -86,6 +86,8 @@
 #pragma comment(lib, "sys-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "str-c++")
+#pragma comment(lib, "xerces-c")
+#pragma comment(lib, "xml.lite-c++.lib")
 
 #pragma warning(push)
 #pragma warning(disable: 4800) // Implicit conversion from '...' to bool.Possible information loss

@@ -191,6 +191,12 @@ XMLElem XMLParser::getFirstAndOnly(const xml::lite::Element* parent, const std::
     return & getFirstAndOnly(*parent, tag);
 }
 
+void XMLParser::getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag, double& value) const
+{
+    parseDouble(getFirstAndOnly(parent, tag), value);
+}
+
+
 xml::lite::Element* XMLParser::getOptional(const xml::lite::Element& parent, const std::string& tag)
 {
     return XmlLite::getOptional(parent, tag);
@@ -257,4 +263,5 @@ bool XMLParser::parseOptionalString(const xml::lite::Element& parent, const std:
 {
     return mXmlLite.parseOptionalString(parent, tag, value);
 }
+
 }

@@ -1,10 +1,11 @@
 /* =========================================================================
- * This file is part of xml.lite-c++ 
+ * This file is part of hdf5.lite-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2022, Maxar Technologies, Inc.
  *
- * xml.lite-c++ is free software; you can redistribute it and/or modify
+ * hdf5.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,10 +21,10 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_hd5_lite_import_lite_h_INCLUDED_
 #define CODA_OSS_hd5_lite_import_lite_h_INCLUDED_
-#pragma once
 
-#include "hdf5/lite/Read.h"
+#include "hdf5/lite/highfive.h"
 
 #endif  // CODA_OSS_hd5_lite_import_lite_h_INCLUDED_

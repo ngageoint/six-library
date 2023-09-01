@@ -20,13 +20,15 @@
  *
  */
 
-#ifndef __CLI_VALUE_H__
-#define __CLI_VALUE_H__
+#pragma once
+#ifndef CODA_OSS_cli_Value_h_INCLUDED_
+#define CODA_OSS_cli_Value_h_INCLUDED_
 
-#include <import/sys.h>
-#include <import/str.h>
+#include <string>
 #include <iterator>
 
+#include <import/str.h>
+#include "sys/Conf.h"
 #include "config/Exports.h"
 
 namespace cli
@@ -104,10 +106,7 @@ public:
     {
         if (index >= mValues.size())
             throw except::IndexOutOfRangeException(
-                                                   Ctxt(
-                                                        FmtX(
-                                                             "Invalid index: %d",
-                                                             index)));
+                                                   Ctxt(FmtX("Invalid index: %d", index)));
         return str::toType<T>(mValues[index]);
     }
 
@@ -163,4 +162,4 @@ protected:
 };
 
 }
-#endif
+#endif  // CODA_OSS_cli_Value_h_INCLUDED_

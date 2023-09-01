@@ -27,7 +27,6 @@
 
 #include <logging/NullLogger.h>
 #include <math/Utilities.h>
-#include <str/EncodedStringView.h>
 #include <nitf/PluginRegistry.hpp>
 #include <sys/FileFinder.h>
 #include "six/Init.h"
@@ -718,8 +717,7 @@ std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    const str::EncodedStringView view(xmlStr);
-    auto result = parseDataFromString(xmlReg, view.u8string(), dataType, &schemaPaths, &log);
+    auto result = parseDataFromString(xmlReg, str::u8FromString(xmlStr), dataType, &schemaPaths, &log);
     return std::unique_ptr<Data>(result.release());
 }
 
@@ -837,15 +835,21 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = corr * (composite.rg * composite.az);
             }
         }
-        else if (const auto unmodeled = errorStats->Unmodeled.get())
+        else if (has_value(errorStats->unmodeled))
         {
+            const auto& unmodeled = value(errorStats->unmodeled);
+
+            auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
+            auto&& Xrow = unmodeled.Xrow;
+            auto&& Ycol = unmodeled.Ycol;
+            auto&& XrowYcol = unmodeled.XrowYcol;
+
             // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
             //    [0][0] = Xrow; [1][1] = Ycol; 
             //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
-            auto& unmodeledErrorCovar = errors.mUnmodeledErrorCovar;
-            unmodeledErrorCovar(0, 0) = unmodeled->Xrow;
-            unmodeledErrorCovar(1, 1) = unmodeled->Ycol;
-            unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = unmodeled->XrowYcol * unmodeled->Xrow * unmodeled->Ycol;
+            unmodeledErrorCovar(0, 0) = Xrow;
+            unmodeledErrorCovar(1, 1) = Ycol;
+            unmodeledErrorCovar(0, 1) = unmodeledErrorCovar(1, 0) = XrowYcol * Xrow * Ycol;
         }
     }
 }

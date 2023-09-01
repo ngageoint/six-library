@@ -38,7 +38,7 @@ namespace six
 
     #ifndef SIX_six_unique_ComplexInteger
     // Preserve existing behavior where `std::complex<short>` is used.
-    #define SIX_six_unique_ComplexInteger 0 // TODO: set to 1 or CODA_OSS_types_unique_ComplexInteger
+    #define SIX_six_unique_ComplexInteger 0 // TODO: set to 1
     #endif
     template<typename T>
     #if SIX_six_unique_ComplexInteger
@@ -47,7 +47,7 @@ namespace six
     using ComplexInteger = std::complex<T>;
     #endif
 
-    using zint16_t = ComplexInteger<int16_t>; // TODO: types::zint16_t;
+    using zint16_t = ComplexInteger<int16_t>;
 }
 
 #endif // SIX_six_Complex_h_INCLUDED_

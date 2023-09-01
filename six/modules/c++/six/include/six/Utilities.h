@@ -50,6 +50,7 @@
 namespace six
 {
     struct Data; // forward
+    struct ErrorStatistics;
 
 /*!
  *  Remaps angles into [0:360]

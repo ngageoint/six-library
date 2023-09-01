@@ -53,6 +53,7 @@ six/modules/**/Makefile
 *_config.hpp
 # ignore build directories ...
 build/
+out/
 # ... but not coda-oss/build
 !/externals/coda-oss/build/
 

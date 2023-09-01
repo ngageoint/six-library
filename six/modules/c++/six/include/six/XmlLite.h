@@ -39,6 +39,7 @@
 #include <six/Init.h>
 #include <six/Utilities.h>
 #include <six/Logger.h>
+#include <six/XsElement.h>
 
 namespace six
 {
@@ -203,6 +204,9 @@ struct XmlLite final
     xml::lite::Element& createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
     xml::lite::Element& createDate(const std::string& name, const DateTime& p, xml::lite::Element& parent) const;
 
+    xml::lite::Element* createOptional(const xml::lite::QName&, const std::optional<bool>&, xml::lite::Element& parent) const;
+    xml::lite::Element* createOptional(const xml::lite::QName&, const std::optional<std::u8string>&, xml::lite::Element& parent) const;
+
     template <typename T>
     void parseInt(const xml::lite::Element& element, T& value) const
     {
@@ -231,7 +235,10 @@ struct XmlLite final
     void parseComplex(const xml::lite::Element& element, six::zdouble& value) const;
     void parseString(const xml::lite::Element* element, std::string& value) const;
     void parseString(const xml::lite::Element&, std::string&) const;
+
     void parseBooleanType(const xml::lite::Element& element, BooleanType& value) const;
+    BooleanType parseBooleanType(const xml::lite::Element& element) const;
+    bool parseBoolean(const xml::lite::Element& element) const;
 
     bool parseOptionalString(const xml::lite::Element& parent, const std::string& tag, std::string& value) const;
 
@@ -254,9 +261,10 @@ struct XmlLite final
     }
 
     static xml::lite::Element* getOptional(const xml::lite::Element& parent, const std::string& tag);
+    static xml::lite::Element* getOptional(const xml::lite::Element& parent, const xml::lite::QName& tag);
 
     template<typename T>
-    static xml::lite::Element* getOptional_reset(const xml::lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
+    inline static xml::lite::Element* getOptional_reset(const xml::lite::Element& parent, const std::string& tag, mem::ScopedCopyablePtr<T>& obj)
     {
         auto retval = getOptional(parent, tag);
         if (retval != nullptr)
@@ -266,8 +274,19 @@ struct XmlLite final
         }
         return retval;
     }
+    template<typename T>
+    inline static xml::lite::Element* getOptional_reset(const xml::lite::Element& parent, XsElement_minOccurs0<T>& obj)
+    {
+        auto retval = getOptional(parent, obj.tag());
+        if (retval != nullptr)
+        {
+            obj = T{};
+        }
+        return retval;
+    }
 
     static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const std::string& tag);
+    static xml::lite::Element& getFirstAndOnly(const xml::lite::Element& parent, const xml::lite::QName&);
 
     /*!
      * Require an element to be not nullptr
@@ -294,6 +313,18 @@ private:
   {
     return createString_(name, p, parent);
   }
+
+ xml::lite::Element& create(const XmlLite&, const XsElement<double>&, xml::lite::Element& parent);
+ void getFirstAndOnly(const XmlLite&, const xml::lite::Element&, XsElement<double>&);
+
+ xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<bool>&, xml::lite::Element& parent);
+ xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<double>&, xml::lite::Element& parent);
+ xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<std::u8string>&, xml::lite::Element& parent);
+
+ bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<bool>&);
+ bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<double>&);
+ bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<std::u8string>&);
+
 }
 
 #endif // SIX_six_XmlLite_h_INCLUDED_

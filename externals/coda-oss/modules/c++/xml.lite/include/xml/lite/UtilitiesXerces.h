@@ -20,6 +20,7 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_
 
@@ -30,34 +31,7 @@
 #include <type_traits>
 
 #include "config/compiler_extensions.h"
-#include "xml/lite/xml_lite_config.h"
-
-#if defined(USE_XERCES)
-
-CODA_OSS_disable_warning_system_header_push
-#include <xercesc/util/TransService.hpp>
-#include <xercesc/sax2/XMLReaderFactory.hpp>
-#include <xercesc/sax2/Attributes.hpp>
-#include <xercesc/sax2/ContentHandler.hpp>
-#include <xercesc/sax2/SAX2XMLReader.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/framework/StdOutFormatTarget.hpp>
-
-#include <xercesc/util/XMLUni.hpp>
-
-#include <xercesc/sax/SAXParseException.hpp>
-#include <xercesc/framework/XMLValidator.hpp>
-#include <xercesc/parsers/SAXParser.hpp>
-#include <xercesc/validators/schema/SchemaValidator.hpp>
-#include <xercesc/validators/common/ContentSpecNode.hpp>
-#include <xercesc/validators/schema/SchemaSymbols.hpp>
-
-#include <xercesc/util/XercesDefs.hpp>
-#include <xercesc/sax/ErrorHandler.hpp>
-
-CODA_OSS_disable_warning_pop
+#include "config/Exports.h"
 
 #include <sys/Mutex.h>
 #include <mt/CriticalSection.h>
@@ -65,6 +39,10 @@ CODA_OSS_disable_warning_pop
 #include <io/StringStream.h>
 #include <io/OutputStream.h>
 #include <io/InputStream.h>
+
+#include <xml/lite/xml_lite_config.h>
+#if defined(USE_XERCES)
+#include "xerces_.h"
 
 #include "xml/lite/XMLException.h"
 #include "xml/lite/ContentHandler.h"
@@ -429,7 +407,7 @@ struct XercesErrorHandler final : public XercesErrorHandlerInterface_T
  *  \class XercesContext
  *  \brief This class safely creates and destroys Xerces
  */
-struct XercesContext final
+struct CODA_OSS_API XercesContext final
 {
     //! Constructor
     XercesContext();

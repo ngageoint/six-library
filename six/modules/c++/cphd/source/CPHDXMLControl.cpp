@@ -27,11 +27,12 @@
 #include <memory>
 #include <iterator>
 #include <stdexcept>
+#include <std/string>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
 #include <xml/lite/MinidomParser.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 
 #include <six/XMLControl.h>
 #include <six/XmlLite.h>
@@ -89,7 +90,7 @@ std::string CPHDXMLControl::toXMLString_(
     bool prettyPrint)
 {
     const auto result = toXMLString(metadata, schemaPaths, prettyPrint);
-    return str::EncodedStringView(result).native();
+    return str::toString(result);
 }
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
@@ -124,9 +125,9 @@ std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap
 static std::map<Version, xml::lite::Uri> getVersionUriMap_()
 {
     static const std::map<Version, xml::lite::Uri> retval = {
-        {Version::v100, xml::lite::Uri("urn:CPHD:1.0.0")},
-        {Version::v101, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
-        {Version::v110, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
+        {Version::v1_0_0, xml::lite::Uri("urn:CPHD:1.0.0")},
+        {Version::v1_0_1, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
+        {Version::v1_1_0, xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
     };
     return retval;
 }
@@ -161,7 +162,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    return fromXML(str::EncodedStringView(xmlString).u8string(), schemaPaths);
+    return fromXML(str::u8FromString(xmlString), schemaPaths);
 }
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString,
     const std::vector<std::filesystem::path>& schemaPaths)
@@ -231,9 +232,9 @@ std::string cphd::to_string(Version siddVersion)
     // Match existing version strings, see CPHDXMLControl::getVersionUriMap
     switch (siddVersion)
     {
-    case Version::v100: return "1.0.0";
-    case Version::v101: return "1.0.1";
-    case Version::v110: return "1.1.0";
+    case Version::v1_0_0: return "1.0.0";
+    case Version::v1_0_1: return "1.0.1";
+    case Version::v1_1_0: return "1.1.0";
     default: break;
     }
     throw std::logic_error("Unkown 'Version' value.");

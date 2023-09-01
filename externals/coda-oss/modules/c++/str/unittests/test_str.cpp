@@ -28,11 +28,6 @@
 
 #include "TestCase.h"
 
-inline std::string to_string(const std::string& value)
-{
-    return value;
-}
-
 TEST_CASE(testTrim)
 {
     std::string s = "  test   ";
@@ -199,9 +194,9 @@ TEST_CASE(testRoundDouble)
     nv *= denom;
     TEST_ASSERT_ALMOST_EQ_EPS(nv, numerator, eps);
     std::cout << nv << std::endl;
-    std::cout << (nv - (int)nv) << std::endl;
+    std::cout << (nv - static_cast<int>(nv)) << std::endl;
     std::cout << std::numeric_limits<double>::epsilon() << std::endl;
-    TEST_ASSERT_EQ((int)std::ceil(nv), (int)numerator);
+    TEST_ASSERT_EQ(static_cast<int>(std::ceil(nv)), static_cast<int>(numerator));
 }
 
 TEST_CASE(testEscapeForXMLNoReplace)
@@ -277,7 +272,7 @@ TEST_CASE(test_toStringComplexShort)
     actual = str::toString(types_cx_short);
     TEST_ASSERT_EQ(actual, expected);
 
-    const types::zint16_t zint16(1, -2);
+    const types::Complex<int16_t> zint16(1, -2);
     actual = str::toString(zint16);
     TEST_ASSERT_EQ(actual, expected);
 }
@@ -303,7 +298,7 @@ TEST_CASE(test_toTypeComplexShort)
     strActual = str::toString(zactual);
     TEST_ASSERT_EQ(strActual, strValue);
 
-    zactual = str::toType<types::zint16_t>(strValue);
+    zactual = str::toType<types::Complex<int16_t>>(strValue);
     strActual = str::toString(zactual);
     TEST_ASSERT_EQ(strActual, strValue);
 }
