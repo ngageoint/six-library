@@ -19,15 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __CPHD_SUPPORT_BLOCK_H__
 #define __CPHD_SUPPORT_BLOCK_H__
-#pragma once
 
 #include <iostream>
 #include <string>
 #include <complex>
 #include <unordered_map>
-
+#include <vector>
 #include <std/cstddef>
 
 #include <scene/sys_Conf.h>
@@ -118,13 +118,7 @@ struct SupportBlock final
     void read(const std::string& id,
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& data) const;
-    void read(const std::string& id,
-              size_t numThreads,
-              std::span<std::byte> data) const
-    {
-        mem::BufferView<sys::ubyte> data_(reinterpret_cast<sys::ubyte*>(data.data()), data.size());
-        read(id, numThreads, data_);
-    }
+    void read(const std::string& id, size_t numThreads, std::span<std::byte> data) const;
 
     /*
      *  \func read
@@ -139,17 +133,7 @@ struct SupportBlock final
      *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
      */
     // Same as above but allocates the memory
-    void read(const std::string& id,
-              size_t numThreads,
-              std::unique_ptr<sys::ubyte[]>& data) const;
-    void read(const std::string& id,
-              size_t numThreads,
-              std::unique_ptr<std::byte[]>& data) const
-    {
-        std::unique_ptr<sys::ubyte[]> data_;
-        read(id, numThreads, data_);
-        data.reset(reinterpret_cast<std::byte*>(data_.release()));
-    }
+    std::vector<std::byte> read(const std::string& id, size_t numThreads) const;
 
     /*
      *  \func readAll
@@ -163,16 +147,7 @@ struct SupportBlock final
      *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
      *
      */
-    void readAll(size_t numThreads,
-                std::unique_ptr<sys::ubyte[]>& data) const;
-    void readAll(size_t numThreads,
-                 std::unique_ptr<std::byte[]>& data) const
-    {
-        std::unique_ptr<sys::ubyte[]> data_;
-        readAll(numThreads, data_);
-        data.reset(reinterpret_cast<std::byte*>(data_.release()));
-    }
-
+    std::vector<std::byte> readAll(size_t numThreads) const;
 
 private:
     //! Initialize mOffsets for each array

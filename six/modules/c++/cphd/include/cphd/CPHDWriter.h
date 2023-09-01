@@ -26,6 +26,7 @@
 
 #include <string>
 #include <vector>
+#include <std/span>
 
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
@@ -137,6 +138,14 @@ struct CPHDWriter final
             const std::byte* supportData = nullptr)
     {
         write(pvpBlock, widebandData, reinterpret_cast<const sys::ubyte*>(supportData));
+    }
+    template<typename T>
+    void write(
+        const PVPBlock& pvpBlock,
+        const T* widebandData,
+        std::span<const std::byte> supportData)
+    {
+        write(pvpBlock, widebandData, supportData.data());
     }
 
     /*

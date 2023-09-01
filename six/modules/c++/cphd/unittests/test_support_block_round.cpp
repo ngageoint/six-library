@@ -98,10 +98,8 @@ std::vector<std::byte> checkSupportData(
     cphd::CPHDReader reader(pathname, numThreads);
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
 
-    std::unique_ptr<std::byte[]> readPtr;
-    supportBlock.readAll(numThreads, readPtr);
-
-    std::vector<std::byte> readData(readPtr.get(), readPtr.get() + reader.getMetadata().data.getAllSupportSize());
+    const auto bytes = supportBlock.readAll(numThreads);
+    std::vector<std::byte> readData(bytes.data(), bytes.data() + reader.getMetadata().data.getAllSupportSize());
     return readData;
 }
 
