@@ -241,6 +241,25 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const 
     };
     transform(inputs, results, fromComplex_);
 }
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(
+    std::span<const cx_float> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+
+#if SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
+    // make a structure to quickly find the nearest neighbor
+    auto& converter = make(pAmplitudeTable);
+    const auto fromComplex_ = [&converter](const auto& v)
+    {
+        return converter.nearest_neighbor(v);
+    };
+    std::ignore = std::transform(std::execution::par_unseq, inputs.begin(), inputs.end(), retval.begin(), fromComplex_);
+#else
+    nearest_neighbors(sys::make_const_span(inputs), sys::make_span(retval), pAmplitudeTable);
+#endif
+    return retval;
+}
+
 
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)
 {
