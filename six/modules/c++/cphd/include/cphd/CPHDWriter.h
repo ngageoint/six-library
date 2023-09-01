@@ -257,8 +257,7 @@ private:
     /*
      *  Implementation of write support data
      */
-    void writeSupportDataImpl(const std::byte* data,
-                              size_t numElements, size_t elementSize);
+    void writeSupportDataImpl(std::span<const std::byte>, size_t elementSize);
 
     //! DataWriter object
     std::unique_ptr<DataWriter> mDataWriter;

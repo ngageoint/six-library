@@ -25,6 +25,7 @@
 #include <std/memory>
 
 #include <except/Exception.h>
+#include <sys/Span.h>
 
 #include <cphd/ByteSwap.h>
 #undef min
@@ -53,10 +54,16 @@ DataWriterLittleEndian::DataWriterLittleEndian(
         size_t scratchSize) : DataWriterLittleEndian(*stream, numThreads, scratchSize)
 {
 }
+
+static auto adjust_span(std::span<const std::byte> data, size_t dataProcessed)
+{
+    const auto pData = data.data() + dataProcessed;
+    const auto size = data.size() - dataProcessed;
+    return sys::make_span(pData, size);
+}
+
 void DataWriterLittleEndian::operator()(std::span<const std::byte> pData, size_t elementSize)
 {
-    const auto data = pData.data();
-
     size_t dataProcessed = 0;
     const auto dataSize = pData.size();
     while (dataProcessed < dataSize)
@@ -64,7 +71,10 @@ void DataWriterLittleEndian::operator()(std::span<const std::byte> pData, size_t
         const size_t dataToProcess =
                 std::min(mScratch.size(), dataSize - dataProcessed);
 
-        memcpy(mScratch.data(), data + dataProcessed, dataToProcess);
+        const auto data = adjust_span(pData, dataProcessed);
+        const auto begin = data.begin();
+        const auto end = begin + dataToProcess;
+        mScratch.assign(begin, end);
 
         cphd::byteSwap(mScratch.data(),
                        elementSize,

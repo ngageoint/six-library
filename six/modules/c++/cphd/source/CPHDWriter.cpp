@@ -127,22 +127,25 @@ void CPHDWriter::writeCompressedCPHDDataImpl(const std::byte* data,
     (*mDataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
 }
 
-void CPHDWriter::writeSupportDataImpl(const std::byte* data,
-                                      size_t numElements,
-                                      size_t elementSize)
+static auto make_span(std::span<const std::byte> data, const cphd::Data::SupportArray& dataArray)
 {
-    (*mDataWriter)(data, numElements, elementSize);
+    const auto pData = data.data() + dataArray.arrayByteOffset;
+    return sys::make_span(pData, dataArray.size_bytes());
+}
+
+void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t elementSize)
+{
+    (*mDataWriter)(data, elementSize);
 }
 void CPHDWriter::writeSupportData(std::span<const std::byte> data)
 {
-    auto dataPtr = data.data();
     for (auto&& mapEntry : mMetadata.data.supportArrayMap)
     {
         auto&& dataArray = mapEntry.second;
+
         // Move inputstream head to offset of particular support array
         mStream->seek(mHeader.getSupportBlockByteOffset() + dataArray.arrayByteOffset, io::SeekableOutputStream::START);
-        writeSupportDataImpl(dataPtr + dataArray.arrayByteOffset,
-            dataArray.numRows * dataArray.numCols, dataArray.bytesPerElement);
+        writeSupportDataImpl(make_span(data, dataArray), dataArray.bytesPerElement);
     }
     // Move inputstream head to the end of the support block after all supports have been written
     mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
