@@ -53,12 +53,12 @@ DataWriterLittleEndian::DataWriterLittleEndian(
         size_t scratchSize) : DataWriterLittleEndian(*stream, numThreads, scratchSize)
 {
 }
-void DataWriterLittleEndian::operator()(const void* pData, size_t numElements, size_t elementSize)
+void DataWriterLittleEndian::operator()(std::span<const std::byte> pData, size_t elementSize)
 {
-    const auto data = static_cast<const sys::ubyte*>(pData);
+    const auto data = pData.data();
 
     size_t dataProcessed = 0;
-    const size_t dataSize = numElements * elementSize;
+    const auto dataSize = pData.size();
     while (dataProcessed < dataSize)
     {
         const size_t dataToProcess =
@@ -86,9 +86,9 @@ DataWriterBigEndian::DataWriterBigEndian(
         size_t numThreads) : DataWriterBigEndian(*stream, numThreads)
 {
 }
-void DataWriterBigEndian::operator()(const void* data, size_t numElements, size_t elementSize)
+void DataWriterBigEndian::operator()(std::span<const std::byte> pData, size_t /*elementSize*/)
 {
-    mStream.write(data, numElements * elementSize);
+    mStream.write(pData.data(), pData.size());
 }
 
 }

@@ -133,11 +133,26 @@ void CPHDWriter::writeSupportDataImpl(const std::byte* data,
 {
     (*mDataWriter)(data, numElements, elementSize);
 }
+void CPHDWriter::writeSupportData(std::span<const std::byte> data)
+{
+    auto dataPtr = data.data();
+    for (auto&& mapEntry : mMetadata.data.supportArrayMap)
+    {
+        auto&& dataArray = mapEntry.second;
+        // Move inputstream head to offset of particular support array
+        mStream->seek(mHeader.getSupportBlockByteOffset() + dataArray.arrayByteOffset, io::SeekableOutputStream::START);
+        writeSupportDataImpl(dataPtr + dataArray.arrayByteOffset,
+            dataArray.numRows * dataArray.numCols, dataArray.bytesPerElement);
+    }
+    // Move inputstream head to the end of the support block after all supports have been written
+    mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
+}
+
 
 template <typename T>
 void CPHDWriter::write(const PVPBlock& pvpBlock,
-                       const T* widebandData,
-                       const sys::ubyte* supportData)
+    const T* widebandData,
+    std::span<const std::byte> supportData)
 {
     // Write File header and metadata to file
     // Padding is added in writeMetadata
@@ -147,7 +162,7 @@ void CPHDWriter::write(const PVPBlock& pvpBlock,
     // Padding is added in writeSupportData
     if (mMetadata.data.getNumSupportArrays() != 0)
     {
-        if (supportData == nullptr)
+        if (supportData.empty())
         {
             throw except::Exception(Ctxt("SupportData is not provided"));
         }
@@ -170,44 +185,13 @@ void CPHDWriter::write(const PVPBlock& pvpBlock,
         elementsWritten += numElements;
     }
 }
-
-// For compressed data
-template void CPHDWriter::write<sys::ubyte>(const PVPBlock& pvpBlock,
-                                            const sys::ubyte* widebandData,
-                                            const sys::ubyte* supportData);
-template void CPHDWriter::write<std::byte>(const PVPBlock& pvpBlock,
-                                            const std::byte* widebandData,
-                                            const std::byte* supportData);
-
-template void CPHDWriter::write<cphd::zint8_t>(
-    const PVPBlock& pvpBlock,
-    const cphd::zint8_t* widebandData,
-    const sys::ubyte* supportData);
-
-template void CPHDWriter::write<cphd::zint16_t>(
-    const PVPBlock& pvpBlock,
-    const cphd::zint16_t* widebandData,
-    const sys::ubyte* supportData);
-
-template void CPHDWriter::write<cphd::zfloat>(
-    const PVPBlock& pvpBlock,
-    const cphd::zfloat* widebandData,
-    const sys::ubyte* supportData);
-
-template void CPHDWriter::write<cphd::zint8_t>(
-        const PVPBlock& pvpBlock,
-        const cphd::zint8_t* widebandData,
-        const std::byte* supportData);
-
-template void CPHDWriter::write<cphd::zint16_t>(
-        const PVPBlock& pvpBlock,
-        const cphd::zint16_t* widebandData,
-        const std::byte* supportData);
-
-template void CPHDWriter::write<cphd::zfloat>(
-        const PVPBlock& pvpBlock,
-        const cphd::zfloat* widebandData,
-        const std::byte* supportData);
+template void CPHDWriter::write<std::byte>(const PVPBlock&, const std::byte* widebandData, std::span<const std::byte>); // For compressed data
+template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
 
 void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
 {

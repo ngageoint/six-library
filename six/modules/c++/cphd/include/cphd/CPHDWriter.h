@@ -20,17 +20,19 @@
  *
  */
 
+#pragma once
 #ifndef SIX_cphd_CPHDWriter_h_INCLUDED_
 #define SIX_cphd_CPHDWriter_h_INCLUDED_
-#pragma once
 
 #include <string>
 #include <vector>
 #include <std/span>
+#include <std/cstddef>
 
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
+#include <sys/Span.h>
 
 #include <scene/sys_Conf.h>
 
@@ -127,25 +129,12 @@ struct CPHDWriter final
      *  \param supportData (Optional) The support array data to write to disk.
      */
     template<typename T>
-    void write(
-            const PVPBlock& pvpBlock,
-            const T* widebandData,
-            const sys::ubyte* supportData = nullptr);
+    void write(const PVPBlock& pvpBlock, const T* widebandData,
+        std::span<const std::byte> supportData);
     template<typename T>
-    void write(
-            const PVPBlock& pvpBlock,
-            const T* widebandData,
-            const std::byte* supportData = nullptr)
+    void write(const PVPBlock& pvpBlock, const T* widebandData)
     {
-        write(pvpBlock, widebandData, reinterpret_cast<const sys::ubyte*>(supportData));
-    }
-    template<typename T>
-    void write(
-        const PVPBlock& pvpBlock,
-        const T* widebandData,
-        std::span<const std::byte> supportData)
-    {
-        write(pvpBlock, widebandData, supportData.data());
+        write(pvpBlock, widebandData, std::span<const std::byte>());
     }
 
     /*
@@ -186,22 +175,17 @@ struct CPHDWriter final
      *
      *  \param data A pointer to the start of the support array data block
      */
+    void writeSupportData(std::span<const std::byte>);
     template <typename T>
-    void writeSupportData(const T* data)
+    void writeSupportData(std::span<const T> data)
     {
-        auto dataPtr = reinterpret_cast<const std::byte*>(data);
-        for (auto it = mMetadata.data.supportArrayMap.begin(); it != mMetadata.data.supportArrayMap.end(); ++it)
-        {
-            // Move inputstream head to offset of particular support array
-            mStream->seek(mHeader.getSupportBlockByteOffset() + it->second.arrayByteOffset, io::SeekableOutputStream::START);
-            writeSupportDataImpl(dataPtr + it->second.arrayByteOffset,
-                                 it->second.numRows * it->second.numCols,
-                                 it->second.bytesPerElement);
-        }
-        // Move inputstream head to the end of the support block after all supports have been written
-        mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
+        writeSupportData(std::as_bytes(data));
     }
-
+    template <typename T>
+    void writeSupportData(const std::vector<T>& data)
+    {
+        writeSupportData(sys::make_span(data));
+    }
 
     /*
      *  \func writePVPData

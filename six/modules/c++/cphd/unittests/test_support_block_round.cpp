@@ -86,7 +86,7 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
     }
     cphd::CPHDWriter writer(metadata, outPathname, std::vector<std::string>(), numThreads);
     writer.writeMetadata(pvpBlock);
-    writer.writeSupportData(writeData.data());
+    writer.writeSupportData(writeData);
     writer.writePVPData(pvpBlock);
 }
 
