@@ -29,6 +29,8 @@
 #include <gsl/gsl.h>
 #include <std/memory>
 
+#include <sys/Span.h>
+
 using namespace six;
 
 template<typename TPImpl>
@@ -200,7 +202,7 @@ struct NewMemoryWriteHandler::Impl final
     void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const six::zfloat> buffer, const Data& data)
     {
         ampi8i_phs8i.resize(buffer.size());
-        const std::span<std::pair<uint8_t, uint8_t>> ampi8i_phs8i_(ampi8i_phs8i.data(), ampi8i_phs8i.size());
+        const auto ampi8i_phs8i_ = sys::make_span(ampi8i_phs8i);
         if (!data.convertPixels(buffer, ampi8i_phs8i_))
         {
             throw std::runtime_error("Unable to convert pixels.");
