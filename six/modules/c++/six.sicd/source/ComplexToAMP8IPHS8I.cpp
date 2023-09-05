@@ -77,6 +77,13 @@ inline auto GetPhase(const std::complex<long double>& v)
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(const std::complex<long double>& v) const
+{
+    // Phase is determined via arithmetic because it's equally spaced.
+    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
+    // handles cases that are close to 2PI.
+    return gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+}
 
 template<typename TToComplexFunc>
 static std::vector<float> make_magnitudes_(TToComplexFunc toComplex)
@@ -172,11 +179,7 @@ static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
 six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const six::zfloat &v) const
 {
     six::AMP8I_PHS8I_t retval;
-
-    // Phase is determined via arithmetic because it's equally spaced.
-    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
-    // handles cases that are close to 2PI.
-    retval.phase = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    retval.phase = getPhase(v);
 
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of

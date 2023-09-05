@@ -214,6 +214,8 @@ private:
 
     //! The difference in phase angle between two UINT phase values.
     float phase_delta;
+    uint8_t getPhase(const std::complex<long double>&) const;
+
     //! Unit vector rays that represent each direction that phase can point.
     std::array<six::zfloat, UINT8_MAX + 1> phase_directions;
 };
