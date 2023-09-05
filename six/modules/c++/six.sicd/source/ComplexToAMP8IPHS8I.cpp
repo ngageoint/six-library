@@ -230,7 +230,7 @@ static inline void transform(std::span<const TInputs> inputs, std::span<TResults
 #endif // CODA_OSS_cpp17
 }
 
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const cx_float> inputs) const
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const zfloat> inputs) const
 {
     const auto nearest_neighbor_ = [&](const auto& v)
     {
@@ -242,7 +242,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return retval;
 }
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(
-    std::span<const cx_float> inputs, const six::AmplitudeTable* pAmplitudeTable)
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
     const auto& converter = make(pAmplitudeTable);

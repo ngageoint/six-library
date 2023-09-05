@@ -373,7 +373,7 @@ bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, st
     }
 
     // Convert the pixels from a complex<float> to AMP8I_PHS8I.
-    const auto from = make_span<const six::sicd::cx_float>(from_);
+    const auto from = make_span<const zfloat>(from_);
     to = imageData->fromComplex(from);
     return true; // converted
 }
