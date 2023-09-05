@@ -219,7 +219,7 @@ template <typename TInputs, typename TResults, typename TFunc>
 static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
 {
 #if SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
-    std::ignore = std::transform(std::execution::par, inputs.begin(), inputs.end(), results.begin(), f);
+    std::ignore = std::transform(std::execution::par_unseq, inputs.begin(), inputs.end(), results.begin(), f);
 #else
     constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
     // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
@@ -230,16 +230,23 @@ static inline void transform(std::span<const TInputs> inputs, std::span<TResults
 #endif // CODA_OSS_cpp17
 }
 
-void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
-    const six::AmplitudeTable* pAmplitudeTable)
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const cx_float> inputs) const
+{
+    const auto nearest_neighbor_ = [&](const auto& v)
+    {
+        return this->nearest_neighbor(v);
+    };
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor_);
+    return retval;
+}
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(
+    std::span<const cx_float> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
-    auto& converter = make(pAmplitudeTable);
-    const auto fromComplex_ = [&converter](const auto& v)
-    {
-        return converter.nearest_neighbor(v);
-    };
-    transform(inputs, results, fromComplex_);
+    const auto& converter = make(pAmplitudeTable);
+    return converter.nearest_neighbors(inputs);
 }
 
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)
