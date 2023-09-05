@@ -233,23 +233,19 @@ static inline void transform(std::span<const TInputs> inputs, std::span<TResults
 #endif // CODA_OSS_cpp17
 }
 
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const zfloat> inputs) const
-{
-    const auto nearest_neighbor_ = [&](const auto& v)
-    {
-        return this->nearest_neighbor(v);
-    };
-
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor_);
-    return retval;
-}
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
     const auto& converter = make(pAmplitudeTable);
-    return converter.nearest_neighbors(inputs);
+    const auto nearest_neighbor = [&converter](const auto& v)
+    {
+        return converter.nearest_neighbor(v);
+    };
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
+    return retval;
 }
 
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)
