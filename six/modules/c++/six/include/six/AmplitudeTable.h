@@ -203,10 +203,11 @@ public:
      * @return nearest amplitude and phase value
      */
     AMP8I_PHS8I_t nearest_neighbor(const six::zfloat& v) const;
-    static void nearest_neighbors(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs,  const six::AmplitudeTable*);
 
 private:
+    std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs) const;
+
     //! The sorted set of possible magnitudes order from small to large.
     std::vector<float> uncached_magnitudes; // Order is important! This must be ...
     const std::vector<float>& magnitudes; // ... before this.

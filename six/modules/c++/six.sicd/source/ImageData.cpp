@@ -270,10 +270,6 @@ std::vector<six::zfloat> ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inp
     return retval;
 }
 
-void ImageData::fromComplex(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
-{
-    six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, results, amplitudeTable.get());
-}
 std::vector<AMP8I_PHS8I_t> ImageData::fromComplex(std::span<const six::zfloat> inputs) const
 {
     return six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, amplitudeTable.get());

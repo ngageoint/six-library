@@ -34,6 +34,7 @@
 #include <stdexcept>
 #include <numeric>
 #include <std/numbers>
+#include <tuple>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -1679,8 +1680,11 @@ std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& res
     const auto& data = *(result.pComplexData);
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        retval.resize(image.size() * data.getNumBytesPerPixel());
-        data.convertPixels(bytes, sys::make_span(retval));
+        std::vector<AMP8I_PHS8I_t> results;
+        std::ignore = data.convertPixels(bytes, results);
+
+        const auto result_bytes = std::as_bytes(sys::make_span(results));
+        retval.assign(result_bytes.begin(), result_bytes.end());
     }
     else
     {

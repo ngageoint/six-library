@@ -201,12 +201,11 @@ struct NewMemoryWriteHandler::Impl final
 
     void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const six::zfloat> buffer, const Data& data)
     {
-        ampi8i_phs8i.resize(buffer.size());
-        const auto ampi8i_phs8i_ = sys::make_span(ampi8i_phs8i);
-        if (!data.convertPixels(buffer, ampi8i_phs8i_))
+        if (!data.convertPixels(buffer, ampi8i_phs8i))
         {
             throw std::runtime_error("Unable to convert pixels.");
         }
+        const auto ampi8i_phs8i_ = sys::make_span(ampi8i_phs8i);
         validate_buffer(ampi8i_phs8i_, info, data);
 
         // Everything is kosher, point to the converted data

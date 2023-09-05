@@ -80,12 +80,13 @@ struct Data
      */
     virtual PixelType getPixelType() const = 0;
     virtual void setPixelType(PixelType pixelType) = 0;
-    virtual bool convertPixels_(std::span<const std::byte>, std::span<std::byte>) const { return false; }
-    template<typename T, typename U>
-    bool convertPixels(std::span<const T> from, std::span<U> to) const
+
+    virtual bool convertPixels_(std::span<const std::byte>, std::vector<AMP8I_PHS8I_t>&) const { return false; }
+    template<typename T>
+    bool convertPixels(std::span<const T> from, std::vector<AMP8I_PHS8I_t>& to) const
     {
-        return convertPixels_(std::as_bytes(from), std::as_writable_bytes(to));
-    }
+        return convertPixels_(std::as_bytes(from), to);
+    }   
 
     /*!
      *  Maps to: /SICD/ImageData/NumRows,/SICD/ImageData/FullImage/Row
