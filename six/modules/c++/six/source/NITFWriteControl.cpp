@@ -208,7 +208,7 @@ static auto asBytes(BufferList::value_type pImageData,
 
     // At this point, we've lost information about the ACTUAL size of the buffer. Normally, the computation above will be correct.
     // But in the case of AMP8I_PHS8I (now supported), the buffer is actually RE32F_IM32F as the data is converted to
-    // six::zfloat when read-in, and converted to std::pair<uint8_t, uint8_t> when written-out.
+    // six::zfloat when read-in, and converted to AMP8I_PHS8I_t when written-out.
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
         size_in_bytes *= sizeof(float);

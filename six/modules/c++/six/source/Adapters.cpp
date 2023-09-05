@@ -197,7 +197,7 @@ inline void validate_buffer(std::span<T> buffer, const NITFSegmentInfo& info, co
 struct NewMemoryWriteHandler::Impl final
 {
     // This needs to persist beyhond the constructor
-    std::vector<std::pair<uint8_t, uint8_t>> ampi8i_phs8i;
+    std::vector<AMP8I_PHS8I_t> ampi8i_phs8i;
 
     void convertPixels(NewMemoryWriteHandler& instance, const NITFSegmentInfo& info, std::span<const six::zfloat> buffer, const Data& data)
     {
@@ -255,7 +255,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
         // Assume that buffer is really six::zfloat.  If it is something else
-        // (e.g., std::pair<uint8_t, uint8_t> -- already converted) a different
+        // (e.g., AMP8I_PHS8I_t -- already converted) a different
         // overload should be used.  Since we've lost the actual buffer type,
         // there not much else to do except hope for the best.
         const void* pBuffer_ = buffer.data();
@@ -284,7 +284,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
 }
 
 NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
-    std::span<const std::pair<uint8_t, uint8_t>> buffer, size_t firstRow, const Data& data, bool doByteSwap)
+    std::span<const AMP8I_PHS8I_t> buffer, size_t firstRow, const Data& data, bool doByteSwap)
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     // This is for the uncommon case where the data is already in this format; normally, it is six::zfloat.
