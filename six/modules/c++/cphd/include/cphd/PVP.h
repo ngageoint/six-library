@@ -124,7 +124,7 @@ protected:
     std::string mFormat;
 };
 void setOffset(PVPType&, size_t offset);
-
+std::ostream& operator<< (std::ostream& os, const PVPType& p);
 
 /*!
  *  \struct APVPType
@@ -211,6 +211,12 @@ struct PerVectorParameterXYZ final
 
     PVPType param;
 };
+inline std::ostream& operator<<(std::ostream& os, const PerVectorParameterXYZ& v)
+{
+    os << v.param << "\n";
+    return os;
+}
+
 
 /*!
  *  \struct PerVectorParameterEB
@@ -237,6 +243,12 @@ struct PerVectorParameterEB final
 
     PVPType param;
 };
+inline std::ostream& operator<<(std::ostream& os, const PerVectorParameterEB& v)
+{
+    os << v.param << "\n";
+    return os;
+}
+
 
 /*!
  *  \struct TxAntenna
@@ -267,6 +279,13 @@ struct TxAntenna final
     //! TxEB PVP Structure
     six::XsElement<PerVectorParameterEB> txEB{ "TxEB" };
 };
+inline std::ostream& operator<<(std::ostream& os, const TxAntenna& v)
+{
+    os << v.txACX << "\n";
+    os << v.txACY << "\n";
+    os << v.txEB << "\n";
+    return os;
+}
 
 /*!
  *  \struct RcvAntenna
@@ -297,6 +316,13 @@ struct RcvAntenna final
     //! RcvEB PVP Structure
     six::XsElement<PerVectorParameterEB> rcvEB{ "RcvEB" };
 };
+inline std::ostream& operator<<(std::ostream& os, const RcvAntenna& v)
+{
+    os << v.rcvACX << "\n";
+    os << v.rcvACY << "\n";
+    os << v.rcvEB << "\n";
+    return os;
+}
 
 /*!
  *  \struct Pvp
@@ -597,15 +623,9 @@ private:
      * Set default size and format for each parameter
      */
     void setDefaultValues(size_t size, const std::string& format, PVPType& param);
-
-    /*
-     * Initializes default size and format for parameters
-     */
-    void initialize();
 };
 
 //! Ostream operators
-std::ostream& operator<< (std::ostream& os, const PVPType& p);
 std::ostream& operator<< (std::ostream& os, const APVPType& a);
 std::ostream& operator<< (std::ostream& os, const Pvp& p);
 }
