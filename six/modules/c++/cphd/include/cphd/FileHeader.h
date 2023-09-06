@@ -85,7 +85,7 @@ public:
      *
      * returns file version string
      */
-    std::string getVersion() const;
+    Version getVersion() const;
 
     /*
      *  \func setVersion
@@ -96,7 +96,6 @@ public:
      *  ex: 1.0.0, 1.0.1 etc
      *
      */
-    void setVersion(const std::string& version);
     void setVersion(Version);
 
     /*
@@ -234,7 +233,9 @@ private:
 
 private:
     // File type header
-    std::string mVersion;
+    Version mVersion;
+    std::string strGetVersion() const;
+    void setVersion(const std::string& version);
 
     // Required key-value pairs
     int64_t mXmlBlockSize;

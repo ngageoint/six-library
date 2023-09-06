@@ -21,6 +21,7 @@
  */
 #include <string.h>
 #include <sstream>
+#include <map>
 
 #include <nitf/coda-oss.hpp>
 #include <mem/ScopedArray.h>
@@ -40,7 +41,6 @@ static const char* getDefaultVersion()
 const char* FileHeader::DEFAULT_VERSION = getDefaultVersion();
 
 FileHeader::FileHeader() :
-    mVersion(DEFAULT_VERSION),
     mXmlBlockSize(0),
     mXmlBlockByteOffset(0),
     mPvpBlockSize(0),
@@ -50,6 +50,7 @@ FileHeader::FileHeader() :
     mSupportBlockSize(0),
     mSupportBlockByteOffset(0)
 {
+    setVersion(DEFAULT_VERSION);
 }
 
 void FileHeader::read(io::SeekableInputStream& inStream)
@@ -60,7 +61,7 @@ void FileHeader::read(io::SeekableInputStream& inStream)
     }
 
     // Read mVersion first
-    mVersion = readVersion(inStream);
+    setVersion(readVersion(inStream));
 
     // Block read the header for more efficient IO
     KeyValuePair headerEntry;
@@ -162,7 +163,7 @@ std::string FileHeader::toString() const
     // Send the values as they are, no calculating
 
     // File type
-    os << FILE_TYPE << "/" << mVersion << LINE_TERMINATOR;
+    os << FILE_TYPE << "/" << strGetVersion() << LINE_TERMINATOR;
 
     // Classification fields, if present
     if (mSupportBlockSize > 0)
@@ -191,18 +192,37 @@ std::string FileHeader::toString() const
     return os.str();
 }
 
-std::string FileHeader::getVersion() const
+std::string FileHeader::strGetVersion() const
+{
+    return to_string(mVersion);
+}
+Version FileHeader::getVersion() const
 {
     return mVersion;
 }
 
 void FileHeader::setVersion(const std::string& version)
 {
-    mVersion = version;
+    #define SIX_cphd_FileHeader_setVersion_map_entry(v) { to_string(v),  v} // avoid copy/paste errors
+    static const std::map<std::string, Version> string_to_vesion
+    {
+        { "1.0",  Version::v1_0_0},  // existing files; should be "1.0.0"
+        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_0_0),
+        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_0_1),
+        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_1_0),
+    };
+    #undef SIX_cphd_FileHeader_setVersion_map_entry
+    const auto it = string_to_vesion.find(version);
+    if (it != string_to_vesion.end())
+    {
+        mVersion = it->second;
+        return;
+    }
+    throw std::logic_error("Unkown 'Version' value.");
 }
 void FileHeader::setVersion(Version version)
 {
-    setVersion(to_string(version));
+    setVersion(to_string(version)); // call logic above as a sanity-check
 }
 
 size_t FileHeader::set(int64_t xmlBlockSize,
@@ -286,7 +306,7 @@ int64_t FileHeader::getPvpPadBytes() const
 std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
 {
     os << "FileHeader::\n"
-       << "  mVersion               : " << fh.mVersion << "\n"
+       << "  mVersion               : " << fh.strGetVersion() << "\n"
        << "  mXmlBlockSize          : " << fh.mXmlBlockSize << "\n"
        << "  mXmlBlockByteOffset    : " << fh.mXmlBlockByteOffset << "\n"
        << "  mSupportBlockSize      : " << fh.mSupportBlockSize << "\n"
