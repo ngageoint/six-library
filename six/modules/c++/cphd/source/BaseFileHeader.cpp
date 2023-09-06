@@ -46,7 +46,7 @@ bool BaseFileHeader::isCPHD(io::SeekableInputStream& inStream)
     return (::strncmp(buf, FILE_TYPE, 4) == 0);
 }
 
-std::string BaseFileHeader::readVersion(io::SeekableInputStream& inStream)
+std::string BaseFileHeader::strReadVersion(io::SeekableInputStream& inStream)
 {
     char buf[128];
     inStream.seek(0, io::Seekable::START);
@@ -63,6 +63,26 @@ std::string BaseFileHeader::readVersion(io::SeekableInputStream& inStream)
     str::trim(ret);
 
     return ret;
+}
+Version BaseFileHeader::readVersion(io::SeekableInputStream& inStream)
+{
+    const auto version = strReadVersion(inStream);
+
+    #define SIX_cphd_FileHeader_setVersion_map_entry(v) { to_string(v),  v} // avoid copy/paste errors
+    static const std::map<std::string, Version> string_to_vesion
+    {
+        { "1.0",  Version::v1_0_0},  // existing files; should be "1.0.0"
+        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_0_0),
+        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_0_1),
+        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_1_0),
+    };
+    #undef SIX_cphd_FileHeader_setVersion_map_entry
+    const auto it = string_to_vesion.find(version);
+    if (it != string_to_vesion.end())
+    {
+        return it->second;
+    }
+    throw std::logic_error("Unkown 'Version' value.");
 }
 
 void BaseFileHeader::tokenize(const std::string& in,

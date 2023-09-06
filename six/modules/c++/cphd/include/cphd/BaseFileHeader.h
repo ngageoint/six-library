@@ -30,6 +30,8 @@
 #include <scene/sys_Conf.h>
 #include <io/SeekableStreams.h>
 
+#include "cphd/Types.h"
+
 namespace cphd
 {
 
@@ -73,7 +75,8 @@ public:
      *  \throws except::Exception if file is not CPHD
      */
     static
-    std::string readVersion(io::SeekableInputStream& inStream);
+    std::string strReadVersion(io::SeekableInputStream& inStream);
+    static Version readVersion(io::SeekableInputStream& inStream);
 
     /*
      *  \func read

@@ -33,9 +33,10 @@
 namespace cphd
 {
 
+static const auto DefaultVersion = Version::v1_0_1;
 static const char* getDefaultVersion()
 {
-    static const auto defaultVersion = to_string(Version::v1_0_1);
+    static const auto defaultVersion = to_string(DefaultVersion);
     return defaultVersion.c_str();
 }
 const char* FileHeader::DEFAULT_VERSION = getDefaultVersion();
@@ -50,7 +51,7 @@ FileHeader::FileHeader() :
     mSupportBlockSize(0),
     mSupportBlockByteOffset(0)
 {
-    setVersion(DEFAULT_VERSION);
+    setVersion(DefaultVersion);
 }
 
 void FileHeader::read(io::SeekableInputStream& inStream)
@@ -201,28 +202,9 @@ Version FileHeader::getVersion() const
     return mVersion;
 }
 
-void FileHeader::setVersion(const std::string& version)
-{
-    #define SIX_cphd_FileHeader_setVersion_map_entry(v) { to_string(v),  v} // avoid copy/paste errors
-    static const std::map<std::string, Version> string_to_vesion
-    {
-        { "1.0",  Version::v1_0_0},  // existing files; should be "1.0.0"
-        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_0_0),
-        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_0_1),
-        SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_1_0),
-    };
-    #undef SIX_cphd_FileHeader_setVersion_map_entry
-    const auto it = string_to_vesion.find(version);
-    if (it != string_to_vesion.end())
-    {
-        mVersion = it->second;
-        return;
-    }
-    throw std::logic_error("Unkown 'Version' value.");
-}
 void FileHeader::setVersion(Version version)
 {
-    setVersion(to_string(version)); // call logic above as a sanity-check
+    mVersion = version;
 }
 
 size_t FileHeader::set(int64_t xmlBlockSize,

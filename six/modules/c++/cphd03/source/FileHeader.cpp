@@ -52,7 +52,7 @@ void FileHeader::read(io::SeekableInputStream& inStream)
     }
 
     // Read mVersion first
-    mVersion = readVersion(inStream);
+    mVersion = strReadVersion(inStream);
 
     // Block read the header for more efficient IO
     KeyValuePair headerEntry;

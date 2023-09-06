@@ -235,7 +235,6 @@ private:
     // File type header
     Version mVersion;
     std::string strGetVersion() const;
-    void setVersion(const std::string& version);
 
     // Required key-value pairs
     int64_t mXmlBlockSize;

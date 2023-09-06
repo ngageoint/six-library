@@ -24,7 +24,6 @@
 #include <io/ByteStream.h>
 #include "TestCase.h"
 
-const char* FILE_TYPE_HEADER = "CPHD/1.0\n";
 const char* FILE_HEADER_CONTENT = "CPHD/1.0\n"
         "XML_BLOCK_SIZE := 3\n"
         "XML_BLOCK_BYTE_OFFSET := 10\n"
@@ -38,11 +37,22 @@ const char* FILE_HEADER_CONTENT = "CPHD/1.0\n"
         "RELEASE_INFO := UNRESTRICTED\n"
         "\f\n";
 
-TEST_CASE(testReadVersion)
+TEST_CASE(testReadVersion1_0)
 {
+    const char* FILE_TYPE_HEADER = "CPHD/1.0\n";
+
     io::ByteStream fileTypeHeader;
     fileTypeHeader.write(FILE_TYPE_HEADER, strlen(FILE_TYPE_HEADER));
-    TEST_ASSERT_EQ(cphd::FileHeader::readVersion(fileTypeHeader), "1.0");
+    TEST_ASSERT(cphd::FileHeader::readVersion(fileTypeHeader) == cphd::Version::v1_0_0);
+}
+
+TEST_CASE(testReadVersion1_1_0)
+{
+    const char* FILE_TYPE_HEADER = "CPHD/1.1.0\n";
+
+    io::ByteStream fileTypeHeader;
+    fileTypeHeader.write(FILE_TYPE_HEADER, strlen(FILE_TYPE_HEADER));
+    TEST_ASSERT(cphd::FileHeader::readVersion(fileTypeHeader) == cphd::Version::v1_1_0);
 }
 
 TEST_CASE(testCanReadHeaderWithoutBreaking)
@@ -151,7 +161,8 @@ TEST_CASE(testRoundTripHeader)
 }
 
 TEST_MAIN(
-        TEST_CHECK(testReadVersion);
+        TEST_CHECK(testReadVersion1_0);
+        TEST_CHECK(testReadVersion1_1_0);
         TEST_CHECK(testCanReadHeaderWithoutBreaking);
         TEST_CHECK(testRoundTripHeader);
         )
