@@ -881,7 +881,7 @@ static std::string testCPHDXMLBody()
     return std::string(xmlBody);
 }
 
-std::string testCPHDXML(cphd::Version version)
+std::string testCPHDXML_(cphd::Version version)
 {
     const auto map = cphd::CPHDXMLControl::getVersionUriMap();
     const auto uri = map.at(version);
@@ -891,18 +891,21 @@ std::string testCPHDXML(cphd::Version version)
         + testCPHDXMLBody()
         + "</CPHD>\n";
 }
+std::u8string testCPHDXML(cphd::Version version)
+{
+    return str::u8FromString(testCPHDXML_(version));
+}
 
 void runTest(const std::string& testName, cphd::Version version)
 {
-    auto xmlString = testCPHDXML(version);
-    io::StringStream cphdStream;
-    cphdStream.write(xmlString.c_str(), xmlString.size());
+    const auto xmlString = testCPHDXML(version);
+    io::U8StringStream cphdStream;
+    cphdStream.write(xmlString);
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(cphdStream, cphdStream.available());
-    const std::unique_ptr<cphd::Metadata> metadata =
-            cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
+    const auto metadata = cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
     // CollectionID
     TEST_ASSERT_EQ(metadata->collectionID.collectorName, "Collector");

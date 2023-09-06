@@ -261,20 +261,18 @@ void CPHDWriter::writeCPHDData(const T* data,
                                size_t numElements,
                                size_t channel)
 {
+    const void* const pData = data;
     if (mMetadata.data.isCompressed())
     {
-        writeCompressedCPHDDataImpl(reinterpret_cast<const std::byte*>(data),
-                                    channel);
+        writeCompressedCPHDDataImpl(static_cast<const std::byte*>(pData), channel);
     }
     else
     {
         if (mElementSize != sizeof(T))
         {
-            throw except::Exception(
-                    Ctxt("Incorrect buffer data type used for metadata!"));
+            throw except::Exception(Ctxt("Incorrect buffer data type used for metadata!"));
         }
-        writeCPHDDataImpl(reinterpret_cast<const std::byte*>(data),
-                          numElements);
+        writeCPHDDataImpl(static_cast<const std::byte*>(pData), numElements);
     }
 }
 

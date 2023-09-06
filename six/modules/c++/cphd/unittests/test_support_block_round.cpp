@@ -132,7 +132,7 @@ bool runTest(const std::vector<T>& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = 1;
-    cphd::Metadata meta = cphd::Metadata();
+    cphd::Metadata meta;
     cphd::setUpData(meta, types::RowCol<size_t>(128,256), std::vector<cphd::zfloat >());
     setSupport<T>(meta.data);
     cphd::setPVPXML(meta.pvp);

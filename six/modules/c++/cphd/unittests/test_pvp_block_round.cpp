@@ -174,7 +174,7 @@ TEST_CASE(testPVPBlockSimple)
     const types::RowCol<size_t> dims(128, 256);
     const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
-    cphd::Metadata meta = cphd::Metadata();
+    cphd::Metadata meta;
     cphd::setUpData(meta, dims, writeData);
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
@@ -197,7 +197,7 @@ TEST_CASE(testPVPBlockOptional)
     const types::RowCol<size_t> dims(128, 256);
     const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
-    cphd::Metadata meta = cphd::Metadata();
+    cphd::Metadata meta;
     cphd::setUpData(meta, dims, writeData);
     cphd::setPVPXML(meta.pvp);
     meta.pvp.setOffset(27, meta.pvp.fxN1);
@@ -223,7 +223,7 @@ TEST_CASE(testPVPBlockAdditional)
     const types::RowCol<size_t> dims(128, 256);
     const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
-    cphd::Metadata meta = cphd::Metadata();
+    cphd::Metadata meta;
     cphd::setUpData(meta, dims, writeData);
     cphd::setPVPXML(meta.pvp);
     meta.pvp.setCustomParameter(1, 27, "F8", "param1");
