@@ -121,20 +121,11 @@ std::map<Version, xml::lite::Uri> CPHDXMLControl::getVersionUriMap()
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
 {
-    Version cphdVersion;
-    metadata.getVersion(cphdVersion);
+    const auto cphdVersion = metadata.getVersion();
 
     static const auto versionUriMap = getVersionUriMap_();
     const auto it = versionUriMap.find(cphdVersion);
-    if (it != versionUriMap.end())
-    {
-      return getParser(it->second)->toXML(metadata);
-    }
-    std::ostringstream ostr;
-    ostr << "The version " << metadata.getVersion() << " is invalid. "
-         << "Check if version is valid or "
-         << "add a <version, URI> entry to versionUriMap";
-    throw except::Exception(Ctxt(ostr.str()));
+    return getParser(it->second)->toXML(metadata);
 }
 
 /* FROM XML */

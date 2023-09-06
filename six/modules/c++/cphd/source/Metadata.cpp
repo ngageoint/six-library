@@ -29,7 +29,7 @@ namespace cphd
 Metadata::Metadata()
 {
   // Default version defined in cphd::FileHeader
-  setVersion(FileHeader::DEFAULT_VERSION);
+  setVersion(FileHeader::DefaultVersion);
 }
 
 size_t Metadata::getNumChannels() const
@@ -67,33 +67,9 @@ DomainType Metadata::getDomainType() const
     return global.getDomainType();
 }
 
-std::string Metadata::getVersion() const
+Version Metadata::getVersion() const
 {
-    return to_string(mVersion);
-}
-void Metadata::getVersion(Version& version) const
-{
-    version = mVersion;
-}
-
-void Metadata::setVersion(const std::string& version)
-{
-    if (version == "1.0.0")
-    {
-        setVersion(Version::v1_0_0);
-    }
-    else if (version == "1.0.1")
-    {
-        setVersion(Version::v1_0_1);
-    }
-    else if (version == "1.1.0")
-    {
-        setVersion(Version::v1_1_0);
-    }
-    else
-    {
-        throw std::invalid_argument("Unknown version string: " + version);
-    }
+    return mVersion;
 }
 void Metadata::setVersion(Version version)
 {

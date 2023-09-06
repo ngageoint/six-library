@@ -78,12 +78,8 @@ struct Metadata final : MetadataBase
      */
     DomainType getDomainType() const override;
 
-    //! Get CPHD version
-    std::string getVersion() const;
-    void getVersion(Version&) const;
-
-    //! Set CPHD version
-    void setVersion(const std::string& version);
+    //! CPHD version
+    Version getVersion() const;
     void setVersion(Version);
 
     //!  CollectionInfo block.  Contains the general collection information
