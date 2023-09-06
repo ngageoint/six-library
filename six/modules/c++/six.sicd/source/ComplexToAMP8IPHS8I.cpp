@@ -71,13 +71,13 @@ The resulting green point is then what's used to find the nearest magnitude via 
     * @param v complex value
     * @return phase between [0, 2PI]
     */
-inline auto GetPhase(const std::complex<long double>& v)
+inline auto GetPhase(std::complex<double> v)
 {
     double phase = std::arg(v);
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
-uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(const std::complex<long double>& v) const
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
 {
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
