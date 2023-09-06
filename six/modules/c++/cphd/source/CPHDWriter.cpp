@@ -50,7 +50,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
     mSchemaPaths(schemaPaths),
-    mStream(outStream)
+    mStream(outStream),
+    mHeader(metadata.getVersion())
 {
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.

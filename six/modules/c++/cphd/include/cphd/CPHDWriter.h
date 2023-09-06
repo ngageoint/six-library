@@ -265,8 +265,6 @@ private:
     // Book-keeping element
     //! metadata information
     const Metadata& mMetadata;
-    //! header information
-    FileHeader mHeader;
     //! size of each element in signal block
     const size_t mElementSize;
     //! size of scratch space for byte swapping
@@ -277,6 +275,8 @@ private:
     const std::vector<std::string> mSchemaPaths;
     //! Output stream contains CPHD file
     std::shared_ptr<io::SeekableOutputStream> mStream;
+    //! header information
+    FileHeader mHeader;
 };
 }
 

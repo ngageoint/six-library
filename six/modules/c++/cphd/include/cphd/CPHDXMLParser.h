@@ -87,6 +87,7 @@ public:
      */
     std::unique_ptr<Metadata> fromXML(
             const xml::lite::Document* doc);
+    std::unique_ptr<Metadata> fromXML(const xml::lite::Document&, Version);
 
 private:
     typedef xml::lite::Element*  XMLElem;

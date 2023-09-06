@@ -41,18 +41,10 @@ static const char* getDefaultVersion()
 }
 const char* FileHeader::DEFAULT_VERSION = getDefaultVersion();
 
-FileHeader::FileHeader() :
-    mXmlBlockSize(0),
-    mXmlBlockByteOffset(0),
-    mPvpBlockSize(0),
-    mPvpBlockByteOffset(0),
-    mSignalBlockSize(0),
-    mSignalBlockByteOffset(0),
-    mSupportBlockSize(0),
-    mSupportBlockByteOffset(0)
+FileHeader::FileHeader(Version version) : mVersion(version)
 {
-    setVersion(DefaultVersion);
 }
+FileHeader::FileHeader() : FileHeader(DefaultVersion) {}
 
 void FileHeader::read(io::SeekableInputStream& inStream)
 {
@@ -164,7 +156,7 @@ std::string FileHeader::toString() const
     // Send the values as they are, no calculating
 
     // File type
-    os << FILE_TYPE << "/" << strGetVersion() << LINE_TERMINATOR;
+    os << FILE_TYPE << "/" << to_string(mVersion) << LINE_TERMINATOR;
 
     // Classification fields, if present
     if (mSupportBlockSize > 0)
@@ -193,10 +185,6 @@ std::string FileHeader::toString() const
     return os.str();
 }
 
-std::string FileHeader::strGetVersion() const
-{
-    return to_string(mVersion);
-}
 Version FileHeader::getVersion() const
 {
     return mVersion;
@@ -288,7 +276,7 @@ int64_t FileHeader::getPvpPadBytes() const
 std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
 {
     os << "FileHeader::\n"
-       << "  mVersion               : " << fh.strGetVersion() << "\n"
+       << "  mVersion               : " << to_string(fh.mVersion) << "\n"
        << "  mXmlBlockSize          : " << fh.mXmlBlockSize << "\n"
        << "  mXmlBlockByteOffset    : " << fh.mXmlBlockByteOffset << "\n"
        << "  mSupportBlockSize      : " << fh.mSupportBlockSize << "\n"

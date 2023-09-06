@@ -60,6 +60,7 @@ struct Metadata final : MetadataBase
     //! Default constructor
     //! Initializes CPHD version to default version specified in FileHeader
     Metadata();
+    Metadata(Version);
 
     /*
      * Getter functions

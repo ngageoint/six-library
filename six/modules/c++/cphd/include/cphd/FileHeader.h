@@ -50,6 +50,7 @@ public:
      *   initialize default variables
      */
     FileHeader();
+    FileHeader(Version);
 
     virtual ~FileHeader()
     {
@@ -235,21 +236,20 @@ private:
 private:
     // File type header
     Version mVersion;
-    std::string strGetVersion() const;
 
     // Required key-value pairs
-    int64_t mXmlBlockSize;
-    int64_t mXmlBlockByteOffset;
-    int64_t mPvpBlockSize;
-    int64_t mPvpBlockByteOffset;
-    int64_t mSignalBlockSize;
-    int64_t mSignalBlockByteOffset;
+    int64_t mXmlBlockSize = 0;
+    int64_t mXmlBlockByteOffset = 0;
+    int64_t mPvpBlockSize = 0;
+    int64_t mPvpBlockByteOffset = 0;
+    int64_t mSignalBlockSize = 0;
+    int64_t mSignalBlockByteOffset = 0;
     std::string mClassification;
     std::string mReleaseInfo;
 
     // Optional key-value pairs
-    int64_t mSupportBlockSize;
-    int64_t mSupportBlockByteOffset;
+    int64_t mSupportBlockSize = 0;
+    int64_t mSupportBlockByteOffset = 0;
 };
 }
 

@@ -1012,13 +1012,11 @@ XMLElem CPHDXMLParser::toXML(const MatchInformation& matchInfo, XMLElem parent)
 /*
  * FROM XML
  */
-
-std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
-        const xml::lite::Document* doc)
+std::unique_ptr<Metadata> CPHDXMLParser::fromXML(const xml::lite::Document& doc, Version version)
 {
-    std::unique_ptr<Metadata> cphd(new Metadata());
+    std::unique_ptr<Metadata> cphd(new Metadata(version));
 
-    const auto root = doc->getRootElement();
+    const auto root = doc.getRootElement();
 
     XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
     XMLElem globalXML         = getFirstAndOnly(root, "Global");
@@ -1085,6 +1083,11 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
     }
 
     return cphd;
+}
+std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
+    const xml::lite::Document* doc)
+{
+    return fromXML(*doc, FileHeader::DefaultVersion);
 }
 
 void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, CollectionInformation& collectionID)
