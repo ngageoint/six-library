@@ -145,8 +145,7 @@ public:
         const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
     //! \return Suported version to uri mapping
-    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
-    static void getVersionUriMap(std::map<Version, xml::lite::Uri>&);
+    static std::map<Version, xml::lite::Uri> getVersionUriMap();
 
 protected:
     logging::Logger *mLog = nullptr;

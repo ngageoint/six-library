@@ -105,23 +105,6 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
     return doc;
 }
 
-static std::unordered_map<std::string, xml::lite::Uri> makeVersionUriMap_()
-{
-    std::map<Version, xml::lite::Uri> result;
-    CPHDXMLControl::getVersionUriMap(result);
-
-    std::unordered_map<std::string, xml::lite::Uri> retval;
-    for (const auto& version_and_uri : result)
-    {
-        retval[to_string(version_and_uri.first)] = version_and_uri.second;
-    }
-    return retval;
-}
-std::unordered_map<std::string, xml::lite::Uri> CPHDXMLControl::getVersionUriMap() // for existing code
-{
-    static const auto retval = makeVersionUriMap_();
-    return retval;
-}
 static std::map<Version, xml::lite::Uri> getVersionUriMap_()
 {
     static const std::map<Version, xml::lite::Uri> retval = {
@@ -131,9 +114,9 @@ static std::map<Version, xml::lite::Uri> getVersionUriMap_()
     };
     return retval;
 }
-void CPHDXMLControl::getVersionUriMap(std::map<Version, xml::lite::Uri>& result)
+std::map<Version, xml::lite::Uri> CPHDXMLControl::getVersionUriMap()
 {
-    result = getVersionUriMap_();
+    return getVersionUriMap_();
 }
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
