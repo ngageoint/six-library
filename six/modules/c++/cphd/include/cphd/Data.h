@@ -97,7 +97,7 @@ struct Data
         }
         size_t size() const
         {
-            return numRows * numCols;;
+            return numRows * numCols;
         }
         size_t size_bytes() const // c.f., std::span::size_bytes()
         {

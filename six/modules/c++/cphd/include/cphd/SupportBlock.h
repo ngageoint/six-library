@@ -152,10 +152,6 @@ struct SupportBlock final
     void readAll(size_t numThreads, mem::ScopedArray<sys::ubyte>&) const; // for existing SWIG bindings
 
 private:
-    //! Initialize mOffsets for each array
-    // both for uncompressed and compressed data
-    void initialize();
-
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     cphd::Data mData;
     const int64_t mSupportOffset;       // offset in bytes to start of SupportBlock

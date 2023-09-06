@@ -45,7 +45,6 @@ SupportBlock::SupportBlock(const std::string& pathname,
     SupportBlock(std::make_shared<io::FileInputStream>(pathname), data, startSupport, sizeSupport)
 {
 }
-
 SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                            const cphd::Data& data,
                            int64_t startSupport,
@@ -55,23 +54,18 @@ SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
     mSupportOffset(startSupport),
     mSupportSize(sizeSupport)
 {
-    initialize();
+    //! Initialize mOffsets for each array both for uncompressed and compressed data
+    // Trusting data has the right offsets
+    for (auto kv : mData.supportArrayMap)
+    {
+        mOffsets[kv.first] = mSupportOffset + kv.second.arrayByteOffset;
+    }
 }
 SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
     const cphd::Data& data, const cphd::FileHeader& fileHeader):
     SupportBlock(inStream, data,
         fileHeader.getSupportBlockByteOffset(), fileHeader.getSupportBlockSize())
 {
-    initialize();
-}
-
-void SupportBlock::initialize()
-{
-    // Trusting data has the right offsets
-    for (auto it = mData.supportArrayMap.begin(); it != mData.supportArrayMap.end(); ++it)
-    {
-        mOffsets[it->first] = mSupportOffset + it->second.arrayByteOffset;
-    }
 }
 
 int64_t SupportBlock::getFileOffset(const std::string& id) const
@@ -108,14 +102,13 @@ void SupportBlock::read(const std::string& id, size_t numThreads, std::span<std:
     int64_t inOffset = getFileOffset(id);
     auto dataPtr = data.data();
     mInStream->seek(inOffset, io::FileInputStream::START);
-    size_t size = mData.getSupportArrayById(id).getSize();
-    mInStream->read(dataPtr, size);
+    size_t bytes = mData.getSupportArrayById(id).size_bytes();
+    mInStream->read(dataPtr, bytes);
 
     if ((std::endian::native == std::endian::little) && mData.getElementSize(id) > 1)
     {
         cphd::byteSwap(dataPtr, mData.getElementSize(id),
-                       mData.getSupportArrayById(id).numRows *
-                       mData.getSupportArrayById(id).numCols,
+                       mData.getSupportArrayById(id).size(),
                        numThreads);
     }
 }
