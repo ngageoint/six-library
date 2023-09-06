@@ -97,21 +97,21 @@ static auto toComplex_(double A, uint8_t phase)
     const auto angle = units::Radians<double>{ 2 * std::numbers::pi * P };
     double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
-    std::complex<long double> S(A * cos_angle, A * sin_angle);
+    six::zfloat S(A * cos_angle, A * sin_angle);
     return S;
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
+six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
 {   
     // A = input_amplitude(i.e. 0 to 255)
     const double A = amplitude;
     return toComplex_(A, phase);
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable& amplitudeTable)
+six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable& amplitudeTable)
 {
     const double A = amplitudeTable.index(amplitude);
     return toComplex_(A, phase);
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable)
+six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable != nullptr)
     {
