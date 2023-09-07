@@ -258,6 +258,9 @@ private:
     int64_t mSupportBlockSize = 0;
     int64_t mSupportBlockByteOffset = 0;
 };
+
+FileHeader readFileHeader(io::SeekableInputStream&);
+
 }
 
 #endif

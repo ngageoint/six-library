@@ -300,4 +300,12 @@ std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
        << "  mReleaseInfo   : " << fh.mReleaseInfo << "\n";
     return os;
 }
+
+FileHeader readFileHeader(io::SeekableInputStream& inStream)
+{
+    FileHeader retval;
+    retval.read(inStream);
+    return retval;
+}
+
 }

@@ -43,19 +43,17 @@ cphd::CPHDReader::CPHDReader(const std::string& fromFile,
 {
 }
 
-static cphd::Metadata fromXML(std::shared_ptr<io::SeekableInputStream>& inStream,
+static cphd::Metadata fromXML(io::SeekableInputStream& inStream,
     const std::vector<std::string>& schemaPaths_,
     std::shared_ptr<logging::Logger> logger,
-    cphd::FileHeader& mFileHeader)
+    const cphd::FileHeader& mFileHeader)
 {
-    mFileHeader.read(*inStream);
-
     // Read in the XML string
-    inStream->seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);
+    inStream.seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);
 
     six::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
-    xmlParser.parse(*inStream, gsl::narrow<int>(mFileHeader.getXMLBlockSize()));
+    xmlParser.parse(inStream, gsl::narrow<int>(mFileHeader.getXMLBlockSize()));
 
     if (logger.get() == nullptr)
     {
@@ -72,7 +70,8 @@ cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
                        size_t numThreads,
                        const std::vector<std::string>& schemaPaths_,
                        std::shared_ptr<logging::Logger> logger)
-    : mMetadata(fromXML(inStream, schemaPaths_, logger, mFileHeader))
+    : mFileHeader(cphd::readFileHeader(*inStream)),
+    mMetadata(fromXML(*inStream, schemaPaths_, logger, mFileHeader))
 {
     mSupportBlock = std::make_unique<SupportBlock>(inStream, mMetadata.data, mFileHeader);
 
