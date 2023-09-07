@@ -57,7 +57,7 @@ FileHeader::FileHeader(Version version) : mVersion(version)
 }
 FileHeader::FileHeader() : FileHeader(getDefaultVersion()) {}
 
-void FileHeader::read(io::SeekableInputStream& inStream)
+FileHeader FileHeader::read_(io::SeekableInputStream& inStream)
 {
     if (!isCPHD(inStream))
     {
@@ -65,8 +65,16 @@ void FileHeader::read(io::SeekableInputStream& inStream)
     }
 
     // Read mVersion first
-    setVersion(readVersion(inStream));
-
+    FileHeader retval(readVersion(inStream));
+    retval.readAfterValidVersion(inStream);
+    return retval;
+}
+void FileHeader::read(io::SeekableInputStream& inStream)
+{
+    *this = read_(inStream);
+}
+void FileHeader::readAfterValidVersion(io::SeekableInputStream& inStream)
+{
     // Block read the header for more efficient IO
     KeyValuePair headerEntry;
     std::string headerBlock;
@@ -300,12 +308,4 @@ std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
        << "  mReleaseInfo   : " << fh.mReleaseInfo << "\n";
     return os;
 }
-
-FileHeader readFileHeader(io::SeekableInputStream& inStream)
-{
-    FileHeader retval;
-    retval.read(inStream);
-    return retval;
-}
-
 }
