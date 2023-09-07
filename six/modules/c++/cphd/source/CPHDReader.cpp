@@ -35,29 +35,18 @@
 #include <six/XmlLite.h>
 #include <cphd/CPHDXMLControl.h>
 
-namespace cphd
-{
-CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
+cphd::CPHDReader::CPHDReader(const std::string& fromFile,
                        size_t numThreads,
                        const std::vector<std::string>& schemaPaths,
                        std::shared_ptr<logging::Logger> logger)
+    : CPHDReader(std::make_shared<io::FileInputStream>(fromFile), numThreads, schemaPaths, logger)
 {
-    initialize(inStream, numThreads, logger, schemaPaths);
 }
-
-CPHDReader::CPHDReader(const std::string& fromFile,
+cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
                        size_t numThreads,
-                       const std::vector<std::string>& schemaPaths,
+                       const std::vector<std::string>& schemaPaths_,
                        std::shared_ptr<logging::Logger> logger)
-{
-    initialize(std::make_shared<io::FileInputStream>(fromFile),
-        numThreads, logger, schemaPaths);
-}
-
-void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
-                            size_t numThreads,
-                            std::shared_ptr<logging::Logger> logger,
-                            const std::vector<std::string>& schemaPaths_)
+    : mMetadata(mFileHeader.getVersion())
 {
     mFileHeader.read(*inStream);
 
@@ -87,5 +76,4 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     // Setup for wideband reading
     mWideband = std::make_unique<Wideband>(inStream, mMetadata,
         mFileHeader.getSignalBlockByteOffset(), mFileHeader.getSignalBlockSize());
-}
 }

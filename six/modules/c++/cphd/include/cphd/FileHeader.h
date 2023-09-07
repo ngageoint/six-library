@@ -54,6 +54,11 @@ public:
     FileHeader();
     FileHeader(Version);
 
+    FileHeader(const FileHeader&) = delete;
+    FileHeader& operator=(const FileHeader&) = delete;
+    FileHeader(FileHeader&&) = default;
+    FileHeader& operator=(FileHeader&&) = default;
+
     virtual ~FileHeader()
     {
     }
