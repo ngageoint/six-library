@@ -39,8 +39,10 @@ namespace cphd
  */
 class FileHeader final : public BaseFileHeader
 {
+    static Version defaultVersion;
 public:
-    static const Version DefaultVersion;
+    static Version getDefaultVersion();
+    static void setDefaultVersion(Version);
     static const char* DEFAULT_VERSION; // `const char*` for existing Python bindings
 
     /*

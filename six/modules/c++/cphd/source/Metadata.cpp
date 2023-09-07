@@ -31,7 +31,7 @@ Metadata::Metadata(Version version)
     setVersion(version);
 }
 Metadata::Metadata()
-: Metadata(FileHeader::DefaultVersion) // Default version defined in cphd::FileHeader
+: Metadata(FileHeader::getDefaultVersion()) // Default version defined in cphd::FileHeader
 {
 }
 

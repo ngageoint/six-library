@@ -1085,10 +1085,9 @@ Metadata CPHDXMLParser::fromXML(const xml::lite::Document& doc, Version version)
 
     return retval;
 }
-std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
-    const xml::lite::Document* doc)
+std::unique_ptr<Metadata> CPHDXMLParser::fromXML(const xml::lite::Document* doc)
 {
-    auto result = fromXML(*doc, FileHeader::DefaultVersion);
+    auto result = fromXML(*doc, FileHeader::getDefaultVersion());
     return std::make_unique<Metadata>(std::move(result));
 }
 

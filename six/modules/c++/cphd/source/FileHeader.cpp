@@ -33,18 +33,29 @@
 namespace cphd
 {
 
-const Version FileHeader::DefaultVersion = Version::v1_0_1;
-static const char* getDefaultVersion()
+Version FileHeader::defaultVersion = Version::v1_0_1;
+Version FileHeader::getDefaultVersion()
 {
-    static const auto defaultVersion = to_string(FileHeader::DefaultVersion);
-    return defaultVersion.c_str();
+    return defaultVersion;
 }
-const char* FileHeader::DEFAULT_VERSION = getDefaultVersion();
+void FileHeader::setDefaultVersion(Version version)
+{
+    defaultVersion = version;
+}
+static const char* getDefaultVersion_()
+{
+    static std::string strDefaultVersion; // returning a pointer
+    strDefaultVersion = to_string(FileHeader::getDefaultVersion());
+    return strDefaultVersion.c_str();
+}
 
+const char* FileHeader::DEFAULT_VERSION = getDefaultVersion_();
 FileHeader::FileHeader(Version version) : mVersion(version)
 {
+    // reinitialize in case value has changed
+    DEFAULT_VERSION = getDefaultVersion_();
 }
-FileHeader::FileHeader() : FileHeader(DefaultVersion) {}
+FileHeader::FileHeader() : FileHeader(getDefaultVersion()) {}
 
 void FileHeader::read(io::SeekableInputStream& inStream)
 {
