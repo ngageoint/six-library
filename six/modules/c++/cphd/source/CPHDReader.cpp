@@ -46,7 +46,6 @@ cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
                        size_t numThreads,
                        const std::vector<std::string>& schemaPaths_,
                        std::shared_ptr<logging::Logger> logger)
-    : mMetadata(mFileHeader.getVersion())
 {
     mFileHeader.read(*inStream);
 

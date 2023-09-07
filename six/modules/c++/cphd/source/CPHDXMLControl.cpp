@@ -156,10 +156,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
     {
         six::XMLControl::validate(doc, schemaPaths, mLog);
     }
-    std::unique_ptr<Metadata> metadata = fromXMLImpl(doc);
-    const xml::lite::Uri uri(doc->getRootElement()->getUri());
-    metadata->setVersion(uriToVersion(uri));
-    return metadata;
+    return fromXMLImpl(doc);
 }
 Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vector<std::filesystem::path>& schemaPaths)
 {
@@ -175,13 +172,16 @@ Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vect
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
     const xml::lite::Uri uri(doc->getRootElement()->getUri());
-    return getParser(uri)->fromXML(doc);
+
+    auto retval = getParser(uri)->fromXML(doc);
+    retval->setVersion(uriToVersion(uri));
+    return retval;
 }
 
 std::unique_ptr<CPHDXMLParser>
 CPHDXMLControl::getParser(const xml::lite::Uri& uri) const
 {
-    return std::make_unique<CPHDXMLParser>(uri.value, false, mLog);
+    return std::make_unique<CPHDXMLParser>(uri, false, mLog);
 }
 
 Version CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri) const

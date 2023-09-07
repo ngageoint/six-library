@@ -46,9 +46,8 @@ namespace cphd
  *  \brief This class converts a Metadata object into a CPHD XML
  *  Document Object Model (DOM) and vise-versa.
  */
-class CPHDXMLParser : public six::XMLParser
+struct CPHDXMLParser final : public six::XMLParser
 {
-public:
     /*!
      *  \func CPHDXMLParser
      *  \brief Constructor
@@ -58,7 +57,7 @@ public:
      *  \param log provide logger object
      *  \param ownLog flag indicates if log should be deleted
      */
-    CPHDXMLParser(const std::string& uri,
+    CPHDXMLParser(const xml::lite::Uri&,
                   bool addClassAttributes,
                   logging::Logger* log = nullptr,
                   bool ownLog = false);
