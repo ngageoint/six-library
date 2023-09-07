@@ -62,6 +62,11 @@ struct Metadata final : MetadataBase
     Metadata();
     Metadata(Version);
 
+    Metadata(const Metadata&) = delete;
+    Metadata& operator=(const Metadata&) = delete;
+    Metadata(Metadata&&) = default;
+    Metadata& operator=(Metadata&&) = default;
+
     /*
      * Getter functions
      */

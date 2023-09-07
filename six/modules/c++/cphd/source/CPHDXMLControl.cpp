@@ -167,7 +167,9 @@ Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vect
     std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
         [](const std::filesystem::path& p) { return p.string(); });
     auto result = fromXML(&doc, schemaPaths_);
-    return *(result.release());
+
+    auto retval = std::move(*(result.release()));
+    return retval;
 }
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)

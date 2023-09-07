@@ -85,9 +85,8 @@ public:
      *
      *  \return pointer to metadata object
      */
-    std::unique_ptr<Metadata> fromXML(
-            const xml::lite::Document* doc);
-    std::unique_ptr<Metadata> fromXML(const xml::lite::Document&, Version);
+    std::unique_ptr<Metadata> fromXML(const xml::lite::Document* doc);
+    Metadata fromXML(const xml::lite::Document&, Version);
 
 private:
     typedef xml::lite::Element*  XMLElem;
