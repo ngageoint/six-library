@@ -42,10 +42,11 @@ cphd::CPHDReader::CPHDReader(const std::string& fromFile,
     : CPHDReader(std::make_shared<io::FileInputStream>(fromFile), numThreads, schemaPaths, logger)
 {
 }
-cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
-                       size_t numThreads,
-                       const std::vector<std::string>& schemaPaths_,
-                       std::shared_ptr<logging::Logger> logger)
+
+static cphd::Metadata fromXML(std::shared_ptr<io::SeekableInputStream>& inStream,
+    const std::vector<std::string>& schemaPaths_,
+    std::shared_ptr<logging::Logger> logger,
+    cphd::FileHeader& mFileHeader)
 {
     mFileHeader.read(*inStream);
 
@@ -64,7 +65,15 @@ cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
-    mMetadata = CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument(), schemaPaths);
+
+    return cphd::CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument(), schemaPaths);
+}
+cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
+                       size_t numThreads,
+                       const std::vector<std::string>& schemaPaths_,
+                       std::shared_ptr<logging::Logger> logger)
+{
+    mMetadata = fromXML(inStream, schemaPaths_, logger, mFileHeader);
 
     mSupportBlock = std::make_unique<SupportBlock>(inStream, mMetadata.data, mFileHeader);
 
