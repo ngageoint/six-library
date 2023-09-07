@@ -59,7 +59,7 @@ struct Metadata final : MetadataBase
 {
     //! Default constructor
     //! Initializes CPHD version to default version specified in FileHeader
-    Metadata();
+    Metadata(); // default constructor still needed for unittests
     Metadata(Version);
 
     Metadata(const Metadata&) = delete;
