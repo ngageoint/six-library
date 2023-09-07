@@ -170,9 +170,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document*
 {
     const xml::lite::Uri uri(doc->getRootElement()->getUri());
     const auto version = uriToVersion(uri);
-    auto retval = getParser(version)->fromXML(doc);
-    retval->setVersion(version);
-    return retval;
+    return getParser(version)->fromXML(doc);
 }
 
 std::unique_ptr<CPHDXMLParser>
@@ -181,7 +179,7 @@ CPHDXMLControl::getParser(Version version) const
     return std::make_unique<CPHDXMLParser>(version, false, mLog);
 }
 
-Version CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri) const
+Version CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri)
 {
     static const auto versionUriMap = getVersionUriMap_();
     for (const auto& p : versionUriMap)

@@ -46,7 +46,7 @@ typedef xml::lite::Element* XMLElem;
 namespace cphd
 {
 
-static std::string struriFromVersion(Version version)
+static std::string strUriFromVersion(Version version)
 {
     auto&& map = CPHDXMLControl::getVersionUriMap();
     return map.at(version).value;
@@ -57,7 +57,7 @@ CPHDXMLParser::CPHDXMLParser(
         bool addClassAttributes,
         logging::Logger* log,
         bool ownLog) :
-    six::XMLParser(struriFromVersion(version), addClassAttributes, log, ownLog),
+    six::XMLParser(strUriFromVersion(version), addClassAttributes, log, ownLog),
     mCommon(getDefaultURI(), addClassAttributes, getDefaultURI(), log)
 {
 }
@@ -1094,7 +1094,8 @@ Metadata CPHDXMLParser::fromXML(const xml::lite::Document& doc, Version version)
 }
 std::unique_ptr<Metadata> CPHDXMLParser::fromXML(const xml::lite::Document* doc)
 {
-    auto result = fromXML(*doc, FileHeader::getDefaultVersion());
+    const auto version = CPHDXMLControl::uriToVersion(xml::lite::Uri(getDefaultURI()));
+    auto result = fromXML(*doc, version);
     return std::make_unique<Metadata>(std::move(result));
 }
 
