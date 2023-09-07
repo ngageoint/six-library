@@ -33,6 +33,7 @@
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>
 #include <cphd/Types.h>
+#include <cphd/CPHDXMLControl.h>
 
 
 #define ENFORCESPEC 0
@@ -45,12 +46,18 @@ typedef xml::lite::Element* XMLElem;
 namespace cphd
 {
 
+static std::string struriFromVersion(Version version)
+{
+    auto&& map = CPHDXMLControl::getVersionUriMap();
+    return map.at(version).value;
+}
+
 CPHDXMLParser::CPHDXMLParser(
-        const xml::lite::Uri& uri,
+        Version version,
         bool addClassAttributes,
         logging::Logger* log,
         bool ownLog) :
-    six::XMLParser(uri.value, addClassAttributes, log, ownLog),
+    six::XMLParser(struriFromVersion(version), addClassAttributes, log, ownLog),
     mCommon(getDefaultURI(), addClassAttributes, getDefaultURI(), log)
 {
 }

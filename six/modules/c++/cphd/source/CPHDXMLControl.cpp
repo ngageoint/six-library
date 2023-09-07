@@ -122,10 +122,7 @@ std::map<Version, xml::lite::Uri> CPHDXMLControl::getVersionUriMap()
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& metadata)
 {
     const auto cphdVersion = metadata.getVersion();
-
-    static const auto versionUriMap = getVersionUriMap_();
-    const auto it = versionUriMap.find(cphdVersion);
-    return getParser(it->second)->toXML(metadata);
+    return getParser(cphdVersion)->toXML(metadata);
 }
 
 /* FROM XML */
@@ -172,16 +169,16 @@ Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vect
 std::unique_ptr<Metadata> CPHDXMLControl::fromXMLImpl(const xml::lite::Document* doc)
 {
     const xml::lite::Uri uri(doc->getRootElement()->getUri());
-
-    auto retval = getParser(uri)->fromXML(doc);
-    retval->setVersion(uriToVersion(uri));
+    const auto version = uriToVersion(uri);
+    auto retval = getParser(version)->fromXML(doc);
+    retval->setVersion(version);
     return retval;
 }
 
 std::unique_ptr<CPHDXMLParser>
-CPHDXMLControl::getParser(const xml::lite::Uri& uri) const
+CPHDXMLControl::getParser(Version version) const
 {
-    return std::make_unique<CPHDXMLParser>(uri, false, mLog);
+    return std::make_unique<CPHDXMLParser>(version, false, mLog);
 }
 
 Version CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri) const

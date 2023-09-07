@@ -57,7 +57,7 @@ struct CPHDXMLParser final : public six::XMLParser
      *  \param log provide logger object
      *  \param ownLog flag indicates if log should be deleted
      */
-    CPHDXMLParser(const xml::lite::Uri&,
+    CPHDXMLParser(Version,
                   bool addClassAttributes,
                   logging::Logger* log = nullptr,
                   bool ownLog = false);

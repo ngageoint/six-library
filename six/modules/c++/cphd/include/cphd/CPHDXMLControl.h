@@ -177,7 +177,7 @@ private:
      *  \param uri A string specifying CPHD uri
      */
     std::unique_ptr<CPHDXMLParser>
-    getParser(const xml::lite::Uri&) const;
+    getParser(Version) const;
 
     // Given the URI get associated version
     Version uriToVersion(const xml::lite::Uri&) const;
