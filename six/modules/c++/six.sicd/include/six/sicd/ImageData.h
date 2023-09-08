@@ -41,8 +41,6 @@ namespace six
 {
 namespace sicd
 {
-using cx_float = six::zfloat;
-
 class GeoData;
 /*!
  *  \struct ImageData

@@ -71,11 +71,18 @@ The resulting green point is then what's used to find the nearest magnitude via 
     * @param v complex value
     * @return phase between [0, 2PI]
     */
-inline auto GetPhase(const std::complex<long double>& v)
+inline auto GetPhase(std::complex<double> v)
 {
     double phase = std::arg(v);
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
+}
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
+{
+    // Phase is determined via arithmetic because it's equally spaced.
+    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
+    // handles cases that are close to 2PI.
+    return gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
 }
 
 template<typename TToComplexFunc>
@@ -172,11 +179,7 @@ static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
 six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const six::zfloat &v) const
 {
     six::AMP8I_PHS8I_t retval;
-
-    // Phase is determined via arithmetic because it's equally spaced.
-    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
-    // handles cases that are close to 2PI.
-    retval.phase = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    retval.phase = getPhase(v);
 
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
@@ -230,23 +233,19 @@ static inline void transform(std::span<const TInputs> inputs, std::span<TResults
 #endif // CODA_OSS_cpp17
 }
 
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const cx_float> inputs) const
-{
-    const auto nearest_neighbor_ = [&](const auto& v)
-    {
-        return this->nearest_neighbor(v);
-    };
-
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor_);
-    return retval;
-}
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(
-    std::span<const cx_float> inputs, const six::AmplitudeTable* pAmplitudeTable)
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
     const auto& converter = make(pAmplitudeTable);
-    return converter.nearest_neighbors(inputs);
+    const auto nearest_neighbor = [&converter](const auto& v)
+    {
+        return converter.nearest_neighbor(v);
+    };
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
+    return retval;
 }
 
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)

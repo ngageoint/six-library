@@ -175,7 +175,7 @@ TEST_CASE(test_8bit_ampphs)
     TEST_ASSERT(actuals == expecteds);
 
 
-    // we should now be able to convert the cx_floats back to amp/value
+    // we should now be able to convert the `zfloat`s back to amp/value
     std::vector<AMP8I_PHS8I_t> amp8i_phs8i(actuals.size());
     to_AMP8I_PHS8I(imageData, actuals, amp8i_phs8i);
     test_assert_eq(testName, actuals, amp8i_phs8i);
