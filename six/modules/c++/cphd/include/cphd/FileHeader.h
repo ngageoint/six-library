@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __CPHD_FILE_HEADER_H__
-#define __CPHD_FILE_HEADER_H__
+#pragma once
+#ifndef SIX_cphd_FileHeader_h_INCLUDED_
+#define SIX_cphd_FileHeader_h_INCLUDED_
 
 #include <string>
 #include <ostream>
@@ -52,9 +53,14 @@ public:
      *   initialize default variables
      */
     FileHeader(Version);
-
+#ifdef SWIGPYTHON
+    FileHeader() = default;
+    FileHeader(const FileHeader&) = default;
+    FileHeader& operator=(const FileHeader&) = default;
+#else
     FileHeader(const FileHeader&) = delete;
     FileHeader& operator=(const FileHeader&) = delete;
+#endif
     FileHeader(FileHeader&&) = default;
     FileHeader& operator=(FileHeader&&) = default;
 
@@ -263,4 +269,4 @@ private:
 
 }
 
-#endif
+#endif // SIX_cphd_FileHeader_h_INCLUDED_

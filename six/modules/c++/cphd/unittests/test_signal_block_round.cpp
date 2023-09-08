@@ -153,7 +153,7 @@ bool runTest(bool scale, const TCxVector& writeData)
     const types::RowCol<size_t> dims(128, 128);
     const std::vector<double> scaleFactors =
             generateScaleFactors(dims.row, scale);
-    auto meta = setUpData(dims, writeData);
+    auto meta = cphd::setUpData(dims, writeData);
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
 

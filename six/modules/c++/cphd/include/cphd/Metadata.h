@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __CPHD_METADATA_H__
-#define __CPHD_METADATA_H__
+#pragma once
+#ifndef SIX_cphd_Metadata_h_INCLUDED_
+#define SIX_cphd_Metadata_h_INCLUDED_
 
 #include <ostream>
 
@@ -61,9 +62,14 @@ struct Metadata final : MetadataBase
     //! Initializes CPHD version to default version specified in FileHeader
     Metadata(Version);
     Metadata(Data&&);
-
+#ifdef SWIGPYTHON
+    Metadata() = default;
+    Metadata(const Metadata&) = default;
+    Metadata& operator=(const Metadata&) = default;
+#else
     Metadata(const Metadata&) = delete;
     Metadata& operator=(const Metadata&) = delete;
+#endif
     Metadata(Metadata&&) = default;
     Metadata& operator=(Metadata&&) = default;
 
@@ -163,4 +169,4 @@ private:
 std::ostream& operator<< (std::ostream& os, const Metadata& d);
 }
 
-#endif
+#endif // SIX_cphd_Metadata_h_INCLUDED_
