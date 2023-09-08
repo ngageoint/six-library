@@ -31,13 +31,14 @@ TEST_CASE(testReadCompressedChannel)
     input->write("1234");
     input->seek(0, io::Seekable::START);
 
-    cphd::Metadata metadata;
-    metadata.data.channels.resize(1);
-    metadata.data.channels[0].numSamples = 4;
-    metadata.data.channels[0].numVectors = 8;
-    metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
-    metadata.data.signalCompressionID = "Test Compression";
-    metadata.data.channels[0].compressedSignalSize = 4;
+    cphd::Data data;
+    data.channels.resize(1);
+    data.channels[0].numSamples = 4;
+    data.channels[0].numVectors = 8;
+    data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
+    data.signalCompressionID = "Test Compression";
+    data.channels[0].compressedSignalSize = 4;
+    const cphd::Metadata metadata(std::move(data));
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
@@ -57,13 +58,13 @@ TEST_CASE(testReadUncompressedChannel)
     input->write("12345678");
     input->seek(0, io::Seekable::START);
 
-    cphd::Metadata metadata;
-    metadata.data.channels.resize(1);
-    metadata.data.channels[0].numSamples = 1;
-    metadata.data.channels[0].numVectors = 4;
-    metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
-    metadata.data.channels[0].compressedSignalSize =
-            six::Init::undefined<size_t>();
+    cphd::Data data;
+    data.channels.resize(1);
+    data.channels[0].numSamples = 1;
+    data.channels[0].numVectors = 4;
+    data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
+    data.channels[0].compressedSignalSize = six::Init::undefined<size_t>();
+    const cphd::Metadata metadata(std::move(data));
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 
@@ -79,11 +80,12 @@ TEST_CASE(testReadUncompressedChannel)
 
 TEST_CASE(testReadChannelSubset)
 {
-    cphd::Metadata metadata;
-    metadata.data.channels.resize(1);
-    metadata.data.channels[0].numSamples = 2;
-    metadata.data.channels[0].numVectors = 4;
-    metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
+    cphd::Data data;
+    data.channels.resize(1);
+    data.channels[0].numSamples = 2;
+    data.channels[0].numVectors = 4;
+    data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
+    const cphd::Metadata metadata(std::move(data));
 
     auto input = std::make_shared<io::ByteStream>();
     input->write("0A1B");
@@ -147,13 +149,14 @@ TEST_CASE(testCannotDoPartialReadOfCompressedChannel)
     input->write("1234");
     input->seek(0, io::Seekable::START);
 
-    cphd::Metadata metadata;
-    metadata.data.channels.resize(1);
-    metadata.data.channels[0].numSamples = 4;
-    metadata.data.channels[0].numVectors = 8;
-    metadata.data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
-    metadata.data.signalCompressionID = "Test Compression";
-    metadata.data.channels[0].compressedSignalSize = 4;
+    cphd::Data data;
+    data.channels.resize(1);
+    data.channels[0].numSamples = 4;
+    data.channels[0].numVectors = 8;
+    data.signalArrayFormat = cphd::SignalArrayFormat::CI2;
+    data.signalCompressionID = "Test Compression";
+    data.channels[0].compressedSignalSize = 4;
+    const cphd::Metadata metadata(std::move(data));
 
     cphd::Wideband wideband(input, metadata, 0, 4);
 

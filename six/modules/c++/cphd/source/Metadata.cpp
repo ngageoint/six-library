@@ -30,9 +30,10 @@ Metadata::Metadata(Version version)
 {
     setVersion(version);
 }
-Metadata::Metadata()
-: Metadata(FileHeader::getDefaultVersion()) // Default version defined in cphd::FileHeader
+Metadata::Metadata(Data&& data)
+    : Metadata(FileHeader::getDefaultVersion()) // Default version defined in cphd::FileHeader
 {
+    this->data = std::move(data);
 }
 
 size_t Metadata::getNumChannels() const
