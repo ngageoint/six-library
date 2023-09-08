@@ -204,14 +204,22 @@ std::string FileHeader::toString() const
     return os.str();
 }
 
-Version FileHeader::getVersion() const
+std::string FileHeader::getVersion() const
 {
-    return mVersion;
+    return to_string(mVersion);
+}
+void FileHeader::getVersion(Version& version) const
+{
+    version = mVersion;
 }
 
 void FileHeader::setVersion(Version version)
 {
     mVersion = version;
+}
+void FileHeader::setVersion(const std::string& strVersion)
+{
+    setVersion(FileHeader::toVersion(strVersion));
 }
 
 size_t FileHeader::set(int64_t xmlBlockSize,

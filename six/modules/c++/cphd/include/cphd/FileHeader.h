@@ -100,7 +100,8 @@ public:
      *
      * returns file version string
      */
-    Version getVersion() const;
+    std::string getVersion() const;
+    void getVersion(Version&) const;
 
     /*
      *  \func setVersion
@@ -111,6 +112,7 @@ public:
      *  ex: 1.0.0, 1.0.1 etc
      *
      */
+    void setVersion(const std::string&);
     void setVersion(Version);
 
     /*
