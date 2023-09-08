@@ -66,8 +66,10 @@ std::string BaseFileHeader::strReadVersion(io::SeekableInputStream& inStream)
 }
 Version BaseFileHeader::readVersion(io::SeekableInputStream& inStream)
 {
-    const auto version = strReadVersion(inStream);
-
+    return toVersion(strReadVersion(inStream));
+}
+Version BaseFileHeader::toVersion(const std::string& strVersion)
+{
     #define SIX_cphd_FileHeader_setVersion_map_entry(v) { to_string(v),  v} // avoid copy/paste errors
     static const std::map<std::string, Version> string_to_vesion
     {
@@ -77,7 +79,7 @@ Version BaseFileHeader::readVersion(io::SeekableInputStream& inStream)
         SIX_cphd_FileHeader_setVersion_map_entry(Version::v1_1_0),
     };
     #undef SIX_cphd_FileHeader_setVersion_map_entry
-    const auto it = string_to_vesion.find(version);
+    const auto it = string_to_vesion.find(strVersion);
     if (it != string_to_vesion.end())
     {
         return it->second;

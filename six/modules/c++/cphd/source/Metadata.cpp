@@ -71,13 +71,21 @@ DomainType Metadata::getDomainType() const
     return global.getDomainType();
 }
 
-Version Metadata::getVersion() const
+std::string Metadata::getVersion() const
 {
-    return mVersion;
+    return to_string(mVersion);
+}
+void Metadata::getVersion(Version& version) const
+{
+    version = mVersion;
 }
 void Metadata::setVersion(Version version)
 {
     mVersion = version;
+}
+void Metadata::setVersion(const std::string& strVersion)
+{
+    setVersion(FileHeader::toVersion(strVersion));
 }
 
 bool Metadata::operator==(const Metadata& other) const

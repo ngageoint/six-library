@@ -39,6 +39,12 @@
 
 namespace cphd
 {
+static Version getVersion(const Metadata& metadata)
+{
+    Version retval;
+    metadata.getVersion(retval);
+    return retval;
+}
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,
@@ -51,7 +57,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mNumThreads(numThreads),
     mSchemaPaths(schemaPaths),
     mStream(outStream),
-    mHeader(metadata.getVersion())
+    mHeader(getVersion(metadata))
 {
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
@@ -77,7 +83,7 @@ void CPHDWriter::writeMetadata(size_t supportSize,
 {
     const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
 
-    mHeader.setVersion(mMetadata.getVersion());
+    mHeader.setVersion(getVersion(mMetadata));
 
     // update classification and release info
     if (!six::Init::isUndefined(

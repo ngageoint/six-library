@@ -77,6 +77,7 @@ public:
     static
     std::string strReadVersion(io::SeekableInputStream& inStream);
     static Version readVersion(io::SeekableInputStream& inStream);
+    static Version toVersion(const std::string&);
 
     /*
      *  \func read
