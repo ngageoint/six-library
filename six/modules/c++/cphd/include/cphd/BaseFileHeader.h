@@ -91,7 +91,7 @@ public:
      *  \throws except::Exception if expected header entry is not found
      *  \throws except::Exception if any header info is missing or empty
      */
-    virtual void read(io::SeekableInputStream& inStream) = 0;
+    virtual void readImpl(io::SeekableInputStream& inStream) = 0;
 
     /*
      *  \func toString

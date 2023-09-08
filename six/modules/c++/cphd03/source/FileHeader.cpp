@@ -44,7 +44,7 @@ FileHeader::FileHeader() :
 {
 }
 
-void FileHeader::read(io::SeekableInputStream& inStream)
+void FileHeader::readImpl(io::SeekableInputStream& inStream)
 {
     if (!isCPHD(inStream))
     {

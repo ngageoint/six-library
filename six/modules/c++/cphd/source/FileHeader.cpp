@@ -69,7 +69,7 @@ FileHeader FileHeader::read_(io::SeekableInputStream& inStream)
     retval.readAfterValidVersion(inStream);
     return retval;
 }
-void FileHeader::read(io::SeekableInputStream& inStream)
+void FileHeader::readImpl(io::SeekableInputStream& inStream)
 {
     *this = read_(inStream);
 }

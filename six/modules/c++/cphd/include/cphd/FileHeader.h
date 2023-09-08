@@ -70,7 +70,11 @@ public:
      *
      *  \param inStream Valid input stream of CPHD file
      */
-    void read(io::SeekableInputStream& inStream) override;
+    void readImpl(io::SeekableInputStream&) override;
+    void read(io::SeekableInputStream& inStream)
+    {
+        readImpl(inStream);
+    }
     static FileHeader read_(io::SeekableInputStream&);
 
     /*
