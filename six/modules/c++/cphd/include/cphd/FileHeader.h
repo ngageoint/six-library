@@ -51,7 +51,6 @@ public:
      *  \brief Constructor
      *   initialize default variables
      */
-    FileHeader(); // default constructor still needed for unittests
     FileHeader(Version);
 
     FileHeader(const FileHeader&) = delete;
@@ -71,11 +70,7 @@ public:
      *  \param inStream Valid input stream of CPHD file
      */
     void readImpl(io::SeekableInputStream&) override;
-    void read(io::SeekableInputStream& inStream)
-    {
-        readImpl(inStream);
-    }
-    static FileHeader read_(io::SeekableInputStream&);
+    static FileHeader read(io::SeekableInputStream&);
 
     /*
      *  \func toString

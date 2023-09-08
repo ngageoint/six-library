@@ -59,8 +59,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
 {
     io::ByteStream fileHeaderContentWithSupport;
     fileHeaderContentWithSupport.write(FILE_HEADER_CONTENT, strlen(FILE_HEADER_CONTENT));
-    cphd::FileHeader headerWithSupport;
-    headerWithSupport.read(fileHeaderContentWithSupport);
+    const auto headerWithSupport = cphd::FileHeader::read(fileHeaderContentWithSupport);
     TEST_ASSERT_EQ(headerWithSupport.getXMLBlockSize(), 3);
     TEST_ASSERT_EQ(headerWithSupport.getXMLBlockByteOffset(), 10);
     TEST_ASSERT_EQ(headerWithSupport.getSupportBlockSize(), 4);
@@ -84,8 +83,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "RELEASE_INFO := UNRESTRICTED\n"
             "\f\n";
     fileHeaderContentWithoutSupport.write(fileHeaderTxtNoSupport);
-    cphd::FileHeader headerWithoutSupport;
-    headerWithoutSupport.read(fileHeaderContentWithoutSupport);
+    const auto headerWithoutSupport = cphd::FileHeader::read(fileHeaderContentWithoutSupport);
     TEST_ASSERT_EQ(headerWithoutSupport.getXMLBlockSize(), 3);
     TEST_ASSERT_EQ(headerWithoutSupport.getXMLBlockByteOffset(), 10);
     TEST_ASSERT_EQ(headerWithoutSupport.getSupportBlockSize(), 0);
@@ -108,7 +106,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "\f\n";
     io::ByteStream fileHeaderContentWithoutClassification;
     fileHeaderContentWithoutClassification.write(fileHeaderTxtNoClass);
-    TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithoutClassification));
+    TEST_THROWS(cphd::FileHeader::read(fileHeaderContentWithoutClassification));
 
     std::string fileHeaderTxtInvalid = "CPHD/1.0\n"
             "XML_BLOCK_SIZE := foo\n"
@@ -122,21 +120,19 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "\f\n";
     io::ByteStream fileHeaderContentWithInvalidValue;
     fileHeaderContentWithInvalidValue.write(fileHeaderTxtInvalid);
-    TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithInvalidValue));
+    TEST_THROWS(cphd::FileHeader::read(fileHeaderContentWithInvalidValue));
 }
 
 TEST_CASE(testRoundTripHeader)
 {
     io::ByteStream headerContent;
     headerContent.write(FILE_HEADER_CONTENT, strlen(FILE_HEADER_CONTENT));
-    cphd::FileHeader header;
-    header.read(headerContent);
+    const auto header = cphd::FileHeader::read(headerContent);
     std::string outString = header.toString();
 
     io::ByteStream roundTrippedContent;
     roundTrippedContent.write(outString);
-    cphd::FileHeader roundTrippedHeader;
-    roundTrippedHeader.read(roundTrippedContent);
+    const auto roundTrippedHeader = cphd::FileHeader::read(roundTrippedContent);
 
     TEST_ASSERT_EQ(header.getXMLBlockSize(),
             roundTrippedHeader.getXMLBlockSize());

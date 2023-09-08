@@ -22,6 +22,7 @@
 #include <string.h>
 #include <sstream>
 #include <map>
+#include <stdexcept>
 
 #include <nitf/coda-oss.hpp>
 #include <mem/ScopedArray.h>
@@ -55,9 +56,8 @@ FileHeader::FileHeader(Version version) : mVersion(version)
     // reinitialize in case value has changed
     DEFAULT_VERSION = getDefaultVersion_();
 }
-FileHeader::FileHeader() : FileHeader(getDefaultVersion()) {}
 
-FileHeader FileHeader::read_(io::SeekableInputStream& inStream)
+FileHeader FileHeader::read(io::SeekableInputStream& inStream)
 {
     if (!isCPHD(inStream))
     {
@@ -69,9 +69,9 @@ FileHeader FileHeader::read_(io::SeekableInputStream& inStream)
     retval.readAfterValidVersion(inStream);
     return retval;
 }
-void FileHeader::readImpl(io::SeekableInputStream& inStream)
+void FileHeader::readImpl(io::SeekableInputStream&)
 {
-    *this = read_(inStream);
+    throw std::logic_error("Should use 'static' read()");
 }
 void FileHeader::readAfterValidVersion(io::SeekableInputStream& inStream)
 {

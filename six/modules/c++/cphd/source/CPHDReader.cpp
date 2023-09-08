@@ -43,11 +43,6 @@ cphd::CPHDReader::CPHDReader(const std::string& fromFile,
 {
 }
 
-inline auto readFileHeader(io::SeekableInputStream& inStream)
-{
-    return cphd::FileHeader::read_(inStream);
-}
-
 static cphd::Metadata fromXML(io::SeekableInputStream& inStream,
     const std::vector<std::string>& schemaPaths_,
     std::shared_ptr<logging::Logger> logger,
@@ -75,7 +70,7 @@ cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
                        size_t numThreads,
                        const std::vector<std::string>& schemaPaths_,
                        std::shared_ptr<logging::Logger> logger)
-    : mFileHeader(readFileHeader(*inStream)),
+    : mFileHeader(cphd::FileHeader::read(*inStream)),
     mMetadata(fromXML(*inStream, schemaPaths_, logger, mFileHeader))
 {
     mSupportBlock = std::make_unique<SupportBlock>(inStream, mMetadata.data, mFileHeader);
