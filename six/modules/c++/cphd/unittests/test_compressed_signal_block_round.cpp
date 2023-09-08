@@ -97,7 +97,7 @@ std::vector<std::byte> checkCompressedData(const std::string& pathname,
     const cphd::Wideband& wideband = reader.getWideband();
     std::vector<std::byte> readData(dims.area());
 
-    std::span<std::byte> data(readData.data(), readData.size());
+    auto data = sys::make_span(readData);
     for (size_t ii = 0; ii < reader.getMetadata().data.getNumChannels(); ++ii)
     {
         wideband.read(ii, data);
@@ -124,9 +124,7 @@ bool runTest(const std::vector<std::byte>& writeData)
     io::TempFile tempfile;
     const size_t numThreads = std::thread::hardware_concurrency();
     const types::RowCol<size_t> dims(128, 256);
-    cphd::Metadata meta = cphd::Metadata();
-    meta.data.signalCompressionID = "Huffman";
-    cphd::setUpData(meta, dims, writeData);
+    auto meta = cphd::setUpData("Huffman", dims, writeData);
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
 

@@ -177,9 +177,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     ifd->addEntry(tiff::KnownTags::PHOTOMETRIC_INTERPRETATION, photoInterp);
 
-    addStringArray(ifd,
-                   "ImageDescription",
-                   FmtX("SIDD: %s", data->getName().c_str()));
+    addStringArray(ifd, "ImageDescription", FmtX("SIDD: %s", data->getName()));
 
     constexpr unsigned short orientation = 1;
     ifd->addEntry("Orientation", orientation);

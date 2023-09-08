@@ -67,7 +67,7 @@ namespace details
     inline T index(const std::map<std::string, T>& map, const std::string& v)
     {
         const auto result = nitf::details::index(map, v);
-        const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v.c_str())));
+        const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v)));
         return nitf::details::value(result, ex);
     }
     template<typename T>

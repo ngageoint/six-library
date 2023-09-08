@@ -43,7 +43,11 @@ public:
     {
     }
 
-    virtual void read(io::SeekableInputStream& inStream);
+    void readImpl(io::SeekableInputStream&) override;
+    void read(io::SeekableInputStream& inStream)
+    {
+        readImpl(inStream);
+    }
 
     // Convert header info to string (for writing to file)
     // Does not include section terminator string

@@ -881,27 +881,31 @@ static std::string testCPHDXMLBody()
     return std::string(xmlBody);
 }
 
-std::string testCPHDXML(const std::string& version)
+std::string testCPHDXML_(cphd::Version version)
 {
-    auto uri = cphd::CPHDXMLControl::getVersionUriMap().at(version);
+    const auto map = cphd::CPHDXMLControl::getVersionUriMap();
+    const auto uri = map.at(version);
     return "<CPHD xmlns=\""
         + uri.value
         + "\">\n"
         + testCPHDXMLBody()
         + "</CPHD>\n";
 }
-
-void runTest(const std::string& testName, const std::string& version)
+std::u8string testCPHDXML(cphd::Version version)
 {
-    auto xmlString = testCPHDXML(version);
-    io::StringStream cphdStream;
-    cphdStream.write(xmlString.c_str(), xmlString.size());
+    return str::u8FromString(testCPHDXML_(version));
+}
+
+void runTest(const std::string& testName, cphd::Version version)
+{
+    const auto xmlString = testCPHDXML(version);
+    io::U8StringStream cphdStream;
+    cphdStream.write(xmlString);
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(cphdStream, cphdStream.available());
-    const std::unique_ptr<cphd::Metadata> metadata =
-            cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
+    const auto metadata = cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
     // CollectionID
     TEST_ASSERT_EQ(metadata->collectionID.collectorName, "Collector");
@@ -1161,8 +1165,9 @@ void runTest(const std::string& testName, const std::string& version)
 
 TEST_CASE(testVersions)
 {
-    auto versionUriMap = cphd::CPHDXMLControl::getVersionUriMap();
-    for (auto version : {"1.0.0", "1.0.1", "1.1.0"})
+    const auto versionUriMap = cphd::CPHDXMLControl::getVersionUriMap();
+
+    for (auto version : {cphd::Version::v1_0_0, cphd::Version::v1_0_1, cphd::Version::v1_1_0 })
     {
         TEST_ASSERT_TRUE(
             versionUriMap.find(version) != versionUriMap.end());
@@ -1171,10 +1176,11 @@ TEST_CASE(testVersions)
 
 TEST_CASE(testReadXML)
 {
-    for (auto pair : cphd::CPHDXMLControl::getVersionUriMap())
+    const auto map = cphd::CPHDXMLControl::getVersionUriMap();
+    for (auto pair : map)
     {
         auto& version = pair.first;
-        runTest("testReadXML" + version, version);
+        runTest("testReadXML" + to_string(version), version);
     }
 }
 

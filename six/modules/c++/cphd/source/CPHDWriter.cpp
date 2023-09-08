@@ -39,6 +39,12 @@
 
 namespace cphd
 {
+static Version getVersion(const Metadata& metadata)
+{
+    Version retval;
+    metadata.getVersion(retval);
+    return retval;
+}
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,
@@ -50,7 +56,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
     mSchemaPaths(schemaPaths),
-    mStream(outStream)
+    mStream(outStream),
+    mHeader(getVersion(metadata))
 {
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
@@ -76,9 +83,7 @@ void CPHDWriter::writeMetadata(size_t supportSize,
 {
     const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
 
-    Version cphdVersion;
-    mMetadata.getVersion(cphdVersion);
-    mHeader.setVersion(cphdVersion);
+    mHeader.setVersion(getVersion(mMetadata));
 
     // update classification and release info
     if (!six::Init::isUndefined(
@@ -127,17 +132,35 @@ void CPHDWriter::writeCompressedCPHDDataImpl(const std::byte* data,
     (*mDataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
 }
 
-void CPHDWriter::writeSupportDataImpl(const std::byte* data,
-                                      size_t numElements,
-                                      size_t elementSize)
+static auto make_span(std::span<const std::byte> data, const cphd::Data::SupportArray& dataArray)
 {
-    (*mDataWriter)(data, numElements, elementSize);
+    const auto pData = data.data() + dataArray.arrayByteOffset;
+    return sys::make_span(pData, dataArray.size_bytes());
 }
+
+void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t elementSize)
+{
+    (*mDataWriter)(data, elementSize);
+}
+void CPHDWriter::writeSupportData(std::span<const std::byte> data)
+{
+    for (auto&& mapEntry : mMetadata.data.supportArrayMap)
+    {
+        auto&& dataArray = mapEntry.second;
+
+        // Move inputstream head to offset of particular support array
+        mStream->seek(mHeader.getSupportBlockByteOffset() + dataArray.arrayByteOffset, io::SeekableOutputStream::START);
+        writeSupportDataImpl(make_span(data, dataArray), dataArray.bytesPerElement);
+    }
+    // Move inputstream head to the end of the support block after all supports have been written
+    mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
+}
+
 
 template <typename T>
 void CPHDWriter::write(const PVPBlock& pvpBlock,
-                       const T* widebandData,
-                       const sys::ubyte* supportData)
+    const T* widebandData,
+    std::span<const std::byte> supportData)
 {
     // Write File header and metadata to file
     // Padding is added in writeMetadata
@@ -147,7 +170,7 @@ void CPHDWriter::write(const PVPBlock& pvpBlock,
     // Padding is added in writeSupportData
     if (mMetadata.data.getNumSupportArrays() != 0)
     {
-        if (supportData == nullptr)
+        if (supportData.empty())
         {
             throw except::Exception(Ctxt("SupportData is not provided"));
         }
@@ -170,44 +193,13 @@ void CPHDWriter::write(const PVPBlock& pvpBlock,
         elementsWritten += numElements;
     }
 }
-
-// For compressed data
-template void CPHDWriter::write<sys::ubyte>(const PVPBlock& pvpBlock,
-                                            const sys::ubyte* widebandData,
-                                            const sys::ubyte* supportData);
-template void CPHDWriter::write<std::byte>(const PVPBlock& pvpBlock,
-                                            const std::byte* widebandData,
-                                            const std::byte* supportData);
-
-template void CPHDWriter::write<cphd::zint8_t>(
-    const PVPBlock& pvpBlock,
-    const cphd::zint8_t* widebandData,
-    const sys::ubyte* supportData);
-
-template void CPHDWriter::write<cphd::zint16_t>(
-    const PVPBlock& pvpBlock,
-    const cphd::zint16_t* widebandData,
-    const sys::ubyte* supportData);
-
-template void CPHDWriter::write<cphd::zfloat>(
-    const PVPBlock& pvpBlock,
-    const cphd::zfloat* widebandData,
-    const sys::ubyte* supportData);
-
-template void CPHDWriter::write<cphd::zint8_t>(
-        const PVPBlock& pvpBlock,
-        const cphd::zint8_t* widebandData,
-        const std::byte* supportData);
-
-template void CPHDWriter::write<cphd::zint16_t>(
-        const PVPBlock& pvpBlock,
-        const cphd::zint16_t* widebandData,
-        const std::byte* supportData);
-
-template void CPHDWriter::write<cphd::zfloat>(
-        const PVPBlock& pvpBlock,
-        const cphd::zfloat* widebandData,
-        const std::byte* supportData);
+template void CPHDWriter::write<std::byte>(const PVPBlock&, const std::byte* widebandData, std::span<const std::byte>); // For compressed data
+template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
 
 void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
 {
@@ -274,20 +266,18 @@ void CPHDWriter::writeCPHDData(const T* data,
                                size_t numElements,
                                size_t channel)
 {
+    const void* const pData = data;
     if (mMetadata.data.isCompressed())
     {
-        writeCompressedCPHDDataImpl(reinterpret_cast<const std::byte*>(data),
-                                    channel);
+        writeCompressedCPHDDataImpl(static_cast<const std::byte*>(pData), channel);
     }
     else
     {
         if (mElementSize != sizeof(T))
         {
-            throw except::Exception(
-                    Ctxt("Incorrect buffer data type used for metadata!"));
+            throw except::Exception(Ctxt("Incorrect buffer data type used for metadata!"));
         }
-        writeCPHDDataImpl(reinterpret_cast<const std::byte*>(data),
-                          numElements);
+        writeCPHDDataImpl(static_cast<const std::byte*>(pData), numElements);
     }
 }
 

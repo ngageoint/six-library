@@ -324,8 +324,7 @@ PixelType six::toType<PixelType>(const std::string& s)
 {
     auto p = PixelType::toType(s);
     if (p == PixelType::NOT_SET)
-        throw except::Exception(
-                Ctxt(FmtX("Type not understood [%s]", s.c_str())));
+        throw except::Exception(Ctxt(FmtX("Type not understood [%s]", s)));
     return p;
 }
 

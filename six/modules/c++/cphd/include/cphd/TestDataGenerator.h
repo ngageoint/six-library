@@ -121,16 +121,22 @@ inline cphd::SignalArrayFormat getSignalArrayFormat(size_t writeDataSize)
 
 
 template<typename T>
-void setUpData(Metadata& metadata,
-               const types::RowCol<size_t>& dims,
-               const std::vector<T>& writeData)
+Metadata setUpData(const types::RowCol<size_t>& dims,
+               const std::vector<T>& writeData,
+               const std::string* pSignalCompressionID = nullptr)
 {
+    Data data;
+    if (pSignalCompressionID != nullptr)
+    {
+        data.signalCompressionID = *pSignalCompressionID;
+    }
     const size_t numChannels = 1;
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
-        metadata.data.channels.push_back(
+        data.channels.push_back(
                 cphd::Data::Channel(dims.row, dims.col));
     }
+    Metadata metadata(std::move(data));
 
     if (!writeData.empty())
     {
@@ -157,6 +163,15 @@ void setUpData(Metadata& metadata,
     }
 
     setUpMetadata(metadata);
+
+    return metadata;
+}
+template<typename T>
+Metadata setUpData(const std::string& signalCompressionID,
+    const types::RowCol<size_t>& dims,
+    const std::vector<T>& writeData)
+{
+    return setUpData(dims, writeData, &signalCompressionID);
 }
 
 }
