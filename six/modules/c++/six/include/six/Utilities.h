@@ -276,11 +276,6 @@ std::unique_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  * \return Data representation of 'xmlStr'
  */
 std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
-    const std::string& xmlStr,
-    DataType dataType,
-    const std::vector<std::string>& schemaPaths,
-    logging::Logger& log);
-std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::u8string& xmlStr,
     DataType dataType,
     const std::vector<std::filesystem::path>* pSchemaPaths,
@@ -297,10 +292,6 @@ std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStr'
  */
-std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
-    const std::string& xmlStr,
-    const std::vector<std::string>& schemaPaths,
-    logging::Logger& log);
 std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths,

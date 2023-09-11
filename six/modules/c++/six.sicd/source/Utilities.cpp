@@ -1019,19 +1019,6 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromFile(const std::filesystem:
     return parser.fromXML(pathname);
 }
 
-std::unique_ptr<ComplexData> Utilities::parseDataFromString(
-        const std::string& xmlStr_,
-        const std::vector<std::string>& schemaPaths_,
-        logging::Logger& log)
-{
-    const auto xmlStr = str::u8FromNative(xmlStr_);
-
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
-    return parseDataFromString(xmlStr, &schemaPaths, &log);
-}
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {

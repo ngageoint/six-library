@@ -687,13 +687,6 @@ std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     dataParser.preserveCharacterData(false); // existing behavior
     return dataParser.fromXML(xmlStr, xmlReg, DataType::NOT_SET);
 }
-std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
-    const std::string& xmlStr,
-    const std::vector<std::string>& schemaPaths,
-    logging::Logger& log)
-{
-    return parseDataFromString(xmlReg, xmlStr, DataType::NOT_SET, schemaPaths, log);
-}
 
 std::unique_ptr<Data> six::parseDataFromString(
         const XMLControlRegistry& xmlReg,
@@ -705,19 +698,6 @@ std::unique_ptr<Data> six::parseDataFromString(
     DataParser dataParser(pSchemaPaths, pLogger);
     dataParser.preserveCharacterData(false); // existing behavior
     return dataParser.fromXML(xmlStr, xmlReg, dataType);
-}
-std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
-    const std::string& xmlStr,
-    DataType dataType,
-    const std::vector<std::string>& schemaPaths_,
-    logging::Logger& log)
-{
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
-    auto result = parseDataFromString(xmlReg, str::u8FromNative(xmlStr), dataType, &schemaPaths, &log);
-    return std::unique_ptr<Data>(result.release());
 }
 
 std::string six::findSchemaPath(const std::string& progname)

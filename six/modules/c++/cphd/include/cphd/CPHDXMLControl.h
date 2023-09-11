@@ -118,9 +118,6 @@ public:
      *  \return pointer to metadata object
      */
     virtual std::unique_ptr<Metadata> fromXML(
-            const std::string& xmlString,
-            const std::vector<std::string>& schemaPaths = std::vector<std::string>());
-    virtual std::unique_ptr<Metadata> fromXML(
         const std::u8string& xmlString,
         const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
