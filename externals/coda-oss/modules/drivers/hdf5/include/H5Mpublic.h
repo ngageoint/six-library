@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -20,11 +19,11 @@
 #ifndef H5Mpublic_H
 #define H5Mpublic_H
 
-/* System headers needed by this file */
+#include "H5public.h"   /* Generic Functions                        */
+#include "H5Ipublic.h"  /* Identifiers                              */
+#include "H5VLpublic.h" /* Virtual Object Layer                     */
 
-/* Public headers needed by this file */
-#include "H5public.h"
-#include "H5Ipublic.h"
+/* Exposes VOL connector types, so it needs the connector header */
 #include "H5VLconnector.h"
 
 /*****************/
@@ -212,7 +211,7 @@ extern "C" {
  * \details H5Mcreate() creates a new map object for storing key-value
  *          pairs. The in-file datatype for keys is defined by \p key_type_id
  *          and the in-file datatype for values is defined by \p val_type_id. \p
- *          loc_id specifies the location to create the the map object and \p
+ *          loc_id specifies the location to create the map object and \p
  *          name specifies the name of the link to the map object relative to
  *          \p loc_id.
  *
@@ -226,9 +225,14 @@ H5_DLL hid_t H5Mcreate(hid_t loc_id, const char *name, hid_t key_type_id, hid_t 
  * \ingroup ASYNC
  * \async_variant_of{H5Mcreate}
  */
+#ifndef H5_DOXYGEN
 H5_DLL hid_t H5Mcreate_async(const char *app_file, const char *app_func, unsigned app_line, hid_t loc_id,
                              const char *name, hid_t key_type_id, hid_t val_type_id, hid_t lcpl_id,
                              hid_t mcpl_id, hid_t mapl_id, hid_t es_id);
+#else
+H5_DLL hid_t  H5Mcreate_async(hid_t loc_id, const char *name, hid_t key_type_id, hid_t val_type_id,
+                              hid_t lcpl_id, hid_t mcpl_id, hid_t mapl_id, hid_t es_id);
+#endif
 
 /**
  * \ingroup H5M
@@ -266,8 +270,12 @@ H5_DLL hid_t H5Mopen(hid_t loc_id, const char *name, hid_t mapl_id);
  * \ingroup ASYNC
  * \async_variant_of{H5Mopen}
  */
+#ifndef H5_DOXYGEN
 H5_DLL hid_t H5Mopen_async(const char *app_file, const char *app_func, unsigned app_line, hid_t loc_id,
                            const char *name, hid_t mapl_id, hid_t es_id);
+#else
+H5_DLL hid_t  H5Mopen_async(hid_t loc_id, const char *name, hid_t mapl_id, hid_t es_id);
+#endif
 
 /**
  * \ingroup H5M
@@ -292,8 +300,12 @@ H5_DLL herr_t H5Mclose(hid_t map_id);
  * \ingroup ASYNC
  * \async_variant_of{H5Mclose}
  */
+#ifndef H5_DOXYGEN
 H5_DLL herr_t H5Mclose_async(const char *app_file, const char *app_func, unsigned app_line, hid_t map_id,
                              hid_t es_id);
+#else
+H5_DLL herr_t H5Mclose_async(hid_t map_id, hid_t es_id);
+#endif
 
 /**
  * \ingroup H5M
@@ -339,6 +351,9 @@ H5_DLL hid_t H5Mget_val_type(hid_t map_id);
  *
  * \details H5Mget_create_plist() returns an identifier for a copy of the
  *          creation property list for a map object specified by \p map_id.
+ *
+ *          The creation property list identifier should be released with
+ *          H5Pclose() to prevent resource leaks.
  *
  * \since 1.12.0
  *
@@ -414,9 +429,14 @@ H5_DLL herr_t H5Mput(hid_t map_id, hid_t key_mem_type_id, const void *key, hid_t
  * \ingroup ASYNC
  * \async_variant_of{H5Mput}
  */
+#ifndef H5_DOXYGEN
 H5_DLL herr_t H5Mput_async(const char *app_file, const char *app_func, unsigned app_line, hid_t map_id,
                            hid_t key_mem_type_id, const void *key, hid_t val_mem_type_id, const void *value,
                            hid_t dxpl_id, hid_t es_id);
+#else
+H5_DLL herr_t H5Mput_async(hid_t map_id, hid_t key_mem_type_id, const void *key, hid_t val_mem_type_id,
+                           const void *value, hid_t dxpl_id, hid_t es_id);
+#endif
 
 /**
  * \ingroup H5M
@@ -455,9 +475,14 @@ H5_DLL herr_t H5Mget(hid_t map_id, hid_t key_mem_type_id, const void *key, hid_t
  * \ingroup ASYNC
  * \async_variant_of{H5Mget}
  */
+#ifndef H5_DOXYGEN
 H5_DLL herr_t H5Mget_async(const char *app_file, const char *app_func, unsigned app_line, hid_t map_id,
                            hid_t key_mem_type_id, const void *key, hid_t val_mem_type_id, void *value,
                            hid_t dxpl_id, hid_t es_id);
+#else
+H5_DLL herr_t H5Mget_async(hid_t map_id, hid_t key_mem_type_id, const void *key, hid_t val_mem_type_id,
+                           void *value, hid_t dxpl_id, hid_t es_id);
+#endif
 
 /**
  * \ingroup H5M
@@ -517,6 +542,9 @@ H5_DLL herr_t H5Mexists(hid_t map_id, hid_t key_mem_type_id, const void *key, hb
  *
  *          Any further options can be specified through the property list \p dxpl_id.
  *
+ *  \warning Adding or removing key-value pairs to the map during iteration
+ *           will lead to undefined behavior.
+ *
  * \since 1.12.0
  *
  */
@@ -557,6 +585,9 @@ H5_DLL herr_t H5Miterate(hid_t map_id, hsize_t *idx, hid_t key_mem_type_id, H5M_
  *          error. A return value of zero allows iteration to continue.
  *
  *          Any further options can be specified through the property list \p dxpl_id.
+ *
+ *  \warning Adding or removing key-value pairs to the map during iteration
+ *           will lead to undefined behavior.
  *
  * \since 1.12.0
  *

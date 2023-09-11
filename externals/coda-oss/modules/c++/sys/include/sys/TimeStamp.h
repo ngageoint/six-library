@@ -54,7 +54,7 @@ struct TimeStamp final
      *  \param is24HourTime Optional specifier for military time
      */
     TimeStamp() = default;
-    TimeStamp(bool is24HourTime) : m24HourTime(is24HourTime)
+    TimeStamp(bool is24HourTime) noexcept : m24HourTime(is24HourTime)
     {
     }
     ~TimeStamp() = default;
@@ -84,7 +84,7 @@ private:
      *  Sets up string in desired format
      *  \return The string format for printing
      */
-    const char* getFormat() const
+    const char* getFormat() const noexcept
     {
         if (m24HourTime)
         {

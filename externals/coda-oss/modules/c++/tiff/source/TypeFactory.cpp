@@ -28,7 +28,7 @@
 tiff::TypeInterface *tiff::TypeFactory::create(const unsigned char *data,
         const unsigned short type)
 {
-    tiff::TypeInterface *tiffType = NULL;
+    tiff::TypeInterface* tiffType = nullptr;
     switch (type)
     {
     case tiff::Const::Type::BYTE:

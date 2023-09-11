@@ -177,8 +177,6 @@ TEST_CASE(testGetBlock_std_byte)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
     TEST_CHECK(testGetNumBlocks);
     TEST_CHECK(testGetBlock_sys_byte);
     TEST_CHECK(testGetBlock_std_byte);

@@ -26,12 +26,19 @@
 #include <std/memory>
 #include <std/string>
 #include <regex>
+#include <tuple> // std::ignore
+
+#include <config/compiler_extensions.h>
+CODA_OSS_disable_warning_push
+#ifndef _MSC_VER
+CODA_OSS_disable_warning(-Wshadow)
+#endif
+#include <str/utf8.h>
+CODA_OSS_disable_warning_pop
 
 #include <sys/OS.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
-#include <str/EncodedStringView.h>
-#include <str/utf8.h>
 
 namespace fs = std::filesystem;
 
@@ -89,6 +96,14 @@ inline std::vector<std::string> convert(const std::vector<fs::path>& schemaPaths
                    [](const fs::path& p) { return p.string(); });
     return retval;
 }
+inline auto convert(const std::vector<std::string>& paths)
+{
+    std::vector<fs::path> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const auto& p) { return p; });
+    return retval;
+}
+
 ValidatorXerces::ValidatorXerces(
         const std::vector<fs::path>& schemaPaths,
         logging::Logger* log,
@@ -117,7 +132,7 @@ ValidatorXerces::ValidatorXerces(
         xercesc::DOMImplementationRegistry::
             getDOMImplementation (ls_id)->createLSParser(
                 xercesc::DOMImplementationLS::MODE_SYNCHRONOUS,
-                0, 
+                nullptr, 
                 xercesc::XMLPlatformUtils::fgMemoryManager,
                 mSchemaPool.get()));
 
@@ -154,25 +169,32 @@ ValidatorXerces::ValidatorXerces(
 
     // load our schemas --
     // search each directory for schemas
-    sys::OS os;
-    std::vector<std::string> schemas = 
-        os.search(schemaPaths, "", ".xsd", recursive);
+    const auto schemas = loadSchemas(convert(schemaPaths), recursive);
 
     //  add the schema to the validator
-    for (size_t i = 0; i < schemas.size(); ++i)
+    //  add the schema to the validator
+    for (auto&& schema : schemas)
     {
-        if (!mValidator->loadGrammar(schemas[i].c_str(), 
+        if (!mValidator->loadGrammar(schema.c_str(),
                                      xercesc::Grammar::SchemaGrammarType,
                                      true))
         {
             std::ostringstream oss;
-            oss << "Error: Failure to load schema " << schemas[i];
+            oss << "Error: Failure to load schema " << schema;
             log->warn(Ctxt(oss.str()));
         }
     }
 
     //! no additional schemas will be loaded after this point!
     mSchemaPool->lockPool();
+}
+
+std::vector<coda_oss::filesystem::path> ValidatorXerces::loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
+{
+    // load our schemas --
+    // search each directory for schemas
+    sys::OS os;
+    return os.search(schemaPaths, "", ".xsd", recursive);
 }
 
 // From config.h.in: Define to the 16 bit type used to represent Xerces UTF-16 characters
@@ -183,18 +205,18 @@ static_assert(sizeof(XMLCh) == 2, "XMLCh should be two bytes for UTF-16.");
 // On other platforms, char16_t is used; only wchar_t on Windows.
 using XMLCh_t = wchar_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
-inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::wstring>& pWString)
+inline void reset(const std::u8string& xml, std::unique_ptr<std::wstring>& pWString)
 {
-    pWString = std::make_unique<std::wstring>(xmlView.wstring());
+    pWString = std::make_unique<std::wstring>(str::toWString(xml));
 }
 #else
 using XMLCh_t = char16_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be char16_t");
 #endif
 
-inline void reset(str::EncodedStringView xmlView, std::unique_ptr<std::u16string>& pWString)
+inline void reset(const std::u8string& xml, std::unique_ptr<std::u16string>& pWString)
 {
-    pWString = std::make_unique<std::u16string>(xmlView.u16string());
+    pWString = std::make_unique<std::u16string>(str::to_u16string(xml));
 }
 
 using XMLCh_string = std::basic_string<XMLCh_t>;
@@ -202,7 +224,7 @@ static std::unique_ptr<XMLCh_string> setStringData(xercesc::DOMLSInputImpl& inpu
 {
     // expand to the wide character data for use with xerces
     std::unique_ptr<XMLCh_string> retval;
-    reset(str::EncodedStringView(xml), retval);
+    reset(xml, retval);
     input.setStringData(retval->c_str());
     return retval;
 }
@@ -241,7 +263,7 @@ bool ValidatorXerces::validate_(const std::u8string& xml,
     return (!mErrorHandler->getErrorLog().empty());
 }
 
-static str::EncodedStringView encodeXml(const std::string& xml)
+static coda_oss::u8string encodeXml(const std::string& xml)
 {
     // The XML might contain a specific encoding, if it does;
     // we want to use it, otherwise we'll corrupt the data.
@@ -251,34 +273,34 @@ static str::EncodedStringView encodeXml(const std::string& xml)
     std::cmatch m;
     if (std::regex_search(xml.c_str(), m, reUtf8))
     {
-        return str::EncodedStringView::fromUtf8(xml);
+        return str::str<coda_oss::u8string>(xml);
     }
 
     // Maybe this is poor XML with Windows-1252 encoding :-(
     const std::regex reWindows1252("<\?.*encoding=.*['\"]?.*windows-1252.*['\"]?.*\?>", std::regex::icase);
     if (std::regex_search(xml.c_str(), m, reWindows1252))
     {
-        return str::EncodedStringView::fromWindows1252(xml);
+        return to_u8string(str::str<str::W1252string>(xml));
     }
 
-    // No "... encoding= ..."; let EncodedStringView deal with it   
-    return str::EncodedStringView(xml);
+    // No "... encoding= ..."; let u8FromString() deal with it   
+    return str::u8FromString(xml);
 }
 
 bool ValidatorXerces::validate(const std::string& xml,
                                const std::string& xmlID,
                                std::vector<ValidationInfo>& errors) const
 {
-    const auto view = encodeXml(xml);
+    const auto u8xml = encodeXml(xml);
     try
     {
-      return validate(view.u8string(), xmlID, errors);
+        return validate(u8xml, xmlID, errors);
     }
     catch (const utf8::invalid_utf8&) { }
 
     // Can't process as "native" (UTF-8 on Linux, Windows-1252 on Windows).
     // Must be Windows-1252 on Linux.
-    return validate(str::c_str<str::W1252string>(xml), xmlID, errors);
+    return validate(str::str<str::W1252string>(xml), xmlID, errors);
 }
 bool ValidatorXerces::validate(const coda_oss::u8string& xml,
                                const std::string& xmlID,
@@ -290,8 +312,7 @@ bool ValidatorXerces::validate(const str::W1252string& xml,
                                const std::string& xmlID,
                                std::vector<ValidationInfo>& errors) const
 {
-    const str::EncodedStringView xmlView(xml);
-    return validate(xmlView.u8string(), xmlID, errors);
+    return validate(str::to_u8string(xml), xmlID, errors);
 }
 
 }

@@ -20,10 +20,14 @@
  *
  */
 
-#ifndef __CLI_RESULTS_H__
-#define __CLI_RESULTS_H__
+#pragma once
+#ifndef CODA_OSS_cli_Results_h_INCLUDED_
+#define CODA_OSS_cli_Results_h_INCLUDED_
 
 #include <map>
+
+#include "sys/Conf.h"
+
 #include "cli/Value.h"
 
 namespace cli
@@ -144,4 +148,4 @@ protected:
 
 }
 
-#endif
+#endif  // CODA_OSS_cli_Results_h_INCLUDED_

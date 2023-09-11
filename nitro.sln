@@ -30,7 +30,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AIMIDB", "modules\c\nitf\AI
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JITCID", "modules\c\nitf\JITCID.vcxproj", "{D1D7FCD3-6130-4504-9DA0-9D80506BE55E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nitf-plugins", "nitf-plugins", "{27A2685A-E869-42A2-956D-92994F60C536}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "c-nitf-shared", "c-nitf-shared", "{27A2685A-E869-42A2-956D-92994F60C536}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSCRNA", "modules\c\nitf\CSCRNA.vcxproj", "{023DE06D-3967-4406-B1B8-032118BB2552}"
 EndProject
@@ -46,24 +46,24 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HISTOA", "modules\c\nitf\HI
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ENGRDA", "modules\c\nitf\ENGRDA.vcxproj", "{53F9F908-C678-4DEE-9309-E71C1E03A45F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{238C9787-B27D-4107-B8FD-1BDB49EA8023}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test++", "Test++\Test++.vcxproj", "{E610F11D-1240-4260-87F8-504B49DB6915}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "J2KCompress", "modules\c\j2k\J2KCompress.vcxproj", "{A676EDF3-F231-47C8-A6E6-0FE50B50B71B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "J2KDecompress", "modules\c\j2k\J2KDecompress.vcxproj", "{C787537A-0CAC-4D6D-A6D6-A66765A06753}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A45CB073-25A7-411D-A7E7-589BCC8AF547}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{AC22B9D3-0749-486F-A8F2-D6977BF9505D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github-workflows", ".github-workflows", "{A45CB073-25A7-411D-A7E7-589BCC8AF547}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\workflows\frequent_check.yml = .github\workflows\frequent_check.yml
-		.github\workflows\master.yml = .github\workflows\master.yml
+		.github\workflows\main.yml = .github\workflows\main.yml
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSEXRB", "modules\c\nitf\CSEXRB.vcxproj", "{0A9BDA26-092F-4A2C-BBEF-00C64BF0C65E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "externals", "externals", "{7D26D571-0014-4C50-BF86-612E743E64B6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "coda-oss", "externals\coda-oss\modules\c++\coda-oss.vcxproj", "{9997E895-5161-4DDF-8F3F-099894CB2F21}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{8ACE478C-8F6F-4D42-9B43-7D75882D4BE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,14 +127,6 @@ Global
 		{53F9F908-C678-4DEE-9309-E71C1E03A45F}.Debug|x64.Build.0 = Debug|x64
 		{53F9F908-C678-4DEE-9309-E71C1E03A45F}.Release|x64.ActiveCfg = Release|x64
 		{53F9F908-C678-4DEE-9309-E71C1E03A45F}.Release|x64.Build.0 = Release|x64
-		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Debug|x64.ActiveCfg = Debug|x64
-		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Debug|x64.Build.0 = Debug|x64
-		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Release|x64.ActiveCfg = Release|x64
-		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Release|x64.Build.0 = Release|x64
-		{E610F11D-1240-4260-87F8-504B49DB6915}.Debug|x64.ActiveCfg = Debug|x64
-		{E610F11D-1240-4260-87F8-504B49DB6915}.Debug|x64.Build.0 = Debug|x64
-		{E610F11D-1240-4260-87F8-504B49DB6915}.Release|x64.ActiveCfg = Release|x64
-		{E610F11D-1240-4260-87F8-504B49DB6915}.Release|x64.Build.0 = Release|x64
 		{A676EDF3-F231-47C8-A6E6-0FE50B50B71B}.Debug|x64.ActiveCfg = Debug|x64
 		{A676EDF3-F231-47C8-A6E6-0FE50B50B71B}.Debug|x64.Build.0 = Debug|x64
 		{A676EDF3-F231-47C8-A6E6-0FE50B50B71B}.Release|x64.ActiveCfg = Release|x64
@@ -147,6 +139,14 @@ Global
 		{0A9BDA26-092F-4A2C-BBEF-00C64BF0C65E}.Debug|x64.Build.0 = Debug|x64
 		{0A9BDA26-092F-4A2C-BBEF-00C64BF0C65E}.Release|x64.ActiveCfg = Release|x64
 		{0A9BDA26-092F-4A2C-BBEF-00C64BF0C65E}.Release|x64.Build.0 = Release|x64
+		{9997E895-5161-4DDF-8F3F-099894CB2F21}.Debug|x64.ActiveCfg = Debug|x64
+		{9997E895-5161-4DDF-8F3F-099894CB2F21}.Debug|x64.Build.0 = Debug|x64
+		{9997E895-5161-4DDF-8F3F-099894CB2F21}.Release|x64.ActiveCfg = Release|x64
+		{9997E895-5161-4DDF-8F3F-099894CB2F21}.Release|x64.Build.0 = Release|x64
+		{8ACE478C-8F6F-4D42-9B43-7D75882D4BE1}.Debug|x64.ActiveCfg = Debug|x64
+		{8ACE478C-8F6F-4D42-9B43-7D75882D4BE1}.Debug|x64.Build.0 = Debug|x64
+		{8ACE478C-8F6F-4D42-9B43-7D75882D4BE1}.Release|x64.ActiveCfg = Release|x64
+		{8ACE478C-8F6F-4D42-9B43-7D75882D4BE1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,8 +166,8 @@ Global
 		{A676EDF3-F231-47C8-A6E6-0FE50B50B71B} = {27A2685A-E869-42A2-956D-92994F60C536}
 		{C787537A-0CAC-4D6D-A6D6-A66765A06753} = {27A2685A-E869-42A2-956D-92994F60C536}
 		{A45CB073-25A7-411D-A7E7-589BCC8AF547} = {5C5727E7-0CFF-42B4-8F5A-D31B3BC81F21}
-		{AC22B9D3-0749-486F-A8F2-D6977BF9505D} = {A45CB073-25A7-411D-A7E7-589BCC8AF547}
 		{0A9BDA26-092F-4A2C-BBEF-00C64BF0C65E} = {27A2685A-E869-42A2-956D-92994F60C536}
+		{9997E895-5161-4DDF-8F3F-099894CB2F21} = {7D26D571-0014-4C50-BF86-612E743E64B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D7AC542-BBB6-4BAC-8BF1-7E76C714BBA4}

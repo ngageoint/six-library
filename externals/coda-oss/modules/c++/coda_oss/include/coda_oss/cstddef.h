@@ -22,7 +22,10 @@
 #define CODA_OSS_coda_oss_cstddef_h_INCLUDED_
 #pragma once
 
+#include <stdint.h>
+
 #include <cstddef>
+#include <type_traits>
 
 // Need a fairly decent C++ compiler to use the real GSL.  This brings in more than 
 // we really need for span (e.g., gsl::narrow()), but it keeps things simple.
@@ -37,5 +40,6 @@ namespace coda_oss
         enum class byte : unsigned char {};
 	#endif  // GSL_BYTE_H
 }
+static_assert(!std::is_same<coda_oss::byte, uint8_t>::value, "'coda_oss::byte' should be a unique type.");
 
 #endif  // CODA_OSS_coda_oss_cstddef_h_INCLUDED_

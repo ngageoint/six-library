@@ -26,6 +26,35 @@
 
 using namespace nitf;
 
+template<typename TReturn, typename TFunction>
+static inline auto invoke(nitf_Error* error, const char* file, int line, const char* func,
+    TReturn catch_return, TFunction f)
+{
+    try
+    {
+        return f();
+    }
+    catch (const except::Exception& ex)
+    {
+        Utils::error_init(error, ex.getMessage(), file, line, func, NRT_ERR_DECOMPRESSION);
+    }
+    catch (const std::exception& ex)
+    {
+        Utils::error_init(error, ex, file, line, func, NRT_ERR_DECOMPRESSION);
+    }
+    catch (...)
+    {
+        nrt_Error_init(error, "Unknown error", file, line, func, NRT_ERR_DECOMPRESSION);
+    }
+
+    return catch_return;
+}
+
+// Ensure the return type is deduced correctly.  NRT_SUCCESS/NRT_FAILURE
+// is `int`, not `NITF_BOOL`.
+constexpr NITF_BOOL nrt_success = NRT_SUCCESS;
+constexpr NITF_BOOL nrt_failure = NRT_FAILURE;
+
 NITF_BOOL DecompressionInterface::adapterStart(
     nitf_DecompressionControl* object,
     nitf_IOInterface* io,
@@ -35,7 +64,7 @@ NITF_BOOL DecompressionInterface::adapterStart(
     uint64_t* blockMask, 
     nitf_Error* error)
 {
-    try
+    return invoke(error, NRT_CTXT, nrt_failure, [&]()
     {
         nitf::IOInterface ioInter(io);
         ioInter.setManaged(true);
@@ -46,26 +75,8 @@ NITF_BOOL DecompressionInterface::adapterStart(
                                                        fileLength, 
                                                        blockInfo,
                                                        blockMask);
-        return NRT_SUCCESS;
-    }
-    catch (const except::Exception& ex)
-    {
-        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return NRT_FAILURE;
-    }
-    catch (const std::exception& ex)
-    {
-        Utils::error_init(error, ex, NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return NRT_FAILURE;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return NRT_FAILURE;
-    }
+        return nrt_success;
+    });
 }
 
 uint8_t* DecompressionInterface::adapterReadBlock(
@@ -74,29 +85,24 @@ uint8_t* DecompressionInterface::adapterReadBlock(
     uint64_t* blockSize, 
     nitf_Error* error)
 {
-    try
-    {
+    const auto f = [&]() {
         return static_cast<Decompressor*>(object)->readBlock(blockNumber,
                                                                   blockSize); 
-    }
-    catch (const except::Exception& ex)
+    };
+    using retval_t = decltype(f());
+    return invoke(error, NRT_CTXT, static_cast<retval_t>(nullptr), f);
+}
+
+NITF_BOOL DecompressionInterface::adapterFreeBlock(
+    nitf_DecompressionControl* object,
+    uint8_t* block,
+    nitf_Error* error)
+{
+    return invoke(error, NRT_CTXT, nrt_failure, [&]()
     {
-        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return nullptr;
-    }
-    catch (const std::exception& ex)
-    {
-        Utils::error_init(error, ex, NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return nullptr;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return nullptr;
-    }
+        static_cast<Decompressor*>(object)->freeBlock(block);
+        return nrt_success;
+    });
 }
 
 NITF_BOOL DecompressionInterface::adapterFreeBlock(
@@ -104,29 +110,11 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
     std::byte* block,
     nitf_Error* error)
 {
-    try
+    return invoke(error, NRT_CTXT, nrt_failure, [&]()
     {
         static_cast<Decompressor*>(object)->freeBlock(block);
-        return NRT_SUCCESS;
-    }
-    catch (const except::Exception& ex)
-    {
-        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return NRT_FAILURE;
-    }
-    catch (const std::exception& ex)
-    {
-        Utils::error_init(error, ex, NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return NRT_FAILURE;
-    }
-    catch (...)
-    {
-        nrt_Error_init(error, "Unknown error", NRT_CTXT,
-                       NRT_ERR_DECOMPRESSION);
-        return NRT_FAILURE;
-    }
+        return nrt_success;
+    });
 }
 
 void DecompressionInterface::adapterDestroy(

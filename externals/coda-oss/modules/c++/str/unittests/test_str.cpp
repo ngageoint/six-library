@@ -22,14 +22,11 @@
 
 #include <tuple> // std::ignore
 
+#include <types/Complex.h>
 #include <config/compiler_extensions.h>
 #include <import/str.h>
-#include "TestCase.h"
 
-inline std::string to_string(const std::string& value)
-{
-    return value;
-}
+#include "TestCase.h"
 
 TEST_CASE(testTrim)
 {
@@ -69,6 +66,26 @@ TEST_CASE(testLower)
     std::string s = "TEST1";
     str::lower( s);
     TEST_ASSERT_EQ(s, "test1");
+}
+
+TEST_CASE(test_eq_ne)
+{
+    const auto s1 = "TEST1";
+    const auto s2 = "test1";
+    const auto s3 = "T2";
+
+    TEST_ASSERT_TRUE(str::eq(s1, s1));
+    TEST_ASSERT_FALSE(str::ne(s1, s1));
+
+    TEST_ASSERT_TRUE(str::eq(s1, s2));
+    TEST_ASSERT_FALSE(str::ne(s1, s2));
+    TEST_ASSERT_TRUE(str::eq(s2, s1));
+    TEST_ASSERT_FALSE(str::ne(s2, s1));
+
+    TEST_ASSERT_FALSE(str::eq(s1, s3));
+    TEST_ASSERT_TRUE(str::ne(s1, s3));
+    TEST_ASSERT_FALSE(str::eq(s3, s1));
+    TEST_ASSERT_TRUE(str::ne(s3, s1));
 }
 
 TEST_CASE(testReplace)
@@ -177,9 +194,9 @@ TEST_CASE(testRoundDouble)
     nv *= denom;
     TEST_ASSERT_ALMOST_EQ_EPS(nv, numerator, eps);
     std::cout << nv << std::endl;
-    std::cout << (nv - (int)nv) << std::endl;
+    std::cout << (nv - static_cast<int>(nv)) << std::endl;
     std::cout << std::numeric_limits<double>::epsilon() << std::endl;
-    TEST_ASSERT_EQ((int)std::ceil(nv), (int)numerator);
+    TEST_ASSERT_EQ(static_cast<int>(std::ceil(nv)), static_cast<int>(numerator));
 }
 
 TEST_CASE(testEscapeForXMLNoReplace)
@@ -205,11 +222,94 @@ TEST_CASE(testEscapeForXMLKitchenSink)
     TEST_ASSERT_EQ(message, expectedMessage);
 }
 
+TEST_CASE(test_toStringComplexFloat)
+{
+    const std::string expected("(1,-2)");
+
+    const std::complex<float> std_cx_float(1.0f, -2.0f);
+    auto actual = str::toString(std_cx_float);
+    TEST_ASSERT_EQ(actual, expected);
+
+    const types::ComplexReal<float> types_cx_float(1.0f, -2.0f);
+    actual = str::toString(types_cx_float);
+    TEST_ASSERT_EQ(actual, expected);
+
+    const types::zfloat zfloat(1.0f, -2.0f);
+    actual = str::toString(zfloat);
+    TEST_ASSERT_EQ(actual, expected);
+}
+TEST_CASE(test_toTypeComplexFloat)
+{
+    const std::string strValue("(1,-2)");
+
+    auto actual = str::toType<std::complex<float>>(strValue);
+    auto strActual = str::toString(actual);
+    TEST_ASSERT_EQ(strActual, strValue);
+
+    actual = str::toType<types::ComplexReal<float>>(strValue);
+    strActual = str::toString(actual);
+    TEST_ASSERT_EQ(strActual, strValue);
+
+    actual = str::toType<types::zfloat>(strValue);
+    strActual = str::toString(actual);
+    TEST_ASSERT_EQ(strActual, strValue);
+}
+
+TEST_CASE(test_toStringComplexShort)
+{
+    const std::string expected("(1,-2)");
+
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning
+    #endif
+    const std::complex<short> std_cx_short(1, -2);
+    CODA_OSS_disable_warning_pop
+    auto actual = str::toString(std_cx_short);
+    TEST_ASSERT_EQ(actual, expected);
+
+    const types::ComplexInteger<short> types_cx_short(std_cx_short);  // "copy constructor" or overload
+    actual = str::toString(types_cx_short);
+    TEST_ASSERT_EQ(actual, expected);
+
+    const types::Complex<int16_t> zint16(1, -2);
+    actual = str::toString(zint16);
+    TEST_ASSERT_EQ(actual, expected);
+}
+TEST_CASE(test_toTypeComplexShort)
+{
+    const std::string strValue("(1,-2)");
+
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning
+    #endif
+    const auto cx_actual = str::toType<std::complex<short>>(strValue);
+    CODA_OSS_disable_warning_pop
+    auto strActual = str::toString(cx_actual);
+    TEST_ASSERT_EQ(strActual, strValue);
+
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable: 4996) // '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning
+    #endif
+    auto zactual = str::toType<types::ComplexInteger<short>>(strValue);
+    CODA_OSS_disable_warning_pop
+    strActual = str::toString(zactual);
+    TEST_ASSERT_EQ(strActual, strValue);
+
+    zactual = str::toType<types::Complex<int16_t>>(strValue);
+    strActual = str::toString(zactual);
+    TEST_ASSERT_EQ(strActual, strValue);
+}
+
+
 TEST_MAIN(
     TEST_CHECK(testTrim);
     TEST_CHECK(testData);
     TEST_CHECK(testUpper);
     TEST_CHECK(testLower);
+    TEST_CHECK(test_eq_ne);
     TEST_CHECK(testReplace);
     TEST_CHECK(testReplaceAllInfinite);
     TEST_CHECK(testReplaceAllRecurse);
@@ -226,4 +326,8 @@ TEST_MAIN(
     TEST_CHECK(testRoundDouble);
     TEST_CHECK(testEscapeForXMLNoReplace);
     TEST_CHECK(testEscapeForXMLKitchenSink);
+    TEST_CHECK(test_toStringComplexFloat);
+    TEST_CHECK(test_toTypeComplexFloat);
+    TEST_CHECK(test_toStringComplexShort);
+    TEST_CHECK(test_toTypeComplexShort);
     )

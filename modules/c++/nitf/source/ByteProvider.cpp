@@ -634,7 +634,7 @@ void ByteProvider::getBytes(const void* imageData,
 static std::span<const std::byte> make_span(const std::vector<sys::byte>& v) noexcept
 {
     const void* const pData = v.data();
-    return std::span<const std::byte>(static_cast<const std::byte*>(pData), v.size());
+    return sys::make_span(static_cast<const std::byte*>(pData), v.size());
 }
 
 void nitf::ByteProvider::getFileHeader(std::span<const std::byte>& result) const noexcept

@@ -294,6 +294,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
     std::map<std::string, Argument*> longOptionsFlags;
     std::vector<Argument*> positionalArgs;
 
+    positionalArgs.reserve(mArgs.size());
     for (auto& arg_ : mArgs)
     {
         cli::Argument* arg = arg_.get();
@@ -316,8 +317,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                 std::map<std::string, Argument*>& flagMap =
                         (subOption ? shortOptionsFlags : shortFlags);
                 if (flagMap.find(op) != flagMap.end())
-                    parseError(FmtX("Conflicting option: %c%s", mPrefixChar,
-                                    op.c_str()));
+                    parseError(FmtX("Conflicting option: %c%s", mPrefixChar, op));
                 flagMap[op] = arg;
             }
             for (std::vector<std::string>::const_iterator it =
@@ -327,8 +327,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                 std::map<std::string, Argument*>& flagMap =
                         (subOption ? longOptionsFlags : longFlags);
                 if (flagMap.find(op) != flagMap.end())
-                    parseError(FmtX("Conflicting option: %c%c%s", mPrefixChar,
-                                    mPrefixChar, op.c_str()));
+                    parseError(FmtX("Conflicting option: %c%c%s", mPrefixChar, mPrefixChar, op));
                 flagMap[op] = arg;
             }
         }
@@ -336,6 +335,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
     }
 
     std::vector < std::string > explodedArgs;
+    explodedArgs.reserve(args.size());
     // next, check for combined short options
     for (size_t i = 0, s = args.size(); i < s; ++i)
     {
@@ -413,12 +413,12 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
     }
 
     auto results = std::make_unique<cli::Results>();
-    cli::Results *currentResults = NULL;
+    cli::Results* currentResults = nullptr;
     for (size_t i = 0, s = explodedArgs.size(); i < s; ++i)
     {
         currentResults = results.get(); // set the pointer
         std::string argStr = explodedArgs[i];
-        cli::Argument *arg = NULL;
+        cli::Argument* arg = nullptr;
         std::string optionsStr("");
         if (argStr.size() > 2 && argStr[0] == mPrefixChar && argStr[1]
                 == mPrefixChar)
@@ -456,8 +456,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                     }
                     else
                     {
-                        throw except::Exception(Ctxt(
-                                FmtX("Invalid option: [%s]", argStr.c_str())));
+                        throw except::Exception(Ctxt(FmtX("Invalid option: [%s]", argStr)));
                     }
                 }
             }
@@ -498,8 +497,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                     }
                     else
                     {
-                        throw except::Exception(Ctxt(
-                                FmtX("Invalid option: [%s]", argStr.c_str())));
+                        throw except::Exception(Ctxt(FmtX("Invalid option: [%s]", argStr)));
                     }
 
                 }
@@ -507,7 +505,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         }
 
 
-        if (arg != NULL)
+        if (arg != nullptr)
         {
             std::string argVar = arg->getVariable();
             switch (arg->getAction())
@@ -547,10 +545,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                 }
 
                 if (!added)
-                    parseError(
-                               FmtX(
-                                    "option requires value or has exceeded its max: [%s]",
-                                    argVar.c_str()));
+                    parseError(FmtX("option requires value or has exceeded its max: [%s]", argVar));
 
                 currentResults->put(argVar, v);
                 break;
@@ -564,7 +559,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
             case cli::STORE_CONST:
             {
                 const Value* constVal = arg->getConst();
-                currentResults->put(argVar, constVal ? constVal->clone() : NULL);
+                currentResults->put(argVar, constVal ? constVal->clone() : nullptr);
                 break;
             }
             case cli::SUB_OPTIONS:
@@ -605,7 +600,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         else
         {
             // it's a positional argument
-            cli::Value *lastPosVal = NULL;
+            cli::Value* lastPosVal = nullptr;
             for (std::vector<cli::Argument*>::iterator it =
                     positionalArgs.begin(); it != positionalArgs.end(); ++it)
             {
@@ -653,7 +648,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         if (!results->hasValue(argVar))
         {
             const Value* defaultVal = arg->getDefault();
-            if (defaultVal != NULL)
+            if (defaultVal != nullptr)
                 results->put(argVar, defaultVal->clone());
             else if (arg->getAction() == cli::STORE_FALSE)
                 results->put(argVar, new cli::Value(true));
@@ -675,11 +670,9 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         if (arg->isRequired() || numGiven > 0)
         {
             if (minArgs > 0 && numGiven < static_cast<size_t>(minArgs))
-                parseError(FmtX("not enough arguments, %d required: [%s]",
-                                minArgs, argId.c_str()));
+                parseError(FmtX("not enough arguments, %d required: [%s]", minArgs, argId));
             if (maxArgs >= 0 && numGiven > static_cast<size_t>(maxArgs))
-                parseError(FmtX("too many arguments, %d supported: [%s]",
-                                maxArgs, argId.c_str()));
+                parseError(FmtX("too many arguments, %d supported: [%s]", maxArgs, argId));
         }
 
 

@@ -5,7 +5,7 @@
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
  * the COPYING file, which can be found at the root of the source code       *
- * distribution tree, or in https://support.hdfgroup.org/ftp/HDF5/releases.  *
+ * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -23,11 +23,10 @@
 #define H5FD_ONION_ENCODED_SIZE_HEADER 40
 
 /* Flags must align exactly one per bit, up to 24 bits */
-#define H5FD_ONION_HEADER_FLAG_WRITE_LOCK        0x1
-#define H5FD_ONION_HEADER_FLAG_DIVERGENT_HISTORY 0x2
-#define H5FD_ONION_HEADER_FLAG_PAGE_ALIGNMENT    0x4
-#define H5FD_ONION_HEADER_SIGNATURE              "OHDH"
-#define H5FD_ONION_HEADER_VERSION_CURR           1
+#define H5FD_ONION_HEADER_FLAG_WRITE_LOCK     0x1
+#define H5FD_ONION_HEADER_FLAG_PAGE_ALIGNMENT 0x2
+#define H5FD_ONION_HEADER_SIGNATURE           "OHDH"
+#define H5FD_ONION_HEADER_VERSION_CURR        1
 
 /* In-memory representation of the on-store onion history file header.
  */

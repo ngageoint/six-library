@@ -26,8 +26,6 @@
 
 TEST_CASE(testNestedMod)
 {
-    nitf::Test::setNitfPluginPath();
-
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE* tre = nitf_TRE_construct("ACCHZB", NULL, &error);
@@ -61,8 +59,6 @@ TEST_CASE(testNestedMod)
 
 TEST_CASE(testIncompleteCondMod)
 {
-    nitf::Test::setNitfPluginPath();
-
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
@@ -89,8 +85,6 @@ TEST_CASE(testIncompleteCondMod)
 
 TEST_CASE(testClone)
 {
-    nitf::Test::setNitfPluginPath();
-
     NITF_BOOL exists;
     nitf_TRE* dolly;            /* used for clone */
     nitf_Field* clonedField = NULL;
@@ -116,8 +110,6 @@ TEST_CASE(testClone)
 
 TEST_CASE(testBasicMod)
 {
-    nitf::Test::setNitfPluginPath();
-
     /* construct a tre */
     NITF_BOOL exists;
     nitf_Error error;
@@ -147,8 +139,6 @@ TEST_CASE(testBasicMod)
 
 TEST_CASE(testSize)
 {
-    nitf::Test::setNitfPluginPath();
-
     nitf_Error error;
     int treLength;
     nitf_TRE* tre = nitf_TRE_construct("AIMIDB", NULL, &error);
@@ -163,8 +153,6 @@ TEST_CASE(testSize)
 
 TEST_CASE(iterateUnfilled)
 {
-    nitf::Test::setNitfPluginPath();
-
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
@@ -186,8 +174,6 @@ TEST_CASE(iterateUnfilled)
 
 TEST_CASE(populateThenIterate)
 {
-    nitf::Test::setNitfPluginPath();
-
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
@@ -214,8 +200,6 @@ TEST_CASE(populateThenIterate)
 
 TEST_CASE(populateWhileIterating)
 {
-    nitf::Test::setNitfPluginPath();
-
     nitf_Error error;
     nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
@@ -247,8 +231,7 @@ TEST_CASE(populateWhileIterating)
 }
 
 TEST_MAIN(
-    (void) argc;
-    (void) argv;
+    nitf::Test::setNitfPluginPath();
 
     TEST_CHECK(testClone);
     TEST_CHECK(testSize);

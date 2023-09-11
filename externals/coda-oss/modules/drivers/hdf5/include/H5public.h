@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -80,7 +79,7 @@
 /**
  * For minor interface/format changes
  */
-#define H5_VERS_MINOR 13
+#define H5_VERS_MINOR 14
 /**
  * For tweaks, bug-fixes, or development
  */
@@ -92,7 +91,7 @@
 /**
  * Full version string
  */
-#define H5_VERS_INFO "HDF5 library version: 1.13.2"
+#define H5_VERS_INFO "HDF5 library version: 1.14.2"
 
 #define H5check() H5check_version(H5_VERS_MAJOR, H5_VERS_MINOR, H5_VERS_RELEASE)
 
@@ -398,19 +397,6 @@ typedef struct H5O_token_t {
 //! <!-- [H5O_token_t_snip] -->
 
 /**
- * Allocation statistics info struct
- */
-typedef struct H5_alloc_stats_t {
-    unsigned long long total_alloc_bytes;        /**< Running count of total # of bytes allocated */
-    size_t             curr_alloc_bytes;         /**< Current # of bytes allocated */
-    size_t             peak_alloc_bytes;         /**< Peak # of bytes allocated */
-    size_t             max_block_size;           /**< Largest block allocated */
-    size_t             total_alloc_blocks_count; /**< Running count of total # of blocks allocated */
-    size_t             curr_alloc_blocks_count;  /**< Current # of blocks allocated */
-    size_t             peak_alloc_blocks_count;  /**< Peak # of blocks allocated */
-} H5_alloc_stats_t;
-
-/**
  * Library shutdown callback, used by H5atclose().
  */
 typedef void (*H5_atclose_func_t)(void *ctx);
@@ -435,7 +421,7 @@ extern "C" {
  *          issued. If one finds that an HDF5 library function is failing
  *          inexplicably, H5open() can be called first. It is safe to call
  *          H5open() before an application issues any other function calls to
- *          the HDF5 library as there are no damaging side effects in calling
+ *          the HDF5 library, as there are no damaging side effects in calling
  *          it more than once.
  */
 H5_DLL herr_t H5open(void);
@@ -448,13 +434,13 @@ H5_DLL herr_t H5open(void);
  *
  * \details H5atclose() registers a callback that the HDF5 library will invoke
  *          when closing.  The full capabilities of the HDF5 library are
- *          available to callbacks invoked through this mechanism, library
+ *          available to callbacks invoked through this mechanism, and library
  *          shutdown will only begin in earnest when all callbacks have been
  *          invoked and have returned.
  *
  *          Registered callbacks are invoked in LIFO order, similar to the
  *          Standard C 'atexit' routine.  For example, if 'func1' is registered,
- *          then 'func2', when the library is closing 'func2' will
+ *          then 'func2', when the library is closing 'func2', will
  *          be invoked first, then 'func1'.
  *
  *          The \p ctx pointer will be passed to \p func when it's invoked.
@@ -463,7 +449,7 @@ H5_DLL herr_t H5open(void);
  *          If the HDF5 library is initialized and closed more than once, the
  *          \p func callback must be registered within each open/close cycle.
  *
- * \since 1.13.0
+ * \since 1.14.0
  */
 H5_DLL herr_t H5atclose(H5_atclose_func_t func, void *ctx);
 /**
@@ -488,13 +474,13 @@ H5_DLL herr_t H5close(void);
  *          function is in situations where the library is dynamically linked
  *          into an application and is un-linked from the application before
  *          exit() gets called. In those situations, a routine installed with
- *          atexit() would jump to a routine which was no longer in memory,
+ *          atexit() would jump to a routine that was no longer in memory,
  *          causing errors.
  *
  * \attention In order to be effective, this routine \Emph{must} be called
  *            before any other HDF5 function calls, and must be called each
  *            time the library is loaded/linked into the application (the first
- *            time and after it's been un-loaded).
+ *            time and after it's been unloaded).
  */
 H5_DLL herr_t H5dont_atexit(void);
 /**
@@ -506,7 +492,7 @@ H5_DLL herr_t H5dont_atexit(void);
  *          of the library, freeing any unused memory.
  *
  *          It is not required that H5garbage_collect() be called at any
- *          particular time; it is only necessary in certain situations where
+ *          particular time; it is only necessary for certain situations where
  *          the application has performed actions that cause the library to
  *          allocate many objects. The application should call
  *          H5garbage_collect() if it eventually releases those objects and
@@ -592,27 +578,6 @@ H5_DLL herr_t H5set_free_list_limits(int reg_global_lim, int reg_list_lim, int a
 H5_DLL herr_t H5get_free_list_sizes(size_t *reg_size, size_t *arr_size, size_t *blk_size, size_t *fac_size);
 /**
  * \ingroup H5
- * \brief Gets the memory allocation statistics for the library
- *
- * \param[out] stats Memory allocation statistics
- * \return \herr_t
- *
- * \details H5get_alloc_stats() gets the memory allocation statistics for the
- *          library, if the \c --enable-memory-alloc-sanity-check option was
- *          given when building the library. Applications can check whether
- *          this option was enabled detecting if the
- *          \c H5_MEMORY_ALLOC_SANITY_CHECK macro is defined. This option is
- *          enabled by default for debug builds of the library and disabled by
- *          default for non-debug builds. If the option is not enabled, all the
- *          values returned with be 0. These statistics are global for the
- *          entire library, but do not include allocations from chunked dataset
- *          I/O filters or non-native VOL connectors.
- *
- * \since 1.10.7
- */
-H5_DLL herr_t H5get_alloc_stats(H5_alloc_stats_t *stats);
-/**
- * \ingroup H5
  * \brief Returns the HDF library release number
  *
  * \param[out] majnum The major version number of the library
@@ -687,7 +652,7 @@ H5_DLL herr_t H5check_version(unsigned majnum, unsigned minnum, unsigned relnum)
  *          after it has been closed.  The value of \p is_terminating is
  *          undefined if this routine fails.
  *
- * \since 1.13.0
+ * \since 1.14.0
  */
 H5_DLL herr_t H5is_library_terminating(hbool_t *is_terminating);
 /**
@@ -713,13 +678,13 @@ H5_DLL herr_t H5is_library_threadsafe(hbool_t *is_ts);
  * \param[in] mem Buffer to be freed. Can be NULL
  * \return \herr_t
  *
- * \details H5free_memory() frees memory that has been allocated by the caller
+ * \details H5free_memory() frees the memory that has been allocated by the caller
  *          with H5allocate_memory() or by the HDF5 library on behalf of the
  *          caller.
  *
  *          H5Tget_member_name() provides an example of memory allocation on
  *          behalf of the caller: The function returns a buffer containing the
- *          name of a compound datatype member. It is the caller’s
+ *          name of a compound datatype member. It is the caller's
  *          responsibility to eventually free that buffer with H5free_memory().
  *
  * \attention It is especially important to use this function to free memory
@@ -745,7 +710,7 @@ H5_DLL herr_t H5is_library_threadsafe(hbool_t *is_ts);
 H5_DLL herr_t H5free_memory(void *mem);
 /**
  * \ingroup H5
- * \brief Frees memory allocated by the HDF5 library
+ * \brief Allocates memory that will be freed later internally.
  *
  * \param[in] size The size in bytes of the buffer to be allocated
  * \param[in] clear Flag whether the new buffer is to be initialized with 0
@@ -763,7 +728,7 @@ H5_DLL herr_t H5free_memory(void *mem);
  *          initialized.
  *
  *          This function is intended to have the semantics of malloc() and
- *          calloc(). However, unlike malloc() and calloc() which allow for a
+ *          calloc(). However, unlike malloc() and calloc(), which allow for a
  *          "special" pointer to be returned instead of NULL, this function
  *          always returns NULL on failure or when size is set to 0 (zero).
  *
@@ -775,7 +740,7 @@ H5_DLL herr_t H5free_memory(void *mem);
  *            the same library that initially allocated it. In most cases, the
  *            HDF5 API uses resources that are allocated and freed either
  *            entirely by the user or entirely by the library, so this is not a
- *            problem. In rare cases, however, HDF5 API calls will free memory
+ *            problem. In rare cases, however, HDF5 API calls will free the memory
  *            that the user allocated. This function allows the user to safely
  *            allocate this memory.\n
  *            It is particularly important to use this function to allocate

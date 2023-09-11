@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -167,10 +166,10 @@
         unsigned               ioflags  = (IOF);                                                             \
                                                                                                              \
         /* Decode the message */                                                                             \
-        HDassert(msg_type->decode);                                                                          \
+        assert(msg_type->decode);                                                                            \
         if (NULL == ((MSG)->native = (msg_type->decode)((F), (OH), (MSG)->flags, &ioflags, (MSG)->raw_size,  \
                                                         (MSG)->raw)))                                        \
-            HGOTO_ERROR(H5E_OHDR, H5E_CANTDECODE, ERR, "unable to decode message")                           \
+            HGOTO_ERROR(H5E_OHDR, H5E_CANTDECODE, ERR, "unable to decode message");                          \
                                                                                                              \
         /* Mark the message dirty if it was changed by decoding */                                           \
         if ((ioflags & H5O_DECODEIO_DIRTY) && (H5F_get_intent((F)) & H5F_ACC_RDWR)) {                        \
@@ -182,7 +181,7 @@
                                                                                                              \
         /* Set the message's "shared info", if it's shareable */                                             \
         if ((MSG)->flags & H5O_MSG_FLAG_SHAREABLE) {                                                         \
-            HDassert(msg_type->share_flags &H5O_SHARE_IS_SHARABLE);                                          \
+            assert(msg_type->share_flags &H5O_SHARE_IS_SHARABLE);                                            \
             H5O_UPDATE_SHARED((H5O_shared_t *)(MSG)->native, H5O_SHARE_TYPE_HERE, (F), msg_type->id,         \
                               (MSG)->crt_idx, (OH)->chunk[0].addr)                                           \
         } /* end if */                                                                                       \
@@ -191,7 +190,7 @@
         if (msg_type->set_crt_index) {                                                                       \
             /* Set the creation index for the message */                                                     \
             if ((msg_type->set_crt_index)((MSG)->native, (MSG)->crt_idx) < 0)                                \
-                HGOTO_ERROR(H5E_OHDR, H5E_CANTSET, ERR, "unable to set creation index")                      \
+                HGOTO_ERROR(H5E_OHDR, H5E_CANTSET, ERR, "unable to set creation index");                     \
         } /* end if */                                                                                       \
     }     /* end if */
 

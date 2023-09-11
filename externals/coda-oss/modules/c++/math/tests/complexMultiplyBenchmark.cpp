@@ -199,7 +199,7 @@ void loopingBenchmark(size_t size,
     std::vector<std::complex<float> > arr(size);
 
     //fill the vector based on a random number
-    srand(static_cast<unsigned int>(time(NULL)));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     auto real = static_cast<float>(rand() % 100 + 1);
     auto imag = static_cast<float>(rand() % 100 + 1);
@@ -297,7 +297,7 @@ void singlePassBenchmark(size_t size,
     std::vector<std::complex<float> > arr;
     arr.reserve(endSize);
 
-    srand(static_cast<unsigned int>(time(NULL)));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     auto real =  static_cast<float>(rand() % 100 + 1);
     auto imag =  static_cast<float>(rand() % 100 + 1);
