@@ -165,6 +165,10 @@ inline auto u8FromNative(const std::string& s)  // platform determines Windows-1
     #endif   
     return str::to_u8string(p, s.length());
 }
+inline auto u8FromString(const std::string& s)  // existing code
+{
+  return u8FromNative(s);
+}
 
 namespace details
 {
@@ -207,6 +211,11 @@ inline std::string to_native(const coda_oss::u8string& s) // cf., std::filesyste
 {
     return details::to_string(s);
 }
+inline std::string toString(const coda_oss::u8string& s) // existing code
+{
+  return to_native(s);
+}
+
 
 }
 
