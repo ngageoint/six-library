@@ -716,7 +716,7 @@ std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    auto result = parseDataFromString(xmlReg, str::u8FromString(xmlStr), dataType, &schemaPaths, &log);
+    auto result = parseDataFromString(xmlReg, str::u8FromNative(xmlStr), dataType, &schemaPaths, &log);
     return std::unique_ptr<Data>(result.release());
 }
 

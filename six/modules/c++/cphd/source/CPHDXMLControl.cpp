@@ -134,7 +134,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    return fromXML(str::u8FromString(xmlString), schemaPaths);
+    return fromXML(str::u8FromNative(xmlString), schemaPaths);
 }
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString,
     const std::vector<std::filesystem::path>& schemaPaths)

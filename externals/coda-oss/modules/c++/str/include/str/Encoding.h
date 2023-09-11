@@ -165,10 +165,6 @@ inline auto u8FromNative(const std::string& s)  // platform determines Windows-1
     #endif   
     return str::to_u8string(p, s.length());
 }
-inline auto u8FromString(const std::string& s)  // existing code
-{
-  return u8FromNative(s);
-}
 
 namespace details
 {
