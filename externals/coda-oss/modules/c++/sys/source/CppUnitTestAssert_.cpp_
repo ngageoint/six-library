@@ -35,5 +35,5 @@ void test::Assert::FailOnCondition(bool condition, const unsigned short* message
 std::wstring GetAssertMessage(bool equality, const std::wstring& expected, const std::wstring& actual, const wchar_t *message); // declare caller
 std::wstring test::Assert::GetAssertMessage(bool equality, const std::string& expected, const std::string& actual, const wchar_t *message)
 {
-    return ::GetAssertMessage(equality, str::toWString(expected), str::toWString(actual), message); // and call!
+    return ::GetAssertMessage(equality, str::details::to_wstring(expected), str::details::to_wstring(actual), message); // and call!
 }

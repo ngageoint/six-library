@@ -568,7 +568,7 @@ void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPat
         const Data* data = getContainer()->getData(ii);
 
         const auto xml = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
-        desStrs[ii] = str::toString(xml);
+        desStrs[ii] = str::to_native(xml);
         nitf::SegmentWriter deWriter = mWriter.newDEWriter(gsl::narrow<int>(ii));
         nitf::SegmentMemorySource segSource(desStrs[ii], 0, 0, false);
         deWriter.attachSource(segSource);

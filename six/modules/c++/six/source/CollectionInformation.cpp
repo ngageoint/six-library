@@ -48,7 +48,7 @@ CollectionInformation* CollectionInformation::clone() const
 
 std::string CollectionInformation::getClassificationLevel() const
 {
-    return str::toString(mClassification);
+    return str::to_native(mClassification);
 }
 void CollectionInformation::getClassificationLevel(std::u8string& result) const
 {

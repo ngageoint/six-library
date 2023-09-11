@@ -234,12 +234,12 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     tiff::IFDEntry* const xmlEntry = (*ifd)[Constants::GT_XML_TAG];
 
     auto xml = six::toValidXMLString(data, schemaPaths, mLog);
-    xmlEntry->addValues(str::toString(xml));
+    xmlEntry->addValues(str::to_native(xml));
 
     for (size_t jj = 0; jj < mComplexData.size(); ++jj)
     {
         xml = six::toValidXMLString(mComplexData[jj], schemaPaths, mLog);
-        xmlEntry->addValues(str::toString(xml));
+        xmlEntry->addValues(str::to_native(xml));
     }
 }
 
