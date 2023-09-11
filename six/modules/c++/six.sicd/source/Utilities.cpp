@@ -1024,7 +1024,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
         const std::vector<std::string>& schemaPaths_,
         logging::Logger& log)
 {
-    const auto xmlStr = str::u8FromString(xmlStr_);
+    const auto xmlStr = str::u8FromNative(xmlStr_);
 
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
