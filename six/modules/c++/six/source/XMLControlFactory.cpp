@@ -78,12 +78,6 @@ std::u8string six::toXMLString(const Data* data,
     return toValidXMLString(data, std::vector<std::string>(),
                             &log, xmlRegistry);
 }
-std::string six::toXMLString_(const Data* data,
-    const six::XMLControlRegistry* xmlRegistry)
-{
-    const auto result = toXMLString(data, xmlRegistry);
-    return str::to_native(result);
-}
 
 template<typename TSchemaPaths>
 std::u8string six_toValidXMLString(const Data& data,

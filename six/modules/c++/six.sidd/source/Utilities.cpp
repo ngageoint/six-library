@@ -580,16 +580,6 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string&
     return dataParser.fromXML(xmlStr);
 }
 
-std::string Utilities::toXMLString(const DerivedData& data,
-                                   const std::vector<std::string>& schemaPaths_, logging::Logger* logger)
-{
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
-    const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::to_native(result);
-}
 std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {

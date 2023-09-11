@@ -72,10 +72,6 @@ std::u8string CPHDXMLControl::toXMLString(const Metadata& metadata)
 
     return str::u8FromNative("<?xml version=\"1.0\"?>") + ss.stream().str();
 }
-std::string CPHDXMLControl::toXMLString_(const Metadata& metadata)
-{
-    return str::to_native(toXMLString(metadata));
-}
 
 size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
 {
@@ -491,11 +487,6 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
     return adpXML;
 }
 
-std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
-{
-    auto result = fromXML(str::u8FromNative(xmlString));
-    return std::unique_ptr<Metadata>(result.release());
-}
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString)
 {
     io::U8StringStream stringStream;

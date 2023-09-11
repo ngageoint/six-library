@@ -60,10 +60,7 @@ public:
     std::unique_ptr<Metadata> fromXML(const xml::lite::Document* doc);
    Metadata fromXML(const xml::lite::Document& doc);
 
-    std::unique_ptr<Metadata> fromXML(const std::string& xmlString);
     std::unique_ptr<Metadata> fromXML(const std::u8string& xmlString);
-
-    std::string toXMLString_(const Metadata& metadata);
     std::u8string toXMLString(const Metadata& metadata);
 
     size_t getXMLsize(const Metadata& metadata);

@@ -108,8 +108,8 @@ void SICDSensorModel::initializeFromFile(const std::string& pathname)
                 container->getData(0)->clone()));
 
         // get xml as string for sensor model state
-        const auto xmlStr = six::toXMLString_(mData.get(), &xmlRegistry);
-        mSensorModelState = NAME + std::string(" ") + xmlStr;
+        const auto xmlStr = six::toXMLString(mData.get(), &xmlRegistry);
+        mSensorModelState = NAME + std::string(" ") + str::to_native(xmlStr);
         reinitialize();
     }
     catch (const except::Exception& ex)

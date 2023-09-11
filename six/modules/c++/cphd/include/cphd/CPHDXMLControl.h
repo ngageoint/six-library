@@ -89,10 +89,6 @@ public:
             const Metadata& metadata,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             bool prettyPrint = false);
-    std::string toXMLString_(
-        const Metadata& metadata,
-        const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
-        bool prettyPrint = false);
     virtual std::u8string toXMLString(
         const Metadata& metadata,
         const std::vector<std::filesystem::path>* pSchemaPaths,

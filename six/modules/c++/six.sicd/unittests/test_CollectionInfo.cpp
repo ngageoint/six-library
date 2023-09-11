@@ -92,7 +92,7 @@ TEST_CASE(FakeComplexData)
     const auto data = six::sicd::Utilities::createFakeComplexData();
 
     const std::vector<std::string> schemaPaths;
-    const auto result = six::sicd::Utilities::toXMLString(*data, schemaPaths);
+    const auto result = six::sicd::Utilities::toXMLString(*data, nullptr);
     TEST_ASSERT_FALSE(result.empty());
 }
 

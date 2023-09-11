@@ -84,14 +84,6 @@ std::u8string CPHDXMLControl::toXMLString(
 
     return toXMLString(metadata, &schemaPaths, prettyPrint);
 }
-std::string CPHDXMLControl::toXMLString_(
-    const Metadata& metadata,
-    const std::vector<std::string>& schemaPaths,
-    bool prettyPrint)
-{
-    const auto result = toXMLString(metadata, schemaPaths, prettyPrint);
-    return str::to_native(result);
-}
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(
         const Metadata& metadata,
