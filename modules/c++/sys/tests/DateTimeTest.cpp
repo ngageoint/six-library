@@ -54,7 +54,7 @@ int main(int, char**)
         sys::CPUStopWatch csw;
         //std::cout << "CPS: " << CLOCKS_PER_SEC << std::endl;
         std::cout << "clock(): " << clock() / CLOCKS_PER_SEC << std::endl;
-        std::cout << "time(): " << time(NULL) << std::endl;
+        std::cout << "time(): " << time(nullptr) << std::endl;
         std::cout << "RTStart: " << sw.start() << std::endl;
         std::cout << "CStart: " << csw.start() << std::endl;
         int x = 0;
@@ -82,7 +82,7 @@ int main(int, char**)
         }
         std::cout << "Finish Loop 3" << std::endl;
         std::cout << "clock(): " << clock() / CLOCKS_PER_SEC << std::endl;
-        std::cout << "time(): " << time(NULL) << std::endl;
+        std::cout << "time(): " << time(nullptr) << std::endl;
         std::cout << "RTStop: " << std::setprecision(50) << sw.stop()
                 << std::endl;
         std::cout << "CStop: " << std::setprecision(50) << csw.stop()

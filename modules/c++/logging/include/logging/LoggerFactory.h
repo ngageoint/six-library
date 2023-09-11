@@ -24,15 +24,15 @@
 //  LoggerFactory.h
 ///////////////////////////////////////////////////////////
 
-#ifndef __LOGGING_LOGGER_FACTORY_H__
-#define __LOGGING_LOGGER_FACTORY_H__
+#pragma once
+#ifndef CODA_OSS_logging_LoggerFactory_h_INCLUDED_
+#define CODA_OSS_logging_LoggerFactory_h_INCLUDED_
 
 #include <map>
 #include <memory>
 #include <mutex>
 
-#include <import/sys.h>
-#include <import/mt.h>
+#include <mt/Singleton.h>
 #include <mem/SharedPtr.h>
 #include "logging/DefaultLogger.h"
 
@@ -133,5 +133,4 @@ Logger* getLogger(const std::string& name = "root");
  std::shared_ptr<logging::Logger> getLoggerSharedPtr(const std::string& name = "root");
 
 }
-#endif
-
+#endif  // CODA_OSS_logging_LoggerFactory_h_INCLUDED_

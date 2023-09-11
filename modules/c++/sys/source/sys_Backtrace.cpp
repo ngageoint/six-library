@@ -24,7 +24,7 @@
 
 std::string sys::getBacktrace(bool* pSupported)
 {
-    bool supported;
+    bool supported = false;
     std::vector<std::string> frames;
     bool& supported_ = pSupported != nullptr ? *pSupported : supported;
     return getBacktrace(supported_, frames);

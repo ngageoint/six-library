@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,10 +13,8 @@
 /*-------------------------------------------------------------------------
  *
  * Created:             H5Ostab.c
- *                      Aug  6 1997
- *                      Robb Matzke
  *
- * Purpose:             Symbol table messages.
+ * Purpose:             Symbol table messages
  *
  *-------------------------------------------------------------------------
  */
@@ -79,41 +76,39 @@ H5FL_DEFINE_STATIC(H5O_stab_t);
  * Purpose:     Decode a symbol table message and return a pointer to
  *              a newly allocated one.
  *
- * Return:      Success:        Ptr to new message in native order.
- *
- *              Failure:        NULL
- *
- * Programmer:  Robb Matzke
- *              Aug  6 1997
- *
+ * Return:      Success:    Pointer to new message in native order
+ *              Failure:    NULL
  *-------------------------------------------------------------------------
  */
 static void *
 H5O__stab_decode(H5F_t *f, H5O_t H5_ATTR_UNUSED *open_oh, unsigned H5_ATTR_UNUSED mesg_flags,
-                 unsigned H5_ATTR_UNUSED *ioflags, size_t H5_ATTR_UNUSED p_size, const uint8_t *p)
+                 unsigned H5_ATTR_UNUSED *ioflags, size_t p_size, const uint8_t *p)
 {
-    H5O_stab_t *stab      = NULL;
-    void       *ret_value = NULL; /* Return value */
+    H5O_stab_t    *stab      = NULL;
+    const uint8_t *p_end     = p + p_size - 1; /* End of the p buffer */
+    void          *ret_value = NULL;
 
     FUNC_ENTER_PACKAGE
 
-    /* check args */
-    HDassert(f);
-    HDassert(p);
+    assert(f);
+    assert(p);
 
-    /* decode */
     if (NULL == (stab = H5FL_CALLOC(H5O_stab_t)))
-        HGOTO_ERROR(H5E_RESOURCE, H5E_NOSPACE, NULL, "memory allocation failed")
+        HGOTO_ERROR(H5E_RESOURCE, H5E_NOSPACE, NULL, "memory allocation failed");
+
+    if (H5_IS_BUFFER_OVERFLOW(p, H5F_sizeof_addr(f), p_end))
+        HGOTO_ERROR(H5E_OHDR, H5E_OVERFLOW, NULL, "ran off end of input buffer while decoding");
     H5F_addr_decode(f, &p, &(stab->btree_addr));
+
+    if (H5_IS_BUFFER_OVERFLOW(p, H5F_sizeof_addr(f), p_end))
+        HGOTO_ERROR(H5E_OHDR, H5E_OVERFLOW, NULL, "ran off end of input buffer while decoding");
     H5F_addr_decode(f, &p, &(stab->heap_addr));
 
-    /* Set return value */
     ret_value = stab;
 
 done:
-    if (ret_value == NULL)
-        if (stab != NULL)
-            stab = H5FL_FREE(H5O_stab_t, stab);
+    if (!ret_value && stab)
+        H5FL_FREE(H5O_stab_t, stab);
 
     FUNC_LEAVE_NOAPI(ret_value)
 } /* end H5O__stab_decode() */
@@ -125,9 +120,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Robb Matzke
- *              Aug  6 1997
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -138,9 +130,9 @@ H5O__stab_encode(H5F_t *f, hbool_t H5_ATTR_UNUSED disable_shared, uint8_t *p, co
     FUNC_ENTER_PACKAGE_NOERR
 
     /* check args */
-    HDassert(f);
-    HDassert(p);
-    HDassert(stab);
+    assert(f);
+    assert(p);
+    assert(stab);
 
     /* encode */
     H5F_addr_encode(f, &p, stab->btree_addr);
@@ -159,9 +151,6 @@ H5O__stab_encode(H5F_t *f, hbool_t H5_ATTR_UNUSED disable_shared, uint8_t *p, co
  *
  *              Failure:        NULL
  *
- * Programmer:  Robb Matzke
- *              Aug  6 1997
- *
  *-------------------------------------------------------------------------
  */
 static void *
@@ -174,7 +163,7 @@ H5O__stab_copy(const void *_mesg, void *_dest)
     FUNC_ENTER_PACKAGE
 
     /* check args */
-    HDassert(stab);
+    assert(stab);
     if (!dest && NULL == (dest = H5FL_MALLOC(H5O_stab_t)))
         HGOTO_ERROR(H5E_RESOURCE, H5E_NOSPACE, NULL, "memory allocation failed");
 
@@ -199,9 +188,6 @@ done:
  *
  *              Failure:        zero
  *
- * Programmer:  Robb Matzke
- *              Aug  6 1997
- *
  *-------------------------------------------------------------------------
  */
 static size_t
@@ -224,9 +210,6 @@ H5O__stab_size(const H5F_t *f, hbool_t H5_ATTR_UNUSED disable_shared, const void
  *
  * Return:	Non-negative on success/Negative on failure
  *
- * Programmer:	Quincey Koziol
- *              Thursday, March 30, 2000
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -234,7 +217,7 @@ H5O__stab_free(void *mesg)
 {
     FUNC_ENTER_PACKAGE_NOERR
 
-    HDassert(mesg);
+    assert(mesg);
 
     mesg = H5FL_FREE(H5O_stab_t, mesg);
 
@@ -248,9 +231,6 @@ H5O__stab_free(void *mesg)
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Quincey Koziol
- *              Thursday, March 20, 2003
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -261,12 +241,12 @@ H5O__stab_delete(H5F_t *f, H5O_t H5_ATTR_UNUSED *open_oh, void *mesg)
     FUNC_ENTER_PACKAGE
 
     /* check args */
-    HDassert(f);
-    HDassert(mesg);
+    assert(f);
+    assert(mesg);
 
     /* Free the file space for the symbol table */
     if (H5G__stab_delete(f, (const H5O_stab_t *)mesg) < 0)
-        HGOTO_ERROR(H5E_OHDR, H5E_CANTFREE, FAIL, "unable to free symbol table")
+        HGOTO_ERROR(H5E_OHDR, H5E_CANTFREE, FAIL, "unable to free symbol table");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -280,9 +260,6 @@ done:
  * Return:      Success:        Ptr to _DEST
  *
  *              Failure:        NULL
- *
- * Programmer:  Peter Cao
- *              September 10, 2005
  *
  *-------------------------------------------------------------------------
  */
@@ -300,23 +277,23 @@ H5O__stab_copy_file(H5F_t *file_src, void *native_src, H5F_t *file_dst,
     FUNC_ENTER_PACKAGE
 
     /* check args */
-    HDassert(stab_src);
-    HDassert(file_dst);
+    assert(stab_src);
+    assert(file_dst);
 
     /* Allocate space for the destination stab */
     if (NULL == (stab_dst = H5FL_MALLOC(H5O_stab_t)))
-        HGOTO_ERROR(H5E_RESOURCE, H5E_NOSPACE, NULL, "memory allocation failed")
+        HGOTO_ERROR(H5E_RESOURCE, H5E_NOSPACE, NULL, "memory allocation failed");
 
     /* Get the old local heap's size and use that as the hint for the new heap */
     if (H5HL_get_size(file_src, stab_src->heap_addr, &size_hint) < 0)
-        HGOTO_ERROR(H5E_SYM, H5E_CANTGETSIZE, NULL, "can't query local heap size")
+        HGOTO_ERROR(H5E_SYM, H5E_CANTGETSIZE, NULL, "can't query local heap size");
 
     /* Set copy metadata tag */
-    H5_BEGIN_TAG(H5AC__COPIED_TAG);
+    H5_BEGIN_TAG(H5AC__COPIED_TAG)
 
     /* Create components of symbol table message */
     if (H5G__stab_create_components(file_dst, stab_dst, size_hint) < 0)
-        HGOTO_ERROR_TAG(H5E_SYM, H5E_CANTINIT, NULL, "can't create symbol table components")
+        HGOTO_ERROR_TAG(H5E_SYM, H5E_CANTINIT, NULL, "can't create symbol table components");
 
     /* Reset metadata tag */
     H5_END_TAG
@@ -344,9 +321,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Peter Cao
- *              September 28, 2005
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -361,15 +335,15 @@ H5O__stab_post_copy_file(const H5O_loc_t *src_oloc, const void *mesg_src, H5O_lo
     FUNC_ENTER_PACKAGE
 
     /* check args */
-    HDassert(stab_src);
-    HDassert(H5F_addr_defined(dst_oloc->addr));
-    HDassert(dst_oloc->file);
-    HDassert(stab_dst);
-    HDassert(cpy_info);
+    assert(stab_src);
+    assert(H5_addr_defined(dst_oloc->addr));
+    assert(dst_oloc->file);
+    assert(stab_dst);
+    assert(cpy_info);
 
     /* If we are performing a 'shallow hierarchy' copy, get out now */
     if (cpy_info->max_depth >= 0 && cpy_info->curr_depth >= cpy_info->max_depth)
-        HGOTO_DONE(SUCCEED)
+        HGOTO_DONE(SUCCEED);
 
     /* Set up B-tree iteration user data */
     udata.src_oloc      = src_oloc;
@@ -380,7 +354,7 @@ H5O__stab_post_copy_file(const H5O_loc_t *src_oloc, const void *mesg_src, H5O_lo
 
     /* Iterate over objects in group, copying them */
     if ((H5B_iterate(src_oloc->file, H5B_SNODE, stab_src->btree_addr, H5G__node_copy, &udata)) < 0)
-        HGOTO_ERROR(H5E_SYM, H5E_CANTINIT, FAIL, "iteration operator failed")
+        HGOTO_ERROR(H5E_SYM, H5E_CANTINIT, FAIL, "iteration operator failed");
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)
@@ -393,9 +367,6 @@ done:
  *
  * Return:      Non-negative on success/Negative on failure
  *
- * Programmer:  Robb Matzke
- *              Aug  6 1997
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -406,15 +377,15 @@ H5O__stab_debug(H5F_t H5_ATTR_UNUSED *f, const void *_mesg, FILE *stream, int in
     FUNC_ENTER_PACKAGE_NOERR
 
     /* check args */
-    HDassert(f);
-    HDassert(stab);
-    HDassert(stream);
-    HDassert(indent >= 0);
-    HDassert(fwidth >= 0);
+    assert(f);
+    assert(stab);
+    assert(stream);
+    assert(indent >= 0);
+    assert(fwidth >= 0);
 
-    HDfprintf(stream, "%*s%-*s %" PRIuHADDR "\n", indent, "", fwidth, "B-tree address:", stab->btree_addr);
+    fprintf(stream, "%*s%-*s %" PRIuHADDR "\n", indent, "", fwidth, "B-tree address:", stab->btree_addr);
 
-    HDfprintf(stream, "%*s%-*s %" PRIuHADDR "\n", indent, "", fwidth, "Name heap address:", stab->heap_addr);
+    fprintf(stream, "%*s%-*s %" PRIuHADDR "\n", indent, "", fwidth, "Name heap address:", stab->heap_addr);
 
     FUNC_LEAVE_NOAPI(SUCCEED)
 } /* end H5O__stab_debug() */

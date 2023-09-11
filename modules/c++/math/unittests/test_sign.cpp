@@ -23,6 +23,7 @@
 #include <TestCase.h>
 #include <math/Utilities.h>
 #include <limits>
+#include <std/numbers>
 
 TEST_CASE(testZero)
 {
@@ -43,9 +44,19 @@ TEST_CASE(testNegative)
     TEST_ASSERT_EQ(math::sign(-0.1), -1);
 }
 
+TEST_CASE(testConstants)
+{
+    static auto pi = std::numbers::pi; // "Conditional expression is constant"
+    TEST_ASSERT_EQ(pi, M_PI);
+
+    static auto e = std::numbers::e;  // "Conditional expression is constant"
+    TEST_ASSERT_EQ(e, M_E);
+}
+
 TEST_MAIN(
     TEST_CHECK(testZero);
     TEST_CHECK(testPositive);
     TEST_CHECK(testNegative);
+    TEST_CHECK(testConstants);
     )
 

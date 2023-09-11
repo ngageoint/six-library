@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -12,12 +11,9 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
- * Programmer:	Quincey Koziol
- *		Thursday, May 15, 2003
- *
- * Purpose:	This file contains declarations which are visible only within
- *		the H5I package.  Source files outside the H5I package should
- *		include H5Iprivate.h instead.
+ * Purpose: This file contains declarations which are visible only within
+ *          the H5I package.  Source files outside the H5I package should
+ *          include H5Iprivate.h instead.
  */
 #if !(defined H5I_FRIEND || defined H5I_MODULE)
 #error "Do not include this file outside the H5I package!"

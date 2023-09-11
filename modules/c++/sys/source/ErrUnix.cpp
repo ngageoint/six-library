@@ -33,7 +33,7 @@ int sys::Err::getLast() const
 std::string sys::Err::toString() const
 {
     char *temp = strerror(mErrId);
-    if (temp == NULL)
+    if (temp == nullptr)
         return std::string("");
 
     std::string stringError = temp;

@@ -23,11 +23,7 @@
 #include <iostream>
 #include <import/str.h>
 
-#if defined(TEST_FUNTOR)
-#   define FORMAT_FUNC (std::string)str::Format
-#else
-#   define FORMAT_FUNC str::format
-#endif
+#define FORMAT_FUNC str::Format
 
 int main()
 {

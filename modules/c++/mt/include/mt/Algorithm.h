@@ -30,41 +30,12 @@
 
 namespace mt
 {
-namespace details
-{
-    template <typename InputIt, typename OutputIt, typename TFunc>
-    inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-        typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
-    {
-        // https://en.cppreference.com/w/cpp/thread/async
-        const auto len = std::distance(first1, last1);
-        if (len < cutoff)
-        {
-            return std::transform(first1, last1, d_first, f);
-        }
-
-        const auto mid1 = first1 + len / 2;
-        const auto d_mid = d_first + len / 2;
-        auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff, policy);
-        details::transform_async(first1, mid1, d_first, f, cutoff, policy);
-        return handle.get();
-    }
-}
-template <typename InputIt, typename OutputIt, typename TFunc>
-inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-    typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
-{
-    // details::... eliminates the overload
-    return details::transform_async(first1, last1, d_first, f, cutoff, policy);
-}
-template <typename InputIt, typename OutputIt, typename TFunc>
-inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-    typename std::iterator_traits<InputIt>::difference_type cutoff)
-{
-    const std::launch policy = std::launch::deferred | std::launch::async;
-    return transform_async(first1, last1, d_first, f, cutoff, policy);
+// There was a transform_async() utility here, but I removed it.
+//
+// First of all, C++11's std::async() is now (in 2023) thought of as maybe a
+// bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
+// parallel algorithms which might be a better ... although we're still at C++14.
 }
 
-}
 #endif // CODA_OSS_mt_Algorithm_h_INCLUDED_
 

@@ -69,19 +69,19 @@ size_t cpp11Function(std::shared_ptr<Foo> foo)
 TEST_CASE(testNullCopying)
 {
     mem::SharedPtr<int> ptr1;
-    TEST_ASSERT_EQ(ptr1.get(), static_cast<int *>(NULL));
+    TEST_ASSERT_EQ(ptr1.get(), static_cast<int *>(nullptr));
 
     // Copy construction
     const mem::SharedPtr<int> ptr2(ptr1);
-    TEST_ASSERT_EQ(ptr2.get(), static_cast<int *>(NULL));
+    TEST_ASSERT_EQ(ptr2.get(), static_cast<int *>(nullptr));
 
     // Assignment operator
     mem::SharedPtr<int> ptr3;
     ptr3 = ptr1;
-    TEST_ASSERT_EQ(ptr3.get(), static_cast<int *>(NULL));
+    TEST_ASSERT_EQ(ptr3.get(), static_cast<int *>(nullptr));
 
     ptr1.reset();
-    TEST_ASSERT_EQ(ptr1.get(), static_cast<int *>(NULL));
+    TEST_ASSERT_EQ(ptr1.get(), static_cast<int *>(nullptr));
 }
 
 TEST_CASE(testAutoPtrConstructor)
@@ -90,7 +90,7 @@ TEST_CASE(testAutoPtrConstructor)
     std::unique_ptr<int> autoPtr(rawPtr);
     const mem::SharedPtr<int> ptr(autoPtr.release());
     TEST_ASSERT_EQ(ptr.get(), rawPtr);
-    TEST_ASSERT_EQ(autoPtr.get(), static_cast<int *>(NULL));
+    TEST_ASSERT_EQ(autoPtr.get(), static_cast<int *>(nullptr));
     //TEST_ASSERT_EQ(ptr.getCount(), 1);
     TEST_ASSERT_EQ(ptr.use_count(), 1);
     TEST_ASSERT_EQ(getCount(ptr), 1);
@@ -287,7 +287,7 @@ TEST_CASE(testCasting)
         std::unique_ptr<Bar> autoBar(rawBar);
         const mem::SharedPtr<Foo> fooPtr(autoBar.release());
         TEST_ASSERT_EQ(fooPtr.get(), rawBar);
-        TEST_ASSERT_EQ(autoBar.get(), static_cast<Bar *>(NULL));
+        TEST_ASSERT_EQ(autoBar.get(), static_cast<Bar *>(nullptr));
         //TEST_ASSERT_EQ(fooPtr.getCount(), 1);
         TEST_ASSERT_EQ(fooPtr.use_count(), 1);
         TEST_ASSERT_EQ(getCount(fooPtr), 1);

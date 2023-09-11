@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,8 +13,6 @@
 /*-------------------------------------------------------------------------
  *
  * Created:   H5ACprivate.h
- *            Jul  9 1997
- *            Robb Matzke
  *
  * Purpose:   Constants and typedefs available to the rest of the
  *            library.
@@ -125,7 +122,7 @@ typedef enum {
 #define H5AC__DEFAULT_MIN_CLEAN_SIZE H5C__DEFAULT_MIN_CLEAN_SIZE
 
 /* Check if we are sanity checking tagging */
-#if H5C_DO_TAGGING_SANITY_CHECKS
+#ifdef H5C_DO_TAGGING_SANITY_CHECKS
 #define H5AC_DO_TAGGING_SANITY_CHECKS 1
 #else
 #define H5AC_DO_TAGGING_SANITY_CHECKS 0

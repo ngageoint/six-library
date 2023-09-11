@@ -19,15 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include "cli/Argument.h"
-#include "cli/ArgumentParser.h"
+
 #include <iterator>
 
+#include <import/sys.h>
+
+#include "cli/ArgumentParser.h"
+
 cli::Argument::Argument(const std::string& nameOrFlags, cli::ArgumentParser* parser):
-    mAction(cli::STORE), mMinArgs(0), mMaxArgs(1), mDefaultValue(NULL),
-            mOwnDefault(false), mConstValue(NULL), mOwnConst(false),
-            mRequired(false), mShowsHelp(true), mParser(parser)
+    mParser(parser)
 {
     std::vector < std::string > vars = str::split(nameOrFlags, " ");
     if (vars.size() == 1 && !str::startsWith(vars[0], "-"))

@@ -25,9 +25,11 @@
 void xml::lite::Serializable::serialize(io::OutputStream& os)
 {
     xml::lite::Element *root = getDocument()->getRootElement();
-    if (root != NULL)
+    if (root != nullptr)
+    {
         os.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-    root->print(os);
+        root->print(os);
+    }
 }
 
 void xml::lite::Serializable::deserialize(io::InputStream& is)
