@@ -137,7 +137,7 @@ inline std::unique_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
 
     // The DES's data is just the XML string
     const auto xml = six::toXMLString(data, &registry);
-    des.setData(str::toString(xml));
+    des.setData(str::to_native(xml));
     nitfIsd->addFileDes(des);
 
     return nitfIsd;

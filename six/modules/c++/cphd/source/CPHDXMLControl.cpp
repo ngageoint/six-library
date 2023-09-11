@@ -90,7 +90,7 @@ std::string CPHDXMLControl::toXMLString_(
     bool prettyPrint)
 {
     const auto result = toXMLString(metadata, schemaPaths, prettyPrint);
-    return str::toString(result);
+    return str::to_native(result);
 }
 
 std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXML(

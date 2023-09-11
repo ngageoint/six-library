@@ -207,11 +207,6 @@ inline std::string to_native(const coda_oss::u8string& s) // cf., std::filesyste
 {
     return details::to_string(s);
 }
-inline std::string toString(const coda_oss::u8string& s) // existing code
-{
-  return to_native(s);
-}
-
 
 }
 

@@ -74,7 +74,7 @@ std::u8string CPHDXMLControl::toXMLString(const Metadata& metadata)
 }
 std::string CPHDXMLControl::toXMLString_(const Metadata& metadata)
 {
-    return str::toString(toXMLString(metadata));
+    return str::to_native(toXMLString(metadata));
 }
 
 size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)

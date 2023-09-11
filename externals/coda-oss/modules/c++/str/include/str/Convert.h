@@ -89,7 +89,7 @@ inline std::string toString(const std::string& value)
 std::string toString(const std::wstring&) = delete;
 std::string toString(const std::u16string&) = delete;
 std::string toString(const std::u32string&) = delete;
-//std::string toString(const coda_oss::u8string&) = delete;
+std::string toString(const coda_oss::u8string&) = delete;
 std::string toString(const str::W1252string&) = delete;
 
 inline std::string toString(std::string::const_pointer pStr)

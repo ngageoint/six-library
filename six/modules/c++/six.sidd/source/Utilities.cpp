@@ -588,7 +588,7 @@ std::string Utilities::toXMLString(const DerivedData& data,
         [](const std::string& s) { return s; });
 
     const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::toString(result);
+    return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
