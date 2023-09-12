@@ -132,7 +132,7 @@ inline void assert_almost_eq(const std::string& testName, long double X1, long d
 #define TEST_ASSERT_EQ_MSG(msg, X1, X2) testName, Microsoft::VisualStudio::CppUnitTestFramework::Logger::WriteMessage(msg.c_str()); TEST_ASSERT_EQ(X1, X2)
 
 #undef TEST_FAIL_MSG
-#define TEST_FAIL_MSG(msg) { (void)testName; Microsoft::VisualStudio::CppUnitTestFramework::Assert::Fail(str::toWString(msg).c_str()); }
+#define TEST_FAIL_MSG(msg) { (void)testName; Microsoft::VisualStudio::CppUnitTestFramework::Assert::Fail(str::details::to_wstring(msg).c_str()); }
 
 #undef TEST_EXCEPTION
 #undef TEST_THROWS

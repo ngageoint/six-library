@@ -207,7 +207,7 @@ using XMLCh_t = wchar_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
 inline void reset(const std::u8string& xml, std::unique_ptr<std::wstring>& pWString)
 {
-    pWString = std::make_unique<std::wstring>(str::toWString(xml));
+    pWString = std::make_unique<std::wstring>(str::details::to_wstring(xml));
 }
 #else
 using XMLCh_t = char16_t;
@@ -283,8 +283,8 @@ static coda_oss::u8string encodeXml(const std::string& xml)
         return to_u8string(str::str<str::W1252string>(xml));
     }
 
-    // No "... encoding= ..."; let u8FromString() deal with it   
-    return str::u8FromString(xml);
+    // No "... encoding= ..."; let u8FromNative() deal with it   
+    return str::u8FromNative(xml);
 }
 
 bool ValidatorXerces::validate(const std::string& xml,

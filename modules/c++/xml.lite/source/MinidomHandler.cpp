@@ -73,7 +73,7 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
     // If we're still here despite use_char() being "false" then the
     // wide-character routine "failed."  On Windows, that means the char* value
     // is encoded as Windows-1252 (more-or-less ISO8859-1).
-    characters(str::u8FromString(std::string(value, length)));
+    characters(str::u8FromNative(std::string(value, length)));
 }
 
 bool xml::lite::MinidomHandler::vcharacters(const void /*XMLCh*/* chars_, size_t length)

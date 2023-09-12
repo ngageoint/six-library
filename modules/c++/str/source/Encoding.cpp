@@ -218,7 +218,7 @@ inline void w1252to16(str::W1252string::const_pointer p, size_t sz, std::u16stri
     w1252_to_string(p, sz, result);
 
     #if defined(_WIN32) && (!defined(_NDEBUG) || defined(DEBUG))
-    const _bstr_t bstr(std::string(str::cast<const char*>(p), sz).c_str()); // no _bstr_t ctor taking sz
+    const _bstr_t bstr(std::string(str::details::cast<const char*>(p), sz).c_str()); // no _bstr_t ctor taking sz
     const std::wstring wstr(static_cast<const wchar_t*>(bstr));
     assert(result == str::str<std::u16string>(wstr));
     #endif
@@ -385,7 +385,7 @@ inline auto to_uXXstring(const std::basic_string<CharT>& s)
     #endif
 }
 template<typename CharT>
-static std::wstring toWString_(const std::basic_string<CharT>& s, bool is_utf8)
+static std::wstring to_wstring_(const std::basic_string<CharT>& s, bool is_utf8)
 {
    
     const auto result = is_utf8 ? to_uXXstring<coda_oss::u8string>(s)
@@ -395,21 +395,21 @@ static std::wstring toWString_(const std::basic_string<CharT>& s, bool is_utf8)
 
 /***********************************************************************************/
 
-std::string str::toString(const coda_oss::u8string& s)
+std::string str::details::to_string(const coda_oss::u8string& s)
 {
     #if _WIN32
     std::string retval;
     utf8to1252(s.c_str(), s.length(), retval);
     return retval;
     #else
-    return str::str<std::string>(s);
+    return str<std::string>(s);
     #endif
 }
 
-std::string str::toString(const str::W1252string& s)
+std::string str::testing::to_string(const str::W1252string& s)
 {
     #if _WIN32
-    return str::str<std::string>(s);
+    return str<std::string>(s);
     #else
     std::string retval;
     w1252to8(s.c_str(), s.length(), retval);
@@ -417,18 +417,9 @@ std::string str::toString(const str::W1252string& s)
     #endif
 }
 
-inline auto c_str_(const std::wstring& s)
+std::string str::details::to_string(const std::wstring& s)
 {
-    #if _WIN32
-    return str::c_str<std::u16string>(s); // std::wstring is UTF-16 on Windows
-    #else
-    return str::c_str<std::u32string>(s); // assume std::wstring is UTF-32 on any non-Windows platform
-    #endif   
-}
-
-std::string str::toString(const std::wstring& s)
-{
-    const auto p = c_str_(s);
+    const auto p = details::c_str(s);
     const auto sz = s.length();
 
     std::string retval;
@@ -440,39 +431,21 @@ std::string str::toString(const std::wstring& s)
     return retval;
 }
 
-std::wstring str::toWString(const std::string& s)
+std::wstring str::details::to_wstring(const std::string& s)
 {
      #if _WIN32
-    return toWString_(s, false /*is_utf8*/); // Input is Windows-1252 on Windows
+    return to_wstring_(s, false /*is_utf8*/); // Input is Windows-1252 on Windows
     #else
-    return toWString_(s, true /*is_utf8*/);  // Input is UTF-8 everywhere except Windows
+    return to_wstring_(s, true /*is_utf8*/);  // Input is UTF-8 everywhere except Windows
     #endif
 }
-std::wstring str::toWString(const coda_oss::u8string& s)
+std::wstring str::details::to_wstring(const coda_oss::u8string& s)
 {
-    return toWString_(s, true /*is_utf8*/);
+    return to_wstring_(s, true /*is_utf8*/);
 }
-std::wstring str::toWString(const str::W1252string& s)
+std::wstring str::testing::to_wstring(const str::W1252string& s)
 {
-    return toWString_(s, false /*is_utf8*/);
-}
-
-inline auto c_str_(const std::string& s)
-{
-    #if _WIN32
-    return str::c_str<str::W1252string>(s); // std::string is Windows-1252 on Windows
-    #else
-    return str::c_str<coda_oss::u8string>(s); // assume std::string is UTF-8 on any non-Windows platform
-    #endif   
-}
-coda_oss::u8string str::u8FromString(const std::string& s)
-{
-    return str::to_u8string(c_str_(s), s.length());
-}
-
-coda_oss::u8string str::u8FromWString(const std::wstring& s)
-{
-    return str::to_u8string(c_str_(s), s.length());
+    return to_wstring_(s, false /*is_utf8*/);
 }
 
 /***********************************************************************************/
@@ -506,7 +479,7 @@ coda_oss::u8string str::to_u8string(std::u16string::const_pointer p, size_t sz)
 
 std::u16string str::to_u16string(coda_oss::u8string::const_pointer p_, size_t sz)
 {
-    auto p = str::cast<std::string::const_pointer>(p_);
+    auto p = details::cast<std::string::const_pointer>(p_);
     std::u16string retval;
     utf8::utf8to16(p, p + sz, std::back_inserter(retval));
     return retval;
@@ -514,7 +487,7 @@ std::u16string str::to_u16string(coda_oss::u8string::const_pointer p_, size_t sz
 
 std::u32string str::to_u32string(coda_oss::u8string::const_pointer p_, size_t sz)
 {
-    auto p = str::cast<std::string::const_pointer>(p_);
+    auto p = details::cast<std::string::const_pointer>(p_);
     std::u32string retval;
     utf8::utf8to32(p, p + sz, std::back_inserter(retval));
     return retval;

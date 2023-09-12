@@ -48,7 +48,7 @@ fs::path::string_type fs::path::to_native(const std::string& s_)
 {
    
 #ifdef _WIN32
-    return str::toWString(s_);
+    return str::details::to_wstring(s_);
 #else
     return s_;
 #endif
@@ -103,7 +103,7 @@ fs::path::operator string_type() const
 
 std::string fs::path::string() const
 {
-    return str::toString(p_);
+    return str::details::to_string(p_);
 }
 
 fs::path fs::path::root_path() const
