@@ -319,7 +319,7 @@ struct CODA_OSS_API Element  // SOAPElement derives :-(
      *  \return the charater data
      */
     std::string getCharacterData() const;
-    coda_oss::u8string& getCharacterData(coda_oss::u8string& result) const;
+    const coda_oss::u8string& getCharacterData(coda_oss::u8string& result) const;
     //explicit operator coda_oss::u8string() const
     //{
     //    coda_oss::u8string result;
