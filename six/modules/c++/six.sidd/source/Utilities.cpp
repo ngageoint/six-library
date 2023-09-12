@@ -563,7 +563,7 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
         const std::vector<std::string>& schemaPaths_, logging::Logger& log)
 {
-    const auto xmlStr = str::u8FromString(xmlStr_);
+    const auto xmlStr = str::u8FromNative(xmlStr_);
 
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
@@ -588,7 +588,7 @@ std::string Utilities::toXMLString(const DerivedData& data,
         [](const std::string& s) { return s; });
 
     const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::toString(result);
+    return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)

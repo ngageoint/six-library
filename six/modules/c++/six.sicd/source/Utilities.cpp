@@ -34,6 +34,7 @@
 #include <stdexcept>
 #include <numeric>
 #include <std/numbers>
+#include <tuple>
 
 #include <except/Exception.h>
 #include <io/StringStream.h>
@@ -96,21 +97,21 @@ static auto toComplex_(double A, uint8_t phase)
     const auto angle = units::Radians<double>{ 2 * std::numbers::pi * P };
     double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
-    std::complex<long double> S(A * cos_angle, A * sin_angle);
+    six::zfloat S(A * cos_angle, A * sin_angle);
     return S;
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
+six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
 {   
     // A = input_amplitude(i.e. 0 to 255)
     const double A = amplitude;
     return toComplex_(A, phase);
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable& amplitudeTable)
+six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable& amplitudeTable)
 {
     const double A = amplitudeTable.index(amplitude);
     return toComplex_(A, phase);
 }
-std::complex<long double> six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable)
+six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable != nullptr)
     {
@@ -1023,7 +1024,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
         const std::vector<std::string>& schemaPaths_,
         logging::Logger& log)
 {
-    const auto xmlStr = str::u8FromString(xmlStr_);
+    const auto xmlStr = str::u8FromNative(xmlStr_);
 
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
@@ -1048,7 +1049,7 @@ std::string Utilities::toXMLString(const ComplexData& data,
         [](const std::string& s) { return s; });
 
     const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::toString(result);
+    return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const ComplexData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
@@ -1679,8 +1680,11 @@ std::vector<std::byte> six::sicd::testing::toBytes(const ComplexImageResult& res
     const auto& data = *(result.pComplexData);
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
-        retval.resize(image.size() * data.getNumBytesPerPixel());
-        data.convertPixels(bytes, sys::make_span(retval));
+        std::vector<AMP8I_PHS8I_t> results;
+        std::ignore = data.convertPixels(bytes, results);
+
+        const auto result_bytes = std::as_bytes(sys::make_span(results));
+        retval.assign(result_bytes.begin(), result_bytes.end());
     }
     else
     {

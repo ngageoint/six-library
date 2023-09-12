@@ -95,6 +95,14 @@ struct Data
         {
             return numRows * numCols * bytesPerElement;
         }
+        size_t size() const
+        {
+            return numRows * numCols;
+        }
+        size_t size_bytes() const // c.f., std::span::size_bytes()
+        {
+            return size() * bytesPerElement;
+        }
 
         //! Unique string that identifies this support array
         //! (SA_ID).

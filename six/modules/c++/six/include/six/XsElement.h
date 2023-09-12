@@ -149,7 +149,7 @@ inline std::ostream& operator<<(std::ostream& os, const XsElement<T>& v)
 template <>
 inline std::ostream& operator<<(std::ostream& os, const XsElement<std::u8string>& v)
 {
-    os << "\t" << v.tag() << "\t: " << str::toString(value(v));
+    os << "\t" << v.tag() << "\t: " << str::to_native(value(v));
     return os;
 }
 

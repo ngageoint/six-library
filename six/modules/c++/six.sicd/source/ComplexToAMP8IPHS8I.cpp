@@ -71,11 +71,18 @@ The resulting green point is then what's used to find the nearest magnitude via 
     * @param v complex value
     * @return phase between [0, 2PI]
     */
-inline auto GetPhase(const std::complex<long double>& v)
+inline auto GetPhase(std::complex<double> v)
 {
     double phase = std::arg(v);
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
+}
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
+{
+    // Phase is determined via arithmetic because it's equally spaced.
+    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
+    // handles cases that are close to 2PI.
+    return gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
 }
 
 template<typename TToComplexFunc>
@@ -172,11 +179,7 @@ static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
 six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const six::zfloat &v) const
 {
     six::AMP8I_PHS8I_t retval;
-
-    // Phase is determined via arithmetic because it's equally spaced.
-    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
-    // handles cases that are close to 2PI.
-    retval.phase = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    retval.phase = getPhase(v);
 
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
@@ -219,7 +222,7 @@ template <typename TInputs, typename TResults, typename TFunc>
 static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
 {
 #if SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
-    std::ignore = std::transform(std::execution::par, inputs.begin(), inputs.end(), results.begin(), f);
+    std::ignore = std::transform(std::execution::par_unseq, inputs.begin(), inputs.end(), results.begin(), f);
 #else
     constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
     // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
@@ -230,16 +233,19 @@ static inline void transform(std::span<const TInputs> inputs, std::span<TResults
 #endif // CODA_OSS_cpp17
 }
 
-void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
-    const six::AmplitudeTable* pAmplitudeTable)
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
-    auto& converter = make(pAmplitudeTable);
-    const auto fromComplex_ = [&converter](const auto& v)
+    const auto& converter = make(pAmplitudeTable);
+    const auto nearest_neighbor = [&converter](const auto& v)
     {
         return converter.nearest_neighbor(v);
     };
-    transform(inputs, results, fromComplex_);
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
+    return retval;
 }
 
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)

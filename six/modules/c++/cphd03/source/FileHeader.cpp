@@ -44,7 +44,7 @@ FileHeader::FileHeader() :
 {
 }
 
-void FileHeader::read(io::SeekableInputStream& inStream)
+void FileHeader::readImpl(io::SeekableInputStream& inStream)
 {
     if (!isCPHD(inStream))
     {
@@ -52,7 +52,7 @@ void FileHeader::read(io::SeekableInputStream& inStream)
     }
 
     // Read mVersion first
-    mVersion = readVersion(inStream);
+    mVersion = strReadVersion(inStream);
 
     // Block read the header for more efficient IO
     KeyValuePair headerEntry;

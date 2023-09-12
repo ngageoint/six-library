@@ -58,9 +58,10 @@ std::string sys::OSWin32::getPlatformName() const
     {
         platform = "Unknown Windows OS";
     }
-    return str::Format("%s: %d.%d [build: %d], %s", platform.c_str(),
-                info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber,
-                info.szCSDVersion);
+    auto retval = platform + ": ";
+    retval += FmtX("%d.%d [build: %d], ", info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber);
+    retval += info.szCSDVersion;
+    return retval;
 }
 
 std::string sys::OSWin32::getNodeName() const
