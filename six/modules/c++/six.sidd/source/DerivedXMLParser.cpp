@@ -1960,9 +1960,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     }
     else
     {
-        throw except::InvalidArgumentException(Ctxt(FmtX(
-                "Invalid geo type: [%s]",
-                geoType.c_str())));
+        throw except::InvalidArgumentException(Ctxt(FmtX("Invalid geo type: [%s]", geoType)));
     }
 
     return geoElem;

@@ -20,16 +20,19 @@
  *
  */
 
+#pragma once
 #ifndef SIX_cphd_CPHDWriter_h_INCLUDED_
 #define SIX_cphd_CPHDWriter_h_INCLUDED_
-#pragma once
 
 #include <string>
 #include <vector>
+#include <std/span>
+#include <std/cstddef>
 
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
+#include <sys/Span.h>
 
 #include <scene/sys_Conf.h>
 
@@ -126,17 +129,12 @@ struct CPHDWriter final
      *  \param supportData (Optional) The support array data to write to disk.
      */
     template<typename T>
-    void write(
-            const PVPBlock& pvpBlock,
-            const T* widebandData,
-            const sys::ubyte* supportData = nullptr);
+    void write(const PVPBlock& pvpBlock, const T* widebandData,
+        std::span<const std::byte> supportData);
     template<typename T>
-    void write(
-            const PVPBlock& pvpBlock,
-            const T* widebandData,
-            const std::byte* supportData = nullptr)
+    void write(const PVPBlock& pvpBlock, const T* widebandData)
     {
-        write(pvpBlock, widebandData, reinterpret_cast<const sys::ubyte*>(supportData));
+        write(pvpBlock, widebandData, std::span<const std::byte>());
     }
 
     /*
@@ -161,12 +159,12 @@ struct CPHDWriter final
      *  \param id The unique identifier of the support array
      */
     template <typename T>
-    void writeSupportData(const T* data,
+    void writeSupportData(const T* data_,
                           const std::string& id)
     {
-        writeSupportDataImpl(reinterpret_cast<const std::byte*>(data),
-                             mMetadata.data.getSupportArrayById(id).numRows * mMetadata.data.getSupportArrayById(id).numCols,
-                             mMetadata.data.getSupportArrayById(id).bytesPerElement);
+        const auto size = mMetadata.data.getSupportArrayById(id).size_bytes();
+	const auto data = sys::make_span<const std::byte>(data_, size);
+        writeSupportDataImpl(data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
     }
 
     /*
@@ -177,22 +175,17 @@ struct CPHDWriter final
      *
      *  \param data A pointer to the start of the support array data block
      */
+    void writeSupportData(std::span<const std::byte>);
     template <typename T>
-    void writeSupportData(const T* data)
+    void writeSupportData(std::span<const T> data)
     {
-        auto dataPtr = reinterpret_cast<const std::byte*>(data);
-        for (auto it = mMetadata.data.supportArrayMap.begin(); it != mMetadata.data.supportArrayMap.end(); ++it)
-        {
-            // Move inputstream head to offset of particular support array
-            mStream->seek(mHeader.getSupportBlockByteOffset() + it->second.arrayByteOffset, io::SeekableOutputStream::START);
-            writeSupportDataImpl(dataPtr + it->second.arrayByteOffset,
-                                 it->second.numRows * it->second.numCols,
-                                 it->second.bytesPerElement);
-        }
-        // Move inputstream head to the end of the support block after all supports have been written
-        mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
+        writeSupportData(std::as_bytes(data));
     }
-
+    template <typename T>
+    void writeSupportData(const std::vector<T>& data)
+    {
+        writeSupportData(sys::make_span(data));
+    }
 
     /*
      *  \func writePVPData
@@ -264,8 +257,7 @@ private:
     /*
      *  Implementation of write support data
      */
-    void writeSupportDataImpl(const std::byte* data,
-                              size_t numElements, size_t elementSize);
+    void writeSupportDataImpl(std::span<const std::byte>, size_t elementSize);
 
     //! DataWriter object
     std::unique_ptr<DataWriter> mDataWriter;
@@ -273,8 +265,6 @@ private:
     // Book-keeping element
     //! metadata information
     const Metadata& mMetadata;
-    //! header information
-    FileHeader mHeader;
     //! size of each element in signal block
     const size_t mElementSize;
     //! size of scratch space for byte swapping
@@ -285,6 +275,8 @@ private:
     const std::vector<std::string> mSchemaPaths;
     //! Output stream contains CPHD file
     std::shared_ptr<io::SeekableOutputStream> mStream;
+    //! header information
+    FileHeader mHeader;
 };
 }
 
