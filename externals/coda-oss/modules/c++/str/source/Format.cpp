@@ -51,7 +51,7 @@ inline void va_end_(va_list& args)
     CODA_OSS_disable_warning_pop
 }
 
-std::string str::Format(const char* format, ...)
+std::string str::details::Format_(const char* format, ...)
 {
     va_list args;
     va_start(args, format);

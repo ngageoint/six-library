@@ -63,6 +63,20 @@ enum class SIMDInstructionSet
     AVX512F, // https://en.wikipedia.org/wiki/AVX-512
 };
 
+constexpr auto getSIMDInstructionSet() { return SIMDInstructionSet::
+    // https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+
+    #if __AVX512F__
+            AVX512F
+    #elif __AVX2__
+            AVX2
+    #elif _M_X64 /*MSVC*/ || __SSE2__ /*GCC*/
+            SSE2
+    #else
+        #error "Can't determine SIMDInstructionSet'"
+    #endif
+; }
+
 /*!
  *  \class AbstractOS
  *  \brief Interface for system independent function calls
