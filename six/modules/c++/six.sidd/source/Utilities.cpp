@@ -23,12 +23,14 @@
 
 #include <stdexcept>
 #include <set>
+#include <std/string>
 
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
 #include "six/sidd/DerivedDataBuilder.h"
+#include "six/sidd/DataParser.h"
 
 namespace
 {
@@ -526,53 +528,22 @@ std::unique_ptr<scene::ProjectionModel> Utilities::getProjectionModel(
     return projModel;
 }
 
-template<typename TReturn, typename TSchemaPaths>
-TReturn Utilities_parseData(::io::InputStream& xmlStream, const TSchemaPaths& schemaPaths, logging::Logger& log)
+std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
+        const std::vector<std::string>& schemaPaths, logging::Logger& log)
 {
     XMLControlRegistry xmlRegistry;
     xmlRegistry.addCreator<DerivedXMLControl>();
 
     auto data(six::parseData(xmlRegistry, xmlStream, schemaPaths, log));
-    return TReturn(static_cast<DerivedData*>(data.release()));
-}
-std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
-        const std::vector<std::string>& schemaPaths, logging::Logger& log)
-{
-    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, schemaPaths, log);
-}
-
-static void prependISMSchemaPaths(const std::vector<std::filesystem::path>* &pSchemaPaths,
-    std::vector<std::filesystem::path>& adjustedSchemaPaths)
-{
-    if (pSchemaPaths == nullptr)
-    {
-        return;
-    }
-
-    // Get directories for XSDs that appear to be SIDD schemas
-    const auto xsd_files = six::sidd300::find_SIDD_schema_V_files(*pSchemaPaths);
-    std::set<std::string> xsd_dirs; // easy way to make directories unique
-    for (auto&& xsd : xsd_files)
-    {
-        xsd_dirs.insert(xsd.parent_path().string());
-    }
-    for (const auto& dir : xsd_dirs)
-    {
-        adjustedSchemaPaths.push_back(dir);
-    }
-
-    // Include all the original schema paths; these will be AFTER the adjusted paths, above
-    adjustedSchemaPaths.insert(adjustedSchemaPaths.end(), pSchemaPaths->begin(), pSchemaPaths->end());
-
-    pSchemaPaths = &adjustedSchemaPaths;
+    return std::unique_ptr<DerivedData>(static_cast<DerivedData*>(data.release()));
 }
 
 std::unique_ptr<DerivedData> Utilities::parseData(::io::InputStream& xmlStream,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger& log)
 {
-    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
-    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
-    return Utilities_parseData<std::unique_ptr<DerivedData>>(xmlStream, pSchemaPaths, log);
+    DataParser dataParser(log, pSchemaPaths);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(xmlStream);
 }
 
 std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pathname,
@@ -584,17 +555,15 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::string& pat
 std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem::path& pathname,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* const logger = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::FileInputStream inStream(pathname.string());
-    return parseData(inStream, pSchemaPaths, *logger);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(pathname);
 }
 
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
         const std::vector<std::string>& schemaPaths_, logging::Logger& log)
 {
-    const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
+    const auto xmlStr = str::u8FromNative(xmlStr_);
 
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
@@ -606,12 +575,9 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& x
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string& xmlStr,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    logging::NullLogger nullLogger;
-    logging::Logger* log = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    io::U8StringStream inStream;
-    inStream.write(xmlStr);
-    return parseData(inStream, pSchemaPaths, *log);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.fromXML(xmlStr);
 }
 
 std::string Utilities::toXMLString(const DerivedData& data,
@@ -622,21 +588,14 @@ std::string Utilities::toXMLString(const DerivedData& data,
         [](const std::string& s) { return s; });
 
     const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::EncodedStringView(result).native();
+    return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
 {
-    XMLControlRegistry xmlRegistry;
-    xmlRegistry.addCreator<DerivedXMLControl>();
-
-    logging::NullLogger nullLogger;
-    logging::Logger* const pLogger_ = (pLogger == nullptr) ? &nullLogger : pLogger;
-
-    std::vector<std::filesystem::path> adjustedSchemaPaths; // keep in-scope
-    prependISMSchemaPaths(pSchemaPaths, adjustedSchemaPaths);
-
-    return ::six::toValidXMLString(data, pSchemaPaths, pLogger_, &xmlRegistry);
+    DataParser dataParser(pSchemaPaths, pLogger);
+    dataParser.preserveCharacterData(false); // existing behavior
+    return dataParser.toXML(data);
 }
 
 static void createPredefinedFilter(six::sidd::Filter& filter)
@@ -732,7 +691,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, Ver
     productCreation.productCreationExtensions.push_back(parameter);
 
     productCreation.classification.securityExtensions.push_back(parameter);
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         productCreation.classification.desVersion = 234; // existing code
     }
@@ -743,7 +702,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, Ver
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
-    if (siddVersion == Version::v100)
+    if (siddVersion == Version::v1_0_0)
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
     }
@@ -981,7 +940,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     polarization->txPolarization = six::PolarizationSequenceType::V;
     polarization->rcvPolarization = six::PolarizationSequenceType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
-    if (siddVersion == Version::v100)
+    if (siddVersion == Version::v1_0_0)
     {
         polarization->processed = six::BooleanType::IS_TRUE;
     }
@@ -999,7 +958,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     collection.geometry->extensions.push_back(param);
 
     collection.phenomenology.reset(new six::sidd::Phenomenology());
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         // [-180, 180) before SIDD 3.0
         collection.phenomenology->shadow = six::AngleMagnitude(-1.5, 3.7);
@@ -1021,7 +980,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     exFeatures.product[0].north = 58.332;
     exFeatures.product[0].extensions.push_back(param);
 
-    if (siddVersion == Version::v200)
+    if (siddVersion == Version::v2_0_0)
     {
         exFeatures.product[0].ellipticity = 12.0;
         exFeatures.product[0].polarization.resize(1);
@@ -1167,7 +1126,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     constexpr bool smallImage = true;
     const auto elementSize = static_cast<size_t>(lutType == "Mono" ? 2 : 3);
 
-    if ((siddVersion == Version::v200) || (siddVersion == Version::v300))
+    if ((siddVersion == Version::v2_0_0) || (siddVersion == Version::v3_0_0))
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
@@ -1433,11 +1392,11 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddV
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion)
 {
-    if (siddVersion == Version::v300)
+    if (siddVersion == Version::v3_0_0)
     {
         throw std::invalid_argument("Must use ISMVersion overload.");
     }
-    if (siddVersion == Version::v200)
+    if (siddVersion == Version::v2_0_0)
     {
         return createFakeDerivedData_(&siddVersion);
     }
@@ -1445,7 +1404,7 @@ std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersio
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersion)
 {
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         return createFakeDerivedData(siddVersion);
     }

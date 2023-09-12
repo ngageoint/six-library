@@ -34,7 +34,7 @@ namespace mt
 
 
 ThreadGroup::ThreadGroup(bool pinToCPU) :
-    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : NULL),
+    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : nullptr),
     mLastJoined(0)
 {
 }
@@ -163,7 +163,7 @@ void ThreadGroup::ThreadGroupRunnable::run()
 
 bool ThreadGroup::isPinToCPUEnabled() const
 {
-    return mAffinityInit.get() != NULL;
+    return mAffinityInit.get() != nullptr;
 }
 
 bool ThreadGroup::getDefaultPinToCPU()

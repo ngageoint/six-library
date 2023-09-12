@@ -19,17 +19,30 @@
 * see <http://www.gnu.org/licenses/>.
 *
 */
-#include "six/sicd/ComplexToAMP8IPHS8I.h"
+#include "six/AmplitudeTable.h"
 
 #include <math.h>
+#include <assert.h>
 
 #include <cassert>
-#include <std/memory>
+#include <memory>
+#include <std/numbers>
+#include <algorithm>
+
+#include <coda_oss/CPlusPlus.h>
+#if CODA_OSS_cpp17
+    // <execution> is broken with the older version of GCC we're using
+    #if (__GNUC__ >= 10) || _MSC_VER
+    #include <execution>
+    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
+    #endif
+#endif
 
 #include <gsl/gsl.h>
-#include <six/sicd/Utilities.h>
 #include <math/Utilities.h>
 #include <units/Angles.h>
+
+#include "six/sicd/Utilities.h"
 
 // https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353
 /*
@@ -58,24 +71,31 @@ The resulting green point is then what's used to find the nearest magnitude via 
     * @param v complex value
     * @return phase between [0, 2PI]
     */
-inline long double GetPhase(const std::complex<long double>& v)
+inline auto GetPhase(std::complex<double> v)
 {
-    auto phase = std::arg(v);
-    if (phase < 0.0) phase += M_PI * 2.0; // Wrap from [0, 2PI]
+    double phase = std::arg(v);
+    if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
-
-static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmplitudeTable)
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
 {
-    std::vector<long double> retval(UINT8_MAX + 1);
-    for (size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
+    // Phase is determined via arithmetic because it's equally spaced.
+    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
+    // handles cases that are close to 2PI.
+    return gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+}
+
+template<typename TToComplexFunc>
+static std::vector<float> make_magnitudes_(TToComplexFunc toComplex)
+{
+    std::vector<float> retval;
+    retval.reserve(UINT8_MAX + 1);
+    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
-        static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
         // AmpPhase -> Complex
-        const auto amplitude = gsl::narrow<uint8_t>(i);
-        const auto value = amplitude;
-        const auto complex = six::sicd::Utilities::from_AMP8I_PHS8I(amplitude, value, pAmplitudeTable);
-        retval[i] = std::abs(complex);
+        const auto phase = amplitude;
+        const auto complex = toComplex(amplitude, phase);
+        retval.push_back(std::abs(complex));
     }
 
     // I don't know if we can guarantee that the amplitude table is non-decreasing.
@@ -86,90 +106,168 @@ static std::vector<long double> make_magnitudes(const six::AmplitudeTable* pAmpl
     }
     return retval;
 }
-static const std::vector<long double>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
-    std::vector<long double>& uncached_magnitudes)
+static inline auto make_magnitudes(const six::AmplitudeTable& amplitudeTable)
+{
+    const auto toComplex = [&](auto amplitude, auto phase)
+    {
+        return six::sicd::Utilities::toComplex(amplitude, phase, amplitudeTable);
+    };
+    return make_magnitudes_(toComplex);
+}
+static inline auto make_magnitudes()
+{
+    static const auto toComplex = [](auto amplitude, auto phase)
+    {
+        return six::sicd::Utilities::toComplex(amplitude, phase);
+    };
+    return make_magnitudes_(toComplex);
+}
+
+static const std::vector<float>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
+    std::vector<float>& uncached_magnitudes)
 {
     if (pAmplitudeTable == nullptr)
     {
-        static const auto magnitudes = make_magnitudes(nullptr); // OK to cache, won't change
+        static const auto magnitudes = make_magnitudes(); // OK to cache, won't change
         return magnitudes;
     }
     
-    uncached_magnitudes = make_magnitudes(pAmplitudeTable);
+    uncached_magnitudes = make_magnitudes(*pAmplitudeTable);
     return uncached_magnitudes;
 }
 
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
     : magnitudes(get_magnitudes(pAmplitudeTable, uncached_magnitudes))
 {
-    const auto p0 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 0, pAmplitudeTable));
-    const auto p1 = GetPhase(Utilities::from_AMP8I_PHS8I(1, 1, pAmplitudeTable));
+    const auto p0 = GetPhase(Utilities::toComplex(1, 0, pAmplitudeTable));
+    const auto p1 = GetPhase(Utilities::toComplex(1, 1, pAmplitudeTable));
     assert(p0 == 0.0);
     assert(p1 > p0);
     phase_delta = p1 - p0;
-    for(size_t i = 0; i <= UINT8_MAX; i++) // Be careful with indexing so that we don't wrap-around in the loops.
+    size_t i = 0;
+    for(const auto value : six::sicd::Utilities::iota_0_256())
     {
-        static_assert(sizeof(size_t) > sizeof(uint8_t), "size_t can't hold UINT8_MAX!");
-        const units::Radians<long double> angle{ p0 + gsl::narrow_cast<long double>(i) * phase_delta };
-        long double y, x;
+        const units::Radians<float> angle{ static_cast<float>(p0) + value * phase_delta };
+        float y, x;
         SinCos(angle, y, x);
         phase_directions[i] = { x, y };
+        i++;
     }
 }
 
 /*!
  * Find the nearest element given an iterator range.
- * @tparam TIter type of iterator
- * @param begin beginning of search range
- * @param end end of search range
  * @param value query value
  * @return index of nearest value within the iterator range.
  */
-template<typename TIter>
-static uint8_t nearest(const TIter& begin, const TIter& end, long double value)
+static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
 {
+    const auto begin = magnitudes.begin();
+    const auto end = magnitudes.end();
+
     const auto it = std::lower_bound(begin, end, value);
-    if(it == begin) return 0;
+    if (it == begin) return 0;
 
     const auto prev_it = std::prev(it);
-    const auto nearest = (it == end || value - *prev_it <= *it - value) ? prev_it : it;
-    const auto distance = std::distance(begin, nearest);
+    const auto nearest_it = it == end ? prev_it  :
+        (value - *prev_it <= *it - value ? prev_it : it);
+    const auto distance = std::distance(begin, nearest_it);
     assert(distance <= std::numeric_limits<uint8_t>::max());
     return gsl::narrow<uint8_t>(distance);
 }
 
-six::sicd::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const std::complex<float> &v) const
+six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const six::zfloat &v) const
 {
-    six::sicd::AMP8I_PHS8I_t retval;
-
-    // Phase is determined via arithmetic because it's equally spaced.
-    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
-    // handles cases that are close to 2PI.
-    retval.second = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    six::AMP8I_PHS8I_t retval;
+    retval.phase = getPhase(v);
 
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // i.e. dot product.
-    auto&& phase_direction = phase_directions[retval.second];
+    auto&& phase_direction = phase_directions[retval.phase];
     const auto projection = phase_direction.real() * v.real() + phase_direction.imag() * v.imag();
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    retval.first = nearest(magnitudes.begin(), magnitudes.end(), projection);
+    retval.amplitude = nearest(magnitudes, projection);
     return retval;
 }
 
-const six::sicd::details::ComplexToAMP8IPHS8I* six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable,
-    std::unique_ptr<ComplexToAMP8IPHS8I>& pTree)
+ // Yes, this is duplicated code :-(  1) hopefully it will go away someday "soon,"
+ // that is, we'll be at C++17; 2) the cutoff/dimension values may be different.
+ //
+ // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
+ // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
+ // parallel algorithms which might be a better way of satisfying our immediate
+ // needs (below) ... although we're still at C++14.
+template <typename InputIt, typename OutputIt, typename TFunc>
+static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
+    typename std::iterator_traits<InputIt>::difference_type cutoff)
+{
+    // https://en.cppreference.com/w/cpp/thread/async
+    const auto len = std::distance(first1, last1);
+    if (len < cutoff)
+    {
+        return std::transform(first1, last1, d_first, f);
+    }
+
+    constexpr auto policy = std::launch::async;
+
+    const auto mid1 = first1 + len / 2;
+    const auto d_mid = d_first + len / 2;
+    auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff);
+    transform_async(first1, mid1, d_first, f, cutoff);
+    return handle.get();
+}
+template <typename TInputs, typename TResults, typename TFunc>
+static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
+{
+#if SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
+    std::ignore = std::transform(std::execution::par_unseq, inputs.begin(), inputs.end(), results.begin(), f);
+#else
+    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
+    // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
+    constexpr auto dimension = 128 * 8;
+    constexpr auto default_cutoff = dimension * dimension;
+    const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;        
+    std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(), f, cutoff);
+#endif // CODA_OSS_cpp17
+}
+
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make(pAmplitudeTable);
+    const auto nearest_neighbor = [&converter](const auto& v)
+    {
+        return converter.nearest_neighbor(v);
+    };
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
+    return retval;
+}
+
+const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
         // this won't change, so OK to cache
         static const six::sicd::details::ComplexToAMP8IPHS8I tree;
-        return &tree;
+        return tree;
     }
     else
     {
-        pTree.reset(new six::sicd::details::ComplexToAMP8IPHS8I(pAmplitudeTable));
-        return pTree.get();
+        // Might have already "cached" this on the AmplitudeTable instance.
+        auto pFromComplex = pAmplitudeTable->getFromComplex();
+        if (pFromComplex != nullptr)
+        {
+            return *pFromComplex;
+        }
+
+        // constructor is private, can't use make_unique
+        std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pTree(new six::sicd::details::ComplexToAMP8IPHS8I(pAmplitudeTable));
+        pAmplitudeTable->cacheFromComplex_(std::move(pTree));
+        return *(pAmplitudeTable->getFromComplex());
     }
 }

@@ -58,9 +58,10 @@ std::string sys::OSWin32::getPlatformName() const
     {
         platform = "Unknown Windows OS";
     }
-    return FmtX("%s: %d.%d [build: %d], %s", platform.c_str(),
-                info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber,
-                info.szCSDVersion);
+    auto retval = platform + ": ";
+    retval += FmtX("%d.%d [build: %d], ", info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber);
+    retval += info.szCSDVersion;
+    return retval;
 }
 
 std::string sys::OSWin32::getNodeName() const
@@ -81,12 +82,12 @@ bool sys::OSWin32::exists(const std::string& path) const
         const DWORD errCode = GetLastError();
         if (errCode != ERROR_FILE_NOT_FOUND && errCode != ERROR_PATH_NOT_FOUND)
         {
-            char* err = NULL;
+            char* err = nullptr;
             FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                           FORMAT_MESSAGE_FROM_SYSTEM,
-                          NULL, errCode,
+                          nullptr, errCode,
                           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                          (LPTSTR) &err, 0, NULL);
+                          (LPTSTR) &err, 0, nullptr);
             throw except::Exception(Ctxt(
                 "Problem while testing file existence for " + path +
                 " with Error: " + std::string(err)));
@@ -166,7 +167,7 @@ bool sys::OSWin32::isDirectory(const std::string& path) const
 
 bool sys::OSWin32::makeDirectory(const std::string& path) const
 {
-    return (CreateDirectory(path.c_str(), NULL)) ? (true): (false);
+    return (CreateDirectory(path.c_str(), nullptr)) ? (true) : (false);
 }
 
 std::string sys::OSWin32::getCurrentWorkingDirectory() const
@@ -224,7 +225,7 @@ std::string sys::OSWin32::operator[](const std::string& s) const
 
 static std::string getEnv(const std::string& s)
 {
-    const DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
+    const DWORD size = GetEnvironmentVariable(s.c_str(), nullptr, 0);
     if (size == 0)
     {
         throw sys::SystemException(Ctxt(
@@ -266,7 +267,7 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
 
 bool sys::OSWin32::isEnvSet(const std::string& s) const
 {
-    const DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
+    const DWORD size = GetEnvironmentVariable(s.c_str(), nullptr, 0);
     if (size != 0)
     {
         return true;
@@ -283,8 +284,14 @@ static void setEnv(const std::string& var,
         throw sys::SystemException(Ctxt(
             "Unable to set windows environment variable " + var));
     }
+
     const auto s = var + "=" + val;
-    _putenv(s.c_str());
+    const auto result = _putenv(s.c_str());
+    if (result != 0) // "The functions return 0 if successful, or -1 if there's an error."
+    {
+        throw sys::SystemException(Ctxt("Unable to set windows environment variable " + var));
+    }
+
 }
 void sys::OSWin32::setEnv(const std::string& var,
                           const std::string& val,
@@ -298,13 +305,18 @@ void sys::OSWin32::setEnv(const std::string& var,
 
 void sys::OSWin32::unsetEnv(const std::string& var)
 {
-    const BOOL ret = SetEnvironmentVariable(var.c_str(), NULL);
+    const BOOL ret = SetEnvironmentVariable(var.c_str(), nullptr);
     if (!ret)
     {
         throw sys::SystemException(Ctxt("Unable to unset windows environment variable " + var));
     }
+
     const auto s = var + "=";
-    _putenv(s.c_str());
+    const auto result = _putenv(s.c_str());
+    if (result != 0) // "The functions return 0 if successful, or -1 if there's an error."
+    {
+        throw sys::SystemException(Ctxt("Unable to unset windows environment variable " + var));
+    }
 }
 
 size_t sys::OSWin32::getNumCPUs() const
@@ -340,6 +352,25 @@ void sys::OSWin32::getAvailableCPUs(std::vector<int>& /*physicalCPUs*/,
 {
     throw except::NotImplementedException(
         Ctxt("Windows getAvailableCPUs not yet implemented."));
+}
+
+sys::SIMDInstructionSet sys::OSWin32::getSIMDInstructionSet() const
+{
+    // https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent
+    if (IsProcessorFeaturePresent(PF_AVX512F_INSTRUCTIONS_AVAILABLE))
+    {
+        return SIMDInstructionSet::AVX512F;
+    }
+    if (IsProcessorFeaturePresent(PF_AVX2_INSTRUCTIONS_AVAILABLE))
+    {
+        return SIMDInstructionSet::AVX2;
+    }
+    if (IsProcessorFeaturePresent(PF_XMMI64_INSTRUCTIONS_AVAILABLE))
+    {
+        return SIMDInstructionSet::SSE2;
+    }
+
+    throw std::runtime_error("SSE2 support is required.");
 }
 
 void sys::OSWin32::createSymlink(const std::string& origPathname,
@@ -414,7 +445,7 @@ std::string sys::OSWin32::getCurrentExecutable(
     char buffer[MAX_PATH + 2];
     memset(buffer, 0, MAX_PATH + 2);
 
-    size_t bytesRead = GetModuleFileName(NULL, buffer, MAX_PATH + 1);
+    size_t bytesRead = GetModuleFileName(nullptr, buffer, MAX_PATH + 1);
 
     if (bytesRead == MAX_PATH + 1 || bytesRead == 0)
     {

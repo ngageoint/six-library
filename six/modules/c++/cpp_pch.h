@@ -15,9 +15,6 @@
 #pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 5264) // '...': '...' variable is not used
 
-// error 4996: '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
-#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
-
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <assert.h>
@@ -45,11 +42,13 @@
 #include <mutex>
 #include <atomic>
 #include <future>
-#include <complex>
 
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define NOMINMAX
 #include <windows.h>
+
+#include <types/Complex.h>
 
 #pragma warning(pop)

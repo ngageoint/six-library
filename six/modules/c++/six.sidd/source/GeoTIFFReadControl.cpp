@@ -25,7 +25,7 @@
 #include <std/memory>
 
 #include <str/Convert.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 #include <gsl/gsl.h>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
@@ -59,7 +59,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
                     str::trim(curStr);
                     if (!curStr.empty())
                     {
-                        entries.emplace_back(str::EncodedStringView(curStr).u8string());
+                        entries.emplace_back(str::u8FromNative(curStr));
                         curStr.clear();
                     }
                 }
@@ -75,7 +75,7 @@ void parseXMLEntry(const tiff::IFDEntry *entry,
         str::trim(curStr);
         if (!curStr.empty())
         {
-           entries.emplace_back(str::EncodedStringView(curStr).u8string());
+           entries.emplace_back(str::u8FromNative(curStr));
         }
     }
 }

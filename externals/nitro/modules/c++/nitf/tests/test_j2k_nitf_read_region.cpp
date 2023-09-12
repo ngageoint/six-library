@@ -47,7 +47,8 @@
 void writeFile(uint32_t x0, uint32_t y0,
     uint32_t x1, uint32_t y1, std::span<const uint8_t> buf, const std::string& prefix)
 {
-    const auto filename = str::format("%s-raw-%d_%d__%d_%d.out", prefix.c_str(), x0, y0, x1, y1);
+    auto filename = FmtX("%s-raw-", prefix);
+    filename += FmtX("%d_%d__%d_%d.out", x0, y0, x1, y1);
     nitf::IOHandle outHandle(filename, NRT_ACCESS_WRITEONLY, NRT_CREATE);
     outHandle.write(buf.data(), buf.size());
     printf("Wrote file: %s\n", filename.c_str());
@@ -57,7 +58,8 @@ void writeJ2K(uint32_t x0, uint32_t y0,
     uint32_t x1, uint32_t y1, std::span<const uint8_t> buf,
     const j2k::Container& inContainer, const std::string& prefix)
 {
-    const auto outName = str::format("%s-raw-%d_%d__%d_%d.j2k", prefix.c_str(), x0, y0, x1, y1);
+    auto outName = FmtX("%s-raw-", prefix);
+    outName += FmtX("%d_%d__%d_%d.j2k", x0, y0, x1, y1);
 
     const auto num_x_tiles = inContainer.getTilesX();
     const auto num_y_tiles = inContainer.getTilesY();
@@ -215,7 +217,7 @@ int main(int argc, char **argv)
                 const auto result_ = j2kReader.readRegion(0, 0, width, height, buf);
                 const std::span<const uint8_t> result(result_.data(), result_.size());
 
-                const auto namePrefix = str::format("image-%d", (i + 1));
+                const auto namePrefix = FmtX("image-%d", (i + 1));
                 // TODO: Update write to only output tiles in read region
                 writeFile(0, 0, width, height, result, namePrefix);
                 writeJ2K(0, 0, width, height, result, container, namePrefix);

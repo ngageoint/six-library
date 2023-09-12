@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_MinidomHandler_h_INCLUDED_
 #define CODA_OSS_xml_lite_MinidomHandler_h_INCLUDED_
-#pragma once
 
 /*!
  *  \file MinidomHandler.h
@@ -49,8 +49,7 @@
 #include <memory>
 #include "coda_oss/string.h"
 
-#include "str/EncodedString.h"
-#include "str/EncodedStringView.h"
+#include <config/Exports.h>
 #include "XMLReader.h"
 #include "io/StandardStreams.h"
 #include "Document.h"
@@ -68,7 +67,7 @@ namespace lite
  * whether it is allocated externally or not.  DONT delete it 
  * explicitly unless you are looking for disaster.
  */
-struct MinidomHandler final : public ContentHandler
+struct CODA_OSS_API MinidomHandler final : public ContentHandler
 {
     //! Constructor.  Uses default document
     MinidomHandler() 
@@ -77,7 +76,7 @@ struct MinidomHandler final : public ContentHandler
     }
 
     //! Destructor
-    ~ MinidomHandler()
+    ~MinidomHandler() noexcept(false)
     {
         setDocument(nullptr, true);
     }

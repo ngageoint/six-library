@@ -21,13 +21,19 @@
  */
 #include <cphd/Metadata.h>
 
+#include <stdexcept>
+
 namespace cphd
 {
 
-Metadata::Metadata()
+Metadata::Metadata(Version version)
 {
-  // Default version defined in cphd::FileHeader
-  mVersion = FileHeader::DEFAULT_VERSION;
+    setVersion(version);
+}
+Metadata::Metadata(Data&& data)
+    : Metadata(FileHeader::getDefaultVersion()) // Default version defined in cphd::FileHeader
+{
+    this->data = std::move(data);
 }
 
 size_t Metadata::getNumChannels() const
@@ -67,11 +73,19 @@ DomainType Metadata::getDomainType() const
 
 std::string Metadata::getVersion() const
 {
-    return mVersion;
+    return to_string(mVersion);
 }
-void Metadata::setVersion(const std::string& version)
+void Metadata::getVersion(Version& version) const
+{
+    version = mVersion;
+}
+void Metadata::setVersion(Version version)
 {
     mVersion = version;
+}
+void Metadata::setVersion(const std::string& strVersion)
+{
+    setVersion(FileHeader::toVersion(strVersion));
 }
 
 bool Metadata::operator==(const Metadata& other) const

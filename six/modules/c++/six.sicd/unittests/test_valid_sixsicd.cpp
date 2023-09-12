@@ -24,7 +24,6 @@
 #include <stdlib.h>
 
 #include <string>
-#include <string>
 #include <std/filesystem>
 #include <std/span>
 
@@ -37,26 +36,27 @@
 
 #include "TestCase.h"
 
-namespace fs = std::filesystem;
-
 static std::unique_ptr<six::sicd::ComplexData> test_assert_round_trip(const std::string& testName,
-    const six::sicd::ComplexData& complexData, const std::vector<fs::path>* pSchemaPaths)
+    const six::sicd::ComplexData& complexData, const std::vector<std::filesystem::path>* pSchemaPaths)
 {
     auto strXML = six::sicd::Utilities::toXMLString(complexData, pSchemaPaths);
     TEST_ASSERT_FALSE(strXML.empty());
     return six::sicd::Utilities::parseDataFromString(strXML, pSchemaPaths);
 }
 
-inline static const six::UnmodeledS* get_Unmodeled(const six::sicd::ComplexData& complexData, const std::string& strVersion)
+inline static const six::Unmodeled* get_Unmodeled(const six::sicd::ComplexData& complexData, const std::string& strVersion)
 {
     if (strVersion != "1.3.0") // Unmodeled added in SICD 1.3
     {
         return nullptr;
     }
-    else
+
+    if (has_value(complexData.errorStatistics->unmodeled))
     {
-        return complexData.errorStatistics->Unmodeled.get();
+        return &value(complexData.errorStatistics->unmodeled);
     }
+
+    return nullptr;
 }
 
 static void test_createFakeComplexData_(const std::string& testName, const std::string& strVersion)
@@ -83,18 +83,18 @@ TEST_CASE(test_createFakeComplexData)
     test_createFakeComplexData_(testName, "1.3.0");
 }
 
-static void test_assert_unmodeled_(const std::string& testName, const six::UnmodeledS& Unmodeled)
+static void test_assert_unmodeled_(const std::string& testName, const six::Unmodeled& unmodeled)
 {
-    TEST_ASSERT_EQ(1.23, Unmodeled.Xrow);
-    TEST_ASSERT_EQ(4.56, Unmodeled.Ycol);
-    TEST_ASSERT_EQ(7.89, Unmodeled.XrowYcol);
+    TEST_ASSERT_EQ(1.23, unmodeled.Xrow);
+    TEST_ASSERT_EQ(4.56, unmodeled.Ycol);
+    TEST_ASSERT_EQ(7.89, unmodeled.XrowYcol);
 
-    const auto& UnmodeledDecor = Unmodeled.UnmodeledDecorr;
-    TEST_ASSERT(UnmodeledDecor.get() != nullptr);
-    TEST_ASSERT_EQ(12.34, UnmodeledDecor->Xrow.CorrCoefZero);
-    TEST_ASSERT_EQ(56.78, UnmodeledDecor->Xrow.DecorrRate);
-    TEST_ASSERT_EQ(123.4, UnmodeledDecor->Ycol.CorrCoefZero);
-    TEST_ASSERT_EQ(567.8, UnmodeledDecor->Ycol.DecorrRate);
+    TEST_ASSERT(has_value(unmodeled.unmodeledDecorr));
+    auto&& unmodeledDecor = value(unmodeled.unmodeledDecorr);
+    TEST_ASSERT_EQ(12.34, value(unmodeledDecor.Xrow).corrCoefZero);
+    TEST_ASSERT_EQ(56.78, value(unmodeledDecor.Xrow).decorrRate);
+    TEST_ASSERT_EQ(123.4, value(unmodeledDecor.Ycol).corrCoefZero);
+    TEST_ASSERT_EQ(567.8, value(unmodeledDecor.Ycol).decorrRate);
 }
 static void test_assert(const std::string& testName, const six::sicd::ComplexData& complexData)
 {
@@ -105,9 +105,9 @@ static void test_assert(const std::string& testName, const six::sicd::ComplexDat
         return;
     }
     TEST_ASSERT(errorStatistics.get() != nullptr);
-    auto Unmodeled = errorStatistics->Unmodeled;
-    TEST_ASSERT(Unmodeled.get() != nullptr);
-    test_assert_unmodeled_(testName, *Unmodeled);
+    auto&& unmodeled = errorStatistics->unmodeled;
+    TEST_ASSERT(has_value(unmodeled));
+    test_assert_unmodeled_(testName, value(unmodeled));
 
     // for SICD 1.3, also check the polarization type; this is set either in the fake data or scid130.xml
     const auto txRcvPolarizationProc = complexData.imageFormation->txRcvPolarizationProc;
@@ -116,9 +116,9 @@ static void test_assert(const std::string& testName, const six::sicd::ComplexDat
     TEST_ASSERT_EQ(strTxRcvPolarizationProc,"OTHER_TxRcvPolarizationProc:OTHER_TxRcvPolarizationProc");
 }
 
-static void test_read_sicd_xml(const std::string& testName, const fs::path& path)
+static void test_read_sicd_xml(const std::string& testName, const std::filesystem::path& path)
 {
-    const auto pathname = six::testing::getSampleXmlPath(fs::path("six.sicd") / "tests" / "sample_xml", path);
+    const auto pathname = six::testing::getSampleXmlPath(std::filesystem::path("six.sicd") / "tests" / "sample_xml", path);
 
     // NULL schemaPaths, no validation
     auto pComplexData = six::sicd::Utilities::parseDataFromFile(pathname, nullptr /*pSchemaPaths*/);
@@ -149,5 +149,5 @@ TEST_CASE(test_read_sicd130_xml)
 TEST_MAIN(
     TEST_CHECK(test_createFakeComplexData);
     TEST_CHECK(test_read_sicd110_xml);
-    TEST_CHECK(test_read_sicd110_xml);
+    TEST_CHECK(test_read_sicd130_xml);
     )

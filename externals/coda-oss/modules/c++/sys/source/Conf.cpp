@@ -85,8 +85,9 @@ constexpr inline bool is_big_or_little_endian()
 inline bool testIsBigEndianSystem()
 {
     // This is an endian test
-    int intVal = 1;
-    unsigned char* endianTest = (unsigned char*)&intVal;
+    static const int intVal = 1;
+    const void* const pIntVal = &intVal;
+    const auto endianTest = static_cast<const unsigned char*>(pIntVal);
     return endianTest[0] != 1;
 }
 inline auto isBigEndianSystem_()

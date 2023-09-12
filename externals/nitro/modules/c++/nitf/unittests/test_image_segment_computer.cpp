@@ -216,9 +216,6 @@ TEST_CASE(testKnownCase)
 
 TEST_MAIN
 (
-    (void)argc;
-    (void)argv;
-
     TEST_CHECK(testBlockSizedBoundaries);
     TEST_CHECK(testPerfectSplitting);
     TEST_CHECK(testOneRowOver);

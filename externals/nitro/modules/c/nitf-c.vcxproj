@@ -52,7 +52,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);HAVE_OPENJPEG_H</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nrt\include\;$(ProjectDir)nitf\include\;$(ProjectDir)jpeg\include\;$(ProjectDir)j2k\include\;$(ProjectDir)cgm\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nrt\include;$(ProjectDir)nitf\include;$(ProjectDir)jpeg\include;$(ProjectDir)j2k\include;$(ProjectDir)cgm\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -62,9 +62,13 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SupportJustMyCode>true</SupportJustMyCode>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>false</ExceptionHandling>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -79,7 +83,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);HAVE_OPENJPEG_H</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nrt\include\;$(ProjectDir)nitf\include\;$(ProjectDir)jpeg\include\;$(ProjectDir)j2k\include\;$(ProjectDir)cgm\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nrt\include;$(ProjectDir)nitf\include;$(ProjectDir)jpeg\include;$(ProjectDir)j2k\include;$(ProjectDir)cgm\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -88,6 +92,10 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <WarningLevel>Level3</WarningLevel>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>

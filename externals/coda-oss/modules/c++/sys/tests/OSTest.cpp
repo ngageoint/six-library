@@ -110,7 +110,7 @@ int main(int argc, char **argv)
         }
         os.remove("TEST_DIRECTORY");
 
-        std::cout << "Time Now: " << time(NULL) << std::endl;
+        std::cout << "Time Now: " << time(nullptr) << std::endl;
         sys::RealTimeStopWatch sw;
         //std::cout << "CPS: " << CLOCKS_PER_SEC << std::endl;
         //	std::cout << "Clock: " << clock() << std::endl;
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
         std::cout << "Finish Loop 3" << std::endl;
         std::cout << "Stop: " << std::setprecision(50) << sw.stop()
                 << std::endl;
-        std::cout << "Time Now: " << time(NULL) << std::endl;
+        std::cout << "Time Now: " << time(nullptr) << std::endl;
         //	std::cout << "Clock: " << clock() << std::endl;
 
     }

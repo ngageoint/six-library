@@ -27,7 +27,7 @@ using namespace zip;
 GZipOutputStream::GZipOutputStream(const std::string& file)
 {
     mFile = gzopen(file.c_str(), "wb");
-    if (mFile == NULL)
+    if (mFile == nullptr)
     {
         throw except::IOException(Ctxt(
                 "Failed to open gzip stream [" + file + "]"));
@@ -59,5 +59,5 @@ void GZipOutputStream::write(const void* buffer, size_t len)
 void GZipOutputStream::close()
 {
     gzclose( mFile);
-    mFile = NULL;
+    mFile = nullptr;
 }

@@ -22,8 +22,11 @@
 
 
 #include "str/Format.h"
-#include <stdio.h>
 
+#include <stdio.h>
+#include <stdarg.h>
+
+#include <config/compiler_extensions.h>
 
 static std::string vformat(const char* format, va_list& args)
 {
@@ -36,20 +39,23 @@ static std::string vformat(const char* format, va_list& args)
     return std::string(buffer);
 }
 
-std::string str::format(const char *format, ...)
+inline void va_end_(va_list& args)
 {
-    va_list args;
-    va_start(args, format);
-    auto retval = vformat(format, args);
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable : 26477)  // Use '...' rather than 0 or NULL(es .47).
+    #endif
+
     va_end(args);
-    return retval;
+
+    CODA_OSS_disable_warning_pop
 }
 
-str::Format::Format(const char* format, ...)
+std::string str::details::Format_(const char* format, ...)
 {
     va_list args;
     va_start(args, format);
     auto result = vformat(format, args);
-    va_end(args);
-    mString = std::move(result);
+    va_end_(args);
+    return result;
 }

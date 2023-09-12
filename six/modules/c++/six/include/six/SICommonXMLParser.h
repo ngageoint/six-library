@@ -55,7 +55,7 @@ struct SICommonXMLParser : public XMLParser
         return mSICommonURI;
     }
 
-    XMLElem createComplex(const std::string& name, std::complex<double> c,
+    XMLElem createComplex(const std::string& name, six::zdouble c,
             XMLElem parent = nullptr) const;
     XMLElem createVector2D(const std::string& name, const std::string& uri,
             Vector2 p = 0.0, XMLElem parent = nullptr) const;
@@ -223,6 +223,11 @@ protected:
 private:
     // TODO: Can we combine this with parsePoly1D()?
     void parsePoly(const xml::lite::Element* polyXML, size_t xyzIdx, PolyXYZ& polyXYZ) const;
+
+    XMLElem createFromElement(const six::XsElement<double>&, xml::lite::Element&) const;
+
+    template<typename T>
+    XMLElem newFromElement(const XsElement_minOccurs0<T>& element, xml::lite::Element& parent) const;
 
 private:
     const std::string mSICommonURI;

@@ -113,7 +113,7 @@ ProjectionType DerivedXMLParser200::getProjectionType(const xml::lite::Element& 
 }
 
 
-constexpr Version VERSION = Version::v200;
+constexpr Version VERSION = Version::v2_0_0;
 const char SI_COMMON_URI[] = "urn:SICommon:1.0";
 inline static xml::lite::Uri getISMUri()
 {

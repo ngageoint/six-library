@@ -40,12 +40,20 @@ BaseConverter::BaseConverter() :
 std::unique_ptr<xml::lite::Document>
 BaseConverter::readXML(const std::string& xmlPathname)
 {
-    six::MinidomParser parser;
+    return readXML(std::filesystem::path(xmlPathname));
+}
+std::unique_ptr<xml::lite::Document>
+BaseConverter::readXML(const std::filesystem::path& xmlPathname, bool preserveCharacterData)
+{
     io::FileInputStream xmlInputStream(xmlPathname);
+
+    six::MinidomParser parser;
+    parser.preserveCharacterData(preserveCharacterData);
     parser.parse(xmlInputStream);
+
     std::unique_ptr<xml::lite::Document> pDocument;
     parser.getDocument(pDocument);
-    return std::unique_ptr<xml::lite::Document>(pDocument.release());
+    return pDocument;
 }
 
 BaseConverter::XMLElem BaseConverter::findUniqueElement(

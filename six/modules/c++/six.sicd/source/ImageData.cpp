@@ -31,57 +31,70 @@
 
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
+#include <coda_oss/CPlusPlus.h>
+#if CODA_OSS_cpp17
+    // <execution> is broken with the older version of GCC we're using
+    #if (__GNUC__ >= 10) || _MSC_VER
+    #include <execution>
+    #define SIX_six_sicd_ImageData_has_execution 1
+    #endif
+#endif
+#include <sys/Span.h>
 
+#include "six/AmplitudeTable.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Utilities.h"
-#include "six/sicd/ComplexToAMP8IPHS8I.h"
 
- // There was in coda-oss, but I removed it.
+using namespace six;
+using namespace six::sicd;
+
+ // This was in coda-oss, but I removed it.
  //
  // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
  // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
  // parallel algorithms which might be a better way of satisfying our immediate
  // needs (below) ... although we're still at C++14.
-namespace
+template <typename InputIt, typename OutputIt, typename TFunc>
+static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
+    typename std::iterator_traits<InputIt>::difference_type cutoff)
 {
-    namespace details
+    // https://en.cppreference.com/w/cpp/thread/async
+    const auto len = std::distance(first1, last1);
+    if (len < cutoff)
     {
-        template <typename InputIt, typename OutputIt, typename TFunc>
-        inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-            typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
-        {
-            // https://en.cppreference.com/w/cpp/thread/async
-            const auto len = std::distance(first1, last1);
-            if (len < cutoff)
-            {
-                return std::transform(first1, last1, d_first, f);
-            }
+        return std::transform(first1, last1, d_first, f);
+    }
 
-            const auto mid1 = first1 + len / 2;
-            const auto d_mid = d_first + len / 2;
-            auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff, policy);
-            details::transform_async(first1, mid1, d_first, f, cutoff, policy);
-            return handle.get();
-        }
-    }
-    template <typename InputIt, typename OutputIt, typename TFunc>
-    inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-        typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
-    {
-        // details::... eliminates the overload
-        return details::transform_async(first1, last1, d_first, f, cutoff, policy);
-    }
-    template <typename InputIt, typename OutputIt, typename TFunc>
-    inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-        typename std::iterator_traits<InputIt>::difference_type cutoff)
-    {
-        const std::launch policy = std::launch::deferred | std::launch::async;
-        return transform_async(first1, last1, d_first, f, cutoff, policy);
-    }
+    constexpr auto policy = std::launch::async;
+
+    const auto mid1 = first1 + len / 2;
+    const auto d_mid = d_first + len / 2;
+    auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff);
+    transform_async(first1, mid1, d_first, f, cutoff);
+    return handle.get();
 }
-
-using namespace six;
-using namespace six::sicd;
+template <typename TInputs, typename TResults, typename TFunc>
+static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
+{
+#if SIX_six_sicd_ImageData_has_execution
+    std::ignore = std::transform(std::execution::par, inputs.begin(), inputs.end(), results.begin(), f);
+#else
+    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
+    //if (cutoff_ < 0)
+    //{
+    //    std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(), f);
+    //}
+    //else
+    {
+        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
+        constexpr auto dimension = 128 * 8;
+        constexpr auto default_cutoff = dimension * dimension;
+        const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
+        
+        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(), f, cutoff);
+    }
+#endif // CODA_OSS_cpp17
+}
 
 bool ImageData::operator==(const ImageData& rhs) const
 {
@@ -175,167 +188,96 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-struct KDNode_t final
+template<typename TToComplexFunc>
+static auto createLookup(TToComplexFunc toComplex)
 {
-    cx_float result;
-    AMP8I_PHS8I_t amp_and_value;
-};
-static std::vector<KDNode_t> make_nodes(const six::AmplitudeTable* pAmplitudeTable)
-{
-    // For all possible amp/phase values (there are "only" 256*256), get and save the
-    // complex<float> value.
-    //
-    // Be careful with indexing so that we don't wrap-around in the loops.
-    std::vector<KDNode_t> retval;
-    retval.reserve(UINT8_MAX * UINT8_MAX);
-    for (uint16_t input_amplitude = 0; input_amplitude <= UINT8_MAX; input_amplitude++)
-    {
-        KDNode_t v;
-        v.amp_and_value.first = gsl::narrow<uint8_t>(input_amplitude);
+    auto retval = std::make_unique<six::Amp8iPhs8iLookup_t>(); // too big for the stack
+    auto& values = *retval;
 
-        for (uint16_t input_value = 0; input_value <= UINT8_MAX; input_value++)
+    // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
+    // complex<float> value.
+    for (const auto amplitude : Utilities::iota_0_256())
+    {
+        for (const auto phase : Utilities::iota_0_256())
         {
-            v.amp_and_value.second = gsl::narrow<uint8_t>(input_value);
-            v.result = six::sicd::Utilities::from_AMP8I_PHS8I(v.amp_and_value.first, v.amp_and_value.second, pAmplitudeTable);
-            retval.push_back(v);
+            values[amplitude][phase] = toComplex(amplitude, phase);
         }
     }
+
     return retval;
 }
-
-// input_amplitudes_t is too big for the stack
-static std::unique_ptr<input_amplitudes_t> AMP8I_PHS8I_to_RE32F_IM32F_(const six::AmplitudeTable* pAmplitudeTable)
+static auto createLookup(const six::AmplitudeTable& amplitudeTable)
 {
-    // Get all 256x256 values for the AmplitudeTable
-    auto nodes = make_nodes(pAmplitudeTable);
-
-    auto retval = std::make_unique<input_amplitudes_t>();
-    auto& values = *retval;
-    for (auto&& n : nodes)
-    {
-        values[n.amp_and_value.first][n.amp_and_value.second] = std::move(n.result);
-    }
-
-    return retval;
+    const auto toComplex = [&amplitudeTable](auto amplitude, auto phase) {
+        return six::sicd::Utilities::toComplex(amplitude, phase, amplitudeTable);
+    };
+    return createLookup(toComplex);
+}
+static auto createLookup()
+{
+    static const auto toComplex = [](auto amplitude, auto phase) {
+        return six::sicd::Utilities::toComplex(amplitude, phase);
+    };
+    return createLookup(toComplex);
 }
 
-// This is a non-templatized function so that there is copy of the "static" data with a NULL AmplutdeTable.
-static const input_amplitudes_t* get_cached_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable)
+static const six::Amp8iPhs8iLookup_t* getCachedLookup(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
-        static const auto RE32F_IM32F_values_no_amp = AMP8I_PHS8I_to_RE32F_IM32F_(nullptr);
-        return RE32F_IM32F_values_no_amp.get();
+        static const auto lookup_no_table = createLookup();
+        return lookup_no_table.get();
     }
-    return nullptr;
+
+    // Maybe one has already been created and stored on the table?
+    return pAmplitudeTable->getLookup();
 }
 
-std::complex<float> ImageData::from_AMP8I_PHS8I(const AMP8I_PHS8I_t& input) const
+const six::Amp8iPhs8iLookup_t& ImageData::getLookup(const six::AmplitudeTable* pAmplitudeTable)
 {
-    if (pixelType != PixelType::AMP8I_PHS8I)
-    {
-        throw std::runtime_error("pxielType must be AMP8I_PHS8I");
-    }
-
-    auto const pAmplitudeTable = amplitudeTable.get();
-    auto const pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
-
-    // Do we have a cahced result to use (no amplitude table)?
-    // Or must it be recomputed (have an amplutude table)?
-    if (pValues != nullptr)
-    {
-        return (*pValues)[input.first][input.second];
-    }
-
-    const auto S = Utilities::from_AMP8I_PHS8I(input.first, input.second, pAmplitudeTable);
-    return std::complex<float>(gsl::narrow_cast<float>(S.real()), gsl::narrow_cast<float>(S.imag()));
-}
-
-const input_amplitudes_t& ImageData::get_RE32F_IM32F_values(const six::AmplitudeTable* pAmplitudeTable,
-    std::unique_ptr<input_amplitudes_t>& pValues_)
-{
-    const input_amplitudes_t* pValues = get_cached_RE32F_IM32F_values(pAmplitudeTable);
-    if (pValues == nullptr)
+    auto pLookup = getCachedLookup(pAmplitudeTable);
+    if (pLookup == nullptr)
     {
         assert(pAmplitudeTable != nullptr);
-        pValues_ = AMP8I_PHS8I_to_RE32F_IM32F_(pAmplitudeTable);
-        pValues = pValues_.get();
+        auto& amplitudeTable = *pAmplitudeTable;
+        auto lookup = createLookup(amplitudeTable);
+        amplitudeTable.cacheLookup_(std::move(lookup));
+        pLookup = amplitudeTable.getLookup();
     }
-    assert(pValues != nullptr);
-    return *pValues;
+    assert(pLookup != nullptr);
+    return *pLookup;
 }
 
-void ImageData::from_AMP8I_PHS8I(std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
-    ptrdiff_t cutoff_) const
+void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results)
+{
+    const auto toComplex_ = [&values](const auto& v)
+    {
+        return values[v.amplitude][v.phase];
+    };
+    transform(inputs, results, toComplex_);
+}
+std::vector<six::zfloat> ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
         throw std::runtime_error("pxielType must be AMP8I_PHS8I");
     }
 
-    std::unique_ptr<input_amplitudes_t> pValues_;
-    const auto& values = get_RE32F_IM32F_values(amplitudeTable.get(), pValues_);
-    from_AMP8I_PHS8I(values, inputs, results, cutoff_);
+    const auto& values = getLookup(amplitudeTable.get());
+
+    std::vector<six::zfloat> retval(inputs.size());
+    toComplex(values, inputs, sys::make_span(retval));
+    return retval;
 }
 
-void ImageData::from_AMP8I_PHS8I(const input_amplitudes_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<std::complex<float>> results,
-    ptrdiff_t cutoff_)
+std::vector<AMP8I_PHS8I_t> ImageData::fromComplex(std::span<const six::zfloat> inputs) const
 {
-    const auto get_RE32F_IM32F_value_f = [&values](const six::sicd::AMP8I_PHS8I_t& v)
-    {
-        return values[v.first][v.second];
-    };
-
-    if (cutoff_ < 0)
-    {
-        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(),
-            get_RE32F_IM32F_value_f);
-    }
-    else
-    {
-        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-        constexpr auto dimension = 128 * 8;
-        constexpr auto default_cutoff = dimension * dimension;
-        const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(),
-            get_RE32F_IM32F_value_f, cutoff, std::launch::async);
-    }
+    return six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, amplitudeTable.get());
 }
 
-template<typename TConverter>
-static void to_AMP8I_PHS8I_(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
-    const TConverter& tree, ptrdiff_t cutoff_)
+std::vector<AMP8I_PHS8I_t> ImageData::testing_fromComplex_(std::span<const six::zfloat> inputs)
 {
-    const auto nearest_neighbor_f = [&](const std::complex<float>& v)
-    {
-        return tree.nearest_neighbor(v);
-    };
-
-    if (cutoff_ < 0)
-    {
-        std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(),
-            nearest_neighbor_f);
-    }
-    else
-    {
-        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-        constexpr auto dimension = 128 * 8;
-        constexpr auto default_cutoff = dimension * dimension;
-        const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(),
-            nearest_neighbor_f, cutoff, std::launch::async);
-    }
-}
-void ImageData::to_AMP8I_PHS8I(std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results,
-    ptrdiff_t cutoff) const
-{
-    to_AMP8I_PHS8I(amplitudeTable.get(), inputs, results, cutoff);
-}
-void  ImageData::to_AMP8I_PHS8I(const AmplitudeTable* pAmplitudeTable,
-    std::span<const cx_float> inputs, std::span<AMP8I_PHS8I_t> results, ptrdiff_t cutoff)
-{
-    // make a structure to quickly find the nearest neighbor
-    std::unique_ptr<six::sicd::details::ComplexToAMP8IPHS8I> pConvert; // not-cached, non-NULL amplitudeTable
-    const auto& converter = *(six::sicd::details::ComplexToAMP8IPHS8I::make(pAmplitudeTable, pConvert));
-    to_AMP8I_PHS8I_(inputs, results, converter, cutoff);
+    static const ImageData imageData;
+    assert(imageData.amplitudeTable.get() == nullptr);
+    return imageData.fromComplex(inputs);
 }

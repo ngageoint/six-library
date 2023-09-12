@@ -16,12 +16,12 @@ git remote add -m main -f nitro_remote git@github.com:mdaus/nitro.git
 # pull these in
 # git rm -r externals/coda-oss/modules/drivers/fftw externals/coda-oss/modules/drivers/openssl externals/coda-oss/modules/drivers/pcre externals/coda-oss/modules/drivers/sql externals/coda-oss/modules/drivers/uuid externals/coda-oss/modules/drivers/zlib externals/coda-oss/modules/drivers/jars externals/coda-oss/modules/drivers/jpeg externals/coda-oss/waf externals/coda-oss/wscript
 
-git rm -r externals/nitro/externals
-
 # Now we just want to update
 # Here I'm assuming you're running this on the master branch... otherwise the push command should change
 git subtree pull --prefix externals/coda-oss coda-oss_remote main --squash
+
 git subtree pull --prefix externals/nitro nitro_remote main --squash
+git rm -rf externals/nitro/externals
 
 # If when you do this command you git a merge conflict because a file that has been removed here has been updated in CODA-OSS, you just need to do a 'git rm <pathname>' to resolve the merge conflict.  Then a 'git commit'.
 # TODO: Make this script smart enough to do this.

@@ -32,6 +32,7 @@
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 #pragma warning(disable: 4127) // conditional expression is constant
 #pragma warning(disable: 5039) // '...' : pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#pragma warning(disable: 5267) // definition of implicit copy constructor for '...' is deprecated because it has a user-provided destructor
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow(io.2).
@@ -39,9 +40,7 @@
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
 #pragma warning(disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...' (Enum.3).
 
-// error 4996: '...': warning STL4037: The effect of instantiating the template std::complex for any type other than float, double, or long double is unspecified. You can define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING to suppress this warning.
-#define _SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING
-#include <complex>
+#include <types/Complex.h>
 
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'

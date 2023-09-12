@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __CPHD_FILE_HEADER_H__
-#define __CPHD_FILE_HEADER_H__
+#pragma once
+#ifndef SIX_cphd_FileHeader_h_INCLUDED_
+#define SIX_cphd_FileHeader_h_INCLUDED_
 
 #include <string>
 #include <ostream>
@@ -28,6 +29,7 @@
 
 #include <io/SeekableStreams.h>
 #include <cphd/BaseFileHeader.h>
+#include <cphd/Types.h>
 
 namespace cphd
 {
@@ -36,10 +38,13 @@ namespace cphd
  *
  *  \brief Stores CPHD file header information
  */
-class FileHeader : public BaseFileHeader
+class FileHeader final : public BaseFileHeader
 {
+    static Version defaultVersion;
 public:
-    static const char DEFAULT_VERSION[];
+    static Version getDefaultVersion();
+    static void setDefaultVersion(Version);
+    static const char* DEFAULT_VERSION; // `const char*` for existing Python bindings
 
     /*
      *  \func FileHeader
@@ -47,7 +52,17 @@ public:
      *  \brief Constructor
      *   initialize default variables
      */
-    FileHeader();
+    FileHeader(Version);
+#ifdef SWIGPYTHON
+    FileHeader() = default;
+    FileHeader(const FileHeader&) = default;
+    FileHeader& operator=(const FileHeader&) = default;
+#else
+    FileHeader(const FileHeader&) = delete;
+    FileHeader& operator=(const FileHeader&) = delete;
+#endif
+    FileHeader(FileHeader&&) = default;
+    FileHeader& operator=(FileHeader&&) = default;
 
     virtual ~FileHeader()
     {
@@ -60,7 +75,8 @@ public:
      *
      *  \param inStream Valid input stream of CPHD file
      */
-    void read(io::SeekableInputStream& inStream) override;
+    void readImpl(io::SeekableInputStream&) override;
+    static FileHeader read(io::SeekableInputStream&);
 
     /*
      *  \func toString
@@ -85,6 +101,7 @@ public:
      * returns file version string
      */
     std::string getVersion() const;
+    void getVersion(Version&) const;
 
     /*
      *  \func setVersion
@@ -95,7 +112,8 @@ public:
      *  ex: 1.0.0, 1.0.1 etc
      *
      */
-    void setVersion(const std::string& version);
+    void setVersion(const std::string&);
+    void setVersion(Version);
 
     /*
      *  \func set
@@ -232,22 +250,25 @@ private:
 
 private:
     // File type header
-    std::string mVersion;
+    Version mVersion;
 
     // Required key-value pairs
-    int64_t mXmlBlockSize;
-    int64_t mXmlBlockByteOffset;
-    int64_t mPvpBlockSize;
-    int64_t mPvpBlockByteOffset;
-    int64_t mSignalBlockSize;
-    int64_t mSignalBlockByteOffset;
+    int64_t mXmlBlockSize = 0;
+    int64_t mXmlBlockByteOffset = 0;
+    int64_t mPvpBlockSize = 0;
+    int64_t mPvpBlockByteOffset = 0;
+    int64_t mSignalBlockSize = 0;
+    int64_t mSignalBlockByteOffset = 0;
     std::string mClassification;
     std::string mReleaseInfo;
 
     // Optional key-value pairs
-    int64_t mSupportBlockSize;
-    int64_t mSupportBlockByteOffset;
+    int64_t mSupportBlockSize = 0;
+    int64_t mSupportBlockByteOffset = 0;
+
+    void readAfterValidVersion(io::SeekableInputStream& inStream);
 };
+
 }
 
-#endif
+#endif // SIX_cphd_FileHeader_h_INCLUDED_

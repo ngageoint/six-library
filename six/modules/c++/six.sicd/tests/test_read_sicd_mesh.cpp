@@ -27,7 +27,7 @@ int main(int argc, char** argv)
         const size_t orderX(4);
         const size_t orderY(4);
         std::unique_ptr<six::sicd::ComplexData> complexData;
-        std::vector<std::complex<float> > widebandData;
+        std::vector<six::zfloat > widebandData;
         six::Poly2D outputRowColToSlantRow;
         six::Poly2D outputRowColToSlantCol;
         std::unique_ptr<six::sicd::NoiseMesh> noiseMesh;

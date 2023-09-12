@@ -20,8 +20,32 @@
  *
  */
 
-#ifndef __IMPORT_NITF_H__
-#define __IMPORT_NITF_H__
+#pragma once
+#ifndef NITRO_nitf_import_nitf_h_INCLUDED_
+#define NITRO_nitf_import_nitf_h_INCLUDED_
+
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...' : '...' bytes padding added after data member '...'
+#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+#pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' 
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
+#endif
+
+#if _MSC_VER
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#endif
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#undef min
+#undef max
+#endif
 
 #include "nitf/BandInfo.h"
 #include "nitf/BandSource.h"
@@ -67,4 +91,8 @@
 #include "nitf/DirectBlockSource.h"
 #include "nitf/WriterOptions.h"
 
+#if _MSC_VER
+#pragma warning(pop)
 #endif
+
+#endif // NITRO_nitf_import_nitf_h_INCLUDED_

@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,8 +13,6 @@
 /*-------------------------------------------------------------------------
  *
  * Created:		H5FLprivate.h
- *			Mar 23 2000
- *			Quincey Koziol
  *
  * Purpose:		Private non-prototype header.
  *
@@ -25,9 +22,6 @@
 #define H5FLprivate_H
 
 /* Public headers needed by this file */
-#ifdef LATER
-#include "H5FLpublic.h" /*API prototypes			     */
-#endif                  /* LATER */
 
 /* Private headers needed by this file */
 

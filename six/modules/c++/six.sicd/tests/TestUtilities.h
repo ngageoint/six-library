@@ -55,14 +55,15 @@ struct GetPixelType<int16_t>
 };
 
 // Create dummy SICD data
-template <typename DataTypeT>
+template <typename CxDataTypeT>
 std::unique_ptr<six::sicd::ComplexData>
 createData(const types::RowCol<size_t>& dims)
 {
     std::unique_ptr<six::sicd::ComplexData> data =
             six::sicd::Utilities::createFakeComplexData();
     setExtent(*data, dims);
-    data->setPixelType(GetPixelType<DataTypeT>::getPixelType());
+    using value_type = typename CxDataTypeT::value_type;
+    data->setPixelType(GetPixelType<value_type>::getPixelType());
     return data;
 }
 

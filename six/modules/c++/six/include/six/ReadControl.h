@@ -210,6 +210,10 @@ struct ReadControl
         if (!mXMLRegistry)
             mXMLRegistry = &XMLControlFactory::getInstance();
     }
+    void setXMLControlRegistry(const XMLControlRegistry& xmlRegistry)
+    {
+        setXMLControlRegistry(&xmlRegistry);
+    }
 
 protected:
     std::shared_ptr<Container> mContainer;

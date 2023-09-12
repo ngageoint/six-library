@@ -56,7 +56,8 @@ std::ostream& operator<< (std::ostream& os, const AntCoordFrame& a)
     os << "  AntCoordFrame:: \n"
         << "    Identifier     : " << a.identifier << "\n"
         << "    XAxisPoly      : " << a.xAxisPoly << "\n"
-        << "    YAxisPoly      : " << a.yAxisPoly << "\n";
+        << "    YAxisPoly      : " << a.yAxisPoly << "\n"
+        << a.useACFPVP;
     return os;
 }
 
@@ -66,6 +67,28 @@ std::ostream& operator<< (std::ostream& os, const AntPhaseCenter& a)
         << "    Identifier     : " << a.identifier << "\n"
         << "    ACFId          : " << a.acfId << "\n"
         << "    APCXYZ         : " << a.apcXYZ << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const AntPattern::EBFreqShiftSF& v)
+{
+    os << "  EBFreqShiftSF:: \n"
+        << v.dcxsf << v.dcysf << "\n";
+    return os;
+}
+
+std::ostream& operator<< (std::ostream& os, const AntPattern::MLFreqDilationSF& v)
+{
+    os << "  MLFreqDilationSF:: \n"
+        << v.dcxsf << v.dcysf << "\n";
+    return os;
+}
+
+
+std::ostream& operator<< (std::ostream& os, const AntPattern::AntPolRef& v)
+{
+    os << "  AntPolRef:: \n"
+        << v.ampX << v.ampY << v.phaseY << "\n";
     return os;
 }
 
@@ -85,8 +108,11 @@ std::ostream& operator<< (std::ostream& os, const AntPattern& a)
         << "    FreqZero       : " << a.freqZero << "\n"
         << "    GainZero       : " << a.gainZero << "\n"
         << "    EBFreqShift    : " << a.ebFreqShift << "\n"
+        << a.ebFreqShiftSF << "\n"
         << "    MLFreqDilation : " << a.mlFreqDilation << "\n"
+        << a.mlFreqDilationSF << "\n"
         << "    GainBSPoly     : " << a.gainBSPoly << "\n"
+        << a.antPolRef << "\n"
         << a.eb << "\n"
         << "    Array:: \n"
         << a.array << "\n"

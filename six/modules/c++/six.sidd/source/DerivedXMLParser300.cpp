@@ -39,7 +39,7 @@ namespace six
 {
 namespace sidd
 {
-constexpr Version VERSION = Version::v300;
+constexpr Version VERSION = Version::v3_0_0;
 static const char SI_COMMON_URI[] = "urn:SICommon:1.0";
 
 // There is a need to support two different versions of ISM with SIDD 3.0 :-(

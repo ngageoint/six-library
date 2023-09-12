@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef NITRO_nitf_Object_hpp_INCLUDED_
 #define NITRO_nitf_Object_hpp_INCLUDED_
-#pragma once
 
 #include <assert.h>
 

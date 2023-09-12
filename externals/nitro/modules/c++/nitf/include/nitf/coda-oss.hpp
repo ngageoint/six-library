@@ -22,19 +22,16 @@
 
 #pragma once
 
-#if _MSC_VER
-#pragma warning(disable: 5032) // detected #pragma warning(push) with no corresponding #pragma warning(pop)
-#pragma warning(push)
-#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
-#pragma warning(disable: 5031) // #pragma warning(pop): likely mismatch, popping warning state pushed in different file
-#endif // _MSC_VER
+#include "config/disable_compiler_warnings.h"
 
-#include <std/bit> // std::endian
-#include <std/cstddef> // std::byte
+#include "import/std.h"
+#include <std/bit>
+#include <std/cstddef>
 #include <std/filesystem>
 #include <std/span>
 #include <std/optional>
 
+CODA_OSS_disable_warning_push
 #if _MSC_VER
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
@@ -52,27 +49,17 @@
 
 #include <sys/Conf.h>
 #include <except/Throwable.h>
-
 #include <import/str.h>
 #include <import/sys.h>
-#if _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
-#endif // _MSC_VER
 #include <import/mt.h>
-#if _MSC_VER
-#pragma warning(pop)
-#endif // _MSC_VER
 #include <import/io.h>
-
-#include <import/mt.h>
-#include <import/sys.h>
-#include <import/str.h>
+#include <io/ReadUtils.h>
+#include <io/TempFile.h>
 #include <import/types.h>
-#include <import/io.h>
 #include <import/mem.h>
+#include <import/math.h>
 #include <gsl/gsl.h>
+#include <sys/Span.h>
+#include <import/sio/lite.h>
 
-#if _MSC_VER
-#pragma warning(pop)
-#endif // _MSC_VER
+CODA_OSS_disable_warning_pop

@@ -24,7 +24,6 @@
 #include <io/ByteStream.h>
 #include "TestCase.h"
 
-const char* FILE_TYPE_HEADER = "CPHD/1.0\n";
 const char* FILE_HEADER_CONTENT = "CPHD/1.0\n"
         "XML_BLOCK_SIZE := 3\n"
         "XML_BLOCK_BYTE_OFFSET := 10\n"
@@ -38,19 +37,29 @@ const char* FILE_HEADER_CONTENT = "CPHD/1.0\n"
         "RELEASE_INFO := UNRESTRICTED\n"
         "\f\n";
 
-TEST_CASE(testReadVersion)
+TEST_CASE(testReadVersion1_0)
 {
+    const char* FILE_TYPE_HEADER = "CPHD/1.0\n";
+
     io::ByteStream fileTypeHeader;
     fileTypeHeader.write(FILE_TYPE_HEADER, strlen(FILE_TYPE_HEADER));
-    TEST_ASSERT_EQ(cphd::FileHeader::readVersion(fileTypeHeader), "1.0");
+    TEST_ASSERT(cphd::FileHeader::readVersion(fileTypeHeader) == cphd::Version::v1_0_0);
+}
+
+TEST_CASE(testReadVersion1_1_0)
+{
+    const char* FILE_TYPE_HEADER = "CPHD/1.1.0\n";
+
+    io::ByteStream fileTypeHeader;
+    fileTypeHeader.write(FILE_TYPE_HEADER, strlen(FILE_TYPE_HEADER));
+    TEST_ASSERT(cphd::FileHeader::readVersion(fileTypeHeader) == cphd::Version::v1_1_0);
 }
 
 TEST_CASE(testCanReadHeaderWithoutBreaking)
 {
     io::ByteStream fileHeaderContentWithSupport;
     fileHeaderContentWithSupport.write(FILE_HEADER_CONTENT, strlen(FILE_HEADER_CONTENT));
-    cphd::FileHeader headerWithSupport;
-    headerWithSupport.read(fileHeaderContentWithSupport);
+    const auto headerWithSupport = cphd::FileHeader::read(fileHeaderContentWithSupport);
     TEST_ASSERT_EQ(headerWithSupport.getXMLBlockSize(), 3);
     TEST_ASSERT_EQ(headerWithSupport.getXMLBlockByteOffset(), 10);
     TEST_ASSERT_EQ(headerWithSupport.getSupportBlockSize(), 4);
@@ -74,8 +83,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "RELEASE_INFO := UNRESTRICTED\n"
             "\f\n";
     fileHeaderContentWithoutSupport.write(fileHeaderTxtNoSupport);
-    cphd::FileHeader headerWithoutSupport;
-    headerWithoutSupport.read(fileHeaderContentWithoutSupport);
+    const auto headerWithoutSupport = cphd::FileHeader::read(fileHeaderContentWithoutSupport);
     TEST_ASSERT_EQ(headerWithoutSupport.getXMLBlockSize(), 3);
     TEST_ASSERT_EQ(headerWithoutSupport.getXMLBlockByteOffset(), 10);
     TEST_ASSERT_EQ(headerWithoutSupport.getSupportBlockSize(), 0);
@@ -98,7 +106,7 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "\f\n";
     io::ByteStream fileHeaderContentWithoutClassification;
     fileHeaderContentWithoutClassification.write(fileHeaderTxtNoClass);
-    TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithoutClassification));
+    TEST_THROWS(cphd::FileHeader::read(fileHeaderContentWithoutClassification));
 
     std::string fileHeaderTxtInvalid = "CPHD/1.0\n"
             "XML_BLOCK_SIZE := foo\n"
@@ -112,21 +120,19 @@ TEST_CASE(testCanReadHeaderWithoutBreaking)
             "\f\n";
     io::ByteStream fileHeaderContentWithInvalidValue;
     fileHeaderContentWithInvalidValue.write(fileHeaderTxtInvalid);
-    TEST_THROWS(cphd::FileHeader().read(fileHeaderContentWithInvalidValue));
+    TEST_THROWS(cphd::FileHeader::read(fileHeaderContentWithInvalidValue));
 }
 
 TEST_CASE(testRoundTripHeader)
 {
     io::ByteStream headerContent;
     headerContent.write(FILE_HEADER_CONTENT, strlen(FILE_HEADER_CONTENT));
-    cphd::FileHeader header;
-    header.read(headerContent);
+    const auto header = cphd::FileHeader::read(headerContent);
     std::string outString = header.toString();
 
     io::ByteStream roundTrippedContent;
     roundTrippedContent.write(outString);
-    cphd::FileHeader roundTrippedHeader;
-    roundTrippedHeader.read(roundTrippedContent);
+    const auto roundTrippedHeader = cphd::FileHeader::read(roundTrippedContent);
 
     TEST_ASSERT_EQ(header.getXMLBlockSize(),
             roundTrippedHeader.getXMLBlockSize());
@@ -151,7 +157,8 @@ TEST_CASE(testRoundTripHeader)
 }
 
 TEST_MAIN(
-        TEST_CHECK(testReadVersion);
+        TEST_CHECK(testReadVersion1_0);
+        TEST_CHECK(testReadVersion1_1_0);
         TEST_CHECK(testCanReadHeaderWithoutBreaking);
         TEST_CHECK(testRoundTripHeader);
         )

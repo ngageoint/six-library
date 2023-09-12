@@ -20,12 +20,14 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_io_ReadUtils_h_INCLUDED_
 #define CODA_OSS_io_ReadUtils_h_INCLUDED_
 
 #include <string>
 #include <vector>
 
+#include <config/Exports.h>
 #include <sys/Conf.h>
 #include <coda_oss/cstddef.h> // byte
 #include <sys/filesystem.h>
@@ -40,9 +42,8 @@ namespace io
  * \param pathname Pathname of the file to read in
  * \param buffer Raw bytes of the file
  */
-void readFileContents(const std::string& pathname,
-                      std::vector<sys::byte>& buffer);
-void readFileContents(const coda_oss::filesystem::path& pathname, std::vector<coda_oss::byte>& buffer);
+CODA_OSS_API void readFileContents(const std::string& pathname, std::vector<sys::byte>& buffer);
+CODA_OSS_API void readFileContents(const coda_oss::filesystem::path& pathname, std::vector<coda_oss::byte>& buffer);
 
 /*!
  * Reads the contents of a file into a string.  The file is assumed to be a
@@ -51,7 +52,7 @@ void readFileContents(const coda_oss::filesystem::path& pathname, std::vector<co
  * \param pathname Pathname of the file to read in
  * \param[out] str Contents of the file
  */
-void readFileContents(const std::string& pathname, std::string& str);
+CODA_OSS_API void readFileContents(const std::string& pathname, std::string& str);
 
 /*!
  * Reads the contents of a file into a string.  The file is assumed to be a

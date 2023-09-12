@@ -91,7 +91,6 @@ files, this bug may allow an attacker to cause a denial of service.
 
 */
 
-static std::string testName;
 const char* output_file = "test_writer_3++.nitf";
 
 static std::filesystem::path findInputFile_(const std::string& name)
@@ -174,8 +173,9 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
     nitf_Writer* writer = nitf_Writer_construct(&error);
     TEST_ASSERT_NOT_NULL(writer);
     (void)nitf_Writer_prepare(writer, record, output, &error);
-
+    
     nitf_IOHandle_close(io);
+    nitf_Writer_destruct(&writer);
     nitf_Record_destruct(&record);
     nitf_Reader_destruct(&reader);
 
@@ -200,6 +200,10 @@ TEST_CASE(test_defaultRead_crash)
 
     /*  This parses all header data within the NITF  */
     (void)nitf_Reader_read(reader, io, &error);
+    TEST_ASSERT_TRUE(true);
+
+    nitf_IOHandle_close(io);
+    nitf_Reader_destruct(&reader);
     TEST_ASSERT_TRUE(true);
 }
 
@@ -272,8 +276,6 @@ TEST_CASE(test_nitf_CSEXRB_bugfix)
 }
 
 TEST_MAIN(
-    (void)argc; (void)argv;
-
 TEST_CHECK(test_nitf_Record_unmergeTREs_crash); // 2
 TEST_CHECK(test_defaultRead_crash); // 3
 TEST_CHECK(test_readBandInfo_crash); // 4

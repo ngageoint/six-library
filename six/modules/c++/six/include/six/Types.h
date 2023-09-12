@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIX_TYPES_H__
-#define __SIX_TYPES_H__
 #pragma once
+#ifndef SIX_six_Types_h_INCLUDED_
+#define SIX_six_Types_h_INCLUDED_
 
 #include <stdint.h>
 
@@ -29,21 +29,25 @@
 #include <limits>
 #include <string>
 #include <stdexcept>
-#include <std/memory>
+#include <memory>
 
-#include <scene/sys_Conf.h>
+#include <types/Complex.h>
 #include <import/except.h>
 #include <import/mem.h>
 #include <import/str.h>
 #include <import/sys.h>
 #include <import/math/linear.h>
 #include <import/math/poly.h>
-#include <import/nitf.hpp>
 #include <import/io.h>
 
+#include <import/nitf.hpp>
+
+#include <scene/sys_Conf.h>
 #include "scene/Types.h"
 #include "scene/FrameType.h"
 #include "six/Enums.h"
+#include "six/Complex.h"
+#include "six/AmplitudeTable.h"
 
 namespace six
 {
@@ -179,7 +183,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the realand imaginary
             // components. Each component is stored in a 32-bit IEEE floating point format (4
             // bytes per component, 8 bytes per pixel).
-            static_assert(sizeof(std::complex<float>) == 8, "RE32F_IM32F should be two floats");
+            static_assert(sizeof(six::zfloat) == 8, "RE32F_IM32F should be two floats");
             return 8;
         }
 
@@ -188,7 +192,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the real and imaginary 
             // components. Each component is stored in a 16-bit signed integer in 2's 
             // complement format (2 bytes per component, 4 bytes per pixel). 
-            static_assert(sizeof(std::complex<int16_t>) == 4, "RE16I_IM16I should be two 16-bit integers");
+            static_assert(sizeof(six::zint16_t) == 4, "RE16I_IM16I should be two 16-bit integers");
             return 4;
         }
 
@@ -197,7 +201,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the amplitude and phase
             // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
             // component, 2 bytes per pixel). 
-            static_assert(sizeof(std::pair<uint8_t, uint8_t>) == 2, "AMP8I_PHS8I should be two 8-bit integers");
+            static_assert(sizeof(AMP8I_PHS8I_t) == 2, "AMP8I_PHS8I should be two 8-bit integers");
             return 2;
         }
 
@@ -286,171 +290,6 @@ struct SCP
     bool operator!=(const SCP& rhs) const
     {
         return !(*this == rhs);
-    }
-};
-
-/*!
- *  \struct LUT
- *  \brief Lookup table
- *
- *  This lookup table object has a number of entries (for pixel ops,
- *  this is usually 256), and an output space (size) which can be anything
- *  (e.g., 2 for short) depending on the type that is being housed
- *
- */
-struct LUT
-{
-    std::vector<unsigned char> table;
-    size_t numEntries = 0;
-    size_t elementSize = 0;
-
-    //!  Initialize with a number of entries and known output space
-    LUT(size_t entries, size_t outputSpace) :
-        table(entries * outputSpace),
-        numEntries(entries),
-        elementSize(outputSpace)
-    {
-    }
-
-    //!  Initialize with an existing LUT, which we copy
-    LUT(const unsigned char* interleavedLUT,
-        size_t entries,
-        size_t outputSpace) :
-        table(interleavedLUT, interleavedLUT + entries * outputSpace),
-        numEntries(entries),
-        elementSize(outputSpace)
-    {
-    }
-
-    //! Initialize from nitf::LookupTable read from a NITF
-    LUT(const nitf::LookupTable& lookupTable) : LUT(lookupTable.getEntries(), lookupTable.getTables())
-    {
-        // NITF stores the tables consecutively.
-        // Need to interleave them for SIX
-        if (elementSize == 3)
-        {
-            // Imagine the vector is a matrix and then transpose it
-            for (size_t ii = 0; ii < table.size(); ++ii)
-            {
-                table[(ii % numEntries) * elementSize +
-                    (ii / numEntries)] = lookupTable.getTable()[ii];
-            }
-        }
-
-        // I'm not sure why this is a special case, but elements get
-        // swapped if we try to use the above formula
-        else if (elementSize == 2)
-        {
-            for (size_t ii = 0; ii < numEntries; ++ii)
-            {
-                table[2 * ii] = lookupTable.getTable()[numEntries + ii];
-                table[2 * ii + 1] = lookupTable.getTable()[ii];
-            }
-        }
-    }
-
-    virtual ~LUT() = default;
-
-    bool operator==(const LUT& rhs) const
-    {
-        return (table == rhs.table &&
-                numEntries == rhs.numEntries &&
-                elementSize == rhs.elementSize);
-    }
-
-    //!  Gives back a pointer at table[i * elementSize]
-    unsigned char* operator[](size_t i)
-    {
-        return &(table[i * elementSize]);
-    }
-
-    //!  Gives back a pointer at table[i * elementSize]
-    const unsigned char* operator[](size_t i) const
-    {
-        return &(table[i * elementSize]);
-    }
-
-    unsigned char* getTable()
-    {
-        return table.empty() ? nullptr : table.data();
-    }
-
-    const unsigned char* getTable() const
-    {
-
-        return table.empty() ? nullptr : table.data();
-    }
-
-    virtual LUT* clone() const
-    {
-        return std::make_unique<LUT>(getTable(), numEntries, elementSize).release();
-    }
-};
-
-/*!
- *  \struct AmplitudeTable
- *  \brief SICD 'AmpTable' parameter
- *
- *  This is a fixed size (256-element) LUT.  For AMP8I_PHS8I data,
- *  the amplitude and phase parts are stored as unsigned 8-bit integers.
- *  If an amplitude table is given, the amplitude component should be
- *  interpreted as an index into the AmpTable, ultimately yielding the
- *  double precision amplitude value
- */
-struct AmplitudeTable final : public LUT
-{
-    //!  Constructor.  Creates a 256-entry table
-    AmplitudeTable(size_t elementSize) noexcept(false) :
-        LUT(UINT8_MAX + 1 /*i.e., 256*/, elementSize)
-    {
-    }
-    AmplitudeTable() noexcept(false) :  AmplitudeTable(sizeof(double)) 
-    {
-    }
-    AmplitudeTable(const nitf::LookupTable& lookupTable) noexcept(false) : LUT(lookupTable)
-    {
-        if (size() != 256)
-        {
-            throw std::invalid_argument("lookupTable should have 256 elements.");
-        }
-    }
-
-    size_t size() const
-    {
-        return numEntries;
-    }
-
-    bool operator==(const AmplitudeTable& rhs) const
-    {
-        const LUT* pThis = this;
-        const LUT* pRHS = &rhs;
-        return *(pThis) == *(pRHS);
-    }
-    bool operator!=(const AmplitudeTable& rhs) const
-    {
-        return !(*this == rhs);
-    }
-
-    const double& index(size_t ii) const
-    {
-        const void* this_ii = (*this)[ii];
-        return *static_cast<const double*>(this_ii);
-    }
-    double& index(size_t ii)
-    {
-        void* this_ii = (*this)[ii];
-        return *static_cast<double*>(this_ii);
-    }
-
-    AmplitudeTable* clone() const
-    {
-        auto ret = std::make_unique<AmplitudeTable>();
-        for (size_t ii = 0; ii < numEntries; ++ii)
-        {
-            void* ret_ii = (*ret)[ii];
-            *static_cast<double*>(ret_ii) = index(ii);
-        }
-        return ret.release();
     }
 };
 
@@ -578,4 +417,4 @@ ImageMode getImageMode(RadarModeType radarMode);
 DECLARE_EXCEPTION(MissingRequired);
 }
 
-#endif
+#endif // SIX_six_Types_h_INCLUDED_

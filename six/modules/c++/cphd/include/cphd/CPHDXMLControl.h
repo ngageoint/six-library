@@ -29,6 +29,7 @@
 #include <std/filesystem>
 #include <vector>
 #include <std/string>
+#include <map>
 
 #include <scene/sys_Conf.h>
 #include <xml/lite/Element.h>
@@ -144,7 +145,10 @@ public:
         const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
     //! \return Suported version to uri mapping
-    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
+    static std::map<Version, xml::lite::Uri> getVersionUriMap();
+
+    // Given the URI get associated version
+    static Version uriToVersion(const xml::lite::Uri&);
 
 protected:
     logging::Logger *mLog = nullptr;
@@ -176,10 +180,7 @@ private:
      *  \param uri A string specifying CPHD uri
      */
     std::unique_ptr<CPHDXMLParser>
-    getParser(const xml::lite::Uri&) const;
-
-    // Given the URI get associated version
-    std::string uriToVersion(const xml::lite::Uri&) const;
+    getParser(Version) const;
 };
 }
 

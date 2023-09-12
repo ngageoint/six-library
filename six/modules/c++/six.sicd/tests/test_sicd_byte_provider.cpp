@@ -39,7 +39,7 @@
 namespace
 {
 // Main test class
-template <typename DataTypeT>
+template <typename CxDataTypeT>
 struct Tester final
 {
     Tester(const std::vector<std::string>& schemaPaths,
@@ -50,7 +50,7 @@ struct Tester final
         mDims(123, 456),
         // Have to release() here to prevent nasty runtime error
         // with Solaris
-        mData(createData<DataTypeT>(mDims).release()),
+        mData(createData<CxDataTypeT>(mDims).release()),
         mImage(mDims.area()),
         mTestPathname("streaming_write.nitf"),
         mSchemaPaths(schemaPaths),
@@ -60,16 +60,17 @@ struct Tester final
     {
         for (size_t ii = 0; ii < mImage.size(); ++ii)
         {
-            mImage[ii] = std::complex<DataTypeT>(
-                    static_cast<DataTypeT>(ii),
-                    static_cast<DataTypeT>(ii * 10));
+            using value_type = typename CxDataTypeT::value_type;
+            mImage[ii] = CxDataTypeT(
+                    static_cast<value_type>(ii),
+                    static_cast<value_type>(ii * 10));
         }
 
         mBigEndianImage = mImage;
         if (sys::isLittleEndianSystem())
         {
             void* const buffer = mBigEndianImage.data();
-            constexpr auto elemSize = sizeof(DataTypeT);
+            constexpr auto elemSize = sizeof(CxDataTypeT);
             const auto numElems = mBigEndianImage.size() * 2; // real and imag
             sys::byteSwap(buffer, elemSize, numElems);
         }
@@ -148,8 +149,8 @@ private:
 
     const types::RowCol<size_t> mDims;
     std::unique_ptr<six::sicd::ComplexData> mData;
-    std::vector<std::complex<DataTypeT> > mImage;
-    std::vector<std::complex<DataTypeT> > mBigEndianImage;
+    std::vector<CxDataTypeT > mImage;
+    std::vector<CxDataTypeT > mBigEndianImage;
 
     std::unique_ptr<const CompareFiles> mCompareFiles;
     const std::string mTestPathname;
@@ -161,8 +162,8 @@ private:
     bool mSuccess;
 };
 
-template <typename DataTypeT>
-void Tester<DataTypeT>::normalWrite()
+template <typename CxDataTypeT>
+void Tester<CxDataTypeT>::normalWrite()
 {
     mem::SharedPtr<six::Container> container(
             new six::Container(six::DataType::COMPLEX));
@@ -183,8 +184,8 @@ void Tester<DataTypeT>::normalWrite()
     mCompareFiles.reset(new CompareFiles(mNormalPathname));
 }
 
-template <typename DataTypeT>
-void Tester<DataTypeT>::testSingleWrite()
+template <typename CxDataTypeT>
+void Tester<CxDataTypeT>::testSingleWrite()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -206,8 +207,8 @@ void Tester<DataTypeT>::testSingleWrite()
     compare("Single write");
 }
 
-template <typename DataTypeT>
-void Tester<DataTypeT>::testMultipleWrites()
+template <typename CxDataTypeT>
+void Tester<CxDataTypeT>::testMultipleWrites()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -291,8 +292,8 @@ void Tester<DataTypeT>::testMultipleWrites()
     compare("Multiple writes");
 }
 
-template <typename DataTypeT>
-void Tester<DataTypeT>::testOneWritePerRow()
+template <typename CxDataTypeT>
+void Tester<CxDataTypeT>::testOneWritePerRow()
 {
     const EnsureFileCleanup ensureFileCleanup(mTestPathname);
 
@@ -323,7 +324,7 @@ void Tester<DataTypeT>::testOneWritePerRow()
     compare("One write per row");
 }
 
-template <typename DataTypeT>
+template <typename CxDataTypeT>
 bool doTests(const std::vector<std::string>& schemaPaths,
              bool setMaxProductSize,
              size_t numRowsPerSeg)
@@ -334,11 +335,11 @@ bool doTests(const std::vector<std::string>& schemaPaths,
     //       It would be better to get the logic fixed that forces
     //       segmentation on the number of rows via OPT_MAX_ILOC_ROWS
     static const size_t APPROX_HEADER_SIZE = 2 * 1024;
-    const size_t numBytesPerRow = 456 * sizeof(std::complex<DataTypeT>);
+    const size_t numBytesPerRow = 456 * sizeof(CxDataTypeT);
     const size_t maxProductSize = numRowsPerSeg * numBytesPerRow +
             APPROX_HEADER_SIZE;
 
-    Tester<DataTypeT> tester(schemaPaths, setMaxProductSize, maxProductSize);
+    Tester<CxDataTypeT> tester(schemaPaths, setMaxProductSize, maxProductSize);
     tester.testSingleWrite();
     tester.testMultipleWrites();
     tester.testOneWritePerRow();
@@ -351,12 +352,12 @@ bool doTestsBothDataTypes(const std::vector<std::string>& schemaPaths,
                           size_t numRowsPerSeg = 0)
 {
     bool success = true;
-    if (!doTests<float>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<six::zfloat>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }
 
-    if (!doTests<int16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
+    if (!doTests<six::zint16_t>(schemaPaths, setMaxProductSize, numRowsPerSeg))
     {
         success = false;
     }

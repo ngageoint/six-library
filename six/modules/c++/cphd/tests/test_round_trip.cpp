@@ -59,8 +59,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
 
     // Read SupportBlock
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
-    std::unique_ptr<std::byte[]> readPtr;
-    supportBlock.readAll(numThreads, readPtr);
+    const auto readPtr = supportBlock.readAll(numThreads);
 
     // Read PVPBlock
     const cphd::PVPBlock& pvpBlock = reader.getPVPBlock();
@@ -75,8 +74,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
     cphd::CPHDWriter writer(reader.getMetadata(), outPathname, schemaPathnames, numThreads);
 
     // Declare and allocate the wideband data storage
-    std::unique_ptr<std::byte[]> data;
-    data.reset(new std::byte[header.getSignalBlockSize()]);
+    const auto data = std::make_unique<std::byte[]>(header.getSignalBlockSize());
 
     // Check if signal data is compressed
     if (metadata.data.isCompressed())
@@ -91,7 +89,7 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         writer.write(
                 pvpBlock,
                 data.get(),
-                readPtr.get());
+                sys::make_span(readPtr));
     }
     else
     {
@@ -111,20 +109,20 @@ void testRoundTrip(const std::string& inPathname, const std::string& outPathname
         case cphd::SignalArrayFormat::CI2:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<int8_t>* >(data.get()),
-                    readPtr.get());
+                    reinterpret_cast<const cphd::zint8_t* >(data.get()),
+                    sys::make_span(readPtr));
             break;
         case cphd::SignalArrayFormat::CI4:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<int16_t>* >(data.get()),
-                    readPtr.get());
+                    reinterpret_cast<const cphd::zint16_t* >(data.get()),
+                    sys::make_span(readPtr));
             break;
         case cphd::SignalArrayFormat::CF8:
             writer.write(
                     pvpBlock,
-                    reinterpret_cast<const std::complex<float>* >(data.get()),
-                    readPtr.get());
+                    reinterpret_cast<const cphd::zfloat* >(data.get()),
+                    sys::make_span(readPtr));
             break;
         }
     }

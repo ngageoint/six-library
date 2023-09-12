@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_Doocument_h_INCLUDED_
 #define CODA_OSS_xml_lite_Doocument_h_INCLUDED_
-#pragma once
 
 /*!
  * \file  Document.h
@@ -42,6 +42,8 @@
 #include <memory>
 #include "coda_oss/string.h"
 
+#include <config/Exports.h>
+
 #include "xml/lite/Element.h"
 #include "xml/lite/QName.h"
 
@@ -56,7 +58,7 @@ namespace lite
  * Use the Document to access the Element nodes contained within.
  * The DocumentParser will build a tree that you can use.
  */
-struct Document // SOAPDocument derives :-(
+struct CODA_OSS_API Document  // SOAPDocument derives :-(
 {
     //! Constructor
     Document(Element* rootNode = nullptr, bool own = true) :

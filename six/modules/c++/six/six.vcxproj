@@ -51,12 +51,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;SIX_DEFAULT_SCHEMA_PATH=R"($(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\conf\schema\six)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;SIX_DEFAULT_SCHEMA_PATH=R"($(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\conf\schema\six)";%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
@@ -65,7 +65,9 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <EnablePREfast>true</EnablePREfast>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -79,19 +81,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;SIX_DEFAULT_SCHEMA_PATH=R"($(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\conf\schema\six)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;SIX_DEFAULT_SCHEMA_PATH=R"($(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\conf\schema\six)";%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)..\scene\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -104,9 +106,11 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="include\six\Adapters.h" />
+    <ClInclude Include="include\six\AmplitudeTable.h" />
     <ClInclude Include="include\six\ByteProvider.h" />
     <ClInclude Include="include\six\Classification.h" />
     <ClInclude Include="include\six\CollectionInformation.h" />
+    <ClInclude Include="include\six\Complex.h" />
     <ClInclude Include="include\six\CompressedByteProvider.h" />
     <ClInclude Include="include\six\Container.h" />
     <ClInclude Include="include\six\Data.h" />
@@ -146,6 +150,7 @@
     <ClInclude Include="include\six\XMLControlFactory.h" />
     <ClInclude Include="include\six\XmlLite.h" />
     <ClInclude Include="include\six\XMLParser.h" />
+    <ClInclude Include="include\six\XsElement.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

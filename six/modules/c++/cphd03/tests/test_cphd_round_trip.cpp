@@ -81,18 +81,18 @@ int main(int argc, char** argv)
             switch (sampleType)
             {
             case cphd::SampleType::RE08I_IM08I:
-                writer.writeCPHDData<std::complex<int8_t> >(
-                    reinterpret_cast<const std::complex<int8_t>* >(data.get()),
+                writer.writeCPHDData<cphd::zint8_t >(
+                    reinterpret_cast<const cphd::zint8_t* >(data.get()),
                     dims.area());
                 break;
             case cphd::SampleType::RE16I_IM16I:
-                writer.writeCPHDData<std::complex<int16_t> >(
-                    reinterpret_cast<const std::complex<int16_t>* >(data.get()),
+                writer.writeCPHDData<cphd::zint16_t >(
+                    reinterpret_cast<const cphd::zint16_t* >(data.get()),
                     dims.area());
                 break;
             case cphd::SampleType::RE32F_IM32F:
-                writer.writeCPHDData<std::complex<float> >(
-                    reinterpret_cast<const std::complex<float>* >(data.get()),
+                writer.writeCPHDData<cphd::zfloat >(
+                    reinterpret_cast<const cphd::zfloat* >(data.get()),
                     dims.area());
                 break;
             }

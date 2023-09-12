@@ -33,6 +33,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "six/XsElement.h"
 
 namespace six
 {
@@ -254,47 +255,49 @@ struct IonoError
  *
  *  Contains Unmodeled error statistics 
  */
-struct UnmodeledS final
+struct Unmodeled final
 {
-    // By making member names match XML element names, macros can
-    // help generate boilerplate code.
-    double Xrow = 0.0;
-    double Ycol = 0.0;
-    double XrowYcol = 0.0;
+    XsElement<double> Xrow{ "Xrow" };
+    XsElement<double> Ycol{ "Ycol" };
+    XsElement<double> XrowYcol{ "XrowYcol" };
 
     struct Decorr final
     {
         struct Xrow_Ycol final
         {
-            double CorrCoefZero = 0.0;
-            double DecorrRate = 0.0;
+            XsElement<double> corrCoefZero{ "CorrCoefZero" };
+            XsElement<double> decorrRate{ "DecorrRate" };
         };
-        Xrow_Ycol Xrow;
-        Xrow_Ycol Ycol;
+        XsElement<Xrow_Ycol> Xrow{ "Xrow" };
+        XsElement<Xrow_Ycol> Ycol{ "Ycol" };
     };
-    mem::ScopedCopyablePtr<Decorr> UnmodeledDecorr;
+    XsElement_minOccurs0<Decorr> unmodeledDecorr{ "UnmodeledDecorr" };
 };
-inline bool operator==(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
+inline bool operator==(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
 {
-    return (lhs.Xrow.CorrCoefZero == rhs.Xrow.CorrCoefZero)
-        && (lhs.Xrow.DecorrRate == rhs.Xrow.DecorrRate)
-        && (lhs.Ycol.CorrCoefZero == rhs.Ycol.CorrCoefZero)
-        && (lhs.Ycol.DecorrRate == rhs.Ycol.DecorrRate)
+    auto&& lhs_Xrow = value(lhs.Xrow);
+    auto&& rhs_Xrow = value(rhs.Xrow);
+    auto&& lhs_Ycol = value(lhs.Ycol);
+    auto&& rhs_Ycol = value(rhs.Ycol);
+    return (lhs_Xrow.corrCoefZero == rhs_Xrow.corrCoefZero)
+        && (lhs_Xrow.decorrRate == rhs_Xrow.decorrRate)
+        && (lhs_Ycol.corrCoefZero == rhs_Ycol.corrCoefZero)
+        && (lhs_Ycol.decorrRate == rhs_Ycol.decorrRate)
         ;
 }
-inline bool operator!=(const UnmodeledS::Decorr& lhs, const UnmodeledS::Decorr& rhs)
+inline bool operator!=(const Unmodeled::Decorr& lhs, const Unmodeled::Decorr& rhs)
 {
     return !(lhs == rhs);
 }
-inline bool operator==(const UnmodeledS& lhs, const UnmodeledS& rhs)
+inline bool operator==(const Unmodeled& lhs, const Unmodeled& rhs)
 {
     return (lhs.Xrow == rhs.Xrow)
         && (lhs.Ycol == rhs.Ycol)
         && (lhs.XrowYcol == rhs.XrowYcol)
-        && (lhs.UnmodeledDecorr == rhs.UnmodeledDecorr)
+        && (lhs.unmodeledDecorr == rhs.unmodeledDecorr)
         ;
 }
-inline bool operator!=(const UnmodeledS& lhs, const UnmodeledS& rhs)
+inline bool operator!=(const Unmodeled& lhs, const Unmodeled& rhs)
 {
     return !(lhs == rhs);
 }
@@ -407,7 +410,7 @@ struct ErrorStatistics
      *  (Optional) Unmodeled
      *
      */
-    mem::ScopedCopyablePtr<UnmodeledS> Unmodeled;
+    XsElement_minOccurs0<Unmodeled> unmodeled{ "Unmodeled" };
 
     /*!
      *  Additional parameters
@@ -421,7 +424,7 @@ struct ErrorStatistics
         return (compositeSCP == rhs.compositeSCP)
             && (components == rhs.components)
             && (additionalParameters == rhs.additionalParameters)
-            && (Unmodeled == rhs.Unmodeled)
+            && (unmodeled == rhs.unmodeled)
             ;
     }
     bool operator!=(const ErrorStatistics& rhs) const

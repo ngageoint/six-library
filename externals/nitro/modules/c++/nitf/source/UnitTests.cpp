@@ -53,23 +53,9 @@ static fs::path current_path()
 	return fs::absolute(fs::current_path());
 }
 
-// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
 static inline std::string PlatformToolset()
 {
-#ifdef _WIN32
-	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
-	// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
-	#if _MSC_VER >= 1930
-		return "v143"; // Visual Studio 2022
-	#elif _MSC_VER >= 1920
-		return "v142"; // Visual Studio 2019
-	#else
-		#error "Don't know $(PlatformToolset) value.'"
-	#endif
-#else 
-	// Linux
-	return "";
-#endif
+	return os.getSpecialEnv("PlatformToolset"); // e.g.,  "v143" on Windows
 }
 
 // Depending on the unittest we're running, how we're running it and what platform we're on, there could

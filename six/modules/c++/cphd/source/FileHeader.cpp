@@ -21,31 +21,43 @@
  */
 #include <string.h>
 #include <sstream>
+#include <map>
+#include <stdexcept>
 
 #include <nitf/coda-oss.hpp>
 #include <mem/ScopedArray.h>
 #include <except/Exception.h>
 #include <str/Manip.h>
 #include <cphd/FileHeader.h>
+#include <cphd/Types.h>
 
 namespace cphd
 {
-const char FileHeader::DEFAULT_VERSION[] = "1.0.1";
 
-FileHeader::FileHeader() :
-    mVersion(DEFAULT_VERSION),
-    mXmlBlockSize(0),
-    mXmlBlockByteOffset(0),
-    mPvpBlockSize(0),
-    mPvpBlockByteOffset(0),
-    mSignalBlockSize(0),
-    mSignalBlockByteOffset(0),
-    mSupportBlockSize(0),
-    mSupportBlockByteOffset(0)
+Version FileHeader::defaultVersion = Version::v1_0_1;
+Version FileHeader::getDefaultVersion()
 {
+    return defaultVersion;
+}
+void FileHeader::setDefaultVersion(Version version)
+{
+    defaultVersion = version;
+}
+static const char* getDefaultVersion_()
+{
+    static std::string strDefaultVersion; // returning a pointer
+    strDefaultVersion = to_string(FileHeader::getDefaultVersion());
+    return strDefaultVersion.c_str();
 }
 
-void FileHeader::read(io::SeekableInputStream& inStream)
+const char* FileHeader::DEFAULT_VERSION = getDefaultVersion_();
+FileHeader::FileHeader(Version version) : mVersion(version)
+{
+    // reinitialize in case value has changed
+    DEFAULT_VERSION = getDefaultVersion_();
+}
+
+FileHeader FileHeader::read(io::SeekableInputStream& inStream)
 {
     if (!isCPHD(inStream))
     {
@@ -53,8 +65,16 @@ void FileHeader::read(io::SeekableInputStream& inStream)
     }
 
     // Read mVersion first
-    mVersion = readVersion(inStream);
-
+    FileHeader retval(readVersion(inStream));
+    retval.readAfterValidVersion(inStream);
+    return retval;
+}
+void FileHeader::readImpl(io::SeekableInputStream&)
+{
+    throw std::logic_error("Should use 'static' read()");
+}
+void FileHeader::readAfterValidVersion(io::SeekableInputStream& inStream)
+{
     // Block read the header for more efficient IO
     KeyValuePair headerEntry;
     std::string headerBlock;
@@ -121,6 +141,19 @@ void FileHeader::read(io::SeekableInputStream& inStream)
         }
     }
 
+    /*
+    "... we found that the six library does a check when reading a CPHD file to ensure that the Release Info field not only exists,
+    but that it is not an empty string. The CPHD spec does require that the field exists, but does not seem to prohibit it from being
+    an empty string.
+    
+    We have gotten some vendor CPHDs with an empty field here and have failed reading the file due to this.
+    I checked and SARPY is able to read (it must not implement the same check)."
+    */
+    //if (mReleaseInfo.empty())
+    //{
+    //    throw except::Exception(Ctxt("CPHD header information is incomplete"));
+    //}
+
     // check for any required values that are uninitialized
     if (mXmlBlockSize == 0  ||
         mXmlBlockByteOffset == 0  ||
@@ -128,8 +161,7 @@ void FileHeader::read(io::SeekableInputStream& inStream)
         mPvpBlockByteOffset == 0  ||
         mSignalBlockSize == 0  ||
         mSignalBlockByteOffset == 0 ||
-        mClassification.empty() ||
-        mReleaseInfo.empty())
+        mClassification.empty())
     {
         throw except::Exception(Ctxt("CPHD header information is incomplete"));
     }
@@ -143,7 +175,7 @@ std::string FileHeader::toString() const
     // Send the values as they are, no calculating
 
     // File type
-    os << FILE_TYPE << "/" << mVersion << LINE_TERMINATOR;
+    os << FILE_TYPE << "/" << to_string(mVersion) << LINE_TERMINATOR;
 
     // Classification fields, if present
     if (mSupportBlockSize > 0)
@@ -174,12 +206,20 @@ std::string FileHeader::toString() const
 
 std::string FileHeader::getVersion() const
 {
-    return mVersion;
+    return to_string(mVersion);
+}
+void FileHeader::getVersion(Version& version) const
+{
+    version = mVersion;
 }
 
-void FileHeader::setVersion(const std::string& version)
+void FileHeader::setVersion(Version version)
 {
     mVersion = version;
+}
+void FileHeader::setVersion(const std::string& strVersion)
+{
+    setVersion(FileHeader::toVersion(strVersion));
 }
 
 size_t FileHeader::set(int64_t xmlBlockSize,
@@ -263,7 +303,7 @@ int64_t FileHeader::getPvpPadBytes() const
 std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
 {
     os << "FileHeader::\n"
-       << "  mVersion               : " << fh.mVersion << "\n"
+       << "  mVersion               : " << to_string(fh.mVersion) << "\n"
        << "  mXmlBlockSize          : " << fh.mXmlBlockSize << "\n"
        << "  mXmlBlockByteOffset    : " << fh.mXmlBlockByteOffset << "\n"
        << "  mSupportBlockSize      : " << fh.mSupportBlockSize << "\n"

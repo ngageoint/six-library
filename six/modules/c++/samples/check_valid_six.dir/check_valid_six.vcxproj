@@ -50,9 +50,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)six\modules\c++\scene\include\;$(SolutionDir)six\modules\c++\six\include\;$(SolutionDir)six\modules\c++\six.sidd\include\;$(SolutionDir)six\modules\c++\six.sicd\include\;$(SolutionDir)six\modules\c++\cphd\include\;$(SolutionDir)six\modules\c++\cphd03\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\cphd\include;$(SolutionDir)six\modules\c++\cphd03\include;$(SolutionDir)externals\nitro\modules\c\nrt\include;$(SolutionDir)externals\nitro\modules\c\nitf\include;$(SolutionDir)externals\nitro\modules\c++\nitf\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -60,16 +60,16 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib;$(SolutionDir)out\install\$(Platform)-$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -78,9 +78,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)six\modules\c++\scene\include\;$(SolutionDir)six\modules\c++\six\include\;$(SolutionDir)six\modules\c++\six.sidd\include\;$(SolutionDir)six\modules\c++\six.sicd\include\;$(SolutionDir)six\modules\c++\cphd\include\;$(SolutionDir)six\modules\c++\cphd03\include\;$(SolutionDir)externals\nitro\modules\c\nrt\include\;$(SolutionDir)externals\nitro\modules\c\nitf\include\;$(SolutionDir)externals\nitro\modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\cphd\include;$(SolutionDir)six\modules\c++\cphd03\include;$(SolutionDir)externals\nitro\modules\c\nrt\include;$(SolutionDir)externals\nitro\modules\c\nitf\include;$(SolutionDir)externals\nitro\modules\c++\nitf\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -88,15 +88,15 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib;$(SolutionDir)out\install\$(Platform)-$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

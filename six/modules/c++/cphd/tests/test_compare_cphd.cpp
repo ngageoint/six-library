@@ -63,10 +63,19 @@ bool compareCPHDData(const std::byte* data1,
     return true;
 }
 
-bool compareSupportData(const std::unique_ptr<std::byte[]>& data1,
-                     const std::unique_ptr<std::byte[]>& data2,
-                     size_t size)
+bool compareSupportData(const std::vector<std::byte>& data1, const std::vector<std::byte>& data2, size_t size)
 {
+    if (data1.size() != size)
+    {
+        std::cerr << "Support data1.size()=" << data1.size() << " should be: " << size << "\n";
+        return false;
+    }
+    if (data2.size() != size)
+    {
+        std::cerr << "Support data2.size()=" << data2.size() << " should be: " << size << "\n";
+        return false;
+    }
+
     for (size_t ii = 0; ii < size; ++ii)
     {
         if (data1[ii] != data2[ii])
@@ -116,7 +125,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
             switch (reader1.getMetadata().data.getSampleType())
             {
             case cphd::SampleType::RE08I_IM08I:
-                if (!compareCPHDData<std::complex<int8_t> >(
+                if (!compareCPHDData<cphd::zint8_t >(
                         cphdData1.get(),
                         cphdData2.get(),
                         dims1.area(),
@@ -126,7 +135,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
                 }
                 break;
             case cphd::SampleType::RE16I_IM16I:
-                if (!compareCPHDData<std::complex<int16_t> >(
+                if (!compareCPHDData<cphd::zint16_t >(
                         cphdData1.get(),
                         cphdData2.get(),
                         dims1.area(),
@@ -136,7 +145,7 @@ bool compareWideband(cphd::CPHDReader& reader1,
                 }
                 break;
             case cphd::SampleType::RE32F_IM32F:
-                if (!compareCPHDData<std::complex<float> >(
+                if (!compareCPHDData<cphd::zfloat >(
                         cphdData1.get(),
                         cphdData2.get(),
                         dims1.area(),
@@ -178,10 +187,8 @@ bool checkCPHD(const std::string& pathname1, const std::string& pathname2, size_
     }
 
     // Check support block
-    std::unique_ptr<std::byte[]> readPtr1;
-    reader1.getSupportBlock().readAll(numThreads, readPtr1);
-    std::unique_ptr<std::byte[]> readPtr2;
-    reader2.getSupportBlock().readAll(numThreads, readPtr2);
+    const auto readPtr1 = reader1.getSupportBlock().readAll(numThreads);
+    const auto readPtr2 = reader2.getSupportBlock().readAll(numThreads);
     if (!compareSupportData(readPtr1, readPtr2, reader1.getMetadata().data.getAllSupportSize()))
     {
         std::cerr << "SupportBlock does not match \n";

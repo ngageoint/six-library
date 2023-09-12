@@ -21,8 +21,6 @@
  */
 #include <six/CollectionInformation.h>
 
-#include <str/EncodedStringView.h>
-
 namespace six
 {
 CollectionInformation::CollectionInformation()
@@ -50,13 +48,13 @@ CollectionInformation* CollectionInformation::clone() const
 
 std::string CollectionInformation::getClassificationLevel() const
 {
-    return mClassification.native();
+    return str::to_native(mClassification);
 }
-void CollectionInformation::getClassificationLevel(str::EncodedString& result) const
+void CollectionInformation::getClassificationLevel(std::u8string& result) const
 {
     result = mClassification;
 }
-void CollectionInformation::setClassificationLevel(const str::EncodedString& classification)
+void CollectionInformation::setClassificationLevel(const std::u8string& classification)
 {
     mClassification = classification;
 }

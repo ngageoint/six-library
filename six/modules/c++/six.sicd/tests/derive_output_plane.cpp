@@ -37,7 +37,7 @@ void roundTripNITF(const std::string& sicdPathname,
         const std::vector<std::string>& schemaPaths_)
 {
     std::unique_ptr<six::sicd::ComplexData> complexData;
-    std::vector<std::complex<float> > buffer;
+    std::vector<six::zfloat > buffer;
     six::sicd::Utilities::readSicd(sicdPathname, schemaPaths_, complexData,
             buffer);
 

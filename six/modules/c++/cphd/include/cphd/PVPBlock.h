@@ -23,13 +23,12 @@
 #ifndef __CPHD_PVP_BLOCK_H__
 #define __CPHD_PVP_BLOCK_H__
 
+#include <stddef.h>
+
 #include <ostream>
 #include <vector>
-#include <complex>
 #include <cstdint>
-#include <stddef.h>
 #include <unordered_map>
-
 #include <std/optional>
 
 #include <scene/sys_Conf.h>
@@ -60,13 +59,23 @@ struct AddedPVP
     }
 };
 template<typename T>
-struct AddedPVP<std::complex<T> >
+struct AddedPVP<std::complex<T>>
 {
-    std::complex<T> getAddedPVP(const six::Parameter& val) const
+    auto getAddedPVP(const six::Parameter& val) const
     {
         return val.getComplex<T>();
     }
 };
+#if SIX_six_unique_ComplexInteger 
+template<typename T>
+struct AddedPVP<six::ComplexInteger<T> >
+{
+    auto getAddedPVP(const six::Parameter& val) const
+    {
+        return val.getComplex<T>();
+    }
+};
+#endif
 template<>
 struct AddedPVP<std::string>
 {
@@ -185,8 +194,7 @@ struct PVPBlock
             return aP.getAddedPVP(mData[channel][set].addedPVP.find(name)->second);
             // return AddPVPNamespace::getAddedPVP<T>(mData[channel][set].addedPVP.find(name)->second);
         }
-        throw except::Exception(Ctxt(
-                "Parameter was not set"));
+        throw except::Exception(Ctxt("Parameter was not set"));
     }
 
     //! Setter functions
@@ -227,11 +235,9 @@ struct PVPBlock
                 mData[channel][set].addedPVP.find(name)->second.setValue(value);
                 return;
             }
-            throw except::Exception(Ctxt(
-                                "Additional parameter requested already exists"));
+            throw except::Exception(Ctxt("Additional parameter requested already exists"));
         }
-        throw except::Exception(Ctxt(
-                                "Parameter was not specified in XML"));
+        throw except::Exception(Ctxt("Parameter was not specified in XML"));
     }
 
     /*
@@ -243,9 +249,9 @@ struct PVPBlock
      *  be resized and zeroed internally.
      */
     void getPVPdata(size_t channel,
-                    std::vector<sys::ubyte>& data) const;
-    void getPVPdata(size_t channel,
                     std::vector<std::byte>& data) const;
+    void getPVPdata(size_t channel,
+                    std::vector<sys::ubyte>& data) const; // for existing SWIG bindings
 
     /*
      *  \func getPVPdata
@@ -350,7 +356,7 @@ protected:
      *  Each channel consists of a PVP Array,
      *  which consists of multiple sets
      */
-    struct PVPSet
+    struct PVPSet final
     {
         /*!
          *  \func PVPSet

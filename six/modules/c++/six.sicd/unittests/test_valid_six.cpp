@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 
-#include <string>
+#include <std/string>
 #include <iostream>
 #include <string>
 #include <utility>
@@ -35,7 +35,7 @@
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>
 #include <import/sys.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 #include <sys/Span.h>
 
 #include <import/six.h>
@@ -152,13 +152,13 @@ TEST_CASE(valid_six_50x50)
     valid_six_50x50_(testName, &schemaPaths_); // "validate" against schema (use a default path)
 }
 
-inline static std::string classificationText_iso8859_1()
+inline static std::string classificationText_asIso8859_1()
 {
-    return std::string("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
+    return "NON CLASSIFI\xc9 / UNCLASSIFIED";  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
 }
-inline static std::string classificationText_utf_8()
+inline static std::string classificationText_asUtf8()
 {
-    return std::string("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+    return "NON CLASSIFI\xc3\x89 / UNCLASSIFIED";  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
 }
 
 TEST_CASE(sicd_French_xml)
@@ -169,7 +169,7 @@ TEST_CASE(sicd_French_xml)
     const auto image = six::sicd::readFromNITF(inputPathname, &schemaPaths_, pComplexData);
     const six::Data* pData = pComplexData.get();
 
-    const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8() : classificationText_iso8859_1();
+    const auto expectedCassificationText = sys::Platform == sys::PlatformType::Linux ? classificationText_asUtf8() : classificationText_asIso8859_1();
     const auto& classification = pData->getClassification();
     const auto actual = classification.getLevel();
     TEST_ASSERT_EQ(actual, expectedCassificationText);
@@ -218,9 +218,8 @@ static bool find_string(io::FileInputStream& stream, const std::string& s)
     stream.seek(pos, io::Seekable::START);
     return false;
 }
-static void sicd_French_xml_raw_()
+TEST_CASE(sicd_French_xml_raw)
 {
-    static const std::string testName("test_valid_six");
     // This is a binary file with XML burried in it somewhere
     const auto path = six::testing::getNitfPath("sicd_French_xml.nitf");
 
@@ -234,23 +233,19 @@ static void sicd_French_xml_raw_()
     const auto& classificationXML = root.getElementByTagName("Classification", true /*recurse*/);
 
     // UTF-8 characters in sicd_French_xml.nitf
-    const auto expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8() : classificationText_iso8859_1();
+    const auto expectedCharData = sys::Platform == sys::PlatformType::Linux ? classificationText_asUtf8() : classificationText_asIso8859_1();
     auto expectedLength = expectedCharData.length();
     const auto characterData = classificationXML.getCharacterData();
     TEST_ASSERT_EQ(characterData.length(), expectedLength);
     TEST_ASSERT_EQ(characterData, expectedCharData);
 
-    const auto u8_expectedCharData8 = str::EncodedStringView::fromUtf8(classificationText_utf_8()).u8string();
+    const std::u8string u8_expectedCharData8 = str::c_str<std::u8string>(classificationText_asUtf8());
     expectedLength = u8_expectedCharData8.length();
 
     std::u8string u8_characterData;
     classificationXML.getCharacterData(u8_characterData);
     TEST_ASSERT_EQ(u8_characterData.length(), expectedLength);
     TEST_ASSERT(u8_characterData == u8_expectedCharData8);
-}
-TEST_CASE(sicd_French_xml_raw)
-{
-    sicd_French_xml_raw_();
 }
 
 static void test_assert(const six::sicd::ComplexData& complexData,
@@ -271,7 +266,7 @@ static std::vector<std::byte> readFromNITF(const std::filesystem::path& inputPat
     std::unique_ptr<six::sicd::ComplexData> pComplexData;
     auto image = six::sicd::readFromNITF(inputPathname, pComplexData);
 
-    test_assert(*pComplexData, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>));
+    test_assert(*pComplexData, six::PixelType::RE32F_IM32F, sizeof(six::zfloat));
 
     return image;
 
@@ -298,9 +293,9 @@ static six::sicd::ComplexImageResult readSicd_(const std::filesystem::path& sicd
     test_assert(*(result.pComplexData), expectedPixelType, expectedNumBytesPerPixel);
     return result;
 }
-static std::vector<std::complex<float>> readSicd(const std::filesystem::path& inputPathname)
+static std::vector<six::zfloat> readSicd(const std::filesystem::path& inputPathname)
 {
-    return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(std::complex<float>)).widebandData;
+    return readSicd_(inputPathname, six::PixelType::RE32F_IM32F, sizeof(six::zfloat)).widebandData;
 }
 TEST_CASE(test_read_sicd_50x50)
 {
@@ -308,7 +303,7 @@ TEST_CASE(test_read_sicd_50x50)
     auto widebandData = readSicd(inputPathname);
 }
 
-static std::vector<std::complex<float>> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
+static std::vector<six::zfloat> make_complex_image(const six::sicd::ComplexData& complexData, const types::RowCol<size_t>& dims)
 {
     if (complexData.getPixelType() == six::PixelType::RE32F_IM32F)
     {
@@ -360,7 +355,7 @@ static void read_raw_data(const std::filesystem::path& path, six::PixelType pixe
 
     if (pixelType == six::PixelType::RE32F_IM32F)
     {
-        std::vector<std::complex<float>> rawData;
+        std::vector<six::zfloat> rawData;
         six::sicd::Utilities::getRawData(reader.NITFReadControl(), complexData, offset, extent, rawData);
         test_assert_eq(bytes, rawData);
         test_assert_eq(expectedBytes, rawData);
@@ -368,7 +363,7 @@ static void read_raw_data(const std::filesystem::path& path, six::PixelType pixe
 }
 
 static void read_nitf(const std::string& testName,
-    const std::filesystem::path& path, six::PixelType pixelType, const std::vector<std::complex<float>>& image)
+    const std::filesystem::path& path, six::PixelType pixelType, const std::vector<six::zfloat>& image)
 {
     const auto expectedNumBytesPerPixel = pixelType == six::PixelType::RE32F_IM32F ? 8 : (pixelType == six::PixelType::AMP8I_PHS8I ? 2 : -1);
     const auto result = readSicd_(path, pixelType, expectedNumBytesPerPixel);
@@ -378,7 +373,7 @@ static void read_nitf(const std::string& testName,
     read_raw_data(path, pixelType, std::span<const std::byte>(bytes.data(), bytes.size()));
 }
 
-static void buffer_list_save(const std::filesystem::path& outputName, const std::vector<std::complex<float>>& image,
+static void buffer_list_save(const std::filesystem::path& outputName, const std::vector<six::zfloat>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
@@ -388,11 +383,11 @@ static void buffer_list_save(const std::filesystem::path& outputName, const std:
     six::save(writer, image.data(), outputName.string(), schemaPaths); // API for Python; it uses six::BufferList
 }
 
-static void save(const std::filesystem::path& outputName, const std::vector<std::complex<float>>& image,
+static void save(const std::filesystem::path& outputName, const std::vector<six::zfloat>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
     static const std::vector<std::filesystem::path> fs_schemaPaths;
-    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, std::span<const std::complex<float>>(image.data(), image.size()));
+    six::sicd::writeAsNITF(outputName, fs_schemaPaths, *pComplexData, std::span<const six::zfloat>(image.data(), image.size()));
 }
 
 template<typename TSave>
