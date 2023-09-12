@@ -177,9 +177,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     ifd->addEntry(tiff::KnownTags::PHOTOMETRIC_INTERPRETATION, photoInterp);
 
-    addStringArray(ifd,
-                   "ImageDescription",
-                   FmtX("SIDD: %s", data->getName().c_str()));
+    addStringArray(ifd, "ImageDescription", FmtX("SIDD: %s", data->getName()));
 
     constexpr unsigned short orientation = 1;
     ifd->addEntry("Orientation", orientation);
@@ -236,12 +234,12 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     tiff::IFDEntry* const xmlEntry = (*ifd)[Constants::GT_XML_TAG];
 
     auto xml = six::toValidXMLString(data, schemaPaths, mLog);
-    xmlEntry->addValues(str::toString(xml));
+    xmlEntry->addValues(str::to_native(xml));
 
     for (size_t jj = 0; jj < mComplexData.size(); ++jj)
     {
         xml = six::toValidXMLString(mComplexData[jj], schemaPaths, mLog);
-        xmlEntry->addValues(str::toString(xml));
+        xmlEntry->addValues(str::to_native(xml));
     }
 }
 

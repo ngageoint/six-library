@@ -89,7 +89,7 @@ jobs:
     #      searchFolder: D:\a\nitro\nitro\${{ matrix.platform }}\${{ matrix.configuration }}
     #      runInParallel: true  
 
-  build-linux-cmake:
+  build-linux-cmake-default:
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -109,8 +109,7 @@ jobs:
       run: |
         env
         which python
-        mkdir target
-        cd target
+        mkdir target && cd target
         cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
     - name: build
       run: |
@@ -126,6 +125,30 @@ jobs:
       run: |
         cd target
         cmake --build . --target install
+
+  build-linux-cmake:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        configuration: [Debug, Release]
+    name: ${{ matrix.os }}-${{ matrix.configuration }}-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: configure
+      run: |
+        mkdir out && cd out
+        cmake .. -DENABLE_PYTHON=OFF
+    - name: build
+      run: |
+        cd out
+        # "-j" spawns too many processes causing GCC to crash
+        cmake --build . --config ${{ matrix.configuration }} -j 12
+    - name: test
+    # should run w/o install
+      run: |
+        cd out
+        ctest -C ${{ matrix.configuration }} --output-on-failure
 
   build-waf:
     strategy:

@@ -21,6 +21,8 @@
  */
 #include <string.h>
 #include <sstream>
+#include <map>
+#include <stdexcept>
 
 #include <nitf/coda-oss.hpp>
 #include <mem/ScopedArray.h>
@@ -32,27 +34,30 @@
 namespace cphd
 {
 
-static const char* getDefaultVersion()
+Version FileHeader::defaultVersion = Version::v1_0_1;
+Version FileHeader::getDefaultVersion()
 {
-    static const auto defaultVersion = to_string(Version::v1_0_1);
-    return defaultVersion.c_str();
+    return defaultVersion;
 }
-const char* FileHeader::DEFAULT_VERSION = getDefaultVersion();
-
-FileHeader::FileHeader() :
-    mVersion(DEFAULT_VERSION),
-    mXmlBlockSize(0),
-    mXmlBlockByteOffset(0),
-    mPvpBlockSize(0),
-    mPvpBlockByteOffset(0),
-    mSignalBlockSize(0),
-    mSignalBlockByteOffset(0),
-    mSupportBlockSize(0),
-    mSupportBlockByteOffset(0)
+void FileHeader::setDefaultVersion(Version version)
 {
+    defaultVersion = version;
+}
+static const char* getDefaultVersion_()
+{
+    static std::string strDefaultVersion; // returning a pointer
+    strDefaultVersion = to_string(FileHeader::getDefaultVersion());
+    return strDefaultVersion.c_str();
 }
 
-void FileHeader::read(io::SeekableInputStream& inStream)
+const char* FileHeader::DEFAULT_VERSION = getDefaultVersion_();
+FileHeader::FileHeader(Version version) : mVersion(version)
+{
+    // reinitialize in case value has changed
+    DEFAULT_VERSION = getDefaultVersion_();
+}
+
+FileHeader FileHeader::read(io::SeekableInputStream& inStream)
 {
     if (!isCPHD(inStream))
     {
@@ -60,8 +65,16 @@ void FileHeader::read(io::SeekableInputStream& inStream)
     }
 
     // Read mVersion first
-    mVersion = readVersion(inStream);
-
+    FileHeader retval(readVersion(inStream));
+    retval.readAfterValidVersion(inStream);
+    return retval;
+}
+void FileHeader::readImpl(io::SeekableInputStream&)
+{
+    throw std::logic_error("Should use 'static' read()");
+}
+void FileHeader::readAfterValidVersion(io::SeekableInputStream& inStream)
+{
     // Block read the header for more efficient IO
     KeyValuePair headerEntry;
     std::string headerBlock;
@@ -162,7 +175,7 @@ std::string FileHeader::toString() const
     // Send the values as they are, no calculating
 
     // File type
-    os << FILE_TYPE << "/" << mVersion << LINE_TERMINATOR;
+    os << FILE_TYPE << "/" << to_string(mVersion) << LINE_TERMINATOR;
 
     // Classification fields, if present
     if (mSupportBlockSize > 0)
@@ -193,16 +206,20 @@ std::string FileHeader::toString() const
 
 std::string FileHeader::getVersion() const
 {
-    return mVersion;
+    return to_string(mVersion);
+}
+void FileHeader::getVersion(Version& version) const
+{
+    version = mVersion;
 }
 
-void FileHeader::setVersion(const std::string& version)
+void FileHeader::setVersion(Version version)
 {
     mVersion = version;
 }
-void FileHeader::setVersion(Version version)
+void FileHeader::setVersion(const std::string& strVersion)
 {
-    setVersion(to_string(version));
+    setVersion(FileHeader::toVersion(strVersion));
 }
 
 size_t FileHeader::set(int64_t xmlBlockSize,
@@ -286,7 +303,7 @@ int64_t FileHeader::getPvpPadBytes() const
 std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
 {
     os << "FileHeader::\n"
-       << "  mVersion               : " << fh.mVersion << "\n"
+       << "  mVersion               : " << to_string(fh.mVersion) << "\n"
        << "  mXmlBlockSize          : " << fh.mXmlBlockSize << "\n"
        << "  mXmlBlockByteOffset    : " << fh.mXmlBlockByteOffset << "\n"
        << "  mSupportBlockSize      : " << fh.mSupportBlockSize << "\n"

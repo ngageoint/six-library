@@ -26,10 +26,14 @@
 namespace cphd
 {
 
-Metadata::Metadata()
+Metadata::Metadata(Version version)
 {
-  // Default version defined in cphd::FileHeader
-  setVersion(FileHeader::DEFAULT_VERSION);
+    setVersion(version);
+}
+Metadata::Metadata(Data&& data)
+    : Metadata(FileHeader::getDefaultVersion()) // Default version defined in cphd::FileHeader
+{
+    this->data = std::move(data);
 }
 
 size_t Metadata::getNumChannels() const
@@ -75,29 +79,13 @@ void Metadata::getVersion(Version& version) const
 {
     version = mVersion;
 }
-
-void Metadata::setVersion(const std::string& version)
-{
-    if (version == "1.0.0")
-    {
-        setVersion(Version::v1_0_0);
-    }
-    else if (version == "1.0.1")
-    {
-        setVersion(Version::v1_0_1);
-    }
-    else if (version == "1.1.0")
-    {
-        setVersion(Version::v1_1_0);
-    }
-    else
-    {
-        throw std::invalid_argument("Unknown version string: " + version);
-    }
-}
 void Metadata::setVersion(Version version)
 {
     mVersion = version;
+}
+void Metadata::setVersion(const std::string& strVersion)
+{
+    setVersion(FileHeader::toVersion(strVersion));
 }
 
 bool Metadata::operator==(const Metadata& other) const
