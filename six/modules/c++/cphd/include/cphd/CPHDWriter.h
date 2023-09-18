@@ -150,7 +150,10 @@ struct CPHDWriter final
      *
      *  \param pvpBlock The vector based metadata to write.
      */
+    void writeMetadata(io::OutputStream&, const PVPBlock& pvpBlock);
     void writeMetadata(const PVPBlock& pvpBlock);
+    void getMetadata(const PVPBlock&, size_t& supportSize, /*Optional*/ size_t& pvpSize, size_t& cphdSize) const;
+
 
     /*
      *  \func writeSupportData
@@ -202,7 +205,7 @@ struct CPHDWriter final
     void writePVPData(const PVPBlock&);
     void writePVPData(io::SeekableOutputStream&, const PVPBlock&);
     static void writePvpPadBytes(io::OutputStream& stream, int64_t pvpPadBytes);
-    static void writePVPData(DataWriter& dataWriter,  const cphd::Data&, const PVPBlock&);
+    static void writePVPData(DataWriter& dataWriter, const cphd::Data&, const PVPBlock&);
 
     /*
      *  \func writeCPHDData
@@ -257,7 +260,7 @@ private:
     /*
      *  Write metadata helper
      */
-    void writeMetadata(
+    void writeMetadata(io::OutputStream&,
         size_t supportSize, // Optional
         size_t pvpSize,
         size_t cphdSize);

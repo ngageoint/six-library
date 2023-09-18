@@ -74,9 +74,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 {
 }
 
-void CPHDWriter::writeMetadata(size_t supportSize,
-                               size_t pvpSize,
-                               size_t cphdSize)
+void CPHDWriter::writeMetadata(io::OutputStream& stream,
+    size_t supportSize, size_t pvpSize, size_t cphdSize)
 {
     mHeader.setVersion(getVersion(mMetadata));
 
@@ -96,10 +95,10 @@ void CPHDWriter::writeMetadata(size_t supportSize,
 
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
-    mStream->write(mHeader.toString());
-    mStream->write("\f\n");
-    mStream->write(xmlMetadata);
-    mStream->write("\f\n");
+    stream.write(mHeader.toString());
+    stream.write("\f\n");
+    stream.write(xmlMetadata);
+    stream.write("\f\n");
 }
 
 std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter(io::SeekableOutputStream& stream) const
@@ -145,18 +144,17 @@ CPHDWriter::WriteImplFunc_t CPHDWriter::getWriteCompressedCPHDDataImpl()
     };
 }
 
-static auto make_span(std::span<const std::byte> data, const cphd::Data::SupportArray& dataArray)
-{
-    const auto pData = data.data() + dataArray.arrayByteOffset;
-    return sys::make_span(pData, dataArray.size_bytes());
-}
-
 void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t elementSize)
 {
     auto dataWriter = make_DataWriter();
     (*dataWriter)(data, elementSize);
 }
 
+static auto make_span(std::span<const std::byte> data, const cphd::Data::SupportArray& dataArray)
+{
+    const auto pData = data.data() + dataArray.arrayByteOffset;
+    return sys::make_span(pData, dataArray.size_bytes());
+}
 void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream, std::span<const std::byte> data)
 {
     const auto supportBlockByteOffset = mHeader.getSupportBlockByteOffset();
@@ -223,7 +221,8 @@ template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloa
 //template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
 //template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
 
-void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
+void CPHDWriter::getMetadata(const PVPBlock& pvpBlock,
+    size_t& totalSupportSize, size_t& totalPVPSize, size_t& totalCPHDSize) const
 {
     auto&& data = mMetadata.data;
 
@@ -238,21 +237,31 @@ void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
 
     const size_t numChannels = data.getNumChannels();
 
-    size_t totalSupportSize = 0;
+    totalSupportSize = 0;
     for (auto&& kv : data.supportArrayMap)
     {
         totalSupportSize += kv.second.getSize();
     }
 
-    size_t totalPVPSize = 0;
-    size_t totalCPHDSize = 0;
+    totalPVPSize = 0;
+    totalCPHDSize = 0;
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         totalPVPSize += pvpBlock.getPVPsize(ii);
         totalCPHDSize += data.getNumVectors(ii) * data.getNumSamples(ii) * mElementSize;
     }
-
-    writeMetadata(totalSupportSize, totalPVPSize, totalCPHDSize);
+}
+void CPHDWriter::writeMetadata(io::OutputStream& stream, const PVPBlock& pvpBlock)
+{
+    size_t totalSupportSize;
+    size_t totalPVPSize;
+    size_t totalCPHDSize;
+    getMetadata(pvpBlock, totalSupportSize, totalPVPSize, totalCPHDSize);
+    writeMetadata(stream, totalSupportSize, totalPVPSize, totalCPHDSize);
+}
+void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
+{
+    writeMetadata(*mStream, pvpBlock);
 }
 
 void CPHDWriter::writePvpPadBytes(io::OutputStream& stream, int64_t pvpPadBytes)
