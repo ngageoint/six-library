@@ -170,20 +170,27 @@ std::function<void(std::span<const std::byte>, size_t)> CPHDWriter::getWriteSupp
     };
 }
 
-void CPHDWriter::writeSupportData(std::span<const std::byte> data)
+void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream,
+    const FileHeader& header, std::function<void(std::span<const std::byte>, size_t)> writeSupportDataImpl,
+    const std::unordered_map<std::string, cphd::Data::SupportArray>& supportArrayMap, std::span<const std::byte> data)
 {
-    for (auto&& mapEntry : mMetadata.data.supportArrayMap)
+    const auto supportBlockByteOffset = header.getSupportBlockByteOffset();
+
+    for (auto&& mapEntry : supportArrayMap)
     {
         auto&& dataArray = mapEntry.second;
 
         // Move inputstream head to offset of particular support array
-        mStream->seek(mHeader.getSupportBlockByteOffset() + dataArray.arrayByteOffset, io::SeekableOutputStream::START);
+        stream.seek(supportBlockByteOffset + dataArray.arrayByteOffset, io::SeekableOutputStream::START);
         writeSupportDataImpl(make_span(data, dataArray), dataArray.bytesPerElement);
     }
     // Move inputstream head to the end of the support block after all supports have been written
-    mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
+    stream.seek(supportBlockByteOffset + header.getSupportBlockSize(), io::SeekableOutputStream::START);
 }
-
+void CPHDWriter::writeSupportData(std::span<const std::byte> data)
+{
+    writeSupportData(*mStream, mHeader, getWriteSupportDataImpl(), mMetadata.data.supportArrayMap, data);
+}
 
 template <typename T>
 void CPHDWriter::write(const PVPBlock& pvpBlock,

@@ -184,6 +184,9 @@ struct CPHDWriter final
      *
      *  \param data A pointer to the start of the support array data block
      */
+    static void writeSupportData(io::SeekableOutputStream&,
+        const FileHeader&, std::function<void(std::span<const std::byte>, size_t)> writeSupportDataImpl,
+        const std::unordered_map<std::string, cphd::Data::SupportArray>&, std::span<const std::byte>);
     void writeSupportData(std::span<const std::byte>);
     template <typename T>
     void writeSupportData(std::span<const T> data)
