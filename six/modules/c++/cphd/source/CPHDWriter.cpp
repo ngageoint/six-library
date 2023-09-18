@@ -107,18 +107,17 @@ void CPHDWriter::writeMetadata(size_t supportSize,
     mStream->write("\f\n");
 }
 
-void CPHDWriter::writePVPData(const std::byte* pvpBlock, size_t channel)
+void CPHDWriter::writePVPData(std::span<const std::byte> pvpBlock, size_t channel)
 {
-    const size_t size = (mMetadata.data.getNumVectors(channel) *
-                         mMetadata.data.getNumBytesPVPSet()) /
-            8;
+    auto&& data = mMetadata.data;
+    const size_t size = (data.getNumVectors(channel) * data.getNumBytesPVPSet()) / 8;
 
     //! The vector based parameters are always 64 bit
-    (*mDataWriter)(pvpBlock, size, 8);
+    (*mDataWriter)(pvpBlock.data(), size, 8);
 }
-CPHDWriter::WriteImplFunc_t CPHDWriter::getWritePVPData()
+std::function<void(std::span<const std::byte>, size_t)> CPHDWriter::getWritePVPData()
 {
-    return [&](const std::byte* data, size_t channel)
+    return [&](std::span<const std::byte> data, size_t channel)
     {
         writePVPData(data, channel);
     };
@@ -268,17 +267,19 @@ void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
     writeMetadata(totalSupportSize, totalPVPSize, totalCPHDSize);
 }
 
-void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
+void CPHDWriter::writePVPData(io::SeekableOutputStream& stream, const FileHeader& header,
+    const cphd::Data& data, std::function<void(std::span<const std::byte>, size_t)> writePVPData,
+    const PVPBlock& pvpBlock)
 {
     // Add padding
     char zero = 0;
-    for (int64_t ii = 0; ii < mHeader.getPvpPadBytes(); ++ii)
+    for (int64_t ii = 0; ii < header.getPvpPadBytes(); ++ii)
     {
-        mStream->write(&zero, 1);
+        stream.write(&zero, 1);
     }
 
     // Write each PVP array
-    const size_t numChannels = mMetadata.data.getNumChannels();
+    const size_t numChannels = data.getNumChannels();
     std::vector<std::byte> pvpData;
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
@@ -289,8 +290,12 @@ void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
             ostr << "PVPBlock of channel " << ii << " is empty";
             throw except::Exception(Ctxt(ostr.str()));
         }
-        writePVPData(pvpData.data(), ii);
+        writePVPData(sys::make_span(pvpData), ii);
     }
+}
+void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
+{
+    writePVPData(*mStream, mHeader, mMetadata.data, getWritePVPData(), pvpBlock);
 }
 
 template <typename T>

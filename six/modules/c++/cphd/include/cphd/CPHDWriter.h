@@ -216,6 +216,9 @@ struct CPHDWriter final
      *  to the file as a block of data
      */
     void writePVPData(const PVPBlock& PVPBlock);
+    static void writePVPData(io::SeekableOutputStream&, const FileHeader&,
+        const cphd::Data&, std::function<void(std::span<const std::byte>, size_t)> writePVPData,
+        const PVPBlock&);
 
     /*
      *  \func getWritePVPData
@@ -224,7 +227,7 @@ struct CPHDWriter final
      * Returns the writePVPData() function; use for writing
      * the data in pieces.  Note that `this` must remain in-scope.
      */
-    WriteImplFunc_t getWritePVPData();
+    std::function<void(std::span<const std::byte>, size_t)> getWritePVPData();
 
     /*
      *  \func writeCPHDData
@@ -258,13 +261,13 @@ struct CPHDWriter final
     WriteImplFunc_t getWriteCPHDDataImpl();
     WriteImplFunc_t getWriteCompressedCPHDDataImpl();
 
-    void close()
-    {
-        mStream->close();
-    }
     std::shared_ptr<io::SeekableOutputStream> getStream() const
     {
         return mStream;
+    }
+    void close()
+    {
+        getStream()->close();
     }
 
 private:
@@ -282,7 +285,7 @@ private:
      *  Implementation of write compressed wideband
      *  Implementation of write support data
      */
-    void writePVPData(const std::byte* pvpBlock, size_t index);
+    void writePVPData(std::span<const std::byte> pvpBlock, size_t index);
     void writeCPHDDataImpl(const std::byte* data, size_t size);
     void writeCompressedCPHDDataImpl(const std::byte* data, size_t channel);
     void writeSupportDataImpl(std::span<const std::byte>, size_t elementSize);
