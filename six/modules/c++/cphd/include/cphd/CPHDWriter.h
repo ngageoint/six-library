@@ -123,6 +123,8 @@ struct CPHDWriter final
      */
     using WriteImplFunc_t = std::function<void(const std::byte*, size_t)>;
 
+    std::unique_ptr<DataWriter> make_DataWriter() const;
+
     /*
      *  \func write
      *  \brief Writes the complete CPHD into the file.
@@ -289,9 +291,6 @@ private:
     void writeCPHDDataImpl(const std::byte* data, size_t size);
     void writeCompressedCPHDDataImpl(const std::byte* data, size_t channel);
     void writeSupportDataImpl(std::span<const std::byte>, size_t elementSize);
-
-    //! DataWriter object
-    std::unique_ptr<DataWriter> mDataWriter;
 
     // Book-keeping element
     //! metadata information

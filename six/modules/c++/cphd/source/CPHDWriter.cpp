@@ -59,9 +59,6 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mStream(outStream),
     mHeader(getVersion(metadata))
 {
-    // Get the correct dataWriter.
-    // The CPHD file needs to be big endian.
-    mDataWriter = make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
@@ -81,24 +78,22 @@ void CPHDWriter::writeMetadata(size_t supportSize,
                                size_t pvpSize,
                                size_t cphdSize)
 {
-    const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
-
     mHeader.setVersion(getVersion(mMetadata));
 
     // update classification and release info
-    if (!six::Init::isUndefined(
-                mMetadata.collectionID.getClassificationLevel()) &&
-        !six::Init::isUndefined(mMetadata.collectionID.releaseInfo))
+    auto&& collectionID = mMetadata.collectionID;
+    if (!six::Init::isUndefined(collectionID.getClassificationLevel()) && !six::Init::isUndefined(collectionID.releaseInfo))
     {
-        mHeader.setClassification(
-                mMetadata.collectionID.getClassificationLevel());
-        mHeader.setReleaseInfo(mMetadata.collectionID.releaseInfo);
+        mHeader.setClassification(collectionID.getClassificationLevel());
+        mHeader.setReleaseInfo(collectionID.releaseInfo);
     }
     else
     {
-        throw except::Exception(Ctxt("Classification level and Release "
-                                     "informaion must be specified"));
+        throw except::Exception(Ctxt("Classification level and Release informaion must be specified"));
     }
+
+    const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
+
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
     mStream->write(mHeader.toString());
@@ -107,13 +102,21 @@ void CPHDWriter::writeMetadata(size_t supportSize,
     mStream->write("\f\n");
 }
 
+std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter() const
+{
+    // Get the correct dataWriter.
+    // The CPHD file needs to be big endian.
+    return cphd::make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
+}
+
 void CPHDWriter::writePVPData(std::span<const std::byte> pvpBlock, size_t channel)
 {
     auto&& data = mMetadata.data;
     const size_t size = (data.getNumVectors(channel) * data.getNumBytesPVPSet()) / 8;
 
+    auto dataWriter = make_DataWriter();
     //! The vector based parameters are always 64 bit
-    (*mDataWriter)(pvpBlock.data(), size, 8);
+    (*dataWriter)(pvpBlock.data(), size, 8);
 }
 std::function<void(std::span<const std::byte>, size_t)> CPHDWriter::getWritePVPData()
 {
@@ -125,9 +128,11 @@ std::function<void(std::span<const std::byte>, size_t)> CPHDWriter::getWritePVPD
 
 void CPHDWriter::writeCPHDDataImpl(const std::byte* data, size_t size)
 {
+    auto dataWriter = make_DataWriter();
+
     //! We have to pass in the data as though it was not complex
     //  thus we pass in twice the number of elements at half the size.
-    (*mDataWriter)(data, size * 2, mElementSize / 2);
+    (*dataWriter)(data, size * 2, mElementSize / 2);
 }
 CPHDWriter::WriteImplFunc_t CPHDWriter::getWriteCPHDDataImpl()
 {
@@ -139,9 +144,11 @@ CPHDWriter::WriteImplFunc_t CPHDWriter::getWriteCPHDDataImpl()
 
 void CPHDWriter::writeCompressedCPHDDataImpl(const std::byte* data, size_t channel)
 {
+    auto dataWriter = make_DataWriter();
+
     //! We have to pass in the data as though it was 1 signal array sized
     // element of ubytes
-    (*mDataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
+    (*dataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
 }
 CPHDWriter::WriteImplFunc_t CPHDWriter::getWriteCompressedCPHDDataImpl()
 {
@@ -159,7 +166,8 @@ static auto make_span(std::span<const std::byte> data, const cphd::Data::Support
 
 void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t elementSize)
 {
-    (*mDataWriter)(data, elementSize);
+    auto dataWriter = make_DataWriter();
+    (*dataWriter)(data, elementSize);
 }
 std::function<void(std::span<const std::byte>, size_t)> CPHDWriter::getWriteSupportDataImpl()
 {
