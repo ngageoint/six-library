@@ -133,8 +133,14 @@ struct CPHDWriter final
      *  \param supportData (Optional) The support array data to write to disk.
      */
     template<typename T>
-    void write(const PVPBlock& pvpBlock, const T* widebandData,
+    void write(io::SeekableOutputStream&, const PVPBlock& pvpBlock, const T* widebandData,
         std::span<const std::byte> supportData);
+    template<typename T>
+    void write(const PVPBlock& pvpBlock, const T* widebandData,
+        std::span<const std::byte> supportData)
+    {
+        write(*mStream, pvpBlock, widebandData, supportData);
+    }
     template<typename T>
     void write(const PVPBlock& pvpBlock, const T* widebandData)
     {
@@ -151,7 +157,10 @@ struct CPHDWriter final
      *  \param pvpBlock The vector based metadata to write.
      */
     void writeMetadata(io::OutputStream&, const PVPBlock& pvpBlock);
-    void writeMetadata(const PVPBlock& pvpBlock);
+    void writeMetadata(const PVPBlock& pvpBlock)
+    {
+        writeMetadata(*mStream, pvpBlock);
+    }
     void getMetadata(const PVPBlock&, size_t& supportSize, /*Optional*/ size_t& pvpSize, size_t& cphdSize) const;
 
 
@@ -166,12 +175,17 @@ struct CPHDWriter final
      *  \param id The unique identifier of the support array
      */
     template <typename T>
-    void writeSupportData(const T* data_,
-        const std::string& id)
+    void writeSupportData(io::OutputStream& stream,
+        const T* data_, const std::string& id)
     {
         const auto size = mMetadata.data.getSupportArrayById(id).size_bytes();
         const auto data = sys::make_span<const std::byte>(data_, size);
-        writeSupportDataImpl(*mStream, data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
+        writeSupportDataImpl(stream, data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
+    }
+    template <typename T>
+    void writeSupportData(const T* data, const std::string& id)
+    {
+        writeSupportData(*mStream, data, id);
     }
 
     /*
@@ -183,16 +197,27 @@ struct CPHDWriter final
      *  \param data A pointer to the start of the support array data block
      */
     void writeSupportData(io::SeekableOutputStream&, std::span<const std::byte>);
-    void writeSupportData(std::span<const std::byte>);
+
+    template <typename T>
+    void writeSupportData(io::SeekableOutputStream& stream, std::span<const T> data)
+    {
+        writeSupportData(stream, std::as_bytes(data));
+    }
     template <typename T>
     void writeSupportData(std::span<const T> data)
     {
-        writeSupportData(std::as_bytes(data));
+        writeSupportData(*mStream, data);
+    }
+
+    template <typename T>
+    void writeSupportData(io::SeekableOutputStream& stream, const std::vector<T>& data)
+    {
+        writeSupportData(stream, sys::make_span(data));
     }
     template <typename T>
     void writeSupportData(const std::vector<T>& data)
     {
-        writeSupportData(sys::make_span(data));
+        writeSupportData(*mStream, data);
     }
 
     /*
@@ -202,8 +227,11 @@ struct CPHDWriter final
      *  \param PVPBlock A populated PVPBlock object that will be written
      *  to the file as a block of data
      */
-    void writePVPData(const PVPBlock&);
     void writePVPData(io::SeekableOutputStream&, const PVPBlock&);
+    void writePVPData(const PVPBlock& pvpBlock)
+    {
+        writePVPData(*mStream, pvpBlock);
+    }
     static void writePvpPadBytes(io::OutputStream& stream, int64_t pvpPadBytes);
     static void writePVPData(DataWriter& dataWriter, const cphd::Data&, const PVPBlock&);
 
@@ -225,9 +253,17 @@ struct CPHDWriter final
      *  \param channel For selecting channel of compressed signal block
      */
     template <typename T>
-    void writeCPHDData(const T* data,
+    void writeCPHDData(io::SeekableOutputStream&,
+                       const T* data,
                        size_t numElements,
                        size_t channel = 1);
+    template <typename T>
+    void writeCPHDData(const T* data,
+                       size_t numElements,
+                       size_t channel = 1)
+    {
+        writeCPHDData(*mStream, data, numElements, channel);
+    }
 
     std::shared_ptr<io::SeekableOutputStream> getStream() const
     {

@@ -140,19 +140,16 @@ void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream, std::span<co
     // Move inputstream head to the end of the support block after all supports have been written
     stream.seek(supportBlockByteOffset + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
 }
-void CPHDWriter::writeSupportData(std::span<const std::byte> data)
-{
-    writeSupportData(*mStream, data);
-}
 
 template <typename T>
-void CPHDWriter::write(const PVPBlock& pvpBlock,
+void CPHDWriter::write(io::SeekableOutputStream& stream,
+    const PVPBlock& pvpBlock,
     const T* widebandData,
     std::span<const std::byte> supportData)
 {
     // Write File header and metadata to file
     // Padding is added in writeMetadata
-    writeMetadata(pvpBlock);
+    writeMetadata(stream, pvpBlock);
 
     // Write optional support array block
     // Padding is added in writeSupportData
@@ -167,27 +164,27 @@ void CPHDWriter::write(const PVPBlock& pvpBlock,
 
     // Write pvp data block
     // Padding is added in writePVPData
-    writePVPData(pvpBlock);
+    writePVPData(stream, pvpBlock);
 
     // Doesn't require pading because pvp block is always 8 bytes words
     // Write wideband (or signal) block
+    auto&& data = mMetadata.data;
     size_t elementsWritten = 0;  // Used to increment widebandData pointer
-    for (size_t ii = 0; ii < mMetadata.data.getNumChannels(); ++ii)
+    for (size_t ii = 0; ii < data.getNumChannels(); ++ii)
     {
-        size_t numElements = mMetadata.data.getNumVectors(ii) *
-                mMetadata.data.getNumSamples(ii);
+        const size_t numElements = data.getNumVectors(ii) * data.getNumSamples(ii);
         // writeCPHDData handles compressed data as well
-        writeCPHDData<T>(widebandData + elementsWritten, numElements, ii);
+        writeCPHDData<T>(stream, widebandData + elementsWritten, numElements, ii);
         elementsWritten += numElements;
     }
 }
-template void CPHDWriter::write<std::byte>(const PVPBlock&, const std::byte* widebandData, std::span<const std::byte>); // For compressed data
-template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
-template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
-template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
-//template void CPHDWriter::write<cphd::zint8_t>(const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
-//template void CPHDWriter::write<cphd::zint16_t>(const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
-//template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<std::byte>(io::SeekableOutputStream&, const PVPBlock&, const std::byte* widebandData, std::span<const std::byte>); // For compressed data
+template void CPHDWriter::write<cphd::zint8_t>(io::SeekableOutputStream&, const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zint16_t>(io::SeekableOutputStream&, const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
+template void CPHDWriter::write<cphd::zfloat>(io::SeekableOutputStream&, const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zint8_t>(io::SeekableOutputStream&, const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zint16_t>(io::SeekableOutputStream&, const PVPBlock&, const cphd::zint16_t* widebandData, std::span<const std::byte>);
+//template void CPHDWriter::write<cphd::zfloat>(io::SeekableOutputStream&, const PVPBlock&, const cphd::zfloat* widebandData, std::span<const std::byte>);
 
 void CPHDWriter::getMetadata(const PVPBlock& pvpBlock,
     size_t& totalSupportSize, size_t& totalPVPSize, size_t& totalCPHDSize) const
@@ -226,10 +223,6 @@ void CPHDWriter::writeMetadata(io::OutputStream& stream, const PVPBlock& pvpBloc
     size_t totalCPHDSize;
     getMetadata(pvpBlock, totalSupportSize, totalPVPSize, totalCPHDSize);
     writeMetadata(stream, totalSupportSize, totalPVPSize, totalCPHDSize);
-}
-void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
-{
-    writeMetadata(*mStream, pvpBlock);
 }
 
 void CPHDWriter::writePvpPadBytes(io::OutputStream& stream, int64_t pvpPadBytes)
@@ -271,13 +264,10 @@ void CPHDWriter::writePVPData(io::SeekableOutputStream& stream, const PVPBlock& 
     auto dataWriter = make_DataWriter(stream);
     writePVPData(*dataWriter, mMetadata.data, pvpBlock);
 }
-void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
-{
-    writePVPData(*mStream, pvpBlock);
-}
 
 template <typename T>
-void CPHDWriter::writeCPHDData(const T* data_,
+void CPHDWriter::writeCPHDData(io::SeekableOutputStream& stream, 
+                               const T* data_,
                                size_t numElements,
                                size_t channel)
 {
@@ -288,7 +278,7 @@ void CPHDWriter::writeCPHDData(const T* data_,
     {
         //! We have to pass in the data as though it was 1 signal array sized
         // element of ubytes
-        auto dataWriter = make_DataWriter();
+        auto dataWriter = make_DataWriter(stream);
         (*dataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
     }
     else
@@ -300,29 +290,24 @@ void CPHDWriter::writeCPHDData(const T* data_,
 
         //! We have to pass in the data as though it was not complex
         //  thus we pass in twice the number of elements at half the size.
-        auto dataWriter = make_DataWriter();
+        auto dataWriter = make_DataWriter(stream);
         (*dataWriter)(data, numElements * 2, mElementSize / 2);
     }
 }
 
-// For compressed data
-template void CPHDWriter::writeCPHDData(const sys::ubyte* data,
-                                        size_t numElements,
-                                        size_t channel);
-template void CPHDWriter::writeCPHDData(const std::byte* data,
-                                        size_t numElements,
-                                        size_t channel);
-
-template void CPHDWriter::writeCPHDData<cphd::zint8_t>(
-        const cphd::zint8_t* data,
-        size_t numElements,
-        size_t channel);
-
-template void CPHDWriter::writeCPHDData<cphd::zint16_t>(
-        const cphd::zint16_t* data,
-        size_t numElements,
-        size_t channel);
-
-template void CPHDWriter::writeCPHDData<cphd::zfloat>(
-        const cphd::zfloat* data, size_t numElements, size_t channel);
+template void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
+    const sys::ubyte* data, // For compressed data
+    size_t numElements, size_t channel);
+template void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
+    const std::byte* data,
+    size_t numElements, size_t channel);
+template void CPHDWriter::writeCPHDData<cphd::zint8_t>(io::SeekableOutputStream&,
+    const cphd::zint8_t* data,
+    size_t numElements, size_t channel);
+template void CPHDWriter::writeCPHDData<cphd::zint16_t>(io::SeekableOutputStream&,
+    const cphd::zint16_t* data,
+    size_t numElements, size_t channel);
+template void CPHDWriter::writeCPHDData<cphd::zfloat>(io::SeekableOutputStream&,
+    const cphd::zfloat* data,
+    size_t numElements, size_t channel);
 }
