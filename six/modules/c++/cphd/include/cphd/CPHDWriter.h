@@ -218,10 +218,10 @@ struct CPHDWriter final
      *  \param PVPBlock A populated PVPBlock object that will be written
      *  to the file as a block of data
      */
-    void writePVPData(const PVPBlock& PVPBlock);
-    static void writePVPData(io::SeekableOutputStream&, DataWriter& dataWriter, 
-        const FileHeader&, const cphd::Data&,
-        const PVPBlock&);
+    void writePVPData(const PVPBlock&);
+    void writePVPData(io::SeekableOutputStream&, const PVPBlock&);
+    static void writePvpPadBytes(io::OutputStream& stream, int64_t pvpPadBytes);
+    static void writePVPData(DataWriter& dataWriter,  const cphd::Data&, const PVPBlock&);
 
     /*
      *  \func writeCPHDData
