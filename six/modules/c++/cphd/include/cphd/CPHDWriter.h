@@ -229,24 +229,6 @@ struct CPHDWriter final
                        size_t numElements,
                        size_t channel = 1);
 
-    /*
-     *  \brief The type of "write" function.
-     *
-     * While the signature is the same, the meaning of `size_t` varies for different
-     * functions; for example, it is an `index` for `writePVPData()`.
-     */
-    using WriteImplFunc_t = std::function<void(const std::byte*, size_t)>;
-
-    /*
-     *  \func getWriteCPHDDataImpl
-     *  \brief Returns the writeCPHDDataImpl() function.
-     *
-     * Returns the writeCPHDDataImpl() function; use for writing
-     * the data in pieces.  Note that `this` must remain in-scope.
-     */
-    WriteImplFunc_t getWriteCPHDDataImpl();
-    WriteImplFunc_t getWriteCompressedCPHDDataImpl();
-
     std::shared_ptr<io::SeekableOutputStream> getStream() const
     {
         return mStream;
@@ -266,12 +248,8 @@ private:
         size_t cphdSize);
 
     /*
-     *  Implementation of write wideband
-     *  Implementation of write compressed wideband
      *  Implementation of write support data
      */
-    void writeCPHDDataImpl(const std::byte* data, size_t size);
-    void writeCompressedCPHDDataImpl(const std::byte* data, size_t channel);
     void writeSupportDataImpl(std::span<const std::byte>, size_t elementSize);
 
     // Book-keeping element

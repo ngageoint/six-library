@@ -112,38 +112,6 @@ std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter() const
     return make_DataWriter(*mStream);
 }
 
-void CPHDWriter::writeCPHDDataImpl(const std::byte* data, size_t size)
-{
-    auto dataWriter = make_DataWriter();
-
-    //! We have to pass in the data as though it was not complex
-    //  thus we pass in twice the number of elements at half the size.
-    (*dataWriter)(data, size * 2, mElementSize / 2);
-}
-CPHDWriter::WriteImplFunc_t CPHDWriter::getWriteCPHDDataImpl()
-{
-    return [&](const std::byte* data, size_t channel)
-    {
-        writeCPHDDataImpl(data, channel);
-    };
-}
-
-void CPHDWriter::writeCompressedCPHDDataImpl(const std::byte* data, size_t channel)
-{
-    auto dataWriter = make_DataWriter();
-
-    //! We have to pass in the data as though it was 1 signal array sized
-    // element of ubytes
-    (*dataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
-}
-CPHDWriter::WriteImplFunc_t CPHDWriter::getWriteCompressedCPHDDataImpl()
-{
-    return [&](const std::byte* data, size_t channel)
-    {
-        writeCompressedCPHDDataImpl(data, channel);
-    };
-}
-
 void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t elementSize)
 {
     auto dataWriter = make_DataWriter();
@@ -309,14 +277,19 @@ void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
 }
 
 template <typename T>
-void CPHDWriter::writeCPHDData(const T* data,
+void CPHDWriter::writeCPHDData(const T* data_,
                                size_t numElements,
                                size_t channel)
 {
-    const void* const pData = data;
+    const void* const pData = data_;
+    const std::byte* const data = static_cast<const std::byte*>(pData);
+
     if (mMetadata.data.isCompressed())
     {
-        writeCompressedCPHDDataImpl(static_cast<const std::byte*>(pData), channel);
+        //! We have to pass in the data as though it was 1 signal array sized
+        // element of ubytes
+        auto dataWriter = make_DataWriter();
+        (*dataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
     }
     else
     {
@@ -324,7 +297,11 @@ void CPHDWriter::writeCPHDData(const T* data,
         {
             throw except::Exception(Ctxt("Incorrect buffer data type used for metadata!"));
         }
-        writeCPHDDataImpl(static_cast<const std::byte*>(pData), numElements);
+
+        //! We have to pass in the data as though it was not complex
+        //  thus we pass in twice the number of elements at half the size.
+        auto dataWriter = make_DataWriter();
+        (*dataWriter)(data, numElements * 2, mElementSize / 2);
     }
 }
 
