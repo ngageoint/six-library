@@ -142,11 +142,43 @@ void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream, std::span<co
 }
 
 template <typename T>
+size_t CPHDWriter::writeChannel(DataWriter& dataWriter, const T* widebandData, size_t channel)
+{
+    auto&& data = mMetadata.data;
+
+    const size_t numElements = data.getNumVectors(channel) * data.getNumSamples(channel);
+    // writeCPHDData handles compressed data as well
+    writeCPHDData<T>(dataWriter, widebandData, numElements, channel);
+    return numElements;
+}
+
+template <typename T>
+void CPHDWriter::writeChannels(DataWriter& dataWriter, const T* widebandData)
+{
+    // Doesn't require pading because pvp block is always 8 bytes words
+    // Write wideband (or signal) block
+    size_t elementsWritten = 0;  // Used to increment widebandData pointer
+    for (size_t ii = 0; ii < mMetadata.data.getNumChannels(); ++ii)
+    {
+        elementsWritten += writeChannel(dataWriter, widebandData + elementsWritten, ii);
+    }
+}
+
+template <typename T>
 void CPHDWriter::write(io::SeekableOutputStream& stream,
     const PVPBlock& pvpBlock,
     const T* widebandData,
     std::span<const std::byte> supportData)
 {
+    // Throw exception right away ... before writing anything.
+    if (mMetadata.data.getNumSupportArrays() != 0)
+    {
+        if (supportData.empty())
+        {
+            throw except::Exception(Ctxt("SupportData is not provided"));
+        }
+    }
+
     // Write File header and metadata to file
     // Padding is added in writeMetadata
     writeMetadata(stream, pvpBlock);
@@ -155,10 +187,6 @@ void CPHDWriter::write(io::SeekableOutputStream& stream,
     // Padding is added in writeSupportData
     if (mMetadata.data.getNumSupportArrays() != 0)
     {
-        if (supportData.empty())
-        {
-            throw except::Exception(Ctxt("SupportData is not provided"));
-        }
         writeSupportData(supportData);
     }
 
@@ -166,17 +194,15 @@ void CPHDWriter::write(io::SeekableOutputStream& stream,
     // Padding is added in writePVPData
     writePVPData(stream, pvpBlock);
 
-    // Doesn't require pading because pvp block is always 8 bytes words
-    // Write wideband (or signal) block
-    auto&& data = mMetadata.data;
-    size_t elementsWritten = 0;  // Used to increment widebandData pointer
-    for (size_t ii = 0; ii < data.getNumChannels(); ++ii)
+    if (!mMetadata.data.isCompressed())
     {
-        const size_t numElements = data.getNumVectors(ii) * data.getNumSamples(ii);
-        // writeCPHDData handles compressed data as well
-        writeCPHDData<T>(stream, widebandData + elementsWritten, numElements, ii);
-        elementsWritten += numElements;
+        if (mElementSize != sizeof(T))
+        {
+            throw except::Exception(Ctxt("Incorrect buffer data type used for metadata!"));
+        }
     }
+    auto dataWriter = make_DataWriter(stream);
+    writeChannels(*dataWriter, widebandData);
 }
 template void CPHDWriter::write<std::byte>(io::SeekableOutputStream&, const PVPBlock&, const std::byte* widebandData, std::span<const std::byte>); // For compressed data
 template void CPHDWriter::write<cphd::zint8_t>(io::SeekableOutputStream&, const PVPBlock&, const cphd::zint8_t* widebandData, std::span<const std::byte>);
@@ -266,10 +292,10 @@ void CPHDWriter::writePVPData(io::SeekableOutputStream& stream, const PVPBlock& 
 }
 
 template <typename T>
-void CPHDWriter::writeCPHDData(io::SeekableOutputStream& stream, 
-                               const T* data_,
-                               size_t numElements,
-                               size_t channel)
+void CPHDWriter::writeCPHDData(DataWriter& dataWriter,
+    const T* data_,
+    size_t numElements,
+    size_t channel)
 {
     const void* const pData = data_;
     const std::byte* const data = static_cast<const std::byte*>(pData);
@@ -278,21 +304,31 @@ void CPHDWriter::writeCPHDData(io::SeekableOutputStream& stream,
     {
         //! We have to pass in the data as though it was 1 signal array sized
         // element of ubytes
-        auto dataWriter = make_DataWriter(stream);
-        (*dataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
+        dataWriter(data, mMetadata.data.getCompressedSignalSize(channel), 1);
     }
     else
+    {
+        //! We have to pass in the data as though it was not complex
+        //  thus we pass in twice the number of elements at half the size.
+        dataWriter(data, numElements * 2, mElementSize / 2);
+    }
+}
+
+template <typename T>
+void CPHDWriter::writeCPHDData(io::SeekableOutputStream& stream, 
+                               const T* data,
+                               size_t numElements,
+                               size_t channel)
+{
+    if (!mMetadata.data.isCompressed())
     {
         if (mElementSize != sizeof(T))
         {
             throw except::Exception(Ctxt("Incorrect buffer data type used for metadata!"));
         }
-
-        //! We have to pass in the data as though it was not complex
-        //  thus we pass in twice the number of elements at half the size.
-        auto dataWriter = make_DataWriter(stream);
-        (*dataWriter)(data, numElements * 2, mElementSize / 2);
     }
+    auto dataWriter = make_DataWriter(stream);
+    writeCPHDData(*dataWriter, data, numElements, channel);
 }
 
 template void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,

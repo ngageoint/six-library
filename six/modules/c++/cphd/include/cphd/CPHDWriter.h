@@ -147,6 +147,13 @@ struct CPHDWriter final
         write(pvpBlock, widebandData, std::span<const std::byte>());
     }
 
+    template <typename T>
+    size_t writeChannel(DataWriter&, const T* widebandData, size_t);
+    template <typename T>
+    void writeChannels(DataWriter&, const T* widebandData);
+
+
+
     /*
      *  \func writeMetadata
      *  \brief Writes the header, and metadata into the file.
@@ -252,6 +259,11 @@ struct CPHDWriter final
      *  for correct byte swapping this is done internally).
      *  \param channel For selecting channel of compressed signal block
      */
+    template <typename T>
+    void writeCPHDData(DataWriter&,
+        const T* data,
+        size_t numElements,
+        size_t channel = 1);
     template <typename T>
     void writeCPHDData(io::SeekableOutputStream&,
                        const T* data,
