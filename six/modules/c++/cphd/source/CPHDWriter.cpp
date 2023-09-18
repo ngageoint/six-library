@@ -101,7 +101,7 @@ void CPHDWriter::writeMetadata(io::OutputStream& stream,
     stream.write("\f\n");
 }
 
-std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter(io::SeekableOutputStream& stream) const
+std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter(io::OutputStream& stream) const
 {
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
@@ -112,9 +112,9 @@ std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter() const
     return make_DataWriter(*mStream);
 }
 
-void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t elementSize)
+void CPHDWriter::writeSupportDataImpl(io::OutputStream& stream, std::span<const std::byte> data, size_t elementSize)
 {
-    auto dataWriter = make_DataWriter();
+    auto dataWriter = make_DataWriter(stream);
     (*dataWriter)(data, elementSize);
 }
 

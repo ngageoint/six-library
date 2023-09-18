@@ -115,7 +115,7 @@ struct CPHDWriter final
     CPHDWriter& operator=(CPHDWriter&&) = delete;
     ~CPHDWriter() = default;
 
-    std::unique_ptr<DataWriter> make_DataWriter(io::SeekableOutputStream&) const;
+    std::unique_ptr<DataWriter> make_DataWriter(io::OutputStream&) const;
     std::unique_ptr<DataWriter> make_DataWriter() const;
 
     /*
@@ -171,7 +171,7 @@ struct CPHDWriter final
     {
         const auto size = mMetadata.data.getSupportArrayById(id).size_bytes();
         const auto data = sys::make_span<const std::byte>(data_, size);
-        writeSupportDataImpl(data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
+        writeSupportDataImpl(*mStream, data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
     }
 
     /*
@@ -250,7 +250,7 @@ private:
     /*
      *  Implementation of write support data
      */
-    void writeSupportDataImpl(std::span<const std::byte>, size_t elementSize);
+    void writeSupportDataImpl(io::OutputStream&, std::span<const std::byte>, size_t elementSize);
 
     // Book-keeping element
     //! metadata information
