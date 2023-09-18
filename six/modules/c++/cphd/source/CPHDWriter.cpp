@@ -156,34 +156,27 @@ void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t el
     auto dataWriter = make_DataWriter();
     (*dataWriter)(data, elementSize);
 }
-std::function<void(std::span<const std::byte>, size_t)> CPHDWriter::getWriteSupportDataImpl()
-{
-    return [&](std::span<const std::byte> data, size_t channel)
-    {
-        writeSupportDataImpl(data, channel);
-    };
-}
 
-void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream,
-    const FileHeader& header, std::function<void(std::span<const std::byte>, size_t)> writeSupportDataImpl,
-    const std::unordered_map<std::string, cphd::Data::SupportArray>& supportArrayMap, std::span<const std::byte> data)
+void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream, std::span<const std::byte> data)
 {
-    const auto supportBlockByteOffset = header.getSupportBlockByteOffset();
+    const auto supportBlockByteOffset = mHeader.getSupportBlockByteOffset();
 
-    for (auto&& mapEntry : supportArrayMap)
+    auto dataWriter = make_DataWriter(stream);
+    for (auto&& mapEntry : mMetadata.data.supportArrayMap)
     {
         auto&& dataArray = mapEntry.second;
 
         // Move inputstream head to offset of particular support array
         stream.seek(supportBlockByteOffset + dataArray.arrayByteOffset, io::SeekableOutputStream::START);
-        writeSupportDataImpl(make_span(data, dataArray), dataArray.bytesPerElement);
+
+        (*dataWriter)(make_span(data, dataArray), dataArray.bytesPerElement);
     }
     // Move inputstream head to the end of the support block after all supports have been written
-    stream.seek(supportBlockByteOffset + header.getSupportBlockSize(), io::SeekableOutputStream::START);
+    stream.seek(supportBlockByteOffset + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
 }
 void CPHDWriter::writeSupportData(std::span<const std::byte> data)
 {
-    writeSupportData(*mStream, mHeader, getWriteSupportDataImpl(), mMetadata.data.supportArrayMap, data);
+    writeSupportData(*mStream, data);
 }
 
 template <typename T>

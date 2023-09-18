@@ -115,14 +115,6 @@ struct CPHDWriter final
     CPHDWriter& operator=(CPHDWriter&&) = delete;
     ~CPHDWriter() = default;
 
-    /*
-     *  \brief The type of "write" function.
-     *
-     * While the signature is the same, the meaning of `size_t` varies for different
-     * functions; for example, it is an `index` for `writePVPData()`.
-     */
-    using WriteImplFunc_t = std::function<void(const std::byte*, size_t)>;
-
     std::unique_ptr<DataWriter> make_DataWriter(io::SeekableOutputStream&) const;
     std::unique_ptr<DataWriter> make_DataWriter() const;
 
@@ -187,9 +179,7 @@ struct CPHDWriter final
      *
      *  \param data A pointer to the start of the support array data block
      */
-    static void writeSupportData(io::SeekableOutputStream&,
-        const FileHeader&, std::function<void(std::span<const std::byte>, size_t)> writeSupportDataImpl,
-        const std::unordered_map<std::string, cphd::Data::SupportArray>&, std::span<const std::byte>);
+    void writeSupportData(io::SeekableOutputStream&, std::span<const std::byte>);
     void writeSupportData(std::span<const std::byte>);
     template <typename T>
     void writeSupportData(std::span<const T> data)
@@ -201,15 +191,6 @@ struct CPHDWriter final
     {
         writeSupportData(sys::make_span(data));
     }
-
-    /*
-     *  \func getWriteSupportDataImpl
-     *  \brief Returns the writeSupportDataImpl() function.
-     * 
-     * Returns the writeSupportDataImpl() function; use for writing
-     * the data in pieces.  Note that `this` must remain in-scope.
-     */
-    std::function<void(std::span<const std::byte>, size_t)> getWriteSupportDataImpl();
 
     /*
      *  \func writePVPData
@@ -244,6 +225,14 @@ struct CPHDWriter final
     void writeCPHDData(const T* data,
                        size_t numElements,
                        size_t channel = 1);
+
+    /*
+     *  \brief The type of "write" function.
+     *
+     * While the signature is the same, the meaning of `size_t` varies for different
+     * functions; for example, it is an `index` for `writePVPData()`.
+     */
+    using WriteImplFunc_t = std::function<void(const std::byte*, size_t)>;
 
     /*
      *  \func getWriteCPHDDataImpl
