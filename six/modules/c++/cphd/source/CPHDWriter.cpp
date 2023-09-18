@@ -116,6 +116,13 @@ void CPHDWriter::writePVPData(const std::byte* pvpBlock, size_t channel)
     //! The vector based parameters are always 64 bit
     (*mDataWriter)(pvpBlock, size, 8);
 }
+CPHDWriter::WriteImplFunc_t CPHDWriter::getWritePVPData()
+{
+    return [&](const std::byte* data, size_t channel)
+    {
+        writePVPData(data, channel);
+    };
+}
 
 void CPHDWriter::writeCPHDDataImpl(const std::byte* data, size_t size)
 {
@@ -123,13 +130,26 @@ void CPHDWriter::writeCPHDDataImpl(const std::byte* data, size_t size)
     //  thus we pass in twice the number of elements at half the size.
     (*mDataWriter)(data, size * 2, mElementSize / 2);
 }
+CPHDWriter::WriteImplFunc_t CPHDWriter::getWriteCPHDDataImpl()
+{
+    return [&](const std::byte* data, size_t channel)
+    {
+        writeCPHDDataImpl(data, channel);
+    };
+}
 
-void CPHDWriter::writeCompressedCPHDDataImpl(const std::byte* data,
-                                             size_t channel)
+void CPHDWriter::writeCompressedCPHDDataImpl(const std::byte* data, size_t channel)
 {
     //! We have to pass in the data as though it was 1 signal array sized
     // element of ubytes
     (*mDataWriter)(data, mMetadata.data.getCompressedSignalSize(channel), 1);
+}
+CPHDWriter::WriteImplFunc_t CPHDWriter::getWriteCompressedCPHDDataImpl()
+{
+    return [&](const std::byte* data, size_t channel)
+    {
+        writeCompressedCPHDDataImpl(data, channel);
+    };
 }
 
 static auto make_span(std::span<const std::byte> data, const cphd::Data::SupportArray& dataArray)
@@ -142,6 +162,14 @@ void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t el
 {
     (*mDataWriter)(data, elementSize);
 }
+std::function<void(std::span<const std::byte>, size_t)> CPHDWriter::getWriteSupportDataImpl()
+{
+    return [&](std::span<const std::byte> data, size_t channel)
+    {
+        writeSupportDataImpl(data, channel);
+    };
+}
+
 void CPHDWriter::writeSupportData(std::span<const std::byte> data)
 {
     for (auto&& mapEntry : mMetadata.data.supportArrayMap)

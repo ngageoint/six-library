@@ -28,6 +28,7 @@
 #include <vector>
 #include <std/span>
 #include <std/cstddef>
+#include <functional>
 
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
@@ -115,6 +116,14 @@ struct CPHDWriter final
     ~CPHDWriter() = default;
 
     /*
+     *  \brief The type of "write" function.
+     *
+     * While the signature is the same, the meaning of `size_t` varies for different
+     * functions; for example, it is an `index` for `writePVPData()`.
+     */
+    using WriteImplFunc_t = std::function<void(const std::byte*, size_t)>;
+
+    /*
      *  \func write
      *  \brief Writes the complete CPHD into the file.
      *
@@ -160,10 +169,10 @@ struct CPHDWriter final
      */
     template <typename T>
     void writeSupportData(const T* data_,
-                          const std::string& id)
+        const std::string& id)
     {
         const auto size = mMetadata.data.getSupportArrayById(id).size_bytes();
-	const auto data = sys::make_span<const std::byte>(data_, size);
+        const auto data = sys::make_span<const std::byte>(data_, size);
         writeSupportDataImpl(data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
     }
 
@@ -188,6 +197,15 @@ struct CPHDWriter final
     }
 
     /*
+     *  \func getWriteSupportDataImpl
+     *  \brief Returns the writeSupportDataImpl() function.
+     * 
+     * Returns the writeSupportDataImpl() function; use for writing
+     * the data in pieces.  Note that `this` must remain in-scope.
+     */
+    std::function<void(std::span<const std::byte>, size_t)> getWriteSupportDataImpl();
+
+    /*
      *  \func writePVPData
      *  \brief Writes the PVP to the file
      *
@@ -195,6 +213,15 @@ struct CPHDWriter final
      *  to the file as a block of data
      */
     void writePVPData(const PVPBlock& PVPBlock);
+
+    /*
+     *  \func getWritePVPData
+     *  \brief Returns the writePVPData() function.
+     *
+     * Returns the writePVPData() function; use for writing
+     * the data in pieces.  Note that `this` must remain in-scope.
+     */
+    WriteImplFunc_t getWritePVPData();
 
     /*
      *  \func writeCPHDData
@@ -218,6 +245,16 @@ struct CPHDWriter final
                        size_t numElements,
                        size_t channel = 1);
 
+    /*
+     *  \func getWriteCPHDDataImpl
+     *  \brief Returns the writeCPHDDataImpl() function.
+     *
+     * Returns the writeCPHDDataImpl() function; use for writing
+     * the data in pieces.  Note that `this` must remain in-scope.
+     */
+    WriteImplFunc_t getWriteCPHDDataImpl();
+    WriteImplFunc_t getWriteCompressedCPHDDataImpl();
+
     void close()
     {
         mStream->close();
@@ -238,25 +275,13 @@ private:
 
     /*
      *  Write pvp helper
-     */
-    void writePVPData(const std::byte* pvpBlock,
-                      size_t index);
-
-    /*
      *  Implementation of write wideband
-     */
-    void writeCPHDDataImpl(const std::byte* data,
-                           size_t size);
-
-    /*
      *  Implementation of write compressed wideband
-     */
-    void writeCompressedCPHDDataImpl(const std::byte* data,
-                                     size_t channel);
-
-    /*
      *  Implementation of write support data
      */
+    void writePVPData(const std::byte* pvpBlock, size_t index);
+    void writeCPHDDataImpl(const std::byte* data, size_t size);
+    void writeCompressedCPHDDataImpl(const std::byte* data, size_t channel);
     void writeSupportDataImpl(std::span<const std::byte>, size_t elementSize);
 
     //! DataWriter object
