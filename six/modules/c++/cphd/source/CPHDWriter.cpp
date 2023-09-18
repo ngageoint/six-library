@@ -203,34 +203,31 @@ template void CPHDWriter::write<cphd::zfloat>(const PVPBlock&, const cphd::zfloa
 
 void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
 {
+    auto&& data = mMetadata.data;
+
     // Update the number of bytes per PVP
-    if (mMetadata.data.numBytesPVP != pvpBlock.getNumBytesPVPSet())
+    if (data.numBytesPVP != pvpBlock.getNumBytesPVPSet())
     {
         std::ostringstream ostr;
-        ostr << "Number of pvp block bytes in metadata: "
-             << mMetadata.data.numBytesPVP
-             << " does not match calculated size of pvp block: "
-             << pvpBlock.getNumBytesPVPSet();
+        ostr << "Number of pvp block bytes in metadata: " << data.numBytesPVP
+             << " does not match calculated size of pvp block: " << pvpBlock.getNumBytesPVPSet();
         throw except::Exception(ostr.str());
     }
 
-    const size_t numChannels = mMetadata.data.getNumChannels();
-    size_t totalSupportSize = 0;
-    size_t totalPVPSize = 0;
-    size_t totalCPHDSize = 0;
+    const size_t numChannels = data.getNumChannels();
 
-    for (auto it = mMetadata.data.supportArrayMap.begin();
-         it != mMetadata.data.supportArrayMap.end();
-         ++it)
+    size_t totalSupportSize = 0;
+    for (auto&& kv : data.supportArrayMap)
     {
-        totalSupportSize += it->second.getSize();
+        totalSupportSize += kv.second.getSize();
     }
 
+    size_t totalPVPSize = 0;
+    size_t totalCPHDSize = 0;
     for (size_t ii = 0; ii < numChannels; ++ii)
     {
         totalPVPSize += pvpBlock.getPVPsize(ii);
-        totalCPHDSize += mMetadata.data.getNumVectors(ii) *
-                mMetadata.data.getNumSamples(ii) * mElementSize;
+        totalCPHDSize += data.getNumVectors(ii) * data.getNumSamples(ii) * mElementSize;
     }
 
     writeMetadata(totalSupportSize, totalPVPSize, totalCPHDSize);
