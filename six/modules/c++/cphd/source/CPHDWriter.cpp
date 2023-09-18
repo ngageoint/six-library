@@ -102,28 +102,25 @@ void CPHDWriter::writeMetadata(size_t supportSize,
     mStream->write("\f\n");
 }
 
-std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter() const
+std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter(io::SeekableOutputStream& stream) const
 {
     // Get the correct dataWriter.
     // The CPHD file needs to be big endian.
-    return cphd::make_DataWriter(*mStream, mNumThreads, mScratchSpaceSize);
+    return cphd::make_DataWriter(stream, mNumThreads, mScratchSpaceSize);
+}
+std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter() const
+{
+    return make_DataWriter(*mStream);
 }
 
-void CPHDWriter::writePVPData(std::span<const std::byte> pvpBlock, size_t channel)
+
+static void writePVPData(DataWriter& dataWriter, std::span<const std::byte> pvpBlock, size_t channel,
+    const cphd::Data& data)
 {
-    auto&& data = mMetadata.data;
     const size_t size = (data.getNumVectors(channel) * data.getNumBytesPVPSet()) / 8;
 
-    auto dataWriter = make_DataWriter();
     //! The vector based parameters are always 64 bit
-    (*dataWriter)(pvpBlock.data(), size, 8);
-}
-std::function<void(std::span<const std::byte>, size_t)> CPHDWriter::getWritePVPData()
-{
-    return [&](std::span<const std::byte> data, size_t channel)
-    {
-        writePVPData(data, channel);
-    };
+    dataWriter(pvpBlock.data(), size, 8);
 }
 
 void CPHDWriter::writeCPHDDataImpl(const std::byte* data, size_t size)
@@ -275,8 +272,8 @@ void CPHDWriter::writeMetadata(const PVPBlock& pvpBlock)
     writeMetadata(totalSupportSize, totalPVPSize, totalCPHDSize);
 }
 
-void CPHDWriter::writePVPData(io::SeekableOutputStream& stream, const FileHeader& header,
-    const cphd::Data& data, std::function<void(std::span<const std::byte>, size_t)> writePVPData,
+void CPHDWriter::writePVPData(io::SeekableOutputStream& stream, DataWriter& dataWriter,
+    const FileHeader& header, const cphd::Data& data,
     const PVPBlock& pvpBlock)
 {
     // Add padding
@@ -298,12 +295,14 @@ void CPHDWriter::writePVPData(io::SeekableOutputStream& stream, const FileHeader
             ostr << "PVPBlock of channel " << ii << " is empty";
             throw except::Exception(Ctxt(ostr.str()));
         }
-        writePVPData(sys::make_span(pvpData), ii);
+
+        cphd::writePVPData(dataWriter, sys::make_span(pvpData), ii, data);
     }
 }
 void CPHDWriter::writePVPData(const PVPBlock& pvpBlock)
 {
-    writePVPData(*mStream, mHeader, mMetadata.data, getWritePVPData(), pvpBlock);
+    auto dataWriter = make_DataWriter(*mStream);
+    writePVPData(*mStream, *dataWriter, mHeader, mMetadata.data, pvpBlock);
 }
 
 template <typename T>

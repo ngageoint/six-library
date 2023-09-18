@@ -123,6 +123,7 @@ struct CPHDWriter final
      */
     using WriteImplFunc_t = std::function<void(const std::byte*, size_t)>;
 
+    std::unique_ptr<DataWriter> make_DataWriter(io::SeekableOutputStream&) const;
     std::unique_ptr<DataWriter> make_DataWriter() const;
 
     /*
@@ -218,18 +219,9 @@ struct CPHDWriter final
      *  to the file as a block of data
      */
     void writePVPData(const PVPBlock& PVPBlock);
-    static void writePVPData(io::SeekableOutputStream&, const FileHeader&,
-        const cphd::Data&, std::function<void(std::span<const std::byte>, size_t)> writePVPData,
+    static void writePVPData(io::SeekableOutputStream&, DataWriter& dataWriter, 
+        const FileHeader&, const cphd::Data&,
         const PVPBlock&);
-
-    /*
-     *  \func getWritePVPData
-     *  \brief Returns the writePVPData() function.
-     *
-     * Returns the writePVPData() function; use for writing
-     * the data in pieces.  Note that `this` must remain in-scope.
-     */
-    std::function<void(std::span<const std::byte>, size_t)> getWritePVPData();
 
     /*
      *  \func writeCPHDData
@@ -282,12 +274,10 @@ private:
         size_t cphdSize);
 
     /*
-     *  Write pvp helper
      *  Implementation of write wideband
      *  Implementation of write compressed wideband
      *  Implementation of write support data
      */
-    void writePVPData(std::span<const std::byte> pvpBlock, size_t index);
     void writeCPHDDataImpl(const std::byte* data, size_t size);
     void writeCompressedCPHDDataImpl(const std::byte* data, size_t channel);
     void writeSupportDataImpl(std::span<const std::byte>, size_t elementSize);
