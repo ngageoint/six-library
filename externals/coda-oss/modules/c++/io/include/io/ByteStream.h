@@ -117,10 +117,13 @@ struct CODA_OSS_API ByteStream : public SeekableInputStream, public SeekableOutp
         return mData.empty() ? nullptr : &mData[0];
     }
 
-    sys::Size_T
-    getSize()
+    auto size() const
     {
-        return mData.size();
+        return mData.size();    
+    }
+    auto getSize() const
+    {
+        return size();
     }
 
 protected:

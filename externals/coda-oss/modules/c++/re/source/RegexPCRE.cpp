@@ -330,6 +330,19 @@ void Regex::split(const std::string& str, std::vector<std::string>& v)
     }
 }
 
+inline static void replace(std::string& result, size_t pos, size_t count, const std::string& str)
+{
+    // https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+    #if _WIN32 && __SANITIZE_ADDRESS__ && (_MSC_VER <= 1933 /*VS 2022 17.3*/)
+    // ASAN diagnostic on Windows with replace() ... bug in VS?
+    const auto input = result;
+    result = input.substr(0, pos);
+    result += str;
+    result += input.substr(pos + count);
+    #else
+    result.replace(pos, count, str);
+    #endif
+}
 std::string Regex::sub(const std::string& str, const std::string& repl)
 {
     size_t begin;
@@ -339,7 +352,7 @@ std::string Regex::sub(const std::string& str, const std::string& repl)
     std::string result = search(str, startIndex, 0, begin, end);
     while (!result.empty())
     {
-        toReplace.replace(begin, result.size(), repl);
+        replace(toReplace, begin, result.size(), repl);
 
         // You can't skip ahead result.size() here because 'repl' may be shorter
         // than 'result'
