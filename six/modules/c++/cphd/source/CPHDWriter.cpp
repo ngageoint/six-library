@@ -56,7 +56,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
     mSchemaPaths(schemaPaths),
-    mStream(outStream),
+    mSharedStream(outStream),
+    mStream(*mSharedStream),
     mHeader(getVersion(metadata))
 {
 }
@@ -109,7 +110,7 @@ std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter(io::OutputStream& stream
 }
 std::unique_ptr<DataWriter> CPHDWriter::make_DataWriter() const
 {
-    return make_DataWriter(*mStream);
+    return make_DataWriter(mStream);
 }
 
 void CPHDWriter::writeSupportDataImpl(io::OutputStream& stream, std::span<const std::byte> data, size_t elementSize)

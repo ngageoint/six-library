@@ -139,7 +139,7 @@ struct CPHDWriter final
     void write(const PVPBlock& pvpBlock, const T* widebandData,
         std::span<const std::byte> supportData)
     {
-        write(*mStream, pvpBlock, widebandData, supportData);
+        write(mStream, pvpBlock, widebandData, supportData);
     }
     template<typename T>
     void write(const PVPBlock& pvpBlock, const T* widebandData)
@@ -166,7 +166,7 @@ struct CPHDWriter final
     void writeMetadata(io::OutputStream&, const PVPBlock& pvpBlock);
     void writeMetadata(const PVPBlock& pvpBlock)
     {
-        writeMetadata(*mStream, pvpBlock);
+        writeMetadata(mStream, pvpBlock);
     }
     void getMetadata(const PVPBlock&, size_t& supportSize, /*Optional*/ size_t& pvpSize, size_t& cphdSize) const;
 
@@ -192,7 +192,7 @@ struct CPHDWriter final
     template <typename T>
     void writeSupportData(const T* data, const std::string& id)
     {
-        writeSupportData(*mStream, data, id);
+        writeSupportData(mStream, data, id);
     }
 
     /*
@@ -213,7 +213,7 @@ struct CPHDWriter final
     template <typename T>
     void writeSupportData(std::span<const T> data)
     {
-        writeSupportData(*mStream, data);
+        writeSupportData(mStream, data);
     }
 
     template <typename T>
@@ -224,7 +224,7 @@ struct CPHDWriter final
     template <typename T>
     void writeSupportData(const std::vector<T>& data)
     {
-        writeSupportData(*mStream, data);
+        writeSupportData(mStream, data);
     }
 
     /*
@@ -237,7 +237,7 @@ struct CPHDWriter final
     void writePVPData(io::SeekableOutputStream&, const PVPBlock&);
     void writePVPData(const PVPBlock& pvpBlock)
     {
-        writePVPData(*mStream, pvpBlock);
+        writePVPData(mStream, pvpBlock);
     }
     static void writePvpPadBytes(io::OutputStream& stream, int64_t pvpPadBytes);
     static void writePVPData(DataWriter& dataWriter, const cphd::Data&, const PVPBlock&);
@@ -274,16 +274,20 @@ struct CPHDWriter final
                        size_t numElements,
                        size_t channel = 1)
     {
-        writeCPHDData(*mStream, data, numElements, channel);
+        writeCPHDData(mStream, data, numElements, channel);
     }
 
     std::shared_ptr<io::SeekableOutputStream> getStream() const
+    {
+        return mSharedStream;
+    }
+    io::SeekableOutputStream& stream() const
     {
         return mStream;
     }
     void close()
     {
-        getStream()->close();
+        stream().close();
     }
 
 private:
@@ -312,7 +316,8 @@ private:
     //! schemas for XML validation
     const std::vector<std::string> mSchemaPaths;
     //! Output stream contains CPHD file
-    std::shared_ptr<io::SeekableOutputStream> mStream;
+    std::shared_ptr<io::SeekableOutputStream> mSharedStream;
+    io::SeekableOutputStream& mStream;
     //! header information
     FileHeader mHeader;
 };
