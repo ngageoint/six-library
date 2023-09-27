@@ -138,7 +138,7 @@ jobs:
     - name: configure
       run: |
         mkdir out && cd out
-        cmake .. -DENABLE_PYTHON=OFF
+        cmake .. -DENABLE_PYTHON=OFF -DENABLE_ASAN=ON
     - name: build
       run: |
         cd out

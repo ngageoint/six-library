@@ -21,6 +21,7 @@
  */
 
 #include <std/string>
+#include <std/span>
 #include "coda_oss/CPlusPlus.h"
 #include "io/StringStream.h"
 #include <TestCase.h>
@@ -101,7 +102,7 @@ TEST_CASE(test_getElementsByTagName)
     
     {
         const auto aElements = root.getElementsByTagName("a", true /*recurse*/);
-        TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
+        TEST_ASSERT_EQ(std::ssize(aElements), 1);
         const auto& a = *(aElements[0]);
 
         const auto characterData = a.getCharacterData();
@@ -113,7 +114,7 @@ TEST_CASE(test_getElementsByTagName)
     TEST_ASSERT_EQ(docElements.size(), static_cast<size_t>(1));
     {
         const auto aElements = docElements[0]->getElementsByTagName("a");
-        TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
+        TEST_ASSERT_EQ(std::ssize(aElements), 1);
         const auto& a = *(aElements[0]);
 
         const auto characterData = a.getCharacterData();
@@ -137,10 +138,10 @@ TEST_CASE(test_getElementsByTagName_duplicate)
 
     const auto docElements = root.getElementsByTagName("doc");
     TEST_ASSERT_FALSE(docElements.empty());
-    TEST_ASSERT_EQ(docElements.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(std::ssize(docElements), 1);
     {
         const auto duplicateElements = docElements[0]->getElementsByTagName("duplicate");
-        TEST_ASSERT_EQ(duplicateElements.size(), static_cast<size_t>(2));
+        TEST_ASSERT_EQ(std::ssize(duplicateElements), 2);
         const auto& duplicate = *(duplicateElements[0]);
 
         const auto characterData = duplicate.getCharacterData();

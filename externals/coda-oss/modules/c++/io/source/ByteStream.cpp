@@ -20,6 +20,8 @@
  *
  */
 
+#include <std/span>
+
 #include "io/ByteStream.h"
 
 sys::Off_T io::ByteStream::seek(sys::Off_T offset, Whence whence)
@@ -33,13 +35,13 @@ sys::Off_T io::ByteStream::seek(sys::Off_T offset, Whence whence)
         mPosition = offset;
         break;
     case END:
-        if (offset > static_cast<sys::Off_T>(mData.size()))
+        if (offset > std::ssize(mData))
         {
             mPosition = 0;
         }
         else
         {
-            mPosition = static_cast<sys::Off_T>(mData.size() - offset);
+            mPosition = std::ssize(mData) - offset;
         }
         break;
     case CURRENT:
@@ -48,7 +50,7 @@ sys::Off_T io::ByteStream::seek(sys::Off_T offset, Whence whence)
         break;
     }
 
-    if (mPosition > static_cast<sys::Off_T>(mData.size()))
+    if (mPosition > std::ssize(mData))
         mPosition = -1;
     return tell();
 }
@@ -59,7 +61,7 @@ sys::Off_T io::ByteStream::available()
         throw except::Exception(Ctxt("Invalid available bytes on eof"));
 
     sys::Off_T where = mPosition;
-    sys::Off_T until = static_cast<sys::Off_T>(mData.size());
+    sys::Off_T until = std::ssize(mData);
     sys::Off_T diff = until - where;
     return (diff < 0) ? 0 : diff;
 }
@@ -78,7 +80,7 @@ void io::ByteStream::write(const void* buffer, sys::Size_T size)
             mData.resize(newPos);
 
         const auto bufferPtr = static_cast<const sys::ubyte*>(buffer);
-        std::copy(bufferPtr, bufferPtr + size, &mData[static_cast<size_t>(mPosition)]);
+        std::copy(bufferPtr, bufferPtr + size, &mData[gsl::narrow<size_t>(mPosition)]);
         mPosition = static_cast<sys::Off_T>(newPos);
     }
 }
