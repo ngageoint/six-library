@@ -76,7 +76,7 @@ void writeCompressedCPHD(const std::string& outPathname, size_t numThreads,
         }
     }
 
-    cphd::CPHDWriter writer(metadata, outPathname, std::vector<std::string>(), numThreads);
+    cphd::CPHDWriter writer(metadata, outPathname, nullptr /*pSchemaPaths*/, numThreads);
 
     writer.writeMetadata(pvpBlock);
 
