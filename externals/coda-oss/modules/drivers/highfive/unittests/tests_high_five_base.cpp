@@ -2824,6 +2824,10 @@ TEST_CASE(HighFiveEnum) {
         CHECK(result == Position::highfive_first);
     }
 
+    // https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+    #if _WIN32 && __SANITIZE_ADDRESS__ && (_MSC_VER <= 1933 /*VS 2022 17.3*/)
+    // Bug in VS ASAN?
+    #else
     {  // Scoped enum
         auto e1 = create_enum_direction();
         e1.commit(file, "Direction");
@@ -2847,6 +2851,7 @@ TEST_CASE(HighFiveEnum) {
         CHECK(result[3] == Direction::Left);
         CHECK(result[4] == Direction::Left);
     }
+    #endif
 }
 
 TEST_CASE(HighFiveFixedString) {
