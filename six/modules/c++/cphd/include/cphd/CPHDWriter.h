@@ -29,6 +29,8 @@
 #include <std/span>
 #include <std/cstddef>
 #include <functional>
+#include <memory>
+#include <std/filesystem>
 
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
@@ -76,6 +78,12 @@ struct CPHDWriter final
      *         Default is 4 MB
      */
     CPHDWriter(
+        const Metadata& metadata,
+        io::SeekableOutputStream& stream,
+        const std::vector<std::filesystem::path>* pSchemaPaths = nullptr,
+        size_t numThreads = 0,
+        size_t scratchSpaceSize = 4 * 1024 * 1024);
+    CPHDWriter(
             const Metadata& metadata,
             std::shared_ptr<io::SeekableOutputStream> stream,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
@@ -107,6 +115,12 @@ struct CPHDWriter final
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             size_t numThreads = 0,
             size_t scratchSpaceSize = 4 * 1024 * 1024);
+    CPHDWriter(
+        const Metadata& metadata,
+        const std::filesystem::path& pathname,
+        const std::vector<std::filesystem::path>* pSchemaPaths = nullptr,
+        size_t numThreads = 0,
+        size_t scratchSpaceSize = 4 * 1024 * 1024);
 
     CPHDWriter() = delete;
     CPHDWriter(const CPHDWriter&) = delete;
@@ -314,7 +328,8 @@ private:
     //! number of threads for parallelism
     const size_t mNumThreads;
     //! schemas for XML validation
-    const std::vector<std::string> mSchemaPaths;
+    const std::vector<std::filesystem::path> mSchemaPaths;
+    const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
     //! Output stream contains CPHD file
     std::shared_ptr<io::SeekableOutputStream> mSharedStream;
     io::SeekableOutputStream& mStream;

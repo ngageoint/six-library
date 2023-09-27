@@ -23,7 +23,7 @@
 
 #include <thread>
 #include <std/bit>
-#include <std/memory>
+#include <algorithm>
 
 #include <except/Exception.h>
 
@@ -47,6 +47,28 @@ static Version getVersion(const Metadata& metadata)
 }
 
 CPHDWriter::CPHDWriter(const Metadata& metadata,
+    io::SeekableOutputStream& outStream,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    size_t numThreads,
+    size_t scratchSpaceSize) :
+    mMetadata(metadata),
+    mElementSize(metadata.data.getNumBytesPerSample()),
+    mScratchSpaceSize(scratchSpaceSize),
+    mNumThreads(numThreads),
+    mpSchemaPaths(pSchemaPaths),
+    mStream(outStream),
+    mHeader(getVersion(metadata))
+{
+}
+
+static auto transform(const std::vector<std::string>& schemaPaths)
+{
+    std::vector<std::filesystem::path> retval;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
+        [](const std::string& s) { return s; });
+    return retval;
+}
+CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,
                        const std::vector<std::string>& schemaPaths,
                        size_t numThreads,
@@ -55,7 +77,8 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mElementSize(metadata.data.getNumBytesPerSample()),
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
-    mSchemaPaths(schemaPaths),
+    mSchemaPaths(transform(schemaPaths)),
+    mpSchemaPaths(&mSchemaPaths),
     mSharedStream(outStream),
     mStream(*mSharedStream),
     mHeader(getVersion(metadata))
@@ -72,6 +95,21 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
         schemaPaths,
         numThreads,
         scratchSpaceSize)
+{
+}
+CPHDWriter::CPHDWriter(const Metadata& metadata,
+    const std::filesystem::path& pathname,
+    const std::vector<std::filesystem::path>* pSchemaPaths,
+    size_t numThreads,
+    size_t scratchSpaceSize) :
+    mMetadata(metadata),
+    mElementSize(metadata.data.getNumBytesPerSample()),
+    mScratchSpaceSize(scratchSpaceSize),
+    mNumThreads(numThreads),
+    mpSchemaPaths(pSchemaPaths),
+    mSharedStream(std::make_shared<io::FileOutputStream>(pathname)), // Initialize output stream
+    mStream(*mSharedStream),
+    mHeader(getVersion(metadata))
 {
 }
 
@@ -92,7 +130,7 @@ void CPHDWriter::writeMetadata(io::OutputStream& stream,
         throw except::Exception(Ctxt("Classification level and Release informaion must be specified"));
     }
 
-    const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mSchemaPaths));
+    const auto xmlMetadata(CPHDXMLControl().toXMLString(mMetadata, mpSchemaPaths));
 
     // set header size, final step before write
     mHeader.set(xmlMetadata.size(), supportSize, pvpSize, cphdSize);
