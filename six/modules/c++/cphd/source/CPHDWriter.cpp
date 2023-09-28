@@ -162,22 +162,35 @@ static auto make_span(std::span<const std::byte> data, const cphd::Data::Support
     const auto pData = data.data() + dataArray.arrayByteOffset;
     return sys::make_span(pData, dataArray.size_bytes());
 }
-void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream, std::span<const std::byte> data)
+
+sys::Off_T CPHDWriter::getSupportBlockByteOffset(const Data::SupportArray& dataArray) const
 {
     const auto supportBlockByteOffset = mHeader.getSupportBlockByteOffset();
+    return supportBlockByteOffset + dataArray.arrayByteOffset;
+}
 
+void CPHDWriter::writeSupportDataArray(io::SeekableOutputStream& stream, DataWriter& dataWriter,
+    std::span<const std::byte> data, const Data::SupportArray& dataArray)
+{
+    // Move inputstream head to offset of particular support array
+    stream.seek(getSupportBlockByteOffset(dataArray), io::SeekableOutputStream::START);
+    dataWriter(make_span(data, dataArray), dataArray.bytesPerElement);
+}
+void CPHDWriter::writeSupportDataArray(io::SeekableOutputStream& stream,
+    std::span<const std::byte> data, const Data::SupportArray& dataArray)
+{
+    auto dataWriter = make_DataWriter(stream);
+    writeSupportDataArray(stream, *dataWriter, data, dataArray);
+}
+void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream, std::span<const std::byte> data)
+{
     auto dataWriter = make_DataWriter(stream);
     for (auto&& mapEntry : mMetadata.data.supportArrayMap)
     {
-        auto&& dataArray = mapEntry.second;
-
-        // Move inputstream head to offset of particular support array
-        stream.seek(supportBlockByteOffset + dataArray.arrayByteOffset, io::SeekableOutputStream::START);
-
-        (*dataWriter)(make_span(data, dataArray), dataArray.bytesPerElement);
+        writeSupportDataArray(stream, *dataWriter, data, mapEntry.second);
     }
     // Move inputstream head to the end of the support block after all supports have been written
-    stream.seek(supportBlockByteOffset + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
+    stream.seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
 }
 
 template <typename T>
