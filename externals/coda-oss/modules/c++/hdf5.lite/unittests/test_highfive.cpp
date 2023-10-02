@@ -560,7 +560,7 @@ TEST_MAIN(
     TEST_CHECK(test_highfive_info_nested);
 
     TEST_CHECK(test_highfive_dump);
-    //TEST_CHECK(test_highfive_write);
+    TEST_CHECK(test_highfive_write);
 
     TEST_CHECK(test_highfive_getDataType);
     TEST_CHECK(test_highfive_getAttribute);
