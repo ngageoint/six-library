@@ -23,6 +23,7 @@
 #include <std/string>
 #include <std/filesystem>
 #include <std/optional>
+#include <std/span>
 
 #include "io/StringStream.h"
 #include "io/FileInputStream.h"
@@ -105,7 +106,7 @@ static std::filesystem::path find_unittest_file(const std::filesystem::path& nam
 static void test_a_element(const std::string& testName, const xml::lite::Element& root)
 {
     const auto aElements = root.getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(std::ssize(aElements), 1);
     const auto& a = *(aElements[0]);
 
     const auto characterData = a.getCharacterData();
@@ -124,7 +125,7 @@ TEST_CASE(testXmlParseSimple)
         
     const auto docElements = root.getElementsByTagName("doc");
     TEST_ASSERT_FALSE(docElements.empty());
-    TEST_ASSERT_EQ(docElements.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(std::ssize(docElements), 1);
     test_a_element(testName, *docElements[0]);
 }
 
@@ -365,7 +366,7 @@ static void testReadXmlFile(const std::string& testName, const std::string& xmlF
     const auto& root = getRootElement(getDocument(xmlParser));
 
     const auto aElements = root.getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(std::ssize(aElements), 1);
     const auto& a = *(aElements[0]);
 
     auto characterData = a.getCharacterData();

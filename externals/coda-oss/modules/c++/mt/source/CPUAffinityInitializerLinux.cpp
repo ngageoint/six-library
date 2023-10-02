@@ -51,14 +51,14 @@ std::vector<int> mergeAvailableCPUs()
 
 namespace mt
 {
-class AvailableCPUProvider : public AbstractNextCPUProviderLinux
+struct AvailableCPUProvider final : public AbstractNextCPUProviderLinux
 {
-public:
     AvailableCPUProvider() :
         mCPUs(mergeAvailableCPUs()),
         mNextCPUIndex(0)
     {
     }
+    ~AvailableCPUProvider() = default;
 
     virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
     {
@@ -79,13 +79,13 @@ private:
     size_t mNextCPUIndex;
 };
 
-class OffsetCPUProvider : public AbstractNextCPUProviderLinux
+struct OffsetCPUProvider final : public AbstractNextCPUProviderLinux
 {
-public:
     OffsetCPUProvider(int initialOffset) :
         mNextCPU(initialOffset)
     {
     }
+    ~OffsetCPUProvider() = default;
 
     virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
     {
