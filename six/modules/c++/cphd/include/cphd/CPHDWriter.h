@@ -115,12 +115,14 @@ struct CPHDWriter final
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             size_t numThreads = 0,
             size_t scratchSpaceSize = 4 * 1024 * 1024);
+#ifndef SWIGPYTHON
     CPHDWriter(
         const Metadata& metadata,
         const std::filesystem::path& pathname,
         const std::vector<std::filesystem::path>* pSchemaPaths = nullptr,
         size_t numThreads = 0,
         size_t scratchSpaceSize = 4 * 1024 * 1024);
+#endif
 
     CPHDWriter() = delete;
     CPHDWriter(const CPHDWriter&) = delete;
