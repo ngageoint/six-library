@@ -128,7 +128,7 @@ void writeCPHD(const std::string& outPathname,
 
     cphd::CPHDWriter writer(metadata,
                             outPathname,
-                            std::vector<std::string>(),
+                            nullptr /*pSchemaPaths*/,
                             numThreads);
     writer.writeMetadata(pvpBlock);
     writer.writePVPData(pvpBlock);

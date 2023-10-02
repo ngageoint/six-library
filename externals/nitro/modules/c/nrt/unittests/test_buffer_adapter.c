@@ -44,6 +44,8 @@ TEST_CASE(testReadInBounds)
     {
         TEST_ASSERT(output[ii] == (char)1);
     }
+
+    nrt_IOInterface_destruct(&reader);
 }
 
 TEST_CASE(testReadPastEnd)
@@ -63,6 +65,8 @@ TEST_CASE(testReadPastEnd)
     nrt_IOInterface_seek(reader, 8, NRT_SEEK_SET, &error);
     success = nrt_IOInterface_read(reader, output, sizeof(output), &error);
     TEST_ASSERT(!success);
+
+    nrt_IOInterface_destruct(&reader);
 }
 
 TEST_CASE(testReadOutOfBounds)
@@ -82,6 +86,8 @@ TEST_CASE(testReadOutOfBounds)
     TEST_ASSERT(success != 0);
     success = nrt_IOInterface_read(reader, output, sizeof(output), &error);
     TEST_ASSERT(!success);
+
+    nrt_IOInterface_destruct(&reader);
 }
 
 TEST_CASE(testWriteOutOfBounds)
@@ -99,11 +105,11 @@ TEST_CASE(testWriteOutOfBounds)
     TEST_ASSERT(success != 0);
     success = nrt_IOInterface_write(writer, input, 4, &error);
     TEST_ASSERT(!success);
+
+    nrt_IOInterface_destruct(&writer);
 }
 
 TEST_MAIN(
-    (void) argc;
-    (void) argv;
     CHECK(testReadInBounds);
     CHECK(testReadPastEnd);
     CHECK(testReadOutOfBounds);

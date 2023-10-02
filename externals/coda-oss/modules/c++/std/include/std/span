@@ -23,6 +23,7 @@
 #define CODA_OSS_std_span_INCLUDED_
 
 #include "coda_oss/span.h"
+#include "coda_oss/CPlusPlus.h"
 
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_span

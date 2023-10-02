@@ -28,10 +28,11 @@ io::RotatingFileOutputStream::RotatingFileOutputStream(
                                                        unsigned long maxBytes,
                                                        size_t backupCount,
                                                        int creationFlags) :
-    io::CountingOutputStream(new io::FileOutputStream(filename, creationFlags),
-                             true), mFilename(filename), mMaxBytes(maxBytes),
-            mBackupCount(backupCount)
+    io::CountingOutputStream(new io::FileOutputStream(filename, creationFlags), true),
+    mMaxBytes(maxBytes), mBackupCount(backupCount)
 {
+    mFilename = filename; // doing this in initializer list causes ASAN diagnostic on Windows ... VS bug?
+
     mByteCount = ((io::FileOutputStream*) mProxy.get())->tell();
     if (shouldRollover(0))
         doRollover();

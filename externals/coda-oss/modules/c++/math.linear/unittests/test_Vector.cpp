@@ -1,3 +1,4 @@
+#include <std/span>
 #include <cstdlib>
 #include "TestCase.h"
 #include "math/linear/Vector.h"
@@ -256,8 +257,8 @@ TEST_CASE(testOperatorMinusEquals)
     Vector<double> v2(5, -5);
 
     v2 -= v1;
-    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(5));
-    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(5));
+    TEST_ASSERT_EQ(std::ssize(v1), 5);
+    TEST_ASSERT_EQ(std::ssize(v2), 5);
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v2[i], -18);
     for (int i = 0; i < 5; i++)
@@ -347,9 +348,9 @@ TEST_CASE(testOperatorMinus)
     Vector<double> v3(v2 - v1);
     // TODO: Test what happens if v1 & v2 are of different lengths.
 
-    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(4));
-    TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(4));
-    TEST_ASSERT_EQ(v3.size(), static_cast<size_t>(4));
+    TEST_ASSERT_EQ(std::ssize(v1), 4);
+    TEST_ASSERT_EQ(std::ssize(v2), 4);
+    TEST_ASSERT_EQ(std::ssize(v3), 4);
 
     for (int i = 0; i < 4; i++)
     {

@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <std/span>
 
 #include <import/str.h>
 #include <import/mem.h>
@@ -533,8 +534,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                             break;
                         }
                     }
-                    if (maxArgs >= 0 &&
-                        v->size() >= static_cast<size_t>(maxArgs))
+                    if (maxArgs >= 0 && std::ssize(*v) >= maxArgs)
                     {
                         // it's another positional argument, so we break out
                         break;

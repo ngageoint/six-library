@@ -29,12 +29,6 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
     elseif (UNIX)
        add_compile_options(-Werror) # warnings as errors
-
-       if (ENABLE_ASAN)
-            # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
-            add_compile_options(-fsanitize=address)
-            add_link_options(-fsanitize=address)
-       endif()
     endif()
 
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
