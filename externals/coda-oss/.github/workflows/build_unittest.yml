@@ -58,7 +58,8 @@ jobs:
         os: [windows-latest]
         platform: [x64]
         configuration: [Debug] # Debug turns on more compiler warnings
-    name: ${{ matrix.os }}-msbuild
+        avx: [AVX2, AVX512F]
+    name: ${{ matrix.os }}-${{ matrix.avx }}-msbuild
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -68,7 +69,7 @@ jobs:
         ls env:
         mkdir out
         cd out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON
     - name: build
       run: |
         cd out
@@ -131,14 +132,15 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         configuration: [Debug, Release]
-    name: ${{ matrix.os }}-${{ matrix.configuration }}-CMake
+        avx: [AVX2, AVX512F]
+    name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
     - name: configure
       run: |
         mkdir out && cd out
-        cmake .. -DENABLE_PYTHON=OFF -DENABLE_ASAN=ON
+        cmake .. -DENABLE_PYTHON=OFF -DENABLE_ASAN=ON -DENABLE_${{ matrix.avx }}=ON
     - name: build
       run: |
         cd out
