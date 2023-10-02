@@ -217,6 +217,10 @@ struct CPHDWriter final
      *
      *  \param data A pointer to the start of the support array data block
      */
+    sys::Off_T getSupportBlockByteOffset(const Data::SupportArray&) const;
+    void writeSupportDataArray(io::SeekableOutputStream&, DataWriter&,
+        std::span<const std::byte>, const Data::SupportArray&);
+    void writeSupportDataArray(io::SeekableOutputStream&, std::span<const std::byte>, const Data::SupportArray&);
     void writeSupportData(io::SeekableOutputStream&, std::span<const std::byte>);
 
     template <typename T>
