@@ -162,7 +162,6 @@ static auto make_span(std::span<const std::byte> data, const cphd::Data::Support
     const auto pData = data.data() + dataArray.arrayByteOffset;
     return sys::make_span(pData, dataArray.size_bytes());
 }
-
 sys::Off_T CPHDWriter::getSupportBlockByteOffset(const Data::SupportArray& dataArray) const
 {
     const auto supportBlockByteOffset = mHeader.getSupportBlockByteOffset();
