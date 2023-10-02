@@ -25,7 +25,9 @@
 #include <std/cstddef>
 
 #include <sys/Conf.h>
+#include <sys/AbstractOS.h>
 #include <avx/extractf.h>
+#include <config/compiler_extensions.h>
 
 TEST_CASE(extractf)
 {
@@ -49,8 +51,50 @@ TEST_CASE(extractf)
   */
     TEST_SUCCESS;
 }
+
+TEST_CASE(test_getSIMDInstructionSet)
+{
+    // This is the reverse of getSIMDInstructionSet(): it uses the macros to generate a value.
+    constexpr auto simdInstructionSet = sys::getSIMDInstructionSet();
+    #if __AVX512F__
+    static_assert(simdInstructionSet == sys::SIMDInstructionSet::AVX512F, "getSIMDInstructionSet()");
+    #elif __AVX2__
+    static_assert(simdInstructionSet == sys::SIMDInstructionSet::AVX2, "getSIMDInstructionSet()");
+    #else
+    static_assert(simdInstructionSet == sys::SIMDInstructionSet::SSE2, "getSIMDInstructionSet()");
+    #endif
     
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable: 4127) // conditional expression is constant
+    #endif
+
+    switch (sys::getSIMDInstructionSet()) // run-time value
+    {
+    case sys::SIMDInstructionSet::SSE2:
+    {
+        TEST_ASSERT(simdInstructionSet == sys::SIMDInstructionSet::SSE2);
+        break;
+    }
+    case sys::SIMDInstructionSet::AVX2:
+    {
+        TEST_ASSERT(simdInstructionSet == sys::SIMDInstructionSet::AVX2);
+        break;
+    }
+    case sys::SIMDInstructionSet::AVX512F:
+    {
+        TEST_ASSERT(simdInstructionSet == sys::SIMDInstructionSet::AVX512F);
+        break;
+    }
+    default:
+    {
+        TEST_FAIL;
+    }
+    }
+    CODA_OSS_disable_warning_pop
+}
 
 TEST_MAIN(
     TEST_CHECK(extractf);
+    TEST_CHECK(test_getSIMDInstructionSet);
 )
