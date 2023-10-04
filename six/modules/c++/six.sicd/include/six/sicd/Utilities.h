@@ -428,10 +428,14 @@ struct Utilities final
      *
      * \return XML string representation of 'data'
      */
-    static std::string toXMLString(
+    static std::u8string toXMLString(
             const ComplexData& data,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             logging::Logger* logger = nullptr);
+    static std::string toXMLString_(
+        const ComplexData& data,
+        const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+        logging::Logger* logger = nullptr);
     static std::u8string toXMLString(const ComplexData&,
         const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
     /*!

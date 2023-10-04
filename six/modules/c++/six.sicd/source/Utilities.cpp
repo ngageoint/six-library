@@ -1040,7 +1040,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string&
     return parser.fromXML(xmlStr);
 }
 
-std::string Utilities::toXMLString(const ComplexData& data,
+std::u8string Utilities::toXMLString(const ComplexData& data,
                                    const std::vector<std::string>& schemaPaths_,
                                    logging::Logger* logger)
 {
@@ -1048,7 +1048,13 @@ std::string Utilities::toXMLString(const ComplexData& data,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    const auto result = toXMLString(data, &schemaPaths, logger);
+    return toXMLString(data, &schemaPaths, logger);
+ }
+std::string Utilities::toXMLString_(const ComplexData& data,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger* logger)
+{
+    const auto result = toXMLString(data, schemaPaths, logger);
     return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const ComplexData& data,
