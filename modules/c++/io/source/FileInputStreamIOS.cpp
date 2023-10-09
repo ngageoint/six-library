@@ -91,7 +91,7 @@ void io::FileInputStreamIOS::open(const char *file,
     mFStream.open(file, mode);
     if (!isOpen())
         throw except::IOException(Ctxt(
-                                      FmtX(
+                                      str::Format(
                                           "File %s could not be opened for reading",
                                           file)
                                   )
