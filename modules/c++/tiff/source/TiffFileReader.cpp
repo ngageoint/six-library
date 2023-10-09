@@ -79,7 +79,7 @@ void tiff::FileReader::close()
 tiff::ImageReader *tiff::FileReader::operator[](const sys::Uint32_T index) const
 {
     if (index >= mImages.size())
-    throw except::Exception(Ctxt(FmtX("Index out of range: %d", index)));
+    throw except::Exception(Ctxt(str::Format("Index out of range: %d", index)));
 
     return mImages[index];
 }
@@ -106,7 +106,7 @@ void tiff::FileReader::getData(unsigned char *buffer,
         const sys::Uint32_T numElementsToRead, const sys::Uint32_T imageIndex)
 {
     if (imageIndex >= mImages.size())
-        throw except::Exception(Ctxt(FmtX("Index out of range", imageIndex)));
+        throw except::Exception(Ctxt(str::Format("Index out of range", imageIndex)));
 
     mImages[imageIndex]->getData(buffer, numElementsToRead);
 }

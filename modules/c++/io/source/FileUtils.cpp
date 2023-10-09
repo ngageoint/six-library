@@ -133,7 +133,7 @@ std::string io::FileUtils::createFile(std::string dirname,
     sys::OS os;
 
     if (!os.exists(dirname))
-        throw except::IOException(Ctxt(FmtX("Directory does not exist: %s",
+        throw except::IOException(Ctxt(str::Format("Directory does not exist: %s",
                                             dirname.c_str())));
 
     str::trim(filename);

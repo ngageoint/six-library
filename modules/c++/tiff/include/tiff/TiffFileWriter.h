@@ -191,7 +191,7 @@ template<typename T> void writeTIFF(const T* image, size_t rows, size_t cols,
             et = ::tiff::Const::SampleFormatType::UNSIGNED_INT;
             break;
         default:
-            throw except::Exception(Ctxt(FmtX("Unexpected es: %d", es)));
+            throw except::Exception(Ctxt(str::Format("Unexpected es: %d", es)));
         }
     }
     unsigned short alpha(0);

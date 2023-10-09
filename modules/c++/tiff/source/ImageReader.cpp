@@ -65,7 +65,7 @@ void tiff::ImageReader::getData(unsigned char *buffer,
     {
         unsigned short c = *(tiff::GenericType<unsigned short> *)(*compression)[0];
         if (c != tiff::Const::CompressionType::NO_COMPRESSION)
-            throw except::Exception(Ctxt(FmtX("Unsupported compression type: %d", c)));
+            throw except::Exception(Ctxt(str::Format("Unsupported compression type: %d", c)));
     }
     
     if (mIFD["StripOffsets"])
