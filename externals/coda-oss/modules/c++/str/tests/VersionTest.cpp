@@ -25,7 +25,7 @@
 
 int main()
 {
-    std::cout << FmtX("Your version of str is %d.%d.%d\n",
+    std::cout << str::Format("Your version of str is %d.%d.%d\n",
             STR_MAJOR_VERSION, STR_MINOR_VERSION, STR_MICRO_VERSION);
     std::cout << "Specialization for string test...\n";
     std::string ok("This test passes");

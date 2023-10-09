@@ -18,10 +18,12 @@ CMakeLists.txt text eol=lf
 
 # Text file formats
 *.txt	text eol=lf
+*.text	text eol=lf
 *.md	text eol=lf
 *.tex	text eol=lf
 *.?ml	text eol=lf
 *.kmz	  binary
+*.log	text eol=lf
 
 # Programming languages
 *.htm?	text eol=lf
@@ -54,12 +56,21 @@ CMakeLists.txt text eol=lf
 ######################
 # Known binary files
 
+# executables, libraries; yes, sometimes they're part of a repository
+*.exe	       binary
+*.out	       binary
+lib*.so*       binary
+*.dll	       binary
+lib*.a*	       binary
+*.lib	       binary
+
 # from various unit_test/ directories
 *.dat  	       binary
 *.*hdr	       binary
 *.flat	       binary
 *.sig	       binary
 *.bin	       binary
+*.dump	       binary
 
 # images
 *.bmp	binary
