@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
         // Check to make sure we have right length
         if (argc != 2)
-            throw Exception(Ctxt(FmtX("Usage: %s <xml file>\n", argv[0])));
+            throw Exception(Ctxt(str::Format("Usage: %s <xml file>\n", argv[0])));
 
         // Create an input stream
         FileInputStream xmlFile(argv[1]);
