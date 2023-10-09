@@ -1236,7 +1236,7 @@ XMLElem DerivedXMLParser::convertProductProcessingToXML(
     // error checking
     if (productProcessing->processingModules.empty())
     {
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
                 "There must be at least [1] ProcessingModule in "\
                 "ProductProcessing, [%d] found",
                 productProcessing->processingModules.size())));
@@ -1847,7 +1847,7 @@ XMLElem DerivedXMLParser::createSFALine(
 
     // error check the vertices
     if (l->vertices.size() < 2)
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
                 "Must be at least two Vertices in LineString. Only [%d] " \
                 "found", l->vertices.size())));
 
@@ -1948,7 +1948,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
 
         // error check the vertices
         if (p->vertices.size() < 2)
-            throw except::Exception(Ctxt(FmtX(
+            throw except::Exception(Ctxt(str::Format(
                     "Must be at least two Vertices in LineString. Only [%d] " \
                     "found", p->vertices.size())));
 
@@ -1960,7 +1960,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     }
     else
     {
-        throw except::InvalidArgumentException(Ctxt(FmtX("Invalid geo type: [%s]", geoType)));
+        throw except::InvalidArgumentException(Ctxt(str::Format("Invalid geo type: [%s]", geoType)));
     }
 
     return geoElem;

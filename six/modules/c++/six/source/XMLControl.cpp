@@ -447,5 +447,5 @@ std::string six::getSchemaPath(std::vector<std::string>& schemaPaths, bool tryTo
         }
     }
 
-    throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath)));
+    throw except::IOException(Ctxt(str::Format("Directory does not exist: '%s'", schemaPath)));
 }
