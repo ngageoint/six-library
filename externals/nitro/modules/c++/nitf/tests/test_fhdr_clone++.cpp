@@ -118,7 +118,7 @@ int main(int argc, char** argv)
     {
         if (argc != 2)
         {
-            throw nitf::NITFException(Ctxt(FmtX("Usage: %s <nitf-file>\n", argv[0])));
+            throw nitf::NITFException(Ctxt(str::Format("Usage: %s <nitf-file>\n", argv[0])));
         }
 
         nitf::Reader reader;
