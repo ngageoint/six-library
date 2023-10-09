@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef __NITF_EXCEPTION_HPP__
 #define __NITF_EXCEPTION_HPP__
-#pragma once
 
 #include <assert.h>
 
@@ -79,7 +79,11 @@ namespace nitf
  *  \class NITFException
  *  \brief  The C++ wrapper for the nitf_Error
  */
-class NITFException  /*final*/ : public except::Exception // no "final", SWIG doesn't like it
+#ifndef SWIGPYTHON  // no "final", SWIG doesn't like it
+class NITFException final : public except::Exception
+#else
+class NITFException : public except::Exception
+#endif
 {
     static except::Context make_Context_(const Error& error, const std::string& message)
     {

@@ -173,7 +173,7 @@ template<typename T> void writeSIO(const T* image, size_t rows, size_t cols,
             et = FileHeader::UNSIGNED;
             break;
         default:
-            throw except::Exception(Ctxt(FmtX("Unexpected es: %d", es)));
+            throw except::Exception(Ctxt(str::Format("Unexpected es: %d", es)));
         }
     }
 

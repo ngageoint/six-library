@@ -59,7 +59,7 @@ std::string sys::OSWin32::getPlatformName() const
         platform = "Unknown Windows OS";
     }
     auto retval = platform + ": ";
-    retval += FmtX("%d.%d [build: %d], ", info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber);
+    retval += str::Format("%d.%d [build: %d], ", info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber);
     retval += info.szCSDVersion;
     return retval;
 }

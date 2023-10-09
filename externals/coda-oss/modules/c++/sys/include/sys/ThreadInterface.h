@@ -132,7 +132,7 @@ struct CODA_OSS_API ThreadInterface : public Runnable
         // of nasty issues that could pop up (execution in freed memory, etc).
         if (isRunning())
         {
-            std::cerr << Ctxt(FmtX("Thread object [%s] destructed before " \
+            std::cerr << Ctxt(str::Format("Thread object [%s] destructed before " \
                                    "thread terminated, aborting program.", 
                                    getName().c_str())) << std::endl;
             abort();
