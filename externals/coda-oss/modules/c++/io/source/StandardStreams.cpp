@@ -33,7 +33,7 @@ void io::StandardOutStream::write(const void* buffer, sys::Size_T len)
     if (!std::cout.good())
         throw except::IOException(
             Ctxt(
-                FmtX("std::cout stream is bad after requested write: (%d)",
+                str::Format("std::cout stream is bad after requested write: (%d)",
                      len)) );
 }
 
@@ -53,7 +53,7 @@ void io::StandardErrStream::write(const void* buffer, sys::Size_T len)
     if (!std::cerr.good())
         throw except::IOException(
             Ctxt(
-                FmtX("std::cerr stream is bad after requested write: (%d)",
+                str::Format("std::cerr stream is bad after requested write: (%d)",
                      len) ) );
 }
 

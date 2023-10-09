@@ -144,8 +144,8 @@ std::string sys::OSUnix::getPlatformName() const
         throw sys::SystemException("Uname failed");
 
     std::string retval = name.sysname;
-    retval += FmtX(" (%s): %s", name.machine, name.release);
-    retval += FmtX(" [build: %s]", name.version);
+    retval += str::Format(" (%s): %s", name.machine, name.release);
+    retval += str::Format(" [build: %s]", name.version);
     return retval;
 }
 

@@ -43,7 +43,7 @@ void sys::File::create(const std::string& str, int accessFlags,
     if (mHandle < 0)
     {
         throw sys::SystemException(Ctxt(
-                FmtX("Error opening file [%d]: [%s]", mHandle, str.c_str())));
+                str::Format("Error opening file [%d]: [%s]", mHandle, str.c_str())));
     }
 }
 
