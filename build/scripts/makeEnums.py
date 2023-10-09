@@ -110,7 +110,7 @@ def makeEnums(filenames):
                     s.write('        %sif (s == "%s")\n            value = %s%s;\n' % (i > 0 and 'else ' or '',
                                                                        n, values.cleanPrefix, item.names[0].replace(' ', '_')))
                     i += 1
-        s.write('        else\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));\n')
+        s.write('        else\n            throw except::InvalidFormatException(Ctxt(str::Format("Invalid enum value: %s", s.c_str())));\n')
         s.write('    }\n\n')
         
         s.write('    //! int constructor\n')
@@ -123,7 +123,7 @@ def makeEnums(filenames):
             try:
                 idx += 1
             except:{}
-        s.write('        default:\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));\n')
+        s.write('        default:\n            throw except::InvalidFormatException(Ctxt(str::Format("Invalid enum value: %d", i)));\n')
         s.write('        }\n    }\n\n')
         
         s.write('    //! destructor\n')
@@ -142,7 +142,7 @@ def makeEnums(filenames):
             try:
                 idx += 1
             except:{}
-        s.write('        default:\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));\n')
+        s.write('        default:\n            throw except::InvalidFormatException(Ctxt(str::Format("Invalid enum value: %d", value)));\n')
         s.write('        }\n    }\n\n')
         
         s.write('    //! assignment operator\n')
