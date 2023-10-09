@@ -40,6 +40,7 @@ namespace mt
 struct AbstractNextCPUProviderLinux
 {
     virtual std::unique_ptr<const sys::ScopedCPUMaskUnix> nextCPU() = 0;
+    virtual ~AbstractNextCPUProviderLinux() {}
 };
 
 /*!
