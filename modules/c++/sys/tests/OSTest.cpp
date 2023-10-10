@@ -92,7 +92,7 @@ int main(int argc, char **argv)
         std::string tempFileName = os.getTempName();
         std::ofstream ofs(tempFileName.c_str());
         if (!ofs.is_open())
-            throw except::Exception(FmtX("Could not open file named: %s",
+            throw except::Exception(str::Format("Could not open file named: %s",
                                          tempFileName.c_str()));
         ofs << "Im writing some crap to this file!" << std::endl;
         ofs.close();
