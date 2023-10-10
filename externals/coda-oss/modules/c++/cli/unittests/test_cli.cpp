@@ -160,7 +160,7 @@ TEST_CASE(testIterate)
     std::unique_ptr<cli::Results>
             results(parser.parse(str::split("-v -c config.xml")));
     std::vector<std::string> keys;
-    for(cli::Results::const_iterator it = results->begin(); it != results->end(); ++it)
+    for(auto it = results->begin(); it != results->end(); ++it)
         keys.push_back(it->first);
     TEST_ASSERT_EQ(std::ssize(keys), 2);
     // std::map returns keys in alphabetical order...
@@ -186,14 +186,9 @@ TEST_CASE(testRequiredThrows)
     parser.addArgument("-c --config", "Specify a config file", cli::STORE)
             ->setRequired(true);
 
-    // The exceptions leak memory which causes an ASAN diagnostic on Linux.
-    #if CODA_OSS_POSIX_SOURCE && __SANITIZE_ADDRESS__
-    TEST_SUCCESS;
-    #else
     const std::string program(testName);
     TEST_EXCEPTION(parser.parse(program, str::split("")));
     TEST_EXCEPTION(parser.parse(program, str::split("-c")));
-    #endif
 }
 
 TEST_CASE(testUnknownArgumentsOptions)
