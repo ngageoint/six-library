@@ -103,7 +103,7 @@ public:
     }
     void run() override
     {
-        //__debugln__(FmtX("[%s]:", mName.c_str()));
+        //__debugln__(str::Format("[%s]:", mName.c_str()));
         doLines();
     }
     virtual void doLines() = 0;

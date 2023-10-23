@@ -80,7 +80,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
 
     if (!bandInfo)
     {
-        throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
+        throw nitf::NITFException(Ctxt("Out of Memory"));
     }
 
     for (size_t i = 0; i < bandCount; i++)

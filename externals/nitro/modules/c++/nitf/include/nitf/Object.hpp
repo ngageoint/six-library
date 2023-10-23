@@ -151,7 +151,7 @@ public:
      */
     std::string getObjectID() const
     {
-        return FmtX("%p", getNative());
+        return str::Format("%p", getNative());
     }
 
     bool isManaged() const noexcept { return isValid() && mHandle->isManaged(); }

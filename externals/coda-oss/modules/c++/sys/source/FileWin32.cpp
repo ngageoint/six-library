@@ -59,7 +59,7 @@ void sys::File::create(const std::string& str,
     if (mHandle == INVALID_HANDLE_VALUE)
     {
         throw sys::SystemException(
-                Ctxt(FmtX("Error opening file: [%s]", str.c_str())));
+                Ctxt(str::Format("Error opening file: [%s]", str.c_str())));
     }
 }
 
@@ -169,7 +169,7 @@ sys::Off_T sys::File::lastModifiedTime()
         return (sys::Off_T)stInMillis;
     }
     throw sys::SystemException(Ctxt(
-                    FmtX("Error getting last modified time for path %s",
+                    str::Format("Error getting last modified time for path %s",
                             mPath.c_str())));
 }
 
