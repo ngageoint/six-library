@@ -7,8 +7,6 @@
 
 TEST_CASE(test_tre_create_329)
 {
-    nitf::Test::setNitfPluginPath();
-
     // https://github.com/mdaus/nitro/issues/329
 
     nitf::TRE tre("HISTOA", "HISTOA"); // allocates fields SYSTEM .. NEVENTS
@@ -21,8 +19,6 @@ TEST_CASE(test_tre_create_329)
 
 TEST_CASE(test_tre_clone_329)
 {
-    nitf::Test::setNitfPluginPath();
-
     // https://github.com/mdaus/nitro/issues/329
     const std::string rd = "begin1020030004ABCDEFend";
 
@@ -43,7 +39,8 @@ TEST_CASE(test_tre_clone_329)
 }
 
 TEST_MAIN(
-    (void)argv; (void)argc;
+    nitf::Test::setNitfPluginPath();
+
     TEST_CHECK(test_tre_create_329);
     TEST_CHECK(test_tre_clone_329);
     )

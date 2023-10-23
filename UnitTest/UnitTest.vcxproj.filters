@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="nrt">
+      <UniqueIdentifier>{d6b8959a-344d-4af2-b926-05be973609a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nitf-c">
+      <UniqueIdentifier>{a03980e8-d43d-473b-9f2a-a883ddd94df0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nitf-c++">
+      <UniqueIdentifier>{555282a7-bf5d-4012-842a-435bfb7324ab}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nrt.cpp">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="..\modules\c\nrt\unittests\test_utils.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="CppUnitTestAssert.cpp" />
+    <ClCompile Include="..\modules\c\nrt\unittests\test_buffer_adapter.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_core_values.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_list.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_nrt_byte_swap.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_nrt_datetime.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_tree.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf-c.cpp">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_create.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_create_nitf.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_field.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_geo_utils.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_image_io.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_mem_source.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_moveTREs.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_zero_field.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf-c++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_create_nitf++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_field++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_hash_table_1++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_blocker.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_loading++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_segment_blank_nm_compression.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_segment_computer.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_writer.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_j2k_compress_tile.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_j2k_compressed_byte_provider.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_j2k_loading++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_j2k_read_tile.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_load_plugins.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_nitf_buffer_list.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_tre_create++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_tre_mods.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_tre_mods++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_tre_read.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_writer_3++.cpp">
+      <Filter>nitf-c++</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="TestCase.h" />
+    <ClInclude Include="Test.h" />
+  </ItemGroup>
+</Project>

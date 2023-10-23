@@ -81,7 +81,7 @@ std::string xml::lite::Attributes::getValue(int i) const
     }
     catch (const std::out_of_range& ex)
     {
-        throw except::NoSuchKeyException(Ctxt(FmtX("attributes[%d] not found, %s", i, ex.what())));
+        throw except::NoSuchKeyException(Ctxt(str::Format("attributes[%d] not found, %s", i, ex.what())));
     }
 }
 bool xml::lite::Attributes::getValue(int i, std::string& result) const
@@ -125,7 +125,7 @@ std::string xml::lite::Attributes::getValue(const std::string& qname) const
     std::string retval;
     if (!getValue(qname, retval))
     {
-        throw except::NoSuchKeyException(Ctxt(FmtX("QName '%s' could not be found",
+        throw except::NoSuchKeyException(Ctxt(str::Format("QName '%s' could not be found",
                                                    qname.c_str())));
     }
     
@@ -152,8 +152,7 @@ std::string xml::lite::Attributes::getValue(const QName& qname) const
     {
         const auto uri = qname.getUri().value;
         const auto localName = qname.getName();
-        throw except::NoSuchKeyException(Ctxt(FmtX("(uri: %s, localName: %s",
-                                                   uri.c_str(), localName.c_str())));
+        throw except::NoSuchKeyException(Ctxt(str::Format("(uri: %s, localName: %s", uri, localName)));
     }
     return retval;
 }

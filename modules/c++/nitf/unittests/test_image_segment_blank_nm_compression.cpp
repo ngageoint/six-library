@@ -255,7 +255,7 @@ TEST_CASE(testBlankSegmentsValid)
                                                       imageDataOffset, blockRecordLength,
                                                       padRecordLength, padPixelValueLength,
                                                       padValue, blockMask, padMask) != 0);
-            TEST_ASSERT_GREATER(blockRecordLength, 0u);
+            TEST_ASSERT_GREATER_EQ(blockRecordLength, 1u);
 
             const int64_t totalBlocks = blockingInfo.getNumBlocksPerRow()*blockingInfo.getNumBlocksPerCol();
             TEST_ASSERT_GREATER(totalBlocks, 0);
@@ -279,7 +279,5 @@ TEST_CASE(testBlankSegmentsValid)
 }
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
 TEST_CHECK(testBlankSegmentsValid);
 )

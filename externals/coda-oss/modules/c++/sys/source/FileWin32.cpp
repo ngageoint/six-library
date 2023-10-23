@@ -49,7 +49,7 @@ _SYS_HANDLE_TYPE sys::File::createFile(const coda_oss::filesystem::path& str_, i
                          nullptr /*lpSecurityAttributes*/,
                          dwCreationDisposition,
                          FILE_ATTRIBUTE_NORMAL,
-                         static_cast<HANDLE>(0) /*hTemplateFile*/);
+                         static_cast<HANDLE>(nullptr) /*hTemplateFile*/);
 }
 void sys::File::create(const std::string& str,
                        int accessFlags,
@@ -59,7 +59,7 @@ void sys::File::create(const std::string& str,
     if (mHandle == INVALID_HANDLE_VALUE)
     {
         throw sys::SystemException(
-                Ctxt(FmtX("Error opening file: [%s]", str.c_str())));
+                Ctxt(str::Format("Error opening file: [%s]", str.c_str())));
     }
 }
 
@@ -83,7 +83,7 @@ void sys::File::readInto(void* buffer, size_t size)
                       bufferPtr + bytesRead,
                       bytesToRead,
                       &bytesThisRead,
-                      NULL))
+                      nullptr))
         {
             throw sys::SystemException(Ctxt("Error reading from file"));
         }
@@ -120,7 +120,7 @@ void sys::File::writeFrom(const void* buffer, size_t size)
                        bufferPtr + bytesWritten,
                        bytesToWrite,
                        &bytesThisWrite,
-                       NULL))
+                       nullptr))
         {
             throw sys::SystemException(Ctxt("Writing from file"));
         }
@@ -169,7 +169,7 @@ sys::Off_T sys::File::lastModifiedTime()
         return (sys::Off_T)stInMillis;
     }
     throw sys::SystemException(Ctxt(
-                    FmtX("Error getting last modified time for path %s",
+                    str::Format("Error getting last modified time for path %s",
                             mPath.c_str())));
 }
 

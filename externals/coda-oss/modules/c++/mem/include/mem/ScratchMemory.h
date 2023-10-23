@@ -50,8 +50,7 @@ namespace mem
 class CODA_OSS_API ScratchMemory
 {
 public:
-    //! Default constructor
-    ScratchMemory();
+    ScratchMemory() = default;
 
     /*!
      * \brief Reserve a buffer segment within this scratch memory buffer.
@@ -183,8 +182,8 @@ private:
     std::set<std::string> mConnectedKeys;
 
     BufferView<sys::ubyte> mBuffer;
-    size_t mNumBytesNeeded;
-    size_t mOffset;
+    size_t mNumBytesNeeded=0;
+    size_t mOffset=0;
 };
 }
 

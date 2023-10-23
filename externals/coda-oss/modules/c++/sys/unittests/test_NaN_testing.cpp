@@ -21,6 +21,9 @@
  */
 
 #include <limits>
+#include <std/span>
+#include <vector>
+
 #include "TestCase.h"
 
 TEST_CASE(testNaNsAreNotEqual)
@@ -58,9 +61,40 @@ TEST_CASE(testIsNaN)
     TEST_ASSERT_FALSE(IS_NAN(std::string("test string")));
 }
 
+TEST_CASE(test_ssize)
+{
+    // https://en.cppreference.com/w/cpp/iterator/size
+
+    // Works with containers
+    std::vector<int> v{3, 1, 4};
+    TEST_ASSERT_EQ(std::size(v), 3);
+
+    // And works with built-in arrays too
+    int a[]{-5, 10, 15};
+    // Returns the number of elements (not bytes) as opposed to sizeof
+    TEST_ASSERT_EQ(std::size(a), 3);
+    static_assert(sizeof(a) == 12, "sizeof(a)");
+
+    // Provides a safe way (compared to sizeof) of getting string buffer size
+    const char str[] = "12345";
+    // These are fine and give the correct result
+    TEST_ASSERT_EQ(std::size(str), 6);
+    static_assert(sizeof(str) == 6, "sizeof(str)");
+
+    // But use of sizeof here is a common source of bugs
+    const char* str_decayed = "12345";
+    static_assert(sizeof(str_decayed) == sizeof(void*), "sizeof(void*)");
+
+    // Since C++20 the signed size (std::ssize) is available
+    auto i = std::ssize(v);
+    for (--i; i != -1; --i) { }
+    TEST_ASSERT_EQ(i, -1);
+}
+
 TEST_MAIN(
     TEST_CHECK(testNaNsAreNotEqual);
     TEST_CHECK(testNaNIsNotAlmostEqualToNumber);
     TEST_CHECK(testIsNaN);
-)
+    TEST_CHECK(test_ssize);
+    )
 

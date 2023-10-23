@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -11,9 +10,7 @@
  * help@hdfgroup.org.                                                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/* Programmer:  Quincey Koziol
- *              Thursday, August 28, 2008
- *
+/*
  * Purpose:	Extensible array testing functions.
  *
  */
@@ -114,9 +111,6 @@ H5FL_DEFINE_STATIC(H5EA__ctx_cb_t);
  * Return:	Success:	non-NULL
  *		Failure:	NULL
  *
- * Programmer:	Quincey Koziol
- *              Tuesday, January 27, 2009
- *
  *-------------------------------------------------------------------------
  */
 static void *
@@ -131,7 +125,7 @@ H5EA__test_crt_context(void *_udata)
     /* Allocate new context structure */
     if (NULL == (ctx = H5FL_MALLOC(H5EA__test_ctx_t)))
         HGOTO_ERROR(H5E_EARRAY, H5E_CANTALLOC, NULL,
-                    "can't allocate extensible array client callback context")
+                    "can't allocate extensible array client callback context");
 
     /* Initialize the context */
     ctx->bogus = H5EA__TEST_BOGUS_VAL;
@@ -152,9 +146,6 @@ done:
  * Return:	Success:	non-negative
  *		Failure:	negative
  *
- * Programmer:	Quincey Koziol
- *              Tuesday, January 27, 2009
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -165,7 +156,7 @@ H5EA__test_dst_context(void *_ctx)
     FUNC_ENTER_PACKAGE_NOERR
 
     /* Sanity checks */
-    HDassert(H5EA__TEST_BOGUS_VAL == ctx->bogus);
+    assert(H5EA__TEST_BOGUS_VAL == ctx->bogus);
 
     /* Release context structure */
     ctx = H5FL_FREE(H5EA__test_ctx_t, ctx);
@@ -181,9 +172,6 @@ H5EA__test_dst_context(void *_ctx)
  * Return:	Success:	non-negative
  *		Failure:	negative
  *
- * Programmer:	Quincey Koziol
- *              Thursday, August 28, 2008
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -194,8 +182,8 @@ H5EA__test_fill(void *nat_blk, size_t nelmts)
     FUNC_ENTER_PACKAGE_NOERR
 
     /* Sanity checks */
-    HDassert(nat_blk);
-    HDassert(nelmts);
+    assert(nat_blk);
+    assert(nelmts);
 
     H5VM_array_fill(nat_blk, &fill_val, sizeof(uint64_t), nelmts);
 
@@ -210,9 +198,6 @@ H5EA__test_fill(void *nat_blk, size_t nelmts)
  * Return:	Success:	non-negative
  *		Failure:	negative
  *
- * Programmer:	Quincey Koziol
- *              Thursday, August 28, 2008
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -225,15 +210,15 @@ H5EA__test_encode(void *raw, const void *_elmt, size_t nelmts, void *_ctx)
     FUNC_ENTER_PACKAGE
 
     /* Sanity checks */
-    HDassert(raw);
-    HDassert(elmt);
-    HDassert(nelmts);
-    HDassert(H5EA__TEST_BOGUS_VAL == ctx->bogus);
+    assert(raw);
+    assert(elmt);
+    assert(nelmts);
+    assert(H5EA__TEST_BOGUS_VAL == ctx->bogus);
 
     /* Check for callback action */
     if (ctx->cb) {
         if ((*ctx->cb->encode)(elmt, nelmts, ctx->cb->udata) < 0)
-            HGOTO_ERROR(H5E_EARRAY, H5E_BADVALUE, FAIL, "extensible array testing callback action failed")
+            HGOTO_ERROR(H5E_EARRAY, H5E_BADVALUE, FAIL, "extensible array testing callback action failed");
     }
 
     /* Encode native elements into raw elements */
@@ -260,9 +245,6 @@ done:
  * Return:	Success:	non-negative
  *		Failure:	negative
  *
- * Programmer:	Quincey Koziol
- *              Thursday, August 28, 2008
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -277,10 +259,10 @@ H5EA__test_decode(const void *_raw, void *_elmt, size_t nelmts, void H5_ATTR_NDE
     FUNC_ENTER_PACKAGE_NOERR
 
     /* Sanity checks */
-    HDassert(raw);
-    HDassert(elmt);
-    HDassert(nelmts);
-    HDassert(H5EA__TEST_BOGUS_VAL == ctx->bogus);
+    assert(raw);
+    assert(elmt);
+    assert(nelmts);
+    assert(H5EA__TEST_BOGUS_VAL == ctx->bogus);
 
     /* Decode raw elements into native elements */
     while (nelmts) {
@@ -305,9 +287,6 @@ H5EA__test_decode(const void *_raw, void *_elmt, size_t nelmts, void H5_ATTR_NDE
  * Return:	Success:	non-negative
  *		Failure:	negative
  *
- * Programmer:	Quincey Koziol
- *              Thursday, August 28, 2008
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -318,13 +297,13 @@ H5EA__test_debug(FILE *stream, int indent, int fwidth, hsize_t idx, const void *
     FUNC_ENTER_PACKAGE_NOERR
 
     /* Sanity checks */
-    HDassert(stream);
-    HDassert(elmt);
+    assert(stream);
+    assert(elmt);
 
     /* Print element */
     HDsnprintf(temp_str, sizeof(temp_str), "Element #%llu:", (unsigned long long)idx);
-    HDfprintf(stream, "%*s%-*s %llu\n", indent, "", fwidth, temp_str,
-              (unsigned long long)*(const uint64_t *)elmt);
+    fprintf(stream, "%*s%-*s %llu\n", indent, "", fwidth, temp_str,
+            (unsigned long long)*(const uint64_t *)elmt);
 
     FUNC_LEAVE_NOAPI(SUCCEED)
 } /* end H5EA__test_debug() */
@@ -336,8 +315,6 @@ H5EA__test_debug(FILE *stream, int indent, int fwidth, hsize_t idx, const void *
  *
  * Return:      Success:        non-NULL
  *              Failure:        NULL
- *
- * Programmer:	Vailin Choi; August 2010
  *
  *-------------------------------------------------------------------------
  */
@@ -352,7 +329,7 @@ H5EA__test_crt_dbg_context(H5F_t H5_ATTR_UNUSED *f, haddr_t H5_ATTR_UNUSED obj_a
     /* Allocate new context structure */
     if (NULL == (ctx = H5FL_MALLOC(H5EA__ctx_cb_t)))
         HGOTO_ERROR(H5E_EARRAY, H5E_CANTALLOC, NULL,
-                    "can't allocate extensible array client callback context")
+                    "can't allocate extensible array client callback context");
 
     /* Set return value */
     ret_value = ctx;
@@ -369,8 +346,6 @@ done:
  * Return:	Success:	non-negative
  *		Failure:	negative
  *
- * Programmer:	Vailin Choi; August 2010
- *
  *-------------------------------------------------------------------------
  */
 static herr_t
@@ -380,7 +355,7 @@ H5EA__test_dst_dbg_context(void *_ctx)
 
     FUNC_ENTER_PACKAGE_NOERR
 
-    HDassert(_ctx);
+    assert(_ctx);
 
     /* Release context structure */
     ctx = H5FL_FREE(H5EA__ctx_cb_t, ctx);
@@ -396,9 +371,6 @@ H5EA__test_dst_dbg_context(void *_ctx)
  * Return:	Success:	non-negative
  *		Failure:	negative
  *
- * Programmer:	Quincey Koziol
- *              Thursday, August 28, 2008
- *
  *-------------------------------------------------------------------------
  */
 herr_t
@@ -407,8 +379,8 @@ H5EA__get_cparam_test(const H5EA_t *ea, H5EA_create_t *cparam)
     FUNC_ENTER_PACKAGE_NOERR
 
     /* Check arguments. */
-    HDassert(ea);
-    HDassert(cparam);
+    assert(ea);
+    assert(cparam);
 
     /* Get extensible array creation parameters */
     cparam->raw_elmt_size             = ea->hdr->cparam.raw_elmt_size;
@@ -429,9 +401,6 @@ H5EA__get_cparam_test(const H5EA_t *ea, H5EA_create_t *cparam)
  * Return:	Success:	non-negative
  *		Failure:	negative
  *
- * Programmer:	Quincey Koziol
- *              Thursday, August 28, 2008
- *
  *-------------------------------------------------------------------------
  */
 int
@@ -442,39 +411,39 @@ H5EA__cmp_cparam_test(const H5EA_create_t *cparam1, const H5EA_create_t *cparam2
     FUNC_ENTER_PACKAGE_NOERR
 
     /* Check arguments */
-    HDassert(cparam1);
-    HDassert(cparam2);
+    assert(cparam1);
+    assert(cparam2);
 
     /* Compare creation parameters for array */
     if (cparam1->raw_elmt_size < cparam2->raw_elmt_size)
-        HGOTO_DONE(-1)
+        HGOTO_DONE(-1);
     else if (cparam1->raw_elmt_size > cparam2->raw_elmt_size)
-        HGOTO_DONE(1)
+        HGOTO_DONE(1);
 
     if (cparam1->max_nelmts_bits < cparam2->max_nelmts_bits)
-        HGOTO_DONE(-1)
+        HGOTO_DONE(-1);
     else if (cparam1->max_nelmts_bits > cparam2->max_nelmts_bits)
-        HGOTO_DONE(1)
+        HGOTO_DONE(1);
 
     if (cparam1->idx_blk_elmts < cparam2->idx_blk_elmts)
-        HGOTO_DONE(-1)
+        HGOTO_DONE(-1);
     else if (cparam1->idx_blk_elmts > cparam2->idx_blk_elmts)
-        HGOTO_DONE(1)
+        HGOTO_DONE(1);
 
     if (cparam1->sup_blk_min_data_ptrs < cparam2->sup_blk_min_data_ptrs)
-        HGOTO_DONE(-1)
+        HGOTO_DONE(-1);
     else if (cparam1->sup_blk_min_data_ptrs > cparam2->sup_blk_min_data_ptrs)
-        HGOTO_DONE(1)
+        HGOTO_DONE(1);
 
     if (cparam1->data_blk_min_elmts < cparam2->data_blk_min_elmts)
-        HGOTO_DONE(-1)
+        HGOTO_DONE(-1);
     else if (cparam1->data_blk_min_elmts > cparam2->data_blk_min_elmts)
-        HGOTO_DONE(1)
+        HGOTO_DONE(1);
 
     if (cparam1->max_dblk_page_nelmts_bits < cparam2->max_dblk_page_nelmts_bits)
-        HGOTO_DONE(-1)
+        HGOTO_DONE(-1);
     else if (cparam1->max_dblk_page_nelmts_bits > cparam2->max_dblk_page_nelmts_bits)
-        HGOTO_DONE(1)
+        HGOTO_DONE(1);
 
 done:
     FUNC_LEAVE_NOAPI(ret_value)

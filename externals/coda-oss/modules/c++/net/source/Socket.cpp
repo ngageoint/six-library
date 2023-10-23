@@ -115,7 +115,7 @@ size_t net::Socket::recv(void* b, size_t len, int flags)
         return static_cast<size_t>(-1);
     }
 #if defined(__DEBUG_SOCKET)
-    std::cout << FmtX("Read %d bytes from socket:", numBytes) << std::endl;
+    std::cout << str::Format("Read %d bytes from socket:", numBytes) << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
     std::cout << std::string(b, numBytes) << std::endl;
     std::cout << "---------------------------------------------" << std::endl;

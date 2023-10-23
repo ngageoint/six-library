@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -12,9 +11,6 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
- * Programmer:  Quincey Koziol
- *              Tuesday, January 8, 2008
- *
  * Purpose:     This file contains declarations which are visible only within
  *              the H5MF package.  Source files outside the H5MF package should
  *              include H5MFprivate.h instead.
@@ -71,14 +67,14 @@
 
 /* Calculate the mis-aligned fragment */
 #define H5MF_EOA_MISALIGN(F, E, A, FR)                                                                       \
-    {                                                                                                        \
+    do {                                                                                                     \
         hsize_t m;                                                                                           \
                                                                                                              \
-        if (H5F_addr_gt((E), 0) && ((m) = ((E) + H5F_BASE_ADDR(F)) % (A)))                                   \
+        if (H5_addr_gt((E), 0) && ((m) = ((E) + H5F_BASE_ADDR(F)) % (A)))                                    \
             (FR) = (A)-m;                                                                                    \
         else                                                                                                 \
             (FR) = 0;                                                                                        \
-    }
+    } while (0)
 
 /****************************/
 /* Package Private Typedefs */

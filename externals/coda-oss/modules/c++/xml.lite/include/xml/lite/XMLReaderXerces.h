@@ -20,6 +20,7 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
 
@@ -28,6 +29,8 @@
 #if defined(USE_XERCES)
 
 #include <string>
+
+#include <config/Exports.h>
 
 #include <sys/Mutex.h>
 #include <mt/CriticalSection.h>
@@ -56,7 +59,7 @@ namespace lite
  *  the Expat C Parser underneath, and wiring it to
  *  generic event calls, via the content handler.
  */
-class XMLReaderXerces final : public XMLReaderInterface
+class CODA_OSS_API XMLReaderXerces final : public XMLReaderInterface
 {
     XercesContext mCtxt;    //! this must be the first member listed
     std::unique_ptr<SAX2XMLReader>        mNative;

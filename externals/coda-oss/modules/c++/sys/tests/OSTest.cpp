@@ -92,7 +92,7 @@ int main(int argc, char **argv)
         std::string tempFileName = os.getTempName();
         std::ofstream ofs(tempFileName.c_str());
         if (!ofs.is_open())
-            throw except::Exception(FmtX("Could not open file named: %s",
+            throw except::Exception(str::Format("Could not open file named: %s",
                                          tempFileName.c_str()));
         ofs << "Im writing some crap to this file!" << std::endl;
         ofs.close();
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
         }
         os.remove("TEST_DIRECTORY");
 
-        std::cout << "Time Now: " << time(NULL) << std::endl;
+        std::cout << "Time Now: " << time(nullptr) << std::endl;
         sys::RealTimeStopWatch sw;
         //std::cout << "CPS: " << CLOCKS_PER_SEC << std::endl;
         //	std::cout << "Clock: " << clock() << std::endl;
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
         std::cout << "Finish Loop 3" << std::endl;
         std::cout << "Stop: " << std::setprecision(50) << sw.stop()
                 << std::endl;
-        std::cout << "Time Now: " << time(NULL) << std::endl;
+        std::cout << "Time Now: " << time(nullptr) << std::endl;
         //	std::cout << "Clock: " << clock() << std::endl;
 
     }

@@ -96,7 +96,7 @@ nitf::Field TRE::getField(const std::string& key) const
     nitf_Field* field = ::nitf_TRE_getField(getNativeOrThrow(), key.c_str());
     if (!field)
         throw except::NoSuchKeyException(
-                Ctxt(FmtX("Field does not exist in TRE: %s", key.c_str())));
+                Ctxt(str::Format("Field does not exist in TRE: %s", key)));
     return nitf::Field(field);
 }
 

@@ -4,7 +4,6 @@
 #include <string>
 
 #include <import/str.h>
-#include <str/EncodedString.h>
 
 namespace str
 {
