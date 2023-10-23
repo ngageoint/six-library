@@ -7,54 +7,25 @@ CMakeLists.txt text eol=lf
 
 # Modern tools on Windows can handle Linux LF
 # See https://stackoverflow.com/a/13154031/8877 for details
-* text=auto eol=lf
-.git?*	    text
+*     		text=auto eol=lf
+*.*   		text=auto eol=lf
+.git?*	   	text=auto eol=lf
 
 # Leave known Windows-only text files as CR/LF
-*.sln text eol=crlf
-*.vcxproj text eol=crlf
-*.vcxproj.filters text eol=crlf
-*.ruleset text eol=crlf
-
-# Text file formats
-*.txt	text eol=lf
-*.text	text eol=lf
-*.md	text eol=lf
-*.tex	text eol=lf
-*.?ml	text eol=lf
-*.kmz	  binary
-*.log	text eol=lf
-
-# Programming languages
-*.htm?	text eol=lf
-*.css	text eol=lf
-*.c	text eol=lf
-*.cc	text eol=lf
-*.c??	text eol=lf
-*.c??m	text eol=lf
-*.ccm	text eol=lf
-*.C	text eol=lf
-*.h??	text eol=lf
-*.h	text eol=lf
-*.hh	text eol=lf
-*.ixx	text eol=lf
-*.mpp	text eol=lf
-*.py	text eol=lf
-*.pyc	binary
-# .f and .f90
-*.f*	text eol=lf
-*.m	text eol=lf
-*.java	text eol=lf
-*.cs	text eol=lf
-*.vb	text eol=lf
-*.js	text eol=lf
-*.ts	text eol=lf
-*.pl	text eol=lf
-*.sh	text eol=lf
-*.csh	text eol=lf
+*.sln	      	     text eol=crlf
+*.dsw	      	     text eol=crlf
+*.dsp 	     	     text eol=crlf
+*.vcproj 	     text eol=crlf
+*.vcxproj 	     text eol=crlf
+*.vcxproj.filters    text eol=crlf
+*.ruleset 	     text eol=crlf
+*.bat		     text eol=crlf
 
 ######################
 # Known binary files
+
+# Python builds with WAF
+waf	 binary
 
 # executables, libraries; yes, sometimes they're part of a repository
 *.exe	       binary
@@ -63,6 +34,8 @@ lib*.so*       binary
 *.dll	       binary
 lib*.a*	       binary
 *.lib	       binary
+*.mex	       binary
+*.pyc	       binary
 
 # from various unit_test/ directories
 *.dat  	       binary
@@ -82,9 +55,10 @@ lib*.a*	       binary
 *.jpeg	binary
 *.png	binary
 # SVG images are XML
-*.svg	text eol=lf
+*.svg	text
 *.raw	binary
-*.hei*	binary
+*.hei?	binary
+*.kmz	  binary
 
 # music
 *.mp3	binary
@@ -101,15 +75,21 @@ lib*.a*	       binary
 # documents
 *.pdf	  binary
 *.dvi	  binary
-*.doc*	  binary
-*.xls*	  binary
-*.ppt*	  binary
+*.doc	  binary
+*.docx	  binary
+*.xls	  binary
+*.xlsx	  binary
+*.ppt	  binary
+*.pptx	  binary
 
+# SAR
 *.h5	  binary
 *.sio	  binary
+*.hdr	  binary
 *.ntf	  binary
 *.nitf	  binary
-*.si?d	  binary
+*.sidd	  binary
+*.sicd?	  binary
 
 # containers
 *.zip	  binary

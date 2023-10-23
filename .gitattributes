@@ -80,8 +80,10 @@ lib*.a*	       binary
 *.ppt	  binary
 *.pptx	  binary
 
+# SAR
 *.h5	  binary
 *.sio	  binary
+*.hdr	  binary
 *.ntf	  binary
 *.nitf	  binary
 *.sidd	  binary
