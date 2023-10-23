@@ -43,7 +43,7 @@ void sys::File::create(const std::string& str, int accessFlags,
     if (mHandle < 0)
     {
         throw sys::SystemException(Ctxt(
-                FmtX("Error opening file [%d]: [%s]", mHandle, str.c_str())));
+                str::Format("Error opening file [%d]: [%s]", mHandle, str.c_str())));
     }
 }
 
@@ -118,7 +118,7 @@ void sys::File::writeFrom(const void* buffer, size_t size)
 sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
 {
     sys::Off_T off = ::lseek(mHandle, offset, whence);
-    if (off == (sys::Off_T) - 1)
+    if (off == static_cast<sys::Off_T>(-1))
         throw sys::SystemException(Ctxt("Seeking in file"));
     return off;
 }

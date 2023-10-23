@@ -4,3 +4,96 @@ conanfile.py text eol=lf
 CMakeLists.txt text eol=lf
 *.cmake text eol=lf
 *.in text eol=lf
+
+# Modern tools on Windows can handle Linux LF
+# See https://stackoverflow.com/a/13154031/8877 for details
+*     		text=auto eol=lf
+*.*   		text=auto eol=lf
+.git?*	   	text=auto eol=lf
+
+# Leave known Windows-only text files as CR/LF
+*.sln	      	     text eol=crlf
+*.dsw	      	     text eol=crlf
+*.dsp 	     	     text eol=crlf
+*.vcproj 	     text eol=crlf
+*.vcxproj 	     text eol=crlf
+*.vcxproj.filters    text eol=crlf
+*.ruleset 	     text eol=crlf
+*.bat		     text eol=crlf
+
+######################
+# Known binary files
+
+# Python builds with WAF
+waf	 binary
+
+# executables, libraries; yes, sometimes they're part of a repository
+*.exe	       binary
+*.out	       binary
+lib*.so*       binary
+*.dll	       binary
+lib*.a*	       binary
+*.lib	       binary
+*.mex	       binary
+*.pyc	       binary
+
+# from various unit_test/ directories
+*.dat  	       binary
+*.*hdr	       binary
+*.flat	       binary
+*.sig	       binary
+*.bin	       binary
+*.dump	       binary
+
+# images
+*.bmp	binary
+*.ico	binary
+*.tiff	binary
+*.tif	binary
+*.gif	binary
+*.jpg	binary
+*.jpeg	binary
+*.png	binary
+# SVG images are XML
+*.svg	text
+*.raw	binary
+*.hei?	binary
+*.kmz	  binary
+
+# music
+*.mp3	binary
+*.m4a	binary
+*.wav	binary
+*.wma	binary
+
+# video
+*.m4v	binary
+*.avi	binary
+*.wmv	binary
+*.mkv	binary
+
+# documents
+*.pdf	  binary
+*.dvi	  binary
+*.doc	  binary
+*.docx	  binary
+*.xls	  binary
+*.xlsx	  binary
+*.ppt	  binary
+*.pptx	  binary
+
+# SAR
+*.h5	  binary
+*.sio	  binary
+*.hdr	  binary
+*.ntf	  binary
+*.nitf	  binary
+*.sidd	  binary
+*.sicd?	  binary
+
+# containers
+*.zip	  binary
+*.gz	  binary
+*.tar	  binary
+*.tgz	  binary
+*.jar	  binary

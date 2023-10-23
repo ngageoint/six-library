@@ -29,7 +29,7 @@ mt::TiedRequestHandler::~TiedRequestHandler()
     if (mAffinityInit)
     {
 	delete mAffinityInit;
-	mAffinityInit = NULL;
+	mAffinityInit = nullptr;
     }
     
 }
@@ -50,7 +50,7 @@ void mt::TiedRequestHandler::run()
     while (true)
     {   
 	// Pull a runnable off the queue
-	sys::Runnable *handler = NULL;
+	sys::Runnable *handler = nullptr;
 	
 	mRequestQueue->dequeue(handler);
 	if (!handler) return;
@@ -93,7 +93,7 @@ void mt::GenerationThreadPool::waitGroup()
 /*void mt::GenerationThreadPool::shutdown()
 {
     size_t size = mPool.size();
-    static sys::Runnable* shutdown = NULL;
+    static sys::Runnable* shutdown = nullptr;
     for(unsigned int i=0; i < size; i++)
     {
 	addRequest(shutdown);

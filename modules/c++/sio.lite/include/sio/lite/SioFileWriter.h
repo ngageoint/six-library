@@ -78,6 +78,11 @@ struct FileWriter
         if (!mAdopt) mStream.release();
     }
 
+    FileWriter(const FileWriter&) = delete;
+    FileWriter& operator=(const FileWriter&) = delete;
+    FileWriter(FileWriter&&) = default;
+    FileWriter& operator=(FileWriter&&) = default;
+
     /*!
      * Writes the SIO given the FileHeader and InputStreams.
      */
@@ -168,7 +173,7 @@ template<typename T> void writeSIO(const T* image, size_t rows, size_t cols,
             et = FileHeader::UNSIGNED;
             break;
         default:
-            throw except::Exception(Ctxt(FmtX("Unexpected es: %d", es)));
+            throw except::Exception(Ctxt(str::Format("Unexpected es: %d", es)));
         }
     }
 

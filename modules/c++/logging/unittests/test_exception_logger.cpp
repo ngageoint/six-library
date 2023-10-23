@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <memory>
+#include <std/span>
 
 #include "TestCase.h"
 
@@ -43,7 +44,7 @@ class RunNothing final : public sys::Runnable
     }
 
 public:
-    RunNothing(size_t& c, logging::ExceptionLogger* el, bool getBacktrace=false) : counter(c), exLog(el), getBacktrace(getBacktrace) {}
+    RunNothing(size_t& c, logging::ExceptionLogger* el, bool getBacktrace_=false) : counter(c), exLog(el), getBacktrace(getBacktrace_) {}
 
     virtual void run() override
     {
@@ -102,7 +103,7 @@ TEST_CASE(testExceptionWithBacktrace)
     }
     catch (const except::Throwable& t)
     {
-        TEST_ASSERT_EQ(t.getBacktrace().size(), static_cast<size_t>(0));
+        TEST_ASSERT_EQ(std::ssize(t.getBacktrace()), 0);
         s = t.toString();
         what = t.what();
     }

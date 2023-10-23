@@ -80,10 +80,10 @@ TEST_CASE(testByteStream)
 
     stream.seek(2, io::Seekable::END);
     TEST_ASSERT_EQ(stream.tell(), 18);
-    TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(20));
+    TEST_ASSERT_EQ(std::ssize(stream), 20);
 
     stream.write("abcdef");
-    TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(24));
+    TEST_ASSERT_EQ(std::ssize(stream), 24);
 
      const std::string test("test");
     {

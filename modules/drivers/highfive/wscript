@@ -1,5 +1,5 @@
 NAME            = 'highfive'
-VERSION         = '2.6.2'
+VERSION         = '2.7.1'
 MODULE_DEPS     = 'hdf5 hdf5cpp config'
 USELIB_LOCAL    = 'hdf5-c hdf5cpp-c'
 UNITTEST_DEPS       = 'sys'

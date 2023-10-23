@@ -113,6 +113,13 @@ protected:
     std::string mFragment;
 
 };
+
+inline std::ostream& operator<<(std::ostream& os, const URL& url)
+{
+   os << url.toString();
+   return os;
+}
+
 }
 #endif
 

@@ -29,6 +29,11 @@
 
 #include <re/RegexException.h>
 
+#ifndef _MSC_VER
+#include "config/compiler_extensions.h"
+CODA_OSS_disable_warning(-Wold-style-cast)
+#endif
+
 namespace
 {
 std::string getErrorMessage(int errorCode)
@@ -50,9 +55,9 @@ public:
     //       to do.
     ScopedMatchData(const pcre2_code* code) :
         mCode(code),
-        mMatchData(pcre2_match_data_create_from_pattern(code, NULL))
+        mMatchData(pcre2_match_data_create_from_pattern(code, nullptr))
     {
-        if (mMatchData == NULL)
+        if (mMatchData == nullptr)
         {
             throw re::RegexException(Ctxt(
                     "pcre2_match_data_create_from_pattern() failed to "
@@ -90,7 +95,7 @@ public:
                             startOffset,
                             options,
                             mMatchData,
-                            NULL); // Match context
+                            nullptr); // Match context
 
         if (returnCode == PCRE2_ERROR_NOMATCH)
         {
@@ -151,7 +156,7 @@ private:
 namespace re
 {
 Regex::Regex(const std::string& pattern) :
-    mPattern(pattern), mPCRE(NULL)
+    mPattern(pattern), mPCRE(nullptr)
 {
     if (!mPattern.empty())
     {
@@ -161,10 +166,10 @@ Regex::Regex(const std::string& pattern) :
 
 void Regex::destroy()
 {
-    if (mPCRE != NULL)
+    if (mPCRE != nullptr)
     {
         pcre2_code_free(mPCRE);
-        mPCRE = NULL;
+        mPCRE = nullptr;
     }
 }
 
@@ -174,7 +179,7 @@ Regex::~Regex()
 }
 
 Regex::Regex(const Regex& rhs) :
-    mPattern(rhs.mPattern), mPCRE(NULL)
+    mPattern(rhs.mPattern), mPCRE(nullptr)
 {
     compile(mPattern);
 }
@@ -213,9 +218,9 @@ Regex& Regex::compile(const std::string& pattern)
                           FLAGS,
                           &errorCode,
                           &errorOffset,
-                          NULL); // Use default compile context
+                          nullptr); // Use default compile context
 
-    if (mPCRE == NULL)
+    if (mPCRE == nullptr)
     {
         std::ostringstream ostr;
         ostr << "PCRE compilation failed at offset " << errorOffset
@@ -325,6 +330,19 @@ void Regex::split(const std::string& str, std::vector<std::string>& v)
     }
 }
 
+inline static void replace(std::string& result, size_t pos, size_t count, const std::string& str)
+{
+    // https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+    #if _WIN32 && __SANITIZE_ADDRESS__ && (_MSC_VER <= 1933 /*VS 2022 17.3*/)
+    // ASAN diagnostic on Windows with replace() ... bug in VS?
+    const auto input = result;
+    result = input.substr(0, pos);
+    result += str;
+    result += input.substr(pos + count);
+    #else
+    result.replace(pos, count, str);
+    #endif
+}
 std::string Regex::sub(const std::string& str, const std::string& repl)
 {
     size_t begin;
@@ -334,7 +352,7 @@ std::string Regex::sub(const std::string& str, const std::string& repl)
     std::string result = search(str, startIndex, 0, begin, end);
     while (!result.empty())
     {
-        toReplace.replace(begin, result.size(), repl);
+        replace(toReplace, begin, result.size(), repl);
 
         // You can't skip ahead result.size() here because 'repl' may be shorter
         // than 'result'

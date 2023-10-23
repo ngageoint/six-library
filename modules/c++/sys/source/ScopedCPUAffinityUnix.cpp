@@ -26,6 +26,7 @@
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
+#include <gsl/gsl.h>
 
 #include <sys/ScopedCPUAffinityUnix.h>
 
@@ -51,7 +52,7 @@ void ScopedCPUMaskUnix::initialize(int numCPUs)
     mSize = CPU_ALLOC_SIZE(numCPUs);
     mMask = CPU_ALLOC(numCPUs);
 
-    if (mMask == NULL)
+    if (mMask == nullptr)
     {
         std::ostringstream msg;
         msg << "Failed to allocate CPU mask for " << numCPUs << "CPUs";
@@ -63,7 +64,7 @@ void ScopedCPUMaskUnix::initialize(int numCPUs)
 
 ScopedCPUMaskUnix::~ScopedCPUMaskUnix()
 {
-    if (mMask != NULL)
+    if (mMask != nullptr)
     {
         CPU_FREE(mMask);
     }
@@ -84,12 +85,12 @@ std::string ScopedCPUMaskUnix::toString() const
 int ScopedCPUMaskUnix::getNumOnlineCPUs()
 {
 #ifdef _SC_NPROCESSORS_ONLN
-    const int numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
+    const auto numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
     if (numOnlineCPUs == -1)
     {
         throw except::Exception(Ctxt("Failed to get online CPU count"));
     }
-    return numOnlineCPUs;
+    return gsl::narrow<int>(numOnlineCPUs);
 #else
 throw except::NotImplementedException(Ctxt("Unable to get the number of CPUs"));
 #endif

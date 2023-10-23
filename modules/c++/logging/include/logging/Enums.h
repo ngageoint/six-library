@@ -20,6 +20,7 @@
  *
  */
 
+#pragma once
 #ifndef __LOGGING_ENUMS_H__
 #define __LOGGING_ENUMS_H__
 
@@ -92,7 +93,7 @@ struct LogLevel final
         else if (s == "SEVERE")
             value = LOG_CRITICAL;
         else
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
+            throw except::InvalidFormatException(Ctxt(str::Format("Invalid enum value: %s", s.c_str())));
     }
 
     //! int constructor
@@ -119,7 +120,7 @@ struct LogLevel final
             value = LOG_CRITICAL;
             break;
         default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
+            throw except::InvalidFormatException(Ctxt(str::Format("Invalid enum value: %d", i)));
         }
     }
 
@@ -144,7 +145,7 @@ struct LogLevel final
         case 5:
             return std::string("CRITICAL");
         default:
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+            throw except::InvalidFormatException(Ctxt(str::Format("Invalid enum value: %d", value)));
         }
     }
 

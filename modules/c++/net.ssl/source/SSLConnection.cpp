@@ -30,14 +30,14 @@ net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
                                        const std::string& host) :
     NetConnection(std::move(socket)), mServerAuthentication(serverAuth)
 {
-    mSSL = NULL;
+    mSSL = nullptr;
 
     mBioErr = BIO_new_fp(stderr, BIO_NOCLOSE);
 
     mSSL = SSL_new(ctx);
-    if (mSSL == NULL)
+    if (mSSL == nullptr)
     {
-        throw net::ssl::SSLException(Ctxt(FmtX("SSL_new failed")));
+        throw net::ssl::SSLException(Ctxt(str::Format("SSL_new failed")));
     }
 
     setupSocket(host);
@@ -45,11 +45,11 @@ net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
 
 net::ssl::SSLConnection::~SSLConnection()
 {
-    if(mSSL != NULL)
+    if(mSSL != nullptr)
     {
         SSL_shutdown(mSSL);
     }
-    if(mSSL != NULL)
+    if(mSSL != nullptr)
     {
         SSL_free(mSSL);
     }
@@ -87,7 +87,7 @@ void net::ssl::SSLConnection::setupSocket(const std::string& hostName)
 #endif
 
         throw net::ssl::SSLException
-            (Ctxt(FmtX("SSL_connect failed: %d", SSL_get_error(mSSL, val))));
+            (Ctxt(str::Format("SSL_connect failed: %d", SSL_get_error(mSSL, val))));
     }
     
     if(mServerAuthentication)
@@ -143,7 +143,7 @@ sys::SSize_T net::ssl::SSLConnection::read(sys::byte* b, sys::Size_T len)
         std::cout << "=============================================" << std::endl << std::endl;
 #endif
 
-        throw net::ssl::SSLException(Ctxt(FmtX("When receiving %d bytes",
+        throw net::ssl::SSLException(Ctxt(str::Format("When receiving %d bytes",
                                                len)) );
     }
     else if (numBytes == 0) 
@@ -155,7 +155,7 @@ sys::SSize_T net::ssl::SSLConnection::read(sys::byte* b, sys::Size_T len)
         return -1;
     }
 #if defined(__DEBUG_SOCKET)
-    std::cout << FmtX("Read %d bytes from socket:", numBytes) << std::endl;
+    std::cout << str::Format("Read %d bytes from socket:", numBytes) << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
     std::cout << std::string(b, numBytes) << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
@@ -172,7 +172,7 @@ void net::ssl::SSLConnection::write(const sys::byte* b, sys::Size_T len)
     const auto numBytes = SSL_write(mSSL, (const char*)b, len);    
     if (static_cast<sys::Size_T>(numBytes) != len)
     {
-        throw net::ssl::SSLException(Ctxt(FmtX("Tried sending %d bytes, %d sent",
+        throw net::ssl::SSLException(Ctxt(str::Format("Tried sending %d bytes, %d sent",
                                                len, numBytes)) );
     }
     

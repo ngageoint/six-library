@@ -102,6 +102,6 @@ sys::SSize_T InputStream::readln(sys::byte *cStr, const sys::Size_T strLenPlusNu
         if (*(cStr + i) == '\n') return i + 1;
         // Otherwise, append c;
     }
-    return (sys::SSize_T)i;
+    return static_cast<sys::SSize_T>(i);
 }
 }
