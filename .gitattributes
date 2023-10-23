@@ -13,6 +13,9 @@ CMakeLists.txt text eol=lf
 
 # Leave known Windows-only text files as CR/LF
 *.sln	      	     text eol=crlf
+*.dsw	      	     text eol=crlf
+*.dsp 	     	     text eol=crlf
+*.vcproj 	     text eol=crlf
 *.vcxproj 	     text eol=crlf
 *.vcxproj.filters    text eol=crlf
 *.ruleset 	     text eol=crlf
@@ -32,7 +35,7 @@ lib*.so*       binary
 lib*.a*	       binary
 *.lib	       binary
 *.mex	       binary
-*.pyc	binary
+*.pyc	       binary
 
 # from various unit_test/ directories
 *.dat  	       binary
@@ -74,14 +77,15 @@ lib*.a*	       binary
 *.dvi	  binary
 *.doc	  binary
 *.docx	  binary
-*.csv	  text
 *.xls	  binary
 *.xlsx	  binary
 *.ppt	  binary
 *.pptx	  binary
 
+# SAR
 *.h5	  binary
 *.sio	  binary
+*.hdr	  binary
 *.ntf	  binary
 *.nitf	  binary
 *.sidd	  binary
