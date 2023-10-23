@@ -25,6 +25,7 @@
 #define CODA_OSS_str_Convert_h_INCLUDED_
 
 #include <cerrno>
+#include <complex>
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
@@ -33,7 +34,6 @@
 #include <sstream>
 #include <string>
 #include <typeinfo>
-#include <type_traits>
 
 #include "config/Exports.h"
 #include "coda_oss/string.h"
@@ -41,6 +41,8 @@
 #include "coda_oss/cstddef.h"
 #include "types/Complex.h"
 #include "import/except.h"
+#include "gsl/gsl.h"
+#include "str/Encoding.h"
 
 namespace str
 {
@@ -50,123 +52,28 @@ template <typename T> int getPrecision(const std::complex<T>&);
 template <typename T> int getPrecision(const types::ComplexInteger<T>&);
 #endif
 
-namespace details
-{
-    // Templating (and then specializing) toString() creates all kinds of weird name-look
-    // problems; avoid trying to work-around all that by just not doing it.
-    // 
-    // The preferred approach is to make a a toString() free function.
-    template <typename T>
-    inline std::string default_toString(const T& value)
-    {
-        // Use operator<<() to generate a string value; this may not be quite
-        // 100% kosher, but it's been long-standing practice in this codebase.
-        //
-        // Note that std::to_string() doesn't necessarily generate the same
-        // output as writing to std::cout; see
-        // https://en.cppreference.com/w/cpp/string/basic_string/to_string
-        std::ostringstream buf;
-        buf.precision(getPrecision(value));
-        buf << std::boolalpha << value;
-        return buf.str();
-    }
-
-    // https://stackoverflow.com/a/73594999/19912380
-    template<int N> struct priority : priority<N - 1> {};
-    template<> struct priority<0> {};
-
-    template<typename T>
-    inline auto toString_imp(const T& obj, priority<2>) -> decltype(obj.toString(), std::string())
-    {
-        return obj.toString(); // member-function
-    }
-
-    template<typename T>
-    inline auto toString_imp(const T& obj, priority<1>) -> decltype(toString(obj), std::string())
-    {
-        return toString(obj); // free function
-    }
-
-    template<typename T>
-    inline auto toString_imp(const T& obj, priority<0>) -> decltype(default_toString(obj), std::string())
-    {
-        return details::default_toString(obj); // our default utility which uses operator<<()
-    }
-    
-    // In order, try to call 1) obj.toString() (highest priority), 2) toString(obj),
-    // and finally 3) toString_(obj) (lowest priority).
-    template<typename T>
-    inline auto toString_(const T& obj) -> decltype(toString_imp(obj, priority<2>{}), std::string())
-    {
-        return details::toString_imp(obj, priority<2>{});
-    }
-}
+// Note that std::to_string() doesn't necessarily generate the same output as writing
+// to std::cout; see https://en.cppreference.com/w/cpp/string/basic_string/to_string
 template <typename T>
-inline std::string toString(const T& value) // no dectype() noise here, leave that in details::toString_()
+std::string toString(const T& value)
 {
-    // This breaks the Windows-CMake build on GitHub (when building as an "external" in NITRO)
-    // ... different compilers or compile-options?
-    //return details::toString_(value);
-
-    return details::default_toString(value);
+    std::ostringstream buf;
+    buf.precision(getPrecision(value));
+    buf << std::boolalpha << value;
+    return buf.str();
 }
 
-// C++11 has a bunch of overloads, do the same.
-// https://en.cppreference.com/w/cpp/string/basic_string/to_string
-inline std::string toString(int value)
-{
-    return details::default_toString(value);
-}
-inline std::string toString(long value)
-{
-    return details::default_toString(value);
-}
-inline std::string toString(long long value)
-{
-    return details::default_toString(value);
-}
-inline std::string toString(unsigned value)
-{
-    return details::default_toString(value);
-}
-inline std::string toString(unsigned long value)
-{
-    return details::default_toString(value);
-}
-inline std::string toString(unsigned long long value)
-{
-    return details::default_toString(value);
-}
-inline std::string toString(float value)
-{
-    return details::default_toString(value);
-}
-inline std::string toString(double value)
-{
-    return details::default_toString(value);
-}
-inline std::string oString(long double value)
-{
-    return details::default_toString(value);
-}
-
-// C++ doesn't have these ...
-// https://en.cppreference.com/w/cpp/string/basic_string/to_string
-inline std::string toString(bool value)
-{
-    return details::default_toString(value);
-}
 inline std::string toString(uint8_t value)
 {
-    return toString(static_cast<unsigned int>(value));
+    return toString(gsl::narrow<unsigned int>(value));
 }
 inline std::string toString(int8_t value)
 {
-    return toString(static_cast<int>(value));
+    return toString(gsl::narrow<int>(value));
 }
 inline std::string toString(coda_oss::byte value)
 {
-    return toString(static_cast<uint8_t>(value));
+    return toString(gsl::narrow<uint8_t>(value));
 }
 
 inline std::string toString(std::nullptr_t)
@@ -174,37 +81,48 @@ inline std::string toString(std::nullptr_t)
     return "<nullptr>";
 }
 
-CODA_OSS_API std::string toString(const coda_oss::u8string&);
 inline std::string toString(const std::string& value)
 {
     return value;
 }
+// Prevent the template above from getting used; instead, use routines from **Encoding.h**.
+std::string toString(const std::wstring&) = delete;
+std::string toString(const std::u16string&) = delete;
+std::string toString(const std::u32string&) = delete;
+std::string toString(const coda_oss::u8string&) = delete;
+std::string toString(const str::W1252string&) = delete;
+
+inline std::string toString(std::string::const_pointer pStr)
+{
+    return toString(std::string(pStr));
+}
+// can't be a template; `bool` overload above is a better match
+std::string toString(std::wstring::const_pointer) = delete; // only used in unittests
+std::string toString(std::u16string::const_pointer) = delete; // only used in unittests
+std::string toString(std::u32string::const_pointer) = delete; // only used in unittests
+
+inline std::ostream& operator<<(std::ostream& os, const coda_oss::u8string& s)
+{
+    os << to_native(s);
+    return os;
+}
+
 inline std::string toString(char value)
 {
     return std::string(1, value);
-}
-inline std::string toString(const char* pStr)
-{
-    return std::string(pStr);
 }
 
 template <typename T>
 inline std::string toString(const coda_oss::optional<T>& value)
 {
     // TODO: handle empty/NULL optional?
-    return details::default_toString(value.value());
+    return toString(value.value());
 }
 
-template <typename T>
+template<typename T>
 inline std::string toString(const T& real, const T& imag)
 {
-    return details::default_toString(std::complex<T>(real, imag));
-}
-
-template <typename T>
-inline std::string toString(const T* ptr)
-{
-    return details::default_toString(ptr);
+    return toString(std::complex<T>(real, imag));
 }
 
 template <typename T>

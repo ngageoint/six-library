@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TestCase.h"
 
-#include "str/EncodedStringView.h"
+#include "str/Encoding.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -37,7 +37,5 @@ void test::Assert::FailOnCondition(bool condition, const unsigned short* message
 std::wstring GetAssertMessage(bool equality, const std::wstring& expected, const std::wstring& actual, const wchar_t *message); // declare caller
 std::wstring test::Assert::GetAssertMessage(bool equality, const std::string& expected, const std::string& actual, const wchar_t *message)
 {
-    const str::EncodedStringView vExpected(expected);
-    const str::EncodedStringView vActual(actual);
-    return ::GetAssertMessage(equality, vExpected.wstring(), vActual.wstring(), message); // and call!
+    return ::GetAssertMessage(equality, str::details::to_wstring(expected), str::details::to_wstring(actual), message); // and call!
 }

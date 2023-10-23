@@ -21,17 +21,13 @@
  */
 
 #include <tuple> // std::ignore
+#include <std/span>
 
 #include <types/Complex.h>
 #include <config/compiler_extensions.h>
 #include <import/str.h>
 
 #include "TestCase.h"
-
-inline std::string to_string(const std::string& value)
-{
-    return value;
-}
 
 TEST_CASE(testTrim)
 {
@@ -130,9 +126,9 @@ TEST_CASE(testSplit)
 {
     std::string s = "space delimited values are the best!";
     std::vector<std::string> parts = str::split(s, " ");
-    TEST_ASSERT_EQ(parts.size(), static_cast<size_t>(6));
+    TEST_ASSERT_EQ(std::ssize(parts), 6);
     parts = str::split(s, " ", 3);
-    TEST_ASSERT_EQ(parts.size(), static_cast<size_t>(3));
+    TEST_ASSERT_EQ(std::ssize(parts), 3);
     TEST_ASSERT_EQ(parts[2], "values are the best!");
 }
 

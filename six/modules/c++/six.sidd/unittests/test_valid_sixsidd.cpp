@@ -74,7 +74,7 @@ static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const std:
     const auto strXML = six::sidd::Utilities::toXMLString(derivedData, pSchemaPaths);
     TEST_ASSERT_FALSE(strXML.empty());
 
-    const auto xml_ = str::EncodedStringView(strXML).native(); // for debugging
+    const auto xml_ = str::to_native(strXML); // for debugging
     TEST_ASSERT_FALSE(xml_.empty());
 
     return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);

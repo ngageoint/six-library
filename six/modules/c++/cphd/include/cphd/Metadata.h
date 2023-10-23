@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __CPHD_METADATA_H__
-#define __CPHD_METADATA_H__
+#pragma once
+#ifndef SIX_cphd_Metadata_h_INCLUDED_
+#define SIX_cphd_Metadata_h_INCLUDED_
 
 #include <ostream>
 
@@ -59,7 +60,18 @@ struct Metadata final : MetadataBase
 {
     //! Default constructor
     //! Initializes CPHD version to default version specified in FileHeader
-    Metadata();
+    Metadata(Version);
+    Metadata(Data&&);
+#ifdef SWIGPYTHON
+    Metadata() = default;
+    Metadata(const Metadata&) = default;
+    Metadata& operator=(const Metadata&) = default;
+#else
+    Metadata(const Metadata&) = delete;
+    Metadata& operator=(const Metadata&) = delete;
+#endif
+    Metadata(Metadata&&) = default;
+    Metadata& operator=(Metadata&&) = default;
 
     /*
      * Getter functions
@@ -78,12 +90,10 @@ struct Metadata final : MetadataBase
      */
     DomainType getDomainType() const override;
 
-    //! Get CPHD version
+    //! CPHD version
     std::string getVersion() const;
     void getVersion(Version&) const;
-
-    //! Set CPHD version
-    void setVersion(const std::string& version);
+    void setVersion(const std::string&);
     void setVersion(Version);
 
     //!  CollectionInfo block.  Contains the general collection information
@@ -161,4 +171,4 @@ private:
 std::ostream& operator<< (std::ostream& os, const Metadata& d);
 }
 
-#endif
+#endif // SIX_cphd_Metadata_h_INCLUDED_

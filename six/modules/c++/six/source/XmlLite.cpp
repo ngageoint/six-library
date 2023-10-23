@@ -195,6 +195,11 @@ inline std::string toString_(const xml::lite::QName& name, const T& v, const xml
 {
     return toString(name, v, parent);
 }
+template<>
+inline std::string toString_(const xml::lite::QName& name, const std::u8string& v, const xml::lite::Element& parent)
+{
+    return toString(name, str::to_native(v), parent);
+}
 
 template<typename T, typename ToString>
 static xml::lite::Element& createValue(const xml::lite::QName& name,

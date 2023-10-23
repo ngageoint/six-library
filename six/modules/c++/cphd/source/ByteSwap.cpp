@@ -251,8 +251,7 @@ void byteSwapAndPromote(const void* input,
         ::byteSwapAndPromote<cphd::zfloat>(input, dims, numThreads, output);
         break;
     default:
-        throw except::Exception(Ctxt(
-                "Unexpected element size " + std::to_string(elementSize)));
+        throw except::Exception(Ctxt("Unexpected element size " + std::to_string(elementSize)));
     }
 }
 
@@ -266,20 +265,16 @@ void byteSwapAndScale(const void* input,
     switch (elementSize)
     {
     case 2:
-        ::byteSwapAndScale<cphd::zint8_t>(input, dims, scaleFactors, numThreads,
-                                        output);
+        ::byteSwapAndScale<cphd::zint8_t>(input, dims, scaleFactors, numThreads, output);
         break;
     case 4:
-        ::byteSwapAndScale<cphd::zint16_t>(input, dims, scaleFactors, numThreads,
-                                         output);
+        ::byteSwapAndScale<cphd::zint16_t>(input, dims, scaleFactors, numThreads, output);
         break;
     case 8:
-        ::byteSwapAndScale<cphd::zfloat>(input, dims, scaleFactors, numThreads,
-                                  output);
+        ::byteSwapAndScale<cphd::zfloat>(input, dims, scaleFactors, numThreads, output);
         break;
     default:
-        throw except::Exception(Ctxt(
-                "Unexpected element size " + std::to_string(elementSize)));
+        throw except::Exception(Ctxt("Unexpected element size " + std::to_string(elementSize)));
     }
 }
 }

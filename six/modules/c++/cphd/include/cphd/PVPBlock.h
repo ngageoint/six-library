@@ -194,8 +194,7 @@ struct PVPBlock
             return aP.getAddedPVP(mData[channel][set].addedPVP.find(name)->second);
             // return AddPVPNamespace::getAddedPVP<T>(mData[channel][set].addedPVP.find(name)->second);
         }
-        throw except::Exception(Ctxt(
-                "Parameter was not set"));
+        throw except::Exception(Ctxt("Parameter was not set"));
     }
 
     //! Setter functions
@@ -236,11 +235,9 @@ struct PVPBlock
                 mData[channel][set].addedPVP.find(name)->second.setValue(value);
                 return;
             }
-            throw except::Exception(Ctxt(
-                                "Additional parameter requested already exists"));
+            throw except::Exception(Ctxt("Additional parameter requested already exists"));
         }
-        throw except::Exception(Ctxt(
-                                "Parameter was not specified in XML"));
+        throw except::Exception(Ctxt("Parameter was not specified in XML"));
     }
 
     /*
@@ -252,9 +249,9 @@ struct PVPBlock
      *  be resized and zeroed internally.
      */
     void getPVPdata(size_t channel,
-                    std::vector<sys::ubyte>& data) const;
-    void getPVPdata(size_t channel,
                     std::vector<std::byte>& data) const;
+    void getPVPdata(size_t channel,
+                    std::vector<sys::ubyte>& data) const; // for existing SWIG bindings
 
     /*
      *  \func getPVPdata
@@ -359,7 +356,7 @@ protected:
      *  Each channel consists of a PVP Array,
      *  which consists of multiple sets
      */
-    struct PVPSet
+    struct PVPSet final
     {
         /*!
          *  \func PVPSet

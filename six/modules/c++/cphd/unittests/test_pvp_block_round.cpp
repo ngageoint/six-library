@@ -128,7 +128,7 @@ void writeCPHD(const std::string& outPathname,
 
     cphd::CPHDWriter writer(metadata,
                             outPathname,
-                            std::vector<std::string>(),
+                            nullptr /*pSchemaPaths*/,
                             numThreads);
     writer.writeMetadata(pvpBlock);
     writer.writePVPData(pvpBlock);
@@ -174,8 +174,7 @@ TEST_CASE(testPVPBlockSimple)
     const types::RowCol<size_t> dims(128, 256);
     const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
-    cphd::Metadata meta = cphd::Metadata();
-    cphd::setUpData(meta, dims, writeData);
+    auto meta = cphd::setUpData(dims, writeData);
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;
@@ -197,8 +196,7 @@ TEST_CASE(testPVPBlockOptional)
     const types::RowCol<size_t> dims(128, 256);
     const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
-    cphd::Metadata meta = cphd::Metadata();
-    cphd::setUpData(meta, dims, writeData);
+    auto meta = cphd::setUpData(dims, writeData);
     cphd::setPVPXML(meta.pvp);
     meta.pvp.setOffset(27, meta.pvp.fxN1);
     meta.pvp.setOffset(28, meta.pvp.fxN2);
@@ -223,8 +221,7 @@ TEST_CASE(testPVPBlockAdditional)
     const types::RowCol<size_t> dims(128, 256);
     const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
-    cphd::Metadata meta = cphd::Metadata();
-    cphd::setUpData(meta, dims, writeData);
+    auto meta = cphd::setUpData(dims, writeData);
     cphd::setPVPXML(meta.pvp);
     meta.pvp.setCustomParameter(1, 27, "F8", "param1");
     meta.pvp.setCustomParameter(1, 28, "F8", "param2");

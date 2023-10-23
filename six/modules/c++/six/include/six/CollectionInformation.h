@@ -19,14 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_CollectionInformation_h_INCLUDED_
 #define SIX_six_CollectionInformation_h_INCLUDED_
-#pragma once
 
 #include <std/string>
 #include <std/optional>
 
-#include <str/EncodedString.h>
+#include <str/Encoding.h>
 
 #include "six/Types.h"
 #include "six/Init.h"
@@ -118,11 +118,11 @@ struct CollectionInformation
     virtual std::string getClassificationLevel() const;
     inline virtual void setClassificationLevel(const std::string& classification)
     {
-        mClassification = str::EncodedString(classification);
+        mClassification = str::u8FromNative(classification);
     }
 
-    virtual void getClassificationLevel(str::EncodedString&) const;
-    virtual void setClassificationLevel(const str::EncodedString& classification);
+    virtual void getClassificationLevel(std::u8string&) const;
+    virtual void setClassificationLevel(const std::u8string& classification);
 
     //! Ostream operators for six::CollectionInformation type (utility only).
     friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
@@ -137,7 +137,7 @@ private:
     /*!
      *  Classification level
      */
-    str::EncodedString mClassification;
+    std::u8string mClassification;
 };
 
 }

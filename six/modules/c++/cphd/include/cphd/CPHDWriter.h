@@ -20,16 +20,22 @@
  *
  */
 
+#pragma once
 #ifndef SIX_cphd_CPHDWriter_h_INCLUDED_
 #define SIX_cphd_CPHDWriter_h_INCLUDED_
-#pragma once
 
 #include <string>
 #include <vector>
+#include <std/span>
+#include <std/cstddef>
+#include <functional>
+#include <memory>
+#include <std/filesystem>
 
 #include <types/RowCol.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
+#include <sys/Span.h>
 
 #include <scene/sys_Conf.h>
 
@@ -72,6 +78,12 @@ struct CPHDWriter final
      *         Default is 4 MB
      */
     CPHDWriter(
+        const Metadata& metadata,
+        io::SeekableOutputStream& stream,
+        const std::vector<std::filesystem::path>* pSchemaPaths = nullptr,
+        size_t numThreads = 0,
+        size_t scratchSpaceSize = 4 * 1024 * 1024);
+    CPHDWriter(
             const Metadata& metadata,
             std::shared_ptr<io::SeekableOutputStream> stream,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
@@ -103,6 +115,14 @@ struct CPHDWriter final
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             size_t numThreads = 0,
             size_t scratchSpaceSize = 4 * 1024 * 1024);
+#ifndef SWIGPYTHON
+    CPHDWriter(
+        const Metadata& metadata,
+        const std::filesystem::path& pathname,
+        const std::vector<std::filesystem::path>* pSchemaPaths = nullptr,
+        size_t numThreads = 0,
+        size_t scratchSpaceSize = 4 * 1024 * 1024);
+#endif
 
     CPHDWriter() = delete;
     CPHDWriter(const CPHDWriter&) = delete;
@@ -110,6 +130,9 @@ struct CPHDWriter final
     CPHDWriter(CPHDWriter&&) = delete;
     CPHDWriter& operator=(CPHDWriter&&) = delete;
     ~CPHDWriter() = default;
+
+    std::unique_ptr<DataWriter> make_DataWriter(io::OutputStream&) const;
+    std::unique_ptr<DataWriter> make_DataWriter() const;
 
     /*
      *  \func write
@@ -126,18 +149,26 @@ struct CPHDWriter final
      *  \param supportData (Optional) The support array data to write to disk.
      */
     template<typename T>
-    void write(
-            const PVPBlock& pvpBlock,
-            const T* widebandData,
-            const sys::ubyte* supportData = nullptr);
+    void write(io::SeekableOutputStream&, const PVPBlock& pvpBlock, const T* widebandData,
+        std::span<const std::byte> supportData);
     template<typename T>
-    void write(
-            const PVPBlock& pvpBlock,
-            const T* widebandData,
-            const std::byte* supportData = nullptr)
+    void write(const PVPBlock& pvpBlock, const T* widebandData,
+        std::span<const std::byte> supportData)
     {
-        write(pvpBlock, widebandData, reinterpret_cast<const sys::ubyte*>(supportData));
+        write(mStream, pvpBlock, widebandData, supportData);
     }
+    template<typename T>
+    void write(const PVPBlock& pvpBlock, const T* widebandData)
+    {
+        write(pvpBlock, widebandData, std::span<const std::byte>());
+    }
+
+    template <typename T>
+    size_t writeChannel(DataWriter&, const T* widebandData, size_t);
+    template <typename T>
+    void writeChannels(DataWriter&, const T* widebandData);
+
+
 
     /*
      *  \func writeMetadata
@@ -148,7 +179,13 @@ struct CPHDWriter final
      *
      *  \param pvpBlock The vector based metadata to write.
      */
-    void writeMetadata(const PVPBlock& pvpBlock);
+    void writeMetadata(io::OutputStream&, const PVPBlock& pvpBlock);
+    void writeMetadata(const PVPBlock& pvpBlock)
+    {
+        writeMetadata(mStream, pvpBlock);
+    }
+    void getMetadata(const PVPBlock&, size_t& supportSize, /*Optional*/ size_t& pvpSize, size_t& cphdSize) const;
+
 
     /*
      *  \func writeSupportData
@@ -161,12 +198,17 @@ struct CPHDWriter final
      *  \param id The unique identifier of the support array
      */
     template <typename T>
-    void writeSupportData(const T* data,
-                          const std::string& id)
+    void writeSupportData(io::OutputStream& stream,
+        const T* data_, const std::string& id)
     {
-        writeSupportDataImpl(reinterpret_cast<const std::byte*>(data),
-                             mMetadata.data.getSupportArrayById(id).numRows * mMetadata.data.getSupportArrayById(id).numCols,
-                             mMetadata.data.getSupportArrayById(id).bytesPerElement);
+        const auto size = mMetadata.data.getSupportArrayById(id).size_bytes();
+        const auto data = sys::make_span<const std::byte>(data_, size);
+        writeSupportDataImpl(stream, data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
+    }
+    template <typename T>
+    void writeSupportData(const T* data, const std::string& id)
+    {
+        writeSupportData(mStream, data, id);
     }
 
     /*
@@ -177,22 +219,33 @@ struct CPHDWriter final
      *
      *  \param data A pointer to the start of the support array data block
      */
+    sys::Off_T getSupportBlockByteOffset(const Data::SupportArray&) const;
+    void writeSupportDataArray(io::SeekableOutputStream&, DataWriter&,
+        std::span<const std::byte>, const Data::SupportArray&);
+    void writeSupportDataArray(io::SeekableOutputStream&, std::span<const std::byte>, const Data::SupportArray&);
+    void writeSupportData(io::SeekableOutputStream&, std::span<const std::byte>);
+
     template <typename T>
-    void writeSupportData(const T* data)
+    void writeSupportData(io::SeekableOutputStream& stream, std::span<const T> data)
     {
-        auto dataPtr = reinterpret_cast<const std::byte*>(data);
-        for (auto it = mMetadata.data.supportArrayMap.begin(); it != mMetadata.data.supportArrayMap.end(); ++it)
-        {
-            // Move inputstream head to offset of particular support array
-            mStream->seek(mHeader.getSupportBlockByteOffset() + it->second.arrayByteOffset, io::SeekableOutputStream::START);
-            writeSupportDataImpl(dataPtr + it->second.arrayByteOffset,
-                                 it->second.numRows * it->second.numCols,
-                                 it->second.bytesPerElement);
-        }
-        // Move inputstream head to the end of the support block after all supports have been written
-        mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
+        writeSupportData(stream, std::as_bytes(data));
+    }
+    template <typename T>
+    void writeSupportData(std::span<const T> data)
+    {
+        writeSupportData(mStream, data);
     }
 
+    template <typename T>
+    void writeSupportData(io::SeekableOutputStream& stream, const std::vector<T>& data)
+    {
+        writeSupportData(stream, sys::make_span(data));
+    }
+    template <typename T>
+    void writeSupportData(const std::vector<T>& data)
+    {
+        writeSupportData(mStream, data);
+    }
 
     /*
      *  \func writePVPData
@@ -201,7 +254,13 @@ struct CPHDWriter final
      *  \param PVPBlock A populated PVPBlock object that will be written
      *  to the file as a block of data
      */
-    void writePVPData(const PVPBlock& PVPBlock);
+    void writePVPData(io::SeekableOutputStream&, const PVPBlock&);
+    void writePVPData(const PVPBlock& pvpBlock)
+    {
+        writePVPData(mStream, pvpBlock);
+    }
+    static void writePvpPadBytes(io::OutputStream& stream, int64_t pvpPadBytes);
+    static void writePVPData(DataWriter& dataWriter, const cphd::Data&, const PVPBlock&);
 
     /*
      *  \func writeCPHDData
@@ -221,60 +280,53 @@ struct CPHDWriter final
      *  \param channel For selecting channel of compressed signal block
      */
     template <typename T>
-    void writeCPHDData(const T* data,
+    void writeCPHDData(DataWriter&,
+        const T* data,
+        size_t numElements,
+        size_t channel = 1);
+    template <typename T>
+    void writeCPHDData(io::SeekableOutputStream&,
+                       const T* data,
                        size_t numElements,
                        size_t channel = 1);
-
-    void close()
+    template <typename T>
+    void writeCPHDData(const T* data,
+                       size_t numElements,
+                       size_t channel = 1)
     {
-        mStream->close();
+        writeCPHDData(mStream, data, numElements, channel);
     }
+
     std::shared_ptr<io::SeekableOutputStream> getStream() const
     {
+        return mSharedStream;
+    }
+    io::SeekableOutputStream& stream() const
+    {
         return mStream;
+    }
+    void close()
+    {
+        stream().close();
     }
 
 private:
     /*
      *  Write metadata helper
      */
-    void writeMetadata(
+    void writeMetadata(io::OutputStream&,
         size_t supportSize, // Optional
         size_t pvpSize,
         size_t cphdSize);
 
     /*
-     *  Write pvp helper
-     */
-    void writePVPData(const std::byte* pvpBlock,
-                      size_t index);
-
-    /*
-     *  Implementation of write wideband
-     */
-    void writeCPHDDataImpl(const std::byte* data,
-                           size_t size);
-
-    /*
-     *  Implementation of write compressed wideband
-     */
-    void writeCompressedCPHDDataImpl(const std::byte* data,
-                                     size_t channel);
-
-    /*
      *  Implementation of write support data
      */
-    void writeSupportDataImpl(const std::byte* data,
-                              size_t numElements, size_t elementSize);
-
-    //! DataWriter object
-    std::unique_ptr<DataWriter> mDataWriter;
+    void writeSupportDataImpl(io::OutputStream&, std::span<const std::byte>, size_t elementSize);
 
     // Book-keeping element
     //! metadata information
     const Metadata& mMetadata;
-    //! header information
-    FileHeader mHeader;
     //! size of each element in signal block
     const size_t mElementSize;
     //! size of scratch space for byte swapping
@@ -282,9 +334,13 @@ private:
     //! number of threads for parallelism
     const size_t mNumThreads;
     //! schemas for XML validation
-    const std::vector<std::string> mSchemaPaths;
+    const std::vector<std::filesystem::path> mSchemaPaths;
+    const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
     //! Output stream contains CPHD file
-    std::shared_ptr<io::SeekableOutputStream> mStream;
+    std::shared_ptr<io::SeekableOutputStream> mSharedStream;
+    io::SeekableOutputStream& mStream;
+    //! header information
+    FileHeader mHeader;
 };
 }
 

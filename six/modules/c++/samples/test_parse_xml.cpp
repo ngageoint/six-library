@@ -95,7 +95,7 @@ std::vector<std::string> extractXML(std::string inputFile,
         nitf::Off size = deReader.getSize();
 
         const auto typeID = subheader.typeID();
-        const std::string outputFile = FmtX("%s-%s%d.xml", prefix.c_str(), typeID.c_str(), i);
+        const auto outputFile = FmtX("%s-%s%d.xml", prefix, typeID, i);
         const auto fileName = outputDir / outputFile;
         {
             std::vector<char> xml(size);

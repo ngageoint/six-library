@@ -39,6 +39,7 @@
     #define SIX_six_sicd_ImageData_has_execution 1
     #endif
 #endif
+#include <sys/Span.h>
 
 #include "six/AmplitudeTable.h"
 #include "six/sicd/GeoData.h"
@@ -255,7 +256,7 @@ void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const
     };
     transform(inputs, results, toComplex_);
 }
-void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results) const
+std::vector<six::zfloat> ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs) const
 {
     if (pixelType != PixelType::AMP8I_PHS8I)
     {
@@ -263,16 +264,20 @@ void ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs, std::span<six::
     }
 
     const auto& values = getLookup(amplitudeTable.get());
-    toComplex(values, inputs, results);
+
+    std::vector<six::zfloat> retval(inputs.size());
+    toComplex(values, inputs, sys::make_span(retval));
+    return retval;
 }
 
-void ImageData::fromComplex(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+std::vector<AMP8I_PHS8I_t> ImageData::fromComplex(std::span<const six::zfloat> inputs) const
 {
-    six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, results, amplitudeTable.get());
+    return six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, amplitudeTable.get());
 }
-void ImageData::testing_fromComplex_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results)
+
+std::vector<AMP8I_PHS8I_t> ImageData::testing_fromComplex_(std::span<const six::zfloat> inputs)
 {
     static const ImageData imageData;
     assert(imageData.amplitudeTable.get() == nullptr);
-    imageData.fromComplex(inputs, results);
+    return imageData.fromComplex(inputs);
 }

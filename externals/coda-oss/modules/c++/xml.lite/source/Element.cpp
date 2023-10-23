@@ -31,7 +31,6 @@
 #include <import/mem.h>
 #include <sys/OS.h>
 #include <str/Encoding.h>
-#include <str/EncodedStringView.h>
 #include "xml/lite/Attributes.h"
 
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const std::string& uri, const std::string& characterData)
@@ -260,9 +259,9 @@ void xml::lite::Element::prettyConsoleOutput_(io::OutputStream& stream,
 
 std::string xml::lite::Element::getCharacterData() const
 {
-    return str::EncodedStringView(mCharacterData).native();
+    return str::to_native(mCharacterData);
 }
-coda_oss::u8string& xml::lite::Element::getCharacterData(coda_oss::u8string& result) const
+const coda_oss::u8string& xml::lite::Element::getCharacterData(coda_oss::u8string& result) const
 {
     result = mCharacterData;
     return result;
@@ -279,7 +278,7 @@ static void writeCharacterData_utf8(io::OutputStream& stream, const std::u8strin
 }
 static void writeCharacterData_native(io::OutputStream& stream, const std::u8string& characterData)
 {
-    stream.write(str::EncodedStringView(characterData).native());
+    stream.write(str::to_native(characterData));
 }
 
 static void depthPrint_(const xml::lite::Element& element,
@@ -466,7 +465,7 @@ void xml::lite::Element::setNamespaceURI(
 
 void xml::lite::Element::setCharacterData(const std::string& characters)
 {
-    mCharacterData = str::EncodedStringView(characters).u8string();
+    mCharacterData = str::u8FromNative(characters);
 }
 xml::lite::Element& xml::lite::Element::operator=(const std::string& characterData)
 {
@@ -507,7 +506,7 @@ xml::lite::Element& xml::lite::addChild(Element& e, const QName& qname, const co
 }
 xml::lite::Element& xml::lite::addChild(Element& e, const QName& qname, const std::string& characterData)
 {
-    return addChild(e, qname, str::EncodedStringView(characterData).u8string());
+    return addChild(e, qname, str::u8FromNative(characterData));
 }
 xml::lite::Element& xml::lite::addChild(Element& e, const QName& qname)
 {

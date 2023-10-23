@@ -54,7 +54,7 @@ cli::Argument::~Argument()
 cli::Argument* cli::Argument::addFlag(const std::string& flag)
 {
     char p = mParser->mPrefixChar;
-    std::string p2 = FmtX("%c%c", p, p);
+    std::string p2 = str::Format("%c%c", p, p);
     if (flag.size() > 2 && str::startsWith(flag, p2) && flag[2] != p)
         mLongFlags.push_back(validateFlag(flag.substr(2)));
     else if (flag.size() > 1 && flag[0] == p && flag[1] != p)
