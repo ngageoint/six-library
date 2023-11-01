@@ -20,10 +20,11 @@
  *
  */
 
-#ifndef __NET_CURL_INIT_H__
-#define __NET_CURL_INIT_H__
+#pragma once
+#ifndef CODA_OSS_net_CurlInit_h_INCLUDED_
+#define CODA_OSS_net_CurlInit_h_INCLUDED_
 
-#include <net/net_config.h>
+#include <net/config.h>
 
 #ifdef NET_CURL_SUPPORT
 
@@ -53,4 +54,4 @@ struct CurlInit
 }
 
 #endif
-#endif
+#endif  // CODA_OSS_net_CurlInit_h_INCLUDED_

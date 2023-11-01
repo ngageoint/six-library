@@ -41,8 +41,6 @@ CODA may be built using Waf or CMake. Below are all of the options available for
                             build given task generators, e.g. "target1,target2"
       --enable-warnings     Enable warnings
       --enable-debugging    Enable debugging
-      --enable-64bit        Enable 64bit builds
-      --enable-32bit        Enable 32bit builds
       --enable-doxygen      Enable running doxygen
       --with-cflags=FLAGS   Set non-standard CFLAGS
       --with-cxxflags=FLAGS
@@ -55,23 +53,6 @@ CODA may be built using Waf or CMake. Below are all of the options available for
       --shared              Build all libs as shared libs
       --disable-symlinks    Disable creating symlinks for libs
       --unittests           Build-time option to run unit tests after the build has completed
-      --disable-pcre        turn off PCRE
-      --enable-pcre         turn on PCRE (default)
-      --with-pcre-home=WITH_PCRE_HOME
-                            Specify the PCRE Home - where PCRE is installed to
-      --build-pcre          force building PCRE from scratch
-      --nobuild-pcre        force building PCRE from scratch
-      --disable-xml         turn off XML
-      --enable-xml-layer=XML_LAYER
-                            Specify the XML layer
-      --with-xml-home=XML_HOME
-                            Specify the XML Home - where the XML library is installed to
-      --build-xml           force building XML library (expat) from scratch
-      --nobuild-xml         force not building XML library from scratch
-      --enable-sql-layer=SQL_LAYER
-                            Specify the SQL layer
-      --with-sql-home=SQL_HOME
-                            Specify the SQL Home - where the SQL library is installed to
       --with-fft-home=FFT_HOME
                             Specify the FFT Home - where an FFT library is installed
       --with-fftw3-home=FFT3_HOME
@@ -81,18 +62,6 @@ CODA may be built using Waf or CMake. Below are all of the options available for
       --enable-fft-double   turn on double precision FFT
       --build-fft           force building FFT library (fftw) from scratch
       --nobuild-fft         force building FFT library (fftw) from scratch
-      --with-zip-home=ZIP_HOME
-                            Specify the ZIP Home - where the ZIP library is installed
-      --disable-zip         will not build the zip (zlib) library
-      --enable-zip          will build the zip (libz) library if not found on the system (default)
-      --build-zip           force building zip (zlib) library from scratch
-      --nobuild-zip         force building zip (zlib) library from scratch
-      --disable-uuid        will not build the uuid library
-      --enable-uuid         will build the uuid library if not found on the system (default)
-      --build-uuid          force building libuuid from scratch
-      --nobuild-uuid        force building libuuid from scratch
-      --with-uuid-home=UUID_HOME
-                            Specify the UUID lib/headers home
 
       configuration options:
         -b BLDDIR, --blddir=BLDDIR
@@ -127,13 +96,3 @@ Enabling a debugger
 `-g` and its variants can be achieved at configure time using the
 `--enable-debugging` switch at waf configure time
 
-Common Errors
--------------
-    Fatal Python error: initfsencoding: unable to load the file system codec
-    ModuleNotFoundError: No module named 'encodings'
-
-Problem: Python is unable to find its `modules` directory, necessary for using the Python C API.
-
-Solution: Set the `PYTHONHOME` environment variable. On Windows, this may look like:
-
-    set PYTHONHOME=C:\ProgramData\Anaconda3\
