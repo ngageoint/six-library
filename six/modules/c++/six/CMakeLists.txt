@@ -49,13 +49,6 @@ target_compile_definitions(six-c++ PRIVATE
 
 coda_add_tests(
     MODULE_NAME six
-    DIRECTORY "tests"
-    SOURCES
-        test_determine_data_type.cpp
-        test_parameter_collection.cpp)
-
-coda_add_tests(
-    MODULE_NAME six
     DIRECTORY "unittests"
     UNITTEST
     SOURCES

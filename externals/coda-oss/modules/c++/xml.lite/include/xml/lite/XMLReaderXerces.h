@@ -24,8 +24,9 @@
 #ifndef CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
 
-#include "xml/lite/xml_lite_config.h"
-
+#if !defined(USE_XERCES)
+#define USE_XERCES
+#endif
 #if defined(USE_XERCES)
 
 #include <string>

@@ -33,15 +33,6 @@ coda_add_module(
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
-    DIRECTORY "tests"
-    DEPS cli-c++
-    SOURCES
-        test_compare_cphd.cpp
-        test_metadata_round.cpp
-        test_round_trip.cpp)
-
-coda_add_tests(
-    MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"
     UNITTEST
     SOURCES

@@ -27,5 +27,7 @@
 #include <std/filesystem>
 #include <std/memory>
 
-#include <xml/lite/xml_lite_config.h>
+#if !defined(USE_XERCES)
+#define USE_XERCES
+#endif
 

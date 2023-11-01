@@ -1,7 +1,7 @@
-#!/bin/csh -f
+#!/bin/tcsh -f
 
-git remote add -m main -f coda-oss_remote git@github.com:mdaus/coda-oss.git
-git remote add -m main -f nitro_remote git@github.com:mdaus/nitro.git
+git remote add -m 2023/main -f coda-oss_remote git@github.com:mdaus/coda-oss.git
+git remote add -m 3.0/main -f nitro_remote git@github.com:mdaus/nitro.git
 
 # To set this up the very first time
 # This does a subtree merge and puts it in the externals/coda-oss directory.  --squash avoids copying all the history
@@ -18,12 +18,12 @@ git remote add -m main -f nitro_remote git@github.com:mdaus/nitro.git
 
 # Now we just want to update
 # Here I'm assuming you're running this on the master branch... otherwise the push command should change
-git subtree pull --prefix externals/coda-oss coda-oss_remote cpp17 --squash
+git subtree pull --prefix externals/coda-oss coda-oss_remote 2023/main --squash
 
-git subtree pull --prefix externals/nitro nitro_remote cpp17 --squash
+git subtree pull --prefix externals/nitro nitro_remote 3.0/main --squash
 git rm -rf externals/nitro/externals
 
 # If when you do this command you git a merge conflict because a file that has been removed here has been updated in CODA-OSS, you just need to do a 'git rm <pathname>' to resolve the merge conflict.  Then a 'git commit'.
 # TODO: Make this script smart enough to do this.
 
-#git push origin cpp17
+#git push origin cpp20

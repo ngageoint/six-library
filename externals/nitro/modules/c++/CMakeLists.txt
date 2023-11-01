@@ -1,6 +1,5 @@
 set(TARGET_LANGUAGE c++)
 
-# turn on warnings as errors
 if (MSVC)
     # By default, there is a /W3 on the command-line from somewhere (?); adding
     # /W4 results in a compiler warning.

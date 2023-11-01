@@ -42,27 +42,6 @@ coda_add_module(
 
 coda_add_tests(
     MODULE_NAME six.sicd
-    DIRECTORY "tests"
-    DEPS cli-c++
-    SOURCES
-        derive_output_plane.cpp
-        test_add_additional_des.cpp
-        test_clone_container.cpp
-        test_compare_sicd_meshes.cpp
-        test_get_complex_data.cpp
-        test_load_from_input_stream.cpp
-        test_mesh_polyfit.cpp
-        test_mesh_roundtrip.cpp
-        test_read_sicd_mesh.cpp
-        test_read_sicd_with_extra_des.cpp
-        test_read_sicd.cpp
-        test_sicd_byte_provider.cpp
-        test_sicd_schemata.cpp
-        test_streaming_write.cpp
-        test_vdp_polyfit.cpp)
-
-coda_add_tests(
-    MODULE_NAME six.sicd
     DIRECTORY "unittests"
     UNITTEST
     SOURCES

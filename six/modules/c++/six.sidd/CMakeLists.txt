@@ -32,18 +32,6 @@ coda_add_module(
 
 coda_add_tests(
     MODULE_NAME six.sidd
-    DIRECTORY "tests"
-    DEPS cli-c++
-    SOURCES
-        test_byte_swap.cpp
-        test_check_blocking.cpp
-        test_geotiff.cpp
-        test_read_and_write_lut.cpp
-        test_sidd_blocking.cpp
-        test_sidd_byte_provider.cpp)
-
-coda_add_tests(
-    MODULE_NAME six.sidd
     DIRECTORY "unittests"
     UNITTEST
     SOURCES

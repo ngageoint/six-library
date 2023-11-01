@@ -20,17 +20,6 @@ coda_add_module(
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
-    DIRECTORY "tests"
-    DEPS cli-c++
-    SOURCES
-        cphd_extract_xml.cpp
-        print_cphd_header.cpp
-        test_cphd_compare.cpp
-        test_cphd_round_trip.cpp
-        test_cphd_write_simple.cpp)
-
-coda_add_tests(
-    MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"
     UNITTEST
     SOURCES
