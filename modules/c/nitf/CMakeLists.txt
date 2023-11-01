@@ -66,10 +66,6 @@ target_compile_definitions(nitf-c PRIVATE
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
-    DIRECTORY "tests")
-
-coda_add_tests(
-    MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"
     UNITTEST
     SOURCES

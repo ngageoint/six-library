@@ -5,7 +5,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(coda-oss)
 
-set(CMAKE_CXX_STANDARD 17)
+project(coda-oss)
+
+set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED true)
 
 if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
@@ -19,11 +21,17 @@ endif()
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
 
-    # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
+    # Always turn on "warnings as errors." To avoid lots of (meaningless?) build output,
     # we'll dial-back warnings as necessary.
     if (MSVC)
-       add_compile_options(/WX) # warnings as errors
-       add_compile_options(/MP) # multi-processor compile
+        # set warning level to /W3
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+
+       if (ENABLE_ASAN)
+            # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
+            add_compile_options(/fsanitize=address)
+       endif()
     elseif (UNIX)
        add_compile_options(-Werror) # warnings as errors
     endif()
@@ -41,9 +49,3 @@ endif()
 
 add_subdirectory("modules")
 
-# generate package config, with the following paths exported
-set(JARS_DIR ${CODA_STD_PROJECT_LIB_DIR} CACHE INTERNAL
-    "path to installed jars, needed by downstream projects")
-set(SWIG_INCLUDE_DIR "${CODA_STD_PROJECT_INCLUDE_DIR}/swig" CACHE INTERNAL
-    "path to installed SWIG includes, needed by downstream projects")
-coda_generate_package_config(JARS_DIR SWIG_INCLUDE_DIR)

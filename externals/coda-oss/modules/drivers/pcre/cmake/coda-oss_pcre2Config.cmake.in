@@ -1,4 +1,0 @@
-@PACKAGE_INIT@
-
-# import the pcre2 targets
-include("${CMAKE_CURRENT_LIST_DIR}/coda-oss_pcre2Targets.cmake")

@@ -7,50 +7,29 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest]
-        python-version: ['3.7']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
+        configuration: [Release, Debug]
+    name: ${{ matrix.os }}-CMake-${{ matrix.configuration }}
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install python dependencies
-      run: |
-        pip install numpy
     - name: configure
       run: |
         ls env:
-        mkdir target-Release
-        cd target-Release
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
-        cd ..
-        mkdir target-Debug
-        cd target-Debug
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DENABLE_PYTHON=OFF
+        mkdir target-${{ matrix.configuration }}
+        cd target-${{ matrix.configuration }}
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github
     - name: build
       run: |
-        cd target-Release
-        cmake --build . --config Release -j
-        cd ..
-        cd target-Debug
-        cmake --build . --config Debug -j
+        cd target-${{ matrix.configuration }}
+        cmake --build . --config ${{ matrix.configuration }} -j
     - name: test # should run w/o install
       run: |
-        cd target-Release
-        ctest -C Release --output-on-failure
-        cd ..
-        cd target-Debug
-        ctest -C Debug --output-on-failure
+        cd target-${{ matrix.configuration }}
+        ctest -C ${{ matrix.configuration }} --output-on-failure
     - name: install
       run: |
-        cd target-Release
-        cmake --build . --config Release --target install
-        cd ..
-        cd target-Debug
-        cmake --build . --config Debug --target install
-        cd ..
+        cd target-${{ matrix.configuration }}
+        cmake --build . --config ${{ matrix.configuration }} --target install
 
   build-msbuild-windows:
     strategy:
@@ -69,7 +48,7 @@ jobs:
         ls env:
         mkdir out
         cd out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }}
     - name: build
       run: |
         cd out
@@ -94,27 +73,17 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.7']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
+    name: ${{ matrix.os }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install python dependencies
-      run: |
-        pip install numpy
     - name: configure
       run: |
         env
-        which python
-        mkdir target
-        cd target
+        mkdir target && cd target
         export CC=gcc-11
         export CXX=g++-11
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github
     - name: build
       run: |
         cd target
@@ -129,67 +98,3 @@ jobs:
       run: |
         cd target
         cmake --build . --target install
-
-  build-linux-cmake:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        configuration: [Debug, Release]
-        avx: [AVX2, AVX512F]
-    name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
-    runs-on: ${{ matrix.os }}
-    steps:
-    - uses: actions/checkout@v3
-    - name: configure
-      run: |
-        mkdir out && cd out
-        cmake .. -DENABLE_PYTHON=OFF -DENABLE_ASAN=ON -DENABLE_${{ matrix.avx }}=ON
-    - name: build
-      run: |
-        cd out
-        # "-j" spawns too many processes causing GCC to crash
-        cmake --build . --config ${{ matrix.configuration }} -j 12
-    - name: test
-    # should run w/o install
-      run: |
-        cd out
-        ctest -C ${{ matrix.configuration }} --output-on-failure
-
-  build-waf:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ['3.7']
-        debugging: ['--enable-debugging', '']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
-    runs-on: ${{ matrix.os }}
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: configure_with_swig
-      if: ${{ matrix.os == 'ubuntu-latest' }}
-      run: |
-        pip install numpy
-        mkdir install${{ matrix.os }}Waf-Github
-        export CC=gcc-11
-        export CXX=g++-11
-        python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
-    - name: configure_without_swig
-      if: ${{ matrix.os == 'windows-2019' }}
-      run: |
-        pip install numpy
-        mkdir install${{ matrix.os }}Waf-Github
-        python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" ${{ matrix.debugging }}
-    - name: build
-      run: |
-        python waf build
-    - name: install
-      run: |
-        python waf install
-    - name: test
-      run: |
-        python waf install --alltests
-
