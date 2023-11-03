@@ -21,6 +21,7 @@
  */
 
 #include "tiff/Utils.h"
+#include "tiff/TiffUtils.h"
 
 bool tiff::Utils::hasGeoTiffIFD(const tiff::IFD* ifd)
 {
@@ -178,4 +179,22 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
     }
 
     return geoIFD;
+}
+
+tiff::SetErrorHandler::SetErrorHandler(tiff_errorhandler_t pHandler)
+{
+    mpHandler = tiff_setErrorHandler(pHandler);
+}
+tiff::SetErrorHandler::~SetErrorHandler()
+{
+    tiff_setErrorHandler(mpHandler);
+}
+
+tiff::SetWarningHandler::SetWarningHandler(tiff_errorhandler_t pHandler)
+{
+    mpHandler = tiff_setWarningHandler(pHandler);
+}
+tiff::SetWarningHandler::~SetWarningHandler()
+{
+    tiff_setWarningHandler(mpHandler);
 }
