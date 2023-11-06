@@ -76,7 +76,7 @@ jobs:
         cmake --build . --config ${{ matrix.configuration }} -j
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
+      uses: microsoft/setup-msbuild@v1.0.2 # https://github.com/marketplace/actions/setup-msbuild
       with:
         msbuild-architecture: x64
     - name: msbuild
