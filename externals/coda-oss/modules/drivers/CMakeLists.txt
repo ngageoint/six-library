@@ -27,3 +27,4 @@ add_subdirectory("zlib")
 add_subdirectory("hdf5")
 add_subdirectory("highfive")
 
+add_subdirectory("libtiff")

@@ -14,7 +14,7 @@ git remote add -f coda-oss_remote git@github.com:mdaus/coda-oss.git
 
 # Now we just want to update
 # Here I'm assuming you're running this on the master branch... otherwise the push command should change
-git subtree pull --prefix externals/coda-oss coda-oss_remote cpp20 --squash
+git subtree pull --prefix externals/coda-oss coda-oss_remote 2023/main --squash
 
 # If when you do this command you git a merge conflict because a file that has been removed here has been updated in CODA-OSS, you just need to do a 'git rm <pathname>' to resolve the merge conflict.  Then a 'git commit'.
 # TODO: Make this script smart enough to do this.
