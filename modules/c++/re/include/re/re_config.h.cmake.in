@@ -1,7 +1,0 @@
-#ifndef _@tgt_munged_name@_CONFIG_H_
-#define _@tgt_munged_name@_CONFIG_H_
-
-#cmakedefine RE_ENABLE_STD_REGEX @RE_ENABLE_STD_REGEX@
-#cmakedefine PCRE2_STATIC @PCRE2_STATIC@
-
-#endif /* _@tgt_munged_name@_CONFIG_H_ */
