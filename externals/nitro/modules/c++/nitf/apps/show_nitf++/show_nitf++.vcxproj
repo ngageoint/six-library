@@ -64,7 +64,6 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SupportJustMyCode>true</SupportJustMyCode>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>

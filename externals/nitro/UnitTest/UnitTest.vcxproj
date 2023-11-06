@@ -64,7 +64,6 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ConformanceMode>true</ConformanceMode>

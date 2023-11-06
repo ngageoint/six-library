@@ -930,6 +930,10 @@
     <ClInclude Include="str\include\str\W1252string.h">
       <Filter>str</Filter>
     </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
+    <ClInclude Include="tiff\include\tiff\TiffUtils.h">
+      <Filter>tiff</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -1364,6 +1368,9 @@
     </ClCompile>
     <ClCompile Include="unique\source\UUID.cpp">
       <Filter>unique</Filter>
+    </ClCompile>
+    <ClCompile Include="tiff\source\TiffUtils.cpp">
+      <Filter>tiff</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
