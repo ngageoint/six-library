@@ -1,10 +1,18 @@
 ﻿# coda-oss Release Notes
 
+## [Release 2023-10-23](https://github.com/mdaus/coda-oss/releases/tag/2023-10-23)
+* Tweaked **.gitattributes**.
+* Removed *str::EncodedStringView*; made *str* conversion routines more consistent.
+* *FmtX()* uses overloads rather than C-style varargs.
+* Add [`std::ssize()`](https://en.cppreference.com/w/cpp/iterator/size).
+* `ENABLE_AVX2` and `ENABLE_AVX512F` flags for CMake builds.
+* Build cleanly with ASAN.
+
 ## [Release 2023-08-18](https://github.com/mdaus/coda-oss/releases/tag/2023-08-18)
 * New `sys::OS::getSIMDInstructionSet()` utility routine; SSE2 is required (default with 64-bit builds).
 * `types::ComplexInteger` to work-around `std::complex<short>` no longer being [valid C++](https://en.cppreference.com/w/cpp/numeric/complex).
 * Another round of reducing various compiler warnings (of note: `NULL` -> `nullptr`).
-* Some suport for [`std::numbers`](https://en.cppreference.com/w/cpp/header/numbers) from C++20.
+* Some support for [`std::numbers`](https://en.cppreference.com/w/cpp/header/numbers) from C++20.
 * Update to [HighFive 2.7.1](https://github.com/BlueBrain/HighFive/releases/tag/v2.7.1).
 * Update to [e2fsprogs 1.47.0](https://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.47.0).
 * Update to [xerces-c 3.2.4](https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12350542&styleName=Text&projectId=10510).

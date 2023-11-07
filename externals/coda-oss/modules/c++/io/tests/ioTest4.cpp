@@ -53,7 +53,7 @@ int main(int argc, char **argv)
         if (argc != 3)
             throw except::Error(
                                 Ctxt(
-                                     FmtX(
+                                     str::Format(
                                           "Usage: %s <input file> <output file>",
                                           argv[0])));
 
