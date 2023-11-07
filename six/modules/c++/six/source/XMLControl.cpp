@@ -251,7 +251,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
         oss << "Coudn't validate XML - no schemas paths provided "
             << " and " << six::SCHEMA_PATH << " not set.";
 
-        log->warn(oss.str());
+        log->warn(oss);
     }
 
     std::vector<std::filesystem::path> schemaPaths_;
@@ -275,7 +275,7 @@ void XMLControl::validate(const xml::lite::Document& doc,
         oss << "Coudn't validate XML - no schemas paths provided "
             << " and " << six::SCHEMA_PATH << " not set.";
 
-        log->warn(oss.str());
+        log->warn(oss);
     }
 
     // validate against any specified schemas

@@ -21,6 +21,8 @@
  */
 #include <iomanip>
 #include <sstream>
+#include <std/optional>
+#include <string>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -50,10 +52,8 @@ void setField(const std::string& field,
         std::ostringstream ostr;
         ostr << "Tried to set field '" << field << "' to '" << value
              << "' but this is " << value.length() << " characters when the "
-             << "field can only contain " << treField.getLength()
-             << " characters";
-
-        throw except::Exception(Ctxt(ostr.str()));
+             << "field can only contain " << treField.getLength() << " characters";
+        throw except::Exception(Ctxt(ostr));
     }
 
     treField = value;
@@ -242,6 +242,18 @@ void NITFHeaderCreator::setDESecurity(const six::Classification& classification,
     securityClass.set(getNITFClassification(classification.getLevel()));
     setSecurity(classification, subheader.getSecurityGroup(), "DES");
 }
+
+//static std::optional<std::string> getParameter(const Options& ops,
+//    const std::string& field, const std::string& prefix)
+//{
+//    const auto k = NITFImageInfo::generateFieldKey(field, prefix);
+//    if (ops.hasParameter(k))
+//    {
+//        Parameter p = ops.getParameter(k);
+//        return p.str();
+//    }
+//    return std::optional<std::string>{};
+//}
 
 void NITFHeaderCreator::setSecurity(const six::Classification& classification,
                                     nitf::FileSecurity security,
@@ -793,9 +805,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             {
                 std::ostringstream ostr;
                 ostr << "Row offset cannot exceed " << maxRows
-                     << ", but for image segment " << jj << " it is "
-                     << segmentInfo.getFirstRow();
-                throw except::Exception(Ctxt(ostr.str()));
+                     << ", but for image segment " << jj << " it is " << segmentInfo.getFirstRow();
+                throw except::Exception(Ctxt(ostr));
             }
 
             subheader.getImageLocation().set(generateILOC(segmentInfo.getRowOffset(), 0));

@@ -103,7 +103,7 @@ void VersionUpdater::emitWarning(const std::string& fieldName)
     }
     std::ostringstream msg;
     msg << "  - " << fieldName;
-    mLog.warn(msg.str());
+    mLog.warn(msg);
 
     addProcessingParameter(fieldName);
 }

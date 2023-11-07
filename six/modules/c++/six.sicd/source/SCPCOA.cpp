@@ -220,7 +220,7 @@ bool SCPCOA::validate(const GeoData& geoData,
         messageBuilder << SCPCOA_INCONSISTENT_STR << "\n" <<
             "SCPCOA.scpTime: " << scpTime << std::endl <<
             "Derived scpTime: " << derivedSCPTime(grid) << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -243,7 +243,7 @@ bool SCPCOA::validate(const GeoData& geoData,
             "SCPCOA.SideOfTrack: " << sideOfTrack << std::endl <<
             "Derived SideOfTrack: " << geometry.getSideOfTrack()
             << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -282,7 +282,7 @@ bool SCPCOA::compareFields(double given, double expected,
     messageBuilder << SCPCOA_INCONSISTENT_STR << "\n" <<
         "SCPCOA." << name << ": " << given << std::endl <<
         "Derived " << name << ": " << expected << std::endl;
-    log.error(messageBuilder.str());
+    log.error(messageBuilder);
     return false;
 }
 
@@ -298,6 +298,6 @@ bool SCPCOA::compareFields(Vector3 given, Vector3 expected,
     messageBuilder << SCPCOA_INCONSISTENT_STR << "\n" <<
         "SCPCOA." << name << ": " << given << std::endl <<
         "Derived " << name << ": " << expected << std::endl;
-    log.error(messageBuilder.str());
+    log.error(messageBuilder);
     return false;
 }
