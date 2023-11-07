@@ -88,7 +88,7 @@ static SupportArrayParameter getSupportArray(const std::vector<SupportArrayParam
     {
         std::ostringstream oss;
         oss << "SA_ID was not found " << (key);
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
     return params[keyNum];
 }
@@ -114,7 +114,7 @@ AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string& key
     {
         std::ostringstream oss;
         oss << "SA_ID was not found " << (key);
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
     return addedSupportArray.find(key)->second;
 }

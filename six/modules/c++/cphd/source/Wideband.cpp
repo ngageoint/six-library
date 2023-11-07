@@ -469,9 +469,8 @@ void Wideband::read(size_t channel,
     if (data.size < minSize)
     {
         std::ostringstream ostr;
-        ostr << "Need at least " << minSize << " bytes but only got "
-             << data.size;
-        throw except::Exception(Ctxt(ostr.str()));
+        ostr << "Need at least " << minSize << " bytes but only got " << data.size;
+        throw except::Exception(Ctxt(ostr));
     }
 
     // Perform the read
@@ -525,9 +524,8 @@ void Wideband::read(size_t channel,
     if (data.size < minSize)
     {
         std::ostringstream ostr;
-        ostr << "Need at least " << minSize << " bytes but only got "
-             << data.size;
-        throw except::Exception(Ctxt(ostr.str()));
+        ostr << "Need at least " << minSize << " bytes but only got " << data.size;
+        throw except::Exception(Ctxt(ostr));
     }
 
     // Perform the read
@@ -613,9 +611,8 @@ void Wideband::read(size_t channel,
     if (vectorScaleFactors.size() != dims.row)
     {
         std::ostringstream ostr;
-        ostr << "Expected " << dims.row << " vector scale factors but got "
-             << vectorScaleFactors.size();
-        throw except::Exception(Ctxt(ostr.str()));
+        ostr << "Expected " << dims.row << " vector scale factors but got " << vectorScaleFactors.size();
+        throw except::Exception(Ctxt(ostr));
     }
 
     if (dims.row == 0)
@@ -632,9 +629,8 @@ void Wideband::read(size_t channel,
     if (data.size < numPixels)
     {
         std::ostringstream ostr;
-        ostr << "Need at least " << numPixels << " pixels but only got "
-             << data.size;
-        throw except::Exception(Ctxt(ostr.str()));
+        ostr << "Need at least " << numPixels << " pixels but only got " << data.size;
+        throw except::Exception(Ctxt(ostr));
     }
 
     if (needToScale)
@@ -643,9 +639,8 @@ void Wideband::read(size_t channel,
         if (scratch.size < minScratchSize)
         {
             std::ostringstream ostr;
-            ostr << "Need at least " << minScratchSize << " bytes but only got "
-                 << scratch.size;
-            throw except::Exception(Ctxt(ostr.str()));
+            ostr << "Need at least " << minScratchSize << " bytes but only got " << scratch.size;
+            throw except::Exception(Ctxt(ostr));
         }
 
         // Perform the read into the scratch buffer

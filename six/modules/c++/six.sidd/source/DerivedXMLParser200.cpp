@@ -1369,7 +1369,7 @@ xml::lite::Element& DerivedXMLParser200::convertKernelToXML(const DerivedXMLPars
             ostr << "Filter size is " << kernel.custom->size.row << " rows x "
                 << kernel.custom->size.col << " cols but have "
                 << kernel.custom->filterCoef.size() << " coefficients";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
 
         auto& filterCoef = parser.newElement("FilterCoefficients", customElem);
@@ -1422,7 +1422,7 @@ xml::lite::Element& DerivedXMLParser200::convertBankToXML(const DerivedXMLParser
             ostr << "Filter size is " << bank.custom->numPhasings << " x "
                 << bank.custom->numPoints << " but have "
                 << bank.custom->filterCoef.size() << " coefficients";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
 
         auto& filterCoef = parser.newElement("FilterCoefficients", customElem);

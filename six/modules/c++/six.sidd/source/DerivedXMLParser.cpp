@@ -1173,7 +1173,7 @@ XMLElem DerivedXMLParser::createLUTImpl(const LUT *lut, XMLElem lutElem) const
         {
             std::ostringstream ostr;
             ostr << "Invalid element size [" << lut->elementSize << "]";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
         if ((lut->numEntries - 1) != i)
             oss << ' ';

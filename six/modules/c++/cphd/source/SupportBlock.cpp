@@ -93,7 +93,7 @@ void SupportBlock::read(const std::string& id, size_t numThreads, std::span<std:
     {
         std::ostringstream ostr;
         ostr << "Need at least " << minSize << " bytes but only got " << data.size();
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     // Perform the read

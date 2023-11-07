@@ -137,7 +137,7 @@ static auto check_whether_paths_exist(const std::vector<std::filesystem::path>& 
     {
         std::ostringstream msg;
         msg << does_not_exist_path << " does not exist!";
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
     return exist_paths;
 }

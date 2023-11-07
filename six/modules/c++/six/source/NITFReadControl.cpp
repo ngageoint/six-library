@@ -237,7 +237,7 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
     {
         std::ostringstream ostr;
         ostr << "Expected [" << expectedBytesPerPixel << "] bytes per pixel, found [" << foundBytesPerPixel << "]";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     const auto numCols = info.getData()->getNumCols();
@@ -246,7 +246,7 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
     {
         std::ostringstream ostr;
         ostr << "Invalid column width: was expecting [" << numCols << "], got [" << numColsSubheader << "]";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 }
 
