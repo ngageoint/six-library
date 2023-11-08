@@ -87,8 +87,7 @@ std::ostream& operator<< (std::ostream& os, const six::CollectionInformation& c)
     }
     for (size_t ii = 0; ii < c.parameters.size(); ++ii)
     {
-        os << "  Parameter name   : " << c.parameters[ii].getName() << "\n"
-            << "  Parameter value  : " << c.parameters[ii].str() << "\n";
+        out(os, c.parameters[ii]);
     }
     return os;
 }

@@ -192,9 +192,8 @@ Version CPHDXMLControl::uriToVersion(const xml::lite::Uri& uri)
     }
     std::ostringstream ostr;
     ostr << "The URI " << uri << " is invalid. "
-         << "Either input a valid URI or "
-         << "add a <version, URI> entry to versionUriMap";
-    throw except::Exception(Ctxt(ostr.str()));
+         << "Either input a valid URI or add a <version, URI> entry to versionUriMap";
+    throw except::Exception(Ctxt(ostr));
 }
 
 }

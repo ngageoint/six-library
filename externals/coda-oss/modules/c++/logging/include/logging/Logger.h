@@ -24,12 +24,14 @@
 //  Logger.h
 ///////////////////////////////////////////////////////////
 
+#pragma once
 #ifndef CODA_OSS_logging_Logger_h_INCLUDED_
 #define CODA_OSS_logging_Logger_h_INCLUDED_
 
 #include <string>
 #include <vector>
 #include <memory>
+#include <sstream>
 
 #include "config/Exports.h"
 #include "logging/Filterer.h"
@@ -78,6 +80,17 @@ struct CODA_OSS_API Logger : public Filterer
     void error(const std::string& msg);
     //! Logs a message at the CRITICAL LogLevel
     void critical(const std::string& msg);
+
+    //! Logs a message at the DEBUG LogLevel
+    void debug(const std::ostringstream& msg);
+    //! Logs a message at the INFO LogLevel
+    void info(const std::ostringstream& msg);
+    //! Logs a message at the WARNING LogLevel
+    void warn(const std::ostringstream& msg);
+    //! Logs a message at the ERROR LogLevel
+    void error(const std::ostringstream& msg);
+    //! Logs a message at the CRITICAL LogLevel
+    void critical(const std::ostringstream& msg);
 
     //! Logs an Exception Context at the DEBUG LogLevel
     void debug(const except::Context& ctxt);

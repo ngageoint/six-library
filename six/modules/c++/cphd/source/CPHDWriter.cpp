@@ -274,7 +274,7 @@ void CPHDWriter::getMetadata(const PVPBlock& pvpBlock,
         std::ostringstream ostr;
         ostr << "Number of pvp block bytes in metadata: " << data.numBytesPVP
              << " does not match calculated size of pvp block: " << pvpBlock.getNumBytesPVPSet();
-        throw except::Exception(ostr.str());
+        throw except::Exception(Ctxt(ostr));
     }
 
     const size_t numChannels = data.getNumChannels();
@@ -324,7 +324,7 @@ void CPHDWriter::writePVPData(DataWriter& dataWriter, const cphd::Data& data, co
         {
             std::ostringstream ostr;
             ostr << "PVPBlock of channel " << ii << " is empty";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
 
         const size_t size = (data.getNumVectors(ii) * data.getNumBytesPVPSet()) / 8;

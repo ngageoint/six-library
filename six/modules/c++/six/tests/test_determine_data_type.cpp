@@ -46,7 +46,7 @@ void testDataType(const fs::path& pathname_, six::DataType expectedDataType)
         ostr << "Expected " << pathname << " to be "
              << expectedDataType << " but got " << dataType;
 
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 }
 }
