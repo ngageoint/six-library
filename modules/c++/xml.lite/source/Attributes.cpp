@@ -125,8 +125,7 @@ std::string xml::lite::Attributes::getValue(const std::string& qname) const
     std::string retval;
     if (!getValue(qname, retval))
     {
-        throw except::NoSuchKeyException(Ctxt(str::Format("QName '%s' could not be found",
-                                                   qname.c_str())));
+        throw except::NoSuchKeyException(Ctxt(str::Format("QName '%s' could not be found", qname)));
     }
     
     return retval;  

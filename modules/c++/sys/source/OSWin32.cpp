@@ -112,7 +112,7 @@ void sys::OSWin32::removeFile(const std::string& pathname) const
         oss << "Failure removing file [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
@@ -125,7 +125,7 @@ void sys::OSWin32::removeDirectory(const std::string& pathname) const
         oss << "Failure removing directory [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
@@ -414,7 +414,7 @@ void sys::OSWin32::removeSymlink(const std::string& symlinkPathname) const
         oss << "Failure removing symlink [" <<  symlinkPathname <<
             "] with error [" << err.toString() << "]";
 
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 

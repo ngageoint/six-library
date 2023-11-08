@@ -137,7 +137,7 @@ public:
             ostr << "Match: Match substring out of range ("
                  << index << ", " << end << ") for string of length "
                  << str.length();
-            throw re::RegexException(Ctxt(ostr.str()));
+            throw re::RegexException(Ctxt(ostr));
         }
 
         const size_t subStringLength = end - index;
@@ -225,7 +225,7 @@ Regex& Regex::compile(const std::string& pattern)
         std::ostringstream ostr;
         ostr << "PCRE compilation failed at offset " << errorOffset
              << ": " << getErrorMessage(errorCode);
-        throw RegexException(Ctxt(ostr.str()));
+        throw RegexException(Ctxt(ostr));
     }
 
     return *this;
