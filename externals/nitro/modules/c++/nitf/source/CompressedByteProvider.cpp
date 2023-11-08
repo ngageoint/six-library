@@ -70,9 +70,8 @@ void CompressedByteProvider::initialize_(const Record& record,
     {
         std::ostringstream oss;
         oss << "NITF header metadata contains " << numImages << " images, "
-            << "but block sizes provided for " << bytesPerBlock.size()
-            << " images.";
-        throw except::Exception(Ctxt(oss.str()));
+            << "but block sizes provided for " << bytesPerBlock.size() << " images.";
+        throw except::Exception(Ctxt(oss));
     }
     mImageDataLengths.resize(numImages);
 
@@ -119,7 +118,7 @@ size_t CompressedByteProvider::countBytesForCompressedImageData(
         ostr << "Trying to get bytes from blocks [" << blockRange.mStartElement
              << ", " << blockRange.endElement() << ") but seg " << seg
              << " only has " << bytesPerBlock.size() << " blocks";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     size_t numBytes = 0;
@@ -152,7 +151,7 @@ types::Range CompressedByteProvider::findBlocksToWrite(
               << (globalStartRow + numRowsToWrite) << ") from seg " << seg
               << " which contains global rows [" << segmentInfo.firstRow
               << ", " << segmentInfo.endRow() << ")";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     const size_t startRow = globalStartRow - segmentInfo.firstRow;
@@ -192,7 +191,7 @@ static size_t addImageData_(const std::vector<std::vector<size_t> > mBytesInEach
             std::ostringstream error;
             error << "Internal logic error. blockRange.mStartElement should "
                   << "never be 0 when fileOffset hasn't been set.";
-            throw except::Exception(Ctxt(error.str()));
+            throw except::Exception(Ctxt(error));
         }
 
         fileOffset = mImageSubheaderFileOffsets[seg] + gsl::narrow<nitf::Off>(mImageSubheaders[seg].size());

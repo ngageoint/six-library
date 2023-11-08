@@ -37,7 +37,7 @@ j2k::Stream::Stream(j2k::StreamType streamType, size_t chunkSize)
     {
         std::ostringstream os;
         os << "Failed creating an openjpeg stream with a chunk size of " << chunkSize << " bytes.";
-        throw except::Exception(Ctxt(os.str()));
+        throw except::Exception(Ctxt(os));
     }
 }
 
