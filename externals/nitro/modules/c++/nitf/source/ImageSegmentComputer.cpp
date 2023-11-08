@@ -105,18 +105,16 @@ ImageSegmentComputer::ImageSegmentComputer(size_t numRows,
     {
         std::ostringstream ostr;
         ostr << "Max rows was set to " << maxRows
-             << " but it cannot be greater than " << ILOC_MAX
-             << " per the NITF spec";
-        throw except::Exception(Ctxt(ostr.str()));
+             << " but it cannot be greater than " << ILOC_MAX << " per the NITF spec";
+        throw except::Exception(Ctxt(ostr));
     }
 
     if (maxSize > NUM_BYTES_MAX)
     {
         std::ostringstream ostr;
         ostr << "Max image segment size was set to " << maxSize
-             << " but it cannot be greater than " << NUM_BYTES_MAX
-             << " per the NITF spec";
-        throw except::Exception(Ctxt(ostr.str()));
+             << " but it cannot be greater than " << NUM_BYTES_MAX << " per the NITF spec";
+        throw except::Exception(Ctxt(ostr));
     }
 
     computeImageInfo();
@@ -152,9 +150,8 @@ void ImageSegmentComputer::computeImageInfo()
     {
         // This should not be possible
         std::ostringstream ostr;
-        ostr << "Image would require " << maxRowsUint64
-             << " rows which is too many";
-        throw except::Exception(Ctxt(ostr.str()));
+        ostr << "Image would require " << maxRowsUint64 << " rows which is too many";
+        throw except::Exception(Ctxt(ostr));
     }
     size_t maxRows(gsl::narrow<size_t>(maxRowsUint64));
 
@@ -163,7 +160,7 @@ void ImageSegmentComputer::computeImageInfo()
         std::ostringstream ostr;
         ostr << "maxNumBytesPerSegment [" << mMaxNumBytesPerSegment
              << "] < bytesPerRow [" << bytesPerRow << "]";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     // Truncate back to a full block for the maxRows that will actually fit
@@ -180,7 +177,7 @@ void ImageSegmentComputer::computeImageInfo()
                  << ", bytes per row of " << bytesPerRow
                  << ", and rows per block of " << mNumRowsPerBlock
                  << ", cannot fit an entire block into a segment";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
     }
 
