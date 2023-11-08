@@ -471,7 +471,7 @@ PVPBlock::PVPBlock(const Pvp& p, const Data& d) :
         std::ostringstream oss;
         oss << "PVP size specified in metadata: " << mNumBytesPerVector
             << " does not match PVP size calculated: " << calculateBytesPerVector;
-        throw except::Exception(oss.str());
+        throw except::Exception(Ctxt(oss));
     }
 }
 PVPBlock::PVPBlock(const Metadata& metadata)
