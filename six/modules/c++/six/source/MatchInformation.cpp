@@ -75,7 +75,7 @@ std::ostream& operator<< (std::ostream& os, const MatchInformation& m)
             {
                 os << "    Parameter      : "
                     << m.types[ii].matchCollects[jj].parameters[kk].getName()
-                    << ": " << m.types[ii].matchCollects[jj].parameters[kk].str() << "\n";
+                    << ": " << m.types[ii].matchCollects[jj].parameters[kk] << "\n";
             }
         }
     }

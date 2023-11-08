@@ -750,7 +750,7 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
         std::ostringstream oss;
         oss << "VBM::load: calculated VBM size(" << numBytesIn
             << ") != header VB_DATA_SIZE(" << sizeVBM << ")";
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 
     const bool swapToLittleEndian = (std::endian::native == std::endian::little);
@@ -774,7 +774,7 @@ int64_t VBM::load(io::SeekableInputStream& inStream,
             {
                 std::ostringstream oss;
                 oss << "EOF reached during VBM read for channel " << (ii);
-                throw except::Exception(Ctxt(oss.str()));
+                throw except::Exception(Ctxt(oss));
             }
             totalBytesRead += bytesThisRead;
 

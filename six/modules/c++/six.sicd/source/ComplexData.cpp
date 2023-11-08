@@ -183,7 +183,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder <<
                 "RgAzComp specified in imageFormation.imageFormationAlgorithm,"
                 << " but member pointer is nullptr.";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
         break;
@@ -200,7 +200,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder <<
                 "PFA specified in imageFormation.imageFormationAlgorithm,"
                 << " but member pointer is nullptr.";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
         break;
@@ -218,7 +218,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder <<
                 "RMA specified in imageFormation.imageFormationAlgorithm,"
                 << " but member pointer is nullptr.";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
         break;
@@ -227,7 +227,7 @@ bool ComplexData::validate(logging::Logger& log) const
 
         messageBuilder << "Image formation not fully defined." << std::endl
             << "SICD.ImageFormation.ImageFormAlgo = OTHER or is not set.";
-        log.warn(messageBuilder.str());
+        log.warn(messageBuilder);
         valid = false;
         break;
     }
