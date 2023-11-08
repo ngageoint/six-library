@@ -1078,7 +1078,7 @@ std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p)
 
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        os << "  Additional Parameter : " << it->second.str() << "\n";
+        os << "  Additional Parameter : " << it->second << "\n";
     }
     return os;
 }

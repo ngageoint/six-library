@@ -51,8 +51,7 @@ std::ostream& operator<<(std::ostream& os, const Classification& c)
          iter != c.fileOptions.end();
          ++iter)
     {
-        os << "    {" << iter->first << "}  " << iter->second.str()
-           << std::endl;
+        os << "    {" << iter->first << "}  " << iter->second << "\n";
     }
     return os;
 }

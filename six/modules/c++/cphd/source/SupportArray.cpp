@@ -141,8 +141,7 @@ std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a)
         << "    ZUnits         : " << a.zUnits << "\n";
     for (size_t ii = 0; ii < a.parameter.size(); ++ii)
     {
-        os << "    Parameter Name : " << a.parameter[ii].getName() << "\n"
-            << "    Parameter Value : " << a.parameter[ii].str() << "\n";
+        out(os, a.parameter[ii]);
     }
     return os;
 }

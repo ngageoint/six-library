@@ -192,8 +192,7 @@ void DerivedClassification::putImpl(const std::string& name,
     os << name << ":\n";
     for (size_t ii = 0; ii < params.size(); ++ii)
     {
-        os << "    [" << params[ii].getName() << " = "
-           << params[ii].str() << "]\n";
+        os << "    [" << params[ii].getName() << " = " << params[ii] << "]\n";
     }
 }
 
