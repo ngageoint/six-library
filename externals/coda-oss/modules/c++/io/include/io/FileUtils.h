@@ -62,7 +62,7 @@ inline void move(const std::string& path,
         oss << "Move Failed: Could not move source [" <<
             path << "] to destination [" <<
             newPath << "]";
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
