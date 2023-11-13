@@ -1190,7 +1190,7 @@ XMLElem DerivedXMLParser::createFootprint(const std::string& name,
     XMLElem footprint = newElement(name, getDefaultURI(), parent);
     xml::lite::AttributeNode node;
     node.setQName("size");
-    node.setValue(str::toString(LatLonCorners::NUM_CORNERS));
+    node.setValue(std::to_string(LatLonCorners::NUM_CORNERS));
 
     footprint->getAttributes().add(node);
 
@@ -1200,7 +1200,7 @@ XMLElem DerivedXMLParser::createFootprint(const std::string& name,
 
     for (size_t corner = 0; corner < LatLonCorners::NUM_CORNERS; ++corner)
     {
-        node.setValue(str::toString(corner + 1));
+        node.setValue(std::to_string(corner + 1));
         common().createLatLon(cornerName,
                              corners.getCorner(corner),
                              footprint)->getAttributes().add(node);

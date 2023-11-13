@@ -410,8 +410,7 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
         str = "SIDD";
         break;
     default:
-        throw except::Exception(
-            Ctxt("Invalid data type " + str::toString(dataType)));
+        throw except::Exception(Ctxt("Invalid data type " + str::toString(dataType)));
     }
 
     if (appendXML)
