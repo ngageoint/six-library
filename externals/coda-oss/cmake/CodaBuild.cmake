@@ -142,6 +142,13 @@ macro(coda_initialize_build)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
 
+    # Turn on AVX2 by default ... it's from 2013.
+    if (NOT ENABLE_AVX512F)
+        if (NOT DISABLE_AVX2)
+            set(ENABLE_AVX2 true)
+        endif()
+    endif()
+
     # MSVC-specific flags and options.
     if (MSVC)
         set_property(GLOBAL PROPERTY USE_FOLDERS ON)

@@ -96,9 +96,7 @@ public:
         if (A.rows() != A.cols())
         {
             throw except::Exception(Ctxt(
-                "Expected square matrix but got rows = " +
-                str::toString(A.rows()) + ", cols = " +
-                str::toString(A.cols())));
+                "Expected square matrix but got rows = " + std::to_string(A.rows()) + ", cols = " + std::to_string(A.cols())));
         }
 
         if (isSymmetric(A))
