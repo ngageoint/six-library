@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription ACCHZB_description[] = {
     {NITF_BCS_N, 2, "Number of horizontal accuracy regions", "NUMACHZ", },
     {NITF_LOOP, 0, NULL, "NUMACHZ"},
     {NITF_BCS_A, 3, "Unit of Measure for AAH", "UNIAAH" },
@@ -44,6 +44,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(ACCHZB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(ACCHZB)
 
 NITF_CXX_ENDGUARD

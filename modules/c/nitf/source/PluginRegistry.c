@@ -470,12 +470,34 @@ nitf_PluginRegistry_unload(nitf_PluginRegistry* reg, nitf_Error* error)
     return success;
 }
 
+static NITF_BOOL insertPlugin_(const char* msg,
+    nitf_PluginRegistry* reg, const char** ident, nitf_DLL* dll, nitf_Error* error)
+{
+    /*  If no ident, we have a set error and an invalid plugin  */
+    if (ident)
+    {
+        /*  I expect to have problems with this now and then  */
+        int ok = insertPlugin(reg, ident, dll, error);
+
+        /*  If insertion failed, take our toys and leave  */
+        if (!ok)
+        {
+            return NITF_FAILURE;
+        }
+        (void)msg;
+#ifdef NITF_DEBUG_PLUGIN_REG
+        printf(msg, keyName, dll);
+#endif
+        return NITF_SUCCESS;
+    }
+    return NITF_FAILURE;
+}
+
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
 {
     /*  For now, the key is the dll name minus the extension  */
     char keyName[NITF_MAX_PATH] = "";
-    int ok;
     nitf_DLL* dll;
     const char** ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
@@ -499,24 +521,8 @@ nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
 
     /* Now init the plugin!!!  */
     ident = doInit(dll, keyName, error);
-
-    /*  If no ident, we have a set error and an invalid plugin  */
-    if (ident)
-    {
-        /*  I expect to have problems with this now and then  */
-        ok = insertPlugin(reg, ident, dll, error);
-
-        /*  If insertion failed, take our toys and leave  */
-        if (!ok)
-        {
-            return NITF_FAILURE;
-        }
-#ifdef NITF_DEBUG_PLUGIN_REG
-        printf("Successfully loaded plugin: [%s] at [%p]\n", keyName, dll);
-#endif
-        return NITF_SUCCESS;
-    }
-    return NITF_FAILURE;
+    return insertPlugin_("Successfully loaded plugin: [%s] at [%p]\n",
+        reg, ident, dll, error);
 }
 
 NITFAPI(NITF_BOOL)
@@ -945,7 +951,6 @@ insertCreator(nitf_DLL* dso,
     /*  We are trying to find tre_main  */
     /*  Retrieve the main  */
     NITF_DLL_FUNCTION_PTR dsoMain  = nitf_DLL_retrieve(dso, name, error);
-
     if (!dsoMain)
     {
         /*  If it didnt work, we are done  */
@@ -968,8 +973,67 @@ insertCreator(nitf_DLL* dso,
  *
  *  No more talking to the DSOs directly
  */
-NITFPROT(nitf_TREHandler*)
-nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
+static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
+{
+    extern const nitf_TREPreloaded preloadedTREs[];
+    for (size_t i = 0;; i++)
+    {
+        const char* pKeyName = preloadedTREs[i].name;
+        if (pKeyName == NULL) // end of list
+        {
+            return NULL;
+        }
+        if (strcmp(keyName, pKeyName) == 0)
+        {
+            return &(preloadedTREs[i]);
+        }
+    }
+}
+
+/*
+ *  Initialize a DSO.  The init hook is retrieved and called once
+ *  when the DSO is loaded
+ */
+static const char** preload_doInit(NITF_PLUGIN_INIT_FUNCTION init, const char* prefix, nitf_Error* error)
+{
+    /*  Else, call it  */
+    const char** ident = (*init)(error);
+    if (!ident)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, "The plugin [%s] is not retrievable", prefix);
+        return NULL;
+    }
+    return ident;
+}
+
+static NRT_BOOL preloadTRE(const char* keyName, nitf_Error* error)
+{
+    const char** ident;
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
+
+    /*  Construct the DLL object  */
+    nitf_DLL* dll = nitf_DLL_construct(error);
+    if (!dll)
+    {
+        return NITF_FAILURE;
+    }
+    dll->lib = NULL; // not a real DLL
+    dll->dsoMain = NULL; // filled in after successful findPreloadedTRE()
+
+    const nitf_TREPreloaded* plugin = findPreloadedTRE(keyName);
+    if (plugin == NULL)
+    {
+        return NITF_FAILURE;
+    }
+    dll->dsoMain = (NRT_DLL_FUNCTION_PTR)plugin->handler;
+
+    /* Now init the plugin!!!  */
+    ident = preload_doInit(plugin->init, keyName, error);
+    return insertPlugin_("Successfully pre-loaded plugin: [%s] at [%p]\n", reg, ident, dll, error);
+}
+
+static nitf_TREHandler*
+nitf_PluginRegistry_retrieveTREHandler_(nitf_PluginRegistry* reg,
                                        const char* treIdent,
                                        int* hadError,
                                        nitf_Error* error)
@@ -1003,6 +1067,45 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
         *hadError = 1;
     }
     return theHandler;
+}
+
+static nitf_TREHandler* retrievePreloadedTREHandler(nitf_PluginRegistry* reg, const char* treIdent,
+    int* hadError, nitf_Error* error)
+{
+    if (!preloadTRE(treIdent, error))
+    {
+        *hadError = 1;
+        return NULL;
+    }
+
+    // Successfully preloaded the TRE, it should now be in the hash table.
+    return nitf_PluginRegistry_retrieveTREHandler_(reg, treIdent, hadError, error);
+}
+
+NITFPROT(nitf_TREHandler*)
+nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
+                                       const char* treIdent,
+                                       int* hadError,
+                                       nitf_Error* error)
+{
+    nitf_TREHandler* handler = nitf_PluginRegistry_retrieveTREHandler_(reg, treIdent, hadError, error);
+
+    if (*hadError)
+    {
+        *hadError = 0;
+        return retrievePreloadedTREHandler(reg, treIdent, hadError, error);
+    }
+
+    // Normally, a NULL handler is **not** an error.
+    if (handler == NULL)
+    {
+        int bad = 0;
+        nitf_TREHandler* preloadedHandler = retrievePreloadedTREHandler(reg, treIdent, &bad, error);
+        if (!bad)
+            return preloadedHandler;
+    }
+
+    return handler;
 }
 
 NITFPROT(nitf_CompressionInterface*)

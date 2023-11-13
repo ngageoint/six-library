@@ -30,7 +30,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription AIMIDB_description[] = {
     {NITF_BCS_A, 14, "Acquisition Date/Time", "ACQUISITION_DATE" },
     {NITF_BCS_A, 4, "Mission Number", "MISSION_NO" },
     {NITF_BCS_A, 10, "Mission ID (ATO)", "MISSION_IDENTIFICATION" },
@@ -52,6 +52,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(AIMIDB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(AIMIDB)
 
 NITF_CXX_ENDGUARD

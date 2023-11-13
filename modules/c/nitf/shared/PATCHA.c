@@ -75,7 +75,7 @@ static nitf_TREDescriptionInfo descriptions[] = {
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
 
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet PATCHADescriptionSet = { 0, descriptions };
 
 NITF_DECLARE_PLUGIN(PATCHA)
 
