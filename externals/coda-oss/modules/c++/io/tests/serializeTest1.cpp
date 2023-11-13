@@ -60,9 +60,9 @@ public:
 	string vec_2 = fillString(is);
 
 	assert(classType == "Class A");
-	dbg.writeln(str::Format("vec[0] = %s", vec_0.c_str()));
-	dbg.writeln(str::Format("vec[1] = %s", vec_1.c_str()));
-	dbg.writeln(str::Format("vec[2] = %s", vec_2.c_str()));
+	dbg.writeln(str::Format("vec[0] = %s", vec_0));
+	dbg.writeln(str::Format("vec[1] = %s", vec_1));
+	dbg.writeln(str::Format("vec[2] = %s", vec_2));
 
 	vec[0] = str::toType<float>(vec_0);
 	vec[1] = str::toType<float>(vec_1);

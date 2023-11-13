@@ -90,8 +90,7 @@ void tiff::IFD::addEntry(const std::string& name)
     tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
     // we can't add it b/c we don't know about this tag
     if (!mapEntry)
-        throw except::Exception(Ctxt(str::Format(
-                                "Unable to add IFD Entry: unknown tag [%s]", name.c_str())));
+        throw except::Exception(Ctxt(str::Format("Unable to add IFD Entry: unknown tag [%s]", name)));
 
     unsigned short id = mapEntry->getTagID();
 
