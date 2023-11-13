@@ -30,7 +30,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription RPFHDR_description[] = {
     {NITF_BINARY, 1, "endian flag", "ENDIAN" },
     {NITF_BINARY, 2, "header section length", "HDSECL" },
     {NITF_BCS_A, 12, "filename", "FILENM" },
@@ -44,6 +44,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(RPFHDR, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(RPFHDR)
 
 NITF_CXX_ENDGUARD

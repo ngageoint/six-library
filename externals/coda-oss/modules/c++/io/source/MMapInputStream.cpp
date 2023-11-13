@@ -28,7 +28,7 @@ void io::MMapInputStream::open(const std::string& fname, char* flags)
     //    std::cout << mLength << std::endl;
     mFile = fopen(fname.c_str(), "r");
     if (!mFile)
-        throw sys::SystemException(str::Format("Failure while opening file: %s", fname.c_str()));
+        throw sys::SystemException(str::Format("Failure while opening file: %s", fname));
 
     _map();
 

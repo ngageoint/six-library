@@ -79,7 +79,7 @@ struct ValidationInfo final
         std::ostringstream oss;
         oss << "[" << this->getLevel() << "]" << 
             " from File: " << this->getFile() << 
-            " on Line: " << str::toString(this->getLine()) << 
+            " on Line: " << this->getLine() << 
             " with Message: " << this->getMessage();
         return oss.str();
     }

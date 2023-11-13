@@ -66,7 +66,7 @@ struct AvailableCPUProvider final : public AbstractNextCPUProviderLinux
         {
             std::ostringstream msg;
             msg << "No more CPUs available (size = " << mCPUs.size() << ")";
-            throw except::Exception(Ctxt(msg.str()));
+            throw except::Exception(Ctxt(msg));
         }
 
         std::unique_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());

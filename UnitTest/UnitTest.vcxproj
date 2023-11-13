@@ -262,38 +262,8 @@
     <ProjectReference Include="..\modules\c\nitf-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\ACCHZB.vcxproj">
-      <Project>{53f9f908-c678-4dee-9309-e71c1d03a45f}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\ACCPOB.vcxproj">
-      <Project>{730b1e6e-2469-4f9e-b093-d0c6262453c9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\ACFTA.vcxproj">
-      <Project>{51d7b426-899e-428d-9f69-5ddac9e403fb}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\AIMIDB.vcxproj">
-      <Project>{12aa0752-4ee3-4e0a-85af-0e5deadbf343}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\CSCRNA.vcxproj">
-      <Project>{023de06d-3967-4406-b1b8-032118bb2552}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\CSEXRB.vcxproj">
-      <Project>{0a9bda26-092f-4a2c-bbef-00c64bf0c65e}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf\ENGRDA.vcxproj">
       <Project>{53f9f908-c678-4dee-9309-e71c1e03a45f}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\HISTOA.vcxproj">
-      <Project>{d749aa73-4c9a-473d-96bb-070a6d9caa54}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\JITCID.vcxproj">
-      <Project>{d1d7fcd3-6130-4504-9da0-9d80506be55e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\PTPRAA.vcxproj">
-      <Project>{2baaaca9-a5a4-412c-ae52-b16c2d107f55}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\RPFHDR.vcxproj">
-      <Project>{cf5b4f02-364d-4117-9fb9-6c9c7938e412}</Project>
     </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf\XML_DATA_CONTENT.vcxproj">
       <Project>{78849481-d356-4cc7-b182-31c21f857ed1}</Project>

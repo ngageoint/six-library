@@ -52,7 +52,7 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
     {
         std::ostringstream oss;
         oss << "Scratch memory space was already reserved for " << key;
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
     mSegments.insert(
             iterSeg,

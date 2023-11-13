@@ -338,10 +338,10 @@ public:
                 mEncoder.clearError();
 
                 os << " with openjpeg error: " << opjErrorMsg;
-                throw except::Exception(Ctxt(os.str()));
+                throw except::Exception(Ctxt(os));
             }
 
-            throw except::Exception(Ctxt(os.str()));
+            throw except::Exception(Ctxt(os));
         }
     }
 
@@ -560,7 +560,7 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
     {
         std::ostringstream ostr;
         ostr << "Global start row = " << globalStartRow << " must be a multiple of number of rows in tile = " << numRowsInTile;
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     if ((numLocalRows % numRowsInTile != 0) &&
@@ -568,7 +568,7 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
     {
         std::ostringstream ostr;
         ostr << "Number of local rows = " << numLocalRows << " must be a multiple of number of rows in tile = " << numRowsInTile;
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     const auto startRowOfTiles = globalStartRow / numRowsInTile;
@@ -600,7 +600,7 @@ std::span<std::byte> j2k::Compressor::compressTileSubrange(
         std::ostringstream ostr;
         ostr << "Require " << numBytesNeeded << " bytes for compression of "
             << numTiles << " tiles but only received " << compressedData.size() << " bytes";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     auto compressedPtr = compressedData.data();
@@ -649,7 +649,7 @@ std::span<std::byte> j2k::Compressor::compressTileSubrange(
             std::ostringstream os;
             os << "Cannot write " << numBytesThisTile << " bytes for tile " << tileNum << " at byte offset " << numBytesWritten
                 << " - exceeds maximum compressed image size (" << compressedData.size() << " bytes)!";
-            throw except::Exception(Ctxt(os.str()));
+            throw except::Exception(Ctxt(os));
         }
 
         const auto src = tileStream.get();

@@ -56,7 +56,7 @@ void ScopedCPUMaskUnix::initialize(int numCPUs)
     {
         std::ostringstream msg;
         msg << "Failed to allocate CPU mask for " << numCPUs << "CPUs";
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
 
     CPU_ZERO_S(mSize, mMask);
@@ -122,7 +122,7 @@ ScopedCPUAffinityUnix::ScopedCPUAffinityUnix() :
         default:
             msg << " Unknown cause.";
         }
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
 }
 }

@@ -51,7 +51,8 @@
 typedef struct _NRT_DLL
 {
     char *libname;              /* The name of the library */
-    NRT_NATIVE_DLL lib;         /* A handle to the library */
+    NRT_NATIVE_DLL lib;         /* A handle to the library, or NULL for "preloaded" TREs */
+    NRT_DLL_FUNCTION_PTR dsoMain; /* If 'lib' is NULL, the main() function */
 } nrt_DLL;
 
 NRT_CXX_GUARD
