@@ -147,7 +147,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
             << txRFBandwidth << std::endl
             << "SICD.RadarCollection.TxFrequency.txFMRate * txPulseLength: "
             << txFMRate * txPulseLength << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -161,7 +161,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
             << rcvDemodType << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.RcvFMRate: "
             << rcvFMRate << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -177,7 +177,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
             << rcvFMRate << std::endl
             << "SICD.RadarCollection.Waveform.WFParameters.TxFMRate: "
             << txFMRate << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -190,7 +190,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
         messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.txFreqStart: "
             << txFrequencyStart << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -203,7 +203,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
         messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.rcvFreqStart: "
             << rcvFrequencyStart << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -216,7 +216,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
             << txPulseLength << std::endl
             << "SICD.RadarCollection.Waveform.WFPArameters.RcvWindowLength: "
             << rcvWindowLength << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -229,7 +229,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
             << rcvIFBandwidth << std::endl
             << "SICD.RadarCollection.Waveform.WFPArameters.ADCSampleRate: "
             << adcSampleRate << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -244,7 +244,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
             << txRFBandwidth << std::endl
             << "SICD.RadarCollection.Waveform.WFPArameters.ADCSampleRate: "
             << adcSampleRate << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -259,7 +259,7 @@ bool WaveformParameters::validate(int refFrequencyIndex,
                 messageBuilder << WF_INCONSISTENT_STR << std::endl
                 << "SICD.RadarCollection.Waveform.WFParameters.RcvFreqStart: "
                 << rcvFrequencyStart << std::endl;
-                log.error(messageBuilder.str());
+                log.error(messageBuilder);
                 valid = false;
         }
     }
@@ -557,7 +557,7 @@ bool RadarCollection::validate(logging::Logger& log) const
             << wfMin << std::endl
             << "SICD.RadarCollection.TxFrequency.Min: " << txFrequencyMin
             << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -571,7 +571,7 @@ bool RadarCollection::validate(logging::Logger& log) const
             << " + TxFRBandwidth: " << wfMax << std::endl
             << "SICD.RadarCollection.TxFrequency.Max: "
             << txFrequencyMax << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -583,7 +583,7 @@ bool RadarCollection::validate(logging::Logger& log) const
         messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "SICD.RadarCollection.txFrequencyMin: "
             << txFrequencyMin << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 

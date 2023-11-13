@@ -147,7 +147,7 @@ void ImageBlocker::findSegment(size_t row,
 
     std::ostringstream ostr;
     ostr << "Row " << row << " is out of bounds";
-    throw except::Exception(Ctxt(ostr.str()));
+    throw except::Exception(Ctxt(ostr));
 }
 
 void ImageBlocker::findSegmentRange(size_t startRow,
@@ -177,7 +177,7 @@ void ImageBlocker::findSegmentRange(size_t startRow,
                  << startRowWithinFirstSeg << " within segment " << firstSegIdx
                  << ".  The local row must be a multiple of "
                  << mNumRowsPerBlock[firstSegIdx] << ".";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
 
         // Figure out which segment we're ending in
@@ -196,7 +196,7 @@ void ImageBlocker::findSegmentRange(size_t startRow,
             ostr << "Last row " << lastRow << " is local row "
                  << lastRowWithinLastSeg << " within segment " << lastSegIdx
                  << ".  This must land on a full block.";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
     }
 }
@@ -396,6 +396,6 @@ size_t ImageBlocker::getSegmentFromGlobalBlockRow(size_t blockRow) const
     std::ostringstream message;
     message << "Requested block row " << blockRow << ", but this image "
         << "only has " << startBlock << " rows of blocks.";
-    throw except::Exception(Ctxt(message.str()));
+    throw except::Exception(Ctxt(message));
 }
 }

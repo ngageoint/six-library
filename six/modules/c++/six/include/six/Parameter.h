@@ -23,6 +23,8 @@
 #ifndef SIX_six_Parameter_h_INCLUDED_
 #define SIX_six_Parameter_h_INCLUDED_
 
+#include <iostream>
+
 #include <import/str.h>
 
 #include "six/Types.h"
@@ -163,6 +165,19 @@ private:
     std::string mValue;
     std::string mName;
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Parameter& p)
+{
+    os << p.str();
+    return os;
+}
+
+inline std::ostream& out(std::ostream& os, const Parameter& p)
+{
+    os << "    Parameter Name   : " << p.getName() << "\n"
+        << "    Parameter Value  : " << p << "\n";
+    return os;
+}
 
 }
 

@@ -124,7 +124,7 @@ bool PFA::validate(const SCPCOA& scpcoa, logging::Logger& log)
             << "time for center are usuallly the same." << std::endl
             << "PFA.PolarAngRefTime: " << polarAngleRefTime << std::endl
             << "SCPCOA.SCPTime: " << scpcoa.scpTime;
-        log.warn(messageBuilder.str());
+        log.warn(messageBuilder);
         valid = false;
     }
 

@@ -110,7 +110,7 @@ bool GeoData::validate(logging::Logger& log) const
         messageBuilder.str("");
         messageBuilder << "GeoData.SCP.ECF and GeoData.SCP.LLH not consistent.\n"
             << "SICD.GeoData.SCP.ECF - SICD.GeoData.SCP.LLH: " << ecfDiff << " (m)\n";
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         return false;
     }
 

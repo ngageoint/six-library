@@ -260,7 +260,7 @@ bool NITFWriteControl::do_prepareIO(size_t imageDataSize, nitf::IOInterface& out
     {
         std::ostringstream ostr;
         ostr << "Require " << infos.size() << " images, received " << imageDataSize;
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     nitf::Record& record = getRecord();

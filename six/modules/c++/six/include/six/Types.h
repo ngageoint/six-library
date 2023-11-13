@@ -215,7 +215,7 @@ struct Constants
             return 3;
 
         default:
-            throw except::Exception(Ctxt(FmtX("Unknown pixel type [%d]", (int) type)));
+            throw except::Exception(Ctxt(str::Format("Unknown pixel type [%d]", (int) type)));
         }
     }
 

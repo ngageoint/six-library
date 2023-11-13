@@ -70,7 +70,7 @@ struct BufferView
             oss << "BufferView::section() called with sectionSize: " << sectionSize << " when";
             oss << " there were only " << size << " elements in the BufferView";
             
-            throw except::Exception(Ctxt(oss.str()));
+            throw except::Exception(Ctxt(oss));
         } 
 
         BufferView<T> newSection(data, sectionSize);
