@@ -55,7 +55,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription TEST_DES_description[] = {
     {NITF_BCS_N, 2, "Number of data values", "TEST_DES_COUNT" },
     {NITF_BCS_N, 3, "Start value in ramp", "TEST_DES_START" },
     {NITF_BCS_N, 2, "Increment between values in ramp", "TEST_DES_INCREMENT" },
@@ -63,7 +63,7 @@ static nitf_TREDescription description[] = {
 };
 
 
-static const char *ident[] =
+static const char *TEST_DES_ident[] =
 {
     NITF_PLUGIN_TRE_KEY,
     "TEST DES",
@@ -71,24 +71,24 @@ static const char *ident[] =
     NULL
 };
 
-static nitf_TREDescriptionInfo descriptions[] = {
-    { "TEST DES", description, NITF_TRE_DESC_NO_LENGTH },
-    { "TEST_DES", description, NITF_TRE_DESC_NO_LENGTH },
+static nitf_TREDescriptionInfo TEST_DES_descriptions[] = {
+    { "TEST DES", TEST_DES_description, NITF_TRE_DESC_NO_LENGTH },
+    { "TEST_DES", TEST_DES_description, NITF_TRE_DESC_NO_LENGTH },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
 
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet TEST_DES_descriptionSet = { 0, TEST_DES_descriptions };
 static nitf_TREHandler TEST_DESHandler;
 
-NITFAPI(const char**) TEST_DES_init(nitf_Error* error)
+NITF_PLUGIN_FUNCTION_EXPORT(const char**) TEST_DES_init(nitf_Error* error)
 {
-    if (!nitf_TREUtils_createBasicHandler(&descriptionSet,
+    if (!nitf_TREUtils_createBasicHandler(&TEST_DES_descriptionSet,
                                           &TEST_DESHandler,error))
         return NULL;
-    return ident;
+    return TEST_DES_ident;
 }
-NITFAPI(void) TEST_DES_cleanup(void){}
-NITFAPI(nitf_TREHandler*) TEST_DES_handler(nitf_Error* error) {
+NITF_PLUGIN_FUNCTION_EXPORT(void) TEST_DES_cleanup(void){}
+NITF_PLUGIN_FUNCTION_EXPORT(nitf_TREHandler*) TEST_DES_handler(nitf_Error* error) {
     (void)error;
     return &TEST_DESHandler;
 }

@@ -73,7 +73,7 @@ static nitf_TREDescriptionInfo descriptions[] = {
     { "EXPLTA_101", descrip_00101, 101 },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet EXPLTADescriptionSet = { 0, descriptions };
 
 NITF_DECLARE_PLUGIN(EXPLTA)
 

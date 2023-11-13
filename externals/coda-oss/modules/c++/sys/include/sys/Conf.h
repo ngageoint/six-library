@@ -217,9 +217,7 @@ namespace sys
         #error "Don't know how to implement alignedAlloc()."
 #endif
         if (!p)
-            throw except::Exception(Ctxt(
-                "Aligned allocation failure of size [" +
-                str::toString(size) + "] bytes"));
+            throw except::Exception(Ctxt("Aligned allocation failure of size [" + std::to_string(size) + "] bytes"));
         return p;
     }
 

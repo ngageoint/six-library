@@ -258,6 +258,14 @@
     <ClCompile Include="j2k\source\SimpleComponentImpl.c" />
     <ClCompile Include="j2k\source\SimpleContainerImpl.c" />
     <ClCompile Include="jpeg\source\LibjpegDecompress.c" />
+    <ClCompile Include="nitf\shared\ACCHZB.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nitf\shared\HISTOA.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="nitf\source\BandInfo.c" />
     <ClCompile Include="nitf\source\BandSource.c" />
     <ClCompile Include="nitf\source\ComplexityLevel.c" />
@@ -303,6 +311,7 @@
     <ClCompile Include="nitf\source\TRE.c" />
     <ClCompile Include="nitf\source\TRECursor.c" />
     <ClCompile Include="nitf\source\TREPrivateData.c" />
+    <ClCompile Include="nitf\source\TREs.c" />
     <ClCompile Include="nitf\source\TREUtils.c" />
     <ClCompile Include="nitf\source\WriteHandler.c" />
     <ClCompile Include="nrt\source\DateTime.c" />

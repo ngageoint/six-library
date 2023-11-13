@@ -30,7 +30,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription HISTOA_description[] = {
     {NITF_BCS_A, 20, "System Type", "SYSTYPE" },
     {NITF_BCS_A, 12, "Prior Compression", "PC" },
     {NITF_BCS_A, 4, "Prior Enhancements", "PE" },
@@ -124,6 +124,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(HISTOA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(HISTOA)
 
 NITF_CXX_ENDGUARD
