@@ -191,7 +191,7 @@ void BufferViewStream<T>::write(const void* buffer, size_t numBytes)
     {
         std::ostringstream msg;
         msg << "Write of size " << numBytes << " runs out of bounds.";
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
 
     ::memcpy(mBufferView.data + mPosition, buffer, numBytes);

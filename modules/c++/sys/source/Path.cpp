@@ -279,7 +279,7 @@ std::vector<std::string> Path::list(const std::string& path)
         std::ostringstream oss;
         oss << "'" << path
                 << "' does not exist or is not a valid directory";
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
     std::vector<std::string> listing;
     Directory directory;

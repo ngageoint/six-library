@@ -30,6 +30,7 @@
 #endif
 
 #include "highfive/H5Easy.hpp"
+#incldue "highfive/highfive.hpp"
 
 #if _MSC_VER
 #pragma comment(lib, "shlwapi")  // StrStrI()
