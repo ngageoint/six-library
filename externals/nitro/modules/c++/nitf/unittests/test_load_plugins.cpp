@@ -91,7 +91,7 @@ TEST_CASE(test_load_all_TREs)
 
     for (const auto& tre : all_TREs())
     {
-        // TREs are quite the same thing as an arbitrary "plug in;" the underlying
+        // TREs aren't quite the same thing as an arbitrary "plug in;" the underlying
         // infrastructure is all built on shared-libraries/DLLs, but details differ.
         //
         // As a result, we can't expect loadPlugin() will "just work" on a TRE name.
@@ -103,9 +103,10 @@ TEST_CASE(test_load_all_TREs)
         {
             nitf::PluginRegistry::loadPlugin(tre);
         }
-        catch (const nitf::NITFException& ex)
+        catch (const nitf::NITFException&)
         {
-            TEST_FAIL_MSG(ex.toString());
+            // assume this is a pre-loaded plugin
+            retrieveTREHandler(testName, tre.c_str());
         }
         #endif // _WIN32
 

@@ -140,7 +140,7 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
     if (SetFilePointerEx(mHandle, largeInt, &newFilePointer, dwMoveMethod) == 0)
     {
         const auto dwLastError = GetLastError();
-        throw sys::SystemException(Ctxt("SetFilePointer failed: GetLastError() = " + str::toString(dwLastError)));
+        throw sys::SystemException(Ctxt("SetFilePointer failed: GetLastError() = " + std::to_string(dwLastError)));
     }
 
     return static_cast<sys::Off_T>(newFilePointer.QuadPart);

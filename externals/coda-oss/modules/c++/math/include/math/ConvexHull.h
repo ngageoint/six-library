@@ -97,8 +97,7 @@ public:
         {
             throw except::Exception(Ctxt(
                 "ConvexHull constructor error: must use at least 2 input "
-                "points but " + str::toString(rawPoints.size()) +
-                " were used"));
+                "points but " + std::to_string(rawPoints.size()) + " were used"));
         }
 
         // Enforce (at compile time) that T is a signed type
