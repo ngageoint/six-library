@@ -104,9 +104,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
         {
             bc = *bp++;
             if (bc != fc)
-                throw except::Exception(Ctxt(
-                        "Value does not match format (" + str::toString(fc) +
-                        "):  " + str::toString(bc)));
+                throw except::Exception(Ctxt("Value does not match format (" + str::toString(fc) + "):  " + str::toString(bc)));
             continue;
         }
 
@@ -316,7 +314,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
         case 'Y':              // The year.
             i = TM_YEAR_BASE;
             if (!(conv_num(bp, i, 0, 9999)))
-                throw except::Exception(Ctxt("Invalid year: " + str::toString(i)));
+                throw except::Exception(Ctxt("Invalid year: " + std::to_string(i)));
             tm.tm_year = i - TM_YEAR_BASE;
             break;
 

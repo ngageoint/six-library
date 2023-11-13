@@ -1,5 +1,8 @@
 ﻿# coda-oss Release Notes
 
+## [Release 202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+* Update to [HighFive 2.8.0](https://github.com/BlueBrain/HighFive/releases/tag/v2.8.0).
+
 ## [Release 2023-10-23](https://github.com/mdaus/coda-oss/releases/tag/2023-10-23)
 * Tweaked **.gitattributes**.
 * Removed *str::EncodedStringView*; made *str* conversion routines more consistent.

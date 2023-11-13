@@ -64,9 +64,9 @@ TEST_CASE(testBadConvert)
 
 TEST_CASE(testEightBitIntToString)
 {
-    TEST_ASSERT_EQ(str::toString(static_cast<uint8_t>(1)), "1");
-    TEST_ASSERT_EQ(str::toString(static_cast<int8_t>(2)), "2");
-    TEST_ASSERT_EQ(str::toString(static_cast<int8_t>(-2)), "-2");
+    TEST_ASSERT_EQ(std::to_string(static_cast<uint8_t>(1)), "1");
+    TEST_ASSERT_EQ(std::to_string(static_cast<int8_t>(2)), "2");
+    TEST_ASSERT_EQ(std::to_string(static_cast<int8_t>(-2)), "-2");
 }
 
 TEST_CASE(testCharToString)
