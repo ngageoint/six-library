@@ -24,19 +24,12 @@
     <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\span.h" />
-    <ClInclude Include="coda_oss\include\coda_oss\span_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\string.h" />
     <ClInclude Include="coda_oss\include\coda_oss\type_traits.h" />
     <ClInclude Include="config\include\config\compiler_extensions.h" />
     <ClInclude Include="config\include\config\disable_compiler_warnings.h" />
     <ClInclude Include="config\include\config\Exports.h" />
     <ClInclude Include="config\include\config\Version.h" />
-    <ClInclude Include="dbi\include\dbi\DatabaseClientFactory.h" />
-    <ClInclude Include="dbi\include\dbi\DatabaseConnection.h" />
-    <ClInclude Include="dbi\include\dbi\MySQLConnection.h" />
-    <ClInclude Include="dbi\include\dbi\OracleConnection.h" />
-    <ClInclude Include="dbi\include\dbi\PgSQLConnection.h" />
-    <ClInclude Include="dbi\include\import\dbi.h" />
     <ClInclude Include="except\include\except\Backtrace.h" />
     <ClInclude Include="except\include\except\Context.h" />
     <ClInclude Include="except\include\except\Error.h" />
@@ -170,12 +163,14 @@
     <ClInclude Include="mt\include\mt\WorkerThread.h" />
     <ClInclude Include="mt\include\mt\WorkSharingBalancedRunnable1D.h" />
     <ClInclude Include="net.ssl\include\import\net\ssl.h" />
+    <ClInclude Include="net.ssl\include\net\ssl\config.h" />
     <ClInclude Include="net.ssl\include\net\ssl\SSLConnection.h" />
     <ClInclude Include="net.ssl\include\net\ssl\SSLConnectionClientFactory.h" />
     <ClInclude Include="net.ssl\include\net\ssl\SSLExceptions.h" />
     <ClInclude Include="net\include\import\net.h" />
     <ClInclude Include="net\include\net\AllocStrategy.h" />
     <ClInclude Include="net\include\net\ClientSocketFactory.h" />
+    <ClInclude Include="net\include\net\config.h" />
     <ClInclude Include="net\include\net\CurlHandle.h" />
     <ClInclude Include="net\include\net\CurlInit.h" />
     <ClInclude Include="net\include\net\Daemon.h" />
@@ -337,10 +332,6 @@
   <ItemGroup>
     <ClCompile Include="cli\source\Argument.cpp" />
     <ClCompile Include="cli\source\ArgumentParser.cpp" />
-    <ClCompile Include="dbi\source\DatabaseClientFactory.cpp" />
-    <ClCompile Include="dbi\source\MySQLConnection.cpp" />
-    <ClCompile Include="dbi\source\OracleConnection.cpp" />
-    <ClCompile Include="dbi\source\PgSQLConnection.cpp" />
     <ClCompile Include="except\source\Backtrace.cpp" />
     <ClCompile Include="except\source\Context.cpp" />
     <ClCompile Include="except\source\Throwable.cpp" />
@@ -568,9 +559,9 @@
     <ClCompile>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>cli\include;coda_oss\include;config\include;dbi\include;except\include;gsl\include;hdf5.lite\include;io\include;logging\include;math\include;math.linear\include;math.poly\include;mem\include;mt\include;net\include;net.ssl\include;plugin\include;polygon\include;re\include;sio.lite\include;std\include;str\include;sys\include;tiff\include;types\include;unique\include;units\include;xml.lite\include;zip\include;$(ProjectDir)include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>cli\include;coda_oss\include;config\include;except\include;gsl\include;hdf5.lite\include;io\include;logging\include;math\include;math.linear\include;math.poly\include;mem\include;mt\include;net\include;net.ssl\include;plugin\include;polygon\include;re\include;sio.lite\include;std\include;str\include;sys\include;tiff\include;types\include;unique\include;units\include;xml.lite\include;zip\include;$(ProjectDir)include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -584,8 +575,8 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
@@ -602,9 +593,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>cli\include;coda_oss\include;config\include;dbi\include;except\include;gsl\include;hdf5.lite\include;io\include;logging\include;math\include;math.linear\include;math.poly\include;mem\include;mt\include;net\include;net.ssl\include;plugin\include;polygon\include;re\include;sio.lite\include;std\include;str\include;sys\include;tiff\include;types\include;unique\include;units\include;xml.lite\include;zip\include;$(ProjectDir)include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>cli\include;coda_oss\include;config\include;except\include;gsl\include;hdf5.lite\include;io\include;logging\include;math\include;math.linear\include;math.poly\include;mem\include;mt\include;net\include;net.ssl\include;plugin\include;polygon\include;re\include;sio.lite\include;std\include;str\include;sys\include;tiff\include;types\include;unique\include;units\include;xml.lite\include;zip\include;$(ProjectDir)include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -614,8 +605,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>

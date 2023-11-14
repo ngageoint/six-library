@@ -25,7 +25,9 @@
 #define CODA_OSS_xml_lite_xerces_h_INCLUDED_
 
 #include "config/compiler_extensions.h"
-#include <xml/lite/xml_lite_config.h>
+#if !defined(USE_XERCES)
+#define USE_XERCES
+#endif
 
 #if defined(USE_XERCES)
 

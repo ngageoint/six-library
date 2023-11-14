@@ -28,8 +28,11 @@
  // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_numbers
     #if CODA_OSS_cpp20
-       	#include <numbers>
-        #define CODA_OSS_NO_std_numbers 1  // provided by implementation, probably C++20
+        // Some versions of G++ say they're C++20 but don't have <numbers>
+        #if __has_include(<numbers>)
+       	    #include <numbers>
+            #define CODA_OSS_NO_std_numbers 1  // provided by implementation, probably C++20
+	#endif
     #endif 
     #ifndef CODA_OSS_NO_std_numbers
         #define CODA_OSS_NO_std_numbers 0  // <= C++20, use our own
