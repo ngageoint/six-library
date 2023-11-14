@@ -257,31 +257,36 @@ struct SecurityParameterSetter final
             getField().set(p.str());
         }
     }
-    SecurityParameterSetter() = delete;
     SecurityParameterSetter& operator=(const SecurityParameterSetter&) = delete;
+    #if _MSC_VER
+    // doing `= delete` for the default constructor causes the line below not to compile w/C++20
+    #pragma warning(disable: 4623) // '...': default constructor was implicitly defined as deleted
+    #endif
 };
 
 void NITFHeaderCreator::setSecurity(const six::Classification& classification,
                                     nitf::FileSecurity security,
                                     const std::string& prefix)
 {
-    const SecurityParameterSetter setSecurityParameter{ prefix,  classification.fileOptions };
-    setSecurityParameter(NITFImageInfo::CLSY, [&]() { return security.getClassificationSystem(); });
-    setSecurityParameter(NITFImageInfo::CLSY, [&]() { return security.getClassificationSystem(); });
-    setSecurityParameter(NITFImageInfo::CODE, [&]() { return security.getCodewords(); });
-    setSecurityParameter(NITFImageInfo::CTLH, [&]() { return security.getControlAndHandling(); });
-    setSecurityParameter(NITFImageInfo::REL, [&]() { return security.getReleasingInstructions(); });
-    setSecurityParameter(NITFImageInfo::DCTP, [&]() { return security.getDeclassificationType(); });
-    setSecurityParameter(NITFImageInfo::DCDT, [&]() { return security.getDeclassificationDate(); });
-    setSecurityParameter(NITFImageInfo::DCXM, [&]() { return security.getDeclassificationExemption(); });
-    setSecurityParameter(NITFImageInfo::DG, [&]() { return security.getDowngrade(); });
-    setSecurityParameter(NITFImageInfo::DGDT, [&]() { return security.getDowngradeDateTime(); });
-    setSecurityParameter(NITFImageInfo::CLTX, [&]() { return security.getClassificationText(); });
-    setSecurityParameter(NITFImageInfo::CATP, [&]() { return security.getClassificationAuthorityType(); });
-    setSecurityParameter(NITFImageInfo::CAUT, [&]() { return security.getClassificationAuthority(); });
-    setSecurityParameter(NITFImageInfo::CRSN, [&]() { return security.getClassificationReason(); });
-    setSecurityParameter(NITFImageInfo::SRDT, [&]() { return security.getSecuritySourceDate(); });
-    setSecurityParameter(NITFImageInfo::CTLN, [&]() { return security.getSecurityControlNumber(); });
+    const SecurityParameterSetter setSecurityParameter_{ prefix,  classification.fileOptions };
+    #define setSecurityParameter(code_, getter_) \
+        setSecurityParameter_(NITFImageInfo::code_, [&]() { return security.get ## getter_(); })
+    setSecurityParameter(CLSY, ClassificationSystem);
+    setSecurityParameter(CODE, Codewords);
+    setSecurityParameter(CTLH, ControlAndHandling);
+    setSecurityParameter(REL, ReleasingInstructions);
+    setSecurityParameter(DCTP, DeclassificationType);
+    setSecurityParameter(DCDT, DeclassificationDate);
+    setSecurityParameter(DCXM, DeclassificationExemption);
+    setSecurityParameter(DG, Downgrade);
+    setSecurityParameter(DGDT, DowngradeDateTime);
+    setSecurityParameter(CLTX, ClassificationText);
+    setSecurityParameter(CATP, ClassificationAuthorityType);
+    setSecurityParameter(CAUT, ClassificationAuthority);
+    setSecurityParameter(CRSN, ClassificationReason);
+    setSecurityParameter(SRDT, SecuritySourceDate);
+    setSecurityParameter(CTLN, SecurityControlNumber);
+    #undef setSecurityParameter
 
     // Now, do some specific overrides
     if (security.getClassificationSystem().toString().empty())
