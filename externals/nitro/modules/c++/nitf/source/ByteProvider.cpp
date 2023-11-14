@@ -249,18 +249,16 @@ void  ByteProvider::getFileLayout_(const nitf::Record& inRecord,
             {
                 std::ostringstream ostr;
                 ostr << "First image segment had " << mNumCols
-                     << " columns but image segment " << ii << " has "
-                     << numCols;
-                throw except::Exception(Ctxt(ostr.str()));
+                     << " columns but image segment " << ii << " has " << numCols;
+                throw except::Exception(Ctxt(ostr));
             }
 
             if (numBytesPerPixel != mNumBytesPerPixel)
             {
                 std::ostringstream ostr;
                 ostr << "First image segment had " << mNumBytesPerPixel
-                     << " bytes/pxeil but image segment " << ii << " has "
-                     << numBytesPerPixel;
-                throw except::Exception(Ctxt(ostr.str()));
+                     << " bytes/pxeil but image segment " << ii << " has " << numBytesPerPixel;
+                throw except::Exception(Ctxt(ostr));
             }
         }
 
@@ -287,7 +285,7 @@ void  ByteProvider::getFileLayout_(const nitf::Record& inRecord,
         std::ostringstream ostr;
         ostr << "Record has " << numDESs << " DESs but "
              << desData.size() << " DES data was sent in";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     std::vector<size_t> desSubheaderLengths(numDESs);
@@ -415,7 +413,7 @@ void ByteProvider::checkBlocking(size_t seg,
             ostr << "Trying to write starting at segment " << seg
                  << "'s row " << segStartRowToWrite
                  << " which is not a multiple of " << numRowsPerBlock;
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
 
         // Need to end on a block boundary or the end of the segment
@@ -429,7 +427,7 @@ void ByteProvider::checkBlocking(size_t seg,
                  << " which is not a multiple of " << numRowsPerBlock
                  << " (segment has start = " << imageSegmentInfo.firstRow
                  << ", num = " << imageSegmentInfo.numRows << ")";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
     }
 }

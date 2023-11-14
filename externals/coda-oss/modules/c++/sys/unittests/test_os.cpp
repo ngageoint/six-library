@@ -350,7 +350,7 @@ TEST_CASE(testSpecialEnvVars)
     result = os.getSpecialEnv("$"); // i.e., ${$}
     TEST_ASSERT_FALSE(result.empty());
     TEST_ASSERT_EQ(result, pid);
-    const auto strPid = str::toString(os.getProcessId());
+    const auto strPid = std::to_string(os.getProcessId());
     TEST_ASSERT_EQ(result, strPid);
 
     result = os.getSpecialEnv("PWD");

@@ -107,9 +107,8 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
         if (idx + 3 >= geoVals.size())
         {
             throw except::Exception(Ctxt(
-                "'GeoKeyDirectoryTag' specified " +
-                str::toString(numKeys) + " keys but the IFD entry only had " +
-                str::toString(geoVals.size()) + " values"));
+                "'GeoKeyDirectoryTag' specified " + 
+                std::to_string(numKeys) + " keys but the IFD entry only had " + std::to_string(geoVals.size()) + " values"));
         }
 
         const unsigned short keyId =
@@ -144,8 +143,7 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
         {
             if (count != 1)
             {
-                throw except::Exception(Ctxt(
-                    "Expected a count of 1 but got " + str::toString(count)));
+                throw except::Exception(Ctxt("Expected a count of 1 but got " + std::to_string(count)));
             }
 
             entry->addValue(new tiff::GenericType<unsigned short>(valueStr));

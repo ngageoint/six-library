@@ -219,7 +219,7 @@ nitf_Field& TRE::nitf_TRE_getField(const std::string& tag) const
     {
         std::ostringstream msg;
         msg << tag << " is not a recognized field for this TRE";
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
     return *field;
 }

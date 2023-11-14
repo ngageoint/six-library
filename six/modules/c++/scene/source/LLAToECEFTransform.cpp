@@ -53,7 +53,7 @@ scene::Vector3 scene::LLAToECEFTransform::transform(const LatLonAlt& lla) const
 	str << ", alt=";
 	str << lla.getAlt();
 
-	throw except::InvalidFormatException(str.str());
+	throw except::InvalidFormatException(Ctxt(str));
     }
 
     //do conversion here; store result in ecef struct

@@ -67,7 +67,7 @@ size_t NITFBufferList::getNumBytesInBlock(
         std::ostringstream ostr;
         ostr << "Block index " << blockIdx << " is out of bounds - only "
              << numBlocks << " blocks with a block size of " << blockSize;
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     const size_t numBytes = (blockIdx == numBlocks - 1) ?

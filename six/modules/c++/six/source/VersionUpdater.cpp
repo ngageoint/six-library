@@ -44,7 +44,7 @@ void VersionUpdater::validateTargetVersion() const
     {
         std::ostringstream msg;
         msg << "Unrecognized version: " << mTarget;
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
 
     const auto currentIt = std::find(mVersions.begin(), mVersions.end(),
@@ -54,7 +54,7 @@ void VersionUpdater::validateTargetVersion() const
         std::ostringstream msg;
         msg << "Target version <" << mTarget << "> must be later than "
             << "current version <" << mData.getVersion() << ">";
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
 }
 
@@ -103,7 +103,7 @@ void VersionUpdater::emitWarning(const std::string& fieldName)
     }
     std::ostringstream msg;
     msg << "  - " << fieldName;
-    mLog.warn(msg.str());
+    mLog.warn(msg);
 
     addProcessingParameter(fieldName);
 }

@@ -52,6 +52,7 @@ coda_add_module(
         source/StreamIOWriteHandler.c
         source/SubWindow.c
         source/TRE.c
+        source/TREs.c
         source/TRECursor.c
         source/TREPrivateData.c
         source/TREUtils.c

@@ -258,12 +258,12 @@ void DaemonUnix::redirectStreamsTo(const std::string& filename)
     if (openFileFor(STDOUT_FILENO, filename, O_WRONLY|O_CREAT|O_TRUNC) < 0)
     {
         throw except::Exception(
-            Ctxt(str::Format("Failed to open file %s for STDOUT.", filename.c_str())));
+            Ctxt(str::Format("Failed to open file %s for STDOUT.", filename)));
     }
     if (openFileFor(STDERR_FILENO, filename, O_WRONLY|O_CREAT|O_TRUNC) < 0)
     {
         throw except::Exception(
-            Ctxt(str::Format("Failed to open file %s for STDERR.", filename.c_str())));
+            Ctxt(str::Format("Failed to open file %s for STDERR.", filename)));
     }
 }
 

@@ -183,7 +183,7 @@ ValidatorXerces::ValidatorXerces(
         {
             std::ostringstream oss;
             oss << "Error: Failure to load schema " << schema;
-            log->warn(Ctxt(oss.str()));
+            log->warn(Ctxt(oss));
         }
     }
 
