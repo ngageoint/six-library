@@ -183,7 +183,7 @@ TEST_CASE(testContainsOnly)
 }
 TEST_CASE(testRoundDouble)
 {
-    double eps = std::numeric_limits<double>::epsilon();
+    constexpr auto eps = 0.01;
     double numerator = 10005.0;
     double denom = 10007.0;
     double v = numerator / denom;

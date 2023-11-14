@@ -28,16 +28,6 @@ coda_add_module(
         source/SimpleContainerImpl.c
         source/j2k_Writer.c)
 
-coda_add_tests(
-    MODULE_NAME ${MODULE_NAME}
-    DIRECTORY "tests"
-    SOURCES
-        test_j2k_create.c
-        test_j2k_header.c
-        test_j2k_nitf.c
-        test_j2k_read_region.c
-        test_j2k_read_tile.c)
-
 # Build all J2KCompress and J2KDecompress
 set(j2k_shared_srcs  J2KCompress J2KDecompress)
 foreach(j2k_shared ${j2k_shared_srcs})

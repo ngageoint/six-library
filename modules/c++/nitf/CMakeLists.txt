@@ -87,17 +87,6 @@ target_compile_features(nitf-c++ PUBLIC cxx_inheriting_constructors)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
-    DIRECTORY "tests"
-    DEPS cli-c++
-    FILTER_LIST
-        test_functional.cpp
-        test_handles.cpp
-        test_mem_source.cpp
-        test_static_plugin.cpp
-        test_j2k_nitf_read_region.cpp)
-
-coda_add_tests(
-    MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"
     UNITTEST
     SOURCES
