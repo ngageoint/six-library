@@ -257,7 +257,6 @@ struct SecurityParameterSetter final
             getField().set(p.str());
         }
     }
-    SecurityParameterSetter() = delete;
     SecurityParameterSetter& operator=(const SecurityParameterSetter&) = delete;
 };
 
@@ -266,7 +265,6 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
                                     const std::string& prefix)
 {
     const SecurityParameterSetter setSecurityParameter{ prefix,  classification.fileOptions };
-    setSecurityParameter(NITFImageInfo::CLSY, [&]() { return security.getClassificationSystem(); });
     setSecurityParameter(NITFImageInfo::CLSY, [&]() { return security.getClassificationSystem(); });
     setSecurityParameter(NITFImageInfo::CODE, [&]() { return security.getCodewords(); });
     setSecurityParameter(NITFImageInfo::CTLH, [&]() { return security.getControlAndHandling(); });
