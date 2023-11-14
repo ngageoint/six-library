@@ -257,8 +257,11 @@ struct SecurityParameterSetter final
             getField().set(p.str());
         }
     }
-    SecurityParameterSetter() = delete;
     SecurityParameterSetter& operator=(const SecurityParameterSetter&) = delete;
+    #if _MSC_VER
+    // doing `= delete` for the default constructor causes the line below not to compile w/C++20
+    #pragma warning(disable: 4623) // '...': default constructor was implicitly defined as deleted
+    #endif
 };
 
 void NITFHeaderCreator::setSecurity(const six::Classification& classification,
@@ -266,7 +269,6 @@ void NITFHeaderCreator::setSecurity(const six::Classification& classification,
                                     const std::string& prefix)
 {
     const SecurityParameterSetter setSecurityParameter{ prefix,  classification.fileOptions };
-    setSecurityParameter(NITFImageInfo::CLSY, [&]() { return security.getClassificationSystem(); });
     setSecurityParameter(NITFImageInfo::CLSY, [&]() { return security.getClassificationSystem(); });
     setSecurityParameter(NITFImageInfo::CODE, [&]() { return security.getCodewords(); });
     setSecurityParameter(NITFImageInfo::CTLH, [&]() { return security.getControlAndHandling(); });
