@@ -63,7 +63,7 @@ std::string toString_(const T& value)
     return buf.str();
 }
 template <typename T>
-inline auto toString(const T& value)
+inline std::string toString(const T& value)
 {
     return toString_(value);
 }
@@ -105,6 +105,7 @@ inline auto toString(long double value)
 {
     return toString_(value);
 }
+
 inline std::string toString(uint8_t value)
 {
     return toString(gsl::narrow<unsigned int>(value));
