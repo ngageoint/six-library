@@ -258,6 +258,10 @@ struct SecurityParameterSetter final
         }
     }
     SecurityParameterSetter& operator=(const SecurityParameterSetter&) = delete;
+    #if _MSC_VER
+    // doing `= delete` for the default constructor causes the line below not to compile w/C++20
+    #pragma warning(disable: 4623) // '...': default constructor was implicitly defined as deleted
+    #endif
 };
 
 void NITFHeaderCreator::setSecurity(const six::Classification& classification,
