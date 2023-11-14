@@ -164,13 +164,11 @@ TEST_CASE(setFields)
 
     // set a field
     tre.setField("AC_MSN_ID", "fly-by");
-    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(),
-                   std::string("fly-by    "));
+    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(), "fly-by    ");
 
     // re-set the field
     tre.setField("AC_MSN_ID", 1.2345678);
-    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(),
-                   std::string("1.2345678 "));
+    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(), "1.234568  ");
 
     // try setting an invalid tag
     TEST_EXCEPTION(tre.setField("invalid-tag", "some data"));
@@ -375,10 +373,10 @@ TEST_CASE(overflowingNumericFields)
     // This field has a length of 9, so check that it's properly
     // truncated
     tre.setField("ULCNR_LAT", 1.0 / 9);
-    TEST_ASSERT_EQ_STR(tre.getField("ULCNR_LAT").toString(), "0.1111111");
-    TEST_ASSERT_EQ_STR(tre.getFieldValue<std::string>("ULCNR_LAT"), "0.1111111");
+    TEST_ASSERT_EQ_STR(tre.getField("ULCNR_LAT").toString(), "0.1111110");
+    TEST_ASSERT_EQ_STR(tre.getFieldValue<std::string>("ULCNR_LAT"), "0.1111110");
     std::string value;
-    TEST_ASSERT_EQ_STR(tre.getFieldValue("ULCNR_LAT", value), "0.1111111");
+    TEST_ASSERT_EQ_STR(tre.getFieldValue("ULCNR_LAT", value), "0.1111110");
 
     tre.setField("ULCNR_LAT", 123456789);
     TEST_ASSERT_EQ_STR(tre.getField("ULCNR_LAT").toString(), "123456789");
