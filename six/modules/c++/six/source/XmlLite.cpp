@@ -181,7 +181,7 @@ static std::string toString(const xml::lite::QName& name, const T& p, const xml:
 {
     try
     {
-        return str::toString(p);
+        return six::toString(p);
     }
     catch (const except::Exception& ex)
     {
