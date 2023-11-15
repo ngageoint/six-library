@@ -77,8 +77,8 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
@@ -103,8 +103,8 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>

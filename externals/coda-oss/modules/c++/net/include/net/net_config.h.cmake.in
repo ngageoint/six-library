@@ -1,7 +1,6 @@
 #ifndef _@tgt_munged_name@_CONFIG_H_
 #define _@tgt_munged_name@_CONFIG_H_
 
-#cmakedefine HAVE_CURL @HAVE_CURL@
 #cmakedefine NET_CURL_SUPPORT @NET_CURL_SUPPORT@
 
 #endif /* _@tgt_munged_name@_CONFIG_H_ */
