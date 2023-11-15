@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include "nitf/PluginRegistry.h"
 
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error, FILE* log);
@@ -967,15 +969,21 @@ insertCreator(nitf_DLL* dso,
     return nitf_HashTable_insert(hash, ident, (NITF_DATA*)dsoMain, error);
 }
 
-/*
- *  Function is now greatly simplified.  We only retrieve TREs from
- *  the hash table.  If they are there, we are good, if not fail
- *
- *  No more talking to the DSOs directly
- */
-static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
+// Somebody might want to use a different set of preloadedTREs, or we might even want multiple
+// sets of preloaded TREs.  There's nothing to support either of those right now, but it's easy enough
+// to put the infrastructure in place to make it easy to hook-up.
+extern nitf_TREPreloaded defaultPreloadedTREs[];
+static nitf_TREPreloaded* findPreloadedTRE_(nitf_TREPreloaded preloadedTREs[], const char* keyName)
 {
-    extern const nitf_TREPreloaded preloadedTREs[];
+    if (preloadedTREs == NULL)
+    {
+        return NULL;
+    }
+    if (keyName == NULL)
+    {
+        return NULL;
+    }
+
     for (size_t i = 0;; i++)
     {
         const char* pKeyName = preloadedTREs[i].name;
@@ -988,6 +996,56 @@ static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
             return &(preloadedTREs[i]);
         }
     }
+}
+static const nitf_TREPreloaded* findPreloadedTRE(nitf_TREPreloaded preloadedTREs[], const char* keyName)
+{
+    const nitf_TREPreloaded* retval = findPreloadedTRE_(preloadedTREs, keyName);
+    if ((retval != NULL) && (retval->enabled))
+    {
+        return retval;
+    }
+    return NULL;
+}
+
+static NITF_BOOL PreloadedTREHandlerEnable(nitf_TREPreloaded preloadedTREs[],
+    const char* keyName, NITF_BOOL enable)
+{
+    nitf_TREPreloaded* result = findPreloadedTRE_(preloadedTREs, keyName);
+    if (result != NULL)
+    {
+        result->enabled = enable;
+        return NRT_TRUE;
+    }
+    return NRT_FALSE;
+}
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_PreloadedTREHandlerEnable(const char* keyName, NITF_BOOL enable)
+{
+    return PreloadedTREHandlerEnable(defaultPreloadedTREs, keyName, enable);
+}
+
+static void preloadedTREHandlersEnable(nitf_TREPreloaded preloadedTREs[], NITF_BOOL enable)
+{
+    if (preloadedTREs == NULL)
+    {
+        return;
+    }
+
+    for (size_t i = 0;; i++)
+    {
+        const char* pKeyName = preloadedTREs[i].name;
+        if (pKeyName == NULL) // end of list
+        {
+            return;
+        }
+
+        preloadedTREs[i].enabled = enable;
+    }
+}
+NITFAPI(void)
+nitf_PluginRegistry_PreloadedTREHandlersEnable(NITF_BOOL enable)
+{
+    preloadedTREHandlersEnable(defaultPreloadedTREs, enable);
 }
 
 /*
@@ -1006,7 +1064,8 @@ static const char** preload_doInit(NITF_PLUGIN_INIT_FUNCTION init, const char* p
     return ident;
 }
 
-static NRT_BOOL preloadTRE(const char* keyName, nitf_Error* error)
+static NRT_BOOL preloadTRE(nitf_TREPreloaded preloadedTREs[],
+    const char* keyName, nitf_Error* error)
 {
     const char** ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
@@ -1020,7 +1079,7 @@ static NRT_BOOL preloadTRE(const char* keyName, nitf_Error* error)
     dll->lib = NULL; // not a real DLL
     dll->dsoMain = NULL; // filled in after successful findPreloadedTRE()
 
-    const nitf_TREPreloaded* plugin = findPreloadedTRE(keyName);
+    const nitf_TREPreloaded* plugin = findPreloadedTRE(preloadedTREs, keyName);
     if (plugin == NULL)
     {
         return NITF_FAILURE;
@@ -1069,10 +1128,10 @@ nitf_PluginRegistry_retrieveTREHandler_(nitf_PluginRegistry* reg,
     return theHandler;
 }
 
-static nitf_TREHandler* retrievePreloadedTREHandler(nitf_PluginRegistry* reg, const char* treIdent,
-    int* hadError, nitf_Error* error)
+static nitf_TREHandler* retrievePreloadedTREHandler(nitf_TREPreloaded preloadedTREs[], 
+    nitf_PluginRegistry* reg, const char* treIdent, int* hadError, nitf_Error* error)
 {
-    if (!preloadTRE(treIdent, error))
+    if (!preloadTRE(preloadedTREs, treIdent, error))
     {
         *hadError = 1;
         return NULL;
@@ -1082,30 +1141,39 @@ static nitf_TREHandler* retrievePreloadedTREHandler(nitf_PluginRegistry* reg, co
     return nitf_PluginRegistry_retrieveTREHandler_(reg, treIdent, hadError, error);
 }
 
+static nitf_TREHandler* retrieveTREHandler(nitf_TREPreloaded preloadedTREs[],
+    nitf_PluginRegistry* reg, const char* treIdent, int* hadError, nitf_Error* error)
+{
+    nitf_TREHandler* handler = nitf_PluginRegistry_retrieveTREHandler_(reg, treIdent, hadError, error);
+    if (*hadError)
+    {
+        // Got an error; try a preloaded TRE.
+        *hadError = 0;
+        return retrievePreloadedTREHandler(preloadedTREs, reg, treIdent, hadError, error);
+    }
+
+    // Normally, a NULL handler is **not** an error ...
+    if (handler == NULL)
+    {
+        // ... but, if we can use a pre-loaded TRE, go with that.
+        int bad = 0; // retrievePreloadedTREHandler() might cause an error
+        nitf_TREHandler* preloadedHandler = retrievePreloadedTREHandler(preloadedTREs, reg, treIdent, &bad, error);
+        if (!bad)
+        {
+            // no error, go with the pre-loaded handler
+            assert(preloadedHandler != NULL); // I supposed this *could* be NULL, but why?  It makes no sense to preload a default handler.
+            return preloadedHandler; 
+        }
+    }
+    return handler;
+}
 NITFPROT(nitf_TREHandler*)
 nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
                                        const char* treIdent,
                                        int* hadError,
                                        nitf_Error* error)
 {
-    nitf_TREHandler* handler = nitf_PluginRegistry_retrieveTREHandler_(reg, treIdent, hadError, error);
-
-    if (*hadError)
-    {
-        *hadError = 0;
-        return retrievePreloadedTREHandler(reg, treIdent, hadError, error);
-    }
-
-    // Normally, a NULL handler is **not** an error.
-    if (handler == NULL)
-    {
-        int bad = 0;
-        nitf_TREHandler* preloadedHandler = retrievePreloadedTREHandler(reg, treIdent, &bad, error);
-        if (!bad)
-            return preloadedHandler;
-    }
-
-    return handler;
+    return retrieveTREHandler(defaultPreloadedTREs, reg, treIdent, hadError, error);
 }
 
 NITFPROT(nitf_CompressionInterface*)
