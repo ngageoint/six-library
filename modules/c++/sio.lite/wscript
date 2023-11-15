@@ -1,8 +1,0 @@
-NAME            = 'sio.lite'
-VERSION         = '1.0'
-MODULE_DEPS     = 'sys io types'
-
-options = configure = distclean = lambda p: None
-
-def build(bld):
-    bld.module(**globals())

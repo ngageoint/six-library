@@ -40,7 +40,9 @@
 #include <io/OutputStream.h>
 #include <io/InputStream.h>
 
-#include <xml/lite/xml_lite_config.h>
+#if !defined(USE_XERCES)
+#define USE_XERCES
+#endif
 #if defined(USE_XERCES)
 #include "xerces_.h"
 
