@@ -26,6 +26,7 @@
 #include <str/Manip.h>
 #include <sys/OS.h>
 
+#include <nitf/PluginRegistry.h>
 #include <nitf/TRE.hpp>
 #include <nitf/UnitTests.hpp>
 
@@ -58,7 +59,7 @@
 
 #include "nitf/TRE.hpp"
 #include "nitf/exports.hpp"
-#include "nitf/TREField.hpp"
+#include "nitf/TREsTyped.hpp"
 
 // A sample "strongly-typed" TRE.  There are too many TREs (and too much unwillingness to change) to
 // actually hook this up.  But it's kind of neat code that I don't want to lose.
@@ -159,7 +160,7 @@ struct /*namespace*/ TREs
 
 TEST_CASE(setFields)
 {
-    // create an ACFTA TRE
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ACFTA", NRT_TRUE) );
     nitf::TRE tre("ACFTA");
 
     // set a field
@@ -176,6 +177,7 @@ TEST_CASE(setFields)
 
 TEST_CASE(setBinaryFields)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("RPFHDR", NRT_TRUE) );
     nitf::TRE tre("RPFHDR");
     const int value = 123;
     tre.setField("LOCSEC", value);
@@ -187,6 +189,7 @@ TEST_CASE(setBinaryFields)
 
 TEST_CASE(cloneTRE)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("JITCID", NRT_TRUE) );
     nitf::TRE tre("JITCID");
     tre.setField("FILCMT", "fyi");
 
@@ -200,6 +203,7 @@ TEST_CASE(cloneTRE)
 
 TEST_CASE(basicIteration)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ACCPOB", NRT_TRUE) );
     nitf::TRE tre("ACCPOB");
 
     // The entire TRE is one loop, and we haven't told it
@@ -225,8 +229,47 @@ TEST_CASE(basicIteration)
     TEST_ASSERT_EQ(numFields, static_cast<size_t>(29));
 }
 
+static void test_des_(const std::string& testName, nitf::TRE& des, const std::string& prefix)
+{
+    des.setField(prefix + "COUNT", 12);
+    des.setField(prefix + "START", 345);
+    des.setField(prefix + "INCREMENT", 67);
+
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "COUNT"), 12);
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "START"), 345);
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "INCREMENT"), 67);
+}
+TEST_CASE(use_TEST_DES)
+{
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("TEST_PRELOADED_DES", NRT_TRUE) );
+    nitf::TRE preloaded("TEST_PRELOADED_DES", "TEST_PRELOADED_DES");
+    test_des_(testName, preloaded, "");
+
+    nitf::TREs::TEST_PRELOADED_DES test_preloaded_des;
+    test_preloaded_des.COUNT = 12;
+    test_preloaded_des.START = 345;
+    test_preloaded_des.INCREMENT = 67;
+    TEST_ASSERT_EQ(test_preloaded_des.COUNT, 12);
+    TEST_ASSERT_EQ(test_preloaded_des.START, 345);
+    TEST_ASSERT_EQ(test_preloaded_des.INCREMENT, 67);
+
+    /***********************************************************/
+
+    nitf::TRE des("TEST_DES", "TEST_DES");
+    test_des_(testName, des, "TEST_DES_");
+
+    nitf::TREs::TEST_DES test_des;
+    test_des.TEST_DES_COUNT = 12;
+    test_des.TEST_DES_START = 345;
+    test_des.TEST_DES_INCREMENT = 67;
+    TEST_ASSERT_EQ(test_des.TEST_DES_COUNT, 12);
+    TEST_ASSERT_EQ(test_des.TEST_DES_START, 345);
+    TEST_ASSERT_EQ(test_des.TEST_DES_INCREMENT, 67);
+}
+
 TEST_CASE(use_ENGRDA)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ENGRDA", NRT_TRUE) );
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.setField("RESRC", "HSS");
@@ -251,6 +294,7 @@ TEST_CASE(use_ENGRDA)
 
 TEST_CASE(use_ENGRDA_typed_fields)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ENGRDA", NRT_TRUE) );
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     nitf::TREField_BCS_A<20> RESRC(engrda, "RESRC");
@@ -283,6 +327,7 @@ TEST_CASE(use_ENGRDA_typed_fields)
 
 TEST_CASE(use_typed_ENGRDA)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ENGRDA", NRT_TRUE) );
     TREs::ENGRDA engrda; // nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
@@ -331,6 +376,7 @@ TEST_CASE(use_typed_ENGRDA)
 
 TEST_CASE(use_CSEXRB_typed_fields)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("CSEXRB", NRT_TRUE) );
     nitf::TRE tre("CSEXRB", "CSEXRB");
 
     constexpr auto length = 12;
@@ -344,6 +390,7 @@ TEST_CASE(use_CSEXRB_typed_fields)
 
 TEST_CASE(populateWhileIterating)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ACCPOB", NRT_TRUE) );
     nitf::TRE tre("ACCPOB");
     size_t numFields = 0;
     for (auto it = tre.begin(); it != tre.end(); ++it)
@@ -368,6 +415,7 @@ TEST_CASE(populateWhileIterating)
 
 TEST_CASE(overflowingNumericFields)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("CSCRNA", NRT_TRUE) );
     nitf::TRE tre("CSCRNA");
 
     // This field has a length of 9, so check that it's properly
@@ -396,12 +444,14 @@ TEST_CASE(overflowingNumericFields)
 }
 
 TEST_MAIN(
+    // must be set before making any NITRO calls
     nitf::Test::setNitfPluginPath();
 
     TEST_CHECK(setFields);
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
+    TEST_CHECK(use_TEST_DES);
     TEST_CHECK(use_ENGRDA);
     TEST_CHECK(use_ENGRDA_typed_fields);
     TEST_CHECK(use_typed_ENGRDA);

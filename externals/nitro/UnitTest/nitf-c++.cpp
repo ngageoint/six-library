@@ -8,7 +8,7 @@
 
 #include <import/nitf.hpp>
 #include <nitf/UnitTests.hpp>
-#include <nitf/TREField.hpp>
+#include <nitf/TREsTyped.hpp>
 #include <nitf/TestingTest.hpp>
 #include <nitf/J2KReader.hpp>
 #include <nitf/J2KWriter.hpp>

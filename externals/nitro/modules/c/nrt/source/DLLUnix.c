@@ -127,7 +127,7 @@ NRTAPI(NRT_DLL_FUNCTION_PTR) nrt_DLL_retrieve(nrt_DLL * dll,
     // This might be a "preloaded" TRE
     if (dll->dsoMain)
     {
-        const char* underscore = strchr(function, '_');
+        const char* underscore = strrchr(function, '_');
         if ((underscore != NULL) && strcmp(underscore, "_handler") == 0)
         {
             return dll->dsoMain;
