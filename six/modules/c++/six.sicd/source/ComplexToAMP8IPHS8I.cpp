@@ -143,7 +143,7 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
     const auto p1 = GetPhase(Utilities::toComplex(1, 1, pAmplitudeTable));
     assert(p0 == 0.0);
     assert(p1 > p0);
-    phase_delta = p1 - p0;
+    phase_delta = gsl::narrow_cast<float>(p1 - p0);
     size_t i = 0;
     for(const auto value : six::sicd::Utilities::iota_0_256())
     {

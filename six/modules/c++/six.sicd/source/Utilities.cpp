@@ -97,7 +97,7 @@ static auto toComplex_(double A, uint8_t phase)
     const auto angle = units::Radians<double>{ 2 * std::numbers::pi * P };
     double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
-    six::zfloat S(A * cos_angle, A * sin_angle);
+    six::zfloat S(gsl::narrow_cast<float>(A * cos_angle), gsl::narrow_cast<float>(A * sin_angle));
     return S;
 }
 six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)

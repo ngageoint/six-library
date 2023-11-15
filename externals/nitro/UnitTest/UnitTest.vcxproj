@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)modules\c\nrt\include;$(SolutionDir)modules\c\nitf\include;$(SolutionDir)modules\c++\nitf\include;$(SolutionDir)modules\c\j2k\include;$(SolutionDir)modules\c;$(SolutionDir)modules\c++;$(SolutionDir)externals\coda-oss\modules\c++;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -261,9 +261,6 @@
     </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf\ENGRDA.vcxproj">
-      <Project>{53f9f908-c678-4dee-9309-e71c1e03a45f}</Project>
     </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf\XML_DATA_CONTENT.vcxproj">
       <Project>{78849481-d356-4cc7-b182-31c21f857ed1}</Project>
