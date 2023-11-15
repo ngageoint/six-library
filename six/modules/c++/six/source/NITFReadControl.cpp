@@ -237,7 +237,7 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
     {
         std::ostringstream ostr;
         ostr << "Expected [" << expectedBytesPerPixel << "] bytes per pixel, found [" << foundBytesPerPixel << "]";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     const auto numCols = info.getData()->getNumCols();
@@ -246,7 +246,7 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
     {
         std::ostringstream ostr;
         ostr << "Invalid column width: was expecting [" << numCols << "], got [" << numColsSubheader << "]";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 }
 
@@ -538,7 +538,7 @@ public:
         Parameter p = parameter.toString();
         const auto k = NITFImageInfo::generateFieldKey(field, prefix_);
         options_.setParameter(k, p);
-        log_.debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
+        log_.debug(Ctxt(str::Format("Added NITF security option: [%s]->[%s]", k,
             static_cast<const char*>(p))));
     }
 };
@@ -664,10 +664,10 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]", numRowsReq)));
+        throw except::Exception(Ctxt(str::Format("Too many rows requested [%d]", numRowsReq)));
 
     if (extentCols > numColsTotal || startCol > numColsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many cols requested [%d]", numColsReq)));
+        throw except::Exception(Ctxt(str::Format("Too many cols requested [%d]", numColsReq)));
 
     // Allocate one band
     uint32_t bandList(0);

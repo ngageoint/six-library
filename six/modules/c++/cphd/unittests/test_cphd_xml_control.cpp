@@ -893,7 +893,7 @@ std::string testCPHDXML_(cphd::Version version)
 }
 std::u8string testCPHDXML(cphd::Version version)
 {
-    return str::u8FromString(testCPHDXML_(version));
+    return str::u8FromNative(testCPHDXML_(version));
 }
 
 void runTest(const std::string& testName, cphd::Version version)

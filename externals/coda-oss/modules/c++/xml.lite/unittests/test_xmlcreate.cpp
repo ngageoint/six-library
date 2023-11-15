@@ -115,11 +115,11 @@ TEST_CASE(testXmlCreateWhitespace)
     xml::lite::MinidomParser xmlParser;
     auto& document = getDocument(xmlParser);
 
-    const auto text = str::u8FromString("     ");
+    const auto text = str::u8FromNative("     ");
     auto documents_ = document.createElement(xml::lite::QName(""_u, "text"), text);
     auto& documents = *documents_;
-    auto strXml = str::u8FromString(print(documents));
-    const auto expected = str::u8FromString("<text>") + text + str::u8FromString("</text>");
+    auto strXml = str::u8FromNative(print(documents));
+    const auto expected = str::u8FromNative("<text>") + text + str::u8FromNative("</text>");
     TEST_ASSERT(strXml == expected);
 
     {

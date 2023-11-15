@@ -30,7 +30,7 @@ std::ostream& operator<< (std::ostream& os, const GeoInfo& g)
         << "  Name             : " << g.name << "\n";
     for (size_t ii = 0; ii < g.desc.size(); ++ii)
     {
-        os << "  Description      : " << g.desc[ii].getName() << ": " << g.desc[ii].str() << "\n";
+        os << "  Description      : " << g.desc[ii].getName() << ": " << g.desc[ii] << "\n";
     }
     if (g.geometryLatLon.size() == 1)
     {

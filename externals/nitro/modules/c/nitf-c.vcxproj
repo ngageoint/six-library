@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);HAVE_OPENJPEG_H</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -65,10 +65,10 @@
       <SupportJustMyCode>true</SupportJustMyCode>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>false</ExceptionHandling>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -94,7 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>false</ExceptionHandling>
+      <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
@@ -259,6 +259,14 @@
     <ClCompile Include="j2k\source\SimpleComponentImpl.c" />
     <ClCompile Include="j2k\source\SimpleContainerImpl.c" />
     <ClCompile Include="jpeg\source\LibjpegDecompress.c" />
+    <ClCompile Include="nitf\shared\ACCHZB.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nitf\shared\HISTOA.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="nitf\source\BandInfo.c" />
     <ClCompile Include="nitf\source\BandSource.c" />
     <ClCompile Include="nitf\source\ComplexityLevel.c" />
@@ -304,6 +312,7 @@
     <ClCompile Include="nitf\source\TRE.c" />
     <ClCompile Include="nitf\source\TRECursor.c" />
     <ClCompile Include="nitf\source\TREPrivateData.c" />
+    <ClCompile Include="nitf\source\TREs.c" />
     <ClCompile Include="nitf\source\TREUtils.c" />
     <ClCompile Include="nitf\source\WriteHandler.c" />
     <ClCompile Include="nrt\source\DateTime.c" />

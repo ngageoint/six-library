@@ -23,6 +23,7 @@
 #define CODA_OSS_std_span_INCLUDED_
 
 #include "coda_oss/span.h"
+#include "coda_oss/CPlusPlus.h"
 
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_span
@@ -46,5 +47,51 @@ namespace std // This is slightly uncouth: we're not supposed to augment "std".
 #endif
 
 #endif  // CODA_OSS_NO_std_span
+
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_nonmember_container_access
+    // https://en.cppreference.com/w/cpp/feature_test#cpp_lib_nonmember_container_access
+    #if defined(__cpp_lib_nonmember_container_access) && (__cpp_lib_nonmember_container_access >= 201411L)
+        #define CODA_OSS_NO_nonmember_container_access 1  // no need to muck with `std`
+    #else
+        // It seems MSVC has this even at C++14, see <xutility>
+        // https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+        #if _MSC_VER >= 1900 // Visual Studio 2015 (14.0)
+            #define CODA_OSS_NO_nonmember_container_access 1  // no need to muck with `std`
+        #else
+            #define CODA_OSS_NO_nonmember_container_access 0  // use our own
+        #endif
+    #endif
+#endif
+
+#if !CODA_OSS_NO_nonmember_container_access
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::size;
+}
+#ifndef __cpp_lib_nonmember_container_access
+#define __cpp_lib_nonmember_container_access 201411L // https://en.cppreference.com/w/cpp/feature_test
+#endif
+#endif // CODA_OSS_NO_nonmember_container_access
+
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_std_ssize
+    // https://en.cppreference.com/w/cpp/feature_test#cpp_lib_ssize
+    #if defined(__cpp_lib_ssize) && (__cpp_lib_ssize >= 201902L)
+        #define CODA_OSS_NO_std_ssize 1  // no need to muck with `std`
+    #else
+        #define CODA_OSS_NO_std_ssize 0  // use our own
+    #endif
+#endif
+
+#if !CODA_OSS_NO_std_ssize
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::ssize;
+}
+#ifndef __cpp_lib_ssize
+#define __cpp_lib_ssize 201902L // https://en.cppreference.com/w/cpp/feature_test
+#endif
+#endif  // CODA_OSS_NO_std_ssize
 
 #endif  // CODA_OSS_std_span_INCLUDED_

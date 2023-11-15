@@ -386,14 +386,14 @@ int main(int argc, char** argv)
         writer.setLogger(log);
         writer.save(buffers.get(), outputFile, schemaPaths);
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
         return 1;
     }
     catch (...)

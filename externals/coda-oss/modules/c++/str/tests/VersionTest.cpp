@@ -23,17 +23,15 @@
 #include <iostream>
 #include <import/str.h>
 
-#define FORMAT_FUNC str::Format
-
 int main()
 {
-    std::cout << FORMAT_FUNC("Your version of str is %d.%d.%d\n",
+    std::cout << str::Format("Your version of str is %d.%d.%d\n",
             STR_MAJOR_VERSION, STR_MINOR_VERSION, STR_MICRO_VERSION);
-    std::cout << "Specialization for string test..." << std::endl;
+    std::cout << "Specialization for string test...\n";
     std::string ok("This test passes");
     std::cout << str::toType<std::string>(ok) << std::endl;
 
-    std::cout << "Testing the trim function..." << std::endl;
+    std::cout << "Testing the trim function...\n";
     std::string s = "  test   ";
     std::cout << "'" << s << "', length: " << s.length() << std::endl;
     str::trim(s);

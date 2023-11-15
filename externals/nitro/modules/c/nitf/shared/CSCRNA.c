@@ -30,7 +30,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSCRNA_description[] = {
     {NITF_BCS_A,   1,  "predicted corners flag", "PREDICT_CORNERS" },
     {NITF_BCS_N,   9,  "lat UL",                 "ULCNR_LAT" },
     {NITF_BCS_N,  10,  "long UL",                "ULCNR_LONG" },
@@ -47,6 +47,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSCRNA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSCRNA)
 
 NITF_CXX_ENDGUARD

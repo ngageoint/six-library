@@ -97,7 +97,7 @@ static auto toComplex_(double A, uint8_t phase)
     const auto angle = units::Radians<double>{ 2 * std::numbers::pi * P };
     double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
-    six::zfloat S(A * cos_angle, A * sin_angle);
+    six::zfloat S(gsl::narrow_cast<float>(A * cos_angle), gsl::narrow_cast<float>(A * sin_angle));
     return S;
 }
 six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
@@ -1024,7 +1024,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
         const std::vector<std::string>& schemaPaths_,
         logging::Logger& log)
 {
-    const auto xmlStr = str::u8FromString(xmlStr_);
+    const auto xmlStr = str::u8FromNative(xmlStr_);
 
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
@@ -1040,7 +1040,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string&
     return parser.fromXML(xmlStr);
 }
 
-std::string Utilities::toXMLString(const ComplexData& data,
+std::u8string Utilities::toXMLString(const ComplexData& data,
                                    const std::vector<std::string>& schemaPaths_,
                                    logging::Logger* logger)
 {
@@ -1048,8 +1048,14 @@ std::string Utilities::toXMLString(const ComplexData& data,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::toString(result);
+    return toXMLString(data, &schemaPaths, logger);
+ }
+std::string Utilities::toXMLString_(const ComplexData& data,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger* logger)
+{
+    const auto result = toXMLString(data, schemaPaths, logger);
+    return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const ComplexData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)

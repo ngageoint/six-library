@@ -278,12 +278,9 @@ public:
 
                 for (unsigned int i = 0; ops[i] != nullptr; i++)
                     oss << ops[i] << ":";
-                eh->onPluginVersionUnsupported(
-                    str::Format("For plugin supporting ops %s version [%d.%d] not supported (%d.%d)",
-                         oss.str().c_str(), majorVersion, minorVersion,
-                         mMajorVersion, mMinorVersion
-                        )
-                );
+                auto unsupported = str::Format("For plugin supporting ops %s version ", oss.str());
+                unsupported += str::Format("[%d.%d] not supported (%d.%d)", majorVersion, minorVersion, mMajorVersion, mMinorVersion);
+                eh->onPluginVersionUnsupported(unsupported);
                 return;
             }
 
@@ -293,7 +290,7 @@ public:
                 if (! pluginHandler )
                 {
                     eh->onPluginLoadFailed(
-                        FmtX("Failed to spawn handler for op %s", ops[i]));
+                        str::Format("Failed to spawn handler for op %s", ops[i]));
                     // Keep going
                 }
                 mHandlers[ops[i]].first = pluginHandler;

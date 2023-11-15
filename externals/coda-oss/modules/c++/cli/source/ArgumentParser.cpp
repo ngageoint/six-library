@@ -24,13 +24,15 @@
 
 #include <algorithm>
 #include <iterator>
+#include <std/span>
 
 #include <import/str.h>
 #include <import/mem.h>
+#include <gsl/gsl.h>
 
 namespace
 {
-static const size_t MAX_ARG_LINE_LENGTH = 21;
+constexpr size_t MAX_ARG_LINE_LENGTH = 21;
 
 bool containsOnly(const std::string& str,
                   const std::map<std::string, cli::Argument*>& flags)
@@ -283,6 +285,20 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         return parse("cli::ArgumentParser::parse" /*program*/, args).release(); // provide a "meaningful" default program name
     }
 }
+
+static auto put(cli::Results& currentResults, const std::string& argVar,
+                cli::Value* v, std::unique_ptr<cli::Value>&& v_)
+{
+    if (v == v_.get()) // no existing value, using the newly created std::unique_ptr
+    {
+        currentResults.put(argVar, std::move(v_));
+    }
+    else
+    {
+        currentResults.put(argVar, v); // already had a value, just update
+    }
+}
+
 std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& program, const std::vector<std::string>& args)
 {
     if (!program.empty())
@@ -317,7 +333,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                 std::map<std::string, Argument*>& flagMap =
                         (subOption ? shortOptionsFlags : shortFlags);
                 if (flagMap.find(op) != flagMap.end())
-                    parseError(FmtX("Conflicting option: %c%s", mPrefixChar, op));
+                    parseError(str::Format("Conflicting option: %c%s", mPrefixChar, op));
                 flagMap[op] = arg;
             }
             for (std::vector<std::string>::const_iterator it =
@@ -327,7 +343,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                 std::map<std::string, Argument*>& flagMap =
                         (subOption ? longOptionsFlags : longFlags);
                 if (flagMap.find(op) != flagMap.end())
-                    parseError(FmtX("Conflicting option: %c%c%s", mPrefixChar, mPrefixChar, op));
+                    parseError(str::Format("Conflicting option: %c%c%s", mPrefixChar, mPrefixChar, op));
                 flagMap[op] = arg;
             }
         }
@@ -456,7 +472,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                     }
                     else
                     {
-                        throw except::Exception(Ctxt(FmtX("Invalid option: [%s]", argStr)));
+                        throw except::Exception(Ctxt(str::Format("Invalid option: [%s]", argStr)));
                     }
                 }
             }
@@ -497,7 +513,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                     }
                     else
                     {
-                        throw except::Exception(Ctxt(FmtX("Invalid option: [%s]", argStr)));
+                        throw except::Exception(Ctxt(str::Format("Invalid option: [%s]", argStr)));
                     }
 
                 }
@@ -512,9 +528,8 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
             {
             case cli::STORE:
             {
-                cli::Value* v = currentResults->hasValue(argVar)
-                        ? currentResults->getValue(argVar)
-                        : new cli::Value;
+                auto v_ = std::make_unique<cli::Value>();
+                auto v =  currentResults->hasValue(argVar) ? currentResults->getValue(argVar) : v_.get();
                 int maxArgs = arg->getMaxArgs();
                 // risky, I know...
                 bool added = false;
@@ -533,8 +548,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                             break;
                         }
                     }
-                    if (maxArgs >= 0 &&
-                        v->size() >= static_cast<size_t>(maxArgs))
+                    if (maxArgs >= 0 && std::ssize(*v) >= maxArgs)
                     {
                         // it's another positional argument, so we break out
                         break;
@@ -545,16 +559,16 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                 }
 
                 if (!added)
-                    parseError(FmtX("option requires value or has exceeded its max: [%s]", argVar));
+                    parseError(str::Format("option requires value or has exceeded its max: [%s]", argVar));
 
-                currentResults->put(argVar, v);
+                put(*currentResults, argVar, v, std::move(v_));
                 break;
             }
             case cli::STORE_TRUE:
-                currentResults->put(argVar, new cli::Value(true));
+                currentResults->put(argVar, std::make_unique<cli::Value>(true));
                 break;
             case cli::STORE_FALSE:
-                currentResults->put(argVar, new cli::Value(false));
+                currentResults->put(argVar, std::make_unique<cli::Value>(false));
                 break;
             case cli::STORE_CONST:
             {
@@ -565,10 +579,10 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
             case cli::SUB_OPTIONS:
             {
                 if (optionsStr.empty())
-                    parseError(FmtX("invalid sub option: [%s]", argVar.c_str()));
-                cli::Value* v = currentResults->hasValue(optionsStr)
-                        ? currentResults->getValue(optionsStr)
-                        : new cli::Value;
+                    parseError(str::Format("invalid sub option: [%s]", argVar));
+
+                auto v_ = std::make_unique<cli::Value>();
+                auto v = currentResults->hasValue(optionsStr) ? currentResults->getValue(optionsStr) : v_.get();
                 if (i < s - 1)
                 {
                     std::string nextArg = explodedArgs[i + 1];
@@ -589,7 +603,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
                     // this indicates the sub op is a bool
                     v->add(true);
                 }
-                currentResults->put(optionsStr, v);
+                put(*currentResults, optionsStr, v, std::move(v_));
                 break;
             }
             case cli::VERSION:
@@ -601,24 +615,22 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         {
             // it's a positional argument
             cli::Value* lastPosVal = nullptr;
-            for (std::vector<cli::Argument*>::iterator it =
-                    positionalArgs.begin(); it != positionalArgs.end(); ++it)
+            for (auto&& posArg : positionalArgs)
             {
-                cli::Argument *posArg = *it;
                 std::string argVar = posArg->getVariable();
                 int maxArgs = posArg->getMaxArgs();
                 if (currentResults->hasValue(argVar))
                 {
-                    cli::Value *posVal = lastPosVal
-                            = currentResults->getValue(argVar);
-                    if (static_cast<int>(posVal->size()) >= maxArgs)
+                    lastPosVal = currentResults->getValue(argVar);
+                    if (gsl::narrow<int>(lastPosVal->size()) >= maxArgs)
                         continue;
                     break;
                 }
                 else if (maxArgs != 0)
                 {
-                    lastPosVal = new cli::Value;
-                    currentResults->put(argVar, lastPosVal);
+                    auto lastPosVal_ = std::make_unique<cli::Value>();
+                    lastPosVal = lastPosVal_.get();
+                    currentResults->put(argVar, std::move(lastPosVal_));
                     break;
                 }
             }
@@ -651,12 +663,11 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
             if (defaultVal != nullptr)
                 results->put(argVar, defaultVal->clone());
             else if (arg->getAction() == cli::STORE_FALSE)
-                results->put(argVar, new cli::Value(true));
+                results->put(argVar, std::make_unique<cli::Value>(true));
             else if (arg->getAction() == cli::STORE_TRUE)
-                results->put(argVar, new cli::Value(false));
+                results->put(argVar, std::make_unique<cli::Value>(false));
             else if (arg->isRequired())
-                parseError(FmtX("missing required argument: [%s]",
-                                argVar.c_str()));
+                parseError(str::Format("missing required argument: [%s]", argVar));
         }
 
 
@@ -670,9 +681,9 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         if (arg->isRequired() || numGiven > 0)
         {
             if (minArgs > 0 && numGiven < static_cast<size_t>(minArgs))
-                parseError(FmtX("not enough arguments, %d required: [%s]", minArgs, argId));
+                parseError(str::Format("not enough arguments, %d required: [%s]", minArgs, argId));
             if (maxArgs >= 0 && numGiven > static_cast<size_t>(maxArgs))
-                parseError(FmtX("too many arguments, %d supported: [%s]", maxArgs, argId));
+                parseError(str::Format("too many arguments, %d supported: [%s]", maxArgs, argId));
         }
 
 
@@ -682,7 +693,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
         if (numGiven > 0 && !choices.empty())
         {
             bool isValid = false;
-            cli::Value *vals = results->getValue(argVar);
+            auto vals = results->getValue(argVar);
 
             for (size_t ii = 0; ii < numGiven; ++ii)
             {
@@ -695,7 +706,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
             }
             if (!isValid)
             {
-                parseError(FmtX("invalid option for [%s]", argVar.c_str()));
+                parseError(str::Format("invalid option for [%s]", argVar));
             }
         }
     }

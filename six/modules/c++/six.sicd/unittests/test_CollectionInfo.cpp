@@ -125,10 +125,10 @@ TEST_CASE(ClassificationCanada)
 {
 #ifdef _WIN32
     const std::string classificationText("NON CLASSIFI\xc9 / UNCLASSIFIED"); // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
-    const auto E_ = str::u8FromString("\xc9"); // ISO8859-1  "É"
+    const auto E_ = str::u8FromNative("\xc9"); // ISO8859-1  "É"
 #else
     const std::string classificationText("NON CLASSIFI\xc3\x89 / UNCLASSIFIED"); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
-    const auto E_ = str::u8FromString("\xc3\x89"); // UTF-8  "É"
+    const auto E_ = str::u8FromNative("\xc3\x89"); // UTF-8  "É"
 #endif
 
     auto data = createData<six::zfloat>(types::RowCol<size_t>(10, 10));
@@ -137,9 +137,9 @@ TEST_CASE(ClassificationCanada)
 
     const auto strXml = six::sicd::Utilities::toXMLString(*data, nullptr /*pSchemaPaths*/);
 
-    const auto NON_CLASSIFI = strXml.find(str::u8FromString("NON CLASSIFI"));
+    const auto NON_CLASSIFI = strXml.find(str::u8FromNative("NON CLASSIFI"));
     TEST_ASSERT(NON_CLASSIFI != std::string::npos);
-    const auto UNCLASSIFIED = strXml.find(str::u8FromString(" / UNCLASSIFIED"));
+    const auto UNCLASSIFIED = strXml.find(str::u8FromNative(" / UNCLASSIFIED"));
     TEST_ASSERT(UNCLASSIFIED != std::string::npos);
     const auto utf8 = strXml.substr(NON_CLASSIFI, UNCLASSIFIED - NON_CLASSIFI);
     TEST_ASSERT_EQ(utf8.size(), std::string("NON CLASSIFI\xc3\x89").size()); // UTF-8, "NON CLASSIFIÉ"

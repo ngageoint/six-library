@@ -82,7 +82,7 @@ std::string six::toXMLString_(const Data* data,
     const six::XMLControlRegistry* xmlRegistry)
 {
     const auto result = toXMLString(data, xmlRegistry);
-    return str::toString(result);
+    return str::to_native(result);
 }
 
 template<typename TSchemaPaths>

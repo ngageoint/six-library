@@ -73,7 +73,7 @@ bool RgAzComp::validate(const GeoData& geoData,
         messageBuilder << "RGAZCOMP fields inconsistent." << std::endl
             << "RgAzComp.AzSF: " << azSF << std::endl
             << "Derived RgAzComp.AzSF: " << expectedAzSf;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -95,7 +95,7 @@ bool RgAzComp::validate(const GeoData& geoData,
             messageBuilder << "RGAZCOMP fields inconsistent." << std::endl
                 << "RgAzComp.KazPoly: " << kazPoly << std::endl
                 << "Derived RgAzComp.KazPoly: " << derivedPoly;
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
     }

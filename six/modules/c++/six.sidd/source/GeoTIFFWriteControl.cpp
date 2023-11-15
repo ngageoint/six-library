@@ -77,7 +77,7 @@ void GeoTIFFWriteControl::initialize(std::shared_ptr<Container> container)
             mDerivedData.push_back(data);
         }
         else
-            throw except::Exception(Ctxt(FmtX(
+            throw except::Exception(Ctxt(str::Format(
                     "Data element at position [%d] in container is undefined",
                     ii)));
     }
@@ -92,7 +92,7 @@ void GeoTIFFWriteControl::save(const SourceList& sources,
 
     tiffWriter.writeHeader();
     if (sources.size() != mDerivedData.size())
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
                 "Meta-data count [%d] does not match source list [%d]",
                 mDerivedData.size(), sources.size())));
 
@@ -177,7 +177,7 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     }
     ifd->addEntry(tiff::KnownTags::PHOTOMETRIC_INTERPRETATION, photoInterp);
 
-    addStringArray(ifd, "ImageDescription", FmtX("SIDD: %s", data->getName()));
+    addStringArray(ifd, "ImageDescription", str::Format("SIDD: %s", data->getName()));
 
     constexpr unsigned short orientation = 1;
     ifd->addEntry("Orientation", orientation);
@@ -234,12 +234,12 @@ void GeoTIFFWriteControl::setupIFD(const DerivedData* data,
     tiff::IFDEntry* const xmlEntry = (*ifd)[Constants::GT_XML_TAG];
 
     auto xml = six::toValidXMLString(data, schemaPaths, mLog);
-    xmlEntry->addValues(str::toString(xml));
+    xmlEntry->addValues(str::to_native(xml));
 
     for (size_t jj = 0; jj < mComplexData.size(); ++jj)
     {
         xml = six::toValidXMLString(mComplexData[jj], schemaPaths, mLog);
-        xmlEntry->addValues(str::toString(xml));
+        xmlEntry->addValues(str::to_native(xml));
     }
 }
 
@@ -268,7 +268,7 @@ void GeoTIFFWriteControl::save(const TBufferList& sources,
 
     tiffWriter.writeHeader();
     if (sources.size() != mDerivedData.size())
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
                 "Meta-data count [%d] does not match source list [%d]",
                 mDerivedData.size(), sources.size())));
 

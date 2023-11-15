@@ -221,8 +221,7 @@ std::ostream& operator<< (std::ostream& os, const Channel& c)
     }
     for (size_t ii = 0; ii < c.addedParameters.size(); ++ii)
     {
-        os << "  Parameter name   : " << c.addedParameters[ii].getName() << "\n";
-        os << "  Parameter value   : " << c.addedParameters[ii].str() << "\n";
+        out(os, c.addedParameters[ii]);
     }
     return os;
 }

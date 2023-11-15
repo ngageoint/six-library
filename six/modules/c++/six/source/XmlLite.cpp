@@ -181,7 +181,7 @@ static std::string toString(const xml::lite::QName& name, const T& p, const xml:
 {
     try
     {
-        return str::toString(p);
+        return six::toString(p);
     }
     catch (const except::Exception& ex)
     {
@@ -194,6 +194,11 @@ template<typename T>
 inline std::string toString_(const xml::lite::QName& name, const T& v, const xml::lite::Element& parent)
 {
     return toString(name, v, parent);
+}
+template<>
+inline std::string toString_(const xml::lite::QName& name, const std::u8string& v, const xml::lite::Element& parent)
+{
+    return toString(name, str::to_native(v), parent);
 }
 
 template<typename T, typename ToString>

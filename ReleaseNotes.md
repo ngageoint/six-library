@@ -2,6 +2,14 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
+## [Version 3.2.5](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.5); October 23, 2023
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-10-23](https://github.com/mdaus/coda-oss/releases/tag/2023-10-23)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.5](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.5)
+* Simplify 8AMP_PHSI interfaces.
+* Be more explicit about the CPHD version being used.
+* *io::OutputStream* overloads to make it easier to write CPHD data in pieces.
+* Be sure XML strings are UTF-8.
+
 ## [Version 3.2.4](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.4); August 21, 2023
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2023-08-18](https://github.com/mdaus/coda-oss/releases/tag/2023-08-18)
 * [nitro](https://github.com/mdaus/nitro) version [2.11.4](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.4)
@@ -10,7 +18,7 @@
 * Added support for [CPHD 1.1.0](https://nsgreg.nga.mil/doc/view?i=5388) XML metadata.
 * Bugfix: read SIDDs [without a LUT](https://github.com/ngageoint/six-library/pull/683).
 * Bugfix: [CPHD 'releaseInfo' can be empty](https://github.com/ngageoint/six-library/pull/670).
-* added **.gitattributes** and normalized line-endings (`\n` for most text files).
+* Added **.gitattributes** and normalized line-endings (`\n` for most text files).
 
 ## [Version 3.2.3](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.3); June 5, 2023
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)

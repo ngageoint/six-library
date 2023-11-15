@@ -20,12 +20,16 @@
  *
  */
 
-#include <import/cli.h>
-#include <import/mem.h>
-#include "TestCase.h"
+#include <stdio.h>
+
 #include <sstream>
 #include <fstream>
-#include <stdio.h>
+#include <std/span>
+
+#include <import/cli.h>
+#include <import/mem.h>
+
+#include "TestCase.h"
 
 TEST_CASE(testValue)
 {
@@ -41,7 +45,7 @@ TEST_CASE(testValue)
     for(int i = 0; i < 10; ++i)
     {
         floats.push_back(10.0f * i);
-        strings.push_back(str::toString(i));
+        strings.push_back(std::to_string(i));
     }
 
     // floats
@@ -50,15 +54,15 @@ TEST_CASE(testValue)
     {
         TEST_ASSERT_ALMOST_EQ(v.at<float>(i), 10.0f * i);
     }
-    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(10));
+    TEST_ASSERT_EQ(std::ssize(v), 10);
 
     // strings
     v.setContainer(strings);
     for(int i = 0; i < 10; ++i)
     {
-        TEST_ASSERT_EQ(v.at<std::string>(i), str::toString(i));
+        TEST_ASSERT_EQ(v.at<std::string>(i), std::to_string(i));
     }
-    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(10));
+    TEST_ASSERT_EQ(std::ssize(v), 10);
 }
 
 TEST_CASE(testChoices)
@@ -156,9 +160,9 @@ TEST_CASE(testIterate)
     std::unique_ptr<cli::Results>
             results(parser.parse(str::split("-v -c config.xml")));
     std::vector<std::string> keys;
-    for(cli::Results::const_iterator it = results->begin(); it != results->end(); ++it)
+    for(auto it = results->begin(); it != results->end(); ++it)
         keys.push_back(it->first);
-    TEST_ASSERT_EQ(keys.size(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(std::ssize(keys), 2);
     // std::map returns keys in alphabetical order...
     TEST_ASSERT_EQ(keys[0], "config");
     TEST_ASSERT_EQ(keys[1], "verbose");
@@ -168,14 +172,23 @@ TEST_CASE(testRequired)
 {
     cli::ArgumentParser parser;
     parser.setProgram("tester");
-    parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
     parser.addArgument("-c --config", "Specify a config file", cli::STORE)->setRequired(true);
+
+    const std::string program(testName);
+    const auto results = parser.parse(program, str::split("-c configFile"));
+    TEST_ASSERT_EQ(results->get<std::string>("config"), "configFile");
+}
+
+TEST_CASE(testRequiredThrows)
+{
+    cli::ArgumentParser parser;
+    parser.setProgram("tester");
+    parser.addArgument("-c --config", "Specify a config file", cli::STORE)
+            ->setRequired(true);
 
     const std::string program(testName);
     TEST_EXCEPTION(parser.parse(program, str::split("")));
     TEST_EXCEPTION(parser.parse(program, str::split("-c")));
-    const auto results = parser.parse(program, str::split("-c configFile"));
-    TEST_ASSERT_EQ(results->get<std::string>("config"), "configFile");
 }
 
 TEST_CASE(testUnknownArgumentsOptions)
@@ -254,6 +267,7 @@ TEST_MAIN(
     TEST_CHECK( testSubOptions);
     TEST_CHECK( testIterate);
     TEST_CHECK( testRequired);
+    TEST_CHECK( testRequiredThrows);
     TEST_CHECK( testUnknownArgumentsOptions);
 )
 

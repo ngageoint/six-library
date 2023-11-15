@@ -122,7 +122,7 @@ void io::copy(const std::string& path,
             oss << "Copy Failed: Could not copy source [" <<
                 path << "] to destination [" <<
                 newFile << "]";
-            throw except::Exception(Ctxt(oss.str()));
+            throw except::Exception(Ctxt(oss));
         }
     }
 }
@@ -133,8 +133,7 @@ std::string io::FileUtils::createFile(std::string dirname,
     sys::OS os;
 
     if (!os.exists(dirname))
-        throw except::IOException(Ctxt(FmtX("Directory does not exist: %s",
-                                            dirname.c_str())));
+        throw except::IOException(Ctxt(str::Format("Directory does not exist: %s", dirname)));
 
     str::trim(filename);
 
@@ -155,7 +154,7 @@ std::string io::FileUtils::createFile(std::string dirname,
             int count = 0;
             while (os.exists(outFilename))
             {
-                std::string base = filename + "-" + str::toString(++count);
+                std::string base = filename + "-" + std::to_string(++count);
                 outFilename = sys::Path::joinPaths(dirname, base);
                 if (!ext.empty())
                 {

@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     {
         nitf::Reader reader;
         if ( argc != 2 )
-            throw nitf::NITFException(Ctxt(FmtX("Usage: %s <nitf-file>\n", argv[0])));
+            throw nitf::NITFException(Ctxt(str::Format("Usage: %s <nitf-file>\n", argv[0])));
 
         nitf::IOHandle io(argv[1]);
         nitf::Record record = reader.read(io);

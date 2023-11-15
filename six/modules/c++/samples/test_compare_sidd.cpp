@@ -213,14 +213,14 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-    catch (const std::exception& exception)
-    {
-        std::cerr << exception.what() << std::endl;
-        return 1;
-    }
     catch (const except::Throwable& exception)
     {
         std::cerr << exception.toString() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& exception)
+    {
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
     catch (...)
