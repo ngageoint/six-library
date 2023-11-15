@@ -166,8 +166,6 @@ NITFAPI(NITF_BOOL)
 
 
 NITFAPI(NITF_BOOL)
-    nitf_PluginRegistry_insertPlugin_(const char* msg, nitf_PluginRegistry* reg, const char** ident, nitf_DLL* dll, nitf_Error* error);
-NITFAPI(NITF_BOOL)
     nitf_PluginRegistry_loadPlugin(const char* fullPathName, nitf_Error* error);
 
 /*!
