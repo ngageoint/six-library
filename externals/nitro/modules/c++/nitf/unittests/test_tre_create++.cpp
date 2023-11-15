@@ -9,6 +9,7 @@ TEST_CASE(test_tre_create_329)
 {
     // https://github.com/mdaus/nitro/issues/329
 
+    TEST_ASSERT_TRUE(nitf_PluginRegistry_PreloadedTREHandlerEnable("HISTOA", NRT_TRUE));
     nitf::TRE tre("HISTOA", "HISTOA"); // allocates fields SYSTEM .. NEVENTS
     tre.setField("SYSTYPE", "M1");
     TEST_ASSERT_TRUE(true);
@@ -39,8 +40,6 @@ TEST_CASE(test_tre_clone_329)
 }
 
 TEST_MAIN(
-    nitf::Test::setNitfPluginPath();
-
     TEST_CHECK(test_tre_create_329);
     TEST_CHECK(test_tre_clone_329);
     )
