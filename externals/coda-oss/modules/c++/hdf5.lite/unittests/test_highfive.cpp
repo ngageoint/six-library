@@ -147,7 +147,7 @@ TEST_CASE(test_highfive_nested_small)
     TEST_ASSERT_EQ(actual, 10.0f);
 
     const auto a = load_complex<float>(file, "/Data/1/bar/cat/a/r",  "/Data/1/bar/cat/a/i");
-    const auto cx_view = mem::make_ComplexSpansView(a.first, a.second);
+    const auto cx_view = mem::make_ComplexParallelView(a.first, a.second);
     const auto cx_actual = std::accumulate(cx_view.begin(), cx_view.end(), std::complex<float>(0.0));
     TEST_ASSERT_EQ(cx_actual.real(), 10.0f);
     TEST_ASSERT_EQ(cx_actual.imag(), 0.0f);
@@ -560,7 +560,7 @@ TEST_MAIN(
     TEST_CHECK(test_highfive_info_nested);
 
     TEST_CHECK(test_highfive_dump);
-    //TEST_CHECK(test_highfive_write);
+    TEST_CHECK(test_highfive_write);
 
     TEST_CHECK(test_highfive_getDataType);
     TEST_CHECK(test_highfive_getAttribute);

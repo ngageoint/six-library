@@ -235,7 +235,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "SICD.Grid.Row/Col.DeltaK1: " << deltaK1 << std::endl
             << "SICD.Grid.Row/Col.DetalK2: " << deltaK2 << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -249,7 +249,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
                 << "0.5/SICD.Grid.Row/Col.SampleSpacing: " <<
                 0.5 / sampleSpacing << std::endl
                 << "SICD.Grid.Row/Col.DetalK2: " << deltaK2 << std::endl;
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
 
@@ -261,7 +261,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
                 << "0.5/SICD.Grid.Row/Col.SampleSpacing: " <<
                 0.5 / sampleSpacing << std::endl
                 << "SICD.Grid.Row/Col.DetalK1: " << deltaK1 << std::endl;
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
 
@@ -274,7 +274,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
                 impulseResponseBandwidth << std::endl
                 << "SICD.Grid.Row/Col.DeltaK2 - SICD.Grid.Row/COl.DeltaK1: "
                 << deltaK2 - deltaK1 << std::endl;
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
     }
@@ -294,7 +294,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "SICD.Grid.Row/Col.DeltaK1: " << deltaK1 << std::endl
             << "Derived DeltaK1: " << minDk << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
     //2.3.9.2, 2.3.9.4
@@ -304,7 +304,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         messageBuilder << BOUNDS_ERROR_MESSAGE << std::endl
             << "SICD.Grid.Row/Col.DeltaK2: " << deltaK2 << std::endl
             << "Derived DeltaK2: " << maxDk << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -328,7 +328,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
             messageBuilder << "Unrecognized weighting description" << std::endl
                 << "WeightType.WindowName: "
                 << weightType->windowName << std::endl;
-            log.warn(messageBuilder.str());
+            log.warn(messageBuilder);
             valid = false;
         }
     }
@@ -343,7 +343,7 @@ bool DirectionParameters::validate(const ImageData& imageData,
         messageBuilder << "Non-uniform weighting, but no WgtFunct provided"
             << std::endl << "WgtType.WindowName: " << weightType->windowName
             << std::endl;
-        log.warn(messageBuilder.str());
+        log.warn(messageBuilder);
     }
 
     return valid;
@@ -388,7 +388,7 @@ bool DirectionParameters::validateWeights(const Functor& weightFunction,
             << "inconsistent with weightType" << std::endl
             << "WeightType.WindowName: "
             << weightType->windowName << std::endl;
-        log.warn(messageBuilder.str());
+        log.warn(messageBuilder);
         valid = false;
     }
 
@@ -443,7 +443,7 @@ bool DirectionParameters::validate(const RgAzComp& rgAzComp,
         messageBuilder.str("");
         messageBuilder << "KCenter: " << kCenter << std::endl
             << "DeltaKCOAPoly: " << deltaKCOAPoly[0][0];
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -452,7 +452,7 @@ bool DirectionParameters::validate(const RgAzComp& rgAzComp,
     {
         messageBuilder.str("");
         messageBuilder << "DetlaKCOAPoly must be a single value for RGAZCOMP data";
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
     return valid;
@@ -528,7 +528,7 @@ bool Grid::validateFFTSigns(logging::Logger& log) const
             "FFT signs in row and column direction should be the same." <<
             std::endl << "Grid.Row.Sign: " << row->sign << std::endl
             << "Grid.Col.Sign: " << col->sign << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
     return valid;
@@ -814,7 +814,7 @@ bool Grid::validate(const RMA& rma, const Vector3& scp,
         std::ostringstream messageBuilder;
         messageBuilder << "Given image formation algorithm expects "
             << defaultGridType(rma) << ".\nFound " << type;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -850,7 +850,7 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
             << "Grid.Row.UVectECF: " << row->unitVector << std::endl
             << "Derived grid.Row.UVectECT: "
             << derivedRowUnitVector(rmat, scp);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -862,7 +862,7 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
             << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: "
             << derivedColUnitVector(rmat, scp);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -873,7 +873,7 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
         messageBuilder << WF_INCONSISTENT_STR
             << "Grid.Row.KCtr: " << row->kCenter << std::endl
             << "Derived KCtr: " << derivedRowKCenter(rmat, fc);
-        log.warn(messageBuilder.str());
+        log.warn(messageBuilder);
         valid = false;
     }
 
@@ -884,7 +884,7 @@ bool Grid::validate(const RMAT& rmat, const Vector3& scp,
         messageBuilder << WF_INCONSISTENT_STR
             << "Grid.Col.KCtr: " << col->kCenter << std::endl
             << "Derived KCtr: " << derivedColKCenter(rmat, fc);
-        log.warn(messageBuilder.str());
+        log.warn(messageBuilder);
         valid = false;
     }
 
@@ -905,7 +905,7 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
             << "Grid.Row.UVectECF: " << row->unitVector << std::endl
             << "Derived Grid.Row.UVectECF: "
             << derivedRowUnitVector(rmcr, scp);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -917,7 +917,7 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
             << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: "
             << derivedColUnitVector(rmcr, scp);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -927,7 +927,7 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
         messageBuilder.str("");
         messageBuilder << "Grid.Col.KCtr must be zero for RMA/RMCR data." 
             << std::endl << "Grid.Col.KCtr = " << col->kCenter;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -940,7 +940,7 @@ bool Grid::validate(const RMCR& rmcr, const Vector3& scp,
             messageBuilder << WF_INCONSISTENT_STR << std::endl
                 << "Grid.Row.KCtr: " << row->kCenter << std::endl
                 << "Center frequency * 2/c: " << derivedRowKCenter(rmcr, fc);
-            log.warn(messageBuilder.str());
+            log.warn(messageBuilder);
             valid = false;
         }
     }
@@ -974,7 +974,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
             messageBuilder.str("");
             messageBuilder << "Grid.Col.delaKCOAPoly and "
                 << "RMA.INCA.dopplerCentroidPoly have diferent sizes.";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
         }
         else
         {
@@ -996,7 +996,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
                 messageBuilder << "RMA.INCA fields inconsistent." << std::endl
                     << "Compare Grid.Col.KCOAPoly to RMA.INCA.DopCentroidPoly "
                     << "* RMA.INCA.TimeCAPoly[1].";
-                log.error(messageBuilder.str());
+                log.error(messageBuilder);
                 valid = false;
             }
         }
@@ -1011,7 +1011,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
             << "Grid.Row.UVectECF: " << row->unitVector << std::endl
             << "Derived Grid.Row.UVectECF: "
             << derivedRowUnitVector(inca, scp, arpPoly);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid =  false;
     }
 
@@ -1024,7 +1024,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
             << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: "
             << derivedRowUnitVector(inca, scp, arpPoly);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1035,7 +1035,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
         messageBuilder << "Grid.Col.KCtr must be zero "
             << "for RMA/INCA data." << std::endl
             << "Grid.Col.KCtr: " << col->kCenter;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1048,7 +1048,7 @@ bool Grid::validate(const INCA& inca, const Vector3& scp,
         messageBuilder << WF_INCONSISTENT_STR << std::endl
             << "RMA.INCA.FreqZero * 2 / c: " << derivedRowKCenter(inca)
             << std::endl << "Grid.Row.KCenter: " << row->kCenter;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
     return valid;
@@ -1067,7 +1067,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
         messageBuilder.str("");
         messageBuilder << "PFA image formation should result in a RGAZIM grid."
             << std::endl << "Grid.Type: " << type;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1092,7 +1092,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             messageBuilder << WF_INCONSISTENT_STR
                 << "Grid.Row.KCtr: " << row->kCenter << std::endl
                 << "Derived KapCtr: " << kapCtr;
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
     }
@@ -1112,7 +1112,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
                 << 0.5 / col->sampleSpacing << std::endl
                 << "PFA.Kaz2 - Grid.Col.KCenter: "
                 << pfa.kaz2 - col->kCenter << std::endl;
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
         //2.3.11
@@ -1125,7 +1125,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
                 << 0.5 / col->sampleSpacing << std::endl
                 << "PFA.Kaz1 - Grid.Col.KCenter: "
                 << pfa.kaz1 - col->kCenter << std::endl;
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
     }
@@ -1140,7 +1140,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             << 0.5 / row->sampleSpacing << std::endl
             << "PFA.Krg2 - Grid.Row.KCenter: "
             << pfa.krg2 - row->kCenter << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1154,7 +1154,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             << 0.5 / row->sampleSpacing << std::endl
             << "PFA.Krg1 - Grid.Row.KCenter: "
             << pfa.krg1 - row->kCenter << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1167,7 +1167,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             << col->impulseResponseBandwidth << std::endl
             << "SICD.PFA.Kaz2 - SICD.PFA.Kaz1: "
             << pfa.kaz2 - pfa.kaz1 << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
     //2.3.15
@@ -1179,7 +1179,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             << row->impulseResponseBandwidth << std::endl
             << "SICD.PFA.Krg2 - SICD.PFA.Krg1: "
             << pfa.krg2 - pfa.krg1 << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
     //2.3.16
@@ -1191,7 +1191,7 @@ bool Grid::validate(const PFA& pfa, const RadarCollection& radarCollection,
             << "Grid.Col.KCenter: " << col->kCenter << std::endl
             << "mean(SICD.PFA.Kaz1, SICD.PFA.Kaz2): "
             << (pfa.kaz1 + pfa.kaz2) / 2 << std::endl;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1214,7 +1214,7 @@ bool Grid::validate(const RgAzComp& rgAzComp,
         messageBuilder << 
             "RGAZCOMP image formation should result in a SLANT plane image." 
             << std::endl << "Grid.ImagePlane: " << imagePlane;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1225,7 +1225,7 @@ bool Grid::validate(const RgAzComp& rgAzComp,
         messageBuilder <<
             "RGAZCOMP image formation should result in a RGAZIM grid."
             << std::endl << "Grid.Type: " << type;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1244,7 +1244,7 @@ bool Grid::validate(const RgAzComp& rgAzComp,
             << "Grid.Row.UVectECEF: " << row->unitVector << std::endl
             << "Derived Grid.Row.UVectECEF: " <<
             derivedRowUnitVector(scpcoa, scp);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -1257,7 +1257,7 @@ bool Grid::validate(const RgAzComp& rgAzComp,
             << "Grid.Col.UVectECF: " << col->unitVector << std::endl
             << "Derived Grid.Col.UVectECF: " <<
             derivedColUnitVector(scpcoa, scp);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 

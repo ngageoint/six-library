@@ -263,6 +263,7 @@ static std::string testCPHDXMLBody()
 "            <Polarization>\n"
 "                <TxPol>X</TxPol>\n"
 "                <RcvPol>RHC</RcvPol>\n"
+"                <TxPolRef><AmpH>0.1</AmpH><AmpV>0.2</AmpV><PhaseV>0.3</PhaseV></TxPolRef>\n"
 "            </Polarization>\n"
 "            <FxC>1.300000000000000E00</FxC>\n"
 "            <FxBW>8.000000000000000E-01</FxBW>\n"
@@ -880,27 +881,31 @@ static std::string testCPHDXMLBody()
     return std::string(xmlBody);
 }
 
-std::string testCPHDXML(const std::string& version)
+std::string testCPHDXML_(cphd::Version version)
 {
-    auto uri = cphd::CPHDXMLControl::getVersionUriMap().at(version);
+    const auto map = cphd::CPHDXMLControl::getVersionUriMap();
+    const auto uri = map.at(version);
     return "<CPHD xmlns=\""
         + uri.value
         + "\">\n"
         + testCPHDXMLBody()
         + "</CPHD>\n";
 }
-
-void runTest(const std::string& testName, const std::string& version)
+std::u8string testCPHDXML(cphd::Version version)
 {
-    auto xmlString = testCPHDXML(version);
-    io::StringStream cphdStream;
-    cphdStream.write(xmlString.c_str(), xmlString.size());
+    return str::u8FromNative(testCPHDXML_(version));
+}
+
+void runTest(const std::string& testName, cphd::Version version)
+{
+    const auto xmlString = testCPHDXML(version);
+    io::U8StringStream cphdStream;
+    cphdStream.write(xmlString);
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(cphdStream, cphdStream.available());
-    const std::unique_ptr<cphd::Metadata> metadata =
-            cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
+    const auto metadata = cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
 
     // CollectionID
     TEST_ASSERT_EQ(metadata->collectionID.collectorName, "Collector");
@@ -1046,6 +1051,14 @@ void runTest(const std::string& testName, const std::string& version)
     TEST_ASSERT_EQ(channel.parameters[0].polarization.rcvPol,
                    cphd::PolarizationType::RHC);
 
+    // these are new in CPHD 1.1.0
+    TEST_ASSERT_TRUE(has_value(channel.parameters[0].polarization.txPolRef));
+    const auto& txPolRef = value(channel.parameters[0].polarization.txPolRef);
+    TEST_ASSERT_EQ(txPolRef.ampH, 0.1);
+    TEST_ASSERT_EQ(txPolRef.ampV, 0.2);
+    TEST_ASSERT_EQ(txPolRef.phaseV, 0.3);
+    TEST_ASSERT_FALSE(has_value(channel.parameters[0].polarization.rcvPolRef));
+
     TEST_ASSERT_EQ(channel.parameters[0].fxC, 1.3);
     TEST_ASSERT_EQ(channel.parameters[0].fxBW, 0.8);
     TEST_ASSERT_EQ(channel.parameters[0].toaSaved, 2.7);
@@ -1152,8 +1165,9 @@ void runTest(const std::string& testName, const std::string& version)
 
 TEST_CASE(testVersions)
 {
-    auto versionUriMap = cphd::CPHDXMLControl::getVersionUriMap();
-    for (auto version : {"1.0.0", "1.0.1", "1.1.0"})
+    const auto versionUriMap = cphd::CPHDXMLControl::getVersionUriMap();
+
+    for (auto version : {cphd::Version::v1_0_0, cphd::Version::v1_0_1, cphd::Version::v1_1_0 })
     {
         TEST_ASSERT_TRUE(
             versionUriMap.find(version) != versionUriMap.end());
@@ -1162,10 +1176,11 @@ TEST_CASE(testVersions)
 
 TEST_CASE(testReadXML)
 {
-    for (auto pair : cphd::CPHDXMLControl::getVersionUriMap())
+    const auto map = cphd::CPHDXMLControl::getVersionUriMap();
+    for (auto pair : map)
     {
         auto& version = pair.first;
-        runTest("testReadXML" + version, version);
+        runTest("testReadXML" + to_string(version), version);
     }
 }
 

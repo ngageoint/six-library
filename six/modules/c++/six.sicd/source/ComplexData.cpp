@@ -183,7 +183,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder <<
                 "RgAzComp specified in imageFormation.imageFormationAlgorithm,"
                 << " but member pointer is nullptr.";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
         break;
@@ -200,7 +200,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder <<
                 "PFA specified in imageFormation.imageFormationAlgorithm,"
                 << " but member pointer is nullptr.";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
         break;
@@ -218,7 +218,7 @@ bool ComplexData::validate(logging::Logger& log) const
             messageBuilder <<
                 "RMA specified in imageFormation.imageFormationAlgorithm,"
                 << " but member pointer is nullptr.";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
         break;
@@ -227,7 +227,7 @@ bool ComplexData::validate(logging::Logger& log) const
 
         messageBuilder << "Image formation not fully defined." << std::endl
             << "SICD.ImageFormation.ImageFormAlgo = OTHER or is not set.";
-        log.warn(messageBuilder.str());
+        log.warn(messageBuilder);
         valid = false;
         break;
     }
@@ -358,10 +358,6 @@ inline const void* cast_to_pvoid(std::span<const std::byte> bytes)
 {
     return bytes.data();
 }
-inline void* cast_to_pvoid(std::span<std::byte> bytes)
-{
-    return bytes.data();
-}
 template<typename T, typename U>
 inline std::span<T> make_span(std::span<U> bytes)
 {
@@ -369,7 +365,7 @@ inline std::span<T> make_span(std::span<U> bytes)
     return std::span<T>(static_cast<T*>(cast_to_pvoid(bytes)), size);
 }
 
-bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::span<std::byte> to_) const
+bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, std::vector<AMP8I_PHS8I_t>& to) const
 {
     if (getPixelType() != PixelType::AMP8I_PHS8I)
     {
@@ -377,8 +373,7 @@ bool six::sicd::ComplexData::convertPixels_(std::span<const std::byte> from_, st
     }
 
     // Convert the pixels from a complex<float> to AMP8I_PHS8I.
-    const auto from = make_span<const six::sicd::cx_float>(from_);
-    const auto to = make_span<six::AMP8I_PHS8I_t>(to_);
-    imageData->fromComplex(from, to);
+    const auto from = make_span<const zfloat>(from_);
+    to = imageData->fromComplex(from);
     return true; // converted
 }

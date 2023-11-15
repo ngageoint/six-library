@@ -48,7 +48,7 @@ static std::ostream& unchecked(std::ostream& os, const six::DecorrType& decorr_)
 }
 std::ostream& unchecked(std::ostream& os, const std::optional<six::DecorrType>& decorr)
 {
-    return unchecked(os, decorr.value());
+    return unchecked(os, *decorr);
 }
 
 static std::ostream& checked(std::ostream& os, const std::string& s, const six::DecorrType& decorr)
@@ -112,6 +112,15 @@ std::ostream& operator<< (std::ostream& os, const six::PosVelError& p)
         return unchecked(os, p.positionDecorr);
 }
 
+static std::ostream& operator<< (std::ostream& os, const ErrorParameters::Bistatic::RadarSensor& v)
+{
+    os << "    RadarSensor:: \n"
+        << v.delayBias 
+        << "    ClockFreqSF      : " << v.clockFreqSF << "\n"
+        << "    CollectionStartTime : " <<v.collectionStartTime << "\n";
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
 {
     os << "Error Parameters:: \n";
@@ -152,8 +161,7 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         }
         for (const auto& parameter : e.monostatic->parameter)
         {
-            os << "    Parameter Name   : " << parameter.getName() << "\n"
-                << "    Parameter Value  : " << parameter.str() << "\n";
+            out(os, parameter);
         }
     }
     else if (e.bistatic.get())
@@ -161,19 +169,14 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         os << "  Bistatic:: \n"
             << "    TxPlatform:: \n"
             << e.bistatic->txPlatform.posVelErr << "\n"
-            << "    RadarSensor:: \n"
-            << "    ClockFreqSF      : " << e.bistatic->txPlatform.radarSensor.clockFreqSF << "\n"
-            << "    CollectionStartTime : " << e.bistatic->txPlatform.radarSensor.collectionStartTime << "\n"
+            << e.bistatic->txPlatform.radarSensor
             << "\n"
             << "    RcvPlatform:: \n"
             << e.bistatic->rcvPlatform.posVelErr << "\n"
-            << "    RadarSensor:: \n"
-            << "    ClockFreqSF      : " << e.bistatic->rcvPlatform.radarSensor.clockFreqSF << "\n"
-            << "    CollectionStartTime : " << e.bistatic->rcvPlatform.radarSensor.collectionStartTime << "\n";
+            << e.bistatic->rcvPlatform.radarSensor;
         for (const auto& parameter : e.bistatic->parameter)
         {
-            os << "    Parameter Name   : " << parameter.getName() << "\n"
-                << "    Parameter Value  : " << parameter.str() << "\n";
+            out(os, parameter);
         }
     }
     else

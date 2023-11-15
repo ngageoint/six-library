@@ -122,7 +122,7 @@ std::set<std::string> get_unique_thread_siblings()
                 std::ostringstream msg;
                 msg << "Unable to open thread siblings file "
                     << tsPath.getPath();
-                throw except::Exception(Ctxt(msg.str()));
+                throw except::Exception(Ctxt(msg));
             }
 
             std::string tsContents;
@@ -143,8 +143,10 @@ std::string sys::OSUnix::getPlatformName() const
     if (uname(&name) == -1)
         throw sys::SystemException("Uname failed");
 
-    return FmtX("%s (%s): %s [build: %s]", name.sysname, name.machine,
-                name.release, name.version);
+    std::string retval = name.sysname;
+    retval += str::Format(" (%s): %s", name.machine, name.release);
+    retval += str::Format(" [build: %s]", name.version);
+    return retval;
 }
 
 std::string sys::OSUnix::getNodeName() const
@@ -174,7 +176,7 @@ void sys::OSUnix::removeFile(const std::string& pathname) const
         oss << "Failure removing file [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
@@ -187,7 +189,7 @@ void sys::OSUnix::removeDirectory(const std::string& pathname) const
         oss << "Failure removing directory [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
@@ -461,7 +463,7 @@ void sys::OSUnix::removeSymlink(const std::string& symlinkPathname) const
 		oss << "Failure removing symlink [" <<  symlinkPathname <<
 			"] with error [" << err.toString() << "]";
 
-		throw except::Exception(Ctxt(oss.str()));
+		throw except::Exception(Ctxt(oss));
 	}
 }
 

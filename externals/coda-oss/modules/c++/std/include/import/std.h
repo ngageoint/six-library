@@ -22,9 +22,9 @@
  */
 
 
+#pragma once
 #ifndef CODA_OSS_import_std_h_INCLUDED_
 #define CODA_OSS_import_std_h_INCLUDED_
-#pragma once
 
 #include "coda_oss/CPlusPlus.h"
 #include "config/disable_compiler_warnings.h"
@@ -51,6 +51,7 @@ CODA_OSS_disable_warning_system_header_push
 #include <cfloat>
 #include <climits>
 #include <cassert>
+#include <ctime>
 
 #include <limits>
 #include <memory>
@@ -91,6 +92,7 @@ CODA_OSS_disable_warning_system_header_push
 #include <functional>
 #include <algorithm>
 #include <iterator>
+#include <random>
 
 //#include <coda_oss/filesystem.h>
 #include <coda_oss/bit.h>

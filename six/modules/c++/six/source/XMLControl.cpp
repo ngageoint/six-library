@@ -137,7 +137,7 @@ static auto check_whether_paths_exist(const std::vector<std::filesystem::path>& 
     {
         std::ostringstream msg;
         msg << does_not_exist_path << " does not exist!";
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
     return exist_paths;
 }
@@ -251,7 +251,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
         oss << "Coudn't validate XML - no schemas paths provided "
             << " and " << six::SCHEMA_PATH << " not set.";
 
-        log->warn(oss.str());
+        log->warn(oss);
     }
 
     std::vector<std::filesystem::path> schemaPaths_;
@@ -275,7 +275,7 @@ void XMLControl::validate(const xml::lite::Document& doc,
         oss << "Coudn't validate XML - no schemas paths provided "
             << " and " << six::SCHEMA_PATH << " not set.";
 
-        log->warn(oss.str());
+        log->warn(oss);
     }
 
     // validate against any specified schemas
@@ -410,8 +410,7 @@ std::string XMLControl::dataTypeToString(DataType dataType, bool appendXML)
         str = "SIDD";
         break;
     default:
-        throw except::Exception(
-            Ctxt("Invalid data type " + str::toString(dataType)));
+        throw except::Exception(Ctxt("Invalid data type " + str::toString(dataType)));
     }
 
     if (appendXML)
@@ -447,5 +446,5 @@ std::string six::getSchemaPath(std::vector<std::string>& schemaPaths, bool tryTo
         }
     }
 
-    throw except::IOException(Ctxt(FmtX("Directory does not exist: '%s'", schemaPath.c_str())));
+    throw except::IOException(Ctxt(str::Format("Directory does not exist: '%s'", schemaPath)));
 }

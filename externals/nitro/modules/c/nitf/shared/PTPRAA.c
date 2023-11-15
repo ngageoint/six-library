@@ -31,7 +31,7 @@
 NITF_CXX_GUARD
 
 // MIL-PRF-89034, Table 38 (page 80)
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PTPRAA_description[] = {
     {NITF_BCS_A, 4, "Segment Model ID", "SISEGID" },
     {NITF_BCS_N, 8, "Segment Absolute CE 90%", "SNACE" },
     {NITF_BCS_N, 8, "Segment Absolute LE 90%", "SNALE" },
@@ -66,6 +66,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PTPRAA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PTPRAA)
 
 NITF_CXX_ENDGUARD

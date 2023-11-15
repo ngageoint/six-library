@@ -21,12 +21,12 @@
  */
 #include <cphd03/CPHDXMLControl.h>
 
-#include <string>
+#include <std/string>
 #include <std/memory>
 
 #include <io/StringStream.h>
 #include <logging/NullLogger.h>
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 #include <six/Utilities.h>
 #include <six/XmlLite.h>
 
@@ -70,11 +70,11 @@ std::u8string CPHDXMLControl::toXMLString(const Metadata& metadata)
     io::U8StringStream ss;
     doc->getRootElement()->print(ss);
 
-    return str::EncodedStringView("<?xml version=\"1.0\"?>").u8string() + ss.stream().str();
+    return str::u8FromNative("<?xml version=\"1.0\"?>") + ss.stream().str();
 }
 std::string CPHDXMLControl::toXMLString_(const Metadata& metadata)
 {
-    return str::EncodedStringView(toXMLString(metadata)).native();
+    return str::to_native(toXMLString(metadata));
 }
 
 size_t CPHDXMLControl::getXMLsize(const Metadata& metadata)
@@ -493,7 +493,7 @@ XMLElem CPHDXMLControl::areaSampleDirectionParametersToXML(
 
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString)
 {
-    auto result = fromXML(str::EncodedStringView(xmlString).u8string());
+    auto result = fromXML(str::u8FromNative(xmlString));
     return std::unique_ptr<Metadata>(result.release());
 }
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString)

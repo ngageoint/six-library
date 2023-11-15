@@ -34,7 +34,6 @@
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
 #include <gsl/gsl.h>
-#include <str/EncodedStringView.h>
 #include <sys/Span.h>
 
 #include <six/XMLControlFactory.h>
@@ -209,7 +208,7 @@ static auto asBytes(BufferList::value_type pImageData,
 
     // At this point, we've lost information about the ACTUAL size of the buffer. Normally, the computation above will be correct.
     // But in the case of AMP8I_PHS8I (now supported), the buffer is actually RE32F_IM32F as the data is converted to
-    // six::zfloat when read-in, and converted to std::pair<uint8_t, uint8_t> when written-out.
+    // six::zfloat when read-in, and converted to AMP8I_PHS8I_t when written-out.
     if (data.getPixelType() == six::PixelType::AMP8I_PHS8I)
     {
         size_in_bytes *= sizeof(float);
@@ -261,7 +260,7 @@ bool NITFWriteControl::do_prepareIO(size_t imageDataSize, nitf::IOInterface& out
     {
         std::ostringstream ostr;
         ostr << "Require " << infos.size() << " images, received " << imageDataSize;
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     nitf::Record& record = getRecord();
@@ -569,7 +568,7 @@ void NITFWriteControl::addDataAndWrite(const std::vector<std::string>& schemaPat
         const Data* data = getContainer()->getData(ii);
 
         const auto xml = six::toValidXMLString(data, schemaPaths, mLog, mXMLRegistry);
-        desStrs[ii] = str::EncodedStringView(xml).native();
+        desStrs[ii] = str::to_native(xml);
         nitf::SegmentWriter deWriter = mWriter.newDEWriter(gsl::narrow<int>(ii));
         nitf::SegmentMemorySource segSource(desStrs[ii], 0, 0, false);
         deWriter.attachSource(segSource);

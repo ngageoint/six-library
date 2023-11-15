@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 {
     try
     {
-        if (argc < 4) throw except::Exception(Ctxt(FmtX("Usage %s <database> <user> <password> [host] [port]", argv[0])));
+        if (argc < 4) throw except::Exception(Ctxt(str::Format("Usage %s <database> <user> <password> [host] [port]", argv[0])));
 
         std::string database(argv[1]);
         std::string user(argv[2]);

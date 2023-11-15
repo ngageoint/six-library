@@ -51,20 +51,11 @@ inline void va_end_(va_list& args)
     CODA_OSS_disable_warning_pop
 }
 
-std::string str::format(const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    auto retval = vformat(format, args);
-    va_end_(args);
-    return retval;
-}
-
-str::Format::Format(const char* format, ...)
+std::string str::details::Format_(const char* format, ...)
 {
     va_list args;
     va_start(args, format);
     auto result = vformat(format, args);
     va_end_(args);
-    mString = std::move(result);
+    return result;
 }

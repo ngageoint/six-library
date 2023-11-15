@@ -23,6 +23,8 @@
 #ifndef __ZIP_ZIP_FILE_H__
 #define __ZIP_ZIP_FILE_H__
 
+#include "gsl/gsl.h"
+
 #include "zip/ZipEntry.h"
 
 /*!
@@ -144,9 +146,9 @@ public:
         return mComment;
     }
 
-    unsigned long getNumEntries() const
+    auto getNumEntries() const
     {
-        return static_cast<unsigned long>(mEntries.size());
+        return gsl::narrow<unsigned long>(mEntries.size());
     }
 
 };

@@ -20,7 +20,7 @@
  *
  */
 
-#include <std/memory>
+#include <memory>
 
 #include <mem/SharedPtr.h>
 #include <mem/AutoPtr.h>
@@ -45,17 +45,17 @@ TEST_CASE(testStdUniquePtr)
         TEST_ASSERT_NULL(fooCtor.get());
 
         fooCtor.reset(new Foo(123));
-        TEST_ASSERT_NOT_EQ(nullptr, fooCtor.get());
+        TEST_ASSERT_NOT_NULL(fooCtor.get());
         TEST_ASSERT_EQ(123, fooCtor->mVal);
     }
     {
         auto fooCtor = std::make_unique<Foo>(123);
-        TEST_ASSERT_NOT_EQ(nullptr, fooCtor.get());
+        TEST_ASSERT_NOT_NULL(fooCtor.get());
         TEST_ASSERT_EQ(123, fooCtor->mVal);
     }
     {
         auto pFoos = std::make_unique<Foo[]>(123);  // 123 instances of Foo
-        TEST_ASSERT_NOT_EQ(nullptr, pFoos.get());
+        TEST_ASSERT_NOT_NULL(pFoos.get());
         TEST_ASSERT_EQ(0, pFoos[0].mVal);
         TEST_ASSERT_EQ(0, pFoos[122].mVal);
     }
@@ -65,24 +65,24 @@ TEST_CASE(test_make_unique)
 {
     {
         auto fooCtor = std::make_unique<Foo>(123);
-        TEST_ASSERT_NOT_EQ(nullptr, fooCtor.get());
+        TEST_ASSERT_NOT_NULL(fooCtor.get());
         TEST_ASSERT_EQ(123, fooCtor->mVal);
     }
     {
         auto pFoos = std::make_unique<Foo[]>(123);  // 123 instances of Foo
-        TEST_ASSERT_NOT_EQ(nullptr, pFoos.get());
+        TEST_ASSERT_NOT_NULL(pFoos.get());
         TEST_ASSERT_EQ(0, pFoos[0].mVal);
         TEST_ASSERT_EQ(0, pFoos[122].mVal);
     }
 
     {
         auto fooCtor = std::make_unique<Foo>(123);
-        TEST_ASSERT_NOT_EQ(nullptr, fooCtor.get());
+        TEST_ASSERT_NOT_NULL(fooCtor.get());
         TEST_ASSERT_EQ(123, fooCtor->mVal);
     }
     {
         auto pFoos = std::make_unique<Foo[]>(123);  // 123 instances of Foo
-        TEST_ASSERT_NOT_EQ(nullptr, pFoos.get());
+        TEST_ASSERT_NOT_NULL(pFoos.get());
         TEST_ASSERT_EQ(0, pFoos[0].mVal);
         TEST_ASSERT_EQ(0, pFoos[122].mVal);
     }

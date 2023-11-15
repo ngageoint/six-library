@@ -20,13 +20,13 @@
  *
  */
 
-
+#pragma once 
 #ifndef CODA_OSS_except_Context_h_INCLUDED_
 #define CODA_OSS_except_Context_h_INCLUDED_
-#pragma once
 
 #include <string>
 #include <ostream>
+#include <sstream>
 
 #include "config/Exports.h"
 #include "config/disable_compiler_warnings.h"
@@ -59,12 +59,12 @@ struct CODA_OSS_API Context final
     Context(const char* file /*__FILE__*/, int line /*__LINE__*/,
             const std::string& func,
             const std::string& time,
-            const std::string& message = "") :
-        mMessage(message),
-        mTime(time),
-        mFunc(func),
-        mFile(file),
-        mLine(line) { }
+            const std::string& message = "" /*for existing SWIG bindings*/)
+      : mMessage(message), mTime(time), mFunc(func), mFile(file), mLine(line) { }
+    Context(const char* file /*__FILE__*/, int line /*__LINE__*/,
+            const std::string& func,
+            const std::string& time,
+            const std::ostringstream& message) : Context(file, line, func, time, message.str()) { }
     Context(const std::string& message,
         const char* file /*__FILE__*/, int line /*__LINE__*/,
         const std::string& func = "",

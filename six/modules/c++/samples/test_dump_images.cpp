@@ -161,7 +161,7 @@ int main(int argc, char** argv)
         for (size_t i = 0, total = container->size(); i < total; ++i)
         {
             const six::Data* data = container->getData(i);
-            std::string filename = FmtX("%s_DES_%d.xml", base.c_str(), i);
+            const auto filename = str::Format("%s_DES_%d.xml", base.string(), i);
             const auto xmlFile = fs::path(outputDir) / filename;
             io::FileOutputStream xmlStream(xmlFile.string());
 

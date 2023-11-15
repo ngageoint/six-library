@@ -34,7 +34,7 @@ namespace six
 {
 namespace sidd
 {
-constexpr Version VERSION = Version::v100;
+constexpr Version VERSION = Version::v1_0_0;
 const char SI_COMMON_URI[] = "urn:SICommon:0.1";
 const char ISM_URI[] = "urn:us:gov:ic:ism";
 inline static xml::lite::Uri getISMUri()
@@ -566,7 +566,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
 
     if (exploitationFeatures->collections.empty())
     {
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
             "ExploitationFeatures must have at least [1] Collection, " \
             "only [%d] found", exploitationFeatures->collections.size())));
     }

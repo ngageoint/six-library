@@ -172,7 +172,7 @@ public:
 			  std::span<const six::zint16_t> buffer,
 			  size_t firstRow, const Data& data, bool doByteSwap);
     NewMemoryWriteHandler(const NITFSegmentInfo& info,
-			  std::span<const std::pair<uint8_t, uint8_t>> buffer,
+			  std::span<const AMP8I_PHS8I_t> buffer,
 			  size_t firstRow, const Data& data, bool doByteSwap);
 };
 

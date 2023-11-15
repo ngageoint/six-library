@@ -20,9 +20,9 @@
  *
  */
 
-#ifndef __TEST_CASE_H__
-#define __TEST_CASE_H__
 #pragma once
+#ifndef CODA_OSS_TestCase_h_INCLUDED_
+#define CODA_OSS_TestCase_h_INCLUDED_
 
 #ifdef __cplusplus
 
@@ -31,10 +31,12 @@
 # include <exception>
 # include <iostream>
 #include <utility>
-#  include <import/sys.h>
-#  include <import/str.h>
-#  include <import/except.h>
-#  include <except/Throwable.h>
+
+#include <str/Convert.h>
+#include <except/Throwable.h>
+#include <sys/Dbg.h>
+#include <sys/Conf.h>
+
 
 #  define IS_NAN(X) X != X
 
@@ -72,6 +74,10 @@ template <typename TX>
 inline std::string toString(const TX& X)
 {
     return str::toString(X);
+}
+inline std::string toString(const coda_oss::u8string& X)
+{
+    return str::to_native(X);
 }
 
 template<typename TX>
@@ -274,4 +280,4 @@ inline int main(TFunc f)
 
 #endif
 
-#endif
+#endif  // CODA_OSS_TestCase_h_INCLUDED_

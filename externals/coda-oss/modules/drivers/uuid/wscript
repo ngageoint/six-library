@@ -12,7 +12,7 @@ def options(opt):
                        default=True, help='will build the uuid library if not found on the system (default)')
         opt.add_option('--build-uuid', action='store_true', dest='build_uuid',
                        help='force building libuuid from scratch',
-                       default=os.path.exists(os.path.join(opt.path.abspath(), 'e2fsprogs-1.40-uuid.tar')))
+                       default=os.path.exists(os.path.join(opt.path.abspath(), 'e2fsprogs-1.47.0.tar')))
         opt.add_option('--nobuild-uuid', action='store_false', dest='build_uuid',
                        help='force not building libuuid from scratch')
         opt.add_option('--with-uuid-home', action='store', dest='uuid_home',
@@ -35,7 +35,7 @@ def configure(conf):
 
         elif Options.options.build_uuid:
             # Build is off by default when tarfile not found, fail if forced on
-            if not os.path.exists(os.path.join(conf.path.abspath(), 'e2fsprogs-1.40-uuid.tar')):
+            if not os.path.exists(os.path.join(conf.path.abspath(), 'e2fsprogs-1.47.0.tar')):
                 conf.fatal('Missing uuid tarfile')
             
             def uuid_callback(conf):
@@ -74,9 +74,9 @@ def configure(conf):
             conf.env['MAKE_UUID'] = True
             conf.msg('Building local lib', 'uuid')
            
-            untarFile(path=conf.path, fname='e2fsprogs-1.40-uuid.tar')
+            untarFile(path=conf.path, fname='e2fsprogs-1.47.0.tar')
             
-            fname='e2fsprogs-1.40-uuid'
+            fname='e2fsprogs-1.47.0'
             driverNode = conf.path.make_node(join(fname, 'lib', 'uuid'))
             
             writeConfig(conf, uuid_callback, 'uuid', infile='uuid_types.h.in',
@@ -100,7 +100,7 @@ def build(bld):
 
     if 'MAKE_UUID' in env:
         
-        fname = 'e2fsprogs-1.40-uuid'
+        fname = 'e2fsprogs-1.47.0'
         
         driverNode = driversNode.make_node(fname)
         
@@ -154,7 +154,7 @@ def distclean(context):
     import shutil
     
     dirs = map(lambda d: os.path.join(context.path.abspath(), d),
-               ['e2fsprogs-1.40-uuid'])
+               ['e2fsprogs-1.47.0'])
     for d in dirs:
         try:
             if os.path.exists(d):

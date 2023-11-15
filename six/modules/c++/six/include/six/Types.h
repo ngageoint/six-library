@@ -201,7 +201,7 @@ struct Constants
             // Each pixel is stored as a pair of numbers that represent the amplitude and phase
             // components. Each component is stored in an 8-bit unsigned integer (1 byte per 
             // component, 2 bytes per pixel). 
-            static_assert(sizeof(std::pair<uint8_t, uint8_t>) == 2, "AMP8I_PHS8I should be two 8-bit integers");
+            static_assert(sizeof(AMP8I_PHS8I_t) == 2, "AMP8I_PHS8I should be two 8-bit integers");
             return 2;
         }
 
@@ -215,7 +215,7 @@ struct Constants
             return 3;
 
         default:
-            throw except::Exception(Ctxt(FmtX("Unknown pixel type [%d]", (int) type)));
+            throw except::Exception(Ctxt(str::Format("Unknown pixel type [%d]", (int) type)));
         }
     }
 

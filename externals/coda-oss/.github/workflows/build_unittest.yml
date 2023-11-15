@@ -58,7 +58,8 @@ jobs:
         os: [windows-latest]
         platform: [x64]
         configuration: [Debug] # Debug turns on more compiler warnings
-    name: ${{ matrix.os }}-msbuild
+        avx: [AVX2, AVX512F]
+    name: ${{ matrix.os }}-${{ matrix.avx }}-msbuild
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -68,14 +69,14 @@ jobs:
         ls env:
         mkdir out
         cd out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON
     - name: build
       run: |
         cd out
         cmake --build . --config ${{ matrix.configuration }} -j
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
+      uses: microsoft/setup-msbuild@v1.0.2 # https://github.com/marketplace/actions/setup-msbuild
       with:
         msbuild-architecture: x64
     - name: msbuild
@@ -89,7 +90,7 @@ jobs:
     #      searchFolder: D:\a\nitro\nitro\${{ matrix.platform }}\${{ matrix.configuration }}
     #      runInParallel: true  
 
-  build-linux-cmake:
+  build-linux-cmake-default:
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -109,8 +110,7 @@ jobs:
       run: |
         env
         which python
-        mkdir target
-        cd target
+        mkdir target && cd target
         cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
     - name: build
       run: |
@@ -126,6 +126,31 @@ jobs:
       run: |
         cd target
         cmake --build . --target install
+
+  build-linux-cmake:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        configuration: [Debug, Release]
+        avx: [AVX2, AVX512F]
+    name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: configure
+      run: |
+        mkdir out && cd out
+        cmake .. -DENABLE_PYTHON=OFF -DENABLE_ASAN=ON -DENABLE_${{ matrix.avx }}=ON
+    - name: build
+      run: |
+        cd out
+        # "-j" spawns too many processes causing GCC to crash
+        cmake --build . --config ${{ matrix.configuration }} -j 12
+    - name: test
+    # should run w/o install
+      run: |
+        cd out
+        ctest -C ${{ matrix.configuration }} --output-on-failure
 
   build-waf:
     strategy:

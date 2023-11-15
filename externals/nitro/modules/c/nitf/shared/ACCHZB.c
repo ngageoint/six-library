@@ -20,17 +20,11 @@
  *
  */
 
-#if _MSC_VER
-#pragma warning(disable: 4820) // '...' : '...' bytes padding added after data member '...'
-#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
-#pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
-#endif
-
 #include <import/nitf.h>
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription ACCHZB_description[] = {
     {NITF_BCS_N, 2, "Number of horizontal accuracy regions", "NUMACHZ", },
     {NITF_LOOP, 0, NULL, "NUMACHZ"},
     {NITF_BCS_A, 3, "Unit of Measure for AAH", "UNIAAH" },
@@ -50,6 +44,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(ACCHZB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(ACCHZB)
 
 NITF_CXX_ENDGUARD

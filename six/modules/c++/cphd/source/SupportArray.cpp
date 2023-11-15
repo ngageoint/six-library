@@ -81,28 +81,31 @@ AdditionalSupportArray::AdditionalSupportArray(
     initializeParams();
 }
 
-SupportArrayParameter SupportArray::getIAZSupportArray(const std::string& key) const
+static SupportArrayParameter getSupportArray(const std::vector<SupportArrayParameter>& params, const std::string& key)
 {
     size_t keyNum = str::toType<size_t>(key);
-    if (iazArray.size() <= keyNum)
+    if (params.size() <= keyNum)
     {
         std::ostringstream oss;
         oss << "SA_ID was not found " << (key);
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
-    return iazArray[keyNum];
+    return params[keyNum];
+}
+
+SupportArrayParameter SupportArray::getIAZSupportArray(const std::string& key) const
+{
+    return getSupportArray(iazArray, key);
 }
 
 SupportArrayParameter SupportArray::getAGPSupportArray(const std::string& key) const
 {
-    size_t keyNum = str::toType<size_t>(key);
-    if (antGainPhase.size() <= keyNum)
-    {
-        std::ostringstream oss;
-        oss << "SA_ID was not found " << (key);
-        throw except::Exception(Ctxt(oss.str()));
-    }
-    return antGainPhase[keyNum];
+    return getSupportArray(antGainPhase, key);
+}
+
+SupportArrayParameter SupportArray::getDWTSupportArray(const std::string& key) const
+{
+    return getSupportArray(dwellTimeArray, key);
 }
 
 AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string& key) const
@@ -111,7 +114,7 @@ AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string& key
     {
         std::ostringstream oss;
         oss << "SA_ID was not found " << (key);
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
     return addedSupportArray.find(key)->second;
 }
@@ -138,8 +141,7 @@ std::ostream& operator<< (std::ostream& os, const AdditionalSupportArray& a)
         << "    ZUnits         : " << a.zUnits << "\n";
     for (size_t ii = 0; ii < a.parameter.size(); ++ii)
     {
-        os << "    Parameter Name : " << a.parameter[ii].getName() << "\n"
-            << "    Parameter Value : " << a.parameter[ii].str() << "\n";
+        out(os, a.parameter[ii]);
     }
     return os;
 }
@@ -156,6 +158,11 @@ std::ostream& operator<< (std::ostream& os, const SupportArray& s)
     {
         os << "  Ant Gain Phase:: \n"
             << s.antGainPhase[ii];
+    }
+    for (size_t ii = 0; ii < s.dwellTimeArray.size(); ++ii)
+    {
+        os << "  Dwell Time Array:: \n"
+            << s.dwellTimeArray[ii];
     }
     for (auto it = s.addedSupportArray.begin(); it != s.addedSupportArray.end(); ++it)
     {

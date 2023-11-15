@@ -23,8 +23,9 @@
 
 #include <stdexcept>
 #include <set>
+#include <std/string>
 
-#include <str/EncodedStringView.h>
+#include <str/Encoding.h>
 
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
@@ -562,7 +563,7 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
         const std::vector<std::string>& schemaPaths_, logging::Logger& log)
 {
-    const auto xmlStr = str::EncodedStringView(xmlStr_).u8string();
+    const auto xmlStr = str::u8FromNative(xmlStr_);
 
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
@@ -579,15 +580,21 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string&
     return dataParser.fromXML(xmlStr);
 }
 
-std::string Utilities::toXMLString(const DerivedData& data,
+std::u8string Utilities::toXMLString(const DerivedData& data,
                                    const std::vector<std::string>& schemaPaths_, logging::Logger* logger)
 {
     std::vector<std::filesystem::path> schemaPaths;
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::EncodedStringView(result).native();
+    return toXMLString(data, &schemaPaths, logger);
+}
+std::string Utilities::toXMLString_(const DerivedData& data,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger* logger)
+{
+    const auto result = toXMLString(data, schemaPaths, logger);
+    return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)
@@ -690,7 +697,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, Ver
     productCreation.productCreationExtensions.push_back(parameter);
 
     productCreation.classification.securityExtensions.push_back(parameter);
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         productCreation.classification.desVersion = 234; // existing code
     }
@@ -701,7 +708,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, Ver
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
 
-    if (siddVersion == Version::v100)
+    if (siddVersion == Version::v1_0_0)
     {
         productCreation.classification.compliesWith.push_back("ICD-710");
     }
@@ -939,7 +946,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     polarization->txPolarization = six::PolarizationSequenceType::V;
     polarization->rcvPolarization = six::PolarizationSequenceType::OTHER;
     polarization->rcvPolarizationOffset = 1.37;
-    if (siddVersion == Version::v100)
+    if (siddVersion == Version::v1_0_0)
     {
         polarization->processed = six::BooleanType::IS_TRUE;
     }
@@ -957,7 +964,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     collection.geometry->extensions.push_back(param);
 
     collection.phenomenology.reset(new six::sidd::Phenomenology());
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         // [-180, 180) before SIDD 3.0
         collection.phenomenology->shadow = six::AngleMagnitude(-1.5, 3.7);
@@ -979,7 +986,7 @@ static void initExploitationFeatures(six::sidd::ExploitationFeatures& exFeatures
     exFeatures.product[0].north = 58.332;
     exFeatures.product[0].extensions.push_back(param);
 
-    if (siddVersion == Version::v200)
+    if (siddVersion == Version::v2_0_0)
     {
         exFeatures.product[0].ellipticity = 12.0;
         exFeatures.product[0].polarization.resize(1);
@@ -1125,7 +1132,7 @@ static void populateData(six::sidd::DerivedData& siddData, const std::string& lu
     constexpr bool smallImage = true;
     const auto elementSize = static_cast<size_t>(lutType == "Mono" ? 2 : 3);
 
-    if ((siddVersion == Version::v200) || (siddVersion == Version::v300))
+    if ((siddVersion == Version::v2_0_0) || (siddVersion == Version::v3_0_0))
     {
         // This will naturally get constructed in the course of 1.0.0
         // Separate field in 2.0.0
@@ -1391,11 +1398,11 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddV
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion)
 {
-    if (siddVersion == Version::v300)
+    if (siddVersion == Version::v3_0_0)
     {
         throw std::invalid_argument("Must use ISMVersion overload.");
     }
-    if (siddVersion == Version::v200)
+    if (siddVersion == Version::v2_0_0)
     {
         return createFakeDerivedData_(&siddVersion);
     }
@@ -1403,7 +1410,7 @@ std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersio
 }
 std::unique_ptr<DerivedData> Utilities::createFakeDerivedData(Version siddVersion, six::sidd300::ISMVersion ismVersion)
 {
-    if (siddVersion != Version::v300)
+    if (siddVersion != Version::v3_0_0)
     {
         return createFakeDerivedData(siddVersion);
     }

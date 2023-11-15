@@ -832,9 +832,7 @@ XMLElem ComplexXMLParser::convertRcvChanProcToXML(
     }
     else
     {
-        throw except::Exception(Ctxt(FmtX(
-            "[RcvChanProc] is a manditory field in ImageFormation in %s",
-            strVersion.c_str())));
+        throw except::Exception(Ctxt(str::Format("[RcvChanProc] is a manditory field in ImageFormation in %s", strVersion)));
     }
 }
 
@@ -878,9 +876,7 @@ XMLElem ComplexXMLParser::convertDistortionToXML(
     }
     else
     {
-        throw except::Exception(Ctxt(FmtX(
-            "[Distortion] is a maditory field of ImageFormation in %s",
-            strVersion.c_str())));
+        throw except::Exception(Ctxt(str::Format("[Distortion] is a maditory field of ImageFormation in %s", strVersion)));
     }
 }
 

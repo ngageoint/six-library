@@ -73,9 +73,9 @@ namespace sidd
 //   SIDD 3.0.0
 enum class Version
 {
-    v100,
-    v200,
-    v300,
+    v1_0_0,
+    v2_0_0,
+    v3_0_0,
 };
 std::string to_string(Version); // "1.0.0", "2.0.0", "3.0.0"
 Version normalizeVersion(const std::string&);
@@ -377,7 +377,7 @@ private:
     static const char VENDOR_ID[];
     bool equalTo(const Data& rhs) const override;
 
-    Version mVersion = Version::v100; // existing code
+    Version mVersion = Version::v1_0_0; // existing code
     six::sidd300::ISMVersion mISMVersion = six::sidd300::ISMVersion::current; // only for SIDD 3.0.0
 };
 }

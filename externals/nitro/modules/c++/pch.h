@@ -28,6 +28,7 @@ CODA_OSS_disable_warning_pop
 #define NOMINMAX
 #pragma warning(push)
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 #include <windows.h>
 #pragma warning(pop)
 
@@ -69,6 +70,7 @@ CODA_OSS_disable_warning_pop
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
 #pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
+#pragma warning(disable: 5267) // definition of implicit copy constructor for '...' is deprecated because it has a user-provided destructor
 
 // Yes, these are our files ... but they don't change very often, and if they do
 // change we want to rebuild everything anyway.

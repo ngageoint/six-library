@@ -20,9 +20,9 @@
  *
  */
 
-
-#ifndef __SYS_DIRECTORY_ENTRY_H__
-#define __SYS_DIRECTORY_ENTRY_H__
+#pragma once
+#ifndef CODA_OSS_sys_DirectoryEntry_h_INCLUDED_
+#define CODA_OSS_sys_DirectoryEntry_h_INCLUDED_
 
 #include "except/Exception.h"
 #include "sys/OS.h"
@@ -151,4 +151,4 @@ bool operator==(const sys::DirectoryEntry::Iterator& lhs,
 bool operator!=(const sys::DirectoryEntry::Iterator& lhs,
                 const sys::DirectoryEntry::Iterator& rhs);
 
-#endif
+#endif  // CODA_OSS_sys_DirectoryEntry_h_INCLUDED_

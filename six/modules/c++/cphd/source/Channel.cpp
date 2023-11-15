@@ -20,6 +20,11 @@
  *
  */
 #include <cphd/Channel.h>
+
+#include <std/string>
+
+#include <str/Encoding.h>
+
 #include <six/Init.h>
 
 namespace cphd
@@ -83,10 +88,17 @@ Channel::Channel() :
 {
 }
 
+std::ostream& operator<< (std::ostream& os, const PolRef& v)
+{
+    os << v.ampH << v.ampV << v.phaseV << "\n";
+    return os;
+}
+
 std::ostream& operator<< (std::ostream& os, const Polarization& p)
 {
     os << "      TxPol        : " << p.txPol << "\n"
-        << "      RcvPol       : " << p.rcvPol << "\n";
+        << "      RcvPol       : " << p.rcvPol << "\n"
+        << p.txPolRef << p.rcvPolRef;
     return os;
 }
 
@@ -106,8 +118,10 @@ std::ostream& operator<< (std::ostream& os, const DwellTimes& d)
 {
     os << "      DwellTimes:: \n"
         << "      CODId        : " << d.codId << "\n"
-        << "      DwellId        : " << d.dwellId << "\n";
-        return os;
+        << "      DwellId        : " << d.dwellId << "\n"
+        << d.dtaId
+        << d.useDTA;
+    return os;
 }
 
 std::ostream& operator<< (std::ostream& os, const TgtRefLevel& t)
@@ -207,8 +221,7 @@ std::ostream& operator<< (std::ostream& os, const Channel& c)
     }
     for (size_t ii = 0; ii < c.addedParameters.size(); ++ii)
     {
-        os << "  Parameter name   : " << c.addedParameters[ii].getName() << "\n";
-        os << "  Parameter value   : " << c.addedParameters[ii].str() << "\n";
+        out(os, c.addedParameters[ii]);
     }
     return os;
 }

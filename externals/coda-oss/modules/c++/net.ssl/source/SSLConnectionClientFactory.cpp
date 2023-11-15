@@ -60,12 +60,12 @@ void net::ssl::SSLConnectionClientFactory::initializeContext()
 
     if(method == nullptr)
     {
-        throw net::ssl::SSLException(Ctxt(FmtX("SSLv23_client_method failed")));
+        throw net::ssl::SSLException(Ctxt(str::Format("SSLv23_client_method failed")));
     }
     mCtx = SSL_CTX_new(method);
     if(mCtx == nullptr)
     {
-        throw net::ssl::SSLException(Ctxt(FmtX("SSL_CTX_new failed")));
+        throw net::ssl::SSLException(Ctxt(str::Format("SSL_CTX_new failed")));
     }
 
     if(mClientAuthentication)

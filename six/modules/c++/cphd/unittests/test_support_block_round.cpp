@@ -84,9 +84,9 @@ void writeSupportData(const std::string& outPathname, size_t numThreads,
             cphd::setVectorParameters(ii, jj, pvpBlock);
         }
     }
-    cphd::CPHDWriter writer(metadata, outPathname, std::vector<std::string>(), numThreads);
+    cphd::CPHDWriter writer(metadata, outPathname, nullptr /*pSchemaPaths*/, numThreads);
     writer.writeMetadata(pvpBlock);
-    writer.writeSupportData(writeData.data());
+    writer.writeSupportData(writeData);
     writer.writePVPData(pvpBlock);
 }
 
@@ -98,10 +98,8 @@ std::vector<std::byte> checkSupportData(
     cphd::CPHDReader reader(pathname, numThreads);
     const cphd::SupportBlock& supportBlock = reader.getSupportBlock();
 
-    std::unique_ptr<std::byte[]> readPtr;
-    supportBlock.readAll(numThreads, readPtr);
-
-    std::vector<std::byte> readData(readPtr.get(), readPtr.get() + reader.getMetadata().data.getAllSupportSize());
+    const auto bytes = supportBlock.readAll(numThreads);
+    std::vector<std::byte> readData(bytes.data(), bytes.data() + reader.getMetadata().data.getAllSupportSize());
     return readData;
 }
 
@@ -134,8 +132,7 @@ bool runTest(const std::vector<T>& writeData)
 {
     io::TempFile tempfile;
     const size_t numThreads = 1;
-    cphd::Metadata meta = cphd::Metadata();
-    cphd::setUpData(meta, types::RowCol<size_t>(128,256), std::vector<cphd::zfloat >());
+    auto meta = cphd::setUpData(types::RowCol<size_t>(128,256), std::vector<cphd::zfloat >());
     setSupport<T>(meta.data);
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);

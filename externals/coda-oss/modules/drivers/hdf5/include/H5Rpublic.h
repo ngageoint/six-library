@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -17,10 +16,10 @@
 #ifndef H5Rpublic_H
 #define H5Rpublic_H
 
-/* Public headers needed by this file */
-#include "H5public.h"
-#include "H5Gpublic.h"
-#include "H5Ipublic.h"
+#include "H5public.h"  /* Generic Functions                        */
+#include "H5Gpublic.h" /* Groups                                   */
+#include "H5Ipublic.h" /* Identifiers                              */
+#include "H5Opublic.h" /* Object Headers                           */
 
 /*****************/
 /* Public Macros */
@@ -260,7 +259,7 @@ H5_DLL herr_t H5Rdestroy(H5R_ref_t *ref_ptr);
  *          \snippet this H5R_type_t_snip
  *
  *          Note that #H5R_OBJECT1 and #H5R_DATASET_REGION1 can never be
- *          associated to an \ref H5R_ref_t reference and can therefore never be
+ *          associated with an \ref H5R_ref_t reference and can, therefore, never be
  *          returned through that function.
  *
  *          \ref H5R_ref_t is defined in H5Rpublic.h as:
@@ -303,7 +302,7 @@ H5_DLL htri_t H5Requal(const H5R_ref_t *ref1_ptr, const H5R_ref_t *ref2_ptr);
  * \return \herr_t
  *
  * \details H5Rcopy() creates a copy of an existing reference.
- *          \p src_ref_ptr points to the reference to copy and \p dst_ref_ptr is the
+ *          \p src_ref_ptr points to the reference to copy, and \p dst_ref_ptr is the
  *          pointer to the destination reference.
  *
  */
@@ -337,7 +336,7 @@ H5_DLL herr_t H5Rcopy(const H5R_ref_t *src_ref_ptr, H5R_ref_t *dst_ref_ptr);
  *
  *          The object opened with this function should be closed when it
  *          is no longer needed so that resource leaks will not develop. Use
- *          the appropriate close function such as H5Oclose() or H5Dclose()
+ *          the appropriate close function, such as H5Oclose() or H5Dclose()
  *          for datasets.
  *
  */
@@ -346,10 +345,15 @@ H5_DLL hid_t H5Ropen_object(H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t oapl_id);
 /**
  * --------------------------------------------------------------------------
  * \ingroup ASYNC
- * \async_variant_of{H5Ropen}
+ * \async_variant_of{H5Ropen_object}
  */
+#ifndef H5_DOXYGEN
 H5_DLL hid_t H5Ropen_object_async(const char *app_file, const char *app_func, unsigned app_line,
                                   H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t oapl_id, hid_t es_id);
+#else
+H5_DLL hid_t H5Ropen_object_async(unsigned app_line, H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t oapl_id,
+                                  hid_t es_id);
+#endif
 
 /**
  * --------------------------------------------------------------------------
@@ -389,8 +393,12 @@ H5_DLL hid_t H5Ropen_region(H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t oapl_id);
  * \ingroup ASYNC
  * \async_variant_of{H5Ropen_region}
  */
+#ifndef H5_DOXYGEN
 H5_DLL hid_t H5Ropen_region_async(const char *app_file, const char *app_func, unsigned app_line,
                                   H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t oapl_id, hid_t es_id);
+#else
+H5_DLL hid_t H5Ropen_region_async(H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t oapl_id, hid_t es_id);
+#endif
 
 /**
  * --------------------------------------------------------------------------
@@ -427,8 +435,12 @@ H5_DLL hid_t H5Ropen_attr(H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t aapl_id);
  * \ingroup ASYNC
  * \async_variant_of{H5Ropen_attr}
  */
+#ifndef H5_DOXYGEN
 H5_DLL hid_t H5Ropen_attr_async(const char *app_file, const char *app_func, unsigned app_line,
                                 H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t aapl_id, hid_t es_id);
+#else
+H5_DLL hid_t H5Ropen_attr_async(H5R_ref_t *ref_ptr, hid_t rapl_id, hid_t aapl_id, hid_t es_id);
+#endif
 
 /* Get type */
 
@@ -616,7 +628,7 @@ H5_DLL ssize_t H5Rget_attr_name(const H5R_ref_t *ref_ptr, char *name, size_t siz
  *
  *          A \Emph{reference type} is the type of reference, either an object
  *          reference or a dataset region reference. An \Emph{object reference}
- *          points to an HDF5 object while a \Emph{dataset region reference}
+ *          points to an HDF5 object, while a \Emph{dataset region reference}
  *          points to a defined region within a dataset.
  *
  *          The \Emph{referenced object} is the object the reference points
@@ -635,10 +647,10 @@ H5_DLL ssize_t H5Rget_attr_name(const H5R_ref_t *ref_ptr, char *name, size_t siz
  *          that can be determined with three preliminary calls:
  *
  *          \li Call H5Dget_type() on the dataset containing the reference to
- *              get a datatype identifier for the dataset’s datatype.
+ *              get a datatype identifier for the dataset's datatype.
  *          \li Using that datatype identifier, H5Tget_class() returns a datatype
  *              class.\n If the datatype class is #H5T_REFERENCE, H5Tequal() can
- *              then be used to determine whether the reference’s datatype is
+ *              then be used to determine whether the reference's datatype is
  *              #H5T_STD_REF_OBJ or #H5T_STD_REF_DSETREG:
  *              - If the datatype is #H5T_STD_REF_OBJ, the reference object type
  *                is #H5R_OBJECT.
@@ -688,7 +700,7 @@ H5_DLL H5G_obj_t H5Rget_obj_type1(hid_t id, H5R_type_t ref_type, const void *ref
  *
  *          The object opened with this function should be closed when it is no
  *          longer needed so that resource leaks will not develop. Use the
- *          appropriate close function such as H5Oclose() or H5Dclose() for
+ *          appropriate close function, such as H5Oclose() or H5Dclose() for
  *          datasets.
  *
  * \version 1.10.0 Function H5Rdereference() renamed to H5Rdereference1() and
@@ -772,10 +784,10 @@ H5_DLL herr_t H5Rcreate(void *ref, hid_t loc_id, const char *name, H5R_type_t re
  *          that can be determined with three preliminary calls:
  *
  *          \li Call H5Dget_type() on the dataset containing the reference to
- *              get a datatype identifier for the dataset’s datatype.
+ *              get a datatype identifier for the dataset's datatype.
  *          \li Using that datatype identifier, H5Tget_class() returns a datatype
  *              class.\n If the datatype class is #H5T_REFERENCE, H5Tequal() can
- *              then be used to determine whether the reference’s datatype is
+ *              then be used to determine whether the reference's datatype is
  *              #H5T_STD_REF_OBJ or #H5T_STD_REF_DSETREG:
  *              - If the datatype is #H5T_STD_REF_OBJ, the reference object type
  *                is #H5R_OBJECT.
@@ -825,7 +837,7 @@ H5_DLL herr_t H5Rget_obj_type2(hid_t id, H5R_type_t ref_type, const void *ref, H
  *
  *          The object opened with this function should be closed when it is no
  *          longer needed so that resource leaks will not develop. Use the
- *          appropriate close function such as H5Oclose() or H5Dclose() for
+ *          appropriate close function, such as H5Oclose() or H5Dclose() for
  *          datasets.
  *
  * \since 1.10.0
@@ -893,7 +905,7 @@ H5_DLL hid_t H5Rget_region(hid_t dataset, H5R_type_t ref_type, const void *ref);
  *          include the following:
  *          \snippet this H5R_type_t_snip
  *
- *          \p ref is the reference for which the target object’s name is
+ *          \p ref is the reference for which the target object's name is
  *          sought.
  *
  *          If \p ref is an object reference, \p name will be returned with a

@@ -42,13 +42,13 @@ static_assert(CODA_OSS_MAKE_VERSION_MMPB(9999, 9999, 9999, 9999) <= UINT64_MAX, 
 
 // Do this ala C++ ... we don't currently have major/minor/patch
 //#define CODA_OSS_VERSION_ 20210910L // c.f. __cplusplus
-#define CODA_OSS_VERSION_ 2023 ## 0006 ## 0005 ## 0000 ## L
+#define CODA_OSS_VERSION_ 2023 ## 0010 ## 0023 ## 0000 ## L
 
 // Use the same macros other projects might want to use; overkill for us.
 #define CODA_OSS_VERSION_MAJOR	2023
-#define CODA_OSS_VERSION_MINOR	6
-#define CODA_OSS_VERSION_PATCH	5
-#define CODA_OSS_VERSION_BUILD	0
+#define CODA_OSS_VERSION_MINOR	10
+#define CODA_OSS_VERSION_PATCH	23 // a.k.a. "point," but too similar to "patch."
+#define CODA_OSS_VERSION_BUILD	0 // a.k.a. "patch," but too similar to "point."
 #define CODA_OSS_VERSION CODA_OSS_MAKE_VERSION_MMPB(CODA_OSS_VERSION_MAJOR, CODA_OSS_VERSION_MINOR, CODA_OSS_VERSION_PATCH, CODA_OSS_VERSION_BUILD)
 
 namespace config

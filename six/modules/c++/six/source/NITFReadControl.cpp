@@ -237,7 +237,7 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
     {
         std::ostringstream ostr;
         ostr << "Expected [" << expectedBytesPerPixel << "] bytes per pixel, found [" << foundBytesPerPixel << "]";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     const auto numCols = info.getData()->getNumCols();
@@ -246,7 +246,7 @@ void NITFReadControl::validateSegment(const nitf::ImageSubheader& subheader,
     {
         std::ostringstream ostr;
         ostr << "Invalid column width: was expecting [" << numCols << "], got [" << numColsSubheader << "]";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 }
 
@@ -455,16 +455,41 @@ void NITFReadControl::load_(std::shared_ptr<nitf::IOInterface> ioInterface, cons
             }
         }
 
-        // SIDD 2.0 needs to read LUT directly from NITF
-        const auto pData = currentInfo->getData();
-        if (pData->getDataType() == DataType::DERIVED && pData->getVersion() == "2.0.0")
-        {
-            const auto nitfLut = subheader.getBandInfo(0).getLookupTable();
-            currentInfo->getData_()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
-        }
+        setDisplayLUT(*currentInfo, subheader);
+
         currentInfo->addSegment(si);
     }
 }
+void NITFReadControl::setDisplayLUT(six::NITFImageInfo& currentInfo, const nitf::ImageSubheader& subheader)
+{
+    // SIDD 2.0 needs to read LUT directly from NITF
+    const auto pData = currentInfo.getData();
+    if (pData->getDataType() != DataType::DERIVED)
+    {
+        // LUT processing only for SIDDs
+        return;
+    }
+
+    const auto version = pData->getVersion();
+    if (version == "1.0.0") // TODO: remove this hard-coded SIDD version check
+    {
+        // LUTs only with SIDD 2.0 and later
+        return;
+    }
+
+    // There's no requirement for SIDD 2.0 to have a LUT
+    const auto bandInfo0 = subheader.getBandInfo(0);
+    const int numLUTs = bandInfo0.getNumLUTs();
+    if (numLUTs > 0) // avoid getLookupTable() creating an empty nitf::LookupTable
+    {
+        const auto nitfLut = bandInfo0.getLookupTable();
+        if (nitfLut.getEntries() > 0)
+        {
+            currentInfo.getData_()->setDisplayLUT(std::make_unique<AmplitudeTable>(nitfLut));
+        }
+    }
+}
+
 void NITFReadControl::load(std::shared_ptr<nitf::IOInterface> ioInterface, const std::vector<std::string>* pSchemaPaths_)
 {
     const std::vector<std::string> schemaPaths;
@@ -513,7 +538,7 @@ public:
         Parameter p = parameter.toString();
         const auto k = NITFImageInfo::generateFieldKey(field, prefix_);
         options_.setParameter(k, p);
-        log_.debug(Ctxt(FmtX("Added NITF security option: [%s]->[%s]", k.c_str(),
+        log_.debug(Ctxt(str::Format("Added NITF security option: [%s]->[%s]", k,
             static_cast<const char*>(p))));
     }
 };
@@ -639,10 +664,10 @@ UByte* NITFReadControl::interleaved(Region& region, size_t imageNumber)
     const auto extentCols = startCol + numColsReq;
 
     if (extentRows > numRowsTotal || startRow > numRowsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many rows requested [%d]", numRowsReq)));
+        throw except::Exception(Ctxt(str::Format("Too many rows requested [%d]", numRowsReq)));
 
     if (extentCols > numColsTotal || startCol > numColsTotal)
-        throw except::Exception(Ctxt(FmtX("Too many cols requested [%d]", numColsReq)));
+        throw except::Exception(Ctxt(str::Format("Too many cols requested [%d]", numColsReq)));
 
     // Allocate one band
     uint32_t bandList(0);

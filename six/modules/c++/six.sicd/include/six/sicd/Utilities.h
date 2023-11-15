@@ -428,10 +428,14 @@ struct Utilities final
      *
      * \return XML string representation of 'data'
      */
-    static std::string toXMLString(
+    static std::u8string toXMLString(
             const ComplexData& data,
             const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
             logging::Logger* logger = nullptr);
+    static std::string toXMLString_(
+        const ComplexData& data,
+        const std::vector<std::string>& schemaPaths = std::vector<std::string>(),
+        logging::Logger* logger = nullptr);
     static std::u8string toXMLString(const ComplexData&,
         const std::vector<std::filesystem::path>*, logging::Logger* pLogger = nullptr);
     /*!
@@ -635,9 +639,9 @@ struct Utilities final
     // Convert the amp/phase to a complex value using the given AmplitudeTable, if any.
     // This call could be in a tight loop where the value of six::AmplitudeTable* is known outside of the loop;
     // the overloads allow clients to avoid an inner `if`-check.
-    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable);
-    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable&);
-    static std::complex<long double> toComplex(uint8_t amplitude, uint8_t phase);
+    static six::zfloat toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable* pAmplitudeTable);
+    static six::zfloat toComplex(uint8_t amplitude, uint8_t phase, const six::AmplitudeTable&);
+    static six::zfloat toComplex(uint8_t amplitude, uint8_t phase);
 };
 
 
