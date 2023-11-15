@@ -366,9 +366,6 @@ public:
      */
     std::string getID() const;
 
-    private:
-    std::string truncate(const std::string& value, size_t maxDigits) const;
-
     mutable nitf_Error error{};
 };
 }

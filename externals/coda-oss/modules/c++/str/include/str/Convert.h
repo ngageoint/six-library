@@ -105,6 +105,7 @@ inline auto toString(long double value)
 {
     return toString_(value);
 }
+
 inline std::string toString(uint8_t value)
 {
     return toString(gsl::narrow<unsigned int>(value));

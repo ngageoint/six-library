@@ -78,16 +78,18 @@ TEST_CASE(test_retrieveTREHandler)
 
 TEST_CASE(test_load_PTPRAA)
 {
+    TEST_ASSERT_TRUE(nitf_PluginRegistry_PreloadedTREHandlerEnable("PTPRAA", NRT_TRUE));
     retrieveTREHandler(testName, "PTPRAA");
 }
 TEST_CASE(test_load_ENGRDA)
 {
+    TEST_ASSERT_TRUE(nitf_PluginRegistry_PreloadedTREHandlerEnable("ENGRDA", NRT_TRUE));
     retrieveTREHandler(testName, "ENGRDA");
 }
 
 TEST_CASE(test_load_all_TREs)
 {
-    const nitf::TRE tre("ACCPOB");
+    const nitf::TRE ACCPOB("ACCPOB");
 
     for (const auto& tre : all_TREs())
     {

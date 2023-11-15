@@ -271,7 +271,7 @@ static std::string buildPluginName(const std::string& base)
 void nitf::Test::setNitfPluginPath()
 {
 	// The name of the plugin we know exists and will always be built, see test_load_plugins
-	static const auto p = getNitfPluginPath(buildPluginName("ENGRDA"));
+	static const auto p = getNitfPluginPath(buildPluginName("TEST_DES"));
 	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);	
 }
 
