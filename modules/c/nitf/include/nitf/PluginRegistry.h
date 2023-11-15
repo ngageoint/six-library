@@ -166,8 +166,6 @@ NITFAPI(NITF_BOOL)
 
 
 NITFAPI(NITF_BOOL)
-    nitf_PluginRegistry_insertPlugin_(const char* msg, nitf_PluginRegistry* reg, const char** ident, nitf_DLL* dll, nitf_Error* error);
-NITFAPI(NITF_BOOL)
     nitf_PluginRegistry_loadPlugin(const char* fullPathName, nitf_Error* error);
 
 /*!
@@ -181,6 +179,19 @@ NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_TREHandlerExists(const char* ident);
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_TREHandlerExistsLog(const char* ident, FILE* log);
+
+/*!
+ * Enable (or disable) a pre-loaded TRE.
+ *
+ * \param ident ID of the TRE
+ *
+ * \return true if a pre-loaded TRE handler exists, false otherwise
+ */
+
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_PreloadedTREHandlerEnable(const char* ident, NITF_BOOL enable);
+NITFAPI(void)
+nitf_PluginRegistry_PreloadedTREHandlersEnable(NITF_BOOL enable); // "Handlers", not "Handler"
 
 /*!
  * Checks if a compression handler exists for 'ident'
