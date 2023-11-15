@@ -26,6 +26,8 @@
 
 TEST_CASE(testNestedMod)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ACCHZB", NRT_TRUE) );
+
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE* tre = nitf_TRE_construct("ACCHZB", NULL, &error);
@@ -59,6 +61,8 @@ TEST_CASE(testNestedMod)
 
 TEST_CASE(testIncompleteCondMod)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ACCPOB", NRT_TRUE) );
+
     nitf_Error error;
     NITF_BOOL exists;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
@@ -90,6 +94,7 @@ TEST_CASE(testClone)
     nitf_Field* clonedField = NULL;
     nitf_Error error;
 
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("JITCID", NRT_TRUE) );
     nitf_TRE* tre = nitf_TRE_construct("JITCID", NULL, &error);
     TEST_ASSERT(tre != NULL);
 
@@ -110,13 +115,14 @@ TEST_CASE(testClone)
 
 TEST_CASE(testBasicMod)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ACFTA", NRT_TRUE) );
+
     /* construct a tre */
     NITF_BOOL exists;
     nitf_Error error;
-    nitf_Field* field;
     nitf_TRE *tre = nitf_TRE_construct("ACFTA", "ACFTA_132", &error);
     TEST_ASSERT(tre != NULL);
-    field = (nitf_TRE_getField(tre, "AC_MSN_ID"));
+    nitf_Field* field = (nitf_TRE_getField(tre, "AC_MSN_ID"));
     TEST_ASSERT_EQ_STR(field->raw, "          ");
 
     exists = nitf_TRE_setField(tre, "AC_MSN_ID", "fly-by", 6, &error);
@@ -139,6 +145,7 @@ TEST_CASE(testBasicMod)
 
 TEST_CASE(testSize)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("AIMIDB", NRT_TRUE) );
     nitf_Error error;
     int treLength;
     nitf_TRE* tre = nitf_TRE_construct("AIMIDB", NULL, &error);
@@ -174,18 +181,17 @@ TEST_CASE(iterateUnfilled)
 
 TEST_CASE(populateThenIterate)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ACCPOB", NRT_TRUE) );
     nitf_Error error;
-    nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
-    uint32_t numFields = 0;
-    TEST_ASSERT(tre != NULL);
+    TEST_ASSERT_NOT_NULL(tre);
 
+    uint32_t numFields = 0;
     nitf_TRE_setField(tre, "NUMACPO", "2", 1, &error);
     nitf_TRE_setField(tre, "NUMPTS[0]", "3", 1, &error);
     nitf_TRE_setField(tre, "NUMPTS[1]", "2", 1, &error);
 
-    cursor = nitf_TRECursor_begin(tre);
-
+    nitf_TRECursor cursor = nitf_TRECursor_begin(tre);
     while (!nitf_TRECursor_isDone(&cursor))
     {
         TEST_ASSERT(nitf_TRECursor_iterate(&cursor, &error) != 0);
@@ -200,13 +206,13 @@ TEST_CASE(populateThenIterate)
 
 TEST_CASE(populateWhileIterating)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("ACCPOB", NRT_TRUE) );
     nitf_Error error;
-    nitf_TRECursor cursor;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
-    uint32_t numFields = 0;
-    TEST_ASSERT(tre != NULL);
+    TEST_ASSERT_NOT_NULL(tre);
 
-    cursor = nitf_TRECursor_begin(tre);
+    uint32_t numFields = 0;
+    nitf_TRECursor cursor = nitf_TRECursor_begin(tre);
     while (!nitf_TRECursor_isDone(&cursor))
     {
         TEST_ASSERT(nitf_TRECursor_iterate(&cursor, &error) != 0);
@@ -231,8 +237,6 @@ TEST_CASE(populateWhileIterating)
 }
 
 TEST_MAIN(
-    nitf::Test::setNitfPluginPath();
-
     TEST_CHECK(testClone);
     TEST_CHECK(testSize);
     TEST_CHECK(testBasicMod);
