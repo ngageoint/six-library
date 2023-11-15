@@ -192,25 +192,6 @@ void CPHDWriter::writeSupportData(io::SeekableOutputStream& stream, std::span<co
     stream.seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
 }
 
-void CPHDWriter::writeSupportDataImpl(std::span<const std::byte> data, size_t elementSize)
-{
-    (*mDataWriter)(data, elementSize);
-}
-void CPHDWriter::writeSupportData(std::span<const std::byte> data)
-{
-    for (auto&& mapEntry : mMetadata.data.supportArrayMap)
-    {
-        auto&& dataArray = mapEntry.second;
-
-        // Move inputstream head to offset of particular support array
-        mStream->seek(mHeader.getSupportBlockByteOffset() + dataArray.arrayByteOffset, io::SeekableOutputStream::START);
-        writeSupportDataImpl(make_span(data, dataArray), dataArray.bytesPerElement);
-    }
-    // Move inputstream head to the end of the support block after all supports have been written
-    mStream->seek(mHeader.getSupportBlockByteOffset() + mHeader.getSupportBlockSize(), io::SeekableOutputStream::START);
-}
-
-
 template <typename T>
 size_t CPHDWriter::writeChannel(DataWriter& dataWriter, const T* widebandData, size_t channel)
 {
