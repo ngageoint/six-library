@@ -934,6 +934,7 @@
     <ClInclude Include="tiff\include\tiff\TiffUtils.h">
       <Filter>tiff</Filter>
     </ClInclude>
+    <ClInclude Include="mem\include\mem\AutoPtr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
