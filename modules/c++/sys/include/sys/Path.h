@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_sys_Path_h_INCLUDED_
 #define CODA_OSS_sys_Path_h_INCLUDED_
-#pragma once
 
 #include <string>
 #include <deque>

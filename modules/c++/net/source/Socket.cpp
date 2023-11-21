@@ -101,10 +101,8 @@ size_t net::Socket::recv(void* b, size_t len, int flags)
 
         sys::Err err;
         std::ostringstream oss;
-        oss << "When receiving " << str::toString(len) << " bytes: " << 
-            err.toString(); 
-
-        throw sys::SocketException(Ctxt(oss.str()));
+        oss << "When receiving " << len << " bytes: " <<   err.toString(); 
+        throw sys::SocketException(Ctxt(oss));
     }
     else if (numBytes == 0)
     {
@@ -115,7 +113,7 @@ size_t net::Socket::recv(void* b, size_t len, int flags)
         return static_cast<size_t>(-1);
     }
 #if defined(__DEBUG_SOCKET)
-    std::cout << FmtX("Read %d bytes from socket:", numBytes) << std::endl;
+    std::cout << str::Format("Read %d bytes from socket:", numBytes) << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
     std::cout << std::string(b, numBytes) << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
@@ -170,7 +168,7 @@ void net::Socket::send(const void* b, size_t len, int flags)
         oss << "Tried sending " << len << " bytes, " <<
                 numBytes << " sent: " <<  err.toString();
 
-        throw sys::SocketException(Ctxt(oss.str()));
+        throw sys::SocketException(Ctxt(oss));
     }
 }
 
@@ -193,6 +191,6 @@ void net::Socket::sendTo(const SocketAddress& address,
         oss << "Tried sending " << len << " bytes, " << numBytes << " sent: "
             <<  err.toString();
 
-        throw sys::SocketException(Ctxt(oss.str()));
+        throw sys::SocketException(Ctxt(oss));
     }
 }

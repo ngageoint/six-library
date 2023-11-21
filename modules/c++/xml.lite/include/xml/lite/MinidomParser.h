@@ -20,12 +20,13 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
 #define CODA_OSS_xml_lite_MinidomParser_h_INCLUDED_
-#pragma once
 
 #include <memory>
 
+#include <config/Exports.h>
 
 #include "xml/lite/XMLReader.h"
 #include "xml/lite/Document.h"
@@ -56,7 +57,7 @@ namespace lite
  * bloat of the spec.  It was inspired by python's xml.dom.minidom
  * module.
  */
-struct MinidomParser // SOAPParser inherits :-(
+struct CODA_OSS_API MinidomParser  // SOAPParser inherits :-(
 {
     /*!
      *  Constructor.  Set our SAX ContentHandler.

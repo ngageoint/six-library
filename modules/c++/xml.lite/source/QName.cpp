@@ -19,10 +19,10 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "xml/lite/QName.h"
 
 #include <stdexcept>
 
-#include "xml/lite/QName.h"
 #include "str/Manip.h"
 
 std::string xml::lite::QName::getName() const

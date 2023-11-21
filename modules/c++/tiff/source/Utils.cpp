@@ -30,7 +30,7 @@ bool tiff::Utils::hasGeoTiffIFD(const tiff::IFD* ifd)
 tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
 {
     if (!tiff::Utils::hasGeoTiffIFD(ifd))
-        return NULL;
+        return nullptr;
 
     std::map<unsigned short, std::string> keyMap;
     keyMap[1024] = "GTModelTypeGeoKey";
@@ -83,12 +83,12 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
     tiff::IFD* geoIFD = new tiff::IFD;
 
     tiff::IFDEntry *geoDir = (*ifd)["GeoKeyDirectoryTag"];
-    tiff::IFDEntry *doubleParams =
+    tiff::IFDEntry* const doubleParams =
             ifd->exists("GeoDoubleParamsTag") ? (*ifd)["GeoDoubleParamsTag"]
-                                              : NULL;
-    tiff::IFDEntry *asciiParams =
+                                              : nullptr;
+    tiff::IFDEntry* const asciiParams =
             ifd->exists("GeoAsciiParamsTag") ? (*ifd)["GeoAsciiParamsTag"]
-                                             : NULL;
+                                             : nullptr;
 
     std::vector<tiff::TypeInterface*> geoVals = geoDir->getValues();
     size_t idx = 0;
@@ -106,9 +106,8 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
         if (idx + 3 >= geoVals.size())
         {
             throw except::Exception(Ctxt(
-                "'GeoKeyDirectoryTag' specified " +
-                str::toString(numKeys) + " keys but the IFD entry only had " +
-                str::toString(geoVals.size()) + " values"));
+                "'GeoKeyDirectoryTag' specified " + 
+                std::to_string(numKeys) + " keys but the IFD entry only had " + std::to_string(geoVals.size()) + " values"));
         }
 
         const unsigned short keyId =
@@ -143,8 +142,7 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
         {
             if (count != 1)
             {
-                throw except::Exception(Ctxt(
-                    "Expected a count of 1 but got " + str::toString(count)));
+                throw except::Exception(Ctxt("Expected a count of 1 but got " + std::to_string(count)));
             }
 
             entry->addValue(new tiff::GenericType<unsigned short>(valueStr));

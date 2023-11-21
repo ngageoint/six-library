@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     {
         if (argc != 3)
         {
-            throw Exception(Ctxt(FmtX("Usage: %s <input file> <output file>",
+            throw Exception(Ctxt(str::Format("Usage: %s <input file> <output file>",
                                       argv[0])));
         }
 

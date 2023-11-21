@@ -98,6 +98,30 @@ void logging::Logger::critical(const std::string& msg)
     log(LogLevel::LOG_CRITICAL, msg);
 }
 
+void logging::Logger::debug(const std::ostringstream& msg)
+{
+    log(LogLevel::LOG_DEBUG, msg.str());
+}
+
+void logging::Logger::info(const std::ostringstream& msg)
+{
+    log(LogLevel::LOG_INFO, msg.str());
+}
+
+void logging::Logger::warn(const std::ostringstream& msg)
+{
+    log(LogLevel::LOG_WARNING, msg.str());
+}
+
+void logging::Logger::error(const std::ostringstream& msg)
+{
+    log(LogLevel::LOG_ERROR, msg.str());
+}
+
+void logging::Logger::critical(const std::ostringstream& msg)
+{
+    log(LogLevel::LOG_CRITICAL, msg.str());
+}
 
 void logging::Logger::debug(const except::Context& ctxt)
 {

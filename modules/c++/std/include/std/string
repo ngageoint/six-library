@@ -18,18 +18,17 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
+#pragma once
 #ifndef CODA_OSS_std_string_INCLUDED_
 #define CODA_OSS_std_string_INCLUDED_
-#pragma once
 
 #include <string>
 #include "coda_oss/string.h"
-#include "coda_oss/CPlusPlus.h"
 
 // Make it (too?) easy for clients to get our various std:: implementations
 #ifndef CODA_OSS_NO_std_u8string
-    #if CODA_OSS_cpp20
-        #define CODA_OSS_NO_std_u8string 1  // part of C++20
+    #if CODA_OSS_HAVE_std_u8string_ // set in coda_oss/string.h
+        #define CODA_OSS_NO_std_u8string 1  // no need to muck with `std`
     #else
         #define CODA_OSS_NO_std_u8string 0  // use our own
     #endif

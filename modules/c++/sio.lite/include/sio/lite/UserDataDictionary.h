@@ -77,6 +77,7 @@ public:
     }
     
     virtual size_t size() const { return mList.size(); } 
+    virtual bool empty() const { return mList.empty(); }
     
     virtual void add(Key_T key, const Value_T& value)
     {

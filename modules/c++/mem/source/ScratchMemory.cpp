@@ -25,20 +25,15 @@
 
 namespace mem
 {
-ScratchMemory::ScratchMemory() :
-    mNumBytesNeeded(0),
-    mOffset(0)
-{
-}
 
-ScratchMemory::Segment::Segment(size_t numBytes,
-                                size_t numBuffers,
-                                size_t alignment,
-                                size_t offset) :
-    numBytes(numBytes),
-    numBuffers(numBuffers),
-    alignment(alignment),
-    offset(offset)
+ScratchMemory::Segment::Segment(size_t numBytes_,
+                                size_t numBuffers_,
+                                size_t alignment_,
+                                size_t offset_) :
+    numBytes(numBytes_),
+    numBuffers(numBuffers_),
+    alignment(alignment_),
+    offset(offset_)
 {
 }
 
@@ -185,7 +180,7 @@ void ScratchMemory::setup(const BufferView<sys::ubyte>& scratchBuffer)
             throw except::Exception(Ctxt(
                     "Buffer has insufficient space for scratch memory"));
         }
-        if (scratchBuffer.data == NULL)
+        if (scratchBuffer.data == nullptr)
         {
             throw except::Exception(Ctxt(
                     "Invalid external buffer was provided"));
@@ -214,12 +209,11 @@ const ScratchMemory::Segment& ScratchMemory::lookupSegment(
         const std::string& key,
         size_t indexBuffer) const
 {
-    if (mBuffer.data == NULL)
+    if (mBuffer.data == nullptr)
     {
         std::ostringstream oss;
-        oss << "Tried to get scratch memory for \"" << key
-            << "\" before running setup.";
-        throw except::Exception(Ctxt(oss.str()));
+        oss << "Tried to get scratch memory for \"" << key << "\" before running setup.";
+        throw except::Exception(Ctxt(oss));
     }
 
     std::map<std::string, Segment>::const_iterator iterSeg = mSegments.find(key);
@@ -227,7 +221,7 @@ const ScratchMemory::Segment& ScratchMemory::lookupSegment(
     {
         std::ostringstream oss;
         oss << "Scratch memory segment was not found for \"" << key << "\"";
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 
     const Segment& segment = iterSeg->second;
@@ -235,9 +229,8 @@ const ScratchMemory::Segment& ScratchMemory::lookupSegment(
     {
         std::ostringstream oss;
         oss << "Trying to get buffer index " << indexBuffer << " for \""
-            << key << "\", which has only " << segment.buffers.size()
-            << " buffers";
-        throw except::Exception(Ctxt(oss.str()));
+            << key << "\", which has only " << segment.buffers.size() << " buffers";
+        throw except::Exception(Ctxt(oss));
     }
     return segment;
 }

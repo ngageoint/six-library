@@ -38,7 +38,7 @@ bool dbi::MySQLConnection::connect(const std::string& database,
     if (!mysql_real_connect(&mDBHandle, host.c_str(),
                             user.c_str(),  pass.c_str(),
                             database.c_str(), port,
-                            NULL, 0))
+                            nullptr, 0))
     {
         return false;
     }

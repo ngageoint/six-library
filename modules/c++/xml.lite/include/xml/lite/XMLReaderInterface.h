@@ -20,17 +20,21 @@
  *
  */
 
-#ifndef __XML_LITE_ABSTRACT_XML_READER_H__
-#define __XML_LITE_ABSTRACT_XML_READER_H__
+#pragma once
+#ifndef CODA_OSS_xml_lite_XMLReaderInterface_h_INCLUDED_
+#define CODA_OSS_xml_lite_XMLReaderInterface_h_INCLUDED_
 
 #include <typeinfo>
+
+#include <config/Exports.h>
+
 #include "XMLException.h"
 
 namespace xml
 {
 namespace lite
 {
-class XMLReaderInterface : public io::OutputStream
+class CODA_OSS_API XMLReaderInterface : public io::OutputStream
 {
 public:
 
@@ -77,4 +81,4 @@ public:
 }
 }
 
-#endif
+#endif  // CODA_OSS_xml_lite_XMLReaderInterface_h_INCLUDED_

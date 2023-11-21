@@ -49,7 +49,7 @@ _SYS_HANDLE_TYPE sys::File::createFile(const coda_oss::filesystem::path& str_, i
                          nullptr /*lpSecurityAttributes*/,
                          dwCreationDisposition,
                          FILE_ATTRIBUTE_NORMAL,
-                         static_cast<HANDLE>(0) /*hTemplateFile*/);
+                         static_cast<HANDLE>(nullptr) /*hTemplateFile*/);
 }
 void sys::File::create(const std::string& str,
                        int accessFlags,
@@ -58,8 +58,7 @@ void sys::File::create(const std::string& str,
     create(std::nothrow, str, accessFlags, creationFlags);
     if (mHandle == INVALID_HANDLE_VALUE)
     {
-        throw sys::SystemException(
-                Ctxt(FmtX("Error opening file: [%s]", str.c_str())));
+        throw sys::SystemException(Ctxt(str::Format("Error opening file: [%s]", str)));
     }
 }
 
@@ -83,7 +82,7 @@ void sys::File::readInto(void* buffer, size_t size)
                       bufferPtr + bytesRead,
                       bytesToRead,
                       &bytesThisRead,
-                      NULL))
+                      nullptr))
         {
             throw sys::SystemException(Ctxt("Error reading from file"));
         }
@@ -120,7 +119,7 @@ void sys::File::writeFrom(const void* buffer, size_t size)
                        bufferPtr + bytesWritten,
                        bytesToWrite,
                        &bytesThisWrite,
-                       NULL))
+                       nullptr))
         {
             throw sys::SystemException(Ctxt("Writing from file"));
         }
@@ -141,7 +140,7 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
     if (SetFilePointerEx(mHandle, largeInt, &newFilePointer, dwMoveMethod) == 0)
     {
         const auto dwLastError = GetLastError();
-        throw sys::SystemException(Ctxt("SetFilePointer failed: GetLastError() = " + str::toString(dwLastError)));
+        throw sys::SystemException(Ctxt("SetFilePointer failed: GetLastError() = " + std::to_string(dwLastError)));
     }
 
     return static_cast<sys::Off_T>(newFilePointer.QuadPart);
@@ -169,8 +168,7 @@ sys::Off_T sys::File::lastModifiedTime()
         return (sys::Off_T)stInMillis;
     }
     throw sys::SystemException(Ctxt(
-                    FmtX("Error getting last modified time for path %s",
-                            mPath.c_str())));
+                    str::Format("Error getting last modified time for path %s", mPath)));
 }
 
 void sys::File::flush()

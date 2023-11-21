@@ -26,16 +26,13 @@
 
 #include <string>
 
+#include "config/Exports.h"
+
 #if !defined(USE_IO_STREAMS)
 
 #include "io/SeekableStreams.h"
-#include "sys/filesystem.h"
 #include "sys/File.h"
-
-#include "sys/CPlusPlus.h"
-#if CODA_OSS_cpp17
-#include <std/filesystem>
-#endif
+#include "sys/filesystem.h"
 
 /*!
  *  \file FileOutputStream.h
@@ -55,24 +52,20 @@ namespace io
  *  This class corresponds closely to its java namesake.
  *  It uses native file handles to make writes.
  */
-class FileOutputStreamOS : public SeekableOutputStream
-
+class CODA_OSS_API FileOutputStreamOS : public SeekableOutputStream
 {
 protected:
     sys::File mFile;
 public:
     FileOutputStreamOS() = default;
 
+    using path = coda_oss::filesystem::path; // still used in SWIG bindings
+
     /*!
      *  Alternate Constructor.  Takes an output file and a mode
      *  \param outputFile The file name
      *  \param creationFlags  see sys::File
      */
-    #if CODA_OSS_cpp17
-    using path = std::filesystem::path;
-    #else
-    using path = coda_oss::filesystem::path;
-    #endif
     FileOutputStreamOS(const path& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 

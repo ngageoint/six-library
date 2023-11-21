@@ -52,8 +52,12 @@ public:
     /*!
      *  Virtual destructor
      */
-    virtual ~WorkerThread()
-    {}
+    virtual ~WorkerThread() = default;
+
+    WorkerThread(const WorkerThread&) = delete;
+    WorkerThread& operator=(const WorkerThread&) = delete;
+    WorkerThread(WorkerThread&&) = delete;
+    WorkerThread& operator=(WorkerThread&&) = delete;
 
     virtual void initialize()
     {}
@@ -94,7 +98,7 @@ public:
      */
     std::string getThreadId()
     {
-	return str::toString(sys::getThreadID());
+        return std::to_string(sys::getThreadID());
     }
 protected:
 

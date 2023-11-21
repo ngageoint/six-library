@@ -187,11 +187,9 @@ TwoD<_T>::operator [] (size_t i) const
     }
     else
     {
-        std::stringstream str;
-        str << "index:" << i << " not within range [0..."
-            << mCoef.size() << ")";
-
-        throw except::IndexOutOfRangeException(Ctxt(str.str()));
+        std::ostringstream str;
+        str << "index:" << i << " not within range [0..." << mCoef.size() << ")";
+        throw except::IndexOutOfRangeException(Ctxt(str));
     }
     return ret;
 }
@@ -206,10 +204,9 @@ TwoD<_T>::operator [] (size_t i)
     }
     else
     {
-        std::stringstream str;
-        str << "index: " << i << " not within range [0..."
-            << mCoef.size() << ")";
-        throw except::IndexOutOfRangeException(Ctxt(str.str()));
+        std::ostringstream str;
+        str << "index: " << i << " not within range [0..." << mCoef.size() << ")";
+        throw except::IndexOutOfRangeException(Ctxt(str));
     }
 }
 

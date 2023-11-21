@@ -38,7 +38,7 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
                                            size_t alignment)
 {
     // invalidate buffer (setup must be called before any subsequent get call)
-    mBuffer.data = NULL;
+    mBuffer.data = nullptr;
 
     size_t segmentOffset = mOffset;
 
@@ -52,7 +52,7 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
     {
         std::ostringstream oss;
         oss << "Scratch memory space was already reserved for " << key;
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
     mSegments.insert(
             iterSeg,

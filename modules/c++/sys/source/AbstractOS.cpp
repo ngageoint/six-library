@@ -28,7 +28,10 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <iterator>
+#include <algorithm>
 
+#include <config/compiler_extensions.h>
 #include <import/str.h>
 #include <sys/Path.h>
 #include <sys/DirectoryEntry.h>
@@ -81,6 +84,31 @@ AbstractOS::search(const std::vector<std::string>& searchPaths,
                                                 recursive);
     }
     return elementsFound;
+}
+
+inline auto convert(const std::vector<fs::path>& paths)
+{
+    std::vector<std::string> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const fs::path& p) { return p.string(); });
+    return retval;
+}
+inline auto convert(const std::vector<std::string>& paths)
+{
+    std::vector<fs::path> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const auto& p) { return p; });
+    return retval;
+}
+
+std::vector<coda_oss::filesystem::path> AbstractOS::search(
+        const std::vector<coda_oss::filesystem::path>& searchPaths,
+        const std::string& fragment,
+        const std::string& extension,
+        bool recursive) const
+{
+    const auto results = search(convert(searchPaths), fragment, extension, recursive);
+    return convert(results);
 }
 
 void AbstractOS::remove(const std::string& path) const
@@ -264,7 +292,7 @@ static std::string getSpecialEnv_PID(const AbstractOS& os, const std::string& en
     UNREFERENCED_PARAMETER(envVar);
     #endif
     const auto pid = os.getProcessId();
-    return str::toString(pid);
+    return std::to_string(pid);
 }
 
 static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& envVar)
@@ -333,12 +361,40 @@ static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& 
     #endif
 }
 
+// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
+static std::string getSpecialEnv_PlatformToolset(const AbstractOS&, const std::string& envVar)
+{
+    assert(envVar == "PlatformToolset");
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
+
+#ifdef _WIN32
+	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+	// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+	#if _MSC_VER >= 1930
+		return "v143"; // Visual Studio 2022
+	#elif _MSC_VER >= 1920
+		return "v142"; // Visual Studio 2019
+    #elif _MSC_VER >= 1910
+        return "v141";  // Visual Studio 2017
+    #elif _MSC_VER >= 1900
+        return "v140";  // Visual Studio 2015
+	#else
+		#error "Don't know $(PlatformToolset) value.'"
+	#endif
+#else 
+	// Linux
+	return "";
+#endif
+}
+
 static std::string getSpecialEnv_SECONDS_()
 {
     // https://en.cppreference.com/w/cpp/chrono/c/difftime
     static const auto start = std::time(nullptr);
     const auto diff = static_cast<int64_t>(std::difftime(std::time(nullptr), start));
-    return str::toString(diff);
+    return std::to_string(diff);
 }
 static std::string getSpecialEnv_SECONDS(const AbstractOS&, const std::string& envVar)
 {
@@ -350,7 +406,13 @@ static std::string getSpecialEnv_SECONDS(const AbstractOS&, const std::string& e
     #endif
     return getSpecialEnv_SECONDS_();
 }
+
+CODA_OSS_disable_warning_push
+#if _MSC_VER
+#pragma warning(disable: 26426) // Global initializer calls a non-constexpr function '...' (i.22).
+#endif
 static std::string strUnusedSeconds = getSpecialEnv_SECONDS_(); // "start" the "shell"
+CODA_OSS_disable_warning_pop
 
 // See https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
 // and https://wiki.bash-hackers.org/syntax/shellvars
@@ -372,6 +434,7 @@ static const std::map<std::string, get_env_fp> s_get_env{
                                                     // c.f., Visual Studio
                                                     {"Configuration", getSpecialEnv_Configuration},
                                                     {"Platform", getSpecialEnv_Platform},
+                                                    {"PlatformToolset", getSpecialEnv_PlatformToolset},
 };
 bool AbstractOS::isSpecialEnv(const std::string& envVar) const
 {
@@ -412,19 +475,12 @@ std::string AbstractOS::getSpecialEnv(const std::string& envVar) const
 
     if (envVar == "EPOCHSECONDS")
     {
-        return str::toString(sys::DateTime::getEpochSeconds());
+        return std::to_string(sys::DateTime::getEpochSeconds());
     }
 
     if (envVar == "OSTYPE")
     {
-        // TODO: Mac
-        return sys::Platform == sys::PlatformType::Linux ? " linux-gnu" : "Windows";
-    }
-
-    if (envVar == "OSTYPE")
-    {
-        // TODO: Mac
-        return sys::Platform == sys::PlatformType::Linux ? " linux-gnu" : "Windows";
+        return sys::platformName<sys::Platform>();
     }
     
     // should explicitly handle all env. vars in some way    

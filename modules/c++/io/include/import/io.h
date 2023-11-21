@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __IMPORT_IO_H__
-#define __IMPORT_IO_H__
+#pragma once
+#ifndef CODA_OSS_import_io_h_INCLUDED_
+#define CODA_OSS_import_io_h_INCLUDED_
 
 /*!
  *  \file io.h
@@ -77,4 +78,4 @@
 //#include "io/MMapInputStream.h"
 //using namespace io;
 
-#endif
+#endif  // CODA_OSS_import_io_h_INCLUDED_

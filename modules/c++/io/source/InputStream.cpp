@@ -37,14 +37,14 @@ sys::SSize_T InputStream::read(void* buffer,
         {
             std::ostringstream ostr;
             ostr << "Tried to read " << len << " bytes but read failed";
-            throw except::IOException(Ctxt(ostr.str()));
+            throw except::IOException(Ctxt(ostr));
         }
         else if (numBytes != static_cast<sys::SSize_T>(len))
         {
             std::ostringstream ostr;
             ostr << "Tried to read " << len << " bytes but only read "
                  << numBytes << " bytes";
-            throw except::IOException(Ctxt(ostr.str()));
+            throw except::IOException(Ctxt(ostr));
         }
     }
 
@@ -102,6 +102,6 @@ sys::SSize_T InputStream::readln(sys::byte *cStr, const sys::Size_T strLenPlusNu
         if (*(cStr + i) == '\n') return i + 1;
         // Otherwise, append c;
     }
-    return (sys::SSize_T)i;
+    return static_cast<sys::SSize_T>(i);
 }
 }

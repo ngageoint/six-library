@@ -21,8 +21,14 @@
  */
 
 
-#ifndef __IMPORT_MT_H__
-#define __IMPORT_MT_H__
+#pragma once
+#ifndef CODA_OSS_mt_import_mt_h_h_INCLUDED_
+#define CODA_OSS_mt_import_mt_h_h_INCLUDED_
+
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
+#endif // _MSC_VER
 
 #include "mt/RequestQueue.h"
 #include "mt/ThreadPoolException.h"
@@ -45,4 +51,8 @@
 #include "mt/CPUAffinityThreadInitializer.h"
 #include "mt/Algorithm.h"
 
-#endif
+#if _MSC_VER
+#pragma warning(pop)
+#endif  // _MSC_VER
+
+#endif  // CODA_OSS_mt_import_mt_h_h_INCLUDED_

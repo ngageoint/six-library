@@ -11,12 +11,9 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
- * Programmer:	Quincey Koziol
- *		Saturday, September 12, 2015
- *
- * Purpose:	This file contains declarations which define macros for the
- *		H5Z package.  Including this header means that the source file
- *		is part of the H5Z package.
+ * Purpose: This file contains declarations which define macros for the
+ *          H5Z package.  Including this header means that the source file
+ *          is part of the H5Z package.
  */
 #ifndef H5Zmodule_H
 #define H5Zmodule_H
@@ -28,7 +25,12 @@
 #define H5_MY_PKG     H5Z
 #define H5_MY_PKG_ERR H5E_PLINE
 
-/**\defgroup H5Z H5Z
+/** \page H5Z_UG The HDF5 Filters
+ * @todo Under Construction
+ */
+
+/**
+ * \defgroup H5Z Filters (H5Z)
  *
  * Use the functions in this module to manage HDF5 filters.
  *
@@ -79,7 +81,7 @@
  *
  * The HDF5 library does not support filters for contiguous datasets because of
  * the difficulty of implementing random access for partial I/O. Compact dataset
- * filters are not supported because it would not produce significant results.
+ * filters are not supported because they would not produce significant results.
  *
  * Filter identifiers for the filters distributed with the HDF5
  * Library are as follows:
