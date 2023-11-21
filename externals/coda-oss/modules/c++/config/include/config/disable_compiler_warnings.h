@@ -26,6 +26,7 @@
 #include "compiler_extensions.h"
 
 #if defined(_MSC_VER)
+
 // We don't care about any padding added to structs
 #pragma warning(disable: 4820) //  '...': '...' bytes padding added after data member '...'
 
@@ -38,10 +39,14 @@
 // ???
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
 
+// Different versions of Visual Studio have different warnings; and almost all of our
+// use of them is `disable`.  It not very useful to know we're (attempting) to
+// disable a warning that doesn't exist.
+#pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 
 #elif defined(__GNUC__) || defined(__clang__)
 
-// don't care about compatibility between different -std=c++nn values
+// Don't care about compatibility between different -std=c++nn values.
 CODA_OSS_disable_warning(-Wnoexcept-type)
 
 #endif // _MSC_VER

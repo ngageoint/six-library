@@ -21,9 +21,11 @@
  *
  */
 
+#pragma once 
 #ifndef CODA_OSS_mem_ScopedPtr_h_INCLUDED_
 #define CODA_OSS_mem_ScopedPtr_h_INCLUDED_
-#pragma once
+
+#include <assert.h>
 
 #include <cstddef>
 #include <std/memory>
@@ -110,15 +112,13 @@ public:
         auto rhs_ptr = rhs.get();
         if (ptr == nullptr && rhs_ptr == nullptr)
         {
-            return true;
+            return true; // both NULL: equal
         }
-
         if (ptr == nullptr || rhs_ptr == nullptr)
         {
-            return false;
+            return false; // either NULL, but not both (above): not equal
         }
-
-        return *ptr == *rhs_ptr;
+        return *ptr == *rhs_ptr; // compare the (non-NULL) objects
     }
 
     bool operator!=(const ScopedPtr& rhs) const noexcept
@@ -138,12 +138,16 @@ public:
 
     T& operator*() const
     {
-        return *get();
+        auto ptr = get();
+        assert(ptr != nullptr);
+        return *ptr;
     }
 
     T* operator->() const noexcept
     {
-        return get();
+        auto ptr = get();
+        assert(ptr != nullptr);
+        return ptr;
     }
 
     void reset(T* ptr = nullptr)

@@ -41,6 +41,7 @@
 
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
+#include <nitf/UnitTests.hpp>
 
 CODA_OSS_disable_warning_push
 #if _MSC_VER
@@ -150,6 +151,8 @@ static void test_create_nitf_with_byte_provider__addImageSegment(nitf::Record& r
     // a file in the j2k plugin. To make this test run, go to the file
     // and disable the check for blocking mode B.
     // To the best of my knowledge, nothing bad happens as a result.
+    const auto pNitroImage = getNitroImage();
+    const auto& NITRO_IMAGE = *pNitroImage;
     header.setBlocking(NITRO_IMAGE.height, /*!< The number of rows */
         NITRO_IMAGE.width,  /*!< The number of columns */
         NITRO_IMAGE.height, /*!< The number of rows/block */
@@ -176,6 +179,8 @@ static void test_create_nitf_with_byte_provider__writeNITF(nitf::Record& record,
         * Once you have CompressedByteProvider constructed, everything else
         * should work the same
         */
+    const auto pNitroImage = getNitroImage();
+    const auto& NITRO_IMAGE = *pNitroImage;
     const std::vector<std::vector<size_t> > bytesPerBlock{ { static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height * NUM_BANDS } };
     nitf::CompressedByteProvider byteProvider(record, bytesPerBlock);
     nitf::Off fileOffset;
@@ -212,6 +217,8 @@ static bool test_create_nitf_with_byte_provider__testRead(const std::string& pat
         // Read one block. It should match the first blockSize points of the
         // image. If it does, we got the blocking mode right.
         auto block = reinterpret_cast<const unsigned char*>(imageReader.readBlock(0, &blockSize));
+        const auto pNitroImage = getNitroImage();
+        const auto& NITRO_IMAGE = *pNitroImage;
         const size_t imageLength = static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height;
 
         for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
@@ -286,6 +293,8 @@ static void test_create_nitf__addImageSegment(nitf::Record& record, bool isMono 
     // a file in the j2k plugin. To make this test run, go to the file
     // and disable the check for blocking mode B.
     // To the best of my knowledge, nothing bad happens as a result.
+    const auto pNitroImage = getNitroImage();
+    const auto& NITRO_IMAGE = *pNitroImage;
     header.setBlocking(NITRO_IMAGE.height, /*!< The number of rows */
         NITRO_IMAGE.width,  /*!< The number of columns */
         NITRO_IMAGE.height, /*!< The number of rows/block */
@@ -304,6 +313,9 @@ static void test_create_nitf__writeNITF(nitf::Record& record, const std::string&
 
     nitf::ImageWriter imageWriter = writer.newImageWriter(0);
     nitf::ImageSource imageSource;
+
+    const auto pNitroImage = getNitroImage();
+    const auto& NITRO_IMAGE = *pNitroImage;
 
     /* make one bandSource per band */
     for (int ii = 0; ii < NUM_BANDS; ++ii)
@@ -338,6 +350,9 @@ static bool test_create_nitf__testRead(const std::string& pathname, bool isMono 
     nitf::IOHandle handle(pathname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING);
     nitf::Reader reader;
     nitf::Record record = reader.read(handle);
+
+    const auto pNitroImage = getNitroImage();
+    const auto& NITRO_IMAGE = *pNitroImage;
 
     for (int ii = 0; ii < static_cast<int>(record.getNumImages()); ++ii)
     {
@@ -414,7 +429,7 @@ TEST_CASE(test_create_nitf_test)
     }
     else
     {
-        TEST_ASSERT_TRUE(true);
+        TEST_FAIL_MSG("NITF_PLUGIN_PATH not set");
     }
 }
 
@@ -455,7 +470,7 @@ static void RecordThread_run()
 
 TEST_CASE(test_mt_record)
 {
-    const int NTHR = 2;
+    constexpr int NTHR = 2;
     
     std::array<std::thread, NTHR> thrs;
     try
@@ -479,12 +494,9 @@ TEST_CASE(test_mt_record)
     TEST_ASSERT_TRUE(true);
 }
 
-
-
-
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
+    nitf::Test::setNitfPluginPath();
+
     TEST_CHECK(test_create_nitf_with_byte_provider_test);
     TEST_CHECK(test_create_nitf_test);
     TEST_CHECK(test_mt_record);

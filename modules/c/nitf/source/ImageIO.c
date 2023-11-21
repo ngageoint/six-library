@@ -3566,7 +3566,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_flush(nitf_ImageIO * object,
 
 /*========================= nitf_ImageIO_writeSequential =====================*/
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,
+NITFAPI(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,
                                                  nitf_IOInterface* io,
                                                  nitf_Error * error)
 {
@@ -3862,7 +3862,7 @@ NITFPROT(nitf_BlockingInfo *) nitf_BlockingInfo_construct(nitf_Error *
 
 
 /*=================== nitf_BlockingInfo_destruct ===========================*/
-NITFPROT(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info)
+NITFAPI(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info)
 {
     NITF_FREE(*info);
     *info = NULL;

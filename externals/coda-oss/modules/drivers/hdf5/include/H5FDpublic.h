@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -11,16 +10,12 @@
  * help@hdfgroup.org.                                                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/*
- * Programmer:  Robb Matzke
- *              Monday, July 26, 1999
- */
 #ifndef H5FDpublic_H
 #define H5FDpublic_H
 
-/* Public headers needed by this file */
-#include "H5public.h"  /* Generic Functions */
-#include "H5Fpublic.h" /* Files */
+#include "H5public.h"  /* Generic Functions                        */
+#include "H5Fpublic.h" /* Files                                    */
+#include "H5Ipublic.h" /* Identifiers                              */
 
 /*****************/
 /* Public Macros */
@@ -319,6 +314,7 @@ typedef struct {
     /**
      * \param[in] dest Address of the destination buffer
      * \param[in] src Address of the source buffer
+     * \param[in] size Size in bytes of the file image buffer to allocate
      * \param[in] file_image_op A value from #H5FD_file_image_op_t indicating
      *                          the operation being performed on the file image
      *                          when this callback is invoked
@@ -331,6 +327,7 @@ typedef struct {
     //! <!-- [image_memcpy_snip] -->
     /**
      * \param[in] ptr Pointer to the buffer being reallocated
+     * \param[in] size Size in bytes of the file image buffer to allocate
      * \param[in] file_image_op A value from #H5FD_file_image_op_t indicating
      *                          the operation being performed on the file image
      *                          when this callback is invoked
@@ -341,6 +338,10 @@ typedef struct {
     void *(*image_realloc)(void *ptr, size_t size, H5FD_file_image_op_t file_image_op, void *udata);
     //! <!-- [image_realloc_snip] -->
     /**
+     * \param[in] ptr Pointer to the buffer being reallocated
+     * \param[in] file_image_op A value from #H5FD_file_image_op_t indicating
+     *                          the operation being performed on the file image
+     *                          when this callback is invoked
      * \param[in] udata Value passed in in the H5Pset_file_image_callbacks
      *            parameter \p udata
      */
@@ -398,7 +399,27 @@ extern "C" {
 #endif
 
 /* Function prototypes */
-/* Allows querying a VFD ID for features before the file is opened */
+
+/**
+ * \ingroup H5FD
+ *
+ * \brief Allows querying a VFD ID for features before the file is opened
+ *
+ * \param[in] driver_id Virtual File Driver (VFD) ID
+ * \param[out] flags VFD flags supported
+ *
+ * \return \herr_t
+ *
+ * \details Queries a virtual file driver (VFD) for feature flags. Takes a
+ *          VFD hid_t so it can be used before the file is opened. For example,
+ *          this could be used to check if a VFD supports SWMR.
+ *
+ * \note The flags obtained here are just those of the base driver and
+ *       do not take any configuration options (e.g., set via a fapl
+ *       call) into consideration.
+ *
+ * \since 1.10.2
+ */
 H5_DLL herr_t H5FDdriver_query(hid_t driver_id, unsigned long *flags /*out*/);
 
 #ifdef __cplusplus

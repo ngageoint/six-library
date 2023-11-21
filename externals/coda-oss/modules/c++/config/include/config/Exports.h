@@ -1,22 +1,30 @@
-#ifndef CODA_OSS_config_Exports_h_INCLUDED_
-#define CODA_OSS_config_Exports_h_INCLUDED_
 #pragma once
 
 #include "config/compiler_extensions.h"
 
-// Need to specify how this code will be consumed, either CODA_OSS_LIB (static library)
-// or CODA_OSS_DLL (aka "shared" library).  For DLLs, it needs to be set for BOTH
+// Need to specify how this code will be consumed, either CODA_OSS_LIB_ (static library)
+// or CODA_OSS_DLL_ (aka "shared" library).  For DLLs, it needs to be set for BOTH
 // "exporting" (building this code) and "importing" (consuming).
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
-#if !defined(CODA_OSS_LIB) && !defined(CODA_OSS_DLL)
-    #define CODA_OSS_LIB 1
-    //#define CODA_OSS_DLL 1
+#if !defined(CODA_OSS_LIB_) && !defined(CODA_OSS_DLL_)
+    #if CODA_OSS_LIBRARY_SHARED
+        #if CODA_OSS_LIBRARY_STATIC
+            #error "CODA_OSS_LIBRARY_SHARED already #define'd'"
+        #endif
+        #define CODA_OSS_DLL_ 1  // Symbols must be exported and imported (see below).
+    #else
+        // CODA_OSS_LIBRARY_STATIC doesn't have to be defined
+        #define CODA_OSS_LIB_ 1  // Static library, all symbols visible.
+    #endif
 #endif
-#if defined(CODA_OSS_LIB) && defined(CODA_OSS_DLL)
-    #error "Both CODA_OSS_LIB and CODA_OSS_DLL are #define'd'"
+#if !defined(CODA_OSS_LIB_) && !defined(CODA_OSS_DLL_)
+    #error "One of CODA_OSS_LIB_ pr CODA_OSS_DLL_ must be #define'd'"
 #endif
-#if defined(CODA_OSS_EXPORTS) && defined(CODA_OSS_LIB)
+#if defined(CODA_OSS_LIB_) && defined(CODA_OSS_DLL_)
+    #error "Both CODA_OSS_LIB_ and CODA_OSS_DLL_ are #define'd'"
+#endif
+#if defined(CODA_OSS_EXPORTS) && defined(CODA_OSS_LIB_)
     #error "Can't export from a LIB'"
 #endif
 
@@ -35,10 +43,10 @@
 
     // We need to know whether we're consuming (importing) a DLL or static LIB
     // The default is a static LIB as that's what existing code/builds expect.
-    #ifdef CODA_OSS_DLL
+    #ifdef CODA_OSS_DLL_
         // Actually, it seems that the linker is able to figure this out from the .LIB, so 
         // there doesn't seem to be a need for __declspec(dllimport).  Clients don't
-        // need to #define CODA_OSS_DLL ... ?  Well, almost ... it looks
+        // need to #define CODA_OSS_DLL_ ... ?  Well, almost ... it looks
         // like __declspec(dllimport) is needed to get virtual "inline"s (e.g., 
         // destructors) correct.
         #define CODA_OSS_API CODA_OSS_library_import
@@ -50,5 +58,3 @@
 #if defined(_MSC_VER)
 #pragma warning(disable: 4251) // '...' : class '...' needs to have dll-interface to be used by clients of struct '...'
 #endif
-
-#endif // CODA_OSS_config_Exports_h_INCLUDED_

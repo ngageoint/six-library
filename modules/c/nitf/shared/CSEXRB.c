@@ -30,7 +30,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSEXRB_description[] = {
         {NITF_BCS_A,   36, "UUID Assigned to the Current Image Plane", "IMAGE_UUID"},
         {NITF_BCS_N,   3,  "Number of GLAS/GFM DES Associated with this Image", "NUM_ASSOC_DES"},
         {NITF_IF,      0,  "> 0", "NUM_ASSOC_DES"},
@@ -144,6 +144,6 @@ static nitf_TREDescription description[] = {
         {NITF_END,     0,  NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSEXRB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSEXRB)
 
 NITF_CXX_ENDGUARD

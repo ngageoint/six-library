@@ -20,12 +20,16 @@
  *
  */
 
-#ifndef __IO_FILE_UTILS_H__
-#define __IO_FILE_UTILS_H__
+#pragma once
+#ifndef CODA_OSS_io_FileUtils_h_INCLUDED_
+#define CODA_OSS_io_FileUtils_h_INCLUDED_
+
+#include <string>
+#include <sstream>
 
 #include <import/except.h>
 #include <import/str.h>
-#include <import/sys.h>
+#include <sys/OS.h>
 
 namespace io
 {
@@ -58,7 +62,7 @@ inline void move(const std::string& path,
         oss << "Move Failed: Could not move source [" <<
             path << "] to destination [" <<
             newPath << "]";
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
@@ -94,4 +98,4 @@ struct FileUtils final
 };
 }
 
-#endif
+#endif  // CODA_OSS_io_FileUtils_h_INCLUDED_

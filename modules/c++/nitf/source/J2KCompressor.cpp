@@ -309,7 +309,7 @@ public:
             for (size_t row = 0; row < resizedTileDims.row; ++row)
             {
                 const auto srcTileRowStart = tileData + row * tileDims.col;
-                const std::span<const std::byte> src(srcTileRowStart, resizedTileDims.col);
+                const auto src = sys::make_span(srcTileRowStart, resizedTileDims.col);
 
                 // partialTileBuffer.data() + row * resizedTileDims.col
                 auto dest = partialTileBuffer.begin();
@@ -338,10 +338,10 @@ public:
                 mEncoder.clearError();
 
                 os << " with openjpeg error: " << opjErrorMsg;
-                throw except::Exception(Ctxt(os.str()));
+                throw except::Exception(Ctxt(os));
             }
 
-            throw except::Exception(Ctxt(os.str()));
+            throw except::Exception(Ctxt(os));
         }
     }
 
@@ -390,7 +390,7 @@ public:
         mCompressionParams(compressionParams)
     {
         mImageBlock.resize(mCompressionParams.getTileDims().area());
-        mpImageBlock = std::span<std::byte>(mImageBlock.data(), mImageBlock.size());
+        mpImageBlock = sys::make_span(mImageBlock);
     }
     CodestreamOp(const CodestreamOp&) = delete;
     CodestreamOp& operator=(const CodestreamOp&) = delete;
@@ -509,8 +509,7 @@ void j2k::Compressor::compress(
     std::vector<size_t>& bytesPerTile) const
 {
     compressedData.resize(getMaxBytesRequiredToCompress());
-    const auto compressedDataView = compress(rawImageData,
-        std::span<std::byte>(compressedData.data(), compressedData.size()), bytesPerTile);
+    const auto compressedDataView = compress(rawImageData, sys::make_span(compressedData), bytesPerTile);
     compressedData.resize(compressedDataView.size());
 }
 
@@ -531,7 +530,7 @@ void j2k::Compressor::compressTile(
 {
     compressedTile.resize(getMaxBytesRequiredToCompress(1));
     std::vector<size_t> bytesPerTile;
-    std::span<std::byte> compressedView(compressedTile.data(), compressedTile.size());
+    auto compressedView = sys::make_span(compressedTile);
     compressedView = compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 
         compressedView, bytesPerTile);
     compressedTile.resize(compressedView.size());
@@ -561,7 +560,7 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
     {
         std::ostringstream ostr;
         ostr << "Global start row = " << globalStartRow << " must be a multiple of number of rows in tile = " << numRowsInTile;
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     if ((numLocalRows % numRowsInTile != 0) &&
@@ -569,7 +568,7 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
     {
         std::ostringstream ostr;
         ostr << "Number of local rows = " << numLocalRows << " must be a multiple of number of rows in tile = " << numRowsInTile;
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     const auto startRowOfTiles = globalStartRow / numRowsInTile;
@@ -601,7 +600,7 @@ std::span<std::byte> j2k::Compressor::compressTileSubrange(
         std::ostringstream ostr;
         ostr << "Require " << numBytesNeeded << " bytes for compression of "
             << numTiles << " tiles but only received " << compressedData.size() << " bytes";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     auto compressedPtr = compressedData.data();
@@ -650,7 +649,7 @@ std::span<std::byte> j2k::Compressor::compressTileSubrange(
             std::ostringstream os;
             os << "Cannot write " << numBytesThisTile << " bytes for tile " << tileNum << " at byte offset " << numBytesWritten
                 << " - exceeds maximum compressed image size (" << compressedData.size() << " bytes)!";
-            throw except::Exception(Ctxt(os.str()));
+            throw except::Exception(Ctxt(os));
         }
 
         const auto src = tileStream.get();
@@ -668,7 +667,7 @@ std::span<std::byte> j2k::Compressor::compressTileSubrange(
         dest += numBytesThisTile;
     }
 
-    return std::span<std::byte>(compressedData.data(), numBytesWritten);
+    return sys::make_span(compressedData.data(), numBytesWritten);
 }
 
 

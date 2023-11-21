@@ -20,6 +20,8 @@
  *
  */
 #include <mt/WorkSharingBalancedRunnable1D.h>
+#include <sys/OS.h>
+
 #include "TestCase.h"
 
 struct IncOp final

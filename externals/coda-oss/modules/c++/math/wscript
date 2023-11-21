@@ -1,9 +1,9 @@
 from build import writeConfig
 NAME            = 'math'
-MAINTAINER      = 'asylvest@users.sourceforge.net'
 VERSION         = '0.1'
 USELIB          = 'MATH'
-MODULE_DEPS     = 'except str sys types'
+MODULE_DEPS     = 'except str sys types coda_oss'
+TEST_DEPS       = 'std'
 
 options = distclean = lambda p: None
 

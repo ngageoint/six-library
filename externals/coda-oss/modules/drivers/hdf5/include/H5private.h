@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -11,14 +10,11 @@
  * help@hdfgroup.org.                                                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/* Programmer:  Robb Matzke
- *    Friday, October 30, 1998
- *
- * Purpose:  This file is included by all HDF5 library source files to
- *    define common things which are not defined in the HDF5 API.
- *    The configuration constants like H5_HAVE_UNISTD_H etc. are
- *    defined in H5config.h which is included by H5public.h.
- *
+/*
+ * Purpose: This file is included by all HDF5 library source files to
+ *          define common things which are not defined in the HDF5 API.
+ *          The configuration constants like H5_HAVE_UNISTD_H etc. are
+ *          defined in H5config.h which is included by H5public.h.
  */
 
 #ifndef H5private_H
@@ -128,6 +124,8 @@
 #include <direct.h>   /* For _getcwd() */
 #include <io.h>       /* POSIX I/O */
 #include <winsock2.h> /* For GetUserName() */
+#include <shlwapi.h>  /* For StrStrIA */
+#pragma comment(lib, "shlwapi")
 
 #ifdef H5_HAVE_THREADSAFE
 #include <process.h> /* For _beginthread() */
@@ -150,74 +148,6 @@
 #define uthash_free(ptr, sz) H5MM_free(ptr) /* Ignoring sz is intentional */
 #define HASH_NONFATAL_OOM    1              /* Don't abort() on out-of-memory */
 #include "uthash.h"
-
-/*
- * MPE Instrumentation support
- */
-#ifdef H5_HAVE_MPE
-/*------------------------------------------------------------------------
- * Purpose:    Begin to collect MPE log information for a function. It should
- *             be ahead of the actual function's process.
- *
- * Programmer: Long Wang
- *
- *------------------------------------------------------------------------
- */
-#include "mpe.h"
-/*
- * #define eventa(func_name)   h5_mpe_ ## func_name ## _a
- * #define eventb(func_name)   h5_mpe_ ## func_name ## _b
- */
-#define eventa(func_name) h5_mpe_eventa
-#define eventb(func_name) h5_mpe_eventb
-#define MPE_LOG_VARS                                                                                         \
-    static int eventa(__func__) = -1;                                                                        \
-    static int eventb(__func__) = -1;                                                                        \
-    char       p_event_start[128];
-
-/* Hardwire the color to "red", since that's what all the routines are using
- * now.  In the future, if we want to change that color for a given routine,
- * we should define a "FUNC_ENTER_API_COLOR" macro which takes an extra 'color'
- * parameter and then make additional FUNC_ENTER_<foo>_COLOR macros to get that
- * color information down to the BEGIN_MPE_LOG macro (which should have a new
- * BEGIN_MPE_LOG_COLOR variant). -QAK
- */
-#define BEGIN_MPE_LOG                                                                                        \
-    if (H5_MPEinit_g) {                                                                                      \
-        snprintf(p_event_start, sizeof(p_event_start), "start %s", __func__);                                \
-        if (eventa(__func__) == -1 && eventb(__func__) == -1) {                                              \
-            const char *p_color = "red";                                                                     \
-            eventa(__func__)    = MPE_Log_get_event_number();                                                \
-            eventb(__func__)    = MPE_Log_get_event_number();                                                \
-            MPE_Describe_state(eventa(__func__), eventb(__func__), __func__, p_color);                       \
-        }                                                                                                    \
-        MPE_Log_event(eventa(__func__), 0, p_event_start);                                                   \
-    }
-
-/*------------------------------------------------------------------------
- * Purpose:   Finish the collection of MPE log information for a function.
- *            It should be after the actual function's process.
- *
- * Programmer: Long Wang
- */
-#define FINISH_MPE_LOG                                                                                       \
-    if (H5_MPEinit_g) {                                                                                      \
-        MPE_Log_event(eventb(__func__), 0, __func__);                                                        \
-    }
-
-#else                  /* H5_HAVE_MPE */
-#define MPE_LOG_VARS   /* void */
-#define BEGIN_MPE_LOG  /* void */
-#define FINISH_MPE_LOG /* void */
-
-#endif /* H5_HAVE_MPE */
-
-/*
- * dmalloc (debugging malloc) support
- */
-#ifdef H5_HAVE_DMALLOC_H
-#include "dmalloc.h"
-#endif /* H5_HAVE_DMALLOC_H */
 
 /*
  * NT doesn't define SIGBUS, but since NT only runs on processors
@@ -267,7 +197,7 @@
 #       define H5_ATTR_DEBUG_API_USED /*void*/
 #   else
 #       define H5_ATTR_DEBUG_API_USED H5_ATTR_UNUSED
-#   endif /* H5_DEBUG_API */
+#   endif
 
 #   ifndef NDEBUG
 #       define H5_ATTR_NDEBUG_UNUSED /*void*/
@@ -395,6 +325,20 @@
 /* Raise an integer to a power of 2 */
 #define H5_EXP2(n) (1 << (n))
 
+/* Check if a read of size bytes starting at ptr would overflow past
+ * the last valid byte, pointed to by buffer_end.
+ */
+#define H5_IS_BUFFER_OVERFLOW(ptr, size, buffer_end) (((ptr) + (size)-1) > (buffer_end))
+
+/* Variant of H5_IS_BUFFER_OVERFLOW, used with functions such as H5Tdecode()
+ * that don't take a size parameter, where we need to skip the bounds checks.
+ *
+ * This is a separate macro since we don't want to inflict that behavior on
+ * the entire library.
+ */
+#define H5_IS_KNOWN_BUFFER_OVERFLOW(skip, ptr, size, buffer_end)                                             \
+    (skip ? FALSE : ((ptr) + (size)-1) > (buffer_end))
+
 /*
  * HDF Boolean type.
  */
@@ -471,6 +415,35 @@
  * Used in the VOL code.
  */
 #define H5_REQUEST_NULL NULL
+
+/* clang-format off */
+/* Address-related macros */
+#define H5_addr_overflow(X,Z)    (HADDR_UNDEF == (X) ||                     \
+                                  HADDR_UNDEF == (X) + (haddr_t)(Z) ||      \
+                                  (X) + (haddr_t)(Z) < (X))
+#define H5_addr_defined(X)       ((X) != HADDR_UNDEF)
+/* The H5_addr_eq() macro guarantees that Y is not HADDR_UNDEF by making
+ * certain that X is not HADDR_UNDEF and then checking that X equals Y
+ */
+#define H5_addr_eq(X,Y)          ((X) != HADDR_UNDEF && (X) == (Y))
+#define H5_addr_ne(X,Y)          (!H5_addr_eq((X),(Y)))
+#define H5_addr_lt(X,Y)          ((X) != HADDR_UNDEF &&                     \
+                                  (Y) != HADDR_UNDEF &&                     \
+                                  (X) < (Y))
+#define H5_addr_le(X,Y)          ((X) != HADDR_UNDEF &&                     \
+                                  (Y) != HADDR_UNDEF &&                     \
+                                  (X) <= (Y))
+#define H5_addr_gt(X,Y)          ((X) != HADDR_UNDEF &&                     \
+                                  (Y) != HADDR_UNDEF &&                     \
+                                  (X) > (Y))
+#define H5_addr_ge(X,Y)          ((X) != HADDR_UNDEF &&                     \
+                                  (Y) != HADDR_UNDEF &&                     \
+                                  (X) >= (Y))
+#define H5_addr_cmp(X,Y)         (H5_addr_eq((X), (Y)) ? 0 :                \
+                                 (H5_addr_lt((X), (Y)) ? -1 : 1))
+#define H5_addr_overlap(O1,L1,O2,L2) (((O1) < (O2) && ((O1) + (L1)) > (O2)) || \
+                                      ((O1) >= (O2) && (O1) < ((O2) + (L2))))
+/* clang-format on */
 
 /*
  * Methods to compare the equality of floating-point values:
@@ -595,6 +568,7 @@ H5_DLL herr_t   H5_timer_stop(H5_timer_t *timer /*in,out*/);
 H5_DLL herr_t   H5_timer_get_times(H5_timer_t timer, H5_timevals_t *times /*in,out*/);
 H5_DLL herr_t   H5_timer_get_total_times(H5_timer_t timer, H5_timevals_t *times /*in,out*/);
 H5_DLL char    *H5_timer_get_time_string(double seconds);
+H5_DLL char    *H5_strcasestr(const char *haystack, const char *needle);
 
 /* Depth of object copy */
 typedef enum {
@@ -640,95 +614,20 @@ typedef off_t       h5_stat_size_t;
 #ifndef HDabort
 #define HDabort() abort()
 #endif
-#ifndef HDabs
-#define HDabs(X) abs(X)
-#endif
-#ifndef HDaccept
-#define HDaccept(A, B, C) accept((A), (B), (C))
-#endif
 #ifndef HDaccess
 #define HDaccess(F, M) access(F, M)
-#endif
-#ifndef HDacos
-#define HDacos(X) acos(X)
-#endif
-#ifndef HDalarm
-#define HDalarm(N) alarm(N)
 #endif
 #ifndef HDasctime
 #define HDasctime(T) asctime(T)
 #endif
-#ifndef HDasin
-#define HDasin(X) asin(X)
-#endif
-#ifndef HDasprintf
-#define HDasprintf asprintf /*varargs*/
-#endif
-#ifndef HDassert
-#define HDassert(X) assert(X)
-#endif
-#ifndef HDatan
-#define HDatan(X) atan(X)
-#endif
-#ifndef HDatan2
-#define HDatan2(X, Y) atan2(X, Y)
-#endif
-#ifndef HDatexit
-#define HDatexit(F) atexit(F)
-#endif
-#ifndef HDatof
-#define HDatof(S) atof(S)
-#endif
-#ifndef HDatoi
-#define HDatoi(S) atoi(S)
-#endif
-#ifndef HDatol
-#define HDatol(S) atol(S)
-#endif
-#ifndef HDatoll
-#define HDatoll(S) atoll(S)
-#endif
-#ifndef HDbind
-#define HDbind(A, B, C) bind((A), (B), (C))
-#endif
-#ifndef HDbsearch
-#define HDbsearch(K, B, N, Z, F) bsearch(K, B, N, Z, F)
-#endif
-#ifndef HDcalloc
-#define HDcalloc(N, Z) calloc(N, Z)
-#endif
 #ifndef HDceil
 #define HDceil(X) ceil(X)
-#endif
-#ifndef HDcfgetispeed
-#define HDcfgetispeed(T) cfgetispeed(T)
-#endif
-#ifndef HDcfgetospeed
-#define HDcfgetospeed(T) cfgetospeed(T)
-#endif
-#ifndef HDcfsetispeed
-#define HDcfsetispeed(T, S) cfsetispeed(T, S)
-#endif
-#ifndef HDcfsetospeed
-#define HDcfsetospeed(T, S) cfsetospeed(T, S)
 #endif
 #ifndef HDchdir
 #define HDchdir(S) chdir(S)
 #endif
-#ifndef HDchmod
-#define HDchmod(S, M) chmod(S, M)
-#endif
-#ifndef HDchown
-#define HDchown(S, O, G) chown(S, O, G)
-#endif
-#ifndef HDclearerr
-#define HDclearerr(F) clearerr(F)
-#endif
 #ifndef HDclock
 #define HDclock() clock()
-#endif
-#ifndef HDclock_gettime
-#define HDclock_gettime(CID, TS) clock_gettime(CID, TS)
 #endif
 #ifndef HDclose
 #define HDclose(F) close(F)
@@ -736,59 +635,14 @@ typedef off_t       h5_stat_size_t;
 #ifndef HDclosedir
 #define HDclosedir(D) closedir(D)
 #endif
-#ifndef HDconnect
-#define HDconnect(A, B, C) connect((A), (B), (C))
-#endif
-#ifndef HDcos
-#define HDcos(X) cos(X)
-#endif
-#ifndef HDcosh
-#define HDcosh(X) cosh(X)
-#endif
 #ifndef HDcreat
 #define HDcreat(S, M) creat(S, M)
-#endif
-#ifndef HDctermid
-#define HDctermid(S) ctermid(S)
 #endif
 #ifndef HDctime
 #define HDctime(T) ctime(T)
 #endif
-#ifndef HDcuserid
-#define HDcuserid(S) cuserid(S)
-#endif
 #ifndef HDdifftime
 #define HDdifftime(X, Y) difftime(X, Y)
-#endif
-#ifndef HDdiv
-#define HDdiv(X, Y) div(X, Y)
-#endif
-#ifndef HDdup
-#define HDdup(F) dup(F)
-#endif
-#ifndef HDdup2
-#define HDdup2(F, I) dup2(F, I)
-#endif
-#ifndef HDexecv
-#define HDexecv(S, AV) execv(S, AV)
-#endif
-#ifndef HDexecve
-#define HDexecve(S, AV, E) execve(S, AV, E)
-#endif
-#ifndef HDexecvp
-#define HDexecvp(S, AV) execvp(S, AV)
-#endif
-#ifndef HDexit
-#define HDexit(N) exit(N)
-#endif
-#ifndef HD_exit
-#define HD_exit(N) _exit(N)
-#endif
-#ifndef HDexp
-#define HDexp(X) exp(X)
-#endif
-#ifndef HDexp2
-#define HDexp2(X) exp2(X)
 #endif
 #ifndef HDfabs
 #define HDfabs(X) fabs(X)
@@ -799,29 +653,11 @@ typedef off_t       h5_stat_size_t;
 #ifndef HDfabsl
 #define HDfabsl(X) fabsl(X)
 #endif
-#ifndef HDfclose
-#define HDfclose(F) fclose(F)
-#endif
-#ifndef HDfcntl
-#define HDfcntl(F, C, ...) fcntl(F, C, __VA_ARGS__)
-#endif
 #ifndef HDfdopen
 #define HDfdopen(N, S) fdopen(N, S)
 #endif
-#ifndef HDfeof
-#define HDfeof(F) feof(F)
-#endif
-#ifndef HDferror
-#define HDferror(F) ferror(F)
-#endif
-#ifndef HDfflush
-#define HDfflush(F) fflush(F)
-#endif
 #ifndef HDfgetc
 #define HDfgetc(F) fgetc(F)
-#endif
-#ifndef HDfgetpos
-#define HDfgetpos(F, P) fgetpos(F, P)
 #endif
 #ifndef HDfgets
 #define HDfgets(S, N, F) fgets(S, N, F)
@@ -858,35 +694,11 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDfloor
 #define HDfloor(X) floor(X)
 #endif
-#ifndef HDfmod
-#define HDfmod(X, Y) fmod(X, Y)
-#endif
-#ifndef HDfopen
-#define HDfopen(S, M) fopen(S, M)
-#endif
-#ifndef HDfork
-#define HDfork() fork()
-#endif
-#ifndef HDfprintf
-#define HDfprintf fprintf
-#endif
-#ifndef HDfpathconf
-#define HDfpathconf(F, N) fpathconf(F, N)
-#endif
 #ifndef HDfputc
 #define HDfputc(C, F) fputc(C, F)
 #endif
 #ifndef HDfputs
 #define HDfputs(S, F) fputs(S, F)
-#endif
-#ifndef HDfread
-#define HDfread(M, Z, N, F) fread(M, Z, N, F)
-#endif
-#ifndef HDfree
-#define HDfree(M) free(M)
-#endif
-#ifndef HDfreopen
-#define HDfreopen(S, M, F) freopen(S, M, F)
 #endif
 #ifndef HDfrexp
 #define HDfrexp(X, N) frexp(X, N)
@@ -903,9 +715,6 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDfseek
 #define HDfseek(F, O, W) fseeko(F, O, W)
 #endif
-#ifndef HDfsetpos
-#define HDfsetpos(F, P) fsetpos(F, P)
-#endif
 #ifndef HDfstat
 #define HDfstat(F, B) fstat(F, B)
 #endif
@@ -915,14 +724,8 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDftruncate
 #define HDftruncate(F, L) ftruncate(F, L)
 #endif
-#ifndef HDfwrite
-#define HDfwrite(M, Z, N, F) fwrite(M, Z, N, F)
-#endif
 #ifndef HDgetc
 #define HDgetc(F) getc(F)
-#endif
-#ifndef HDgetchar
-#define HDgetchar() getchar()
 #endif
 #ifndef HDgetcwd
 #define HDgetcwd(S, Z) getcwd(S, Z)
@@ -936,50 +739,11 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #define HDgetdrive() 0
 #endif
 
-#ifndef HDgetegid
-#define HDgetegid() getegid()
-#endif
 #ifndef HDgetenv
 #define HDgetenv(S) getenv(S)
 #endif
-#ifndef HDgeteuid
-#define HDgeteuid() geteuid()
-#endif
-#ifndef HDgetgid
-#define HDgetgid() getgid()
-#endif
-#ifndef HDgetgrgid
-#define HDgetgrgid(G) getgrgid(G)
-#endif
-#ifndef HDgetgrnam
-#define HDgetgrnam(S) getgrnam(S)
-#endif
-#ifndef HDgetgroups
-#define HDgetgroups(Z, G) getgroups(Z, G)
-#endif
-#ifndef HDgethostbyaddr
-#define HDgethostbyaddr(A, B, C) gethostbyaddr((A), (B), (C))
-#endif
-#ifndef HDgethostname
-#define HDgethostname(N, L) gethostname(N, L)
-#endif
-#ifndef HDgetpgrp
-#define HDgetpgrp() getpgrp()
-#endif
 #ifndef HDgetpid
 #define HDgetpid() getpid()
-#endif
-#ifndef HDgetppid
-#define HDgetppid() getppid()
-#endif
-#ifndef HDgetpwnam
-#define HDgetpwnam(S) getpwnam(S)
-#endif
-#ifndef HDgetpwuid
-#define HDgetpwuid(U) getpwuid(U)
-#endif
-#ifndef HDgetrusage
-#define HDgetrusage(X, S) getrusage(X, S)
 #endif
 
 /* Don't define HDgets - gets() was deprecated in C99 and removed in C11 */
@@ -990,80 +754,20 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDgettimeofday
 #define HDgettimeofday(S, P) gettimeofday(S, P)
 #endif
-#ifndef HDgetuid
-#define HDgetuid() getuid()
-#endif
 #ifndef HDgmtime
 #define HDgmtime(T) gmtime(T)
-#endif
-#ifndef HDhtonl
-#define HDhtonl(X) htonl((X))
-#endif
-#ifndef HDhtons
-#define HDhtons(X) htons((X))
-#endif
-#ifndef HDinet_addr
-#define HDinet_addr(C) inet_addr((C))
-#endif
-#ifndef HDinet_ntoa
-#define HDinet_ntoa(C) inet_ntoa((C))
-#endif
-#ifndef HDisalnum
-#define HDisalnum(C) isalnum((int)(C)) /* Cast for Solaris warning */
-#endif
-#ifndef HDisalpha
-#define HDisalpha(C) isalpha((int)(C)) /* Cast for Solaris warning */
 #endif
 #ifndef HDisatty
 #define HDisatty(F) isatty(F)
 #endif
-#ifndef HDiscntrl
-#define HDiscntrl(C) iscntrl((int)(C)) /* Cast for solaris warning */
-#endif
-#ifndef HDisdigit
-#define HDisdigit(C) isdigit((int)(C)) /* Cast for Solaris warning */
-#endif
-#ifndef HDisgraph
-#define HDisgraph(C) isgraph((int)(C)) /* Cast for Solaris warning*/
-#endif
-#ifndef HDislower
-#define HDislower(C) islower((int)(C)) /* Cast for Solaris warning */
-#endif
 #ifndef HDisnan
 #define HDisnan(X) isnan(X)
-#endif
-#ifndef HDisprint
-#define HDisprint(C) isprint((int)(C)) /* Cast for Solaris warning */
-#endif
-#ifndef HDispunct
-#define HDispunct(C) ispunct((int)(C)) /* Cast for Solaris warning */
-#endif
-#ifndef HDisspace
-#define HDisspace(C) isspace((int)(C)) /* Cast for Solaris warning */
-#endif
-#ifndef HDisupper
-#define HDisupper(C) isupper((int)(C)) /* Cast for Solaris warning */
-#endif
-#ifndef HDisxdigit
-#define HDisxdigit(C) isxdigit((int)(C)) /* Cast for Solaris warning */
-#endif
-#ifndef HDkill
-#define HDkill(P, S) kill(P, S)
 #endif
 #ifndef HDlabs
 #define HDlabs(X) labs(X)
 #endif
 #ifndef HDldexp
 #define HDldexp(X, N) ldexp(X, N)
-#endif
-#ifndef HDldiv
-#define HDldiv(X, Y) ldiv(X, Y)
-#endif
-#ifndef HDlink
-#define HDlink(OLD, NEW) link(OLD, NEW)
-#endif
-#ifndef HDlisten
-#define HDlisten(A, B) listen((A), (B))
 #endif
 #ifndef HDllround
 #define HDllround(V) llround(V)
@@ -1073,9 +777,6 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #endif
 #ifndef HDllroundl
 #define HDllroundl(V) llroundl(V)
-#endif
-#ifndef HDlocaleconv
-#define HDlocaleconv() localeconv()
 #endif
 #ifndef HDlocaltime
 #define HDlocaltime(T) localtime(T)
@@ -1088,9 +789,6 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #endif
 #ifndef HDlog10
 #define HDlog10(X) log10(X)
-#endif
-#ifndef HDlongjmp
-#define HDlongjmp(J, N) longjmp(J, N)
 #endif
 #ifndef HDlround
 #define HDlround(V) lround(V)
@@ -1107,56 +805,14 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDlstat
 #define HDlstat(S, B) lstat(S, B)
 #endif
-#ifndef HDmalloc
-#define HDmalloc(Z) malloc(Z)
-#endif
-#ifndef HDposix_memalign
-#define HDposix_memalign(P, A, Z) posix_memalign(P, A, Z)
-#endif
-#ifndef HDmblen
-#define HDmblen(S, N) mblen(S, N)
-#endif
-#ifndef HDmbstowcs
-#define HDmbstowcs(P, S, Z) mbstowcs(P, S, Z)
-#endif
-#ifndef HDmbtowc
-#define HDmbtowc(P, S, Z) mbtowc(P, S, Z)
-#endif
-#ifndef HDmemchr
-#define HDmemchr(S, C, Z) memchr(S, C, Z)
-#endif
-#ifndef HDmemcmp
-#define HDmemcmp(X, Y, Z) memcmp(X, Y, Z)
-#endif
-#ifndef HDmemcpy
-#define HDmemcpy(X, Y, Z) memcpy(X, Y, Z)
-#endif
-#ifndef HDmemmove
-#define HDmemmove(X, Y, Z) memmove((char *)(X), (const char *)(Y), Z)
-#endif
-#ifndef HDmemset
-#define HDmemset(X, C, Z) memset(X, C, Z)
-#endif
 #ifndef HDmkdir
 #define HDmkdir(S, M) mkdir(S, M)
-#endif
-#ifndef HDmkfifo
-#define HDmkfifo(S, M) mkfifo(S, M)
 #endif
 #ifndef HDmktime
 #define HDmktime(T) mktime(T)
 #endif
-#ifndef HDmodf
-#define HDmodf(X, Y) modf(X, Y)
-#endif
 #ifndef HDnanosleep
 #define HDnanosleep(N, O) nanosleep(N, O)
-#endif
-#ifndef HDntohl
-#define HDntohl(A) ntohl((A))
-#endif
-#ifndef HDntohs
-#define HDntohs(A) ntohs((A))
 #endif
 #ifndef HDopen
 #define HDopen(F, ...) open(F, __VA_ARGS__)
@@ -1164,17 +820,8 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDopendir
 #define HDopendir(S) opendir(S)
 #endif
-#ifndef HDpathconf
-#define HDpathconf(S, N) pathconf(S, N)
-#endif
-#ifndef HDpause
-#define HDpause() pause()
-#endif
 #ifndef HDperror
 #define HDperror(S) perror(S)
-#endif
-#ifndef HDpipe
-#define HDpipe(F) pipe(F)
 #endif
 #ifndef HDpow
 #define HDpow(X, Y) pow(X, Y)
@@ -1184,9 +831,6 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #endif
 #ifndef HDpread
 #define HDpread(F, B, C, O) pread(F, B, C, O)
-#endif
-#ifndef HDprintf
-#define HDprintf printf /*varargs*/
 #endif
 #ifndef HDputc
 #define HDputc(C, F) putc(C, F)
@@ -1199,12 +843,6 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #endif
 #ifndef HDpwrite
 #define HDpwrite(F, B, C, O) pwrite(F, B, C, O)
-#endif
-#ifndef HDqsort
-#define HDqsort(M, N, Z, F) qsort(M, N, Z, F)
-#endif
-#ifndef HDraise
-#define HDraise(N) raise(N)
 #endif
 
 /* clang-format off */
@@ -1252,9 +890,6 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDreaddir
 #define HDreaddir(D) readdir(D)
 #endif
-#ifndef HDrealloc
-#define HDrealloc(M, Z) realloc(M, Z)
-#endif
 #ifndef HDrealpath
 #define HDrealpath(F1, F2) realpath(F1, F2)
 #endif
@@ -1266,9 +901,6 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #endif
 #ifndef HDrewind
 #define HDrewind(F) rewind(F)
-#endif
-#ifndef HDrewinddir
-#define HDrewinddir(D) rewinddir(D)
 #endif
 #ifndef HDround
 #define HDround(V) round(V)
@@ -1285,35 +917,11 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDscanf
 #define HDscanf scanf /*varargs*/
 #endif
-#ifndef HDselect
-#define HDselect(N, RD, WR, ER, T) select(N, RD, WR, ER, T)
-#endif
 #ifndef HDsetbuf
 #define HDsetbuf(F, S) setbuf(F, S)
 #endif
 #ifndef HDsetenv
 #define HDsetenv(N, V, O) setenv(N, V, O)
-#endif
-#ifndef HDsetgid
-#define HDsetgid(G) setgid(G)
-#endif
-#ifndef HDsetjmp
-#define HDsetjmp(J) setjmp(J)
-#endif
-#ifndef HDsetlocale
-#define HDsetlocale(N, S) setlocale(N, S)
-#endif
-#ifndef HDsetpgid
-#define HDsetpgid(P, PG) setpgid(P, PG)
-#endif
-#ifndef HDsetsid
-#define HDsetsid() setsid()
-#endif
-#ifndef HDsetsockopt
-#define HDsetsockopt(A, B, C, D, E) setsockopt((A), (B), (C), (D), (E))
-#endif
-#ifndef HDsetuid
-#define HDsetuid(U) setuid(U)
 #endif
 #ifndef HDsetvbuf
 #define HDsetvbuf(F, S, M, Z) setvbuf(F, S, M, Z)
@@ -1324,53 +932,17 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDsigaction
 #define HDsigaction(S, A, O) sigaction((S), (A), (O))
 #endif
-#ifndef HDsigaddset
-#define HDsigaddset(S, N) sigaddset(S, N)
-#endif
-#ifndef HDsigdelset
-#define HDsigdelset(S, N) sigdelset(S, N)
-#endif
 #ifndef HDsigemptyset
 #define HDsigemptyset(S) sigemptyset(S)
 #endif
-#ifndef HDsigfillset
-#define HDsigfillset(S) sigfillset(S)
-#endif
-#ifndef HDsigismember
-#define HDsigismember(S, N) sigismember(S, N)
-#endif
-#ifndef HDsiglongjmp
-#define HDsiglongjmp(J, N) siglongjmp(J, N)
-#endif
 #ifndef HDsignal
 #define HDsignal(N, F) signal(N, F)
-#endif
-#ifndef HDsigpending
-#define HDsigpending(S) sigpending(S)
-#endif
-#ifndef HDsigprocmask
-#define HDsigprocmask(H, S, O) sigprocmask(H, S, O)
-#endif
-#ifndef HDsigsetjmp
-#define HDsigsetjmp(J, N) sigsetjmp(J, N)
-#endif
-#ifndef HDsigsuspend
-#define HDsigsuspend(S) sigsuspend(S)
-#endif
-#ifndef HDsin
-#define HDsin(X) sin(X)
-#endif
-#ifndef HDsinh
-#define HDsinh(X) sinh(X)
 #endif
 #ifndef HDsleep
 #define HDsleep(N) sleep(N)
 #endif
 #ifndef HDsnprintf
 #define HDsnprintf snprintf /*varargs*/
-#endif
-#ifndef HDsocket
-#define HDsocket(A, B, C) socket((A), (B), (C))
 #endif
 #ifndef HDsprintf
 #define HDsprintf sprintf /*varargs*/
@@ -1387,6 +959,13 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDstrcat
 #define HDstrcat(X, Y) strcat(X, Y)
 #endif
+#ifndef HDstrcasestr
+#if defined(H5_HAVE_STRCASESTR)
+#define HDstrcasestr(X, Y) strcasestr(X, Y)
+#else
+#define HDstrcasestr(X, Y) H5_strcasestr(X, Y)
+#endif
+#endif
 #ifndef HDstrchr
 #define HDstrchr(S, C) strchr(S, C)
 #endif
@@ -1395,9 +974,6 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #endif
 #ifndef HDstrcasecmp
 #define HDstrcasecmp(X, Y) strcasecmp(X, Y)
-#endif
-#ifndef HDstrcoll
-#define HDstrcoll(X, Y) strcoll(X, Y)
 #endif
 #ifndef HDstrcpy
 #define HDstrcpy(X, Y) strcpy(X, Y)
@@ -1417,6 +993,9 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDstrlen
 #define HDstrlen(S) strlen(S)
 #endif
+#ifndef HDstrnlen
+#define HDstrnlen(S, L) strnlen(S, L)
+#endif
 #ifndef HDstrncat
 #define HDstrncat(X, Y, Z) strncat(X, Y, Z)
 #endif
@@ -1429,20 +1008,11 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDstrndup
 #define HDstrndup(S, N) strndup(S, N)
 #endif
-#ifndef HDstrpbrk
-#define HDstrpbrk(X, Y) strpbrk(X, Y)
-#endif
 #ifndef HDstrrchr
 #define HDstrrchr(S, C) strrchr(S, C)
 #endif
-#ifndef HDstrspn
-#define HDstrspn(X, Y) strspn(X, Y)
-#endif
 #ifndef HDstrstr
 #define HDstrstr(X, Y) strstr(X, Y)
-#endif
-#ifndef HDstrtod
-#define HDstrtod(S, R) strtod(S, R)
 #endif
 #ifndef HDstrtok
 #define HDstrtok(X, Y) strtok(X, Y)
@@ -1450,74 +1020,11 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDstrtok_r
 #define HDstrtok_r(X, Y, Z) strtok_r(X, Y, Z)
 #endif
-#ifndef HDstrtol
-#define HDstrtol(S, R, N) strtol(S, R, N)
-#endif
-#ifndef HDstrtoll
-#define HDstrtoll(S, R, N) strtoll(S, R, N)
-#endif
-#ifndef HDstrtoul
-#define HDstrtoul(S, R, N) strtoul(S, R, N)
-#endif
-#ifndef HDstrtoull
-#define HDstrtoull(S, R, N) strtoull(S, R, N)
-#endif
-#ifndef HDstrtoumax
-#define HDstrtoumax(S, R, N) strtoumax(S, R, N)
-#endif
-#ifndef HDstrxfrm
-#define HDstrxfrm(X, Y, Z) strxfrm(X, Y, Z)
-#endif
-#ifndef HDsymlink
-#define HDsymlink(F1, F2) symlink(F1, F2)
-#endif
-#ifndef HDsysconf
-#define HDsysconf(N) sysconf(N)
-#endif
-#ifndef HDsystem
-#define HDsystem(S) system(S)
-#endif
-#ifndef HDtan
-#define HDtan(X) tan(X)
-#endif
-#ifndef HDtanh
-#define HDtanh(X) tanh(X)
-#endif
-#ifndef HDtcdrain
-#define HDtcdrain(F) tcdrain(F)
-#endif
-#ifndef HDtcflow
-#define HDtcflow(F, A) tcflow(F, A)
-#endif
-#ifndef HDtcflush
-#define HDtcflush(F, N) tcflush(F, N)
-#endif
-#ifndef HDtcgetattr
-#define HDtcgetattr(F, T) tcgetattr(F, T)
-#endif
-#ifndef HDtcgetpgrp
-#define HDtcgetpgrp(F) tcgetpgrp(F)
-#endif
-#ifndef HDtcsendbreak
-#define HDtcsendbreak(F, N) tcsendbreak(F, N)
-#endif
-#ifndef HDtcsetattr
-#define HDtcsetattr(F, O, T) tcsetattr(F, O, T)
-#endif
-#ifndef HDtcsetpgrp
-#define HDtcsetpgrp(F, N) tcsetpgrp(F, N)
-#endif
 #ifndef HDtime
 #define HDtime(T) time(T)
 #endif
-#ifndef HDtimes
-#define HDtimes(T) times(T)
-#endif
 #ifndef HDtmpfile
 #define HDtmpfile() tmpfile()
-#endif
-#ifndef HDtmpnam
-#define HDtmpnam(S) tmpnam(S)
 #endif
 #ifndef HDtolower
 #define HDtolower(C) tolower(C)
@@ -1525,29 +1032,14 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDtoupper
 #define HDtoupper(C) toupper(C)
 #endif
-#ifndef HDttyname
-#define HDttyname(F) ttyname(F)
-#endif
 #ifndef HDtzset
 #define HDtzset() tzset()
-#endif
-#ifndef HDumask
-#define HDumask(N) umask(N)
-#endif
-#ifndef HDuname
-#define HDuname(S) uname(S)
-#endif
-#ifndef HDungetc
-#define HDungetc(C, F) ungetc(C, F)
 #endif
 #ifndef HDunlink
 #define HDunlink(S) unlink(S)
 #endif
 #ifndef HDunsetenv
 #define HDunsetenv(S) unsetenv(S)
-#endif
-#ifndef HDutime
-#define HDutime(S, T) utime(S, T)
 #endif
 
 #ifndef HDvasprintf
@@ -1558,18 +1050,6 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
 #endif
 #endif
 
-#ifndef HDva_arg
-#define HDva_arg(A, T) va_arg(A, T)
-#endif
-#ifndef HDva_copy
-#define HDva_copy(D, S) va_copy(D, S)
-#endif
-#ifndef HDva_end
-#define HDva_end(A) va_end(A)
-#endif
-#ifndef HDva_start
-#define HDva_start(A, P) va_start(A, P)
-#endif
 #ifndef HDvfprintf
 #define HDvfprintf(F, FMT, A) vfprintf(F, FMT, A)
 #endif
@@ -1581,18 +1061,6 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
 #endif
 #ifndef HDvsnprintf
 #define HDvsnprintf(S, N, FMT, A) vsnprintf(S, N, FMT, A)
-#endif
-#ifndef HDwait
-#define HDwait(W) wait(W)
-#endif
-#ifndef HDwaitpid
-#define HDwaitpid(P, W, O) waitpid(P, W, O)
-#endif
-#ifndef HDwcstombs
-#define HDwcstombs(S, P, Z) wcstombs(S, P, Z)
-#endif
-#ifndef HDwctomb
-#define HDwctomb(S, C) wctomb(S, C)
 #endif
 #ifndef HDwrite
 #define HDwrite(F, M, Z) write(F, M, Z)
@@ -1613,10 +1081,10 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
  */
 #ifndef NDEBUG
 #define H5_CHECK_OVERFLOW(var, vartype, casttype)                                                            \
-    {                                                                                                        \
+    do {                                                                                                     \
         casttype _tmp_overflow = (casttype)(var);                                                            \
-        HDassert((var) == (vartype)_tmp_overflow);                                                           \
-    }
+        assert((var) == (vartype)_tmp_overflow);                                                             \
+    } while (0)
 #else /* NDEBUG */
 #define H5_CHECK_OVERFLOW(var, vartype, casttype)
 #endif /* NDEBUG */
@@ -1629,7 +1097,7 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
     {                                                                                                        \
         srctype _tmp_src = (srctype)(src);                                                                   \
         dsttype _tmp_dst = (dsttype)(_tmp_src);                                                              \
-        HDassert(_tmp_src == (srctype)_tmp_dst);                                                             \
+        assert(_tmp_src == (srctype)_tmp_dst);                                                               \
         (dst) = _tmp_dst;                                                                                    \
     }
 
@@ -1639,8 +1107,8 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
     {                                                                                                        \
         srctype _tmp_src = (srctype)(src);                                                                   \
         dsttype _tmp_dst = (dsttype)(_tmp_src);                                                              \
-        HDassert(_tmp_src >= 0);                                                                             \
-        HDassert(_tmp_src == (srctype)_tmp_dst);                                                             \
+        assert(_tmp_src >= 0);                                                                               \
+        assert(_tmp_src == (srctype)_tmp_dst);                                                               \
         (dst) = _tmp_dst;                                                                                    \
     }
 
@@ -1650,8 +1118,8 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
     {                                                                                                        \
         srctype _tmp_src = (srctype)(src);                                                                   \
         dsttype _tmp_dst = (dsttype)(_tmp_src);                                                              \
-        HDassert(_tmp_dst >= 0);                                                                             \
-        HDassert(_tmp_src == (srctype)_tmp_dst);                                                             \
+        assert(_tmp_dst >= 0);                                                                               \
+        assert(_tmp_src == (srctype)_tmp_dst);                                                               \
         (dst) = _tmp_dst;                                                                                    \
     }
 
@@ -1659,8 +1127,8 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
     {                                                                                                        \
         srctype _tmp_src = (srctype)(src);                                                                   \
         dsttype _tmp_dst = (dsttype)(_tmp_src);                                                              \
-        HDassert(_tmp_src >= 0);                                                                             \
-        HDassert(_tmp_src == (srctype)_tmp_dst);                                                             \
+        assert(_tmp_src >= 0);                                                                               \
+        assert(_tmp_src == (srctype)_tmp_dst);                                                               \
         (dst) = _tmp_dst;                                                                                    \
     }
 
@@ -1682,10 +1150,15 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
  * that will always generate the expected name.
  */
 #define H5_CHECKED_ASSIGN(dst, dsttype, src, srctype)                                                        \
-    ASSIGN_##srctype##_TO_##dsttype(dst, dsttype, src, srctype)
+    do {                                                                                                     \
+        ASSIGN_##srctype##_TO_##dsttype(dst, dsttype, src, srctype)                                          \
+    } while (0)
 
 #else /* NDEBUG */
-#define H5_CHECKED_ASSIGN(dst, dsttype, src, srctype) (dst) = (dsttype)(src);
+#define H5_CHECKED_ASSIGN(dst, dsttype, src, srctype)                                                        \
+    do {                                                                                                     \
+        (dst) = (dsttype)(src);                                                                              \
+    } while (0)
 #endif /* NDEBUG */
 
 #if defined(H5_HAVE_WINDOW_PATH)
@@ -1695,8 +1168,8 @@ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
 #define H5_DIR_SEPC              '\\'
 #define H5_DIR_SEPS              "\\"
 #define H5_CHECK_DELIMITER(SS)   ((SS == H5_DIR_SEPC) || (SS == H5_DIR_SLASH_SEPC))
-#define H5_CHECK_ABSOLUTE(NAME)  ((HDisalpha(NAME[0])) && (NAME[1] == ':') && (H5_CHECK_DELIMITER(NAME[2])))
-#define H5_CHECK_ABS_DRIVE(NAME) ((HDisalpha(NAME[0])) && (NAME[1] == ':'))
+#define H5_CHECK_ABSOLUTE(NAME)  ((isalpha(NAME[0])) && (NAME[1] == ':') && (H5_CHECK_DELIMITER(NAME[2])))
+#define H5_CHECK_ABS_DRIVE(NAME) ((isalpha(NAME[0])) && (NAME[1] == ':'))
 #define H5_CHECK_ABS_PATH(NAME)  (H5_CHECK_DELIMITER(NAME[0]))
 
 #define H5_GET_LAST_DELIMITER(NAME, ptr)                                                                     \
@@ -1790,8 +1263,9 @@ extern hbool_t H5_coll_api_sanity_check_g;
 
 extern H5_debug_t H5_debug_g;
 #define H5DEBUG(X) (H5_debug_g.pkg[H5_PKG_##X].stream)
-/* Do not use const else AIX strings does not show it. */
-extern char H5libhdf5_settings[]; /* embedded library information */
+
+/* Embedded build information */
+extern const char H5libhdf5_settings[];
 
 /*-------------------------------------------------------------------------
  * Purpose: These macros are inserted automatically just after the
@@ -1920,9 +1394,6 @@ H5_DLL herr_t H5_trace_args(struct H5RS_str_t *rs, const char *type, va_list ap)
  *    use initializers that require special cleanup code to
  *    execute if FUNC_ENTER() fails since a failing FUNC_ENTER()
  *    returns immediately without branching to the `done' label.
- *
- * Programmer:  Quincey Koziol
- *
  *-------------------------------------------------------------------------
  */
 
@@ -1936,34 +1407,34 @@ H5_DLL herr_t H5_trace_args(struct H5RS_str_t *rs, const char *type, va_list ap)
  *        Handles H5XY_.
  */
 #define H5_IS_API(S)                                                                                         \
-    ('_' != ((const char *)S)[2]                  /* underscore at position 2     */                         \
-     && '_' != ((const char *)S)[3]               /* underscore at position 3     */                         \
-     && !(                                        /* NOT              */                                     \
-          ((const char *)S)[4]                    /* pos 4 exists     */                                     \
-          && (HDisupper(S[3]) || HDisdigit(S[3])) /* pos 3 dig | uc   */                                     \
-          && '_' == ((const char *)S)[4]          /* pos 4 underscore */                                     \
+    ('_' != ((const char *)S)[2]              /* underscore at position 2     */                             \
+     && '_' != ((const char *)S)[3]           /* underscore at position 3     */                             \
+     && !(                                    /* NOT              */                                         \
+          ((const char *)S)[4]                /* pos 4 exists     */                                         \
+          && (isupper(S[3]) || isdigit(S[3])) /* pos 3 dig | uc   */                                         \
+          && '_' == ((const char *)S)[4]      /* pos 4 underscore */                                         \
           ))
 
 /* `S' is the name of a function which is being tested to check if it's */
 /*      a public API function */
 #define H5_IS_PUB(S)                                                                                         \
-    (((HDisdigit(S[1]) || HDisupper(S[1])) && HDislower(S[2])) ||                                            \
-     ((HDisdigit(S[2]) || HDisupper(S[2])) && HDislower(S[3])) ||                                            \
-     (!S[4] || ((HDisdigit(S[3]) || HDisupper(S[3])) && HDislower(S[4]))))
+    (((isdigit(S[1]) || isupper(S[1])) && islower(S[2])) ||                                                  \
+     ((isdigit(S[2]) || isupper(S[2])) && islower(S[3])) ||                                                  \
+     (!S[4] || ((isdigit(S[3]) || isupper(S[3])) && islower(S[4]))))
 
 /* `S' is the name of a function which is being tested to check if it's */
 /*      a private library function */
 #define H5_IS_PRIV(S)                                                                                        \
-    (((HDisdigit(S[1]) || HDisupper(S[1])) && '_' == S[2] && HDislower(S[3])) ||                             \
-     ((HDisdigit(S[2]) || HDisupper(S[2])) && '_' == S[3] && HDislower(S[4])) ||                             \
-     ((HDisdigit(S[3]) || HDisupper(S[3])) && '_' == S[4] && HDislower(S[5])))
+    (((isdigit(S[1]) || isupper(S[1])) && '_' == S[2] && islower(S[3])) ||                                   \
+     ((isdigit(S[2]) || isupper(S[2])) && '_' == S[3] && islower(S[4])) ||                                   \
+     ((isdigit(S[3]) || isupper(S[3])) && '_' == S[4] && islower(S[5])))
 
 /* `S' is the name of a function which is being tested to check if it's */
 /*      a package private function */
 #define H5_IS_PKG(S)                                                                                         \
-    (((HDisdigit(S[1]) || HDisupper(S[1])) && '_' == S[2] && '_' == S[3] && HDislower(S[4])) ||              \
-     ((HDisdigit(S[2]) || HDisupper(S[2])) && '_' == S[3] && '_' == S[4] && HDislower(S[5])) ||              \
-     ((HDisdigit(S[3]) || HDisupper(S[3])) && '_' == S[4] && '_' == S[5] && HDislower(S[6])))
+    (((isdigit(S[1]) || isupper(S[1])) && '_' == S[2] && '_' == S[3] && islower(S[4])) ||                    \
+     ((isdigit(S[2]) || isupper(S[2])) && '_' == S[3] && '_' == S[4] && islower(S[5])) ||                    \
+     ((isdigit(S[3]) || isupper(S[3])) && '_' == S[4] && '_' == S[5] && islower(S[6])))
 
 /* global library version information string */
 extern char H5_lib_vers_info_g[];
@@ -1991,7 +1462,7 @@ typedef struct H5_api_struct {
 #define H5_FIRST_THREAD_INIT pthread_once(&H5TS_first_init_g, H5TS_pthread_first_thread_init);
 #endif
 
-/* Macros for threadsafe HDF-5 Phase I locks */
+/* Macros for threadsafe HDF5 Phase I locks */
 #define H5_API_LOCK   H5TS_mutex_lock(&H5_g.init_lock);
 #define H5_API_UNLOCK H5TS_mutex_unlock(&H5_g.init_lock);
 
@@ -2025,14 +1496,6 @@ extern hbool_t H5_libterm_g; /* Is the library being shutdown? */
 
 #endif /* H5_HAVE_THREADSAFE */
 
-/* Extern global to determine if we should use selection I/O if available (this
- * variable should be removed once selection I/O performs as well as the
- * previous scalar I/O implementation
- *
- * NOTE: Must be exposed via H5_DLLVAR so parallel tests pass on Windows.
- */
-H5_DLLVAR hbool_t H5_use_selection_io_g;
-
 #ifdef H5_HAVE_CODESTACK
 
 /* Include required function stack header */
@@ -2044,10 +1507,6 @@ H5_DLLVAR hbool_t H5_use_selection_io_g;
 #define H5_PUSH_FUNC /* void */
 #define H5_POP_FUNC  /* void */
 #endif               /* H5_HAVE_CODESTACK */
-
-#ifdef H5_HAVE_MPE
-extern hbool_t H5_MPEinit_g; /* Has the MPE Library been initialized? */
-#endif
 
 /* Forward declaration of H5CXpush() / H5CXpop() */
 /* (Including H5CXprivate.h creates bad circular dependencies - QAK, 3/18/2018) */
@@ -2061,9 +1520,9 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
                                                                                                              \
         if (!func_check) {                                                                                   \
             /* Check function naming status */                                                               \
-            HDassert(asrt &&                                                                                 \
-                     "Function naming conventions are incorrect - check H5_IS_API|PUB|PRIV|PKG macros in "   \
-                     "H5private.h (this is usually due to an incorrect number of underscores)");             \
+            assert(asrt &&                                                                                   \
+                   "Function naming conventions are incorrect - check H5_IS_API|PUB|PRIV|PKG macros in "     \
+                   "H5private.h (this is usually due to an incorrect number of underscores)");               \
                                                                                                              \
             /* Don't check again */                                                                          \
             func_check = TRUE;                                                                               \
@@ -2090,9 +1549,7 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
     H5_API_LOCK
 
 /* Local variables for API routines */
-#define FUNC_ENTER_API_VARS                                                                                  \
-    MPE_LOG_VARS                                                                                             \
-    H5TRACE_DECL
+#define FUNC_ENTER_API_VARS H5TRACE_DECL
 
 #define FUNC_ENTER_API_COMMON                                                                                \
     FUNC_ENTER_API_VARS                                                                                      \
@@ -2103,7 +1560,7 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
     /* Initialize the library */                                                                             \
     if (!H5_INIT_GLOBAL && !H5_TERM_GLOBAL) {                                                                \
         if (H5_init_library() < 0)                                                                           \
-            HGOTO_ERROR(H5E_FUNC, H5E_CANTINIT, err, "library initialization failed")                        \
+            HGOTO_ERROR(H5E_FUNC, H5E_CANTINIT, err, "library initialization failed");                       \
     }
 
 #define FUNC_ENTER_API_PUSH(err)                                                                             \
@@ -2112,11 +1569,9 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
                                                                                                              \
     /* Push the API context */                                                                               \
     if (H5CX_push() < 0)                                                                                     \
-        HGOTO_ERROR(H5E_FUNC, H5E_CANTSET, err, "can't set API context")                                     \
+        HGOTO_ERROR(H5E_FUNC, H5E_CANTSET, err, "can't set API context");                                    \
     else                                                                                                     \
-        api_ctx_pushed = TRUE;                                                                               \
-                                                                                                             \
-    BEGIN_MPE_LOG
+        api_ctx_pushed = TRUE;
 
 /* Use this macro for all "normal" API functions */
 #define FUNC_ENTER_API(err)                                                                                  \
@@ -2158,7 +1613,6 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
             {                                                                                                \
                 FUNC_ENTER_API_COMMON                                                                        \
                 H5_PUSH_FUNC                                                                                 \
-                BEGIN_MPE_LOG                                                                                \
                 {
 
 /*
@@ -2176,13 +1630,12 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
                     FUNC_ENTER_API_VARS                                                                      \
                     FUNC_ENTER_COMMON_NOERR(H5_IS_API(__func__));                                            \
                     FUNC_ENTER_API_THREADSAFE;                                                               \
-                    BEGIN_MPE_LOG                                                                            \
                     {
 
 /*
  * Use this macro for API functions that should only perform initialization
  *      of the library or an interface, but not push any state (API context,
- *      function name, start MPE logging, etc) examples are: H5open.
+ *      function name, etc.) examples are: H5open.
  *
  */
 #define FUNC_ENTER_API_NOPUSH(err)                                                                           \
@@ -2358,11 +1811,8 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
         FUNC_ENTER_COMMON_NOERR(H5_IS_PKG(__func__));
 
 /*-------------------------------------------------------------------------
- * Purpose:  Register function exit for code profiling.  This should be
- *    the last statement executed by a function.
- *
- * Programmer:  Quincey Koziol
- *
+ * Purpose: Register function exit for code profiling.  This should be
+ *          the last statement executed by a function.
  *-------------------------------------------------------------------------
  */
 /* Threadsafety termination code for API routines */
@@ -2370,9 +1820,7 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
     H5_API_UNLOCK                                                                                            \
     H5_API_SET_CANCEL
 
-#define FUNC_LEAVE_API_COMMON(ret_value)                                                                     \
-    FINISH_MPE_LOG                                                                                           \
-    H5TRACE_RETURN(ret_value);
+#define FUNC_LEAVE_API_COMMON(ret_value) H5TRACE_RETURN(ret_value);
 
 #define FUNC_LEAVE_API(ret_value)                                                                            \
     ;                                                                                                        \
@@ -2506,11 +1954,16 @@ H5_DLL herr_t H5CX_pop(hbool_t update_dxpl_props);
 
 /* Union for const/non-const pointer for use by functions that manipulate
  * pointers but do not write to their targets or return pointers to const
- * specified locations.  This helps us avoid compiler warnings. */
+ * specified locations.  Also used for I/O functions that work for read and
+ * write - these functions are expected to never write to these locations in the
+ * write case.  This helps us avoid compiler warnings. */
 typedef union {
     void       *vp;
     const void *cvp;
 } H5_flexible_const_ptr_t;
+
+/* File-independent encode/decode routines */
+#include "H5encode.h"
 
 /* Private functions, not part of the publicly documented API */
 H5_DLL herr_t H5_init_library(void);

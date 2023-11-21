@@ -24,8 +24,9 @@
 //  Formatter.h
 ///////////////////////////////////////////////////////////
 
-#ifndef __LOGGING_FORMATTER_H__
-#define __LOGGING_FORMATTER_H__
+#pragma once
+#ifndef CODA_OSS_logging_Formatter_h_INCLUDED_
+#define CODA_OSS_logging_Formatter_h_INCLUDED_
 
 #include <string>
 #include "config/Exports.h"
@@ -88,4 +89,4 @@ protected:
 };
 
 }
-#endif
+#endif  // CODA_OSS_logging_Formatter_h_INCLUDED_

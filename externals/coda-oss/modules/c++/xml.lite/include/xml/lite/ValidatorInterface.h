@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_ValidatorInterface_h_INCLUDED_
 #define CODA_OSS_xml_lite_ValidatorInterface_h_INCLUDED_
-#pragma once
 
 /*!
  * \file ValidatorInterface.h
@@ -35,14 +35,17 @@
 
 #include <string>
 #include <vector>
+#include <coda_oss/string.h>
+
+#include <config/Exports.h>
 #include <io/InputStream.h>
 #include <str/Convert.h>
 #include <logging/Logger.h>
 #include <sys/filesystem.h>
+#include <str/Encoding.h>
+
 #include <xml/lite/Element.h>
 #include <xml/lite/QName.h>
-#include <coda_oss/string.h>
-#include <str/Encoding.h>
 
 namespace xml
 {
@@ -76,7 +79,7 @@ struct ValidationInfo final
         std::ostringstream oss;
         oss << "[" << this->getLevel() << "]" << 
             " from File: " << this->getFile() << 
-            " on Line: " << str::toString(this->getLine()) << 
+            " on Line: " << this->getLine() << 
             " with Message: " << this->getMessage();
         return oss.str();
     }
@@ -94,7 +97,7 @@ private:
  *
  * This class is the interface for schema validators
  */
-class ValidatorInterface
+class CODA_OSS_API ValidatorInterface
 {
 public:
 

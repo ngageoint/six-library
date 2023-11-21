@@ -40,7 +40,7 @@ j2k::Image::Image(const types::RowCol<size_t>& rawImageDims)
         std::ostringstream os;
         os << "Failed to create an openjpeg image handle using the provided raw image dimensions";
         os << " (rows: "<< rawImageDims.row << ", cols : " << rawImageDims.col << ")!";
-        throw except::Exception(Ctxt(os.str()));
+        throw except::Exception(Ctxt(os));
     }
 
     // set up the image

@@ -32,12 +32,12 @@ namespace
 {
 struct Operation
 {
-    Operation(const std::string& op,
-              const std::string& name,
-              const size_t bytes) :
-        op(op),
-        name(name),
-        bytes(bytes)
+    Operation(const std::string& op_,
+              const std::string& name_,
+              const size_t bytes_) :
+        op(op_),
+        name(name_),
+        bytes(bytes_)
     {
     }
 
@@ -72,7 +72,7 @@ public:
         mHTMLFile(htmlFile),
         mCSSFile(cssFile)
     {
-        mStartPtr = NULL;
+        mStartPtr = nullptr;
         mColors.push_back("lightgrey");
         mColors.push_back("lightblue");
         mColors.push_back("lightcyan");

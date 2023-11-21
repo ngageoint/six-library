@@ -65,13 +65,13 @@ static nitf_TREDescription descrip_0773[] = {
 };
 
 /* Define the available descriptions and the default one */
-static nitf_TREDescriptionInfo descriptions[] = {
+static nitf_TREDescriptionInfo XML_DATA_CONTENTDescriptions[] = {
     { "XML_DATA_CONTENT_005", descrip_0005, 5 },
     { "XML_DATA_CONTENT_283", descrip_0283, 283 },
     { "XML_DATA_CONTENT_773", descrip_0773, 773 },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet XML_DATA_CONTENTDescriptionSet = { 0, XML_DATA_CONTENTDescriptions };
 
 NITF_DECLARE_PLUGIN(XML_DATA_CONTENT)
 

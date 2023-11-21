@@ -54,8 +54,8 @@ void logging::XMLFormatter::format(const logging::LogRecord* record, io::OutputS
     // conver record
     std::string name = (record->getName().empty()) ? 
         ("DEFAULT") : record->getName();
-    std::string line = str::toString(record->getLineNum());
-    std::string threadID =  str::toString(sys::getThreadID());
+    const auto line = std::to_string(record->getLineNum());
+    const auto threadID = std::to_string(sys::getThreadID());
 
     // populate vector with record
     std::vector<std::string> logRecord;

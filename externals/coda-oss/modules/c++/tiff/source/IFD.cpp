@@ -53,7 +53,7 @@ tiff::IFDEntry *tiff::IFD::operator[](unsigned short tag)
     // not exist.  This is to make sure that the map doesn't get full
     // of invalid key/value pairs if you're just trying to verify whether
     // a key already exists of not.
-    return exists(tag) ? mIFD[tag] : NULL;
+    return exists(tag) ? mIFD[tag] : nullptr;
 }
 const tiff::IFDEntry* tiff::IFD::operator[](unsigned short tag) const
 {
@@ -90,8 +90,7 @@ void tiff::IFD::addEntry(const std::string& name)
     tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
     // we can't add it b/c we don't know about this tag
     if (!mapEntry)
-        throw except::Exception(Ctxt(FmtX(
-                                "Unable to add IFD Entry: unknown tag [%s]", name.c_str())));
+        throw except::Exception(Ctxt(str::Format("Unable to add IFD Entry: unknown tag [%s]", name)));
 
     unsigned short id = mapEntry->getTagID();
 
@@ -123,7 +122,7 @@ void tiff::IFD::serialize(io::OutputStream& output)
 {
     io::Seekable *seekable =
             dynamic_cast<io::Seekable *>(&output);
-    if (seekable == NULL)
+    if (seekable == nullptr)
         throw except::Exception(Ctxt("Can only serialize IFD to seekable stream"));
 
     // Makes sure all data offsets are defined for each entry.

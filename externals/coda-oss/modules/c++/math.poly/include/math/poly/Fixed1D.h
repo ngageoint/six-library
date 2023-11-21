@@ -203,14 +203,14 @@ public:
      _T& operator [] (size_t i)
     {
         if (i > _Order)
-            throw except::IndexOutOfRangeException(Ctxt(FmtX("index [%d] is not in range [0..%d]", i, _Order)));
+            throw except::IndexOutOfRangeException(Ctxt(str::Format("index [%d] is not in range [0..%d]", i, _Order)));
         return mCoef[i];
 
     }
     _T operator [] (size_t i) const
     {
         if (i > _Order)
-            throw except::IndexOutOfRangeException(Ctxt(FmtX("index [%d] is not in range [0..%d]", i, _Order)));
+            throw except::IndexOutOfRangeException(Ctxt(str::Format("index [%d] is not in range [0..%d]", i, _Order)));
 
         return mCoef[i];
 

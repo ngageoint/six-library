@@ -30,6 +30,10 @@
 #include <sstream>
 #include <algorithm>
 #include <stdexcept>
+#include <string>
+#include <cctype>
+
+#include "gsl/gsl.h"
 
 #include "str/Convert.h"
 #include "str/Encoding.h"
@@ -79,7 +83,7 @@ inline void trim_(std::basic_string<TChar> & s)
     }
     s.erase(0, i);
 
-    for (i = s.length() - 1; (int) i >= 0; i--)
+    for (i = s.length() - 1; static_cast<int>(i) >= 0; i--)
     {
         if (!iswspace(static_cast<wint_t>(s[i])))
             break;
@@ -249,10 +253,16 @@ bool containsOnly(const std::string& s, const std::string& validChars)
     typedef std::string::const_iterator StringIter;
     std::vector<bool> chars(255, false);
     for (StringIter it = validChars.begin(); it != validChars.end(); ++it)
-        chars[(unsigned int)*it] = true;
+    {
+        const auto i = gsl::narrow<ptrdiff_t>(*it);
+        chars[i] = true;
+    }
     for (StringIter it = s.begin(); it != s.end(); ++it)
-        if (!chars[(unsigned int)*it])
+    {
+        const auto i = gsl::narrow<ptrdiff_t>(*it);
+        if (!chars[i])
             return false;
+    }
     return true;
 }
 
@@ -306,4 +316,54 @@ void escapeForXML(std::string& str)
     replaceAll(str, "\n", "&#10;");
     replaceAll(str, "\r", "&#13;");
 }
+
+// https://en.cppreference.com/w/cpp/string/char_traits
+class ci_char_traits final : public std::char_traits<char>
+{
+    // Use our own routine rather than strcasecmp() so that the same
+    // toupperCheck() is used as when calling upper().
+    static auto to_upper(char ch) noexcept
+    {
+        return toupperCheck(ch);
+    }
+
+    static int compare(const char* s1, const char* s2, std::size_t n) noexcept
+    {
+        while (n-- != 0)
+        {
+            if (to_upper(*s1) < to_upper(*s2))
+                return -1;
+            if (to_upper(*s1) > to_upper(*s2))
+                return 1;
+            ++s1;
+            ++s2;
+        }
+        return 0;
+    }
+
+    public:
+    static int compare(const std::string& s1, const std::string& s2) noexcept
+    {
+        if (s1.length() < s2.length())
+        {
+            return -1;
+        }
+        if (s1.length() > s2.length())
+        {
+            return 1;
+        }
+        assert(s1.length() == s2.length());
+        return compare(s1.c_str(), s2.c_str(), s1.length());
+    }
+};
+
+bool eq(const std::string& lhs, const std::string& rhs) noexcept
+{
+    return ci_char_traits::compare(lhs, rhs) == 0;
+}
+bool ne(const std::string& lhs, const std::string& rhs) noexcept
+{
+    return ci_char_traits::compare(lhs, rhs) != 0;
+}
+
 }

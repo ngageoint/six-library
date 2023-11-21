@@ -31,7 +31,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription ENGRDA_description[] = {
     {NITF_BCS_A, 20, "Unique Source System Name", "RESRC" },
     {NITF_BCS_N, 3, "Record Entry Count", "RECNT" },
     {NITF_LOOP, 0, NULL, "RECNT"},
@@ -57,12 +57,12 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-static nitf_TREDescriptionInfo descriptions[] = {
-        { "ENGRDA", description, NITF_TRE_DESC_NO_LENGTH },
+static nitf_TREDescriptionInfo ENGRDA_descriptions[] = {
+        { "ENGRDA", ENGRDA_description, NITF_TRE_DESC_NO_LENGTH },
         { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
     };
 
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet ENGRDA_descriptionSet = { 0, ENGRDA_descriptions };
 
 static const char *ident[] = { NITF_PLUGIN_TRE_KEY, "ENGRDA", NULL };
 
@@ -294,9 +294,9 @@ NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
     return ok;
 }
 
-NITFAPI(const char**) ENGRDA_init(nitf_Error* error)
+NITF_PLUGIN_FUNCTION_EXPORT(const char**) ENGRDA_init(nitf_Error* error)
 {
-    if (!nitf_TREUtils_createBasicHandler(&descriptionSet,
+    if (!nitf_TREUtils_createBasicHandler(&ENGRDA_descriptionSet,
                                           &engrdaHandler,
                                           error))
     {
@@ -310,7 +310,7 @@ NITFAPI(const char**) ENGRDA_init(nitf_Error* error)
     return ident;
 }
 
-NITFAPI(nitf_TREHandler*) ENGRDA_handler(nitf_Error* error)
+NITF_PLUGIN_FUNCTION_EXPORT(nitf_TREHandler*) ENGRDA_handler(nitf_Error* error)
 {
     (void)error;
     return &engrdaHandler;

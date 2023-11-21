@@ -20,6 +20,8 @@
  *
  */
 
+#include <io/ReadUtils.h>
+
 #include <io/FileInputStream.h>
 #include <coda_oss/span.h>
 

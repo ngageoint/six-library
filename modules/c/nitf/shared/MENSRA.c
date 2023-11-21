@@ -109,7 +109,7 @@ static nitf_TREDescriptionInfo descriptions[] = {
     { "MENSRA_185", descrip_00185, 185 },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet MENSRADescriptionSet = { 0, descriptions };
 
 NITF_DECLARE_PLUGIN(MENSRA)
 

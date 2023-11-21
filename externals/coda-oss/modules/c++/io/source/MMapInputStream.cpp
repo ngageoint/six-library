@@ -28,7 +28,7 @@ void io::MMapInputStream::open(const std::string& fname, char* flags)
     //    std::cout << mLength << std::endl;
     mFile = fopen(fname.c_str(), "r");
     if (!mFile)
-        throw sys::SystemException(FmtX("Failure while opening file: %s", fname.c_str()));
+        throw sys::SystemException(str::Format("Failure while opening file: %s", fname));
 
     _map();
 
@@ -38,7 +38,7 @@ void io::MMapInputStream::close()
 {
     _unmap();
     fclose(mFile);
-    mFile = NULL;
+    mFile = nullptr;
 }
 
 void io::MMapInputStream::_map()
@@ -50,7 +50,7 @@ void io::MMapInputStream::_unmap()
 {
     //     std::cout << "Unmapping file... ";
     mOs.unmapFile(mData, mLength);
-    mData = NULL;
+    mData = nullptr;
     //    std::cout << "done!" << std::endl;
 }
 

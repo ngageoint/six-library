@@ -53,13 +53,11 @@ else()
         HASH "SHA256=898C46BFE9152D51220C6679E905DE4DF75D2A67DCF315BF80459673AB1EB797"
     )
     set(HAVE_PROTOTYPES 1)
-    check_cxx_source_compiles("int main() { unsigned short; return 0; }"
-                                HAVE_UNSIGNED_SHORT)
-    check_cxx_source_compiles("int main() { unsigned char; return 0; }"
-                                HAVE_UNSIGNED_CHAR)
-    check_include_file("stddef.h" HAVE_STDDEF_H)
-    check_include_file("stdlib.h" HAVE_STDLIB_H)
-    check_include_file("locale.h" HAVE_LOCALE_H)
+    set(HAVE_UNSIGNED_SHORT true)
+    set(HAVE_UNSIGNED_CHAR true)
+    set(HAVE_STDDEF_H true)
+    set(HAVE_STDLIB_H true)
+    set(HAVE_STDLIB_H true)
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
     foreach(src "cdjpeg.c"   "jaricom.c"  "jcapimin.c" "jcapistd.c"

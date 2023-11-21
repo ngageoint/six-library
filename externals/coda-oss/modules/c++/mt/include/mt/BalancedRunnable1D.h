@@ -159,7 +159,7 @@ void runBalanced1D(size_t numElements,
         std::ostringstream ostr;
         ostr << "Got " << numThreads << " threads but " << ops.size()
              << " functors";
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
 
     if (numThreads <= 1)

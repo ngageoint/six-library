@@ -20,13 +20,16 @@
  *
  */
 
-#ifndef __CLI_VALUE_H__
-#define __CLI_VALUE_H__
+#pragma once
+#ifndef CODA_OSS_cli_Value_h_INCLUDED_
+#define CODA_OSS_cli_Value_h_INCLUDED_
 
-#include <import/sys.h>
-#include <import/str.h>
+#include <string>
 #include <iterator>
+#include <memory>
 
+#include <import/str.h>
+#include "sys/Conf.h"
 #include "config/Exports.h"
 
 namespace cli
@@ -36,12 +39,9 @@ namespace cli
  * The Value class provides access to one or more actual values.
  * It provides index-based access to parameters.
  */
-class CODA_OSS_API Value
+struct CODA_OSS_API Value final
 {
-public:
-    Value()
-    {
-    }
+    Value() = default;
 
     template<typename T>
     explicit Value(std::vector<T> value)
@@ -55,12 +55,6 @@ public:
         set<T>(value);
     }
 
-    template<typename T>
-    Value(T* value, size_t size, bool own = false)
-    {
-        set<T>(value, size, own);
-    }
-
     ~Value()
     {
         cleanup();
@@ -71,17 +65,6 @@ public:
     {
         cleanup();
         mValues.push_back(str::toString(value));
-    }
-
-    template<typename T>
-    void set(T* value, size_t size, bool own = false)
-    {
-        cleanup();
-        mValues.reserve(size);
-        for (size_t i = 0; i < size; ++i)
-            add(value[i]);
-        if (own)
-            delete[] value;
     }
 
     template<typename T>
@@ -104,10 +87,7 @@ public:
     {
         if (index >= mValues.size())
             throw except::IndexOutOfRangeException(
-                                                   Ctxt(
-                                                        FmtX(
-                                                             "Invalid index: %d",
-                                                             index)));
+                                                   Ctxt(str::Format("Invalid index: %d", index)));
         return str::toType<T>(mValues[index]);
     }
 
@@ -163,4 +143,4 @@ protected:
 };
 
 }
-#endif
+#endif  // CODA_OSS_cli_Value_h_INCLUDED_

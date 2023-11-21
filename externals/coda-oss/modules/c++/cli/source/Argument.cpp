@@ -19,15 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include "cli/Argument.h"
-#include "cli/ArgumentParser.h"
+
 #include <iterator>
 
+#include <import/sys.h>
+
+#include "cli/ArgumentParser.h"
+
 cli::Argument::Argument(const std::string& nameOrFlags, cli::ArgumentParser* parser):
-    mAction(cli::STORE), mMinArgs(0), mMaxArgs(1), mDefaultValue(NULL),
-            mOwnDefault(false), mConstValue(NULL), mOwnConst(false),
-            mRequired(false), mShowsHelp(true), mParser(parser)
+    mParser(parser)
 {
     std::vector < std::string > vars = str::split(nameOrFlags, " ");
     if (vars.size() == 1 && !str::startsWith(vars[0], "-"))
@@ -53,7 +54,7 @@ cli::Argument::~Argument()
 cli::Argument* cli::Argument::addFlag(const std::string& flag)
 {
     char p = mParser->mPrefixChar;
-    std::string p2 = FmtX("%c%c", p, p);
+    std::string p2 = str::Format("%c%c", p, p);
     if (flag.size() > 2 && str::startsWith(flag, p2) && flag[2] != p)
         mLongFlags.push_back(validateFlag(flag.substr(2)));
     else if (flag.size() > 1 && flag[0] == p && flag[1] != p)

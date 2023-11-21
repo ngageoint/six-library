@@ -21,12 +21,9 @@ def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.load(TOOLS, tooldir='build')
 
-    if conf.env['COMPILER_CXX'] == 'msvc':
-       conf.env.CXXFLAGS += ['/std:c++14'];
-
     if conf.env['COMPILER_CXX'] != 'msvc':
         conf.env.CFLAGS += ['-Wall'];
-        conf.env.CXXFLAGS += ['-Wall', '-std=c++14'];
+        conf.env.CXXFLAGS += ['-Wall'];
 
     conf.recurse(DIRS)
 

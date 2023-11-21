@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef NITRO_nitf_Object_hpp_INCLUDED_
 #define NITRO_nitf_Object_hpp_INCLUDED_
-#pragma once
 
 #include <assert.h>
 
@@ -151,7 +151,7 @@ public:
      */
     std::string getObjectID() const
     {
-        return FmtX("%p", getNative());
+        return str::Format("%p", getNative());
     }
 
     bool isManaged() const noexcept { return isValid() && mHandle->isManaged(); }

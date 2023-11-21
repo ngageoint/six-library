@@ -1,6 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
- * Copyright by the Board of Trustees of the University of Illinois.         *
  * All rights reserved.                                                      *
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
@@ -14,19 +13,26 @@
 /*-------------------------------------------------------------------------
  *
  * Created:     H5Cepoch.c
- *              June 5 2004
- *              Quincey Koziol
  *
- * Purpose:     Metadata cache epoch callbacks.
+ * Purpose:     Metadata cache epoch callbacks
  *
  *-------------------------------------------------------------------------
  */
 
+/****************/
+/* Module Setup */
+/****************/
+
+#include "H5Cmodule.h" /* This source code file is part of the H5C module */
+
 /***********/
 /* Headers */
 /***********/
-#include "H5private.h"   /* Generic Functions			*/
-#include "H5ACprivate.h" /* Metadata cache                       */
+#include "H5private.h"   /* Generic Functions                        */
+#include "H5ACprivate.h" /* Metadata Cache                           */
+#include "H5Cpkg.h"      /* Cache                                    */
+#include "H5Eprivate.h"  /* Error Handling                           */
+#include "H5Fprivate.h"  /* Files                                    */
 
 /****************/
 /* Local Macros */
@@ -46,7 +52,7 @@
  *
  * As a strategy for automatic cache size reduction, the cache may insert
  * marker entries in the LRU list at the end of each epoch.  These markers
- * are then used to identify entries that have not been accessed for n
+ * are then used to identify entries that have not been accessed for 'n'
  * epochs so that they can be evicted from the cache.
  *
  ****************************************************************************/
@@ -99,7 +105,6 @@ const H5AC_class_t H5AC_EPOCH_MARKER[1] = {
  *
  * None of these functions should ever be called, so there is no point in
  * documenting them separately.
- *                                                     JRM - 11/16/04
  *
  ***************************************************************************/
 
