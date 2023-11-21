@@ -64,7 +64,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);NRT_MODULE_EXPORTS;NITRO_PCH;HAVE_J2K_H</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);NITRO_NRT_EXPORTS;NITRO_PCH;HAVE_J2K_H;CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\nrt\include;$(ProjectDir)..\nitf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
@@ -91,7 +91,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);NRT_MODULE_EXPORTS;NITRO_PCH;HAVE_J2K_H</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);NITRO_NRT_EXPORTS;NITRO_PCH;HAVE_J2K_H;CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\nrt\include;$(ProjectDir)..\nitf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>

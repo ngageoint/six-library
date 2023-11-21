@@ -361,6 +361,9 @@
     <ClInclude Include="j2k\include\j2k\TileWriter.h">
       <Filter>j2k</Filter>
     </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Exports.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgm\source\CircleElement.c">

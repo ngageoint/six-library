@@ -171,6 +171,9 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\externals\coda-oss\modules\c++\coda-oss.vcxproj">
+      <Project>{9997e895-5161-4ddf-8f3f-099894cb2f21}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\c\nitf-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
@@ -185,11 +188,11 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -216,7 +219,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);;NITRO_NITFCPP_EXPORTS;CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)nitf\include;$(ProjectDir)..\c\nrt\include;$(ProjectDir)..\c\nitf\include;$(ProjectDir)..\c\j2k\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -239,7 +242,7 @@
       <SubSystem>
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\</AdditionalLibraryDirectories>
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
@@ -250,7 +253,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);;NITRO_NITFCPP_EXPORTS;CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)nitf\include;$(ProjectDir)..\c\nrt\include;$(ProjectDir)..\c\nitf\include;$(ProjectDir)..\c\j2k\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -270,7 +273,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\</AdditionalLibraryDirectories>
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
