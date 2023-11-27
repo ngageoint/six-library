@@ -293,6 +293,12 @@
     <ClInclude Include="TestCase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\externals\coda-oss\modules\c++\coda-oss.vcxproj">
+      <Project>{9997e895-5161-4ddf-8f3f-099894cb2f21}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\externals\nitro\modules\c++\nitf-c++.vcxproj">
+      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\six\modules\c++\cphd03\cphd03.vcxproj">
       <Project>{016ef417-e41c-404c-b3b5-34b6cdd94bb3}</Project>
     </ProjectReference>

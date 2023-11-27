@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\externals\coda-oss\modules\c++\coda-oss.vcxproj">
+      <Project>{9997e895-5161-4ddf-8f3f-099894cb2f21}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\modules\c++\six.sicd\six.sicd.vcxproj">
       <Project>{34ac2314-fbd1-42ad-aaf4-0cebc6bf737e}</Project>
     </ProjectReference>

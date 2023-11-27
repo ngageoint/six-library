@@ -38,7 +38,7 @@ namespace sys
 /**
  * Predicate interface for all entries
  */
-struct FilePredicate
+struct CODA_OSS_API FilePredicate
 {
     using argument_type = std::string;
     using result_type = bool;
@@ -59,7 +59,7 @@ struct ExistsPredicate : FilePredicate
 /**
  * Predicate that matches files only (no directories)
  */
-struct FileOnlyPredicate: public FilePredicate
+struct CODA_OSS_API FileOnlyPredicate : public FilePredicate
 {
     virtual ~FileOnlyPredicate() = default;
     virtual bool operator()(const std::string& entry) const override;
@@ -148,7 +148,7 @@ protected:
  *  The FileFinder class allows you to search for 
  *  files/directories in a clean way.
  */
-struct FileFinder final
+struct CODA_OSS_API FileFinder final
 {
     FileFinder() = default;
     ~FileFinder() = default;

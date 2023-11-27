@@ -102,6 +102,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\externals\coda-oss\modules\c++\coda-oss.vcxproj">
+      <Project>{9997e895-5161-4ddf-8f3f-099894cb2f21}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\cphd\cphd.vcxproj">
       <Project>{01be4480-9620-4ded-b34f-d2e3ab4b7c8b}</Project>
     </ProjectReference>
