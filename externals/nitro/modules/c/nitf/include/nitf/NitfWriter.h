@@ -203,7 +203,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer, nitf_Error * error);
  * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
  *
  */
-NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
+NITFAPI(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
                                             nitf_Off* fileLenOff,
                                             uint32_t* hdrLen,
                                             nitf_Error* error);
@@ -221,7 +221,7 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
  *
  * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
  */
-NITFPROT(NITF_BOOL)
+NITFAPI(NITF_BOOL)
 nitf_Writer_writeImageSubheader(nitf_Writer* writer,
                                 const nitf_ImageSubheader* subhdr,
                                 nitf_Version fver,
@@ -242,7 +242,7 @@ nitf_Writer_writeImageSubheader(nitf_Writer* writer,
  *
  * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
  */
-NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
+NITFAPI(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
                                                  const nitf_DESubheader* subhdr,
                                                  uint32_t* userSublen,
                                                  nitf_Version fver,
@@ -261,7 +261,7 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
  *
  * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
  */
-NITFPROT(NITF_BOOL) nitf_Writer_writeInt64Field(nitf_Writer* writer,
+NITFAPI(NITF_BOOL) nitf_Writer_writeInt64Field(nitf_Writer* writer,
                                                 uint64_t field,
                                                 uint32_t length,
                                                 char fill,

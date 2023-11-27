@@ -38,6 +38,8 @@
 #   define NRT_BOOL int
 #endif
 
+#include "nrt/Exports.h"
+
 #if defined(WIN32) || defined(_WIN32)
 /*  Negotiate the meaning of NRTAPI, NRTPROT (for public and protected)  */
 #      if defined(NRT_MODULE_EXPORTS)
@@ -73,6 +75,19 @@
 #endif
 #define NRT_SNPRINTF snprintf
 #define NRT_VSNPRINTF vsnprintf
+
+// Export no matter what ... when you KNOW you're building a DLL/SO, e.g. a plugin
+#define NRTEXPORT(RT) NRT_C NITRO_NRT_library_export RT // extern "C" __declspec(dllexport) void* foo();
+
+// Adjust the above ... but w/o chaning too much :-(
+#if defined(NRTAPI) && defined(CODA_OSS_LIBRARY_SHARED)
+	#undef NRTAPI
+	#ifdef NITRO_NRT_EXPORTS  // See Exports.h
+		#define NRTAPI(RT) NRTEXPORT(RT)
+	#else
+		#define NRTAPI(RT) NRT_C NITRO_NRT_library_import RT // extern "C" __declspec(dllimport) void* foo();		
+	#endif
+#endif
 
 /*
  *  This section describes a set of macros to help with

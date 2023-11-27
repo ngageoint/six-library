@@ -79,6 +79,7 @@ struct CODA_OSS_API path final // N.B. this is an INCOMPLETE and NON-STANDARD im
     {
       *this = source;
     }
+    ~path() = default;
 
     path& operator=(const path&) = default;
     path& operator=(path&&) = default;

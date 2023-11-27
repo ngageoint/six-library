@@ -51,7 +51,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING; CODA_OSS_LIBRARY_SHARED</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -80,7 +80,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING; CODA_OSS_LIBRARY_SHARED</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -184,14 +184,6 @@
     <ClCompile Include="source\SlantPlanePixelTransformer.cpp" />
     <ClCompile Include="source\Timeline.cpp" />
     <ClCompile Include="source\Utilities.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\scene\scene.vcxproj">
-      <Project>{1cfcde59-6410-4037-95eb-b37d31e10820}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\six\six.vcxproj">
-      <Project>{62aad4dd-35ba-41a0-8263-1f4dfd755689}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
