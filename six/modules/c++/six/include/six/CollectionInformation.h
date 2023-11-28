@@ -126,7 +126,7 @@ struct SIX_SIX_API CollectionInformation
     virtual void setClassificationLevel(const std::u8string& classification);
 
     //! Ostream operators for six::CollectionInformation type (utility only).
-    friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
+    SIX_SIX_API friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
 
   bool operator==(const CollectionInformation& rhs) const; // needs to be member-function for SWIG
   bool operator!=(const CollectionInformation& rhs) const  // needs to be member-function for SWIG

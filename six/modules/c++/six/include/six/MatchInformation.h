@@ -148,7 +148,7 @@ public:
     /*
      *  Ostream operators for six::MatchInformation type
      */
-    friend std::ostream& operator<< (std::ostream& os, const MatchInformation& m);
+    SIX_SIX_API friend std::ostream& operator<< (std::ostream& os, const MatchInformation& m);
 };
 }
 

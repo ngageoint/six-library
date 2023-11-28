@@ -315,16 +315,16 @@ private:
     return createString_(name, p, parent);
   }
 
- xml::lite::Element& create(const XmlLite&, const XsElement<double>&, xml::lite::Element& parent);
- void getFirstAndOnly(const XmlLite&, const xml::lite::Element&, XsElement<double>&);
+    SIX_SIX_API xml::lite::Element& create(const XmlLite&, const XsElement<double>&, xml::lite::Element& parent);
+    SIX_SIX_API void getFirstAndOnly(const XmlLite&, const xml::lite::Element&, XsElement<double>&);
 
- xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<bool>&, xml::lite::Element& parent);
- xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<double>&, xml::lite::Element& parent);
- xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<std::u8string>&, xml::lite::Element& parent);
+    SIX_SIX_API xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<bool>&, xml::lite::Element& parent);
+    SIX_SIX_API xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<double>&, xml::lite::Element& parent);
+    SIX_SIX_API xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<std::u8string>&, xml::lite::Element& parent);
 
- bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<bool>&);
- bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<double>&);
- bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<std::u8string>&);
+    SIX_SIX_API bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<bool>&);
+    SIX_SIX_API bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<double>&);
+    SIX_SIX_API bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<std::u8string>&);
 
 }
 

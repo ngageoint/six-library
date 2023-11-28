@@ -561,7 +561,7 @@ private:
 };
 
 // Help out the compiler with overloads, and keep the class smaller.
-extern void save(NITFWriteControl&, const six::zfloat*, const std::string&, const std::vector<std::string>&);
+SIX_SIX_API void save(NITFWriteControl&, const six::zfloat*, const std::string&, const std::vector<std::string>&);
 
 template<typename T>
 inline void save(NITFWriteControl& writeControl, 

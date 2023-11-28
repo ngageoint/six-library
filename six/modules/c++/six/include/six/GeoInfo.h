@@ -81,7 +81,7 @@ struct SIX_SIX_API GeoInfo
 };
 
 //! Ostream operator
-std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
+SIX_SIX_API std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
 }
 
 #endif
