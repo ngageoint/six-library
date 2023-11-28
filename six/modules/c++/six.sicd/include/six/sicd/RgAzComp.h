@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_RG_AZ_COMP_H__
 #define __SIX_RG_AZ_COMP_H__
 
@@ -28,6 +29,7 @@
 #include "six/sicd/GeoData.h"
 #include "six/sicd/SCPCOA.h"
 #include "six/sicd/Timeline.h"
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -40,7 +42,7 @@ struct Timeline;
  *  \brief   Parameters included for a Range, Doppler image.
  *           Required parameters for ImageFormAlgo = RGAZCOMP.
  */
-struct RgAzComp
+struct SIX_SICD_API RgAzComp
 {
     //! Constructor
     RgAzComp() :

@@ -408,7 +408,7 @@ enum ImageMode
  *
  * \return Whether this corresponds to frame or scan mode
  */
-ImageMode getImageMode(RadarModeType radarMode);
+SIX_SIX_API ImageMode getImageMode(RadarModeType radarMode);
 
 /*!
  *  \class MissingRequiredException
