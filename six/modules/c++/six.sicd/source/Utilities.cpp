@@ -1634,7 +1634,7 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
 
 static void writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths_, const six::sicd::ComplexData& data, const six::zfloat* image_)
 {
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFWriteControl writer(data.unique_clone());
     writer.setLogger(logging::setupLogger("out"));

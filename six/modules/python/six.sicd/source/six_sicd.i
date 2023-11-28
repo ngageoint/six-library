@@ -69,7 +69,7 @@ void writeNITF(const std::string& pathname, const std::vector<std::string>&
 {
     const std::complex<float>* image = reinterpret_cast<
             std::complex<float>* >(imageAdr);
-   six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+  six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
     mem::SharedPtr<six::Container> container(new six::Container(
             six::DataType::COMPLEX));
@@ -142,7 +142,7 @@ void cropSICDWrap(const std::string& inPathname,
               const std::string& outPathname)
 {
 
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+   six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
     cropSICD(inPathname, schemaPaths, aoiOffset,
 	         aoiDims, outPathname);

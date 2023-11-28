@@ -207,7 +207,7 @@ struct SIX_SIX_API NITFHeaderCreator
         mXMLRegistry = xmlRegistry;
         if (!mXMLRegistry)
         {
-            mXMLRegistry = &XMLControlFactory::getInstance();
+            mXMLRegistry = &getXMLControlFactory();
         }
     }
 

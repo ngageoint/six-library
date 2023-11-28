@@ -210,7 +210,7 @@ struct SIX_SIX_API ReadControl
     {
         mXMLRegistry = xmlRegistry;
         if (!mXMLRegistry)
-            mXMLRegistry = &XMLControlFactory::getInstance();
+            mXMLRegistry = &getXMLControlFactory();
     }
     void setXMLControlRegistry(const XMLControlRegistry& xmlRegistry)
     {

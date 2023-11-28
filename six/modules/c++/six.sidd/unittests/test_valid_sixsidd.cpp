@@ -128,7 +128,7 @@ TEST_CASE(test_read_sidd200_no_LUT)
 {
     static const auto pathname = get_sample_nitf_path("2023-07-26-11-37-27_UMBRA-04_SIDD.nitf");
 
-    six::XMLControlRegistry& xml_registry = six::XMLControlFactory::getInstance();
+    six::XMLControlRegistry& xml_registry = six::getXMLControlFactory();
     xml_registry.addCreator(six::DataType::DERIVED,
         new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 

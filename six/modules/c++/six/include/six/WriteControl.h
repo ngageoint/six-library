@@ -273,7 +273,7 @@ protected:
     {
         mXMLRegistry = xmlRegistry;
         if (!mXMLRegistry)
-            mXMLRegistry = &XMLControlFactory::getInstance();
+            mXMLRegistry = &getXMLControlFactory();
     }
     std::shared_ptr<Container> mContainer;
     Options mOptions;

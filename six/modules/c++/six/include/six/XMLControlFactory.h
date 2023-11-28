@@ -199,7 +199,7 @@ std::u8string toValidXMLString(const Data&,
     const std::vector<std::filesystem::path>*, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
 
 //!  Singleton declaration of our XMLControlRegistry
-typedef mt::Singleton<XMLControlRegistry, true> XMLControlFactory;
+SIX_SIX_API XMLControlRegistry& getXMLControlFactory();
 
 }
 
