@@ -48,6 +48,7 @@
 #include "six/Enums.h"
 #include "six/Complex.h"
 #include "six/AmplitudeTable.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -103,7 +104,7 @@ typedef scene::FrameType FrameType;
  *
  *  Just a simple pair for error stats
  */
-struct DecorrType
+struct SIX_SIX_API DecorrType
 {
     DecorrType() = default;
         DecorrType(double ccz, double dr = 0.0) :
@@ -143,7 +144,7 @@ typedef types::RowCol<LatLon> RowColLatLon;
  *
  *  Static class to provide constant enums.
  */
-struct Constants
+struct SIX_SIX_API Constants final
 {
     //!  This is the upper bound of a NITF segment
     static const uint64_t IS_SIZE_MAX; // = 9999999998LL;
@@ -229,7 +230,7 @@ struct Constants
  *  and row-column position for a point.
  *
  */
-struct ReferencePoint final
+struct SIX_SIX_API ReferencePoint final
 {
     //!  ECEF location of point
     Vector3 ecef;
@@ -275,7 +276,7 @@ struct ReferencePoint final
  *  The SCP in ECEF (ecf, to match SICD convention) and LLH (or LatLonAlt
  *  as we refer to it).
  */
-struct SCP
+struct SIX_SIX_API SCP
 {
     SCP();
 

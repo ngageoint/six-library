@@ -20,9 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_XmlLite_h_INCLUDED_
 #define SIX_six_XmlLite_h_INCLUDED_
-#pragma once
 
 #include <assert.h>
 
@@ -40,11 +40,12 @@
 #include <six/Utilities.h>
 #include <six/Logger.h>
 #include <six/XsElement.h>
+#include <six/Exports.h>
 
 namespace six
 {
 // A simple wrapper around xml::lite::MinidomParser
-struct MinidomParser final
+struct SIX_SIX_API MinidomParser final
 {
     MinidomParser();
     ~MinidomParser();
@@ -92,7 +93,7 @@ inline const xml::lite::Document& getDocument(const MinidomParser& xmlParser)
 }
 
 
-struct XmlLite final
+struct SIX_SIX_API XmlLite final
 {
     XmlLite(const xml::lite::Uri& defaultURI, bool addClassAttributes,
         logging::Logger* log = nullptr, bool ownLog = false);

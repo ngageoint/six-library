@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_WriteControl_h_INCLUDED_
 #define SIX_six_WriteControl_h_INCLUDED_
-#pragma once
 
 #include <memory>
 #include <std/span>
@@ -36,6 +36,7 @@
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
 #include "six/Logger.h"
+#include "six/Exports.h"
 #include <import/logging.h>
 
 namespace six
@@ -67,7 +68,7 @@ typedef std::vector<UByte*> NonConstBufferList;
  *  allows that data model to be transmitted to the container file format.
  *
  */
-struct WriteControl
+struct SIX_SIX_API WriteControl
 {
     //!  Global byte swap option.  Normally, you should leave this up to us
     static const char OPT_BYTE_SWAP[];

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_XML_CONTROL_FACTORY_H__
 #define __SIX_XML_CONTROL_FACTORY_H__
 
@@ -34,6 +35,7 @@
 #include <scene/sys_Conf.h>
 
 #include "six/XMLControl.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -91,7 +93,7 @@ template <typename T> struct XMLControlCreatorT : public XMLControlCreator
  *  identify which reader/writer to create, and one that uses a
  *  string (the same one that identifies the type in the container)
  */
-struct XMLControlRegistry
+struct SIX_SIX_API XMLControlRegistry
 {
     //!  Destructor
     virtual ~XMLControlRegistry();

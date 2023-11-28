@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_NITF_HEADER_CREATOR_H__
 #define __SIX_NITF_HEADER_CREATOR_H__
 
@@ -31,6 +32,7 @@
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
 #include "six/Logger.h"
+#include "six/Exports.h"
 #include <import/logging.h>
 
 namespace six
@@ -43,7 +45,7 @@ namespace six
  *  This class helps in populating NITF header fields
  *  prior to writing.
  */
-struct NITFHeaderCreator
+struct SIX_SIX_API NITFHeaderCreator
 {
     //! Constructor. Must call initialize to use.
     NITFHeaderCreator(FILE* log = stderr);

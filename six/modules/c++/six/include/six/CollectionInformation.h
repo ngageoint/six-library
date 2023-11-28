@@ -32,6 +32,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -44,7 +45,7 @@ namespace six
  *  the collection.  There is nothing wrong with the SICD name, but
  *  for API consistency, naming is lengthened.
  */
-struct CollectionInformation
+struct SIX_SIX_API CollectionInformation
 {
 
     /*!

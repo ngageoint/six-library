@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_NITF_IMAGE_INFO_H__
 #define __SIX_NITF_IMAGE_INFO_H__
-#pragma once
 
 #include <string>
 
@@ -31,6 +31,7 @@
 #include <six/Data.h>
 #include <six/Utilities.h>
 #include <six/NITFSegmentInfo.h>
+#include <six/Exports.h>
 #include <nitf/ImageSegmentComputer.h>
 
 namespace six
@@ -48,7 +49,7 @@ namespace six
  *
  *
  */
-class NITFImageInfo
+class SIX_SIX_API NITFImageInfo
 {
 public:
     /*!
