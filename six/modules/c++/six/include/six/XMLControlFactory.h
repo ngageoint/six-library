@@ -188,14 +188,14 @@ SIX_SIX_API std::string toXMLString_(const Data* data,
  *  Additionally performs schema validation --
  *  This function must must receive a valid logger to print validation errors
  */
-std::u8string toValidXMLString(
+SIX_SIX_API std::u8string toValidXMLString(
         const Data* data,
         const std::vector<std::string>& schemaPaths,
         logging::Logger* log,
         const XMLControlRegistry *xmlRegistry = nullptr);
-std::u8string toValidXMLString(const Data&,
+SIX_SIX_API std::u8string toValidXMLString(const Data&,
     const std::vector<std::string>& schemaPaths, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
-std::u8string toValidXMLString(const Data&,
+SIX_SIX_API std::u8string toValidXMLString(const Data&,
     const std::vector<std::filesystem::path>*, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
 
 //!  Singleton declaration of our XMLControlRegistry
