@@ -176,7 +176,7 @@ static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
     return gsl::narrow<uint8_t>(distance);
 }
 
-six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const six::zfloat &v) const
+six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor_(const six::zfloat &v) const
 {
     six::AMP8I_PHS8I_t retval;
     retval.phase = getPhase(v);
@@ -190,6 +190,10 @@ six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(con
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     retval.amplitude = nearest(magnitudes, projection);
     return retval;
+}
+six::AMP8I_PHS8I_t six::sicd::nearest_neighbor(const details::ComplexToAMP8IPHS8I& i, const six::zfloat& v)
+{
+    return i.nearest_neighbor_(v);
 }
 
  // Yes, this is duplicated code :-(  1) hopefully it will go away someday "soon,"
@@ -237,10 +241,10 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
-    const auto& converter = make(pAmplitudeTable);
+    const auto& converter = make_(pAmplitudeTable);
     const auto nearest_neighbor = [&converter](const auto& v)
     {
-        return converter.nearest_neighbor(v);
+        return converter.nearest_neighbor_(v);
     };
 
     std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
@@ -248,7 +252,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return retval;
 }
 
-const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)
+const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make_(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
@@ -270,4 +274,8 @@ const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8
         pAmplitudeTable->cacheFromComplex_(std::move(pTree));
         return *(pAmplitudeTable->getFromComplex());
     }
+}
+const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::make_ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable)
+{
+    return six::sicd::details::ComplexToAMP8IPHS8I::make_(pAmplitudeTable);
 }

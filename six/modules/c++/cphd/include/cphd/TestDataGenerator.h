@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_TEST_DATA_GENERATOR_H__
 #define __CPHD_TEST_DATA_GENERATOR_H__
 
@@ -33,6 +33,7 @@
 #include <cphd/PVPBlock.h>
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -43,7 +44,7 @@ namespace cphd
  *
  * \return Randomly generated double
  */
-double getRandom();
+SIX_CPHD_API double getRandom();
 
 /*
  *  \func getRandomVector3
@@ -51,7 +52,7 @@ double getRandom();
  *
  *  \return Return vector3D object
  */
-Vector3 getRandomVector3();
+SIX_CPHD_API Vector3 getRandomVector3();
 
 /*
  *  \func setPVPXML
@@ -62,7 +63,7 @@ Vector3 getRandomVector3();
  *  \params[out] pvp A Pvp object for which values will be set
  *
  */
-void setPVPXML(Pvp& pvp);
+SIX_CPHD_API void setPVPXML(Pvp& pvp);
 
 /*
  *  \func setVectorParameters
@@ -77,7 +78,7 @@ void setPVPXML(Pvp& pvp);
  *   will be returned with data filled in for specific vector
  *
  */
-void setVectorParameters(size_t channel,
+SIX_CPHD_API void setVectorParameters(size_t channel,
                           size_t vector,
                           PVPBlock& pvpBlock);
 
@@ -88,7 +89,7 @@ void setVectorParameters(size_t channel,
  *  \param[out] Filled metadata object
  *
  */
-void setUpMetadata(Metadata& metadata);
+SIX_CPHD_API void setUpMetadata(Metadata& metadata);
 
 /*
  *  \func setUpData

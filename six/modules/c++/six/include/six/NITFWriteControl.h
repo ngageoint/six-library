@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_NITFWriteControl_h_INCLUDED_
 #define SIX_six_NITFWriteControl_h_INCLUDED_
-#pragma once
 
 #include <stdint.h>
 
@@ -42,6 +42,7 @@
 #include "six/NITFImageInfo.h"
 #include "six/Adapters.h"
 #include "six/NITFHeaderCreator.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -56,7 +57,7 @@ namespace six
  *  we take advantage of the WriteHandler API and bypass the normal
  *  blocker.
  */
-class NITFWriteControl : public WriteControl
+class SIX_SIX_API NITFWriteControl : public WriteControl
 {
     void addLegend(const Legend&, int imageNumber);
 
@@ -560,7 +561,7 @@ private:
 };
 
 // Help out the compiler with overloads, and keep the class smaller.
-extern void save(NITFWriteControl&, const six::zfloat*, const std::string&, const std::vector<std::string>&);
+SIX_SIX_API void save(NITFWriteControl&, const six::zfloat*, const std::string&, const std::vector<std::string>&);
 
 template<typename T>
 inline void save(NITFWriteControl& writeControl, 

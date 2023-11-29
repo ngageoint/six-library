@@ -19,16 +19,18 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_UTILITIES_H__
 #define __SCENE_UTILITIES_H__
 
 #include "scene/Types.h"
+#include "scene/Exports.h"
 
 namespace scene
 {
     struct GeographicGridECEFTransform;
 
-struct Utilities
+struct SIX_SCENE_API Utilities final
 {
     /*!
      *  Convert a lat/lon to ECEF. This method returns a

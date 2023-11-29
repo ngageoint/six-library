@@ -22,6 +22,7 @@
 #include "six/Types.h"
 
 #include "six/Init.h"
+#include "six/Exports.h"
 #include <nitf/ImageSegmentComputer.h>
 
 std::ostream& operator<<(std::ostream& os, const scene::LatLonAlt& latLonAlt)
@@ -80,7 +81,7 @@ ImageMode getImageMode(RadarModeType radarMode)
     }
 }
 
-template<>
+template<> SIX_SIX_API
 LatLonCorners::Corners() :
     upperLeft(Init::undefined<LatLon>()),
     upperRight(Init::undefined<LatLon>()),
@@ -89,7 +90,7 @@ LatLonCorners::Corners() :
 {
 }
 
-template<>
+template<> SIX_SIX_API
 LatLonAltCorners::Corners() :
     upperLeft(Init::undefined<LatLonAlt>()),
     upperRight(Init::undefined<LatLonAlt>()),

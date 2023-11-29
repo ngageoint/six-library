@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_XML_CONTROL_H__
 #define __SIX_XML_CONTROL_H__
 
@@ -33,6 +34,7 @@
 
 #include "six/Types.h"
 #include "six/Logger.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -60,7 +62,7 @@ namespace six
  *  They can also be used to interact with an XML model or a stub XML
  *  file as well.
  */
-class XMLControl
+class SIX_SIX_API XMLControl
 {
     public:
     //!  Constructor

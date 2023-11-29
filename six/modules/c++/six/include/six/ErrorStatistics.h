@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_ErrorStatistics_h_INCLUDED_
 #define SIX_six_ErrorStatistics_h_INCLUDED_
-#pragma once
 
 #include <assert.h>
 
@@ -34,6 +34,7 @@
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
 #include "six/XsElement.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -45,7 +46,7 @@ namespace six
  *  Correlation coefficient parameters.  This object is shared
  *  between SICD and SIDD
  */
-struct CorrCoefs
+struct SIX_SIX_API CorrCoefs
 {
     CorrCoefs() = default;
 
@@ -82,7 +83,7 @@ struct CorrCoefs
  *  Position and velocity error statistics for the
  *  radar platform.  Name is altered to match API conventions
  */
-struct PosVelError
+struct SIX_SIX_API PosVelError
 {
     //!  CorrCoefs are nullptr, since optional
     PosVelError() = default;
@@ -118,7 +119,7 @@ struct PosVelError
  *
  *  Radar sensor error statistics.
  */
-struct RadarSensor
+struct SIX_SIX_API RadarSensor
 {
     /*!
      *  Range bias error standard deviation. 
@@ -164,7 +165,7 @@ struct RadarSensor
  *
  *  Contains troposphere delay error statistics
  */
-struct TropoError
+struct SIX_SIX_API TropoError
 {
     /*!
      *  (Optional) Troposphere two-way delay error for normal
@@ -206,7 +207,7 @@ struct TropoError
  *
  *  Contains Ionosphere delay error statistics
  */
-struct IonoError
+struct SIX_SIX_API IonoError
 {
     /*!
      *  (Optional) Ionosphere two-way delay error for normal
@@ -255,7 +256,7 @@ struct IonoError
  *
  *  Contains Unmodeled error statistics 
  */
-struct Unmodeled final
+struct SIX_SIX_API Unmodeled final
 {
     XsElement<double> Xrow{ "Xrow" };
     XsElement<double> Ycol{ "Ycol" };
@@ -309,7 +310,7 @@ inline bool operator!=(const Unmodeled& lhs, const Unmodeled& rhs)
  *  (Optional) Error statistics by components.  All children are
  *  optional and thus, not initialized by the constructor
  */
-struct Components
+struct SIX_SIX_API Components
 {
     Components() = default;
 
@@ -347,7 +348,7 @@ struct Components
  *  RG_AZ.
  *
  */
-struct CompositeSCP
+struct SIX_SIX_API CompositeSCP
 {
     //!  Types
     enum SCPType
@@ -392,7 +393,7 @@ struct CompositeSCP
  *  Parameters needed for computing error statistics.
  *
  */
-struct ErrorStatistics
+struct SIX_SIX_API ErrorStatistics
 {
     /*!
      *  (Optional) Composite error statistics estimated at the scene

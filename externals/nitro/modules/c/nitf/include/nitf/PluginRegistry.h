@@ -94,9 +94,9 @@ nitf_PluginRegistry;
  *  along with an error
  *
  */
-NITFPROT(nitf_PluginRegistry *)
+NITFAPI(nitf_PluginRegistry *)
     nitf_PluginRegistry_getInstance(nitf_Error * error);
-NITFPROT(nitf_PluginRegistry*)
+NITFAPI(nitf_PluginRegistry*)
 nitf_PluginRegistry_getInstanceLog(nitf_Error* error, FILE* log);
 
 
@@ -242,7 +242,7 @@ nitf_PluginRegistry_unload(nitf_PluginRegistry * reg, nitf_Error * error);
  *    is -1
  *  \return The plugin main, or NULL
  */
-NITFPROT(nitf_TREHandler*)
+NITFAPI(nitf_TREHandler*)
 nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
                                        const char *ident,
                                        int *hadError,
@@ -281,7 +281,7 @@ nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry * reg,
 /*
  * Retrieves a compression interface for 'comp'.  Returns NULL if this fails.
  */
-NITFPROT(nitf_CompressionInterface* )
+NITFAPI(nitf_CompressionInterface* )
 nitf_PluginRegistry_retrieveCompInterface(const char *comp,
                                           nitf_Error* error);
 

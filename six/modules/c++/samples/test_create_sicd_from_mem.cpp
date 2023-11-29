@@ -74,7 +74,7 @@ int main(int argc, char** argv)
         std::unique_ptr<logging::Logger> logger(
                 logging::setupLogger(fs::path(argv[0]).filename().string()));
 
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         std::vector<six::zfloat > image(dims.row * dims.col);
 

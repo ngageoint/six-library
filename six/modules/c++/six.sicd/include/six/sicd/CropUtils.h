@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __SIX_SICD_CROP_UTILS_H__
 #define __SIX_SICD_CROP_UTILS_H__
 
@@ -29,6 +29,7 @@
 #include <scene/Types.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/ComplexData.h>
+#include <six/sicd/Exports.h>
 
 namespace six
 {
@@ -44,7 +45,7 @@ namespace sicd
  * \param aoiDims Size of AOI
  * \param outPathname Output cropped SICD pathname
  */
-void cropSICD(const std::string& inPathname,
+SIX_SICD_API void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const types::RowCol<size_t>& aoiOffset,
               const types::RowCol<size_t>& aoiDims,
@@ -54,7 +55,7 @@ void cropSICD(const std::string& inPathname,
  * Same as above but allow an already-opened reader to be used.
  * NITFReadControl::load() must be called prior to calling this function.
  */
-void cropSICD(six::NITFReadControl& reader,
+SIX_SICD_API void cropSICD(six::NITFReadControl& reader,
               const std::vector<std::string>& schemaPaths,
               const types::RowCol<size_t>& aoiOffset,
               const types::RowCol<size_t>& aoiDims,
@@ -74,7 +75,7 @@ void cropSICD(six::NITFReadControl& reader,
  * be in-bounds (and the SICD metadata will reflect this).  If this is false,
  * an exception will be thrown.
  */
-void cropSICD(const std::string& inPathname,
+SIX_SICD_API void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const std::vector<scene::Vector3>& corners,
               const std::string& outPathname,
@@ -84,7 +85,7 @@ void cropSICD(const std::string& inPathname,
  * Same as above but allow an already-opened reader to be used.
  * NITFReadControl::load() must be called prior to calling this function.
  */
-void cropSICD(six::NITFReadControl& reader,
+SIX_SICD_API void cropSICD(six::NITFReadControl& reader,
               const std::vector<std::string>& schemaPaths,
               const std::vector<scene::Vector3>& corners,
               const std::string& outPathname,
@@ -100,7 +101,7 @@ void cropSICD(six::NITFReadControl& reader,
  * rectangular in the slant plane, an AOI will be exscribed from these
  * \param outPathname Output cropped SICD pathname
  */
-void cropSICD(const std::string& inPathname,
+SIX_SICD_API void cropSICD(const std::string& inPathname,
               const std::vector<std::string>& schemaPaths,
               const std::vector<scene::LatLonAlt>& corners,
               const std::string& outPathname,
@@ -110,7 +111,7 @@ void cropSICD(const std::string& inPathname,
  * Same as above but allow an already-opened reader to be used.
  * NITFReadControl::load() must be called prior to calling this function.
  */
-void cropSICD(six::NITFReadControl& reader,
+SIX_SICD_API void cropSICD(six::NITFReadControl& reader,
               const std::vector<std::string>& schemaPaths,
               const std::vector<scene::LatLonAlt>& corners,
               const std::string& outPathname,
@@ -126,7 +127,7 @@ void cropSICD(six::NITFReadControl& reader,
  * \returns A cloned complex data object where the 
  * meta data has been updated to reflect the cropped aoi.
  */
-std::unique_ptr<six::sicd::ComplexData>
+SIX_SICD_API std::unique_ptr<six::sicd::ComplexData>
 cropMetaData(const six::sicd::ComplexData& complexData,
              const types::RowCol<size_t>& aoiOffset,
              const types::RowCol<size_t>& aoiDims);

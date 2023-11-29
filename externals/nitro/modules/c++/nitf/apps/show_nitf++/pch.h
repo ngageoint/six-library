@@ -55,11 +55,6 @@
 #include <import/nitf.hpp>
 #include <io/FileInputStream.h>
 
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
-
 #pragma comment(lib, "ws2_32")
 
 

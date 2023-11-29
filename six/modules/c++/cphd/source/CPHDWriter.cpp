@@ -32,6 +32,7 @@
 #include <cphd/FileHeader.h>
 #include <cphd/Utilities.h>
 #include <cphd/Wideband.h>
+#include <cphd/Exports.h>
 
 #undef min
 #undef max
@@ -382,19 +383,19 @@ void CPHDWriter::writeCPHDData(io::SeekableOutputStream& stream,
     writeCPHDData(*dataWriter, data, numElements, channel);
 }
 
-template void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
     const sys::ubyte* data, // For compressed data
     size_t numElements, size_t channel);
-template void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
     const std::byte* data,
     size_t numElements, size_t channel);
-template void CPHDWriter::writeCPHDData<cphd::zint8_t>(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData<cphd::zint8_t>(io::SeekableOutputStream&,
     const cphd::zint8_t* data,
     size_t numElements, size_t channel);
-template void CPHDWriter::writeCPHDData<cphd::zint16_t>(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData<cphd::zint16_t>(io::SeekableOutputStream&,
     const cphd::zint16_t* data,
     size_t numElements, size_t channel);
-template void CPHDWriter::writeCPHDData<cphd::zfloat>(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData<cphd::zfloat>(io::SeekableOutputStream&,
     const cphd::zfloat* data,
     size_t numElements, size_t channel);
 }

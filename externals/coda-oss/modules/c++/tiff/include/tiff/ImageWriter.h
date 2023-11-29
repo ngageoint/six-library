@@ -19,11 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __TIFF_IMAGE_WRITER_H__
 #define __TIFF_IMAGE_WRITER_H__
 
 #include <import/io.h>
+#include <config/Exports.h>
 
 #include "tiff/Common.h"
 #include "tiff/IFDEntry.h"
@@ -40,7 +41,7 @@ namespace tiff
  * Writes a TIFF image to a stream.  Contains functions for writing
  * the image's IFD, and for putting data to a stream.
  *********************************************************************/
-class ImageWriter
+class CODA_OSS_API ImageWriter
 {
 public:
     //! The ideal tile size if a tiled file.

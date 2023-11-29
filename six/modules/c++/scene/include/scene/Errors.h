@@ -19,16 +19,18 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_ERRORS_H__
 #define __SCENE_ERRORS_H__
 
 #include <scene/sys_Conf.h>
 #include <math/linear/MatrixMxN.h>
 #include <scene/FrameType.h>
+#include <scene/Exports.h>
 
 namespace scene
 {
-struct Errors
+struct SIX_SCENE_API Errors
 {
     Errors() = default;
 
