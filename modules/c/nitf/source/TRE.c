@@ -25,7 +25,7 @@
 
 
 /* IF desc is null, look for it, if I can't load then fail */
-NITFAPI(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
+NITFPROT(nitf_TRE *) nitf_TRE_createSkeleton(const char* tag,
                                             nitf_Error* error)
 {
     nitf_TRE *tre = (nitf_TRE *) NITF_MALLOC(sizeof(nitf_TRE));
