@@ -108,6 +108,9 @@
     <ClInclude Include="include\cphd\DataWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\cphd\Exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
