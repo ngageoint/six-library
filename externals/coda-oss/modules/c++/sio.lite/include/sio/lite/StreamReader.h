@@ -19,10 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIO_LITE_STREAM_READER_H__
 #define __SIO_LITE_STREAM_READER_H__
 
 #include <io/InputStream.h>
+#include "config/Exports.h"
 #include "sio/lite/FileHeader.h"
 
 namespace sio
@@ -87,7 +89,7 @@ namespace lite
     \endcode
  *
  */
-class StreamReader : public io::InputStream
+class CODA_OSS_API StreamReader : public io::InputStream
 {
 public:
     /** Constructor */

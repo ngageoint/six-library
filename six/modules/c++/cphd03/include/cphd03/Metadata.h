@@ -20,7 +20,7 @@
  *
  */
 
-
+#pragma once
 #ifndef __CPHD03_METADATA_H__
 #define __CPHD03_METADATA_H__
 
@@ -34,6 +34,7 @@
 #include <cphd03/SRP.h>
 #include <cphd03/Antenna.h>
 #include <cphd03/VectorParameters.h>
+#include <cphd03/Exports.h>
 
 namespace cphd03
 {
@@ -50,7 +51,7 @@ namespace cphd03
  *
  *
  */
-struct Metadata : cphd::MetadataBase
+struct SIX_CPHD03_API Metadata : cphd::MetadataBase
 {
     Metadata() = default;
 
@@ -107,7 +108,7 @@ struct Metadata : cphd::MetadataBase
     }
 };
 
-std::ostream& operator<< (std::ostream& os, const Metadata& d);
+SIX_CPHD03_API std::ostream& operator<< (std::ostream& os, const Metadata& d);
 }
 
 #endif

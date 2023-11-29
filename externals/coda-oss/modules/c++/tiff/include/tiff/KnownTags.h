@@ -19,13 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __TIFF_KNOWN_TAGS_H__
 #define __TIFF_KNOWN_TAGS_H__
 
 #include <map>
 #include <string>
 #include <import/mt.h>
+#include <config/Exports.h>
 
 #include "tiff/IFDEntry.h"
 
@@ -35,10 +36,8 @@ namespace tiff
 /**
  * This class is a container for known TIFF tags.
  */
-class KnownTags
+struct CODA_OSS_API KnownTags final
 {
-public:
-
     KnownTags();
 
     //! Destructor
@@ -71,14 +70,13 @@ public:
     tiff::IFDEntry *operator[](const unsigned short tagKey);
 
     //! Some common tags
-    static const char IMAGE_WIDTH[];
-    static const char IMAGE_LENGTH[];
-    static const char BITS_PER_SAMPLE[];
-    static const char COMPRESSION[];
-    static const char SAMPLES_PER_PIXEL[];
-    static const char PHOTOMETRIC_INTERPRETATION[];
-    static const char SAMPLE_FORMAT[];
-
+    static constexpr auto IMAGE_WIDTH = "ImageWidth";
+    static constexpr auto IMAGE_LENGTH = "ImageLength";
+    static constexpr auto BITS_PER_SAMPLE = "BitsPerSample";
+    static constexpr auto COMPRESSION = "Compression";
+    static constexpr auto SAMPLES_PER_PIXEL = "SamplesPerPixel";
+    static constexpr auto PHOTOMETRIC_INTERPRETATION = "PhotometricInterpretation";
+    static constexpr auto SAMPLE_FORMAT = "SampleFormat";
 
     /**
      *****************************************************************

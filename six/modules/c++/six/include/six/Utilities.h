@@ -44,6 +44,7 @@
 #include "scene/SceneGeometry.h"
 #include "six/ErrorStatistics.h"
 #include "six/Init.h"
+#include "six/Exports.h"
 #include <scene/Utilities.h>
 
 
@@ -92,90 +93,60 @@ template<typename T> T toType(const std::string& s)
     return str::toType<T>(s);
 }
 
-template<> std::string toString(const float& value);
-template<> std::string toString(const double& value);
-template<> std::string toString(const six::Vector3 & v);
-template<> std::string toString(const six::PolyXYZ & p);
-template<> six::EarthModelType
-        toType<six::EarthModelType>(const std::string& s);
-template<> six::MagnificationMethod
-        toType<six::MagnificationMethod>(const std::string& s);
-template<> std::string toString(const six::MagnificationMethod& value);
-template<> six::MagnificationMethod
-        toType<six::MagnificationMethod>(const std::string& s);
-template<> six::DecimationMethod
-        toType<six::DecimationMethod>(const std::string& s);
-template<> std::string toString(const six::DecimationMethod& value);
+#define SIX_toString_(T) template<> SIX_SIX_API std::string toString(const T&)
 
-template<> six::PixelType toType<six::PixelType>(const std::string& s);
-template<> std::string toString(const six::PixelType& value);
+SIX_toString_(float);
+SIX_toString_(double);
+SIX_toString_(six::Vector3);
+SIX_toString_(six::PolyXYZ);
 
-template<> six::RadarModeType toType<six::RadarModeType>(const std::string& s);
-template<> std::string toString(const six::RadarModeType& value);
+#define SIX_toType_(T) template<> SIX_SIX_API T toType<T>(const std::string&)
+#define SIX_toString_toType_(T) SIX_toString_(T); SIX_toType_(T)
 
-template<> six::DateTime toType<six::DateTime>(const std::string& s);
-template<> std::string toString(const six::DateTime& value);
+SIX_toString_toType_(six::EarthModelType);
+SIX_toString_toType_(six::MagnificationMethod);
+SIX_toString_toType_(six::DecimationMethod);
 
-template<> std::string toString(const six::DataType& value);
-template<> std::string toString(const six::EarthModelType& value);
-template<> six::OrientationType
-        toType<six::OrientationType>(const std::string& s);
-template<> std::string toString(const six::OrientationType& value);
-template<> six::PolarizationSequenceType
-        toType<six::PolarizationSequenceType>(const std::string& s);
-template<> std::string toString(const six::PolarizationSequenceType& value);
-template<> six::PolarizationType
-        toType<six::PolarizationType>(const std::string& s);
-template<> std::string toString(const six::PolarizationType& value);
+SIX_toString_toType_(six::PixelType);
 
-template<> std::string toString(const six::DualPolarizationType& value);
-template<> six::DualPolarizationType
-        toType<six::DualPolarizationType>(const std::string& s);
-template<> six::DemodType toType<six::DemodType>(const std::string& s);
-template<> std::string toString(const six::DemodType& value);
+SIX_toString_toType_(six::RadarModeType);
 
-template<> std::string toString(const six::ImageFormationType& value);
-template<> six::ImageFormationType
-        toType<six::ImageFormationType>(const std::string& s);
-template<> std::string toString(const six::SlowTimeBeamCompensationType& value);
-template<> six::SlowTimeBeamCompensationType toType<
-        six::SlowTimeBeamCompensationType>(const std::string& s);
-template<> std::string toString(const six::ImageBeamCompensationType& value);
-template<> six::ImageBeamCompensationType
-toType<six::ImageBeamCompensationType>(const std::string& s);
-template<> std::string toString(const six::AutofocusType& value);
-template<> six::AutofocusType toType<six::AutofocusType>(const std::string& s);
-template<> std::string toString(const six::RMAlgoType& value);
-template<> six::RMAlgoType toType<six::RMAlgoType>(const std::string& s);
-template<> std::string toString(const six::SideOfTrackType& value);
+SIX_toString_toType_(six::DateTime);
 
-template<> six::BooleanType toType<six::BooleanType>(const std::string& s);
-template<> std::string toString(const six::BooleanType& value);
+SIX_toString_(six::DataType);
+SIX_toString_toType_(six::OrientationType);
+SIX_toString_toType_(six::PolarizationSequenceType);
+SIX_toString_toType_(six::PolarizationType);
 
-template<> six::SideOfTrackType
-        toType<six::SideOfTrackType>(const std::string& s);
+SIX_toString_toType_(six::DualPolarizationType);
+SIX_toString_toType_(six::DemodType);
 
-template<> six::ComplexImagePlaneType
-        toType<six::ComplexImagePlaneType>(const std::string& s);
-template<> std::string toString(const six::ComplexImagePlaneType& value);
+SIX_toString_toType_(six::ImageFormationType);
+SIX_toString_toType_(six::SlowTimeBeamCompensationType);
+SIX_toString_toType_(six::ImageBeamCompensationType);
+SIX_toString_toType_(six::AutofocusType);
+SIX_toString_toType_(six::RMAlgoType);
+SIX_toString_toType_(six::SideOfTrackType);
 
-template<> six::ComplexImageGridType
-        toType<six::ComplexImageGridType>(const std::string& s);
-template<> std::string toString(const six::ComplexImageGridType& value);
+SIX_toString_toType_(six::BooleanType);
 
-template<> six::FFTSign toType<six::FFTSign>(const std::string& s);
-template<> std::string toString(const six::FFTSign& value);
+SIX_toString_toType_(six::ComplexImagePlaneType);
 
-template<> six::AppliedType toType<six::AppliedType>(const std::string& s);
-template<> std::string toString(const six::AppliedType& value);
+SIX_toString_toType_(six::ComplexImageGridType);
 
-template<> six::CollectType toType<six::CollectType>(const std::string& s);
-template<> std::string toString(const six::CollectType& value);
+SIX_toString_toType_(six::FFTSign);
 
-template<> six::FrameType toType<six::FrameType>(const std::string& s);
-template<> std::string toString(const six::FrameType& value);
+SIX_toString_toType_(six::AppliedType);
 
-template<> std::string toString(const six::LatLonCorners& corners);
+SIX_toString_toType_(six::CollectType);
+
+SIX_toString_toType_(six::FrameType);
+
+SIX_toString_(six::LatLonCorners);
+
+#undef SIX_toString_
+#undef SIX_toType_
+#undef SIX_toString_toType_
 
 // Load the TRE plugins in the given directory
 // In most cases this is not needed as XML_DATA_CONTENT is linked statically
@@ -202,12 +173,12 @@ void loadXmlDataContentHandler(FILE* log);
  *
  * \return Data representation of 'xmlStream'
  */
-std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg, 
+SIX_SIX_API std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream, 
                               DataType dataType,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
-std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+SIX_SIX_API std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
     ::io::InputStream& xmlStream, DataType dataType,
     const std::vector<std::filesystem::path>*, logging::Logger&);
 
@@ -222,11 +193,11 @@ std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of 'xmlStream'
  */
-std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
+SIX_SIX_API std::unique_ptr<Data> parseData(const XMLControlRegistry& xmlReg,
                               ::io::InputStream& xmlStream,
                               const std::vector<std::string>& schemaPaths,
                               logging::Logger& log);
-std::unique_ptr<Data> parseData(const XMLControlRegistry&, ::io::InputStream&,
+SIX_SIX_API std::unique_ptr<Data> parseData(const XMLControlRegistry&, ::io::InputStream&,
     const std::vector<std::filesystem::path>*, logging::Logger&);
 
 /*
@@ -241,7 +212,7 @@ std::unique_ptr<Data> parseData(const XMLControlRegistry&, ::io::InputStream&,
  *
  * \return Data representation of the contents of 'pathname'
  */
-std::unique_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
+SIX_SIX_API std::unique_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     DataType dataType,
     const std::vector<std::string>& schemaPaths,
@@ -258,7 +229,7 @@ std::unique_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
  *
  * \return Data representation of the contents of 'pathname'
  */
-std::unique_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
+SIX_SIX_API std::unique_ptr<Data> parseDataFromFile(const XMLControlRegistry& xmlReg,
     const std::string& pathname,
     const std::vector<std::string>& schemaPaths,
     logging::Logger& log);
@@ -306,7 +277,7 @@ std::unique_ptr<Data> parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* pLogger = nullptr);
 
-void getErrors(const ErrorStatistics* errorStats,
+SIX_SIX_API void getErrors(const ErrorStatistics* errorStats,
                const types::RgAz<double>& sampleSpacing,
                scene::Errors& errors);
 
@@ -319,7 +290,7 @@ void getErrors(const ErrorStatistics* errorStats,
  */
 std::string findSchemaPath(const std::string& progname);
 
-class DataParser final
+class SIX_SIX_API DataParser final
 {
     const std::vector<std::filesystem::path>* mpSchemaPaths = nullptr;
     logging::NullLogger mNullLogger;
@@ -402,15 +373,15 @@ public:
 
 namespace testing
 {
-    std::filesystem::path findRootDir(const std::filesystem::path& dir);
-    std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
+    SIX_SIX_API std::filesystem::path findRootDir(const std::filesystem::path& dir);
+    SIX_SIX_API std::filesystem::path buildRootDir(const std::filesystem::path& argv0);
 
-    std::filesystem::path getNitfPath(const  std::filesystem::path& filename);
-    std::filesystem::path getNitroPath(const  std::filesystem::path& filename);
+    SIX_SIX_API std::filesystem::path getNitfPath(const  std::filesystem::path& filename);
+    SIX_SIX_API std::filesystem::path getNitroPath(const  std::filesystem::path& filename);
 
-    std::vector<std::filesystem::path> getSchemaPaths();
-    std::filesystem::path getModuleFile(const std::filesystem::path& modulePath, const  std::filesystem::path& filename);
-    std::filesystem::path getSampleXmlPath(const std::filesystem::path& module /*"six.sicd"*/, const  std::filesystem::path& filename);
+    SIX_SIX_API std::vector<std::filesystem::path> getSchemaPaths();
+    SIX_SIX_API std::filesystem::path getModuleFile(const std::filesystem::path& modulePath, const  std::filesystem::path& filename);
+    SIX_SIX_API std::filesystem::path getSampleXmlPath(const std::filesystem::path& module /*"six.sicd"*/, const  std::filesystem::path& filename);
 }
 
 }

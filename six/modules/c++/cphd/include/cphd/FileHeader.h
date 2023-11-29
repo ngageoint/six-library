@@ -30,6 +30,7 @@
 #include <io/SeekableStreams.h>
 #include <cphd/BaseFileHeader.h>
 #include <cphd/Types.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -38,7 +39,7 @@ namespace cphd
  *
  *  \brief Stores CPHD file header information
  */
-class FileHeader final : public BaseFileHeader
+class SIX_CPHD_API FileHeader final : public BaseFileHeader
 {
     static Version defaultVersion;
 public:

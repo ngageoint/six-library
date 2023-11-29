@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_BYTE_SWAP_H__
 #define __CPHD_BYTE_SWAP_H__
 
@@ -30,6 +30,7 @@
 #include <scene/sys_Conf.h>
 
 #include "cphd/Types.h"
+#include "cphd/Exports.h"
 
 namespace cphd
 {
@@ -42,7 +43,7 @@ namespace cphd
  *  \param numElements Number of elements in 'buffer'
  *  \param numThreads Number of threads to use for byte-swapping
  */
-void byteSwap(void* buffer,
+SIX_CPHD_API void byteSwap(void* buffer,
               size_t elemSize,
               size_t numElements,
               size_t numThreads);

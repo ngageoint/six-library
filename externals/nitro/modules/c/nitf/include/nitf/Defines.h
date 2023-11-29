@@ -32,7 +32,7 @@
  * _Tre the name of the input TRE
  */
 #ifndef NITF_PLUGIN_FUNCTION_EXPORT
-#define NITF_PLUGIN_FUNCTION_EXPORT(retval_) NITFAPI(retval_)
+#define NITF_PLUGIN_FUNCTION_EXPORT(retval_) NRTEXPORT(retval_)
 #endif
 #define NITF_DECLARE_PLUGIN(_Tre) \
     static const char* _Tre##Ident[] = { \

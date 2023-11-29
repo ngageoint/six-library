@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_CLASSIFICATION_H__
 #define __SIX_CLASSIFICATION_H__
 
@@ -26,6 +27,7 @@
 #include "logging/Logger.h"
 #include "nitf/FileSecurity.h"
 #include "six/Options.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -46,7 +48,7 @@ namespace six
  *  directly.  The free parameters are applied last, by the file format
  *  container.  Currently only NITF free parameters are supported.
  */
-struct Classification
+struct SIX_SIX_API Classification
 {
     virtual ~Classification() = default;
 

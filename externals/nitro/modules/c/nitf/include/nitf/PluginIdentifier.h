@@ -70,7 +70,7 @@ typedef struct _nitf_TREPreloaded
     const char* name;
     NITF_PLUGIN_INIT_FUNCTION init;
     NITF_PLUGIN_TRE_HANDLER_FUNCTION handler;
-    NITF_BOOL enabled; // most preloaded TREs are disabled by default
+    int enabled; // most preloaded TREs are "not set" (disabled) by default
 } nitf_TREPreloaded;
 
 /*

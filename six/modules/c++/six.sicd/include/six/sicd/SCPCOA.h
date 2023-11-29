@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_SCPCOA_H__
 #define __SIX_SCPCOA_H__
 
@@ -27,6 +28,8 @@
 #include "six/Types.h"
 #include "six/Parameter.h"
 #include "scene/SceneGeometry.h"
+
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -41,7 +44,7 @@ struct Position;
  *
  *  Required parameters describing the COA for the scene center point
  */
-struct SCPCOA
+struct SIX_SICD_API SCPCOA
 {
 
     /*!

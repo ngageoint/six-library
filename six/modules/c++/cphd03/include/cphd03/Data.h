@@ -20,7 +20,7 @@
  *
  */
 
-
+#pragma once
 #ifndef __CPHD03_DATA_H__
 #define __CPHD03_DATA_H__
 
@@ -31,9 +31,11 @@
 #include <cphd/Data.h>
 #include <cphd/Enums.h>
 
+#include "cphd03/Exports.h"
+
 namespace cphd03
 {
-struct ArraySize
+struct SIX_CPHD03_API ArraySize
 {
     ArraySize(size_t v = 0, size_t s = 0);
 

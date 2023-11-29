@@ -48,8 +48,6 @@
 #pragma warning(disable: 4464) // relative include path contains '..'
 #include "../../nitro_pch.h"
 #pragma warning(pop)
-#pragma comment(lib, "math-c++")
-#pragma comment(lib, "polygon-c++")
 
 #include <import/scene.h>
 #include <import/six.h>

@@ -28,6 +28,7 @@
 #include <import/str.h>
 
 #include "six/Types.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -40,7 +41,7 @@ namespace six
  *  and get parameters directly from native types without string
  *  conversion.
  */
-struct Parameter final
+struct SIX_SIX_API Parameter final
 {
     Parameter() = default;
     ~Parameter() = default;

@@ -19,13 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __TIFF_FILE_WRITER_H__
 #define __TIFF_FILE_WRITER_H__
 
 #include <string>
 #include <vector>
+
 #include <import/io.h>
+#include <config/Exports.h>
+
 #include "tiff/Header.h"
 #include "tiff/ImageWriter.h"
 
@@ -41,7 +44,7 @@ namespace tiff
  * to the same file.  Contains function for manipulating each 
  * sub-image and for writing data.
  *********************************************************************/
-struct FileWriter
+struct CODA_OSS_API FileWriter
 {
     //! Constructor
     FileWriter() :

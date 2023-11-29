@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_sicd_NITFReadComplexXMLControl_h_INCLUDED_
 #define SIX_sicd_NITFReadComplexXMLControl_h_INCLUDED_
-#pragma once
 
 #include <vector>
 #include <std/filesystem>
@@ -36,12 +36,13 @@
 #include "six/Region.h"
 #include "six/sicd/ComplexData.h"
 #include "six/sicd/SICDMesh.h"
+#include "six/sicd/Exports.h"
 
 namespace six
 {
 	namespace sicd
 	{
-		class NITFReadComplexXMLControl final
+		class SIX_SICD_API NITFReadComplexXMLControl final
 		{
 			six::XMLControlRegistry xmlRegistry;
 			six::NITFReadControl reader;

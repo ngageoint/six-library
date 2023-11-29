@@ -33,6 +33,8 @@
 #include <sys/OS.h>
 #include <sys/Span.h>
 
+#include "cphd/Exports.h"
+
 namespace cphd
 {
 
@@ -41,7 +43,7 @@ namespace cphd
  *
  *  \brief Class to handle writing to file and byte swapping
  */
-struct DataWriter
+struct SIX_CPHD_API DataWriter
 {
     /*
      *  \func DataWriter
@@ -93,7 +95,7 @@ protected:
  *
  *  For little endian to big endian storage
  */
-struct DataWriterLittleEndian final : public DataWriter
+struct SIX_CPHD_API DataWriterLittleEndian final : public DataWriter
 {
     /*
      *  \func DataWriterLittleEndian
@@ -139,7 +141,7 @@ private:
  *
  *  No byte swap. Already big endian.
  */
-struct DataWriterBigEndian final : public DataWriter
+struct SIX_CPHD_API DataWriterBigEndian final : public DataWriter
 {
     /*
      *  \func DataWriter

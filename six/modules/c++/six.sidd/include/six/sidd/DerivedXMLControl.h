@@ -31,6 +31,7 @@
 
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLParser.h>
+#include <six/sidd/Exports.h>
 
 namespace six
 {
@@ -45,7 +46,7 @@ namespace sidd
  *  if necessary.  A best practice is to use the six::toXMLCharArray
  *  and six::toXMLString functions to turn Data* objects into XML
  */
-struct DerivedXMLControl : public XMLControl
+struct SIX_SIDD_API DerivedXMLControl : public XMLControl
 {
     DerivedXMLControl(logging::Logger* log = nullptr, bool ownLog = false);
     DerivedXMLControl(std::unique_ptr<logging::Logger>&&);

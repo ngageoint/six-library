@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_RADAR_COLLECTION_H__
 #define __SIX_RADAR_COLLECTION_H__
 
@@ -30,6 +31,8 @@
 #include <mem/ScopedCloneablePtr.h>
 #include <logging/Logger.h>
 
+#include "six/sicd/Exports.h"
+
 namespace six
 {
 namespace sicd
@@ -40,7 +43,7 @@ namespace sicd
  *
  *  Represents a transmit sequence step
  */
-struct TxStep
+struct SIX_SICD_API TxStep
 {
     //!  Constructor
     TxStep();
@@ -77,7 +80,7 @@ struct TxStep
  *  indexed starting at 1 by the index, but this is stored in a vector
  *  and starts at zero as a result.  The serializer hides this.
  */
-struct WaveformParameters
+struct SIX_SICD_API WaveformParameters
 {
     //!  Constructor
     WaveformParameters();
@@ -140,7 +143,7 @@ private:
  *
  *  Parameters for a data channel.
  */
-struct ChannelParameters
+struct SIX_SICD_API ChannelParameters
 {
     //!  Constructor
     ChannelParameters();
@@ -183,7 +186,7 @@ struct ChannelParameters
  *  associated with a SICD.  It includes  the unit vector, the sample
  *  spacing, and the first element
  */
-struct AreaDirectionParameters
+struct SIX_SICD_API AreaDirectionParameters
 {
     //!  Constructor
     AreaDirectionParameters();
@@ -224,7 +227,7 @@ struct AreaDirectionParameters
     }
 };
 
-std::ostream& operator<< (std::ostream& os, const AreaDirectionParameters& d);
+SIX_SICD_API std::ostream& operator<< (std::ostream& os, const AreaDirectionParameters& d);
 
 /*!
  *  \struct Segment
@@ -239,7 +242,7 @@ std::ostream& operator<< (std::ostream& os, const AreaDirectionParameters& d);
  *
  *  Contains also the start line/sample and end/line sample for each segment
  */
-struct Segment
+struct SIX_SICD_API Segment
 {
     //!  Construct
     Segment();
@@ -328,7 +331,7 @@ struct Segment
  *  This object contains parameters describing a rectangular
  *  area in a geo-referenced display plane
  */
-struct AreaPlane
+struct SIX_SICD_API AreaPlane
 {
     /*!
      *  Constructor
@@ -420,7 +423,7 @@ struct AreaPlane
  *
  *  (Optional) Parameters describing the image area covered by the collection.
  */
-struct Area
+struct SIX_SICD_API Area
 {
 
     /*!
@@ -466,7 +469,7 @@ struct Area
  *  populated by the application developer.
  *
  */
-struct RadarCollection
+struct SIX_SICD_API RadarCollection
 {
 
     /*!

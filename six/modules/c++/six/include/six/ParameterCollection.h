@@ -19,13 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __SIX_PARAMETER_COLLECTION_H__
 #define __SIX_PARAMETER_COLLECTION_H__
 
 #include <string>
 #include <vector>
 #include "six/Parameter.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -38,7 +39,7 @@ namespace six
  * This class keeps track of a set of parameters.
  *
  */
-class ParameterCollection
+class SIX_SIX_API ParameterCollection
 {
 public:
 
