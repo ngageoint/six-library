@@ -19,13 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __TIFF_FILE_READER_H__
 #define __TIFF_FILE_READER_H__
 
 #include <string>
 #include <vector>
+
 #include <import/io.h>
+#include <config/Exports.h>
 
 #include "tiff/Header.h"
 #include "tiff/ImageReader.h"
@@ -42,7 +44,7 @@ namespace tiff
  * to access a specific image within the file, and to read data from
  * a specific image in the file.
  *********************************************************************/
-struct FileReader
+struct CODA_OSS_API FileReader
 {
     FileReader() = default;
 
