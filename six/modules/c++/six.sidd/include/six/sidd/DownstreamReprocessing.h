@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_DOWNSTREAM_REPROCESSING_H__
 #define __SIX_DOWNSTREAM_REPROCESSING_H__
 
@@ -26,6 +27,8 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/ParameterCollection.h"
+
+#include "six/sidd/Exports.h"
 
 namespace six
 {
@@ -37,7 +40,7 @@ namespace sidd
  *
  *  Contains information related to downstream chipping of the product.
  */
-struct GeometricChip
+struct SIX_SIDD_API GeometricChip
 {
     //!  Size of the chipped product in pixels
     RowColInt chipSize;
