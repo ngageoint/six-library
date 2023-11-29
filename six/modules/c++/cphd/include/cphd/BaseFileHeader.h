@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_BASE_FILE_HEADER_H__
 #define __CPHD_BASE_FILE_HEADER_H__
 
@@ -31,6 +31,7 @@
 #include <io/SeekableStreams.h>
 
 #include "cphd/Types.h"
+#include "cphd/Exports.h"
 
 namespace cphd
 {
@@ -42,7 +43,7 @@ namespace cphd
  *
  *  Stores file header parsing information
  */
-class BaseFileHeader
+class SIX_CPHD_API BaseFileHeader
 {
 public:
     //! Type of file is CPHD

@@ -38,6 +38,7 @@
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -50,7 +51,7 @@ namespace cphd
  *  \brief This class contains information about the SupportBlock CPHD data.
  */
 //  Provides methods to read support block data from CPHD file/stream
-struct SupportBlock final
+struct SIX_CPHD_API SupportBlock final
 {
     /*
      *  \func SupportBlock
