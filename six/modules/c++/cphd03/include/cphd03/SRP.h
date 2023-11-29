@@ -20,19 +20,20 @@
  *
  */
 
-
+#pragma once
 #ifndef __CPHD03_SRP_H__
 #define __CPHD03_SRP_H__
 
 #include <iostream>
 #include <cphd/Types.h>
 #include <cphd03/Utilities.h>
+#include <cphd03/Exports.h>
 #include <six/Init.h>
 
 
 namespace cphd03
 {
-struct SRP
+struct SIX_CPHD03_API SRP final
 {
     SRP();
 
