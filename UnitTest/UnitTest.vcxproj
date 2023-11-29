@@ -59,7 +59,6 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\cphd\include;$(SolutionDir)six\modules\c++\cphd03\include;$(SolutionDir)externals\nitro\modules\c\nrt\include;$(SolutionDir)externals\nitro\modules\c\nitf\include;$(SolutionDir)externals\nitro\modules\c++\nitf\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration);$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)out\install\$(Platform)-$(Configuration);$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;SIX_DEFAULT_SCHEMA_PATH=R"($(SolutionDir)install-$(Configuration)-$(Platform).$(PlatformToolset)\conf\schema\six)";%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING; CODA_OSS_LIBRARY_SHARED</PreprocessorDefinitions>
-      <UseFullPaths>true</UseFullPaths>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
@@ -85,7 +84,6 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)six\modules\c++\scene\include;$(SolutionDir)six\modules\c++\six\include;$(SolutionDir)six\modules\c++\six.sidd\include;$(SolutionDir)six\modules\c++\six.sicd\include;$(SolutionDir)six\modules\c++\cphd\include;$(SolutionDir)six\modules\c++\cphd03\include;$(SolutionDir)externals\nitro\modules\c\nrt\include;$(SolutionDir)externals\nitro\modules\c\nitf\include;$(SolutionDir)externals\nitro\modules\c++\nitf\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration);$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)out\install\$(Platform)-$(Configuration);$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);_SILENCE_NONFLOATING_COMPLEX_DEPRECATION_WARNING; CODA_OSS_LIBRARY_SHARED</PreprocessorDefinitions>
-      <UseFullPaths>true</UseFullPaths>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
@@ -93,6 +91,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ConformanceMode>true</ConformanceMode>
       <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

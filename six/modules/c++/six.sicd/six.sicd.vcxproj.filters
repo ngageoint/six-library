@@ -132,6 +132,9 @@
     <ClInclude Include="include\six\sicd\DataParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\sicd\Exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

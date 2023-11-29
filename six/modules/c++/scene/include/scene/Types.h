@@ -35,6 +35,7 @@
 #include "math/linear/VectorN.h"
 
 #include "scene/sys_Conf.h"
+#include "scene/Exports.h"
 
 namespace scene
 {
@@ -69,7 +70,7 @@ namespace scene
         XYZ_X, XYZ_Y, XYZ_Z
     };
 
-    struct AngleMagnitude
+    struct SIX_SCENE_API AngleMagnitude
     {
         AngleMagnitude() = default;
         AngleMagnitude(double _angle, double _magnitude = 0) :
@@ -91,7 +92,7 @@ namespace scene
     };
 
     struct LatLonAlt;
-    struct LatLon
+    struct SIX_SCENE_API LatLon
     {
         LatLon() = default;
         LatLon(double scalar) :
@@ -189,7 +190,7 @@ namespace scene
         double mLon = 0.0;
     };
 
-    struct LatLonAlt : public LatLon
+    struct SIX_SCENE_API LatLonAlt : public LatLon
     {
         LatLonAlt() = default;
         LatLonAlt(double scalar) : LatLon(scalar), mAlt(scalar)

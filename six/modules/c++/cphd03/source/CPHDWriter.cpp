@@ -30,6 +30,7 @@
 #include <cphd03/CPHDXMLControl.h>
 #include <cphd03/Utilities.h>
 #include <cphd03/FileHeader.h>
+#include <cphd03/Exports.h>
 #include <cphd/ByteSwap.h>
 
 namespace cphd03
@@ -218,17 +219,17 @@ void CPHDWriter::writeCPHDData(const T* data,
     writeCPHDDataImpl(reinterpret_cast<const std::byte*>(data), numElements);
 }
 
-template
+template SIX_CPHD03_API
 void CPHDWriter::writeCPHDData<cphd::zint8_t >(
         const cphd::zint8_t* data,
         size_t numElements);
 
-template
+template SIX_CPHD03_API
 void CPHDWriter::writeCPHDData<cphd::zint16_t >(
         const cphd::zint16_t* data,
         size_t numElements);
 
-template
+template SIX_CPHD03_API
 void CPHDWriter::writeCPHDData<cphd::zfloat >(
         const cphd::zfloat* data,
         size_t numElements);

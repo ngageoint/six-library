@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_PVP_BLOCK_H__
 #define __CPHD_PVP_BLOCK_H__
 
@@ -37,6 +37,7 @@
 #include <cphd/PVP.h>
 #include <cphd/Metadata.h>
 #include <cphd/ByteSwap.h>
+#include <cphd/Exports.h>
 #include <six/Parameter.h>
 
 namespace cphd
@@ -92,7 +93,7 @@ struct AddedPVP<std::string>
  *
  *  PVPBlock handles reading PVPBlock from CPHD file, and loading the data structure
  */
-struct PVPBlock
+struct SIX_CPHD_API PVPBlock
 {
     PVPBlock() = default;
 
@@ -453,7 +454,7 @@ protected:
         //! (Optional) Additional parameters
         std::unordered_map<std::string,six::Parameter> addedPVP;
     };
-    friend std::ostream& operator<< (std::ostream& os, const PVPSet& p);
+    SIX_CPHD_API friend std::ostream& operator<< (std::ostream& os, const PVPSet& p);
 
 private:
     //! The PVP Block [Num Channles][Num Parameters]
@@ -475,7 +476,7 @@ private:
     bool mSignalEnabled;
 
     //! Ostream operator
-    friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);
+    SIX_CPHD_API friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);
 };
 }
 #endif

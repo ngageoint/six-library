@@ -20,15 +20,17 @@
  *
  */
 
+#pragma once
 #ifndef __SIX_SI_COMPLEX_COMMON_XML_PARSER_01X_H__
 #define __SIX_SI_COMPLEX_COMMON_XML_PARSER_01X_H__
 
 #include <six/SICommonXMLParser.h>
+#include <six/Exports.h>
 
 namespace six
 {
 
-class SICommonXMLParser01x : public SICommonXMLParser
+class SIX_SIX_API SICommonXMLParser01x : public SICommonXMLParser
 {
 public:
     SICommonXMLParser01x(const std::string& defaultURI,

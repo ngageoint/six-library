@@ -174,7 +174,7 @@ int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
-        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sidd::DerivedXMLControl>();
 
         bool success = run(false, false) && run(true, false) &&
             run(false, true) && run(true, true);

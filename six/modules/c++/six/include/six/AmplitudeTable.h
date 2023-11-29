@@ -38,6 +38,7 @@
 #include <scene/sys_Conf.h>
 
 #include "six/Complex.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -50,7 +51,7 @@ namespace six
  *  (e.g., 2 for short) depending on the type that is being housed
  *
  */
-struct LUT
+struct SIX_SIX_API LUT
 {
     std::vector<unsigned char> table;
     size_t numEntries = 0;
@@ -164,7 +165,7 @@ using phase_values_t = std::array<six::zfloat, UINT8_MAX + 1>;
 using Amp8iPhs8iLookup_t = std::array<phase_values_t, UINT8_MAX + 1>;
 
 // More descriptive than std::pair<uint8_t, uint8_t>
-struct AMP8I_PHS8I_t final
+struct SIX_SIX_API AMP8I_PHS8I_t final
 {
     uint8_t amplitude;
     uint8_t phase;
@@ -189,7 +190,7 @@ class ComplexToAMP8IPHS8I final
     explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable = nullptr);
 
 public:
-    static const ComplexToAMP8IPHS8I& make(const six::AmplitudeTable* pAmplitudeTable); // AmplitudeTable* = NULL is cached
+    static const ComplexToAMP8IPHS8I& make_(const six::AmplitudeTable* pAmplitudeTable); // AmplitudeTable* = NULL is cached
 
     ~ComplexToAMP8IPHS8I() = default;
     ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;
@@ -202,7 +203,7 @@ public:
      * @param v complex value to query with
      * @return nearest amplitude and phase value
      */
-    AMP8I_PHS8I_t nearest_neighbor(const six::zfloat& v) const;
+    AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs,  const six::AmplitudeTable*);
 
 private:
@@ -222,7 +223,7 @@ private:
 }
 }
 
-struct AmplitudeTable final : public LUT
+struct SIX_SIX_API AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
     AmplitudeTable(size_t elementSize) noexcept(false) :

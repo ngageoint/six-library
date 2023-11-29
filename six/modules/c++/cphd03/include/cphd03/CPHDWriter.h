@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD03_CPHD03_WRITER_H__
 #define __CPHD03_CPHD03_WRITER_H__
 
@@ -33,6 +33,7 @@
 #include <types/RowCol.h>
 #include <cphd03/Metadata.h>
 #include <cphd03/VBM.h>
+#include <cphd03/Exports.h>
 #include <cphd/CPHDWriter.h>
 
 namespace cphd03
@@ -42,7 +43,7 @@ namespace cphd03
  *  \brief Used to write a CPHD file. You must be able to provide the
  *         appropriate metadata and vector based metadata.
  */
-struct CPHDWriter final
+struct SIX_CPHD03_API CPHDWriter final
 {
     /*
      *  \func Constructor

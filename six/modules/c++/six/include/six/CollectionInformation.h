@@ -32,6 +32,7 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -44,7 +45,7 @@ namespace six
  *  the collection.  There is nothing wrong with the SICD name, but
  *  for API consistency, naming is lengthened.
  */
-struct CollectionInformation
+struct SIX_SIX_API CollectionInformation
 {
 
     /*!
@@ -125,7 +126,7 @@ struct CollectionInformation
     virtual void setClassificationLevel(const std::u8string& classification);
 
     //! Ostream operators for six::CollectionInformation type (utility only).
-    friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
+    SIX_SIX_API friend std::ostream& operator<<(std::ostream& os, const six::CollectionInformation& c);
 
   bool operator==(const CollectionInformation& rhs) const; // needs to be member-function for SWIG
   bool operator!=(const CollectionInformation& rhs) const  // needs to be member-function for SWIG

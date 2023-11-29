@@ -19,6 +19,7 @@
 * see <http://www.gnu.org/licenses/>.
 *
 */
+#pragma once
 #ifndef __SIX_SIDD_SFA_H__
 #define __SIX_SIDD_SFA_H__
 
@@ -26,12 +27,14 @@
 
 #include <import/six.h>
 
+#include "six/sidd/Exports.h"
+
 namespace six
 {
 namespace sidd
 {
 
-struct SFATyped
+struct SIX_SIDD_API SFATyped
 {
 public:
     virtual ~SFATyped()
@@ -64,7 +67,7 @@ inline bool operator!=(const SFATyped& lhs, const SFATyped& rhs)
 }
 
 //! Abstract type
-struct SFAGeometry : public SFATyped
+struct SIX_SIDD_API SFAGeometry : public SFATyped
 {
     virtual SFAGeometry* clone() const = 0;
 
@@ -75,7 +78,7 @@ protected:
     }
 };
 
-struct SFAPoint : public SFAGeometry
+struct SIX_SIDD_API SFAPoint : public SFAGeometry
 {
     double x, y, z, m;
 
@@ -137,7 +140,7 @@ private:
 };
 
 //! Abstract type
-struct SFACurve : public SFAGeometry
+struct SIX_SIDD_API SFACurve : public SFAGeometry
 {
 protected:
     SFACurve(const std::string& typeName) :
@@ -146,7 +149,7 @@ protected:
     }
 };
 
-struct SFALineString : public SFACurve
+struct SIX_SIDD_API SFALineString : public SFACurve
 {
 public:
     SFALineString() :
@@ -180,7 +183,7 @@ private:
     }
 };
 
-struct SFALine : public SFALineString
+struct SIX_SIDD_API SFALine : public SFALineString
 {
 public:
     SFALine() :
@@ -214,7 +217,7 @@ private:
     }
 };
 
-struct SFALinearRing : public SFALineString
+struct SIX_SIDD_API SFALinearRing : public SFALineString
 {
 public:
     SFALinearRing() :
@@ -249,7 +252,7 @@ private:
 };
 
 //! Abstract type
-struct SFASurface : public SFAGeometry
+struct SIX_SIDD_API SFASurface : public SFAGeometry
 {
 protected:
     SFASurface(const std::string& typeName) :
@@ -258,7 +261,7 @@ protected:
     }
 };
 
-struct SFAPolygon : public SFASurface
+struct SIX_SIDD_API SFAPolygon : public SFASurface
 {
 public:
     SFAPolygon() :
@@ -290,7 +293,7 @@ private:
     }
 };
 
-struct SFATriangle : public SFAPolygon
+struct SIX_SIDD_API SFATriangle : public SFAPolygon
 {
 public:
     SFATriangle() :
@@ -326,7 +329,7 @@ private:
     }
 };
 
-struct SFAPolyhedralSurface : public SFASurface
+struct SIX_SIDD_API SFAPolyhedralSurface : public SFASurface
 {
 public:
     SFAPolyhedralSurface() :
@@ -364,7 +367,7 @@ private:
 
 // note that we are deriving Surface rather than PolyhedralSurface
 // this is to avoid the patches name clash
-struct SFATriangulatedIrregularNetwork : public SFASurface
+struct SIX_SIDD_API SFATriangulatedIrregularNetwork : public SFASurface
 {
 public:
     SFATriangulatedIrregularNetwork() :
@@ -401,7 +404,7 @@ private:
 };
 
 //! Abstract type
-struct SFAGeometryCollection : public SFAGeometry
+struct SIX_SIDD_API SFAGeometryCollection : public SFAGeometry
 {
 protected:
     SFAGeometryCollection(const std::string& typeName) :
@@ -410,7 +413,7 @@ protected:
     }
 };
 
-struct SFAMultiPoint : public SFAGeometryCollection
+struct SIX_SIDD_API SFAMultiPoint : public SFAGeometryCollection
 {
 public:
     SFAMultiPoint() :
@@ -445,7 +448,7 @@ private:
 };
 
 //! Abstract type
-struct SFAMultiCurve : public SFAGeometryCollection
+struct SIX_SIDD_API SFAMultiCurve : public SFAGeometryCollection
 {
 protected:
     SFAMultiCurve(const std::string& typeName) :
@@ -454,7 +457,7 @@ protected:
     }
 };
 
-struct SFAMultiLineString : public SFAMultiCurve
+struct SIX_SIDD_API SFAMultiLineString : public SFAMultiCurve
 {
 public:
     SFAMultiLineString() :
@@ -492,7 +495,7 @@ private:
 };
 
 //! Abstract type
-struct SFAMultiSurface : public SFAGeometryCollection
+struct SIX_SIDD_API SFAMultiSurface : public SFAGeometryCollection
 {
 protected:
     SFAMultiSurface(const std::string& typeName) :
@@ -501,7 +504,7 @@ protected:
     }
 };
 
-struct SFAMultiPolygon : public SFAMultiSurface
+struct SIX_SIDD_API SFAMultiPolygon : public SFAMultiSurface
 {
 public:
     SFAMultiPolygon() :
@@ -538,7 +541,7 @@ private:
 };
 
 //! Abstract type
-struct SFACoordinateSystem : public SFATyped
+struct SIX_SIDD_API SFACoordinateSystem : public SFATyped
 {
 public:
     virtual SFACoordinateSystem* clone() const = 0;
@@ -550,7 +553,7 @@ protected:
     }
 };
 
-struct SFAPrimeMeridian final
+struct SIX_SIDD_API SFAPrimeMeridian final
 {
     std::string name;
     double longitude = 0.0;
@@ -565,7 +568,7 @@ struct SFAPrimeMeridian final
     }
 };
 
-struct SFASpheroid final
+struct SIX_SIDD_API SFASpheroid final
 {
     std::string name;
     double semiMajorAxis = 0.0;
@@ -583,7 +586,7 @@ struct SFASpheroid final
     }
 };
 
-struct SFAParameter final
+struct SIX_SIDD_API SFAParameter final
 {
     std::string name;
     double value = 0.0;
@@ -599,7 +602,7 @@ struct SFAParameter final
     }
 };
 
-struct SFAProjection final
+struct SIX_SIDD_API SFAProjection final
 {
     std::string name;
 
@@ -614,7 +617,7 @@ struct SFAProjection final
     }
 };
 
-struct SFADatum final
+struct SIX_SIDD_API SFADatum final
 {
     SFASpheroid spheroid;
 
@@ -629,7 +632,7 @@ struct SFADatum final
     }
 };
 
-struct SFAGeocentricCoordinateSystem : public SFACoordinateSystem
+struct SIX_SIDD_API SFAGeocentricCoordinateSystem : public SFACoordinateSystem
 {
     std::string csName;
     SFADatum datum;
@@ -669,7 +672,7 @@ private:
     }
 };
 
-struct SFAGeographicCoordinateSystem : public SFACoordinateSystem
+struct SIX_SIDD_API SFAGeographicCoordinateSystem : public SFACoordinateSystem
 {
     std::string csName;
     SFADatum datum;
@@ -712,7 +715,7 @@ private:
     }
 };
 
-struct SFAProjectedCoordinateSystem : public SFACoordinateSystem
+struct SIX_SIDD_API SFAProjectedCoordinateSystem : public SFACoordinateSystem
 {
     std::string csName;
     mem::ScopedCopyablePtr<SFAGeographicCoordinateSystem> geographicCoordinateSystem;
@@ -750,7 +753,7 @@ private:
     }
 };
 
-struct SFAReferenceSystem
+struct SIX_SIDD_API SFAReferenceSystem
 {
     mem::ScopedCloneablePtr<SFACoordinateSystem> coordinateSystem;
     std::vector<std::string> axisNames;

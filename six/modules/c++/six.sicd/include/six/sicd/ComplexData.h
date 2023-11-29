@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_sicd_ComplexData_h_INCLUDED_
 #define SIX_sicd_ComplexData_h_INCLUDED_
-#pragma once
 
 #include <memory>
 #include <vector>
@@ -48,6 +48,7 @@
 #include "six/sicd/PFA.h"
 #include "six/sicd/RMA.h"
 #include "six/sicd/RgAzComp.h"
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -73,7 +74,7 @@ namespace sicd
  *
  *
  */
-struct ComplexData: public Data
+struct SIX_SICD_API ComplexData: public Data
 {
     //!  CollectionInfo block.  Contains the general collection information
     mem::ScopedCloneablePtr<CollectionInformation> collectionInformation;
@@ -397,7 +398,7 @@ private:
     std::string mVersion;
 };
 
-struct ComplexImageResult final
+struct SIX_SICD_API ComplexImageResult final
 {
     std::unique_ptr<ComplexData> pComplexData;
     std::vector<six::zfloat> widebandData;
@@ -407,7 +408,7 @@ struct ComplexImageResult final
     ComplexImageResult(ComplexImageResult&&) = default;
     ComplexImageResult& operator=(ComplexImageResult&&) = default;
 };
-struct ComplexImage final
+struct SIX_SICD_API ComplexImage final
 {
     const ComplexData& data;
     std::span<const six::zfloat> image;

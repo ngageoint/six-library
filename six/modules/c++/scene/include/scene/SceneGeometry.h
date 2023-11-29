@@ -19,18 +19,20 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_SCENE_GEOMETRY_H__
 #define __SCENE_SCENE_GEOMETRY_H__
 
 #include <scene/sys_Conf.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <scene/Types.h>
+#include <scene/Exports.h>
 #include <types/RgAz.h>
 #include <types/RowCol.h>
 
 namespace scene
 {
-class SceneGeometry
+class SIX_SCENE_API SceneGeometry
 {
 public:
     /*!

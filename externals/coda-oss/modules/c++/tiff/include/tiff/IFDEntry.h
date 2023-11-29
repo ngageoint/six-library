@@ -20,17 +20,19 @@
  *
  */
 
-
+#pragma once
 #ifndef __TIFF_IFD_ENTRY_H__
 #define __TIFF_IFD_ENTRY_H__
-#pragma once
 
 #include <memory>
 #include <string>
 #include <vector>
+
 #include <import/io.h>
-#include "tiff/GenericType.h"
 #include "sys/Conf.h"
+#include "config/Exports.h"
+
+#include "tiff/GenericType.h"
 
 namespace tiff
 {
@@ -47,7 +49,7 @@ namespace tiff
  * functions for printing out the entry, reading and writing it to a
  * file, and accessing the data.
  *********************************************************************/
-class IFDEntry : public io::Serializable
+class CODA_OSS_API IFDEntry : public io::Serializable
 {
 public:
     //! Constructor

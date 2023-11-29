@@ -19,19 +19,21 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_COORDINATE_TRANSFORM_H__
 #define __SCENE_COORDINATE_TRANSFORM_H__
 
-#include <std/memory>
+#include <memory>
 
 #include "scene/Types.h"
 #include "scene/EllipsoidModel.h"
+#include "scene/Exports.h"
 
 
 namespace scene
 {
 
-struct CoordinateTransform
+struct SIX_SCENE_API CoordinateTransform
 {
     /**
      * Default constructor initializes the CoordinateTransform object with
