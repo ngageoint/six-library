@@ -522,7 +522,7 @@ nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
     nitf_Utils_baseName(keyName, fullName, NITF_DLL_EXTENSION);
 
     /* Now init the plugin!!!  */
-    ident = doInit(dll, keyName, error);
+   ident = doInit(dll, keyName, error);
     return insertPlugin_("Successfully loaded plugin: [%s] at [%p]\n",
         reg, ident, dll, error);
 }
@@ -971,8 +971,59 @@ insertCreator(nitf_DLL* dso,
 
 // Somebody might want to use a different set of preloadedTREs, or we might even want multiple
 // sets of preloaded TREs.  There's nothing to support either of those right now, but it's easy enough
-// to put the infrastructure in place to make it easy to hook-up.
-extern nitf_TREPreloaded defaultPreloadedTREs[];
+// to put the infrastructure in place.
+static nitf_TREPreloaded* getPreloadedTREs(const char* name)
+{
+    // Convert a name (e.g., "default") to a set of preloaded TREs.
+    // Only "default" is currently supported; see TREs.c
+    if (strcmp(name, "default") == 0)
+    {
+        extern nitf_TREPreloaded defaultPreloadedTREs[];
+        return defaultPreloadedTREs;
+    }    
+    return NULL;
+}
+
+static void enable_notset_TREs(nitf_TREPreloaded preloadedTREs[], NITF_BOOL enable)
+{
+    // NITF_PRELOAD_TRES is set, update all TREs which haven't been touched
+    for (size_t i = 0;; i++)
+    {
+        const char* pKeyName = preloadedTREs[i].name;
+        if (pKeyName == NULL) // end of list
+        {
+            return;
+        }
+        if (preloadedTREs[i].enabled < 0) // default is -1 "not set"
+        {
+            preloadedTREs[i].enabled = enable;
+        }
+    }
+}
+static nitf_TREPreloaded* getNitfPreloadedTREs(const char* name)
+{
+    // If NITF_PRELOADED_TRE_HANDLERS_ENABLE is set to *name*", we'll preload those TREs.
+    // This will NOT override a call to nitf_PluginRegistry_PreloadedTREHandlersEnable();
+    // by default, the `enabled` status of TREs is set to -1 "not set."
+    const char* envVar = getenv("NITF_PRELOADED_TRE_HANDLERS_ENABLE");
+    if ((envVar != NULL) && (strcmp(envVar, name) == 0))
+    {
+        nitf_TREPreloaded* preloadedTREs = getPreloadedTREs(name);
+        if (preloadedTREs != NULL)
+        {
+            enable_notset_TREs(preloadedTREs, NRT_TRUE /*enable*/);
+            return preloadedTREs;
+        }
+    }
+
+    // Enviroment variable not set (or not set to *name*), return preloaded TREs as-is.
+    return getPreloadedTREs(name);
+}
+static nitf_TREPreloaded* getDefaultPreloadedTREs()
+{
+    return getNitfPreloadedTREs("default");
+}
+
 static nitf_TREPreloaded* findPreloadedTRE_(nitf_TREPreloaded preloadedTREs[], const char* keyName)
 {
     if (preloadedTREs == NULL)
@@ -1000,9 +1051,14 @@ static nitf_TREPreloaded* findPreloadedTRE_(nitf_TREPreloaded preloadedTREs[], c
 static const nitf_TREPreloaded* findPreloadedTRE(nitf_TREPreloaded preloadedTREs[], const char* keyName)
 {
     const nitf_TREPreloaded* retval = findPreloadedTRE_(preloadedTREs, keyName);
-    if ((retval != NULL) && (retval->enabled))
+    if (retval != NULL)
     {
-        return retval;
+        if (retval->enabled < 0)
+        {
+            return NULL; // "not set" == disabled
+        }
+        const NRT_BOOL enabled = retval->enabled ? NRT_TRUE : NRT_FALSE;
+        return enabled ? retval : NULL;
     }
     return NULL;
 }
@@ -1010,10 +1066,15 @@ static const nitf_TREPreloaded* findPreloadedTRE(nitf_TREPreloaded preloadedTREs
 static NITF_BOOL PreloadedTREHandlerEnable(nitf_TREPreloaded preloadedTREs[],
     const char* keyName, NITF_BOOL enable)
 {
+    if (preloadedTREs == NULL)
+    {
+        return NRT_FALSE;
+    }
+
     nitf_TREPreloaded* result = findPreloadedTRE_(preloadedTREs, keyName);
     if (result != NULL)
     {
-        result->enabled = enable;
+        result->enabled = enable ? NRT_TRUE : NRT_FALSE;
         return NRT_TRUE;
     }
     return NRT_FALSE;
@@ -1021,7 +1082,7 @@ static NITF_BOOL PreloadedTREHandlerEnable(nitf_TREPreloaded preloadedTREs[],
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_PreloadedTREHandlerEnable(const char* keyName, NITF_BOOL enable)
 {
-    return PreloadedTREHandlerEnable(defaultPreloadedTREs, keyName, enable);
+    return PreloadedTREHandlerEnable(getDefaultPreloadedTREs(), keyName, enable);
 }
 
 static void preloadedTREHandlersEnable(nitf_TREPreloaded preloadedTREs[], NITF_BOOL enable)
@@ -1038,14 +1099,13 @@ static void preloadedTREHandlersEnable(nitf_TREPreloaded preloadedTREs[], NITF_B
         {
             return;
         }
-
-        preloadedTREs[i].enabled = enable;
+        preloadedTREs[i].enabled = enable ? NRT_TRUE : NRT_FALSE;
     }
 }
 NITFAPI(void)
 nitf_PluginRegistry_PreloadedTREHandlersEnable(NITF_BOOL enable)
 {
-    preloadedTREHandlersEnable(defaultPreloadedTREs, enable);
+    preloadedTREHandlersEnable(getDefaultPreloadedTREs(), enable);
 }
 
 /*
@@ -1067,7 +1127,6 @@ static const char** preload_doInit(NITF_PLUGIN_INIT_FUNCTION init, const char* p
 static NRT_BOOL preloadTRE(nitf_TREPreloaded preloadedTREs[],
     const char* keyName, nitf_Error* error)
 {
-    const char** ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
 
     /*  Construct the DLL object  */
@@ -1087,7 +1146,7 @@ static NRT_BOOL preloadTRE(nitf_TREPreloaded preloadedTREs[],
     dll->dsoMain = (NRT_DLL_FUNCTION_PTR)plugin->handler;
 
     /* Now init the plugin!!!  */
-    ident = preload_doInit(plugin->init, keyName, error);
+    const char** ident = preload_doInit(plugin->init, keyName, error);
     return insertPlugin_("Successfully pre-loaded plugin: [%s] at [%p]\n", reg, ident, dll, error);
 }
 
@@ -1173,7 +1232,7 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
                                        int* hadError,
                                        nitf_Error* error)
 {
-    return retrieveTREHandler(defaultPreloadedTREs, reg, treIdent, hadError, error);
+    return retrieveTREHandler(getDefaultPreloadedTREs(), reg, treIdent, hadError, error);
 }
 
 NITFPROT(nitf_CompressionInterface*)

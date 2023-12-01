@@ -20,6 +20,7 @@
  *
  */
  
+#pragma once
 #ifndef CODA_OSS_logging_Setup_h_INCLUDED_
 #define CODA_OSS_logging_Setup_h_INCLUDED_
 
@@ -29,6 +30,7 @@
 #include "mem/SharedPtr.h"
 #include "logging/Logger.h"
 #include "sys/filesystem.h"
+#include "config/Exports.h"
 
 namespace logging
 {
@@ -48,7 +50,7 @@ using path = coda_oss::filesystem::path; // still used in SWIG bindings
  *  \param logCount - number of rotating logs to keep (default: 0 no rotation)
  *  \param logBytes - number of bytes per rotating log (default: 0 no rotation)
  */
-std::unique_ptr<logging::Logger> setupLogger(
+CODA_OSS_API std::unique_ptr<logging::Logger> setupLogger(
     const path& program, 
     const std::string& logLevel = "warning", 
     const path& logFile = "console",

@@ -20,20 +20,15 @@
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
+#ifndef CODA_OSS_LIBRARY_SHARED
+#define CODA_OSS_LIBRARY_SHARED 1
+#endif
 
 #include <import/nrt.h>
 #include <import/nitf.h>
 #include <nitf/TestingTest.h>
 
 #include <nitf/coda-oss.hpp>
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
-#pragma comment(lib, "sio.lite-c++.lib")
-#pragma comment(lib, "math-c++")
-#pragma comment(lib, "mt-c++")
 
 #include <import/nitf.hpp>
 #include <nitf/UnitTests.hpp>

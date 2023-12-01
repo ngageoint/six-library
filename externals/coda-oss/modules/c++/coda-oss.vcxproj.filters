@@ -952,6 +952,8 @@
     <ClInclude Include="tiff\include\tiff\TiffUtils.h">
       <Filter>tiff</Filter>
     </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan_.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -1562,6 +1564,9 @@
     <None Include="coda-oss.ruleset" />
     <None Include="sys\source\CppUnitTestAssert_.cpp_">
       <Filter>sys</Filter>
+    </None>
+    <None Include="std\include\std\mdspan">
+      <Filter>std</Filter>
     </None>
   </ItemGroup>
 </Project>

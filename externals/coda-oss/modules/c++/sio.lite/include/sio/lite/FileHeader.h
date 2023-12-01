@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIO_LITE_FILE_HEADER_H__
 #define __SIO_LITE_FILE_HEADER_H__
 
@@ -28,6 +29,7 @@
 #include <import/except.h>
 #include <import/sys.h>
 #include <import/io.h>
+#include "config/Exports.h"
 #include "sio/lite/UserDataDictionary.h"
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/UnsupportedDataTypeException.h"
@@ -37,7 +39,7 @@ namespace sio
 namespace lite
 {
 
-class FileHeader
+class CODA_OSS_API FileHeader
 {
 public:
     /** Unsigned byte data */
