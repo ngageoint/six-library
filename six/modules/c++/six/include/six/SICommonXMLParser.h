@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once
 #ifndef SIX_six_SICommonXMLParser_h_INCLUDED_
 #define SIX_six_SICommonXMLParser_h_INCLUDED_
-#pragma once
 
 #include <six/CollectionInformation.h>
 #include <six/MatchInformation.h>
@@ -33,10 +33,11 @@
 #include <six/Radiometric.h>
 #include <six/GeoInfo.h>
 #include <six/MatchInformation.h>
+#include <six/Exports.h>
 
 namespace six
 {
-struct SICommonXMLParser : public XMLParser
+struct SIX_SIX_API SICommonXMLParser : public XMLParser
 {
     SICommonXMLParser(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
         logging::Logger* log = nullptr, bool ownLog = false);

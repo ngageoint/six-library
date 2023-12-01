@@ -20,7 +20,7 @@
  *
  */
 
-
+#pragma once
 #ifndef __CPHD03_GLOBAL_H__
 #define __CPHD03_GLOBAL_H__
 
@@ -31,10 +31,12 @@
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
 
+#include "cphd03/Exports.h"
+
 namespace cphd03
 {
 // Optional segment DwellTime
-struct DwellTimeParameters
+struct SIX_CPHD03_API DwellTimeParameters
 {
     DwellTimeParameters();
 
@@ -57,7 +59,7 @@ std::ostream& operator<< (std::ostream& os, const DwellTimeParameters& d);
 
 typedef six::sicd::AreaDirectionParameters AreaDirectionParameters;
 
-struct AreaPlane
+struct SIX_CPHD03_API AreaPlane
 {
     AreaPlane();
 
@@ -76,7 +78,7 @@ struct AreaPlane
 
 std::ostream& operator<< (std::ostream& os, const AreaPlane& d);
 
-struct ImageArea
+struct SIX_CPHD03_API ImageArea
 {
     ImageArea();
 
@@ -93,7 +95,7 @@ struct ImageArea
 
 std::ostream& operator<< (std::ostream& os, const ImageArea& d);
 
-struct Global
+struct SIX_CPHD03_API Global final
 {
     Global();
 

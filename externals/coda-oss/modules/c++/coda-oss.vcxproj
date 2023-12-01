@@ -19,6 +19,8 @@
     <ClInclude Include="coda_oss\include\coda_oss\bit.h" />
     <ClInclude Include="coda_oss\include\coda_oss\CPlusPlus.h" />
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\numbers.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
@@ -502,6 +504,7 @@
     <None Include="std\include\std\bit" />
     <None Include="std\include\std\cstddef" />
     <None Include="std\include\std\filesystem" />
+    <None Include="std\include\std\mdspan" />
     <None Include="std\include\std\memory" />
     <None Include="std\include\std\numbers" />
     <None Include="std\include\std\optional" />
@@ -530,7 +533,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>

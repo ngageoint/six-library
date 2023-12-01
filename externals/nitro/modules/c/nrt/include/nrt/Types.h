@@ -159,9 +159,13 @@ typedef int nrt_CreationFlags;
 
 #define NRT_SUCCESS  (1)
 #define NRT_FAILURE  (0)
-#define NRT_TRUE     (1)
-#define NRT_FALSE    (0)
-
+#ifdef __cplusplus
+    #define NRT_TRUE     (true)
+    #define NRT_FALSE    (false)
+#else
+    #define NRT_TRUE     (1)
+    #define NRT_FALSE    (0)
+#endif
 
 #if defined(__cplusplus) && !defined(SWIGPYTHON)
 // "enum class" for C++ w/o SWIG

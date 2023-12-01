@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_POSITION_H__
 #define __SIX_POSITION_H__
 
@@ -27,6 +28,8 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -41,7 +44,7 @@ struct SCPCOA;
  *  Receive aperture phase center (APC).  The size of the vector
  *  of the vector the number of receive APC polys
  */
-struct RcvAPC
+struct SIX_SICD_API RcvAPC
 {
     //!  Constructor
     RcvAPC()
@@ -69,7 +72,7 @@ struct RcvAPC
  *  This block describes the platform and ground reference
  *  positions vs. time.
  */
-struct Position
+struct SIX_SICD_API Position
 {
     /*!
      *  Aperture reference point as a function of time in ECEF meters

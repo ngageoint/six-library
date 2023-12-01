@@ -20,7 +20,7 @@
  *
  */
 
-
+#pragma once
 #ifndef __SYS_DLL_H__
 #define __SYS_DLL_H__
 
@@ -52,6 +52,7 @@ typedef void* DLL_FUNCTION_PTR;
 
 #include "except/Exception.h"
 #include "sys/Err.h"
+#include "config/Exports.h"
 
 
 namespace sys
@@ -124,7 +125,7 @@ struct DLLException : public except::Exception
  */
 
 
-struct DLL
+struct CODA_OSS_API DLL
 {
     /*!
      *  Construct a library object, but dont populate or load it

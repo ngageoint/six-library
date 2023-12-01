@@ -33,6 +33,7 @@
 #include <cphd/Types.h>
 #include <cphd/Enums.h>
 #include <cphd/SceneCoordinates.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -42,7 +43,7 @@ namespace cphd
 *  \brief Polarization parameters for the pulse for the reference signal vector.
 * (New in CPHD 1.1.0)
 */
-struct PolRef final
+struct SIX_CPHD_API PolRef final
 {
     bool operator==(const PolRef& other) const
     {
@@ -70,7 +71,7 @@ struct PolRef final
  *
  *  \brief Polarization of the signals that formed the signal array.
  */
-struct Polarization final
+struct SIX_CPHD_API Polarization final
 {
     //! Equality operator
     bool operator==(const Polarization& other) const
@@ -103,7 +104,7 @@ struct Polarization final
  *
  *  \brief (Optional) TOA extended swath information
  */
-struct TOAExtended
+struct SIX_CPHD_API TOAExtended
 {
     /*
      *  \struct LFMEclipse
@@ -180,7 +181,7 @@ struct TOAExtended
  *
  *  See section 6.3 and section 7.2.6
  */
-struct DwellTimes
+struct SIX_CPHD_API DwellTimes
 {
     //! COD Time & Dwell Time polynomials over the
     //! image area
@@ -223,7 +224,7 @@ struct DwellTimes
  *  located at the SRP for reference signal vector (v_CH_REF)
  *  See section 4.6 and section 7.2.9
  */
-struct TgtRefLevel
+struct SIX_CPHD_API TgtRefLevel
 {
     // Constructor
     TgtRefLevel();
@@ -248,7 +249,7 @@ struct TgtRefLevel
  *
  *  \brief Points that describe the noise profile
  */
-struct Point
+struct SIX_CPHD_API Point
 {
     //! Constructor
     Point();
@@ -276,7 +277,7 @@ struct Point
  *
  *  \brief (Optional) Power level for thermal noise (PN) vs FX freq values
  */
-struct FxNoiseProfile
+struct SIX_CPHD_API FxNoiseProfile
 {
     //! Equality operators
     bool operator==(const FxNoiseProfile& other) const
@@ -297,7 +298,7 @@ struct FxNoiseProfile
  *
  *  \brief (Optional) Thermal noise level for the reference signal vector
  */
-struct NoiseLevel
+struct SIX_CPHD_API NoiseLevel
 {
     //! Thermal noise level for the reference signal
     //! vector (v_CH_REF).
@@ -335,7 +336,7 @@ struct NoiseLevel
  *  channel. Channels referenced by their unique
  *  Channel ID (Ch_ID). See Section 7.2.
 */
-struct ChannelParameter
+struct SIX_CPHD_API ChannelParameter
 {
     /*
      *  \struct TxRcv
@@ -378,7 +379,7 @@ struct ChannelParameter
      *  form the signal array data.
      */
     // Hiding Antenna struct here because of naming clash
-    struct Antenna
+    struct SIX_CPHD_API Antenna
     {
         // Constructor
         Antenna();
@@ -525,7 +526,7 @@ struct ChannelParameter
  *  contained in the product.
  *  See section 7.
  */
-struct Channel
+struct SIX_CPHD_API Channel
 {
     //! Constructor
     Channel();

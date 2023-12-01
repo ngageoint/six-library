@@ -5,8 +5,13 @@
 // Do not add files here that you will be updating frequently as this negates the performance advantage.
 
 #pragma once
-#ifndef CODA_OSS_pch_h_INCLUDED_
-#define CODA_OSS_pch_h_INCLUDED_
+
+// We're building in Visual Studio ... used to control where we get a little bit
+// of config info
+#define CODA_OSS_PCH 1
+#ifndef CODA_OSS_LIBRARY_SHARED
+#define CODA_OSS_LIBRARY_SHARED 1
+#endif
 
 #include "coda_oss/CPlusPlus.h"
 #include "config/disable_compiler_warnings.h"
@@ -117,4 +122,3 @@ CODA_OSS_disable_warning_pop
 #include "hdf5/lite/H5_.h"
 #pragma comment(lib, "hdf5-c++.lib")
 
-#endif //CODA_OSS_pch_h_INCLUDED_

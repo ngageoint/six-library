@@ -33,6 +33,8 @@
 #include "six/Parameter.h"
 #include "six/XsElement.h"
 
+#include "six/sicd/Exports.h"
+
 #include <mem/ScopedCopyablePtr.h>
 
 namespace six
@@ -47,7 +49,7 @@ namespace sicd
  *  the DCXPoly is the EB sterring x-axis direction
  *  cosine (DCX) as a function of slow time
  */
-struct ElectricalBoresight final
+struct SIX_SICD_API ElectricalBoresight final
 {
     //! Constructor
     ElectricalBoresight();
@@ -75,7 +77,7 @@ struct ElectricalBoresight final
     six::XsElement_minOccurs0<bool> useEBPVP{ "UseEBPVP" };
 };
 
-std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d);
+SIX_SICD_API std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d);
 
 /*!
  *  \struct HalfPowerBeamwidths
@@ -86,7 +88,7 @@ std::ostream& operator<< (std::ostream& os, const ElectricalBoresight& d);
  *
  *  Removed in 1.0.0
  */
-struct HalfPowerBeamwidths
+struct SIX_SICD_API HalfPowerBeamwidths
 {
     //! Constructor
     HalfPowerBeamwidths();
@@ -119,7 +121,7 @@ std::ostream& operator<< (std::ostream& os, const HalfPowerBeamwidths& d);
  *  electronically steered arrays, the EB is steered to
  *  DCX = 0, DCY = 0.
  */
-struct GainAndPhasePolys final
+struct SIX_SICD_API GainAndPhasePolys final
 {
     //! No init right now, could do that and set const coef to zero
     GainAndPhasePolys();
@@ -148,14 +150,14 @@ struct GainAndPhasePolys final
     six::XsElement_minOccurs0<std::u8string> antGPId {"AntGPId"};  // new in CPHD 1.1.0
 };
 
-std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d);
+SIX_SICD_API std::ostream& operator<< (std::ostream& os, const GainAndPhasePolys& d);
 
 /*!
  *  \struct AntennaParameters
  *  \brief SICD Tx/Rcv, etc Antenna parameter
  *
  */
-struct AntennaParameters
+struct SIX_SICD_API AntennaParameters
 {
 
     //!  Constructor
@@ -223,7 +225,7 @@ struct AntennaParameters
     BooleanType mainlobeFrequencyDilation;
 };
 
-std::ostream& operator<< (std::ostream& os, const AntennaParameters& d);
+SIX_SICD_API std::ostream& operator<< (std::ostream& os, const AntennaParameters& d);
 
 /*!
  *  \struct Antenna
@@ -237,7 +239,7 @@ std::ostream& operator<< (std::ostream& os, const AntennaParameters& d);
  *  and the receieve (Rcv) antenna.  A single set of prarameters may
  *  be provided for a combined two-way pattern (as appropriate)
  */
-struct Antenna
+struct SIX_SICD_API Antenna
 {
     //! Transmit parameters
     mem::ScopedCopyablePtr<AntennaParameters> tx;

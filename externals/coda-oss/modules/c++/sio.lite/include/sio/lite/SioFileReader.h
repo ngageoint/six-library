@@ -19,12 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIO_LITE_FILE_READER_H__
 #define __SIO_LITE_FILE_READER_H__
 
 #include <import/sys.h>
 #include <io/Seekable.h>
 #include <io/FileInputStream.h>
+#include "config/Exports.h"
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/StreamReader.h"
 
@@ -80,12 +82,9 @@ namespace lite
     \endcode
  */
 
-class FileReader : public StreamReader, public io::Seekable
+class CODA_OSS_API FileReader : public StreamReader, public io::Seekable
 {
-
-
 public:
-
     /** Constructor */
     FileReader() : StreamReader() {}
 

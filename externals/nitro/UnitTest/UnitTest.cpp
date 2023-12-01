@@ -8,6 +8,8 @@
 TEST_MODULE_INITIALIZE(methodName)
 {
     // module initialization code
-    nitf_PluginRegistry_PreloadedTREHandlersEnable(NRT_TRUE);
+    //nitf_PluginRegistry_PreloadedTREHandlersEnable(NRT_TRUE);
+    _putenv("NITF_PRELOADED_TRE_HANDLERS_ENABLE=default");
+
     nitf::Test::j2kSetNitfPluginPath();
 }

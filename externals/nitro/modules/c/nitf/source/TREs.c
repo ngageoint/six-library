@@ -105,7 +105,7 @@ static nitf_TREHandler* TEST_PRELOADED_DES_handler(nitf_Error* error) {
 /******************************************************************************/
 
 #define NITF_preload_TRE_(Tre_, enabled_) { #Tre_, Tre_##_init, Tre_##_handler, enabled_ }
-#define NITF_preload_TRE(Tre_) NITF_preload_TRE_(Tre_, NRT_FALSE /*enabled*/)
+#define NITF_preload_TRE(Tre_) NITF_preload_TRE_(Tre_, -1 /*not set*/)
 
 nitf_TREPreloaded defaultPreloadedTREs[] = {
     // Not preloading any TREs right now: with the existing system,
@@ -122,7 +122,9 @@ nitf_TREPreloaded defaultPreloadedTREs[] = {
     NITF_preload_TRE(JITCID),
     NITF_preload_TRE(PTPRAA),
     NITF_preload_TRE(RPFHDR),
+    NITF_preload_TRE(XML_DATA_CONTENT),
 
+    //NITF_preload_TRE(TEST_DES), // This should ALWAYS come from the DLL/SO
     NITF_preload_TRE_(TEST_PRELOADED_DES,  NRT_TRUE /*enabled*/),
 
 	{ NULL, NULL, NULL, NRT_FALSE } // end of list

@@ -20,6 +20,7 @@
  *
  */
 
+#pragma once
 #ifndef __CPHD_UTILITIES_H__
 #define __CPHD_UTILITIES_H__
 
@@ -30,6 +31,7 @@
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -45,7 +47,7 @@ namespace cphd
  *
  *  \return Returns number of bytes: 2, 4 or 8. (0 if uninitialized)
  */
-size_t getNumBytesPerSample(const SignalArrayFormat& signalArrayFormat);
+SIX_CPHD_API size_t getNumBytesPerSample(const SignalArrayFormat& signalArrayFormat);
 
 /*
  *  \func validateFormat

@@ -1531,5 +1531,8 @@
     <None Include="sys\source\CppUnitTestAssert_.cpp_">
       <Filter>sys</Filter>
     </None>
+    <None Include="std\include\std\mdspan">
+      <Filter>std</Filter>
+    </None>
   </ItemGroup>
 </Project>

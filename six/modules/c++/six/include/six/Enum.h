@@ -20,9 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_Enum_h_INCLUDED_
 #define SIX_six_Enum_h_INCLUDED_
-#pragma once
 
 #include <string>
 #include <map>

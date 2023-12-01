@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_GEO_DATA_H__
 #define __SIX_GEO_DATA_H__
 
@@ -28,6 +29,8 @@
 #include "six/GeoInfo.h"
 #include "scene/ProjectionModel.h"
 #include <logging/Logger.h>
+
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -43,7 +46,7 @@ struct ImageData;
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
-class GeoData : public GeoDataBase
+class SIX_SICD_API GeoData : public GeoDataBase
 {
 public:
 

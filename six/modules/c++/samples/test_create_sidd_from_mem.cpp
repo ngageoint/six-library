@@ -2525,9 +2525,8 @@ int main(int argc, char** argv)
         const bool smallImage = options->get<bool>("smallImage");
         const std::string strVersion = options->get<std::string>("version");
 
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-
-        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sidd::DerivedXMLControl>();
 
         // Output file name
         std::string outputName(options->get<std::string>("output"));
@@ -2572,7 +2571,7 @@ int main(int argc, char** argv)
             //------------------------------------------------------
             std::unique_ptr<logging::Logger> log(new logging::NullLogger());
             sicdData.reset(reinterpret_cast<six::sicd::ComplexData*>(
-                    six::XMLControlFactory::getInstance()
+                    six::getXMLControlFactory()
                             .newXMLControl(six::DataType::COMPLEX, log.get())
                             ->fromXML(parser.getDocument(),
                                       std::vector<std::string>())));

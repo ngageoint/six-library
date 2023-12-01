@@ -20,9 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_XmlLite_h_INCLUDED_
 #define SIX_six_XmlLite_h_INCLUDED_
-#pragma once
 
 #include <assert.h>
 
@@ -40,11 +40,12 @@
 #include <six/Utilities.h>
 #include <six/Logger.h>
 #include <six/XsElement.h>
+#include <six/Exports.h>
 
 namespace six
 {
 // A simple wrapper around xml::lite::MinidomParser
-struct MinidomParser final
+struct SIX_SIX_API MinidomParser final
 {
     MinidomParser();
     ~MinidomParser();
@@ -92,7 +93,7 @@ inline const xml::lite::Document& getDocument(const MinidomParser& xmlParser)
 }
 
 
-struct XmlLite final
+struct SIX_SIX_API XmlLite final
 {
     XmlLite(const xml::lite::Uri& defaultURI, bool addClassAttributes,
         logging::Logger* log = nullptr, bool ownLog = false);
@@ -314,16 +315,16 @@ private:
     return createString_(name, p, parent);
   }
 
- xml::lite::Element& create(const XmlLite&, const XsElement<double>&, xml::lite::Element& parent);
- void getFirstAndOnly(const XmlLite&, const xml::lite::Element&, XsElement<double>&);
+    SIX_SIX_API xml::lite::Element& create(const XmlLite&, const XsElement<double>&, xml::lite::Element& parent);
+    SIX_SIX_API void getFirstAndOnly(const XmlLite&, const xml::lite::Element&, XsElement<double>&);
 
- xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<bool>&, xml::lite::Element& parent);
- xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<double>&, xml::lite::Element& parent);
- xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<std::u8string>&, xml::lite::Element& parent);
+    SIX_SIX_API xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<bool>&, xml::lite::Element& parent);
+    SIX_SIX_API xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<double>&, xml::lite::Element& parent);
+    SIX_SIX_API xml::lite::Element* create(const XmlLite&, const XsElement_minOccurs0<std::u8string>&, xml::lite::Element& parent);
 
- bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<bool>&);
- bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<double>&);
- bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<std::u8string>&);
+    SIX_SIX_API bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<bool>&);
+    SIX_SIX_API bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<double>&);
+    SIX_SIX_API bool parse(const XmlLite&, const xml::lite::Element&, XsElement_minOccurs0<std::u8string>&);
 
 }
 

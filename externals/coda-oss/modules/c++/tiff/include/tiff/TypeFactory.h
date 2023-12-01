@@ -19,9 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __TIFF_TYPE_FACTORY_H__
 #define __TIFF_TYPE_FACTORY_H__
+
+#include "config/Exports.h"
 
 #include "tiff/GenericType.h"
 
@@ -38,7 +40,7 @@ namespace tiff
  * assume a specific size for the data, see tiff::Const for the size
  * of each TIFF type.
  *********************************************************************/
-class TypeFactory
+class CODA_OSS_API TypeFactory final
 {
 public:
     //! Default constructor

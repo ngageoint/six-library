@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD03_ANTENNA_H__
 #define __CPHD03_ANTENNA_H__
 
@@ -27,6 +27,8 @@
 #include <vector>
 
 #include <six/sicd/Antenna.h>
+
+#include "cphd03/Exports.h"
 
 namespace cphd03
 {
@@ -80,7 +82,7 @@ typedef six::sicd::AntennaParameters AntennaParameters;
  *  and the receieve (Rcv) antenna.  A single set of prarameters may
  *  be provided for a combined two-way pattern (as appropriate)
  */
- struct Antenna
+ struct SIX_CPHD03_API Antenna final
 {
     //!  Constructor
     Antenna();

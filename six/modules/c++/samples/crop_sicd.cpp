@@ -155,7 +155,7 @@ int main(int argc, char** argv)
         }
 
         // Crop it
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         if (options->hasValue("ecef"))
         {

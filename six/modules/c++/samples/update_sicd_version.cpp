@@ -41,7 +41,7 @@ void writeSicd(std::unique_ptr<six::Data>&& complexData,
                const std::vector<std::string>& schemaPaths_,
                const std::string& pathname)
 {
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
     mem::SharedPtr<six::Container> container(new six::Container(
         six::DataType::COMPLEX));

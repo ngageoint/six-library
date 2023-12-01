@@ -41,6 +41,7 @@
 #include <six/sidd/Compression.h>
 #include <six/sidd/DigitalElevationData.h>
 #include <six/sidd/Annotations.h>
+#include <six/sidd/Exports.h>
 
 namespace six
 {
@@ -57,7 +58,7 @@ namespace sidd300
     };
     std::string to_string(ISMVersion); // "v201609" or "v13"
 
-    ISMVersion get(ISMVersion defaultIfNotSet); // overloaded on ISMVersion
+    SIX_SIDD_API ISMVersion get(ISMVersion defaultIfNotSet); // overloaded on ISMVersion
     std::optional<ISMVersion> set(ISMVersion); // returns previous value, if any
     std::optional<ISMVersion> getISMVersion();
     std::optional<ISMVersion> clearISMVersion(); // returns previous value, if any
@@ -88,7 +89,7 @@ Version normalizeVersion(const std::string&);
  *  Contains the structs that are the model for SIDD products
  *
  */
-struct DerivedData : public Data
+struct SIX_SIDD_API DerivedData : public Data
 {
     /*!
      *  Information related to processor, classification,

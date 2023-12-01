@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_READ_CONTROL_H__
 #define __SIX_READ_CONTROL_H__
 
@@ -32,6 +33,7 @@
 #include "six/Options.h"
 #include "six/XMLControlFactory.h"
 #include "six/Logger.h"
+#include "six/Exports.h"
 #include <mem/ScopedArray.h>
 #include <import/logging.h>
 
@@ -55,7 +57,7 @@ namespace six
  *  to know that the NITF is split due to technical complications.
  *
  */
-struct ReadControl
+struct SIX_SIX_API ReadControl
 {
     //!  Constructor.  Null-set the current container reference
     ReadControl() noexcept(false) : mLogger(mLog, mOwnLog, nullptr)
@@ -208,7 +210,7 @@ struct ReadControl
     {
         mXMLRegistry = xmlRegistry;
         if (!mXMLRegistry)
-            mXMLRegistry = &XMLControlFactory::getInstance();
+            mXMLRegistry = &getXMLControlFactory();
     }
     void setXMLControlRegistry(const XMLControlRegistry& xmlRegistry)
     {
