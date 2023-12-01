@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
- 
+ #pragma once
 #ifndef __TYPES_ROW_COL_H__
 #define __TYPES_ROW_COL_H__
 
@@ -28,6 +28,7 @@
 #include <cstdlib>
 #include <utility>
 #include <limits>
+#include <array>
 
 #include "gsl/gsl.h"
 
@@ -77,6 +78,11 @@ public:
     {
         row = p.first;
         col = p.second;
+    }
+    explicit RowCol(const std::array<T, 2>& a) noexcept
+    {
+        row = a[0];
+        col = a[1];
     }
 
     template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p) noexcept
