@@ -24,17 +24,8 @@
 #define CODA_OSS_xml_lite_Validator_h_INCLUDED_
 #pragma once
 
-#include "xml/lite/xml_lite_config.h"
-
-#if defined(USE_LIBXML)
-#error LibXML is no longer supported.
-#endif
-#if defined(USE_EXPAT)
-#error Expat is no longer supported.
-#endif
-
 #if !defined(USE_XERCES)
-#error XML parser must be set at configure time
+#define USE_XERCES
 #endif
 
 #  include "xml/lite/ValidatorXerces.h"

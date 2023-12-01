@@ -26,7 +26,7 @@
 
 namespace coda_oss
 {
-	using byte = std::byte;
+	using std::byte;
 }
 
 #endif  // CODA_OSS_coda_oss_cstddef_h_INCLUDED_

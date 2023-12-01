@@ -21,11 +21,11 @@
  */
 
  
-#ifndef __NET_SSL_CONNECTION_H__
-#define __NET_SSL_CONNECTION_H__
-#pragma once
+#pragma once 
+#ifndef CODA_OSS_net_ssl_SSLConnection_h_INCLUDED_
+#define CODA_OSS_net_ssl_SSLConnection_h_INCLUDED_
 
-#include <net/ssl/net_ssl_config.h>
+#include <net/ssl/config.h>
 #include "sys/Conf.h"
 #if defined(USE_OPENSSL)
 #include <net/NetConnection.h>
@@ -139,4 +139,4 @@ public:
 }
 
 #endif
-#endif
+#endif  // CODA_OSS_net_ssl_SSLConnection_h_INCLUDED_

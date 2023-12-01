@@ -1,6 +1,0 @@
-#ifndef _@tgt_munged_name@_CONFIG_H_
-#define _@tgt_munged_name@_CONFIG_H_
-
-#cmakedefine MT_DEFAULT_PINNING @MT_DEFAULT_PINNING@
-
-#endif /* _@tgt_munged_name@_CONFIG_H_ */
