@@ -614,6 +614,7 @@
       <WarningLevel>Level3</WarningLevel>
       <EnableModules>true</EnableModules>
       <TranslateIncludes>true</TranslateIncludes>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>
