@@ -23,8 +23,6 @@
 // This header includes <re/re_config.h> so must come before the ifdef
 #include <re/Regex.h>
 
-#ifdef RE_ENABLE_STD_REGEX
-
 #include <sys/Conf.h>
 #include <re/RegexException.h>
 
@@ -287,4 +285,3 @@ bool Regex::searchWithContext(std::string::const_iterator inputIterBegin,
 }
 }
 
-#endif
