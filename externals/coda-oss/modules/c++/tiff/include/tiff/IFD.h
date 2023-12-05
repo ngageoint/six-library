@@ -19,14 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __TIFF_IFD_H__
 #define __TIFF_IFD_H__
 
 #include <map>
 #include <string>
+
 #include <import/io.h>
 #include <import/except.h>
+#include <config/Exports.h>
 
 #include "tiff/IFDEntry.h"
 #include "tiff/KnownTags.h"
@@ -45,7 +47,7 @@ namespace tiff
  * Contains functions for adding new entries to the IFD or adding
  * values to a specific IFD entry.
  *********************************************************************/
-class IFD : public io::Serializable
+class CODA_OSS_API IFD : public io::Serializable
 {
 public:
     //! The IFDType

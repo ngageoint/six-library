@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_COMPLEX_XML_CONTROL_H__
 #define __SIX_COMPLEX_XML_CONTROL_H__
 
@@ -28,6 +29,7 @@
 #include <six/Enums.h>
 
 #include <six/sicd/ComplexXMLParser.h>
+#include <six/sicd/Exports.h>
 
 namespace six
 {
@@ -48,7 +50,7 @@ namespace sicd
  *  XMLControlFactory::newXMLControl() methods
  *  to create this object.
  */
-struct ComplexXMLControl : public XMLControl
+struct SIX_SICD_API ComplexXMLControl : public XMLControl
 {
     //!  Constructor
     ComplexXMLControl(logging::Logger* log = nullptr, bool ownLog = false);

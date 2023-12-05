@@ -114,13 +114,13 @@ static nitf_TREDescription descrip_00199[] = {
 };
 
 /* Define the available descriptions and the default one */
-static nitf_TREDescriptionInfo descriptions[] = {
+static nitf_TREDescriptionInfo ACFTADescriptions[] = {
     { "ACFTA_132", descrip_00132, 132 },
     { "ACFTA_154", descrip_00154, 154 },
     { "ACFTA_199", descrip_00199, 199 },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet ACFTADescriptionSet = { 0, ACFTADescriptions };
 
 
 #if 1

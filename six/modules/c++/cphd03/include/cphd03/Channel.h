@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD03_CHANNEL_H__
 #define __CPHD03_CHANNEL_H__
 
@@ -27,9 +27,11 @@
 #include <vector>
 #include <stddef.h>
 
+#include "cphd03/Exports.h"
+
 namespace cphd03
 {
-struct ChannelParameters
+struct SIX_CPHD03_API ChannelParameters
 {
     ChannelParameters();
 
@@ -68,7 +70,7 @@ struct ChannelParameters
 
 std::ostream& operator<< (std::ostream& os, const ChannelParameters& d);
 
-struct Channel
+struct SIX_CPHD03_API Channel
 {
     Channel()
     {

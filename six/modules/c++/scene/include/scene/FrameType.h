@@ -19,19 +19,21 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_FRAME_TYPE_H__
 #define __SCENE_FRAME_TYPE_H__
-#pragma once
 
 #include <string>
 #include <ostream>
+
+#include "scene/Exports.h"
 
 namespace scene
 {
 // NOTE: These enums and strings must exactly match what is in the SIX
 //       standard.  Since the scene module needs this concept as well though,
 //       it's present here.
-struct FrameType final
+struct SIX_SCENE_API FrameType final
 {
     //! The enumerations allowed
     enum FrameTypesEnum

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_DATA_H__
 #define __SIX_DATA_H__
 
@@ -32,6 +33,7 @@
 #include "six/Types.h"
 #include "six/Classification.h"
 #include "six/Utilities.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -48,7 +50,7 @@ namespace six
  *  currently NITF, GeoTIFF (SIDD only).
  *
  */
-struct Data
+struct SIX_SIX_API Data
 {
     Data() = default;
 

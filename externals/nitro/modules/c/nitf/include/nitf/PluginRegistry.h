@@ -94,9 +94,9 @@ nitf_PluginRegistry;
  *  along with an error
  *
  */
-NITFPROT(nitf_PluginRegistry *)
+NITFAPI(nitf_PluginRegistry *)
     nitf_PluginRegistry_getInstance(nitf_Error * error);
-NITFPROT(nitf_PluginRegistry*)
+NITFAPI(nitf_PluginRegistry*)
 nitf_PluginRegistry_getInstanceLog(nitf_Error* error, FILE* log);
 
 
@@ -181,6 +181,19 @@ NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_TREHandlerExistsLog(const char* ident, FILE* log);
 
 /*!
+ * Enable (or disable) a pre-loaded TRE.
+ *
+ * \param ident ID of the TRE
+ *
+ * \return true if a pre-loaded TRE handler exists, false otherwise
+ */
+
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_PreloadedTREHandlerEnable(const char* ident, NITF_BOOL enable);
+NITFAPI(void)
+nitf_PluginRegistry_PreloadedTREHandlersEnable(NITF_BOOL enable); // "Handlers", not "Handler"
+
+/*!
  * Checks if a compression handler exists for 'ident'
  *
  * \param ident ID of the compression
@@ -229,7 +242,7 @@ nitf_PluginRegistry_unload(nitf_PluginRegistry * reg, nitf_Error * error);
  *    is -1
  *  \return The plugin main, or NULL
  */
-NITFPROT(nitf_TREHandler*)
+NITFAPI(nitf_TREHandler*)
 nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry * reg,
                                        const char *ident,
                                        int *hadError,
@@ -268,7 +281,7 @@ nitf_PluginRegistry_retrieveCompConstructor(nitf_PluginRegistry * reg,
 /*
  * Retrieves a compression interface for 'comp'.  Returns NULL if this fails.
  */
-NITFPROT(nitf_CompressionInterface* )
+NITFAPI(nitf_CompressionInterface* )
 nitf_PluginRegistry_retrieveCompInterface(const char *comp,
                                           nitf_Error* error);
 

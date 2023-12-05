@@ -68,13 +68,16 @@ void DataWriterLittleEndian::operator()(std::span<const std::byte> pData, size_t
     const auto dataSize = pData.size();
     while (dataProcessed < dataSize)
     {
+        // `capacity()`, not `size()`; https://en.cppreference.com/w/cpp/container/vector/capacity
+        // "Returns the number of elements that the container has currently allocated space for."
+        // `assign()` (below) will alter `size()` to the number of current elements.
         const size_t dataToProcess =
-                std::min(mScratch.size(), dataSize - dataProcessed);
+                std::min(mScratch.capacity(), dataSize - dataProcessed);
 
         const auto data = adjust_span(pData, dataProcessed);
         const auto begin = data.begin();
         const auto end = begin + dataToProcess;
-        mScratch.assign(begin, end);
+        mScratch.assign(begin, end); // see above; changes `size()`.
 
         cphd::byteSwap(mScratch.data(),
                        elementSize,

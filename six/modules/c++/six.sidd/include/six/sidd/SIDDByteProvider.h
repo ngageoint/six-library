@@ -19,12 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __SIX_SIDD_SIDD_BYTE_PROVIDER_H__
 #define __SIX_SIDD_SIDD_BYTE_PROVIDER_H__
 
 #include <six/ByteProvider.h>
 #include <six/sidd/DerivedData.h>
+#include <six/sidd/Exports.h>
 
 namespace six
 {
@@ -46,7 +47,7 @@ namespace sidd
  * copies.  A single logical SIDD image which spans multiple NITF image segments
  * is supported; unrelated SIDD images in one NITF are not yet supported.
  */
-class SIDDByteProvider : public six::ByteProvider
+class SIX_SIDD_API SIDDByteProvider final : public six::ByteProvider
 {
 public:
     /*!

@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD03_FILE_HEADER_H__
 #define __CPHD03_FILE_HEADER_H__
 
@@ -30,9 +30,11 @@
 #include <io/SeekableStreams.h>
 #include <cphd/BaseFileHeader.h>
 
+#include "cphd03/Exports.h"
+
 namespace cphd03
 {
-class FileHeader : public cphd::BaseFileHeader
+class SIX_CPHD03_API FileHeader : public cphd::BaseFileHeader
 {
 public:
     static const char DEFAULT_VERSION[];

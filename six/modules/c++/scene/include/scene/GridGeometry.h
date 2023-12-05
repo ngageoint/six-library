@@ -19,17 +19,19 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_GRID_GEOMETRY_H__
 #define __SCENE_GRID_GEOMETRY_H__
 
 #include "scene/Types.h"
+#include "scene/Exports.h"
 
 #include <math/poly/OneD.h>
 #include <math/poly/TwoD.h>
 
 namespace scene
 {
-class GridGeometry
+class SIX_SCENE_API GridGeometry
 {
 public:
     enum { MAX_ITER = 50 };
@@ -53,7 +55,7 @@ public:
 };
 
 
-class PlanarGridGeometry : public GridGeometry
+class SIX_SCENE_API PlanarGridGeometry : public GridGeometry
 {
 public:
     PlanarGridGeometry(const Vector3& row,

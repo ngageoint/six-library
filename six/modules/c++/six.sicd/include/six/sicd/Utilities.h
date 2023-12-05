@@ -37,12 +37,13 @@
 #include <six/sicd/SICDMesh.h>
 #include <six/NITFReadControl.h>
 #include <six/sicd/AreaPlaneUtility.h>
+#include <six/sicd/Exports.h>
 
 namespace six
 {
 namespace sicd
 {
-struct Utilities final
+struct SIX_SICD_API Utilities final
 {
     /*!
      * Build SceneGeometry from ComplexData members
@@ -646,7 +647,7 @@ struct Utilities final
 
 
 // c.f. six_sicd.i
-extern std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname, const std::vector<std::filesystem::path>*,
+SIX_SICD_API std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname, const std::vector<std::filesystem::path>*,
     std::unique_ptr<ComplexData>& pComplexData); 
 inline std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname, const std::vector<std::filesystem::path>& schemaPaths,
     std::unique_ptr<ComplexData>& pComplexData)
@@ -659,15 +660,15 @@ inline std::vector<std::byte> readFromNITF(const std::filesystem::path& pathname
 }
 
 // c.f. six_sicd.i
-extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, std::span<const six::zfloat> image);
-extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, std::span<const six::zfloat> image);
-extern void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexImage&);
+SIX_SICD_API void writeAsNITF(const std::filesystem::path&, const std::vector<std::string>& schemaPaths, const ComplexData&, std::span<const six::zfloat> image);
+SIX_SICD_API void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexData&, std::span<const six::zfloat> image);
+SIX_SICD_API void writeAsNITF(const std::filesystem::path&, const std::vector<std::filesystem::path>& schemaPaths, const ComplexImage&);
 
 
 namespace testing
 {
-    extern std::vector<six::zfloat> make_complex_image(const types::RowCol<size_t>&);
-    extern std::vector<std::byte> toBytes(const ComplexImageResult&);
+    SIX_SICD_API std::vector<six::zfloat> make_complex_image(const types::RowCol<size_t>&);
+    SIX_SICD_API std::vector<std::byte> toBytes(const ComplexImageResult&);
 }
 
 }

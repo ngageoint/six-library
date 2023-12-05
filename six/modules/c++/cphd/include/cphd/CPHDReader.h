@@ -32,6 +32,7 @@
 #include <cphd/PVPBlock.h>
 #include <cphd/Wideband.h>
 #include <cphd/SupportBlock.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -42,7 +43,7 @@ namespace cphd
  *  Requires a valid CPHD file,and optional schemas
  *  for XML format verification
  */
-struct CPHDReader final
+struct SIX_CPHD_API CPHDReader final
 {
     /*
      *  \func CPHDReader constructor

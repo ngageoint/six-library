@@ -19,12 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_OPTIONS_H__
 #define __SIX_OPTIONS_H__
 
+#include <map>
+
 #include "six/Types.h"
 #include "six/Parameter.h"
-#include <map>
+#include "six/Exports.h"
 
 namespace six
 {
@@ -41,7 +44,7 @@ namespace six
  *  from a string type into the native one.
  *
  */
-class Options
+class SIX_SIX_API Options
 {
 public:
     typedef std::map<std::string, Parameter> ParameterMap;

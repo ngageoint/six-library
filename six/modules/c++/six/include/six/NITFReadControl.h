@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_NITF_READ_CONTROL_H__
 #define __SIX_NITF_READ_CONTROL_H__
-#pragma once
 
 #include <map>
 #include <memory>
@@ -31,6 +31,7 @@
 #include "six/ReadControl.h"
 #include "six/ReadControlFactory.h"
 #include "six/Adapters.h"
+#include "six/Exports.h"
 #include <io/SeekableStreams.h>
 #include <import/nitf.hpp>
 #include <nitf/IOStreamReader.hpp>
@@ -52,7 +53,7 @@ namespace six
  *  This class is not copyable.
  *
  */
-struct NITFReadControl : public ReadControl
+struct SIX_SIX_API NITFReadControl : public ReadControl
 {
     //!  Constructor
     NITFReadControl(FILE* log);

@@ -253,7 +253,7 @@ int main(int argc, char** argv)
         validateArguments(argc, argv);
         const std::string xmlPathname(argv[1]);
 
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         bool allPassed = true;
         allPassed = addingNullSegmentWriterShouldThrow(xmlPathname) && allPassed;

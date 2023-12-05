@@ -37,6 +37,7 @@
 #include <six/XsElement.h>
 
 #include "cphd/Types.h"
+#include "cphd/Exports.h"
 
 namespace cphd
 {
@@ -50,7 +51,7 @@ namespace cphd
  *  the binary parameter in the set of Per Vector
  *  parameters provided for each vector.
  */
-struct PVPType
+struct SIX_CPHD_API PVPType
 {
     static constexpr size_t WORD_BYTE_SIZE = 8;
 
@@ -133,7 +134,7 @@ std::ostream& operator<< (std::ostream& os, const PVPType& p);
  *
  *  Specifies additional (or custom) per vector parameters
  */
-struct APVPType : PVPType
+struct SIX_CPHD_API APVPType : PVPType
 {
     //! Constructor
     APVPType();
@@ -191,7 +192,7 @@ private:
 /*!
  *  \struct PerVectorParameterXYZ
  */
-struct PerVectorParameterXYZ final
+struct SIX_CPHD_API PerVectorParameterXYZ final
 {
     PerVectorParameterXYZ();
     ~PerVectorParameterXYZ() = default;
@@ -223,7 +224,7 @@ inline std::ostream& operator<<(std::ostream& os, const PerVectorParameterXYZ& v
  *
  *  \brief Per vector parameters for Electrical Boresight
  */
-struct PerVectorParameterEB final
+struct SIX_CPHD_API PerVectorParameterEB final
 {
     PerVectorParameterEB();
     ~PerVectorParameterEB() = default;
@@ -257,7 +258,7 @@ inline std::ostream& operator<<(std::ostream& os, const PerVectorParameterEB& v)
  * Parameters included that specify the Transmit Antenna ACF orientation and the EB Steering vector.
  * (New in CPHD 1.1.0)
  */
-struct TxAntenna final
+struct SIX_CPHD_API TxAntenna final
 {
     bool operator==(const TxAntenna& other) const
     {
@@ -294,7 +295,7 @@ inline std::ostream& operator<<(std::ostream& os, const TxAntenna& v)
  * Parameters included that specify the Receive Antenna ACF orientation and the EB Steering vector.
  * (New in CPHD 1.1.0)
  */
-struct RcvAntenna final
+struct SIX_CPHD_API RcvAntenna final
 {
     bool operator==(const RcvAntenna& other) const
     {
@@ -332,7 +333,7 @@ inline std::ostream& operator<<(std::ostream& os, const RcvAntenna& v)
  *
  *  Provided for each channel of a given product.
  */
-struct Pvp final
+struct SIX_CPHD_API Pvp final
 {
     /*!
      *  Transmit time for the center of the transmitted pulse relative to the
@@ -626,7 +627,7 @@ private:
 };
 
 //! Ostream operators
-std::ostream& operator<< (std::ostream& os, const APVPType& a);
-std::ostream& operator<< (std::ostream& os, const Pvp& p);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const APVPType& a);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const Pvp& p);
 }
 #endif // SIX_cphd_PVP_h_INCLUDED_

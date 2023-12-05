@@ -20,6 +20,7 @@
  *
  */
 
+#pragma once
 #ifndef __SYS_FILE_FINDER_H__
 #define __SYS_FILE_FINDER_H__
 
@@ -37,7 +38,7 @@ namespace sys
 /**
  * Predicate interface for all entries
  */
-struct FilePredicate
+struct CODA_OSS_API FilePredicate
 {
     using argument_type = std::string;
     using result_type = bool;
@@ -58,7 +59,7 @@ struct ExistsPredicate : FilePredicate
 /**
  * Predicate that matches files only (no directories)
  */
-struct FileOnlyPredicate: public FilePredicate
+struct CODA_OSS_API FileOnlyPredicate : public FilePredicate
 {
     virtual ~FileOnlyPredicate() = default;
     virtual bool operator()(const std::string& entry) const override;
@@ -147,7 +148,7 @@ protected:
  *  The FileFinder class allows you to search for 
  *  files/directories in a clean way.
  */
-struct FileFinder final
+struct CODA_OSS_API FileFinder final
 {
     FileFinder() = default;
     ~FileFinder() = default;
@@ -167,7 +168,7 @@ struct FileFinder final
 // until either the file is found or we stop at a ".git" directory.
 //
 // This (obviously) might take a while, so consider whether the result should be cached.
-coda_oss::filesystem::path findFirstFile(const coda_oss::filesystem::path& startingDirectory, const coda_oss::filesystem::path& filename);
+CODA_OSS_API coda_oss::filesystem::path findFirstFile(const coda_oss::filesystem::path& startingDirectory, const coda_oss::filesystem::path& filename);
 coda_oss::filesystem::path findFirstDirectory(const coda_oss::filesystem::path& startingDirectory, const coda_oss::filesystem::path& dir);
 
 // This is here most to avoid creating a new module for a few utility routines
@@ -175,11 +176,11 @@ namespace test // i.e., sys::test
 {
     // Try to find the specified "root" directory starting at the given path.
     // Used by unittest to find sample files.
-    coda_oss::filesystem::path findRootDirectory(const coda_oss::filesystem::path& p, const std::string& rootName,
+    CODA_OSS_API coda_oss::filesystem::path findRootDirectory(const coda_oss::filesystem::path& p, const std::string& rootName,
         std::function<bool(const coda_oss::filesystem::path&)> isRoot);
 
-    coda_oss::filesystem::path findCMakeBuildRoot(const coda_oss::filesystem::path& p);
-    bool isCMakeBuild(const coda_oss::filesystem::path& p);
+    CODA_OSS_API coda_oss::filesystem::path findCMakeBuildRoot(const coda_oss::filesystem::path& p);
+    bool CODA_OSS_API isCMakeBuild(const coda_oss::filesystem::path& p);
 
     coda_oss::filesystem::path findCMakeInstallRoot(const coda_oss::filesystem::path& p);
     bool isCMakeInstall(const coda_oss::filesystem::path& p);

@@ -16,6 +16,9 @@
     <Filter Include="nrt">
       <UniqueIdentifier>{2e28e7c0-ed75-4c97-84b1-cb70b635b60e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="nitf\shared">
+      <UniqueIdentifier>{e0402428-7ec8-4079-8b39-48d8db79bf50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cgm\include\cgm\BasicTypes.h">
@@ -358,6 +361,9 @@
     <ClInclude Include="j2k\include\j2k\TileWriter.h">
       <Filter>j2k</Filter>
     </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Exports.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgm\source\CircleElement.c">
@@ -672,6 +678,15 @@
     </ClCompile>
     <ClCompile Include="j2k\source\TileWriter.c">
       <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\shared\HISTOA.c">
+      <Filter>nitf\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\TREs.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\shared\ACCHZB.c">
+      <Filter>nitf\shared</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

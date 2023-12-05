@@ -463,5 +463,8 @@
     <ClInclude Include="nitf\include\nitf\UnitTests.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TREsTyped.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_GEO_DATA_BASE_H__
 #define __SIX_GEO_DATA_BASE_H__
 
@@ -27,6 +28,7 @@
 #include "six/GeoInfo.h"
 #include "six/Parameter.h"
 #include "six/ParameterCollection.h"
+#include "six/Exports.h"
 #include "scene/ProjectionModel.h"
 #include <mem/ScopedCloneablePtr.h>
 #include <logging/Logger.h>
@@ -42,7 +44,7 @@ namespace six
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
-struct GeoDataBase
+struct SIX_SIX_API GeoDataBase
 {
     GeoDataBase() = default;
 

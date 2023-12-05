@@ -100,7 +100,7 @@ static nitf_TREDescriptionInfo descriptions[] = {
     { "AIMIDA_89", descrip_00089, 89 },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet AIMIDADescriptionSet = { 0, descriptions };
 
 NITF_DECLARE_PLUGIN(AIMIDA)
 

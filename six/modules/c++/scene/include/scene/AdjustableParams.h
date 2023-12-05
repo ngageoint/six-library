@@ -19,17 +19,19 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_ADJUSTABLE_PARAMS_H__
 #define __SCENE_ADJUSTABLE_PARAMS_H__
 
 #include <string>
 
 #include <scene/Types.h>
+#include <scene/Exports.h>
 
 namespace scene
 {
 // These should be in RIC_ECF
-struct AdjustableParams
+struct SIX_SCENE_API AdjustableParams
 {
     enum ParamsEnum
     {
