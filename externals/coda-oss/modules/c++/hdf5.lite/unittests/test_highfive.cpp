@@ -53,10 +53,11 @@ TEST_CASE(test_highfive_load)
     {
         std::vector<double> lat;
         const auto rc = hdf5::lite::loadDataSet(file, "/g4/lat", lat);
+        static_assert(decltype(rc)::rank() == 2, "wrong rank()");
         TEST_ASSERT_EQ(lat.size(), 19);
-        TEST_ASSERT_EQ(lat.size(), rc.area());
-        TEST_ASSERT_EQ(rc.dims().row, 19);
-        TEST_ASSERT_EQ(rc.dims().col, 1);
+        TEST_ASSERT_EQ(lat.size(), rc.size());
+        TEST_ASSERT_EQ(rc.extent(0), 19);
+        TEST_ASSERT_EQ(rc.extent(1), 1);
         TEST_ASSERT_ALMOST_EQ(lat[0], -90.0);
         TEST_ASSERT_ALMOST_EQ(lat[0], -lat[18]);
     }
@@ -103,9 +104,9 @@ template<typename T>
 static auto read_complex(const HighFive::DataSet& r, const HighFive::DataSet& i) 
 {
     std::vector<T> r_result;
-    hdf5::lite::readDataSet(r, r_result);
+    std::ignore = hdf5::lite::readDataSet(r, r_result);
     std::vector<T> i_result;
-    hdf5::lite::readDataSet(i, i_result);
+    std::ignore = hdf5::lite::readDataSet(i, i_result);
     return std::make_pair(r, i);
 }
 template<typename T>
@@ -405,11 +406,11 @@ TEST_CASE(test_highfive_write)
 
     const types::RowCol<size_t> dims{10, 20};
     std::vector<double> data_(dims.area());
-    const hdf5::lite::SpanRC<double> data(data_.data(), dims);
+    hdf5::lite::SpanRC<double> data(data_.data(), std::array<size_t, 2>{dims.row, dims.col});
     double d = 0.0;
-    for (size_t r = 0; r<dims.row; r++)
+    for (size_t r = 0; r < data.extent(0); r++)
     {
-        for (size_t c = 0; c < dims.col; c++)
+        for (size_t c = 0; c < data.extent(1); c++)
         {
             data(r, c) = d++;
         }    
@@ -421,7 +422,7 @@ TEST_CASE(test_highfive_write)
         TEST_ASSERT_EQ(dimensions.size(), 2);
         TEST_ASSERT_EQ(dims.row, dimensions[0]);
         TEST_ASSERT_EQ(dims.col, dimensions[1]);
-        TEST_ASSERT_EQ(ds.getElementCount(), data.area());
+        TEST_ASSERT_EQ(ds.getElementCount(), data.size());
     }
     // Be sure we can read the file just written
     {
@@ -446,7 +447,8 @@ TEST_CASE(test_highfive_write)
 
         std::vector<double> result;
         const auto rc = hdf5::lite::loadDataSet(file, "/DS1", result);
-        TEST_ASSERT(rc.dims() == dims);
+        TEST_ASSERT(rc.extent(0) == dims.row);
+        TEST_ASSERT(rc.extent(1) == dims.col);
         TEST_ASSERT_EQ(dims.area(), result.size());
         for (size_t i = 0; i < result.size(); i++)
         {
