@@ -132,14 +132,13 @@ DirectionParameters::calculateWeightFunction() const
         return nullptr;
     }
 
-    std::string windowName(weightType->windowName);
-    str::upper(windowName);
+    const std::string windowName(weightType->windowName);
 
-    if (windowName == "UNIFORM")
+    if (str::eq(windowName, "UNIFORM"))
     {
         return std::make_unique<Identity>();
     }
-    if (windowName == "HAMMING")
+    if (str::eq(windowName, "HAMMING"))
     {
         double coef = 0.0;
         if (weightType->parameters.empty() || weightType->parameters[0].str().empty())
@@ -156,11 +155,11 @@ DirectionParameters::calculateWeightFunction() const
 
         return std::make_unique<RaisedCos>(coef);
     }
-    if (windowName == "HANNING")
+    if (str::eq(windowName, "HANNING"))
     {
         return std::make_unique<RaisedCos>(0.50);
     }
-    if (windowName == "KAISER")
+    if (str::eq(windowName, "KAISER"))
     {
         return std::make_unique<Kaiser>(double(weightType->parameters[0]));
     }
