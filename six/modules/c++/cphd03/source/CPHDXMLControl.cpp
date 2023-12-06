@@ -778,8 +778,7 @@ void CPHDXMLControl::fromXML(const xml::lite::Element* srpXML, SRP& srp)
 #if ENFORCESPEC
     srp.srpType = cphd::SRPType(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
 #else
-    std::string s(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
-    str::upper(s);
+    const auto s = str::upper(getFirstAndOnly(srpXML, "SRPType")->getCharacterData());
     srp.srpType = cphd::SRPType::toType(s);
 #endif
     parseInt(getFirstAndOnly(srpXML, "NumSRPs"), srp.numSRPs);
