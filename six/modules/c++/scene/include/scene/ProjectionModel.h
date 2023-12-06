@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_PROJECTION_MODEL_H__
 #define __SCENE_PROJECTION_MODEL_H__
 
@@ -31,10 +32,11 @@
 #include <scene/GridECEFTransform.h>
 #include <scene/AdjustableParams.h>
 #include <scene/Errors.h>
+#include <scene/Exports.h>
 
 namespace scene
 {
-class ProjectionModel
+class SIX_SCENE_API ProjectionModel
 {
 public:
     enum { MAX_ITER = 50 };
@@ -368,7 +370,7 @@ protected:
     Errors mErrors;
 };
 
-class ProjectionModelWithImageVectors : public ProjectionModel
+class SIX_SCENE_API ProjectionModelWithImageVectors : public ProjectionModel
 {
 public:
     ProjectionModelWithImageVectors(
@@ -392,7 +394,7 @@ protected:
     Vector3 mImagePlaneColVector;
 };
 
-class RangeAzimProjectionModel : public ProjectionModelWithImageVectors
+class SIX_SCENE_API RangeAzimProjectionModel : public ProjectionModelWithImageVectors
 {
 public:
     RangeAzimProjectionModel(const math::poly::OneD<double>& polarAnglePoly,
@@ -420,7 +422,7 @@ private:
     math::poly::OneD<double> mKSFPolyPrime;
 };
 
-class RangeZeroProjectionModel : public ProjectionModelWithImageVectors
+class SIX_SCENE_API RangeZeroProjectionModel : public ProjectionModelWithImageVectors
 {
 public:
     RangeZeroProjectionModel(const math::poly::OneD<double>& timeCAPoly,
@@ -448,7 +450,7 @@ private:
     double mRangeCA;
 };
 
-class PlaneProjectionModel : public ProjectionModelWithImageVectors
+class SIX_SCENE_API PlaneProjectionModel : public ProjectionModelWithImageVectors
 {
 public:
     PlaneProjectionModel(const Vector3& slantPlaneNormal,
@@ -471,7 +473,7 @@ public:
 typedef PlaneProjectionModel XRGYCRProjectionModel;
 typedef PlaneProjectionModel XCTYATProjectionModel;
 
-class GeodeticProjectionModel : public ProjectionModel
+class SIX_SCENE_API GeodeticProjectionModel : public ProjectionModel
 {
 public:
     GeodeticProjectionModel(const Vector3& slantPlaneNormal,

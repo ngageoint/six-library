@@ -34,6 +34,8 @@
 #include <six/Utilities.h>
 #include <six/sicd/GeoData.h>
 
+#include "cphd/Exports.h"
+
 namespace cphd
 {
 // Use the same types that SIX uses
@@ -98,7 +100,7 @@ enum class Version
     v1_0_1, // {"1.0.1", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.0.1")},
     v1_1_0, // {"1.1.0", xml::lite::Uri("http://api.nsgreg.nga.mil/schema/cphd/1.1.0")}
 };
-std::string to_string(Version); // "1.0.0", "1.0.1", "1.1.0"
+SIX_CPHD_API std::string to_string(Version); // "1.0.0", "1.0.1", "1.1.0"
 
 // Existing code handles this via XML validation, not C++.
 using ZeroToOne = double;

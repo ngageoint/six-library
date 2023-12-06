@@ -93,7 +93,7 @@ Data::SupportArray Data::getSupportArrayById(const std::string& id) const
     {
         std::ostringstream ostr;
         ostr << "ID: " << id << " is not a valid identifier";
-        throw except::Exception(ostr.str());
+        throw except::Exception(Ctxt(ostr));
     }
     return supportArrayMap.find(id)->second;
 }
@@ -106,14 +106,14 @@ void Data::setSupportArray(const std::string& id, size_t numRows,
     {
         std::ostringstream ostr;
         ostr << "Identifier " << id << " is not unique";
-        throw except::Exception(ostr.str());
+        throw except::Exception(Ctxt(ostr));
     }
 
     if (mOffsetMap.count(offset))
     {
         std::ostringstream ostr;
         ostr << "Offset " << offset << " is not unique";
-        throw except::Exception(ostr.str());
+        throw except::Exception(Ctxt(ostr));
     }
 
     // Add to ordered map
@@ -126,7 +126,7 @@ void Data::setSupportArray(const std::string& id, size_t numRows,
         {
             std::ostringstream ostr;
             ostr << "Invalid size or offset of support array given for id: " << id;
-            throw except::Exception(ostr.str());
+            throw except::Exception(Ctxt(ostr));
         }
     }
     if (mOffsetMap.upper_bound(offset) != mOffsetMap.end())
@@ -135,7 +135,7 @@ void Data::setSupportArray(const std::string& id, size_t numRows,
         {
             std::ostringstream ostr;
             ostr << "Invalid size or offset of support array given for id: " << id;
-            throw except::Exception(ostr.str());
+            throw except::Exception(Ctxt(ostr));
         }
     }
 
@@ -187,9 +187,8 @@ void Data::verifyChannelInRange(size_t channel) const
     {
     std::ostringstream ostr;
     ostr << "Channel provided is " << channel << "\n"
-            << "while only " << channels.size()
-            << " channels exist \n";
-    throw except::Exception(ostr.str());
+            << "while only " << channels.size() << " channels exist \n";
+    throw except::Exception(Ctxt(ostr));
     }
 }
 

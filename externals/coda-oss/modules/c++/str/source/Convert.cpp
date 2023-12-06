@@ -42,32 +42,25 @@ template<> std::string str::toType<std::string>(const std::string& s)
 
 template<> bool str::toType<bool>(const std::string& s)
 {
-    std::string ss = s;
-    str::lower(ss);
-
-    if (ss == "true")
+    if (eq(s, "true")) // case-insensitive compare
     {
         return true;
     }
-    else if (ss == "false")
+    if (eq(s, "false"))  // case-insensitive compare
     {
         return false;
     }
-    else if (str::isNumeric(ss))
+
+    // no need for lower(), digits don't have case
+    if (str::isNumeric(s))
     {
         int value(0);
-        std::stringstream buf(ss);
+        std::stringstream buf(s);
         buf >> value;
         return (value != 0);
     }
-    else
-    {
-        throw except::BadCastException(except::Context(__FILE__, __LINE__,
-            std::string(""), std::string(""),
-            std::string("Invalid bool: '") + s + std::string("'")));
-    }
 
-    return false;
+    throw except::BadCastException(except::Context(__FILE__, __LINE__, "", "", "Invalid bool: '" + s + "'"));
 }
 
 long long str::strtoll(const char *str, char **endptr, int base)

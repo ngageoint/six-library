@@ -235,8 +235,6 @@ static bool test_create_nitf_with_byte_provider__testRead(const std::string& pat
 
 TEST_CASE(test_create_nitf_with_byte_provider_test)
 {
-    nitf::Test::setNitfPluginPath();
-
     // We can't actually compress. This is just for illustration.
     const bool shouldCompress = false;
     const std::string outname("test_create.nitf");
@@ -397,8 +395,6 @@ static bool test_create_nitf__testRead(const std::string& pathname, bool isMono 
 
 TEST_CASE(test_create_nitf_test)
 {
-    nitf::Test::setNitfPluginPath();
-
     const std::string outname("test_create.nitf");
 
 
@@ -474,8 +470,6 @@ static void RecordThread_run()
 
 TEST_CASE(test_mt_record)
 {
-    nitf::Test::setNitfPluginPath();
-
     constexpr int NTHR = 2;
     
     std::array<std::thread, NTHR> thrs;
@@ -500,10 +494,9 @@ TEST_CASE(test_mt_record)
     TEST_ASSERT_TRUE(true);
 }
 
-
-
-
 TEST_MAIN(
+    nitf::Test::setNitfPluginPath();
+
     TEST_CHECK(test_create_nitf_with_byte_provider_test);
     TEST_CHECK(test_create_nitf_test);
     TEST_CHECK(test_mt_record);

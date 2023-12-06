@@ -20,19 +20,21 @@
  *
  */
 
+#pragma once
 #ifndef SIX_six_Logger_h_INCLUDED_
 #define SIX_six_Logger_h_INCLUDED_
-#pragma once
 
 #include <memory>
 #include <new> // std::nothrow_t
 
 #include <import/logging.h>
 
+#include "six/Exports.h"
+
 namespace six
 {
 	// Encapsulate common (and legacy) logging code
-	class Logger final
+	class SIX_SIX_API Logger final
 	{
 		logging::Logger* pLog_ = nullptr;
 		bool ownLog_ = false;

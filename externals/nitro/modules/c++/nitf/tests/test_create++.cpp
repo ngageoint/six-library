@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     {
         if (argc != 2)
         {
-            throw nitf::NITFException(Ctxt(FmtX("Usage %s <file-to-create>\n",
+            throw nitf::NITFException(Ctxt(str::Format("Usage %s <file-to-create>\n",
                                                 argv[0])));
         }
 

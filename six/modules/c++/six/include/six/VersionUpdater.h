@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_VERSION_UPDATER_H__
 #define __SIX_VERSION_UPDATER_H__
 
@@ -26,6 +27,7 @@
 #include <vector>
 #include <logging/Logger.h>
 #include <six/Data.h>
+#include <six/Exports.h>
 
 namespace six
 {
@@ -37,7 +39,7 @@ namespace six
  * updates. Some inserted fields will be valid XML but
  * mathematically garbage.
  */
-class VersionUpdater
+class SIX_SIX_API VersionUpdater
 {
 public:
     /*!

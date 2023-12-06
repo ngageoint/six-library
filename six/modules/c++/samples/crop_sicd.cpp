@@ -155,7 +155,7 @@ int main(int argc, char** argv)
         }
 
         // Crop it
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         if (options->hasValue("ecef"))
         {
@@ -190,14 +190,14 @@ int main(int argc, char** argv)
 
         return 0;
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-        return 1;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
+        return 1;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
         return 1;
     }
     catch (...)

@@ -82,17 +82,11 @@
 #include <import/cphd03.h>
 
 #pragma comment(lib, "ws2_32")
-#pragma comment(lib, "mt-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "str-c++")
-#pragma comment(lib, "xerces-c")
-#pragma comment(lib, "xml.lite-c++.lib")
 
 #pragma warning(push)
-#pragma warning(disable: 4800) // Implicit conversion from '...' to bool.Possible information loss
+#pragma warning(disable: 4800) // Implicit conversion from '...' to bool. Possible information loss
 #pragma warning(disable: 4388) // '...': signed / unsigned mismatch
-#pragma warning(disable: 4866) // compiler may not enforce left - to - right evaluation order for call to '...'
+#pragma warning(disable: 4866) // compiler may not enforce left-to-right evaluation order for call to '...'
 
 #include "CppUnitTest.h"
 #pragma warning(pop)

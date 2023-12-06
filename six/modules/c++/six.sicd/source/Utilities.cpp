@@ -59,6 +59,7 @@
 #include <six/sicd/ImageData.h>
 #include <six/sicd/NITFReadComplexXMLControl.h>
 #include <six/sicd/DataParser.h>
+#include <six/sicd/Exports.h>
 
 namespace fs = std::filesystem;
 
@@ -97,7 +98,7 @@ static auto toComplex_(double A, uint8_t phase)
     const auto angle = units::Radians<double>{ 2 * std::numbers::pi * P };
     double sin_angle, cos_angle;
     SinCos(angle, sin_angle, cos_angle);
-    six::zfloat S(A * cos_angle, A * sin_angle);
+    six::zfloat S(gsl::narrow_cast<float>(A * cos_angle), gsl::narrow_cast<float>(A * sin_angle));
     return S;
 }
 six::zfloat six::sicd::Utilities::toComplex(uint8_t amplitude, uint8_t phase)
@@ -842,7 +843,7 @@ void Utilities::getWidebandData(const std::string& sicdPathname,
     getWidebandData(sicdPathname, schemaPaths, complexData, offset, extent, buffer);
 }
 
-template<>
+template<> SIX_SICD_API
 void Utilities::getRawData(NITFReadControl& reader,
     const ComplexData& complexData,
     const types::RowCol<size_t>& offset,
@@ -858,7 +859,7 @@ void Utilities::getRawData(NITFReadControl& reader,
     getWidebandData(reader, complexData, offset, extent, buffer);
 }
 
-template<>
+template<> SIX_SICD_API
 void Utilities::getRawData(NITFReadControl& reader,
     const ComplexData& complexData,
     const types::RowCol<size_t>& offset,
@@ -884,7 +885,7 @@ void Utilities::getRawData(NITFReadControl& reader,
         });
 }
 
-template<>
+template<> SIX_SICD_API
 void Utilities::getRawData(NITFReadControl& reader,
     const ComplexData& complexData,
     const types::RowCol<size_t>& offset,
@@ -1040,7 +1041,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string&
     return parser.fromXML(xmlStr);
 }
 
-std::string Utilities::toXMLString(const ComplexData& data,
+std::u8string Utilities::toXMLString(const ComplexData& data,
                                    const std::vector<std::string>& schemaPaths_,
                                    logging::Logger* logger)
 {
@@ -1048,7 +1049,13 @@ std::string Utilities::toXMLString(const ComplexData& data,
     std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
         [](const std::string& s) { return s; });
 
-    const auto result = toXMLString(data, &schemaPaths, logger);
+    return toXMLString(data, &schemaPaths, logger);
+ }
+std::string Utilities::toXMLString_(const ComplexData& data,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger* logger)
+{
+    const auto result = toXMLString(data, schemaPaths, logger);
     return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const ComplexData& data,
@@ -1628,7 +1635,7 @@ std::vector<std::byte> six::sicd::readFromNITF(const fs::path& pathname, const s
 
 static void writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths_, const six::sicd::ComplexData& data, const six::zfloat* image_)
 {
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
     six::NITFWriteControl writer(data.unique_clone());
     writer.setLogger(logging::setupLogger("out"));

@@ -19,10 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_CPHD_XML_CONTROL_H__
 #define __CPHD_CPHD_XML_CONTROL_H__
-#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -36,6 +35,7 @@
 #include <xml/lite/Document.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Types.h>
+#include <cphd/Exports.h>
 #include <six/Logger.h>
 
 namespace cphd
@@ -46,7 +46,7 @@ namespace cphd
  *  \brief This class converts a Metadata object into a CPHD XML
  *  Document Object Model (DOM) and vice-versa.
  */
-class CPHDXMLControl
+class SIX_CPHD_API CPHDXMLControl
 {
 public:
     /*!

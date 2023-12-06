@@ -20,6 +20,7 @@
  *
  */
 
+#pragma once
 #ifndef __SIX_GEO_INFO_H__
 #define __SIX_GEO_INFO_H__
 
@@ -28,6 +29,7 @@
 
 #include <six/Types.h>
 #include <six/ParameterCollection.h>
+#include <six/Exports.h>
 #include <mem/ScopedCopyablePtr.h>
 
 namespace six
@@ -41,7 +43,7 @@ namespace six
  *
  *  Compiler-generated copy constructor and assignment operator are sufficient
  */
-struct GeoInfo
+struct SIX_SIX_API GeoInfo
 {
     GeoInfo() = default;
 
@@ -79,7 +81,7 @@ struct GeoInfo
 };
 
 //! Ostream operator
-std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
+SIX_SIX_API std::ostream& operator<< (std::ostream& os, const GeoInfo& g);
 }
 
 #endif

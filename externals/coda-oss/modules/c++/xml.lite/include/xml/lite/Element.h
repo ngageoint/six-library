@@ -499,7 +499,7 @@ private:
     coda_oss::u8string mCharacterData;
 };
 
-Element& add(const xml::lite::QName&, const std::string& value, Element& parent);
+CODA_OSS_API Element& add(const xml::lite::QName&, const std::string& value, Element& parent);
 
 #ifndef SWIG
 // The (old) version of SWIG we're using doesn't like certain C++11 features.

@@ -96,7 +96,7 @@ bool RMAT::validate(const Vector3& scp, logging::Logger& log)
         messageBuilder << "RMA fields inconsistent." << std::endl
             << "RMA.RMAT.DopConeAngleRef: " << dopConeAngleRef
             << std::endl << "Derived RMA.RMAT.DopConeAngleRef: " << dcaRef;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
     return valid;
@@ -181,7 +181,7 @@ bool RMCR::validate(const Vector3& scp, logging::Logger& log)
         messageBuilder << "RMA fields inconsistent." << std::endl
             << "RMA.RMCR.DopConeAngleRef: " << dopConeAngleRef << std::endl
             << "Derived RMA.RMCR.DopConeAngleRef: " << dcaRef;
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
     return valid;
@@ -264,7 +264,7 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
         messageBuilder << "RMA.INCA fields inconsistent." << std::endl
             << "RMA.INCA.DopplerCentroidPoly/DopplerCentroidCOA "
             << "should not be included for SPOTLIGHT collection.";
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -277,7 +277,7 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
         messageBuilder << "RMA.INCA fields inconsistent." << std::endl
             << "RMA.INCA.DopplerCentroidPoly/COA required "
             << "for non-SPOTLIGHT collection.";
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -288,7 +288,7 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
         messageBuilder << "RMA.INCA.FreqZero is typically the center transmit frequency" << std::endl
             << "RMA.INCA.FreqZero: " << freqZero
             << "Center transmit frequency: " << fc;
-        log.warn(messageBuilder.str());
+        log.warn(messageBuilder);
         valid = false;
     }
 
@@ -299,7 +299,7 @@ bool INCA::validate(const CollectionInformation& collectionInformation,
         messageBuilder << "RMA.INCA fields inconsistent." << std::endl
             << "RMA.INCA.rangeCA: " << rangeCA
             << "Derived RMA.INCA.rangeCA: " << derivedRangeCa(scp, arpPoly);
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -417,6 +417,6 @@ bool RMA::validate(const CollectionInformation& collectionInformation,
     std::ostringstream messageBuilder;
     messageBuilder << "Exactly one of RMA->RMAT, RMA->RMCR, RMA->INCA "
         << "must exist.";
-    log.error(messageBuilder.str());
+    log.error(messageBuilder);
     return false;
 }

@@ -261,14 +261,14 @@ int main(int argc, char** argv)
     {
         return main_(argc, argv);
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
         return 1;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
     }
     catch (...)
     {

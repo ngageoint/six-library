@@ -20,9 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_Enum_h_INCLUDED_
 #define SIX_six_Enum_h_INCLUDED_
-#pragma once
 
 #include <string>
 #include <map>
@@ -67,14 +67,14 @@ namespace details
     inline T index(const std::map<std::string, T>& map, const std::string& v)
     {
         const auto result = nitf::details::index(map, v);
-        const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %s", v)));
+        const except::InvalidFormatException ex(Ctxt(str::Format("Invalid enum value: %s", v)));
         return nitf::details::value(result, ex);
     }
     template<typename T>
     inline std::string index(const std::map<T, std::string>& map, T v)
     {
         const auto result = nitf::details::index(map, v);
-        const except::InvalidFormatException ex(Ctxt(FmtX("Invalid enum value: %d", v)));
+        const except::InvalidFormatException ex(Ctxt(str::Format("Invalid enum value: %d", v)));
         return nitf::details::value(result, ex);
     }
 
@@ -84,7 +84,7 @@ namespace details
         constexpr auto not_set_value = static_cast<T>(NOT_SET_VALUE);
         if (throw_if_not_set && (value == not_set_value))
         {
-            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
+            throw except::InvalidFormatException(Ctxt(str::Format("Invalid enum value: %d", value)));
         }
         return index(map, value);
     }

@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_Init_h_INCLUDED_
 #define SIX_six_Init_h_INCLUDED_
-#pragma once
 
 #include <assert.h>
 
@@ -34,6 +34,7 @@
 #include <types/RgAz.h>
 #include <import/except.h>
 #include <except/Exception.h>
+#include <six/Exports.h>
 
 namespace six
 {
@@ -49,7 +50,7 @@ DECLARE_EXCEPTION(UninitializedValue);
  *  Sometimes, the init value is the same as the default constructor
  *  (e.g., std::string), in which case this doesn't need to be used
  */
-struct Init
+struct SIX_SIX_API Init final
 {
     template<typename T> static bool isUndefined(T value)
     {
@@ -72,61 +73,65 @@ struct Init
 // This is intentionally undefined in order to generate a linker error
 template<> bool Init::undefined<bool>();
 
-template<> std::string Init::undefined<std::string>();
-template<> float Init::undefined<float>();
-template<> double Init::undefined<double>();
-template<> types::RgAz<double> Init::undefined<types::RgAz<double> >();
-template<> RowColInt Init::undefined<RowColInt>();
-template<> RowColDouble Init::undefined<RowColDouble>();
-template<> DecorrType Init::undefined<DecorrType>();
-template<> AngleMagnitude Init::undefined<AngleMagnitude>();
-template<> DateTime Init::undefined<DateTime>();
-template<> Vector3 Init::undefined<Vector3>();
-template<> LatLon Init::undefined<LatLon>();
-template<> LatLonAlt Init::undefined<LatLonAlt>();
-template<> ReferencePoint Init::undefined<ReferencePoint>();
-template<> Poly1D Init::undefined<Poly1D>();
-template<> Poly2D Init::undefined<Poly2D>();
-template<> PolyXYZ Init::undefined<PolyXYZ>();
-template<> Parameter Init::undefined<Parameter>();
+#define SIX_Init_undefined_(T) template<> SIX_SIX_API T Init::undefined<T>()
+
+SIX_Init_undefined_(std::string);
+SIX_Init_undefined_(float);
+SIX_Init_undefined_(double);
+SIX_Init_undefined_(types::RgAz<double>);
+SIX_Init_undefined_(RowColInt);
+SIX_Init_undefined_(RowColDouble);
+SIX_Init_undefined_(DecorrType);
+SIX_Init_undefined_(AngleMagnitude);
+SIX_Init_undefined_(DateTime);
+SIX_Init_undefined_(Vector3);
+SIX_Init_undefined_(LatLon);
+SIX_Init_undefined_(LatLonAlt);
+SIX_Init_undefined_(ReferencePoint);
+SIX_Init_undefined_(Poly1D);
+SIX_Init_undefined_(Poly2D);
+SIX_Init_undefined_(PolyXYZ);
+SIX_Init_undefined_(Parameter);
 
 // enums
-template<> AppliedType Init::undefined<AppliedType>();
-template<> AutofocusType Init::undefined<AutofocusType>();
-template<> BooleanType Init::undefined<BooleanType>();
-template<> ByteSwapping Init::undefined<ByteSwapping>();
-template<> CollectType Init::undefined<CollectType>();
-template<> ComplexImageGridType Init::undefined<ComplexImageGridType>();
-template<> ComplexImagePlaneType Init::undefined<ComplexImagePlaneType>();
-template<> LatLonCorners Init::undefined<LatLonCorners>();
-template<> LatLonAltCorners Init::undefined<LatLonAltCorners>();
-template<> DataType Init::undefined<DataType>();
-template<> DecimationMethod Init::undefined<DecimationMethod>();
-template<> DemodType Init::undefined<DemodType>();
-template<> DisplayType Init::undefined<DisplayType>();
-template<> DualPolarizationType Init::undefined<DualPolarizationType>();
-template<> EarthModelType Init::undefined<EarthModelType>();
-template<> FFTSign Init::undefined<FFTSign>();
-template<> FrameType Init::undefined<FrameType>();
-template<> ImageBeamCompensationType Init::undefined<ImageBeamCompensationType>();
-template<> ImageFormationType Init::undefined<ImageFormationType>();
-template<> MagnificationMethod Init::undefined<MagnificationMethod>();
-template<> OrientationType Init::undefined<OrientationType>();
-template<> PixelType Init::undefined<PixelType>();
-template<> PolarizationSequenceType Init::undefined<PolarizationSequenceType>();
-template<> PolarizationType Init::undefined<PolarizationType>();
-template<> ProjectionType Init::undefined<ProjectionType>();
-template<> RMAlgoType Init::undefined<RMAlgoType>();
-template<> RadarModeType Init::undefined<RadarModeType>();
-template<> RegionType Init::undefined<RegionType>();
-template<> RowColEnum Init::undefined<RowColEnum>();
-template<> SCPType Init::undefined<SCPType>();
-template<> SideOfTrackType Init::undefined<SideOfTrackType>();
-template<> SlowTimeBeamCompensationType Init::undefined<SlowTimeBeamCompensationType>();
-template<> XYZEnum Init::undefined<XYZEnum>();
+SIX_Init_undefined_(AppliedType);
+SIX_Init_undefined_(AutofocusType);
+SIX_Init_undefined_(BooleanType);
+SIX_Init_undefined_(ByteSwapping);
+SIX_Init_undefined_(CollectType);
+SIX_Init_undefined_(ComplexImageGridType);
+SIX_Init_undefined_(ComplexImagePlaneType);
+SIX_Init_undefined_(LatLonCorners);
+SIX_Init_undefined_(LatLonAltCorners);
+SIX_Init_undefined_(DataType);
+SIX_Init_undefined_(DecimationMethod);
+SIX_Init_undefined_(DemodType);
+SIX_Init_undefined_(DisplayType);
+SIX_Init_undefined_(DualPolarizationType);
+SIX_Init_undefined_(EarthModelType);
+SIX_Init_undefined_(FFTSign);
+SIX_Init_undefined_(FrameType);
+SIX_Init_undefined_(ImageBeamCompensationType);
+SIX_Init_undefined_(ImageFormationType);
+SIX_Init_undefined_(MagnificationMethod);
+SIX_Init_undefined_(OrientationType);
+SIX_Init_undefined_(PixelType);
+SIX_Init_undefined_(PolarizationSequenceType);
+SIX_Init_undefined_(PolarizationType);
+SIX_Init_undefined_(ProjectionType);
+SIX_Init_undefined_(RMAlgoType);
+SIX_Init_undefined_(RadarModeType);
+SIX_Init_undefined_(RegionType);
+SIX_Init_undefined_(RowColEnum);
+SIX_Init_undefined_(SCPType);
+SIX_Init_undefined_(SideOfTrackType);
+SIX_Init_undefined_(SlowTimeBeamCompensationType);
+SIX_Init_undefined_(XYZEnum);
 
-template<> bool Init::isUndefined<float>(float);
-template<> bool Init::isUndefined<double>(double);
+#undef SIX_Init_undefined_
+
+template<> SIX_SIX_API bool Init::isUndefined<float>(float);
+template<> SIX_SIX_API bool Init::isUndefined<double>(double);
 
 // These allow switching between `double` and `std::optional<double>` w/o changing a lot of other code.
 template<typename T>

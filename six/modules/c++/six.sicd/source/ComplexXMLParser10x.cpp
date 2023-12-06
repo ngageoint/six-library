@@ -283,7 +283,7 @@ XMLElem ComplexXMLParser10x::convertAntennaParamArrayToXML(
     }
     else
     {
-        throw except::Exception(Ctxt(FmtX("[Array] is a mandatory field in AntennaParams of [%s] in 1.0", name)));
+        throw except::Exception(Ctxt(str::Format("[Array] is a mandatory field in AntennaParams of [%s] in 1.0", name)));
     }
 }
 

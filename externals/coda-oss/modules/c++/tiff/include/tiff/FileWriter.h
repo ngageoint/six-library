@@ -20,9 +20,9 @@
  *
  */
 
+#pragma once 
 #ifndef CODA_OSS_tiff_FileWriter_h_INCLUDED_
 #define CODA_OSS_tiff_FileWriter_h_INCLUDED_
-#pragma once
 
 #include "tiff/TiffFileWriter.h"
 

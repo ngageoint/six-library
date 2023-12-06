@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     {
         if (argc != 5)
         {
-            throw Exception(Ctxt(FmtX(
+            throw Exception(Ctxt(str::Format(
                                      "Usage: %s [OPTION] <service> <uri> <file>\n\n\t-a\tadd service\n\t-s\tsubtract service\n\t-o\toutput file\n",
                                      argv[0])));
         }
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
                 if (rootElement) rootElement->print(out);
                 break;
             default:
-                throw Exception(Ctxt(FmtX(
+                throw Exception(Ctxt(str::Format(
                                          "Usage: %s [OPTION] <service> <uri> <file>\n\n\t-a\tadd service\n\t-s\tsubtract service\n\t-o\toutput file\n",
                                          argv[0])));
         }

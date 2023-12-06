@@ -175,7 +175,7 @@ int main(int argc, char** argv)
         validateArguments(argc, argv);
         const std::string xmlPathname(argv[1]);
 
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         std::unique_ptr<io::TempFile> nitf = createNITFFromXML(xmlPathname);
         six::NITFReadControl reader;

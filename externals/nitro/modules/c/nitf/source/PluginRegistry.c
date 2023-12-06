@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include "nitf/PluginRegistry.h"
 
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error, FILE* log);
@@ -470,12 +472,34 @@ nitf_PluginRegistry_unload(nitf_PluginRegistry* reg, nitf_Error* error)
     return success;
 }
 
+static NITF_BOOL insertPlugin_(const char* msg,
+    nitf_PluginRegistry* reg, const char** ident, nitf_DLL* dll, nitf_Error* error)
+{
+    /*  If no ident, we have a set error and an invalid plugin  */
+    if (ident)
+    {
+        /*  I expect to have problems with this now and then  */
+        int ok = insertPlugin(reg, ident, dll, error);
+
+        /*  If insertion failed, take our toys and leave  */
+        if (!ok)
+        {
+            return NITF_FAILURE;
+        }
+        (void)msg;
+#ifdef NITF_DEBUG_PLUGIN_REG
+        printf(msg, keyName, dll);
+#endif
+        return NITF_SUCCESS;
+    }
+    return NITF_FAILURE;
+}
+
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
 {
     /*  For now, the key is the dll name minus the extension  */
     char keyName[NITF_MAX_PATH] = "";
-    int ok;
     nitf_DLL* dll;
     const char** ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
@@ -498,25 +522,9 @@ nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
     nitf_Utils_baseName(keyName, fullName, NITF_DLL_EXTENSION);
 
     /* Now init the plugin!!!  */
-    ident = doInit(dll, keyName, error);
-
-    /*  If no ident, we have a set error and an invalid plugin  */
-    if (ident)
-    {
-        /*  I expect to have problems with this now and then  */
-        ok = insertPlugin(reg, ident, dll, error);
-
-        /*  If insertion failed, take our toys and leave  */
-        if (!ok)
-        {
-            return NITF_FAILURE;
-        }
-#ifdef NITF_DEBUG_PLUGIN_REG
-        printf("Successfully loaded plugin: [%s] at [%p]\n", keyName, dll);
-#endif
-        return NITF_SUCCESS;
-    }
-    return NITF_FAILURE;
+   ident = doInit(dll, keyName, error);
+    return insertPlugin_("Successfully loaded plugin: [%s] at [%p]\n",
+        reg, ident, dll, error);
 }
 
 NITFAPI(NITF_BOOL)
@@ -945,7 +953,6 @@ insertCreator(nitf_DLL* dso,
     /*  We are trying to find tre_main  */
     /*  Retrieve the main  */
     NITF_DLL_FUNCTION_PTR dsoMain  = nitf_DLL_retrieve(dso, name, error);
-
     if (!dsoMain)
     {
         /*  If it didnt work, we are done  */
@@ -962,14 +969,189 @@ insertCreator(nitf_DLL* dso,
     return nitf_HashTable_insert(hash, ident, (NITF_DATA*)dsoMain, error);
 }
 
+// Somebody might want to use a different set of preloadedTREs, or we might even want multiple
+// sets of preloaded TREs.  There's nothing to support either of those right now, but it's easy enough
+// to put the infrastructure in place.
+static nitf_TREPreloaded* getPreloadedTREs(const char* name)
+{
+    // Convert a name (e.g., "default") to a set of preloaded TREs.
+    // Only "default" is currently supported; see TREs.c
+    if (strcmp(name, "default") == 0)
+    {
+        extern nitf_TREPreloaded defaultPreloadedTREs[];
+        return defaultPreloadedTREs;
+    }    
+    return NULL;
+}
+
+static void enable_notset_TREs(nitf_TREPreloaded preloadedTREs[], NITF_BOOL enable)
+{
+    // NITF_PRELOAD_TRES is set, update all TREs which haven't been touched
+    for (size_t i = 0;; i++)
+    {
+        const char* pKeyName = preloadedTREs[i].name;
+        if (pKeyName == NULL) // end of list
+        {
+            return;
+        }
+        if (preloadedTREs[i].enabled < 0) // default is -1 "not set"
+        {
+            preloadedTREs[i].enabled = enable;
+        }
+    }
+}
+static nitf_TREPreloaded* getNitfPreloadedTREs(const char* name)
+{
+    // If NITF_PRELOADED_TRE_HANDLERS_ENABLE is set to *name*", we'll preload those TREs.
+    // This will NOT override a call to nitf_PluginRegistry_PreloadedTREHandlersEnable();
+    // by default, the `enabled` status of TREs is set to -1 "not set."
+    const char* envVar = getenv("NITF_PRELOADED_TRE_HANDLERS_ENABLE");
+    if ((envVar != NULL) && (strcmp(envVar, name) == 0))
+    {
+        nitf_TREPreloaded* preloadedTREs = getPreloadedTREs(name);
+        if (preloadedTREs != NULL)
+        {
+            enable_notset_TREs(preloadedTREs, NRT_TRUE /*enable*/);
+            return preloadedTREs;
+        }
+    }
+
+    // Enviroment variable not set (or not set to *name*), return preloaded TREs as-is.
+    return getPreloadedTREs(name);
+}
+static nitf_TREPreloaded* getDefaultPreloadedTREs()
+{
+    return getNitfPreloadedTREs("default");
+}
+
+static nitf_TREPreloaded* findPreloadedTRE_(nitf_TREPreloaded preloadedTREs[], const char* keyName)
+{
+    if (preloadedTREs == NULL)
+    {
+        return NULL;
+    }
+    if (keyName == NULL)
+    {
+        return NULL;
+    }
+
+    for (size_t i = 0;; i++)
+    {
+        const char* pKeyName = preloadedTREs[i].name;
+        if (pKeyName == NULL) // end of list
+        {
+            return NULL;
+        }
+        if (strcmp(keyName, pKeyName) == 0)
+        {
+            return &(preloadedTREs[i]);
+        }
+    }
+}
+static const nitf_TREPreloaded* findPreloadedTRE(nitf_TREPreloaded preloadedTREs[], const char* keyName)
+{
+    const nitf_TREPreloaded* retval = findPreloadedTRE_(preloadedTREs, keyName);
+    if (retval != NULL)
+    {
+        if (retval->enabled < 0)
+        {
+            return NULL; // "not set" == disabled
+        }
+        const NRT_BOOL enabled = retval->enabled ? NRT_TRUE : NRT_FALSE;
+        return enabled ? retval : NULL;
+    }
+    return NULL;
+}
+
+static NITF_BOOL PreloadedTREHandlerEnable(nitf_TREPreloaded preloadedTREs[],
+    const char* keyName, NITF_BOOL enable)
+{
+    if (preloadedTREs == NULL)
+    {
+        return NRT_FALSE;
+    }
+
+    nitf_TREPreloaded* result = findPreloadedTRE_(preloadedTREs, keyName);
+    if (result != NULL)
+    {
+        result->enabled = enable ? NRT_TRUE : NRT_FALSE;
+        return NRT_TRUE;
+    }
+    return NRT_FALSE;
+}
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_PreloadedTREHandlerEnable(const char* keyName, NITF_BOOL enable)
+{
+    return PreloadedTREHandlerEnable(getDefaultPreloadedTREs(), keyName, enable);
+}
+
+static void preloadedTREHandlersEnable(nitf_TREPreloaded preloadedTREs[], NITF_BOOL enable)
+{
+    if (preloadedTREs == NULL)
+    {
+        return;
+    }
+
+    for (size_t i = 0;; i++)
+    {
+        const char* pKeyName = preloadedTREs[i].name;
+        if (pKeyName == NULL) // end of list
+        {
+            return;
+        }
+        preloadedTREs[i].enabled = enable ? NRT_TRUE : NRT_FALSE;
+    }
+}
+NITFAPI(void)
+nitf_PluginRegistry_PreloadedTREHandlersEnable(NITF_BOOL enable)
+{
+    preloadedTREHandlersEnable(getDefaultPreloadedTREs(), enable);
+}
+
 /*
- *  Function is now greatly simplified.  We only retrieve TREs from
- *  the hash table.  If they are there, we are good, if not fail
- *
- *  No more talking to the DSOs directly
+ *  Initialize a DSO.  The init hook is retrieved and called once
+ *  when the DSO is loaded
  */
-NITFPROT(nitf_TREHandler*)
-nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
+static const char** preload_doInit(NITF_PLUGIN_INIT_FUNCTION init, const char* prefix, nitf_Error* error)
+{
+    /*  Else, call it  */
+    const char** ident = (*init)(error);
+    if (!ident)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, "The plugin [%s] is not retrievable", prefix);
+        return NULL;
+    }
+    return ident;
+}
+
+static NRT_BOOL preloadTRE(nitf_TREPreloaded preloadedTREs[],
+    const char* keyName, nitf_Error* error)
+{
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
+
+    /*  Construct the DLL object  */
+    nitf_DLL* dll = nitf_DLL_construct(error);
+    if (!dll)
+    {
+        return NITF_FAILURE;
+    }
+    dll->lib = NULL; // not a real DLL
+    dll->dsoMain = NULL; // filled in after successful findPreloadedTRE()
+
+    const nitf_TREPreloaded* plugin = findPreloadedTRE(preloadedTREs, keyName);
+    if (plugin == NULL)
+    {
+        return NITF_FAILURE;
+    }
+    dll->dsoMain = (NRT_DLL_FUNCTION_PTR)plugin->handler;
+
+    /* Now init the plugin!!!  */
+    const char** ident = preload_doInit(plugin->init, keyName, error);
+    return insertPlugin_("Successfully pre-loaded plugin: [%s] at [%p]\n", reg, ident, dll, error);
+}
+
+static nitf_TREHandler*
+nitf_PluginRegistry_retrieveTREHandler_(nitf_PluginRegistry* reg,
                                        const char* treIdent,
                                        int* hadError,
                                        nitf_Error* error)
@@ -1003,6 +1185,54 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
         *hadError = 1;
     }
     return theHandler;
+}
+
+static nitf_TREHandler* retrievePreloadedTREHandler(nitf_TREPreloaded preloadedTREs[], 
+    nitf_PluginRegistry* reg, const char* treIdent, int* hadError, nitf_Error* error)
+{
+    if (!preloadTRE(preloadedTREs, treIdent, error))
+    {
+        *hadError = 1;
+        return NULL;
+    }
+
+    // Successfully preloaded the TRE, it should now be in the hash table.
+    return nitf_PluginRegistry_retrieveTREHandler_(reg, treIdent, hadError, error);
+}
+
+static nitf_TREHandler* retrieveTREHandler(nitf_TREPreloaded preloadedTREs[],
+    nitf_PluginRegistry* reg, const char* treIdent, int* hadError, nitf_Error* error)
+{
+    nitf_TREHandler* handler = nitf_PluginRegistry_retrieveTREHandler_(reg, treIdent, hadError, error);
+    if (*hadError)
+    {
+        // Got an error; try a preloaded TRE.
+        *hadError = 0;
+        return retrievePreloadedTREHandler(preloadedTREs, reg, treIdent, hadError, error);
+    }
+
+    // Normally, a NULL handler is **not** an error ...
+    if (handler == NULL)
+    {
+        // ... but, if we can use a pre-loaded TRE, go with that.
+        int bad = 0; // retrievePreloadedTREHandler() might cause an error
+        nitf_TREHandler* preloadedHandler = retrievePreloadedTREHandler(preloadedTREs, reg, treIdent, &bad, error);
+        if (!bad)
+        {
+            // no error, go with the pre-loaded handler
+            assert(preloadedHandler != NULL); // I supposed this *could* be NULL, but why?  It makes no sense to preload a default handler.
+            return preloadedHandler; 
+        }
+    }
+    return handler;
+}
+NITFPROT(nitf_TREHandler*)
+nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
+                                       const char* treIdent,
+                                       int* hadError,
+                                       nitf_Error* error)
+{
+    return retrieveTREHandler(getDefaultPreloadedTREs(), reg, treIdent, hadError, error);
 }
 
 NITFPROT(nitf_CompressionInterface*)

@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __CPHD_WIDEBAND_H__
 #define __CPHD_WIDEBAND_H__
-#pragma once
 
 #include <complex>
 #include <string>
@@ -30,6 +30,7 @@
 #include <scene/sys_Conf.h>
 #include <cphd/MetadataBase.h>
 #include <cphd/Utilities.h>
+#include <cphd/Exports.h>
 
 #include <io/SeekableStreams.h>
 #include <mem/BufferView.h>
@@ -48,7 +49,7 @@ namespace cphd
  */
 //  It contains the cphd::Data structure (for channel and vector sizes).
 //  Provides methods read wideband data from CPHD file/stream
-struct Wideband final
+struct SIX_CPHD_API Wideband final
 {
     static const size_t ALL;
 

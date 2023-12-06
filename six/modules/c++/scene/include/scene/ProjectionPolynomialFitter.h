@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_PROJECTION_POLYNOMIAL_FITTER_H__
 #define __SCENE_PROJECTION_POLYNOMIAL_FITTER_H__
 
@@ -26,6 +27,7 @@
 #include <scene/GridECEFTransform.h>
 #include <scene/ProjectionModel.h>
 #include <math/linear/Matrix2D.h>
+#include <scene/Exports.h>
 
 namespace scene
 {
@@ -35,7 +37,7 @@ namespace scene
  * sampling sceneToImage() across the output plane
  * versa
  */
-class ProjectionPolynomialFitter
+class SIX_SCENE_API ProjectionPolynomialFitter
 {
 public:
     static const size_t DEFAULTS_POINTS_1D;

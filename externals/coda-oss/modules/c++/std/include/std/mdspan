@@ -1,0 +1,46 @@
+/* =========================================================================
+ * This file is part of std-c++
+ * =========================================================================
+ *
+ * © Copyright 2023, Maxar Technologies, Inc.
+ *
+ * std-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
+#pragma once
+
+#include "coda_oss/mdspan.h"
+#include "coda_oss/CPlusPlus.h"
+
+// Make it (too?) easy for clients to get our various std:: implementations
+#ifndef CODA_OSS_NO_std_mdspan
+    #if CODA_OSS_cpp23
+        #include <mdspan>
+        #define CODA_OSS_NO_std_mdspan 1  // part of C++23
+    #else
+        #define CODA_OSS_NO_std_mdspan 0  // use our own
+    #endif
+#endif
+
+#if !CODA_OSS_NO_std_mdspan
+namespace std // This is slightly uncouth: we're not supposed to augment "std".
+{
+    using coda_oss::mdspan;
+	using coda_oss::dextents;
+}
+#ifndef __cpp_lib_mdspan
+#define __cpp_lib_mdspan 202002L //  https://en.cppreference.com/w/cpp/feature_test#cpp_lib_mdspan
+#endif
+
+#endif  // CODA_OSS_NO_std_mdspan

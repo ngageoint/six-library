@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD03_CPHD03_READER_H__
 #define __CPHD03_CPHD03_READER_H__
 
@@ -30,11 +30,12 @@
 #include <cphd03/Metadata.h>
 #include <cphd03/FileHeader.h>
 #include <cphd03/VBM.h>
+#include <cphd03/Exports.h>
 #include <cphd/Wideband.h>
 
 namespace cphd03
 {
-class CPHDReader
+class SIX_CPHD03_API CPHDReader
 {
 public:
     //!  Constructor

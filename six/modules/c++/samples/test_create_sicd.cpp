@@ -120,7 +120,7 @@ int main(int argc, char** argv)
         //        XMLControlRegistry xmlRegistry;
         //        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         // Open a file with inputName
         io::FileInputStream inputFile(inputName);
@@ -284,15 +284,15 @@ int main(int argc, char** argv)
 
         return 0;
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << "Caught except::Exception: " << ex.getMessage()
             << std::endl;
+        return 1;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
         return 1;
     }
     catch (...)

@@ -120,7 +120,7 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
         messageBuilder << "ImageData.ValidData/GeoData.ValidData "
             << "required together." << std::endl
             << "ImageData.ValidData exists, but GeoData.ValidData does not.";
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -130,7 +130,7 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
         messageBuilder << "ImageData.ValidData/GeoData.ValidData "
             << "required together." << std::endl
             << "GeoData.ValidData exists, but ImageData.ValidData does not.";
-        log.error(messageBuilder.str());
+        log.error(messageBuilder);
         valid = false;
     }
 
@@ -153,7 +153,7 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
         {
             messageBuilder << "ImageData.ValidData first row should have"
                 << "minimum row index";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
         else
@@ -173,14 +173,14 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
             {
                 messageBuilder << "ImageData.ValidData first col of matching"
                     << "minimum row index should have minimum col index";
-                log.error(messageBuilder.str());
+                log.error(messageBuilder);
                 valid = false;
             }
         }
         if (!Utilities::isClockwise(validData))
         {
             messageBuilder << "ImageData.ValidData should be arrange clockwise";
-            log.error(messageBuilder.str());
+            log.error(messageBuilder);
             valid = false;
         }
     }

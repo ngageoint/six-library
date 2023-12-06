@@ -468,7 +468,7 @@ static void read_nitf(const std::string& testName,
 static void buffer_list_save(const std::filesystem::path& outputName, const std::vector<six::zfloat>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
     six::NITFWriteControl writer(std::unique_ptr<six::Data>(std::move(pComplexData)));
 
     static const std::vector<std::string> schemaPaths;
@@ -642,7 +642,7 @@ static void do_test_ComplexToAMP8IPHS8I_(const std::string& testName,
     const six::zfloat& input_dbl, const std::vector<Pairs>& candidates)
 {
     // Calculate the nearest neighbor quickly.
-    const auto test_integral = item.nearest_neighbor(input_dbl);
+    const auto test_integral = six::sicd::nearest_neighbor(item, input_dbl);
 
     // Calculate the nearest neighbor via exhaustive calculation.
     double min_distance = std::abs(candidates[0].floating - input_dbl);
@@ -696,7 +696,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     {
         amplitudeTable.index(i) = static_cast<double>(i) + 10.0;
     }    
-    const auto& item = six::sicd::details::ComplexToAMP8IPHS8I::make(&amplitudeTable);
+    const auto& item = six::sicd::make_ComplexToAMP8IPHS8I(&amplitudeTable);
 
     // Generate the full 256x256 matrix of possible AMP8I_PHS8I values.
     std::vector<Pairs> candidates;
@@ -713,7 +713,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     // These are simple cases that don't necessarily exercise the nearest neighbor property.
     for(auto& i : candidates) {
         auto truth = i.integral;
-        auto test = item.nearest_neighbor(six::zfloat(i.floating.real(), i.floating.imag()));
+        auto test = six::sicd::nearest_neighbor(item, six::zfloat(i.floating.real(), i.floating.imag()));
         TEST_ASSERT_EQ(truth.amplitude, test.amplitude);
         TEST_ASSERT_EQ(truth.phase, test.phase);
     }
@@ -723,7 +723,7 @@ TEST_CASE(test_ComplexToAMP8IPHS8I)
     six::zfloat problem {
         1.0f, -1e-4f
     };
-    TEST_ASSERT_EQ(item.nearest_neighbor(problem).phase, 0);
+    TEST_ASSERT_EQ(six::sicd::nearest_neighbor(item, problem).phase, 0);
 
     // Verify the nearest neighbor property via random search through the possible space.
     // For each sampled point we check that we found the true nearest neighbor.

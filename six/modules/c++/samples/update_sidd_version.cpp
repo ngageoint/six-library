@@ -125,7 +125,7 @@ int main(int argc, char** argv)
             schemaPaths.push_back(options->get<std::string>("schema"));
         }
 
-        six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sidd::DerivedXMLControl>();
 
         std::unique_ptr<six::sidd::DerivedData> derivedData;
         std::vector<std::byte> widebandData;

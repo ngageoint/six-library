@@ -471,7 +471,7 @@ PVPBlock::PVPBlock(const Pvp& p, const Data& d) :
         std::ostringstream oss;
         oss << "PVP size specified in metadata: " << mNumBytesPerVector
             << " does not match PVP size calculated: " << calculateBytesPerVector;
-        throw except::Exception(oss.str());
+        throw except::Exception(Ctxt(oss));
     }
 }
 PVPBlock::PVPBlock(const Metadata& metadata)
@@ -525,7 +525,7 @@ PVPBlock::PVPBlock(size_t numChannels,
         std::ostringstream msg;
         msg << "<" << numChannels << "> channels specified, "
             << "but `data` argument has <" << data.size() << "> channels";
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
 
     for (size_t channel = 0; channel < numChannels; ++channel)
@@ -610,7 +610,7 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
         std::ostringstream oss;
         oss << "PVPBlock::load: calculated PVP size(" << numBytesIn
             << ") != header PVP_DATA_SIZE(" << sizePVP << ")";
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 
     const bool swapToLittleEndian = std::endian::native == std::endian::little;
@@ -633,7 +633,7 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
             {
                 std::ostringstream oss;
                 oss << "EOF reached during PVP read for channel " << (ii);
-                throw except::Exception(Ctxt(oss.str()));
+                throw except::Exception(Ctxt(oss));
             }
             totalBytesRead += bytesThisRead;
 
@@ -1078,7 +1078,7 @@ std::ostream& operator<< (std::ostream& os, const PVPBlock::PVPSet& p)
 
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
-        os << "  Additional Parameter : " << it->second.str() << "\n";
+        os << "  Additional Parameter : " << it->second << "\n";
     }
     return os;
 }

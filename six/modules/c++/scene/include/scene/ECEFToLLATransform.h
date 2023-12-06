@@ -19,15 +19,17 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_ECEF_TO_LLA_TRANSFORM_H__
 #define __SCENE_ECEF_TO_LLA_TRANSFORM_H__
 
 #include "scene/CoordinateTransform.h"
+#include "scene/Exports.h"
 
 namespace scene
 {
 
-struct ECEFToLLATransform : public CoordinateTransform
+struct SIX_SCENE_API ECEFToLLATransform : public CoordinateTransform
 {
     /**
      * This constructor just calls the base class constructor

@@ -69,7 +69,3 @@
 
 #include <import/scene.h>
 #include <import/six.h>
-
-#pragma comment(lib, "cli-c++")
-#pragma comment(lib, "xerces-c")
-#pragma comment(lib, "xml.lite-c++.lib")

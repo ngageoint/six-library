@@ -649,6 +649,10 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
     return rc;
 }
 
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 6262) // Function uses '18832' bytes of stack.  Consider moving some data to heap.
+#endif
 J2KPRIV( NRT_BOOL) OpenJPEG_initImage_(OpenJPEGWriterImpl *impl,
                                       j2k_WriterOptions *writerOps, OPJ_CODEC_FORMAT format,
                                       nrt_Error *error)
@@ -848,6 +852,10 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage_(OpenJPEGWriterImpl *impl,
 
     return rc;
 }
+#if _MSC_VER
+#pragma warning(pop)
+#endif
+
 J2KPRIV(NRT_BOOL) OpenJPEG_initImage_j2k(OpenJPEGWriterImpl* impl, j2k_WriterOptions* writerOps, nrt_Error* error)
 {
     return OpenJPEG_initImage_(impl, writerOps, OPJ_CODEC_J2K, error);

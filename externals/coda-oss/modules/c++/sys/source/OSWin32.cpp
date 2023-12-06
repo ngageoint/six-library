@@ -59,7 +59,7 @@ std::string sys::OSWin32::getPlatformName() const
         platform = "Unknown Windows OS";
     }
     auto retval = platform + ": ";
-    retval += FmtX("%d.%d [build: %d], ", info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber);
+    retval += str::Format("%d.%d [build: %d], ", info.dwMajorVersion, info.dwMinorVersion, info.dwBuildNumber);
     retval += info.szCSDVersion;
     return retval;
 }
@@ -112,7 +112,7 @@ void sys::OSWin32::removeFile(const std::string& pathname) const
         oss << "Failure removing file [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
@@ -125,7 +125,7 @@ void sys::OSWin32::removeDirectory(const std::string& pathname) const
         oss << "Failure removing directory [" <<  pathname <<
             "] with error [" << err.toString() << "]";
 
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
@@ -414,7 +414,7 @@ void sys::OSWin32::removeSymlink(const std::string& symlinkPathname) const
         oss << "Failure removing symlink [" <<  symlinkPathname <<
             "] with error [" << err.toString() << "]";
 
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 }
 
