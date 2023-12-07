@@ -61,7 +61,7 @@ namespace lite
  */
 class CODA_OSS_API XMLReaderXerces final : public XMLReaderInterface
 {
-    static XercesContext mCtxt;
+    XercesContext mCtxt;  //! this must be the first member listed
     std::unique_ptr<SAX2XMLReader>        mNative;
     std::unique_ptr<XercesContentHandler> mDriverContentHandler;
     std::unique_ptr<XercesErrorHandler>   mErrorHandler;
