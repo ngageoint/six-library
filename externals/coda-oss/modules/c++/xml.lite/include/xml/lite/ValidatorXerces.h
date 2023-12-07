@@ -106,8 +106,6 @@ public:
      */
     ValidatorXerces(const std::vector<std::string>& schemaPaths, logging::Logger* log = nullptr, bool recursive = true);
     ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, logging::Logger* log = nullptr, bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, logging::Logger& log, bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, std::vector<except::Context>& loadGrammarWarnings, bool recursive = true);
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
@@ -129,7 +127,13 @@ public:
     bool validate(const str::W1252string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
 
     // Search each directory for XSD files
-    static std::vector<coda_oss::filesystem::path> loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
+    struct FoundSchemas final // stronger typing for ctor overloads, below
+    {
+        std::vector<coda_oss::filesystem::path> value;
+    };
+    static FoundSchemas findSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
+    ValidatorXerces(const FoundSchemas&, logging::Logger& log);
+    ValidatorXerces(const FoundSchemas&, std::vector<except::Context>& loadGrammarWarnings);
 
 private:
     bool validate_(const coda_oss::u8string& xml, 

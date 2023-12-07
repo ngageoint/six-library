@@ -30,6 +30,9 @@
 
 #if defined(USE_XERCES)
 
+// Xerces only needs to be initialized once.
+/*static*/ xml::lite::XercesContext xml::lite::XMLReaderXerces::mCtxt;
+
 xml::lite::XMLReaderXerces::XMLReaderXerces()
 {
     create();

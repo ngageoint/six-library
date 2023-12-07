@@ -182,7 +182,7 @@ static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 static void validate_(const xml::lite::Element& rootElement,
-    const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log)
+    const xml::lite::ValidatorXerces::FoundSchemas& foundSchemas, logging::Logger& log)
 {
     xml::lite::Uri uri;
     rootElement.getUri(uri);
@@ -195,10 +195,11 @@ static void validate_(const xml::lite::Element& rootElement,
     // Process schema paths one at a time.  This will reduce the "noise" from XML validation failures
     // and could also make instantiating an xml::lite::ValidatorXerces faster.
     std::vector<xml::lite::ValidationInfo> all_errors;
-    for (auto&& schemaPath : schemaPaths)
+    for (auto&& foundSchema : foundSchemas.value)
     {
-        const std::vector<std::filesystem::path> schemaPaths_{ schemaPath }; // use one path at a time
-        const xml::lite::ValidatorXerces validator(schemaPaths_, &log, true); // this can be expensive to create as all sub-directories might be traversed
+        xml::lite::ValidatorXerces::FoundSchemas foundSchemas_;
+        foundSchemas_.value.push_back(foundSchema); // use one path at a time
+        const xml::lite::ValidatorXerces validator(foundSchemas_, log); // this can be expensive to create as all sub-directories might be traversed
 
         // validate against any specified schemas
         std::vector<xml::lite::ValidationInfo> errors;
@@ -215,7 +216,7 @@ static void validate_(const xml::lite::Element& rootElement,
     }
 
     // log any error found and throw
-    log_any_errors_and_throw(all_errors, schemaPaths, log);
+    log_any_errors_and_throw(all_errors, foundSchemas.value, log);
 }
 static void validate_(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>& paths_, logging::Logger& log)
@@ -230,7 +231,8 @@ static void validate_(const xml::lite::Document& doc,
     }
 
     // validate against any specified schemas
-    validate_(*rootElement, paths, log);
+    const auto foundSchemas = xml::lite::ValidatorXerces::findSchemas(paths, true /*recursive*/);
+    validate_(*rootElement, foundSchemas, log);
 }
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,

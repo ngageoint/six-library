@@ -243,7 +243,7 @@ static auto find_xsd_path(const xml::lite::Element& rootElement, const std::vect
     for (auto&& schemaPath : schemaPaths)
     {
         const std::vector<std::filesystem::path> schemaPaths_{ schemaPath }; // use one path at a time
-        const auto xsd_files = xml::lite::Validator::loadSchemas(schemaPaths_);
+        const auto xsd_files = xml::lite::Validator::findSchemas(schemaPaths_).value;
         
         // Try anything that looks like a SIDD schema first; this is to avoid
         // loading XSDs that "obviously" won't work.
@@ -451,6 +451,6 @@ std::vector<std::filesystem::path> six::sidd300::find_SIDD_schema_V_files(const 
         schemaPaths.push_back(std::move(result));
     }
 
-    const auto xsd_files = xml::lite::Validator::loadSchemas(schemaPaths);
+    const auto xsd_files = xml::lite::Validator::findSchemas(schemaPaths).value;
     return six::sidd::find_SIDD_xsd_files(xsd_files);
 }
