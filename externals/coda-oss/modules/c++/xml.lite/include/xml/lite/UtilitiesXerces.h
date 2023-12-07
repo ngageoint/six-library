@@ -411,8 +411,14 @@ struct CODA_OSS_API XercesContext final
 {
     XercesContext();
     ~XercesContext();
-    void destroy();
 
+    XercesContext(const XercesContext&) = delete;
+    XercesContext& operator=(const XercesContext&) = delete;
+    XercesContext(XercesContext&&) = delete;
+    XercesContext& operator=(XercesContext&&) = delete;
+
+    void destroy();
+    
 private:
     static std::mutex mMutex;
     bool mIsDestroyed;

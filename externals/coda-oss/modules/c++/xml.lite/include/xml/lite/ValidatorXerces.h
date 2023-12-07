@@ -92,7 +92,7 @@ private:
  */
 class CODA_OSS_API ValidatorXerces : public ValidatorInterface
 {
-    XercesContext mCtxt;    //! this must be the first member listed
+    std::unique_ptr<XercesContext> pCtxt;
 
 public:
 
@@ -107,6 +107,7 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, logging::Logger* log = nullptr, bool recursive = true);
     ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, logging::Logger* log = nullptr, bool recursive = true);
 
+    ~ValidatorXerces();
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
     ValidatorXerces(ValidatorXerces&&) = default;
@@ -132,8 +133,8 @@ public:
         std::vector<coda_oss::filesystem::path> value;
     };
     static FoundSchemas findSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
-    ValidatorXerces(const FoundSchemas&, logging::Logger& log);
-    ValidatorXerces(const FoundSchemas&, std::vector<except::Context>& loadGrammarWarnings);
+    ValidatorXerces(const FoundSchemas&, logging::Logger& log, const XercesContext* = nullptr);
+    ValidatorXerces(const FoundSchemas&, std::vector<except::Context>& loadGrammarWarnings, const XercesContext* = nullptr);
 
 private:
     bool validate_(const coda_oss::u8string& xml, 

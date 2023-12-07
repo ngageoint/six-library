@@ -192,6 +192,12 @@ static void validate_(const xml::lite::Element& rootElement,
     rootElement.prettyPrint(xmlStream);
     const auto strPrettyXml = xmlStream.stream().str();
 
+    // Each new instance of ValidatorXerces by default will initialize (and
+    // terminated) Xerces; this is time-consuming and only needs to be done
+    // once.  Note this can't be `static` as every time *XercesContext* goes
+    // out-of-scope, Xerces is terminated; see **UtilitiesXerces.cpp**.
+    const xml::lite::XercesContext xercesContext;
+
     // Process schema paths one at a time.  This will reduce the "noise" from XML validation failures
     // and could also make instantiating an xml::lite::ValidatorXerces faster.
     std::vector<xml::lite::ValidationInfo> all_errors;
@@ -199,7 +205,7 @@ static void validate_(const xml::lite::Element& rootElement,
     {
         xml::lite::ValidatorXerces::FoundSchemas foundSchemas_;
         foundSchemas_.value.push_back(foundSchema); // use one path at a time
-        const xml::lite::ValidatorXerces validator(foundSchemas_, log); // this can be expensive to create as all sub-directories might be traversed
+        const xml::lite::ValidatorXerces validator(foundSchemas_, log, &xercesContext);
 
         // validate against any specified schemas
         std::vector<xml::lite::ValidationInfo> errors;

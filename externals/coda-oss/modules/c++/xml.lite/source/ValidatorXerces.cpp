@@ -97,6 +97,9 @@ ValidatorXerces::ValidatorXerces(
     ValidatorXerces(sys::convertPaths(schemaPaths), log, recursive)
 {
 }
+ValidatorXerces::~ValidatorXerces()
+{
+}
 
 static std::string loadGrammar(xercesc::DOMLSParser& validator, const fs::path& schema)
 {
@@ -128,11 +131,16 @@ static std::vector<except::Context> loadGrammars(xercesc::DOMLSParser& validator
     return errors;
 }
 
-ValidatorXerces::ValidatorXerces(
-        const FoundSchemas& foundSchemas,
-        std::vector<except::Context>& loadGrammarWarnings) :
+ValidatorXerces::ValidatorXerces(const FoundSchemas& foundSchemas,
+        std::vector<except::Context>& loadGrammarWarnings, const XercesContext* pContext) :
     ValidatorInterface(foundSchemas.value, nullptr /*log*/, false /*recursive*/)
 {
+    if (pContext == nullptr)
+    {
+        // Somebody else hasn't initilized Xerces, do it ourselves
+        pCtxt = std::make_unique<XercesContext>();
+    }
+
     // add each schema into a grammar pool --
     // this allows reuse
     mSchemaPool.reset(
@@ -189,6 +197,7 @@ ValidatorXerces::ValidatorXerces(
     //! no additional schemas will be loaded after this point!
     mSchemaPool->lockPool();
 }
+
 ValidatorXerces::ValidatorXerces(
         const std::vector<coda_oss::filesystem::path>& schemaPaths,
         logging::Logger* log,
@@ -203,8 +212,8 @@ ValidatorXerces::ValidatorXerces(
         }
     }
 }
-ValidatorXerces::ValidatorXerces(const FoundSchemas& foundSchemas, logging::Logger& log) :
-    ValidatorXerces(foundSchemas, mLoadGrammarWarnings)
+ValidatorXerces::ValidatorXerces(const FoundSchemas& foundSchemas, logging::Logger& log, const XercesContext* pContext) :
+    ValidatorXerces(foundSchemas, mLoadGrammarWarnings, pContext)
 {
     for (auto&& warning : mLoadGrammarWarnings)
     {
