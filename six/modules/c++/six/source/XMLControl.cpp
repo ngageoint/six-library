@@ -27,6 +27,8 @@
 #include <iterator>
 
 #include <logging/NullLogger.h>
+#include <sys/Path.h>
+
 #include <six/XMLControl.h>
 #include <six/Utilities.h>
 #include <six/Types.h>
@@ -99,15 +101,13 @@ std::vector<std::filesystem::path> XMLControl::loadSchemaPaths(const std::vector
     // a NULL pointer indicates that we don't want to validate against a schema
     if (pSchemaPaths != nullptr)
     {
-        std::vector<std::string> paths;
-        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(paths),
-            [&](const std::filesystem::path& p) { return p.string();  });
+        std::vector<std::string> paths = sys::convertPaths(*pSchemaPaths);
 
         // If *pSchemaPaths is empty, this will use a default value.  To avoid all validation against a schema,
         // pass NULL for pSchemaPaths.
         loadSchemaPaths(paths);
 
-        std::transform(paths.begin(), paths.end(), std::back_inserter(retval), [&](const std::string& s) { return s; });
+        retval = sys::convertPaths(paths);
     }
     return retval;
 }
@@ -286,9 +286,7 @@ xml::lite::ValidatorXerces::FoundSchemas XMLControl::findValidSchemaPaths(const 
         }
     }
 
-    std::vector<std::filesystem::path> schemaPaths_;
-    std::transform(paths.begin(), paths.end(), std::back_inserter(schemaPaths_), [&](const std::string& s) { return s; });
-    return findValidSchemas(schemaPaths_); // If the paths we have don't exist, throw
+    return findValidSchemas(sys::convertPaths(paths)); // If the paths we have don't exist, throw
 }
 xml::lite::ValidatorXerces::FoundSchemas XMLControl::findValidSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log)
@@ -386,9 +384,7 @@ std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml::lite::Document& doc) co
 Data* XMLControl::fromXML(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths_)
 {
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
 
     assert(doc != nullptr);
     auto data = fromXML(*doc, &schemaPaths);

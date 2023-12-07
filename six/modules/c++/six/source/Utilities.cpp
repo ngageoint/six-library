@@ -29,6 +29,8 @@
 #include <math/Utilities.h>
 #include <nitf/PluginRegistry.hpp>
 #include <sys/FileFinder.h>
+#include <sys/Path.h>
+
 #include "six/Init.h"
 #include "six/Utilities.h"
 #include "six/XMLControl.h"
@@ -712,10 +714,7 @@ std::unique_ptr<Data> six::parseDataFromString(const XMLControlRegistry& xmlReg,
     const std::vector<std::string>& schemaPaths_,
     logging::Logger& log)
 {
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     auto result = parseDataFromString(xmlReg, str::u8FromNative(xmlStr), dataType, &schemaPaths, &log);
     return std::unique_ptr<Data>(result.release());
 }
