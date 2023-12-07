@@ -56,12 +56,8 @@ bool sys::FragmentPredicate::operator()(const std::string& entry) const
 {
     if (mIgnoreCase)
     {
-        std::string base = entry;
-        str::lower(base);
-
-        std::string match = mFragment;
-        str::lower(match);
-
+        const auto base = str::lower(entry);
+        const auto match = str::lower(mFragment);
         return str::contains(base, match);
     }
     else
@@ -80,13 +76,10 @@ bool sys::ExtensionPredicate::operator()(const std::string& filename) const
     if (!sys::FileOnlyPredicate::operator()(filename))
         return false;
 
-    std::string ext = sys::Path::splitExt(filename).second;
+    const std::string ext = sys::Path::splitExt(filename).second;
     if (mIgnoreCase)
     {
-        std::string matchExt = mExt;
-        str::lower(matchExt);
-        str::lower(ext);
-        return ext == matchExt;
+        return str::eq(ext, mExt);
     }
     else
         return ext == mExt;

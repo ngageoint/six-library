@@ -29,6 +29,7 @@
 #include <coda_oss/string.h>
 
 #include "config/Exports.h"
+#include "except/Context.h"
 
 #include <xml/lite/xml_lite_config.h>
 #ifdef USE_XERCES
@@ -103,12 +104,10 @@ public:
      *  \param recursive    Do a recursive search for schemas on directory 
      *                      input
      */
-    ValidatorXerces(const std::vector<std::string>& schemaPaths, 
-                    logging::Logger* log,
-                    bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, // fs::path -> mLegacyStringConversion = false
-                    logging::Logger* log,
-                    bool recursive = true);
+    ValidatorXerces(const std::vector<std::string>& schemaPaths, logging::Logger* log = nullptr, bool recursive = true);
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, logging::Logger* log = nullptr, bool recursive = true);
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, logging::Logger& log, bool recursive = true);
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, std::vector<except::Context>& loadGrammarWarnings, bool recursive = true);
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
@@ -141,6 +140,7 @@ private:
     std::unique_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
     std::unique_ptr<xercesc::DOMLSParser> mValidator;
 
+    std::vector<except::Context> mLoadGrammarWarnings;
 };
 
 //! stream the entire log -- newline separated

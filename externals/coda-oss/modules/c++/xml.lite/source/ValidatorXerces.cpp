@@ -37,6 +37,7 @@ CODA_OSS_disable_warning(-Wshadow)
 CODA_OSS_disable_warning_pop
 
 #include <sys/OS.h>
+#include <sys/Path.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
 
@@ -89,33 +90,48 @@ bool ValidationErrorHandler::handleError(
     return true;
 }
 
-inline std::vector<std::string> convert(const std::vector<fs::path>& schemaPaths)
+ValidatorXerces::ValidatorXerces(
+        const std::vector<std::string>& schemaPaths, 
+        logging::Logger* log,
+        bool recursive) :
+    ValidatorXerces(sys::convertPaths(schemaPaths), log, recursive)
 {
-    std::vector<std::string> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-                   [](const fs::path& p) { return p.string(); });
-    return retval;
 }
-inline auto convert(const std::vector<std::string>& paths)
+
+static std::string loadGrammar(xercesc::DOMLSParser& validator, const fs::path& schema)
 {
-    std::vector<fs::path> retval;
-    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
-                   [](const auto& p) { return p; });
-    return retval;
+    if (!validator.loadGrammar(schema.c_str(),
+                                 xercesc::Grammar::SchemaGrammarType,
+                                 true))
+    {
+        std::ostringstream oss;
+        oss << "Error: Failure to load schema " << schema;
+        return oss.str();
+    }
+    return "";
+}
+
+static std::vector<except::Context> loadGrammars(xercesc::DOMLSParser& validator, const std::vector<fs::path>& schemas)
+{
+    std::vector<except::Context> errors;
+
+    // add the schema to the validator
+    for (auto&& schema : schemas)
+    {
+        const auto error = loadGrammar(validator, schema);
+        if (!error.empty())
+        {
+            errors.emplace_back(Ctxt(error));
+        }
+    }
+    return errors;
 }
 
 ValidatorXerces::ValidatorXerces(
-        const std::vector<fs::path>& schemaPaths,
-        logging::Logger* log,
-        bool recursive) :
-    ValidatorXerces(convert(schemaPaths), log, recursive)
-{
-}
-ValidatorXerces::ValidatorXerces(
-    const std::vector<std::string>& schemaPaths, 
-    logging::Logger* log,
+    const std::vector<fs::path>& schemaPaths, 
+    std::vector<except::Context>& loadGrammarWarnings,
     bool recursive) :
-    ValidatorInterface(schemaPaths, log, recursive)
+    ValidatorInterface(schemaPaths, nullptr /*log*/, recursive)
 {
     // add each schema into a grammar pool --
     // this allows reuse
@@ -169,24 +185,33 @@ ValidatorXerces::ValidatorXerces(
 
     // load our schemas --
     // search each directory for schemas
-    const auto schemas = loadSchemas(convert(schemaPaths), recursive);
+    const auto schemas = loadSchemas(schemaPaths, recursive);
 
-    //  add the schema to the validator
-    //  add the schema to the validator
-    for (auto&& schema : schemas)
-    {
-        if (!mValidator->loadGrammar(schema.c_str(),
-                                     xercesc::Grammar::SchemaGrammarType,
-                                     true))
-        {
-            std::ostringstream oss;
-            oss << "Error: Failure to load schema " << schema;
-            log->warn(Ctxt(oss));
-        }
-    }
+    // add the schema to the validator
+    loadGrammarWarnings = loadGrammars(*mValidator, schemas);
 
     //! no additional schemas will be loaded after this point!
     mSchemaPool->lockPool();
+}
+ValidatorXerces::ValidatorXerces(
+        const std::vector<coda_oss::filesystem::path>& schemaPaths,
+        logging::Logger* log,
+        bool recursive) :
+    ValidatorXerces(schemaPaths, mLoadGrammarWarnings, recursive)
+{
+    if (log != nullptr)
+    {
+        for (auto&& warning : mLoadGrammarWarnings)
+        {
+            log->warn(warning);
+        }
+    }
+}
+ValidatorXerces::ValidatorXerces(const std::vector<coda_oss::filesystem::path>& schemaPaths,
+        logging::Logger& log,
+        bool recursive) :
+    ValidatorXerces(schemaPaths, &log, recursive)
+{
 }
 
 std::vector<coda_oss::filesystem::path> ValidatorXerces::loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
