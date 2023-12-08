@@ -237,6 +237,10 @@ static void validate_(const xml::lite::Document& doc,
     // validate against any specified schemas
     validate_(*rootElement, foundSchemas, log);
 }
+
+static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::string>&, logging::Logger*);
+static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::filesystem::path>*, logging::Logger*);
+
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
                           logging::Logger* log)
@@ -268,13 +272,13 @@ static xml::lite::ValidatorXerces::FoundSchemas findValidSchemas(const std::vect
     const auto paths = check_whether_paths_exist(paths_);
     return xml::lite::ValidatorXerces::findSchemas(paths, true /*recursive*/);
 }
-xml::lite::ValidatorXerces::FoundSchemas XMLControl::findValidSchemaPaths(const std::vector<std::string>& schemaPaths,
+static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::string>& schemaPaths,
     logging::Logger* log)
 {
     // attempt to get the schema location from the
     // environment if nothing is specified
     std::vector<std::string> paths(schemaPaths);
-    loadSchemaPaths(paths);
+    XMLControl::loadSchemaPaths(paths);
     if (paths.empty())
     {
         if (log != nullptr)
@@ -288,11 +292,11 @@ xml::lite::ValidatorXerces::FoundSchemas XMLControl::findValidSchemaPaths(const 
 
     return findValidSchemas(sys::convertPaths(paths)); // If the paths we have don't exist, throw
 }
-xml::lite::ValidatorXerces::FoundSchemas XMLControl::findValidSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths,
+static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log)
 {
     // attempt to get the schema location from the environment if nothing is specified
-    auto paths = loadSchemaPaths(pSchemaPaths);
+    auto paths = XMLControl::loadSchemaPaths(pSchemaPaths);
     if ((pSchemaPaths != nullptr) && paths.empty())
     {
         if (log != nullptr)

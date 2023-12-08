@@ -31,7 +31,6 @@
 
 #include <logging/Logger.h>
 #include <import/xml/lite.h>
-#include <xml/lite/ValidatorXerces.h>
 
 #include "six/Types.h"
 #include "six/Logger.h"
@@ -124,9 +123,6 @@ class SIX_SIX_API XMLControl
      */
     static void loadSchemaPaths(std::vector<std::string>& schemaPaths);
     static std::vector<std::filesystem::path> loadSchemaPaths(const std::vector<std::filesystem::path>*);
-    static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::string>& schemaPaths, logging::Logger* log = nullptr);
-    static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::filesystem::path>*, logging::Logger* log = nullptr);
-
 
     /*!
      *  Convert the Data model into an XML DOM.
