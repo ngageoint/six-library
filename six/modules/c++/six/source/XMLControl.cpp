@@ -205,7 +205,7 @@ static void validate_(const xml::lite::Element& rootElement,
     {
         xml::lite::ValidatorXerces::FoundSchemas foundSchemas_;
         foundSchemas_.value.push_back(foundSchema); // use one path at a time
-        const xml::lite::ValidatorXerces validator(foundSchemas_, log, &xercesContext);
+        const xml::lite::ValidatorXerces validator(foundSchemas_, &log, &xercesContext);
 
         // validate against any specified schemas
         std::vector<xml::lite::ValidationInfo> errors;

@@ -133,8 +133,7 @@ public:
         std::vector<coda_oss::filesystem::path> value;
     };
     static FoundSchemas findSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
-    ValidatorXerces(const FoundSchemas&, logging::Logger& log, const XercesContext* = nullptr);
-    ValidatorXerces(const FoundSchemas&, std::vector<except::Context>& loadGrammarWarnings, const XercesContext* = nullptr);
+    ValidatorXerces(const FoundSchemas&, logging::Logger* log = nullptr, const XercesContext* = nullptr);
 
 private:
     bool validate_(const coda_oss::u8string& xml, 
@@ -144,8 +143,6 @@ private:
     std::unique_ptr<xercesc::XMLGrammarPool> mSchemaPool;
     std::unique_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
     std::unique_ptr<xercesc::DOMLSParser> mValidator;
-
-    std::vector<except::Context> mLoadGrammarWarnings;
 };
 
 //! stream the entire log -- newline separated

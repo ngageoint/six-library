@@ -132,7 +132,7 @@ static std::vector<except::Context> loadGrammars(xercesc::DOMLSParser& validator
 }
 
 ValidatorXerces::ValidatorXerces(const FoundSchemas& foundSchemas,
-        std::vector<except::Context>& loadGrammarWarnings, const XercesContext* pContext) :
+        logging::Logger* log, const XercesContext* pContext) :
     ValidatorInterface(foundSchemas.value, nullptr /*log*/, false /*recursive*/)
 {
     if (pContext == nullptr)
@@ -192,33 +192,24 @@ ValidatorXerces::ValidatorXerces(const FoundSchemas& foundSchemas,
                          mErrorHandler.get());
 
     // add the schema to the validator
-    loadGrammarWarnings = loadGrammars(*mValidator, foundSchemas);
-
-    //! no additional schemas will be loaded after this point!
-    mSchemaPool->lockPool();
-}
-
-ValidatorXerces::ValidatorXerces(
-        const std::vector<coda_oss::filesystem::path>& schemaPaths,
-        logging::Logger* log,
-        bool recursive) :
-    ValidatorXerces(findSchemas(schemaPaths, recursive), mLoadGrammarWarnings)
-{
+    const auto loadGrammarWarnings = loadGrammars(*mValidator, foundSchemas);
     if (log != nullptr)
     {
-        for (auto&& warning : mLoadGrammarWarnings)
+        for (auto&& warning : loadGrammarWarnings)
         {
             log->warn(warning);
         }
     }
+
+    //! no additional schemas will be loaded after this point!
+    mSchemaPool->lockPool();
 }
-ValidatorXerces::ValidatorXerces(const FoundSchemas& foundSchemas, logging::Logger& log, const XercesContext* pContext) :
-    ValidatorXerces(foundSchemas, mLoadGrammarWarnings, pContext)
+ValidatorXerces::ValidatorXerces(
+        const std::vector<coda_oss::filesystem::path>& schemaPaths,
+        logging::Logger* log,
+        bool recursive) :
+    ValidatorXerces(findSchemas(schemaPaths, recursive), log)
 {
-    for (auto&& warning : mLoadGrammarWarnings)
-    {
-        log.warn(warning);
-    }
 }
 
 xml::lite::ValidatorXerces::FoundSchemas ValidatorXerces::findSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
