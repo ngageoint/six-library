@@ -182,7 +182,7 @@ static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 static void validate_(const xml::lite::Element& rootElement,
-    const xml::lite::ValidatorXerces::FoundSchemas& foundSchemas, logging::Logger& log)
+    const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
 {
     xml::lite::Uri uri;
     rootElement.getUri(uri);
@@ -192,20 +192,13 @@ static void validate_(const xml::lite::Element& rootElement,
     rootElement.prettyPrint(xmlStream);
     const auto strPrettyXml = xmlStream.stream().str();
 
-    // Each new instance of ValidatorXerces by default will initialize (and
-    // terminated) Xerces; this is time-consuming and only needs to be done
-    // once.  Note this can't be `static` as every time *XercesContext* goes
-    // out-of-scope, Xerces is terminated; see **UtilitiesXerces.cpp**.
-    const xml::lite::XercesContext xercesContext;
-
     // Process schema paths one at a time.  This will reduce the "noise" from XML validation failures
     // and could also make instantiating an xml::lite::ValidatorXerces faster.
     std::vector<xml::lite::ValidationInfo> all_errors;
-    for (auto&& foundSchema : foundSchemas.value)
+    for (auto&& foundSchema : foundSchemas)
     {
-        xml::lite::ValidatorXerces::FoundSchemas foundSchemas_;
-        foundSchemas_.value.push_back(foundSchema); // use one path at a time
-        const xml::lite::ValidatorXerces validator(foundSchemas_, &log, &xercesContext);
+        const std::vector<coda_oss::filesystem::path> foundSchemas_{ { foundSchema } };
+        const xml::lite::ValidatorXerces validator(foundSchemas_, &log);
 
         // validate against any specified schemas
         std::vector<xml::lite::ValidationInfo> errors;
@@ -222,11 +215,11 @@ static void validate_(const xml::lite::Element& rootElement,
     }
 
     // log any error found and throw
-    log_any_errors_and_throw(all_errors, foundSchemas.value, log);
+    log_any_errors_and_throw(all_errors, foundSchemas, log);
 }
 
 static void validate_(const xml::lite::Document& doc,
-    const xml::lite::ValidatorXerces::FoundSchemas& foundSchemas, logging::Logger& log)
+    const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
 {
     auto rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
@@ -238,8 +231,8 @@ static void validate_(const xml::lite::Document& doc,
     validate_(*rootElement, foundSchemas, log);
 }
 
-static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::string>&, logging::Logger*);
-static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::filesystem::path>*, logging::Logger*);
+static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::string>&, logging::Logger*);
+static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::filesystem::path>*, logging::Logger*);
 
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
@@ -266,13 +259,13 @@ void XMLControl::validate(const xml::lite::Document& doc,
     validate_(doc, foundSchemas, *log);
 }
 
-static xml::lite::ValidatorXerces::FoundSchemas findValidSchemas(const std::vector<std::filesystem::path>& paths_)
+static auto findValidSchemas(const std::vector<std::filesystem::path>& paths_)
 {
     // If the paths we have don't exist, throw
     const auto paths = check_whether_paths_exist(paths_);
-    return xml::lite::ValidatorXerces::findSchemas(paths, true /*recursive*/);
+    return xml::lite::ValidatorXerces::loadSchemas(paths, true /*recursive*/);
 }
-static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::string>& schemaPaths,
+static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::string>& schemaPaths,
     logging::Logger* log)
 {
     // attempt to get the schema location from the
@@ -292,7 +285,7 @@ static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::
 
     return findValidSchemas(sys::convertPaths(paths)); // If the paths we have don't exist, throw
 }
-static xml::lite::ValidatorXerces::FoundSchemas findValidSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths,
+static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log)
 {
     // attempt to get the schema location from the environment if nothing is specified

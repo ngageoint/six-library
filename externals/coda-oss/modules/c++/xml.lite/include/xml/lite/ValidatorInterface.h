@@ -117,10 +117,10 @@ public:
      *                      input
      */
     ValidatorInterface(const std::vector<std::string>& /*schemaPaths*/,
-                       logging::Logger* /*log*/ = nullptr,
+                       logging::Logger* /*log*/,
                        bool /*recursive*/ = true) {}
     ValidatorInterface(const std::vector<coda_oss::filesystem::path>&,
-                       logging::Logger* /*log*/ = nullptr,
+                       logging::Logger* /*log*/,
                        bool /*recursive*/ = true) { }
 
     //! Destructor.

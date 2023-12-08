@@ -29,6 +29,7 @@
 #include <string>
 #include <mutex>
 #include <type_traits>
+#include <memory>
 
 #include "config/compiler_extensions.h"
 #include "config/Exports.h"
@@ -420,8 +421,9 @@ struct CODA_OSS_API XercesContext final
     void destroy();
     
 private:
-    static std::mutex mMutex;
-    bool mIsDestroyed;
+    struct Impl;
+    static std::shared_ptr<Impl> getInstance();
+    std::shared_ptr<Impl> mpImpl;
 };
 }
 }

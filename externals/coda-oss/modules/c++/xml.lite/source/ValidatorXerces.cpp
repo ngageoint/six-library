@@ -91,56 +91,18 @@ bool ValidationErrorHandler::handleError(
 }
 
 ValidatorXerces::ValidatorXerces(
-        const std::vector<std::string>& schemaPaths, 
+        const std::vector<fs::path>& schemaPaths,
         logging::Logger* log,
         bool recursive) :
     ValidatorXerces(sys::convertPaths(schemaPaths), log, recursive)
 {
 }
-ValidatorXerces::~ValidatorXerces()
+ValidatorXerces::ValidatorXerces(
+    const std::vector<std::string>& schemaPaths, 
+    logging::Logger* log,
+    bool recursive) :
+    ValidatorInterface(schemaPaths, log, recursive)
 {
-}
-
-static std::string loadGrammar(xercesc::DOMLSParser& validator, const fs::path& schema)
-{
-    if (!validator.loadGrammar(schema.c_str(),
-                                 xercesc::Grammar::SchemaGrammarType,
-                                 true))
-    {
-        std::ostringstream oss;
-        oss << "Error: Failure to load schema " << schema;
-        return oss.str();
-    }
-    return "";
-}
-
-static std::vector<except::Context> loadGrammars(xercesc::DOMLSParser& validator,
-    const xml::lite::ValidatorXerces::FoundSchemas& schemas)
-{
-    std::vector<except::Context> errors;
-
-    // add the schema to the validator
-    for (auto&& schema : schemas.value)
-    {
-        const auto error = loadGrammar(validator, schema);
-        if (!error.empty())
-        {
-            errors.emplace_back(Ctxt(error));
-        }
-    }
-    return errors;
-}
-
-ValidatorXerces::ValidatorXerces(const FoundSchemas& foundSchemas,
-        logging::Logger* log, const XercesContext* pContext) :
-    ValidatorInterface(foundSchemas.value, nullptr /*log*/, false /*recursive*/)
-{
-    if (pContext == nullptr)
-    {
-        // Somebody else hasn't initilized Xerces, do it ourselves
-        pCtxt = std::make_unique<XercesContext>();
-    }
-
     // add each schema into a grammar pool --
     // this allows reuse
     mSchemaPool.reset(
@@ -191,33 +153,37 @@ ValidatorXerces::ValidatorXerces(const FoundSchemas& foundSchemas,
     config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, 
                          mErrorHandler.get());
 
-    // add the schema to the validator
-    const auto loadGrammarWarnings = loadGrammars(*mValidator, foundSchemas);
-    if (log != nullptr)
+    // load our schemas --
+    // search each directory for schemas
+    const auto schemas = loadSchemas(sys::convertPaths(schemaPaths), recursive);
+
+    //  add the schema to the validator
+    //  add the schema to the validator
+    for (auto&& schema : schemas)
     {
-        for (auto&& warning : loadGrammarWarnings)
+        if (!mValidator->loadGrammar(schema.c_str(),
+                                     xercesc::Grammar::SchemaGrammarType,
+                                     true))
         {
-            log->warn(warning);
+            if (log != nullptr)
+            {
+                std::ostringstream oss;
+                oss << "Error: Failure to load schema " << schema;
+                log->warn(Ctxt(oss));
+            }
         }
     }
 
     //! no additional schemas will be loaded after this point!
     mSchemaPool->lockPool();
 }
-ValidatorXerces::ValidatorXerces(
-        const std::vector<coda_oss::filesystem::path>& schemaPaths,
-        logging::Logger* log,
-        bool recursive) :
-    ValidatorXerces(findSchemas(schemaPaths, recursive), log)
-{
-}
 
-xml::lite::ValidatorXerces::FoundSchemas ValidatorXerces::findSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
+std::vector<coda_oss::filesystem::path> ValidatorXerces::loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive)
 {
     // load our schemas --
     // search each directory for schemas
     sys::OS os;
-    return FoundSchemas{os.search(schemaPaths, "", ".xsd", recursive)};
+    return os.search(schemaPaths, "", ".xsd", recursive);
 }
 
 // From config.h.in: Define to the 16 bit type used to represent Xerces UTF-16 characters
