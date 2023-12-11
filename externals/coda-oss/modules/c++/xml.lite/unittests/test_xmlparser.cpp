@@ -463,8 +463,8 @@ static void testValidateXmlFile_(const std::string& testName, const std::string&
     static const auto xsd = find_unittest_file("doc.xsd");
     const auto path = find_unittest_file(xmlFile);
 
-    const std::vector<std::filesystem::path> schemaPaths{xsd.parent_path()}; // fs::path -> new string-conversion code
-    const xml::lite::Validator validator(schemaPaths, nullptr /*log*/);
+    const std::vector<std::filesystem::path> schemaPaths{xsd.parent_path()};
+    const xml::lite::Validator validator(schemaPaths);
 
     io::FileInputStream fis(path);
     std::vector<xml::lite::ValidationInfo> errors;
