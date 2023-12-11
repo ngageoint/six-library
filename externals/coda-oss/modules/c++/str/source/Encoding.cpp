@@ -33,6 +33,7 @@
 #include <stdexcept>
 #include <vector>
 #include <iterator>
+#include <string>
 
 #include "gsl/gsl.h"
 #include "config/compiler_extensions.h"
@@ -65,59 +66,58 @@ CODA_OSS_disable_warning_pop
 
 // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
 // in a map: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
-inline coda_oss::u8string utf8_(uint32_t i)
+inline coda_oss::u8string utf8_(char32_t i)
 {
     const auto ch = gsl::narrow<std::u32string::value_type>(i);
     return str::to_u8string(std::u32string{ch});
 }
 
-static const auto& Windows1252_x80_x9F_to_u8string()
+static const auto& Windows1252_x80_x9F_to_u8string_()
 {
-    static const std::map<uint32_t, coda_oss::u8string> retval {
-        {0x80, utf8_(0x20AC) } // EURO SIGN
-        // , {0x81, replacement_character } // UNDEFINED
-        , {0x82, utf8_(0x201A) } // SINGLE LOW-9 QUOTATION MARK
-        , {0x83, utf8_(0x0192)  } // LATIN SMALL LETTER F WITH HOOK
-        , {0x84, utf8_(0x201E)  } // DOUBLE LOW-9 QUOTATION MARK
-        , {0x85, utf8_(0x2026)  } // HORIZONTAL ELLIPSIS
-        , {0x86, utf8_(0x2020)  } // DAGGER
-        , {0x87, utf8_(0x2021)  } // DOUBLE DAGGER
-        , {0x88, utf8_(0x02C6)  } // MODIFIER LETTER CIRCUMFLEX ACCENT
-        , {0x89, utf8_(0x2030)  } // PER MILLE SIGN
-        , {0x8A, utf8_(0x0160)  } // LATIN CAPITAL LETTER S WITH CARON
-        , {0x8B, utf8_(0x2039)  } // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-        , {0x8C, utf8_(0x0152)  } // LATIN CAPITAL LIGATURE OE
-        //, {0x8D, replacement_character } // UNDEFINED
-        , {0x8E, utf8_(0x017D)  } // LATIN CAPITAL LETTER Z WITH CARON
-        //, {0x8F, replacement_character } // UNDEFINED
-        //, {0x90, replacement_character } // UNDEFINED
-        , {0x91, utf8_(0x2018)  } // LEFT SINGLE QUOTATION MARK
-        , {0x92, utf8_(0x2019)  } // RIGHT SINGLE QUOTATION MARK
-        , {0x93, utf8_(0x201C)  } // LEFT DOUBLE QUOTATION MARK
-        , {0x94, utf8_(0x201D)  } // RIGHT DOUBLE QUOTATION MARK
-        , {0x95, utf8_(0x2022)  } // BULLET
-        , {0x96, utf8_(0x2013)  } // EN DASH
-        , {0x97, utf8_(0x2014)  } // EM DASH
-        , {0x98, utf8_(0x02DC)  } // SMALL TILDE
-        , {0x99, utf8_(0x2122)  } // TRADE MARK SIGN
-        , {0x9A, utf8_(0x0161)  } // LATIN SMALL LETTER S WITH CARON
-        , {0x9B, utf8_(0x203A)  } // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-        , {0x9C, utf8_(0x0153)  } // LATIN SMALL LIGATURE OE
-        //, {0x9D, replacement_character } // UNDEFINED
-        , {0x9E, utf8_(0x017E)  } // LATIN SMALL LETTER Z WITH CARON
-        , {0x9F, utf8_(0x0178)  } // LATIN CAPITAL LETTER Y WITH DIAERESIS
+    static const std::map<char32_t, coda_oss::u8string> retval{
+            {U'\x80', utf8_(U'\x20AC')}  // EURO SIGN
+        // , {U'\x81, replacement_character } // UNDEFINED
+        , {U'\x82', utf8_(U'\x201A') } // SINGLE LOW-9 QUOTATION MARK
+        , {U'\x83', utf8_(U'\x0192') } // LATIN SMALL LETTER F WITH HOOK
+        , {U'\x84', utf8_(U'\x201E') } // DOUBLE LOW-9 QUOTATION MARK
+        , {U'\x85', utf8_(U'\x2026') } // HORIZONTAL ELLIPSIS
+        , {U'\x86', utf8_(U'\x2020') } // DAGGER
+        , {U'\x87', utf8_(U'\x2021') } // DOUBLE DAGGER
+        , {U'\x88', utf8_(U'\x02C6') } // MODIFIER LETTER CIRCUMFLEX ACCENT
+        , {U'\x89', utf8_(U'\x2030') } // PER MILLE SIGN
+        , {U'\x8A', utf8_(U'\x0160') } // LATIN CAPITAL LETTER S WITH CARON
+        , {U'\x8B', utf8_(U'\x2039') } // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+        , {U'\x8C', utf8_(U'\x0152') } // LATIN CAPITAL LIGATURE OE
+        //, {U'\x8D, replacement_character } // UNDEFINED
+        , {U'\x8E', utf8_(U'\x017D') } // LATIN CAPITAL LETTER Z WITH CARON
+        //, {U'\x8F, replacement_character } // UNDEFINED
+        //, {U'\x90, replacement_character } // UNDEFINED
+        , {U'\x91', utf8_(U'\x2018') } // LEFT SINGLE QUOTATION MARK
+        , {U'\x92', utf8_(U'\x2019') } // RIGHT SINGLE QUOTATION MARK
+        , {U'\x93', utf8_(U'\x201C') } // LEFT DOUBLE QUOTATION MARK
+        , {U'\x94', utf8_(U'\x201D') } // RIGHT DOUBLE QUOTATION MARK
+        , {U'\x95', utf8_(U'\x2022') } // BULLET
+        , {U'\x96', utf8_(U'\x2013') } // EN DASH
+        , {U'\x97', utf8_(U'\x2014') } // EM DASH
+        , {U'\x98', utf8_(U'\x02DC') } // SMALL TILDE
+        , {U'\x99', utf8_(U'\x2122') } // TRADE MARK SIGN
+        , {U'\x9A', utf8_(U'\x0161') } // LATIN SMALL LETTER S WITH CARON
+        , {U'\x9B', utf8_(U'\x203A') } // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+        , {U'\x9C', utf8_(U'\x0153') } // LATIN SMALL LIGATURE OE
+        //, {U'\x9D, replacement_character } // UNDEFINED
+        , {U'\x9E', utf8_(U'\x017E') } // LATIN SMALL LETTER Z WITH CARON
+        , {U'\x9F', utf8_(U'\x0178') } // LATIN CAPITAL LETTER Y WITH DIAERESIS
     };
     return retval;
 }
-
 static auto Windows1252_to_u8string()
 {
-    auto retval = Windows1252_x80_x9F_to_u8string();
+    auto retval = Windows1252_x80_x9F_to_u8string_();
 
     // Add the ISO8859-1 values to the map too.  1) We're already looking
     // in the map anyway for Windows-1252 characters. 2) Need map
     // entires for conversion from UTF-8 to Windows-1252.
-    for (std::u32string::value_type ch = 0xA0; ch <= 0xff; ch++)
+    for (char32_t ch = U'\xA0'; ch <= U'\xff'; ch++)
     {
         // ISO8859-1 can be converted to UTF-8 with bit-twiddling
       
@@ -186,7 +186,14 @@ static void fromWindows1252_(str::W1252string::value_type ch, std::basic_string<
             // If the input text contains a character that isn't defined in Windows-1252; return a
             // "replacement character."  Yes, this will  **corrupt** the input data as information is lost:
             // https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
-            static const coda_oss::u8string replacement_character = utf8_(0xfffd);
+            //
+            // Or ... https://en.wikipedia.org/wiki/Windows-1252
+            // > According to the information on Microsoft's and the Unicode
+            // > Consortium's websites, positions 81, 8D, 8F, 90, and 9D are
+            // > unused; however, the Windows API `MultiByteToWideChar` maps these
+            // > to the corresponding C1 control codes. The "best fit" mapping
+            // > documents this behavior, too.
+            static const coda_oss::u8string replacement_character = utf8_(U'\xfffd');
             append(result, replacement_character);
         }
         else
@@ -229,7 +236,7 @@ inline void w1252to32(str::W1252string::const_pointer p, size_t sz, std::u32stri
 }
 
 template<typename TKey, typename TValue>
-std::map<TValue, TKey> kv_to_vk(const std::map<TKey, TValue>& kv)
+auto kv_to_vk(const std::map<TKey, TValue>& kv)
 {
     std::map<TValue, TKey> retval;
     for (const auto& p : kv)

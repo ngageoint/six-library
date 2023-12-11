@@ -1,5 +1,11 @@
 #pragma once
 
+// Needs to be outside of `#pragma warning(push)`
+#pragma warning(suppress: 4193) // #pragma warning(pop): no matching '...'
+#pragma warning(pop)
+#pragma warning(disable: 4251) // '...' : class '...' needs to have dll-interface to be used by clients of struct '...'
+#pragma warning(push)
+
 #pragma warning(push)
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data

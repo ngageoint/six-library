@@ -184,9 +184,7 @@ TEST_CASE(sicd_French_xml)
 //    const auto schemaPaths = ::six::testing::getSchemaPaths();
 //
 //    // Use legacy APIs ... to test other XML processing path
-//    std::vector<std::string> schemaPaths_;
-//    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
-//        [](const std::filesystem::path& p) { return p.string(); });
+//    const auto schemaPaths_ = sys::convertPaths(schemaPaths);
 //
 //    six::sicd::NITFReadComplexXMLControl reader;
 //    reader.setLogger();
