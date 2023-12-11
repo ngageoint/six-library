@@ -26,6 +26,7 @@
 #include <algorithm>
 
 #include <except/Exception.h>
+#include <sys/Path.h>
 
 #include <cphd/ByteSwap.h>
 #include <cphd/CPHDXMLControl.h>
@@ -62,13 +63,6 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 {
 }
 
-static auto transform(const std::vector<std::string>& schemaPaths)
-{
-    std::vector<std::filesystem::path> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-        [](const std::string& s) { return s; });
-    return retval;
-}
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,
                        const std::vector<std::string>& schemaPaths,
@@ -78,7 +72,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mElementSize(metadata.data.getNumBytesPerSample()),
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
-    mSchemaPaths(transform(schemaPaths)),
+    mSchemaPaths(sys::convertPaths(schemaPaths)),
     mpSchemaPaths(&mSchemaPaths),
     mSharedStream(outStream),
     mStream(*mSharedStream),
