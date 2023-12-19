@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription SOURCB_description[] = {
     {NITF_BCS_N, 9, "Image Segment Reciprocal Scale", "IS_SCA" },
     {NITF_BCS_A, 10, "Colout Patch ID", "CPATCH" },
     {NITF_BCS_N, 2, "Number of Source Descriptions", "NUM_SOUR" },
@@ -121,6 +121,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(SOURCB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(SOURCB)
 
 NITF_CXX_ENDGUARD

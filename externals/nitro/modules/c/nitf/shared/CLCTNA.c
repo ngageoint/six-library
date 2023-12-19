@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CLCTNA_description[] = {
     {NITF_BCS_N, 4, "VERNUM", "VERNUM" },
     {NITF_BCS_A, 25, "CLCTN_NAME", "CLCTN_NAME" },
     {NITF_BCS_A, 255, "CLCTN_DESCRIPT", "CLCTN_DESCRIPT" },
@@ -57,6 +57,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CLCTNA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CLCTNA)
 
 NITF_CXX_ENDGUARD

@@ -26,7 +26,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSDIDA_description[] = {
     {NITF_BCS_N,  2,  "Day of Dataset Collection",       "DAY" },
     {NITF_BCS_A,  3,  "Month of Dataset Collection",     "MONTH" },
     {NITF_BCS_N,  4,  "Year of Dataset Collection",      "YEAR" },
@@ -47,7 +47,7 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSDIDA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSDIDA)
 
 NITF_CXX_ENDGUARD
 

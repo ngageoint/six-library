@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription ACCVTB_description[] = {
     {NITF_BCS_N, 2, "Number of vertical accuracy regions",
      "NUMACVT" },
     {NITF_LOOP, 0, NULL, "NUMACVT"},
@@ -46,6 +46,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(ACCVTB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(ACCVTB)
 
 NITF_CXX_ENDGUARD

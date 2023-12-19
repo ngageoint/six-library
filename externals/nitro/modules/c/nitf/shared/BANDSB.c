@@ -26,7 +26,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription BANDSB_description[] = {
     {NITF_BCS_N,  5,  "Number of Bands",                                    "COUNT" },
     {NITF_BCS_A,  24, "Data Representation",                                "RADIOMETRIC_QUANTITY" },
     {NITF_BCS_A,  1,  "Data Representation Unit",                           "RADIOMETRIC_QUANTITY_UNIT" },
@@ -191,7 +191,7 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(BANDSB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(BANDSB)
 
 NITF_CXX_ENDGUARD
 

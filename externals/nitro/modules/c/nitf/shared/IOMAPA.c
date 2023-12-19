@@ -74,14 +74,14 @@ static nitf_TREDescription descrip_00091[] = {
 };
 
 /* Define the available descriptions and the default one */
-static nitf_TREDescriptionInfo descriptions[] = {
+static nitf_TREDescriptionInfo IOMAPA_descriptions[] = {
     { "IOMAPA_6", descrip_00006, 6 },
     { "IOMAPA_8202", descrip_08202, 8202 },
     { "IOMAPA_16", descrip_00016, 16 },
     { "IOMAPA_91", descrip_00091, 91 },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
-static nitf_TREDescriptionSet IOMAPADescriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet IOMAPADescriptionSet = { 0, IOMAPA_descriptions };
 
 NITF_DECLARE_PLUGIN(IOMAPA)
 

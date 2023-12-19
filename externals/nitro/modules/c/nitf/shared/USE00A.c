@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription USE00A_description[] = {
     {NITF_BCS_N, 3, "Angle to North", "ANGLE_TO_NORTH" },
     {NITF_BCS_A, 5, "Mean GSD     ", "MEAN_GSD" },
     {NITF_BCS_A, 1, "Reserved 1", "rsrvd01" },
@@ -53,6 +53,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(USE00A, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(USE00A)
 
 NITF_CXX_ENDGUARD
