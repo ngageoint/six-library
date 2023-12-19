@@ -298,9 +298,9 @@ protected:
 std::ostream& operator<<(std::ostream& os, const sys::Path& path);
 std::istream& operator>>(std::istream& os, sys::Path& path);
 
-// Convert between collections of paths as strings and sys::filesystem::path
-CODA_OSS_API std::vector<std::string> convertPaths(coda_oss::span<const filesystem::path>);
-CODA_OSS_API std::vector<filesystem::path> convertPaths(coda_oss::span<const std::string>);
+// Convert between collections of paths as strings and coda_oss::filesystem::path
+CODA_OSS_API std::vector<std::string> convertPaths(coda_oss::span<const coda_oss::filesystem::path>);
+CODA_OSS_API std::vector<coda_oss::filesystem::path> convertPaths(coda_oss::span<const std::string>);
 template<typename T>
 inline auto convertPaths(const std::vector<T>& paths)
 {

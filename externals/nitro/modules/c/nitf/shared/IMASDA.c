@@ -25,7 +25,7 @@
 NITF_CXX_GUARD
 
 // MIL-PRF-89034, Table 68 (page 131).
-static nitf_TREDescription description[] = {
+static nitf_TREDescription IMASDA_description[] = {
     {NITF_BCS_A, 22, "Longitude Translation", "LONTR" },
     {NITF_BCS_A, 22, "Latitude Translation", "LATTR" },
     {NITF_BCS_A, 22, "Elevation Translation", "ELVTR" },
@@ -40,6 +40,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(IMASDA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(IMASDA)
 
 NITF_CXX_ENDGUARD

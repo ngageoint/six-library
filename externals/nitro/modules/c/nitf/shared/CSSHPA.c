@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSSHPA_description[] = {
     {NITF_BCS_A, 25, "Shapefile Use", "SHAPE_USE" },
     {NITF_BCS_A, 10, "Type of shapes", "SHAPE_CLASS" },
     {NITF_IF, 0, "eq CLOUD_SHAPES             ", "SHAPE_USE"},
@@ -40,6 +40,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSSHPA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSSHPA)
 
 NITF_CXX_ENDGUARD

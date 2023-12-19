@@ -849,6 +849,8 @@ std::string Path::expandEnvironmentVariables(const std::string& path, fs::file_t
     bool unused_checkIfExists = true;
     return expandEnvironmentVariables_(path, unused_checkIfExists, &type);
 }
+} // sys
+
 
 template<typename TReturn, typename TSpan, typename TFunc>
 inline auto convertPaths_(coda_oss::span<const TSpan> paths, TFunc fun)
@@ -857,13 +859,11 @@ inline auto convertPaths_(coda_oss::span<const TSpan> paths, TFunc fun)
     std::transform(paths.begin(), paths.end(), std::back_inserter(retval), fun);
     return retval;
 }
-std::vector<std::string> convertPaths(coda_oss::span<const fs::path> paths)
+std::vector<std::string> sys::convertPaths(coda_oss::span<const fs::path> paths)
 {
     return convertPaths_<std::string>(paths, [](const auto& p) { return p.string(); });
 }
-std::vector<fs::path> convertPaths(coda_oss::span<const std::string> paths)
+std::vector<fs::path> sys::convertPaths(coda_oss::span<const std::string> paths)
 {
     return convertPaths_<fs::path>(paths, [](const auto& p) { return p; });
-}
-
 }

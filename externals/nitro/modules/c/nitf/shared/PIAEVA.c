@@ -25,12 +25,12 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PIAEVA_description[] = {
     {NITF_BCS_A, 38, "Event Name", "EVENTNAME" },
     {NITF_BCS_A, 8, "Event Type", "EVENTTYPE" },
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PIAEVA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PIAEVA)
 
 NITF_CXX_ENDGUARD
