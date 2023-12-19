@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription EXPLTB_description[] = {
     {NITF_BCS_A, 7, "Angle to True North", "ANGLE_TO_NORTH" },
     {NITF_BCS_A, 6, "Angle North Accuracy", "ANGLE_TO_NORTH_ACCY" },
     {NITF_BCS_A, 7, "Squint Angle", "SQUINT_ANGLE" },
@@ -47,6 +47,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(EXPLTB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(EXPLTB)
 
 NITF_CXX_ENDGUARD

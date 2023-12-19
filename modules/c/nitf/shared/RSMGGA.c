@@ -44,7 +44,7 @@ static int nxptsXnypts(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* e
     return nxpts * nypts;
 }
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription RSMGGA_description[] = {
     {NITF_BCS_A, 80, "Image Identifier", "IID" },
     {NITF_BCS_A, 40, "RSM Image Support Data Edition", "EDITION" },
 
@@ -104,6 +104,6 @@ static nitf_TREDescription description[] = {
 
 
 
-NITF_DECLARE_SINGLE_PLUGIN(RSMGGA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(RSMGGA)
 
 NITF_CXX_ENDGUARD

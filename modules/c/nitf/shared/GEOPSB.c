@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription GEOPSB_description[] = {
     {NITF_BCS_A, 3, "Coordinate System Type", "TYP" },
     {NITF_BCS_A, 3, "Coordinate Units", "UNI" },
     {NITF_BCS_A, 80, "Geodetic Datum Name", "DAG" },
@@ -42,6 +42,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(GEOPSB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(GEOPSB)
 
 NITF_CXX_ENDGUARD

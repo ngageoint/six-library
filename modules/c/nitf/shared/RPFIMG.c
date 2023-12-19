@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription RPFIMG_description[] = {
     {NITF_BINARY, 1, "location section length", "LOCLEN" },
     {NITF_BINARY, 1, "component location table offset", "CLTOFF" },
     {NITF_BINARY, 1, "# of section location records", "SECRECS" },
@@ -40,6 +40,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(RPFIMG, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(RPFIMG)
 
 NITF_CXX_ENDGUARD

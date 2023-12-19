@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription SNSPSB_description[] = {
     {NITF_BCS_N, 2, "Number of sets of sensor parameters", "NUMSNS" },
     {NITF_LOOP, 0, NULL, "NUMSNS"},
     {NITF_BCS_N, 2, "Number of Bounding Polygons", "NUM_BP" },
@@ -86,6 +86,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(SNSPSB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(SNSPSB)
 
 NITF_CXX_ENDGUARD

@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PIAEQA_description[] = {
     {NITF_BCS_A, 7, "Equipment Code", "EQPCODE" },
     {NITF_BCS_A, 45, "Equipment Nomenclature", "EQPNOMEN" },
     {NITF_BCS_A, 64, "Equipment Manufacturer", "EQPMAN" },
@@ -37,6 +37,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PIAEQA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PIAEQA)
 
 NITF_CXX_ENDGUARD

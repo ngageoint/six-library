@@ -27,7 +27,7 @@
 NITF_CXX_GUARD
 
 /* From STDI-0002-1 Appendix AK: Table AK.6-5: MATESA */
-static nitf_TREDescription description[] = {
+static nitf_TREDescription MATESA_description[] = {
     {NITF_BCS_A, 42, "Current File/Segment Source", "CUR_SOURCE" },
     {NITF_BCS_A, 16, "Current File/Segment Mate Type", "CUR_MATE_TYPE" },
     {NITF_BCS_N, 4, "Length of the CUR_FILE_ID field", "CUR_FILE_ID_LEN" },
@@ -46,6 +46,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL },
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(MATESA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(MATESA)
 
 NITF_CXX_ENDGUARD

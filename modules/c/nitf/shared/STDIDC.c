@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription STDIDC_description[] = {
     {NITF_BCS_A, 14, "ACQ DATE", "ACQUISITION_DATE" },
     {NITF_BCS_A, 14, "MISSION", "MISSION" },
     {NITF_BCS_A, 2, "PASS", "PASS" },
@@ -47,6 +47,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(STDIDC, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(STDIDC)
 
 NITF_CXX_ENDGUARD

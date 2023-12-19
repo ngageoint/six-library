@@ -25,13 +25,13 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription SECTGA_description[] = {
     {NITF_BCS_A, 12, "Secondary Target ID", "SEC_ID" },
     {NITF_BCS_A, 15, "Secondary Target BE No", "SEC_BE" },
     {NITF_BCS_A, 1, "reserved 1", "RESVD001" },
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(SECTGA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(SECTGA)
 
 NITF_CXX_ENDGUARD
