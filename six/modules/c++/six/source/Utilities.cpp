@@ -96,10 +96,9 @@ BooleanType six::toType<BooleanType>(const std::string& s)
 {
     std::string type(s);
     str::trim(type);
-    str::lower(type);
-    if (type == "true" || type == "1" || type == "yes")
+    if (str::eq(type, "true") || type == "1" || str::eq(type, "yes"))
         return BooleanType::IS_TRUE;
-    if (type == "false" || type == "0" || type == "no")
+    if (str::eq(type, "false") || type == "0" || str::eq(type, "no"))
         return BooleanType::IS_FALSE;
     return BooleanType::NOT_SET;
 }
