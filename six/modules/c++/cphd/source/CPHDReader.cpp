@@ -31,6 +31,7 @@
 #include <mem/ScopedArray.h>
 #include <xml/lite/MinidomParser.h>
 #include <gsl/gsl.h>
+#include <sys/Path.h>
 
 #include <six/XmlLite.h>
 #include <cphd/CPHDXMLControl.h>
@@ -60,10 +61,7 @@ static cphd::Metadata fromXML(io::SeekableInputStream& inStream,
         logger = std::make_shared<logging::NullLogger>();
     }
 
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     return cphd::CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument(), schemaPaths);
 }
 cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,

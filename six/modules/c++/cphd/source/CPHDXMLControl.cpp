@@ -33,6 +33,7 @@
 #include <logging/NullLogger.h>
 #include <xml/lite/MinidomParser.h>
 #include <str/Encoding.h>
+#include <sys/Path.h>
 
 #include <six/XMLControl.h>
 #include <six/XmlLite.h>
@@ -62,8 +63,7 @@ std::u8string CPHDXMLControl::toXMLString(
     std::vector<std::string> schemaPaths;
     if (pSchemaPaths != nullptr)
     {
-        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(schemaPaths),
-            [](const std::filesystem::path& p) { return p.string(); });
+        schemaPaths = sys::convertPaths(*pSchemaPaths);
     }
 
     std::unique_ptr<xml::lite::Document> doc(toXML(metadata, schemaPaths));
@@ -78,10 +78,7 @@ std::u8string CPHDXMLControl::toXMLString(
         const std::vector<std::string>& schemaPaths_,
         bool prettyPrint)
 {
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     return toXMLString(metadata, &schemaPaths, prettyPrint);
 }
 std::string CPHDXMLControl::toXMLString_(
@@ -130,10 +127,7 @@ std::unique_ptr<xml::lite::Document> CPHDXMLControl::toXMLImpl(const Metadata& m
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::string& xmlString,
                                      const std::vector<std::string>& schemaPaths_)
 {
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     return fromXML(str::u8FromNative(xmlString), schemaPaths);
 }
 std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString,
@@ -158,9 +152,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const xml::lite::Document* doc
 }
 Metadata CPHDXMLControl::fromXML(const xml::lite::Document& doc, const std::vector<std::filesystem::path>& schemaPaths)
 {
-    std::vector<std::string> schemaPaths_;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
-        [](const std::filesystem::path& p) { return p.string(); });
+    const auto schemaPaths_ = sys::convertPaths(schemaPaths);
     auto result = fromXML(&doc, schemaPaths_);
 
     auto retval = std::move(*(result.release()));

@@ -35,6 +35,7 @@
 #include <algorithm>
 
 #include <nitf/BufferedWriter.hpp>
+#include <sys/Path.h>
 
 #include "six/Types.h"
 #include "six/Container.h"
@@ -573,9 +574,7 @@ template<typename T>
 inline void save(NITFWriteControl& writeControl, 
     std::span<const T> imageData, const std::string& outputFile, const std::vector<std::string>& schemaPaths_)
 {
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     save(writeControl, imageData, outputFile, schemaPaths);
 }
 

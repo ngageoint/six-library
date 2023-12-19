@@ -200,6 +200,13 @@ SIX_SIX_API std::u8string toValidXMLString(const Data&,
 
 //!  Singleton declaration of our XMLControlRegistry
 SIX_SIX_API XMLControlRegistry& getXMLControlFactory();
+namespace XMLControlFactory
+{
+  inline auto& getInstance()
+  {
+    return getXMLControlFactory();
+  }
+}
 
 }
 

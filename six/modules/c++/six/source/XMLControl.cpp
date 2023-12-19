@@ -27,6 +27,8 @@
 #include <iterator>
 
 #include <logging/NullLogger.h>
+#include <sys/Path.h>
+
 #include <six/XMLControl.h>
 #include <six/Utilities.h>
 #include <six/Types.h>
@@ -99,15 +101,13 @@ std::vector<std::filesystem::path> XMLControl::loadSchemaPaths(const std::vector
     // a NULL pointer indicates that we don't want to validate against a schema
     if (pSchemaPaths != nullptr)
     {
-        std::vector<std::string> paths;
-        std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(paths),
-            [&](const std::filesystem::path& p) { return p.string();  });
+        std::vector<std::string> paths = sys::convertPaths(*pSchemaPaths);
 
         // If *pSchemaPaths is empty, this will use a default value.  To avoid all validation against a schema,
         // pass NULL for pSchemaPaths.
         loadSchemaPaths(paths);
 
-        std::transform(paths.begin(), paths.end(), std::back_inserter(retval), [&](const std::string& s) { return s; });
+        retval = sys::convertPaths(paths);
     }
     return retval;
 }
@@ -182,7 +182,7 @@ static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 static void validate_(const xml::lite::Element& rootElement,
-    const std::vector<std::filesystem::path>& schemaPaths, logging::Logger& log)
+    const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
 {
     xml::lite::Uri uri;
     rootElement.getUri(uri);
@@ -195,10 +195,10 @@ static void validate_(const xml::lite::Element& rootElement,
     // Process schema paths one at a time.  This will reduce the "noise" from XML validation failures
     // and could also make instantiating an xml::lite::ValidatorXerces faster.
     std::vector<xml::lite::ValidationInfo> all_errors;
-    for (auto&& schemaPath : schemaPaths)
+    for (auto&& foundSchema : foundSchemas)
     {
-        const std::vector<std::filesystem::path> schemaPaths_{ schemaPath }; // use one path at a time
-        const xml::lite::ValidatorXerces validator(schemaPaths_, &log, true); // this can be expensive to create as all sub-directories might be traversed
+        const std::vector<coda_oss::filesystem::path> foundSchemas_{ { foundSchema } };
+        const xml::lite::ValidatorXerces validator(foundSchemas_, &log);
 
         // validate against any specified schemas
         std::vector<xml::lite::ValidationInfo> errors;
@@ -215,14 +215,12 @@ static void validate_(const xml::lite::Element& rootElement,
     }
 
     // log any error found and throw
-    log_any_errors_and_throw(all_errors, schemaPaths, log);
+    log_any_errors_and_throw(all_errors, foundSchemas, log);
 }
-static void validate_(const xml::lite::Document& doc,
-    const std::vector<std::filesystem::path>& paths_, logging::Logger& log)
-{
-    // If the paths we have don't exist, throw
-    const auto paths = check_whether_paths_exist(paths_);
 
+static void validate_(const xml::lite::Document& doc,
+    const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
+{
     auto rootElement = doc.getRootElement();
     if (rootElement->getUri().empty())
     {
@@ -230,8 +228,12 @@ static void validate_(const xml::lite::Document& doc,
     }
 
     // validate against any specified schemas
-    validate_(*rootElement, paths, log);
+    validate_(*rootElement, foundSchemas, log);
 }
+
+static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::string>&, logging::Logger*);
+static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::filesystem::path>*, logging::Logger*);
+
 void XMLControl::validate(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths,
                           logging::Logger* log)
@@ -241,24 +243,9 @@ void XMLControl::validate(const xml::lite::Document* doc,
     // Existing code in xml::lite requires that the Logger be non-NULL
     assert(log != nullptr);
 
-    // attempt to get the schema location from the
-    // environment if nothing is specified
-    std::vector<std::string> paths(schemaPaths);
-    loadSchemaPaths(paths);
-    if (paths.empty())
-    {
-        std::ostringstream oss;
-        oss << "Coudn't validate XML - no schemas paths provided "
-            << " and " << six::SCHEMA_PATH << " not set.";
-
-        log->warn(oss);
-    }
-
-    std::vector<std::filesystem::path> schemaPaths_;
-    std::transform(paths.begin(), paths.end(), std::back_inserter(schemaPaths_), [&](const std::string& s) { return s; });
-
     // validate against any specified schemas
-    validate_(*doc, schemaPaths_, *log);
+    const auto foundSchemas = findValidSchemaPaths(schemaPaths, log); // If the paths we have don't exist, throw
+    validate_(*doc, foundSchemas, *log);
 }
 void XMLControl::validate(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths,
@@ -267,19 +254,53 @@ void XMLControl::validate(const xml::lite::Document& doc,
     // Existing code in xml::lite requires that the Logger be non-NULL
     assert(log != nullptr);
 
-    // attempt to get the schema location from the environment if nothing is specified
-    auto paths = loadSchemaPaths(pSchemaPaths);
-    if ((pSchemaPaths != nullptr) && paths.empty())
-    {
-        std::ostringstream oss;
-        oss << "Coudn't validate XML - no schemas paths provided "
-            << " and " << six::SCHEMA_PATH << " not set.";
+    // validate against any specified schemas
+    const auto foundSchemas = findValidSchemaPaths(pSchemaPaths, log);
+    validate_(doc, foundSchemas, *log);
+}
 
-        log->warn(oss);
+static auto findValidSchemas(const std::vector<std::filesystem::path>& paths_)
+{
+    // If the paths we have don't exist, throw
+    const auto paths = check_whether_paths_exist(paths_);
+    return xml::lite::ValidatorXerces::loadSchemas(paths, true /*recursive*/);
+}
+static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::string>& schemaPaths,
+    logging::Logger* log)
+{
+    // attempt to get the schema location from the
+    // environment if nothing is specified
+    std::vector<std::string> paths(schemaPaths);
+    XMLControl::loadSchemaPaths(paths);
+    if (paths.empty())
+    {
+        if (log != nullptr)
+        {
+            std::ostringstream oss;
+            oss << "Coudn't validate XML - no schemas paths provided "
+                << " and " << six::SCHEMA_PATH << " not set.";
+            log->warn(oss);
+        }
     }
 
-    // validate against any specified schemas
-    validate_(doc, paths, *log);
+    return findValidSchemas(sys::convertPaths(paths)); // If the paths we have don't exist, throw
+}
+static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::filesystem::path>* pSchemaPaths,
+    logging::Logger* log)
+{
+    // attempt to get the schema location from the environment if nothing is specified
+    auto paths = XMLControl::loadSchemaPaths(pSchemaPaths);
+    if ((pSchemaPaths != nullptr) && paths.empty())
+    {
+        if (log != nullptr)
+        {
+            std::ostringstream oss;
+            oss << "Coudn't validate XML - no schemas paths provided "
+                << " and " << six::SCHEMA_PATH << " not set.";
+            log->warn(oss);
+        }
+    }
+    return findValidSchemas(paths); // If the paths we have don't exist, throw
 }
 
 std::string XMLControl::getDefaultURI(const Data& data)
@@ -360,9 +381,7 @@ std::unique_ptr<Data> XMLControl::fromXMLImpl(const xml::lite::Document& doc) co
 Data* XMLControl::fromXML(const xml::lite::Document* doc,
                           const std::vector<std::string>& schemaPaths_)
 {
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
 
     assert(doc != nullptr);
     auto data = fromXML(*doc, &schemaPaths);
