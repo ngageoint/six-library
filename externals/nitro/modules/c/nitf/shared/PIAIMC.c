@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PIAIMC_description[] = {
     {NITF_BCS_N, 3, "Cloud Cover", "CLOUDCVR" },
     {NITF_BCS_A, 1, "Standard Radiometric Product", "SRP" },
     {NITF_BCS_A, 12, "Sensor Mode", "SENSMODE" },
@@ -48,6 +48,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PIAIMC, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PIAIMC)
 
 NITF_CXX_ENDGUARD

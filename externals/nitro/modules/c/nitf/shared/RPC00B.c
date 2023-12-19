@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription RPC00B_description[] = {
     {NITF_BCS_N, 1, "Success", "SUCCESS" },
     {NITF_BCS_A, 7, "Error - Bias", "ERR_BIAS" },
     {NITF_BCS_A, 7, "Error - Random", "ERR_RAND" },
@@ -54,6 +54,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(RPC00B, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(RPC00B)
 
 NITF_CXX_ENDGUARD

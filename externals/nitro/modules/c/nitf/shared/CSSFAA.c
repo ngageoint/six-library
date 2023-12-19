@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSSFAA_description[] = {
     {NITF_BCS_N,   1,  "number of bands",           "NUM_BANDS" },
     {NITF_LOOP, 0, NULL, "NUM_BANDS"},
     {NITF_BCS_A,   1,  "band category",             "BAND_TYPE" },
@@ -45,6 +45,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSSFAA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSSFAA)
 
 NITF_CXX_ENDGUARD

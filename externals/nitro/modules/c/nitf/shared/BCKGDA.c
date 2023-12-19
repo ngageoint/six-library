@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription BCKGDA_description[] = {
     {NITF_BCS_N, 8, "Background Width", "BGWIDTH" },
     {NITF_BCS_N, 8, "Background Height", "BGHEIGHT" },
     {NITF_BCS_N, 8, "Background Red", "BGRED" },
@@ -35,6 +35,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(BCKGDA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(BCKGDA)
 
 NITF_CXX_ENDGUARD

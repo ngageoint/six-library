@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSEPHA_description[] = {
     {NITF_BCS_A,  12,  "ephemeris flag",            "EPHEM_FLAG" },
     {NITF_BCS_N,   5,  "time b/w eph vectors",      "DT_EPHEM" },
     {NITF_BCS_N,   8,  "day of first eph vector",   "DATE_EPHEM" },
@@ -39,6 +39,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSEPHA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSEPHA)
 
 NITF_CXX_ENDGUARD

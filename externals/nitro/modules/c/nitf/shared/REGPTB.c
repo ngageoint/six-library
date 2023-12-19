@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription REGPTB_description[] = {
     {NITF_BCS_N, 4, "Number of Registration Points to Follow",
      "NUMPTS" },
     {NITF_LOOP, 0, NULL, "NUMPTS"},
@@ -38,6 +38,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(REGPTB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(REGPTB)
 
 NITF_CXX_ENDGUARD

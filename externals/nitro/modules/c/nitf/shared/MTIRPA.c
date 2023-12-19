@@ -27,7 +27,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription MTIRPA_description[] = {
     {NITF_BCS_A, 2, "Destination Point", "destp" },
     {NITF_BCS_A, 3, "MTI Packet ID No.", "mtpid" },
     {NITF_BCS_A, 4, "Patch Number", "pchno" },
@@ -48,6 +48,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(MTIRPA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(MTIRPA)
 
 NITF_CXX_ENDGUARD

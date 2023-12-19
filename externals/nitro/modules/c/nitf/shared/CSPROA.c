@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSPROA_description[] = {
     {NITF_BCS_A, 12, "fill0", "RESERVED_0" },
     {NITF_BCS_A, 12, "fill1", "RESERVED_1" },
     {NITF_BCS_A, 12, "fill2", "RESERVED_2" },
@@ -39,6 +39,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSPROA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSPROA)
 
 NITF_CXX_ENDGUARD

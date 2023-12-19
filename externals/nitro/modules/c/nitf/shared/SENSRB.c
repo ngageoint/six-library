@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription SENSRB_description[] = {
     {NITF_BCS_A,  1,     "General Data",                 "GENERAL_DATA"},        /* 01 */
     {NITF_IF,     0,     "eq Y",                         "GENERAL_DATA"},
     {NITF_BCS_A,  25,    "Sensor Name",                  "SENSOR"},              /* 01a */
@@ -402,6 +402,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0,       NULL,                           NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(SENSRB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(SENSRB)
 
 NITF_CXX_ENDGUARD

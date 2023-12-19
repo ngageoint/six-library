@@ -26,7 +26,7 @@
 NITF_CXX_GUARD
 
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription TRGTA_description[] = {
     {NITF_BCS_N, 4, "VERNUM", "VERNUM" },
     {NITF_BCS_N, 3, "NO_VALID_TGTS", "NO_VALID_TGTS" },
     {NITF_BCS_N, 3, "NO_SCENE_TGTS", "NO_SCENE_TGTS" },
@@ -88,6 +88,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(TRGTA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(TRGTA)
 
 NITF_CXX_ENDGUARD
