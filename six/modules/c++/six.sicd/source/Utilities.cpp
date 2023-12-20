@@ -220,7 +220,7 @@ class SICD_readerAndConverter final
     }
     const types::RowCol<size_t>& offset;
     six::zfloat* buffer;
-    const six::Amp8iPhs8iLookup_t& lookup;
+    six::Amp8iPhs8iLookup_t lookup;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,

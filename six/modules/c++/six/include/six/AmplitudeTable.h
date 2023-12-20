@@ -31,6 +31,7 @@
 #include <string>
 #include <memory>
 #include <array>
+#include <std/mdspan>
 
 #include <import/except.h>
 
@@ -157,14 +158,11 @@ struct SIX_SIX_API LUT
  *  double precision amplitude value
  */
 
-// Store the computed `six::zfloat` for every possible 
-// amp/phs pair, a total of 256*256 values.
- //! Fixed size 256 element array of complex values.
-using phase_values_t = std::array<six::zfloat, UINT8_MAX + 1>;
-//! Fixed size 256 x 256 matrix of complex values.
-using Amp8iPhs8iLookup_t = std::array<phase_values_t, UINT8_MAX + 1>;
-
-// More descriptive than std::pair<uint8_t, uint8_t>
+ // Store the computed `six::zfloat` for every possible 
+ // amp/phs pair, a total of 256*256 values.
+using Amp8iPhs8iLookup_t = std::mdspan<const six::zfloat, std::dextents<size_t, 2>>;
+ 
+ // More descriptive than std::pair<uint8_t, uint8_t>
 struct SIX_SIX_API AMP8I_PHS8I_t final
 {
     uint8_t amplitude;
@@ -300,13 +298,13 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     // This is a "cache" mostly because this is a convenient place to store the data; it
     // doesn't take that long to generate the lookup table.  Note that existing code wants
     // to work with a `const AmplitudeTable &`, thus `mutable` ... <shrug>.
-    void cacheLookup_(std::unique_ptr<Amp8iPhs8iLookup_t>&& lookup) const
+    void cacheLookup_(std::vector<six::zfloat>&& lookup_) const
     {
-        pLookup = std::move(lookup);
+        lookup = std::move(lookup_);
     }
-    const Amp8iPhs8iLookup_t* getLookup() const
+    const std::vector<six::zfloat>* getLookup() const
     {
-        return pLookup.get();
+        return lookup.empty() ? nullptr : &lookup;
     }
 
     // Again, this is a convenient place to store the data as it depends on an AmplitudeTable instance.
@@ -320,7 +318,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     }
 
 private:
-    mutable std::unique_ptr<Amp8iPhs8iLookup_t> pLookup; // to big for the stack
+    mutable std::vector<six::zfloat> lookup;
     mutable std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pFromComplex;    
 };
 
