@@ -200,7 +200,7 @@ nitf::ComponentInfo FileHeader::getImageInfo(int i) const
 {
     int num = getNumImages();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+        throw except::IndexOutOfRangeException(Ctxt(str::Format(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return make_ComponentInfo(getNativeOrThrow()->imageInfo, i);
 }
@@ -209,7 +209,7 @@ nitf::ComponentInfo FileHeader::getGraphicInfo(int i) const
 {
     int num = getNumGraphics();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+        throw except::IndexOutOfRangeException(Ctxt(str::Format(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return make_ComponentInfo(getNativeOrThrow()->graphicInfo, i);
 }
@@ -218,7 +218,7 @@ nitf::ComponentInfo FileHeader::getLabelInfo(int i) const
 {
     int num = getNumLabels();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+        throw except::IndexOutOfRangeException(Ctxt(str::Format(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return make_ComponentInfo(getNativeOrThrow()->labelInfo, i);
 }
@@ -227,7 +227,7 @@ nitf::ComponentInfo FileHeader::getTextInfo(int i) const
 {
     int num = getNumTexts();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+        throw except::IndexOutOfRangeException(Ctxt(str::Format(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return make_ComponentInfo(getNativeOrThrow()->textInfo, i);
 }
@@ -236,7 +236,7 @@ nitf::ComponentInfo FileHeader::getDataExtensionInfo(int i) const
 {
     int num = getNumDataExtensions();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+        throw except::IndexOutOfRangeException(Ctxt(str::Format(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return make_ComponentInfo(getNativeOrThrow()->dataExtensionInfo, i);
 }
@@ -245,7 +245,7 @@ nitf::ComponentInfo FileHeader::getReservedExtensionInfo(int i) const
 {
     int num = getNumReservedExtensions();
     if (i < 0 || i >= num)
-        throw except::IndexOutOfRangeException(Ctxt(FmtX(
+        throw except::IndexOutOfRangeException(Ctxt(str::Format(
                 "Index out of range: (%d <= %d <= %d)", 0, i, num)));
     return make_ComponentInfo(getNativeOrThrow()->reservedExtensionInfo, i);
 }

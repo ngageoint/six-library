@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription MAPLOB_description[] = {
     {NITF_BCS_A, 3, "Length units", "UNILOA" },
     {NITF_BCS_N, 5, "Easting interval", "LOD" },
     {NITF_BCS_N, 5, "Northing interval", "LAD" },
@@ -33,6 +33,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(MAPLOB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(MAPLOB)
 
 NITF_CXX_ENDGUARD

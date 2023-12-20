@@ -45,7 +45,7 @@ void sys::DLL::load(const std::string& libName)
 
     // Now we check the return value
     if (!mLib)
-        throw sys::DLLException(FmtX("Failed to load() DLL: %s",
+        throw sys::DLLException(str::Format("Failed to load() DLL: %s",
                                      mLibName.c_str() ) );
 }
 
@@ -75,7 +75,7 @@ retrieve(const std::string& functionName)
 
         // Now we check the ptr value
         if (ptr == nullptr)
-            throw sys::DLLException(FmtX("Failed to load function: %s",
+            throw sys::DLLException(str::Format("Failed to load function: %s",
                                          functionName.c_str()));
         return ptr;
     }

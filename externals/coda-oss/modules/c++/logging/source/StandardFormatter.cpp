@@ -48,15 +48,14 @@ void StandardFormatter::format(const LogRecord* record, io::OutputStream& os) co
     // populate log
     long threadId = sys::getThreadID();
     std::string format = mFmt;
-    str::replace(format, THREAD_ID, str::toString(threadId));
+    str::replace(format, THREAD_ID, std::to_string(threadId));
     str::replace(format, LOG_NAME,  name);
     str::replace(format, LOG_LEVEL, record->getLevelName());
     str::replace(format, TIMESTAMP, record->getTimeStamp());
     if (record->getLineNum() >= 0)
     {
         str::replace(format, FILE_NAME, record->getFile());
-        str::replace(format, LINE_NUM,  
-                str::toString(record->getLineNum()));
+        str::replace(format, LINE_NUM, std::to_string(record->getLineNum()));
     }
     else
     {

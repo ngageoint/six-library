@@ -82,7 +82,7 @@ std::string six::toXMLString_(const Data* data,
     const six::XMLControlRegistry* xmlRegistry)
 {
     const auto result = toXMLString(data, xmlRegistry);
-    return str::toString(result);
+    return str::to_native(result);
 }
 
 template<typename TSchemaPaths>
@@ -92,7 +92,7 @@ std::u8string six_toValidXMLString(const Data& data,
 {
     if (!xmlRegistry)
     {
-        xmlRegistry = &XMLControlFactory::getInstance();
+        xmlRegistry = &getXMLControlFactory();
     }
 
     const std::unique_ptr<XMLControl>
@@ -126,4 +126,9 @@ std::u8string six::toValidXMLString(const Data& data,
     logging::Logger* log, const six::XMLControlRegistry* xmlRegistry)
 {
     return six_toValidXMLString(data, pSchemaPaths, log, xmlRegistry);
+}
+
+six::XMLControlRegistry& six::getXMLControlFactory()
+{
+    return mt::Singleton<XMLControlRegistry, true>::getInstance();
 }

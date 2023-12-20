@@ -114,7 +114,7 @@ nitf_BlockingInfo;
 
       Memory allocation error\n
 */
-NITFPROT(nitf_BlockingInfo *) nitf_BlockingInfo_construct(nitf_Error *
+NITFAPI(nitf_BlockingInfo *) nitf_BlockingInfo_construct(nitf_Error *
         error);
 
 /*!
@@ -125,7 +125,7 @@ NITFPROT(nitf_BlockingInfo *) nitf_BlockingInfo_construct(nitf_Error *
 
   \return None
 */
-NITFPROT(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info);
+NITFAPI(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info);
 
 
 /*!
@@ -158,7 +158,7 @@ NITFPROT(void) nitf_BlockingInfo_destruct(nitf_BlockingInfo ** info);
 
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,
+NITFAPI(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,
                                                  nitf_IOInterface* io,
                                                  nitf_Error * error
                                                 );
@@ -189,7 +189,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeSequential(nitf_ImageIO * nitf,
 
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_writeDone(nitf_ImageIO * object,
+NITFAPI(NITF_BOOL) nitf_ImageIO_writeDone(nitf_ImageIO * object,
                                            nitf_IOInterface* io,
                                            nitf_Error * error);
 
@@ -225,7 +225,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeDone(nitf_ImageIO * object,
     Invalid row count
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
+NITFAPI(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
                                            nitf_IOInterface* io,
                                            uint32_t numRows,
                                            uint8_t ** data,
@@ -250,7 +250,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
     I/O errors
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_flush(nitf_ImageIO * object,
+NITFAPI(NITF_BOOL) nitf_ImageIO_flush(nitf_ImageIO * object,
                                        nitf_IOInterface* io,
                                        nitf_Error * error
                                       );
@@ -686,7 +686,7 @@ typedef int (*NITF_DOWN_SAMPLE_FUNCTION) (void *input,
 
 */
 
-NITFPROT(nitf_ImageIO *)
+NITFAPI(nitf_ImageIO *)
 nitf_ImageIO_construct(nitf_ImageSubheader * subheader,
                        uint64_t offset,
                        uint64_t length,
@@ -711,7 +711,7 @@ nitf_ImageIO_construct(nitf_ImageSubheader * subheader,
     Memory allocation error
 */
 
-NITFPROT(nitf_ImageIO *) nitf_ImageIO_clone(nitf_ImageIO * image,
+NITFAPI(nitf_ImageIO *) nitf_ImageIO_clone(nitf_ImageIO * image,
                                             nitf_Error * error
                                            );
 
@@ -726,7 +726,7 @@ NITFPROT(nitf_ImageIO *) nitf_ImageIO_clone(nitf_ImageIO * image,
   \return None
 */
 
-NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf);
+NITFAPI(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf);
 
 /*!
   \brief nitf_ImageIO_read - Read a sub-window
@@ -765,7 +765,7 @@ NITFPROT(void) nitf_ImageIO_destruct(nitf_ImageIO ** nitf);
     System I/O or memory allocation errors
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
+NITFAPI(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
                                       nitf_IOInterface* io,
                                       nitf_SubWindow * subWindow,
                                       uint8_t ** user,
@@ -782,7 +782,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_read(nitf_ImageIO * nitf,
   \return Returns pixel size in bytes
 */
 
-NITFPROT(uint32_t) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf);
+NITFAPI(uint32_t) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf);
 
 /*!
   \brief  nitf_ImageIO_setFileOffset
@@ -802,7 +802,7 @@ NITFPROT(uint32_t) nitf_ImageIO_pixelSize(nitf_ImageIO * nitf);
     I/O operation in progress
 */
 
-NITFPROT(NITF_BOOL) nitf_ImageIO_setFileOffset(nitf_ImageIO * nitf,
+NITFAPI(NITF_BOOL) nitf_ImageIO_setFileOffset(nitf_ImageIO * nitf,
                                                uint64_t offset,
                                                nitf_Error * error
                                               );
@@ -833,7 +833,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setFileOffset(nitf_ImageIO * nitf,
     I/O error
 */
 
-NITFPROT(nitf_BlockingInfo *) nitf_ImageIO_getBlockingInfo(nitf_ImageIO * image,
+NITFAPI(nitf_BlockingInfo *) nitf_ImageIO_getBlockingInfo(nitf_ImageIO * image,
                                                            nitf_IOInterface* io,
                                                            nitf_Error * error
                                                           );
@@ -846,7 +846,7 @@ NITFPROT(nitf_BlockingInfo *) nitf_ImageIO_getBlockingInfo(nitf_ImageIO * image,
   \return Returns the current enable/disable state
 */
 
-NITFPROT(int) nitf_ImageIO_setWriteCaching
+NITFAPI(int) nitf_ImageIO_setWriteCaching
 (
     nitf_ImageIO * nitf,      /*!< Object to modify */
     int enable               /*!< Enable cached writes if true */
@@ -860,7 +860,7 @@ NITFPROT(int) nitf_ImageIO_setWriteCaching
   \return None
 */
 
-NITFPROT(void) nitf_ImageIO_setReadCaching
+NITFAPI(void) nitf_ImageIO_setReadCaching
 (
     nitf_ImageIO * nitf      /*!< Object to modify */
 );
@@ -876,7 +876,7 @@ NITFPROT(void) nitf_ImageIO_setReadCaching
   \return None
 */
 
-NITFPROT(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,  /*!< The structure to print */
+NITFAPI(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,  /*!< The structure to print */
                                        FILE * file       /*!< FILE to use for print */
                                       );
 
@@ -886,7 +886,7 @@ NITFPROT(void) nitf_BlockingInfo_print(nitf_BlockingInfo * info,  /*!< The struc
   \b nitf_ImageIO_setupDirectBlockRead does some simple checks to prepare
   for reading blocks directly from the NITF (bypassing any reorganization of data)
  */
-NITFPROT(NITF_BOOL) nitf_ImageIO_setupDirectBlockRead(nitf_ImageIO *nitf,
+NITFAPI(NITF_BOOL) nitf_ImageIO_setupDirectBlockRead(nitf_ImageIO *nitf,
                                                       nitf_IOInterface *io,
                                                       uint32_t numBands,
                                                       nitf_Error *error);
@@ -903,7 +903,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setupDirectBlockRead(nitf_ImageIO *nitf,
   \param blockSize    The block size read
   \param error        Error object
  */
-NITFPROT(uint8_t*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
+NITFAPI(uint8_t*) nitf_ImageIO_readBlockDirect(nitf_ImageIO* nitf,
                                                    nitf_IOInterface* io,
                                                    uint32_t blockNumber,
                                                    uint64_t* blockSize,

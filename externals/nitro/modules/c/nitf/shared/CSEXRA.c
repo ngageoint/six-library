@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSEXRA_description[] = {
     {NITF_BCS_A, 6, "Sensor", "SENSOR" },
     {NITF_BCS_N, 12, "Time of the First Line of Image", "TIME_FIRST_LINE_IMAGE" },
     {NITF_BCS_N, 12, "Image Duration Time", "TIME_IMAGE_DURATION" },
@@ -52,6 +52,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSEXRA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSEXRA)
 
 NITF_CXX_ENDGUARD

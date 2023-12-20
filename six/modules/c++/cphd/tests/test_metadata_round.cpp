@@ -66,7 +66,7 @@ bool testEqual(const std::string& inPathname, const std::string& outPathname,
 
     //Output XML file to temp file
     io::FileOutputStream ofs(outPathname);
-    ofs.write(xmlMetadata.c_str(), xmlMetadata.size());
+    ofs.write(xmlMetadata);
 
     // Read in second XML file from temp file
     xml::lite::MinidomParser xmlParser2;

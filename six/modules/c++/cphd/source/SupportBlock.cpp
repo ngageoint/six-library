@@ -42,14 +42,9 @@ SupportBlock::SupportBlock(const std::string& pathname,
                            const cphd::Data& data,
                            int64_t startSupport,
                            int64_t sizeSupport) :
-    mInStream(std::make_shared<io::FileInputStream>(pathname)),
-    mData(data),
-    mSupportOffset(startSupport),
-    mSupportSize(sizeSupport)
+    SupportBlock(std::make_shared<io::FileInputStream>(pathname), data, startSupport, sizeSupport)
 {
-    initialize();
 }
-
 SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
                            const cphd::Data& data,
                            int64_t startSupport,
@@ -59,23 +54,18 @@ SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
     mSupportOffset(startSupport),
     mSupportSize(sizeSupport)
 {
-    initialize();
+    //! Initialize mOffsets for each array both for uncompressed and compressed data
+    // Trusting data has the right offsets
+    for (auto kv : mData.supportArrayMap)
+    {
+        mOffsets[kv.first] = mSupportOffset + kv.second.arrayByteOffset;
+    }
 }
 SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
     const cphd::Data& data, const cphd::FileHeader& fileHeader):
     SupportBlock(inStream, data,
         fileHeader.getSupportBlockByteOffset(), fileHeader.getSupportBlockSize())
 {
-    initialize();
-}
-
-void SupportBlock::initialize()
-{
-    // Trusting data has the right offsets
-    for (auto it = mData.supportArrayMap.begin(); it != mData.supportArrayMap.end(); ++it)
-    {
-        mOffsets[it->first] = mSupportOffset + it->second.arrayByteOffset;
-    }
 }
 
 int64_t SupportBlock::getFileOffset(const std::string& id) const
@@ -89,53 +79,57 @@ int64_t SupportBlock::getFileOffset(const std::string& id) const
 
 void SupportBlock::read(const std::string& id,
                         size_t numThreads,
-                        const mem::BufferView<sys::ubyte>& data) const
+                        const mem::BufferView<sys::ubyte>& data_) const
+{
+    void* pData = data_.data;
+    auto data = sys::make_span<std::byte>(pData, data_.size);
+    read(id, numThreads, data);
+}
+void SupportBlock::read(const std::string& id, size_t numThreads, std::span<std::byte> data) const
 {
     const size_t minSize = mData.getSupportArrayById(id).getSize();
 
-    if (data.size < minSize)
+    if (data.size() < minSize)
     {
         std::ostringstream ostr;
-        ostr << "Need at least " << minSize << " bytes but only got "
-             << data.size;
-        throw except::Exception(Ctxt(ostr.str()));
+        ostr << "Need at least " << minSize << " bytes but only got " << data.size();
+        throw except::Exception(Ctxt(ostr));
     }
+
     // Perform the read
     // Compute the byte offset into this SupportArray in the CPHD file
     // First to the start of the first support array we're going to read
     int64_t inOffset = getFileOffset(id);
-    auto dataPtr = data.data;
+    auto dataPtr = data.data();
     mInStream->seek(inOffset, io::FileInputStream::START);
-    size_t size = mData.getSupportArrayById(id).getSize();
-    mInStream->read(dataPtr, size);
+    size_t bytes = mData.getSupportArrayById(id).size_bytes();
+    mInStream->read(dataPtr, bytes);
 
     if ((std::endian::native == std::endian::little) && mData.getElementSize(id) > 1)
     {
         cphd::byteSwap(dataPtr, mData.getElementSize(id),
-                       mData.getSupportArrayById(id).numRows *
-                       mData.getSupportArrayById(id).numCols,
+                       mData.getSupportArrayById(id).size(),
                        numThreads);
     }
 }
 
-void SupportBlock::readAll(size_t numThreads,
-                           std::unique_ptr<sys::ubyte[]>& data) const
+std::vector<std::byte> SupportBlock::readAll(size_t numThreads) const
 {
-    data = std::make_unique<sys::ubyte[]>(mSupportSize);
+    std::vector<std::byte> retval(mSupportSize);
     for (auto& supportArrayMapPair : mData.supportArrayMap)
     {
         const size_t bufSize = supportArrayMapPair.second.getSize();
-        read(supportArrayMapPair.first, numThreads, mem::BufferView<sys::ubyte>(&data[supportArrayMapPair.second.arrayByteOffset], bufSize));
+        auto pData = &retval[supportArrayMapPair.second.arrayByteOffset];
+        read(supportArrayMapPair.first, numThreads, sys::make_span(pData, bufSize));
     }
+    return retval;
 }
 
-void SupportBlock::read(const std::string& id,
-                        size_t numThreads,
-                       std::unique_ptr<sys::ubyte[]>& data) const
+std::vector<std::byte> SupportBlock::read(const std::string& id, size_t numThreads) const
 {
-    const size_t bufSize = mData.getSupportArrayById(id).getSize();
-    data = std::make_unique<sys::ubyte[]>(bufSize);
-    read(id, numThreads, mem::BufferView<sys::ubyte>(data.get(), bufSize));
+    std::vector<std::byte> retval(mData.getSupportArrayById(id).getSize());
+    read(id, numThreads, sys::make_span(retval));
+    return retval;
 }
 
 std::ostream& operator<< (std::ostream& os, const SupportBlock& d)

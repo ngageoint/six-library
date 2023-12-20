@@ -37,6 +37,7 @@ CODA_OSS_disable_warning(-Wshadow)
 CODA_OSS_disable_warning_pop
 
 #include <sys/OS.h>
+#include <sys/Path.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
 
@@ -89,26 +90,11 @@ bool ValidationErrorHandler::handleError(
     return true;
 }
 
-inline std::vector<std::string> convert(const std::vector<fs::path>& schemaPaths)
-{
-    std::vector<std::string> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-                   [](const fs::path& p) { return p.string(); });
-    return retval;
-}
-inline auto convert(const std::vector<std::string>& paths)
-{
-    std::vector<fs::path> retval;
-    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
-                   [](const auto& p) { return p; });
-    return retval;
-}
-
 ValidatorXerces::ValidatorXerces(
         const std::vector<fs::path>& schemaPaths,
         logging::Logger* log,
         bool recursive) :
-    ValidatorXerces(convert(schemaPaths), log, recursive)
+    ValidatorXerces(sys::convertPaths(schemaPaths), log, recursive)
 {
 }
 ValidatorXerces::ValidatorXerces(
@@ -169,7 +155,7 @@ ValidatorXerces::ValidatorXerces(
 
     // load our schemas --
     // search each directory for schemas
-    const auto schemas = loadSchemas(convert(schemaPaths), recursive);
+    const auto schemas = loadSchemas(sys::convertPaths(schemaPaths), recursive);
 
     //  add the schema to the validator
     //  add the schema to the validator
@@ -179,9 +165,12 @@ ValidatorXerces::ValidatorXerces(
                                      xercesc::Grammar::SchemaGrammarType,
                                      true))
         {
-            std::ostringstream oss;
-            oss << "Error: Failure to load schema " << schema;
-            log->warn(Ctxt(oss.str()));
+            if (log != nullptr)
+            {
+                std::ostringstream oss;
+                oss << "Error: Failure to load schema " << schema;
+                log->warn(Ctxt(oss));
+            }
         }
     }
 
@@ -207,7 +196,7 @@ using XMLCh_t = wchar_t;
 static_assert(std::is_same<::XMLCh, XMLCh_t>::value, "XMLCh should be wchar_t");
 inline void reset(const std::u8string& xml, std::unique_ptr<std::wstring>& pWString)
 {
-    pWString = std::make_unique<std::wstring>(str::toWString(xml));
+    pWString = std::make_unique<std::wstring>(str::details::to_wstring(xml));
 }
 #else
 using XMLCh_t = char16_t;
@@ -283,8 +272,8 @@ static coda_oss::u8string encodeXml(const std::string& xml)
         return to_u8string(str::str<str::W1252string>(xml));
     }
 
-    // No "... encoding= ..."; let u8FromString() deal with it   
-    return str::u8FromString(xml);
+    // No "... encoding= ..."; let u8FromNative() deal with it   
+    return str::u8FromNative(xml);
 }
 
 bool ValidatorXerces::validate(const std::string& xml,

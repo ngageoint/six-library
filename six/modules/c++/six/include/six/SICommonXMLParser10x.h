@@ -20,16 +20,17 @@
  *
  */
 
+#pragma once
 #ifndef SIX_six_SICommonXMLParser10x_h_INCLUDED_
 #define SIX_six_SICommonXMLParser10x_h_INCLUDED_
-#pragma once
 
 #include <six/SICommonXMLParser.h>
+#include <six/Exports.h>
 
 namespace six
 {
 
-struct SICommonXMLParser10x : public SICommonXMLParser
+struct SIX_SIX_API SICommonXMLParser10x : public SICommonXMLParser
 {
     SICommonXMLParser10x(const std::string& defaultURI, bool addClassAttributes, const std::string& siCommonURI,
         logging::Logger* log = nullptr, bool ownLog = false);

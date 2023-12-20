@@ -94,7 +94,7 @@ NITFAPI(void) nitf_BandInfo_destruct(nitf_BandInfo ** info);
  *  \param error  An error to populate upon failure
  *  \return A new object that is identical to the old
  */
-NITFPROT(nitf_BandInfo *) nitf_BandInfo_clone(nitf_BandInfo * source,
+NITFAPI(nitf_BandInfo *) nitf_BandInfo_clone(nitf_BandInfo * source,
                                               nitf_Error * error);
 
 /*!

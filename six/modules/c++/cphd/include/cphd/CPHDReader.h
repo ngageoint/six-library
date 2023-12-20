@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_cphd_CPHDReader_h_INCLUDED_
 #define SIX_cphd_CPHDReader_h_INCLUDED_
-#pragma once
 
 #include <memory>
 
@@ -32,6 +32,7 @@
 #include <cphd/PVPBlock.h>
 #include <cphd/Wideband.h>
 #include <cphd/SupportBlock.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -42,7 +43,7 @@ namespace cphd
  *  Requires a valid CPHD file,and optional schemas
  *  for XML format verification
  */
-struct CPHDReader final
+struct SIX_CPHD_API CPHDReader final
 {
     /*
      *  \func CPHDReader constructor
@@ -77,6 +78,11 @@ struct CPHDReader final
                        std::vector<std::string>(),
                std::shared_ptr<logging::Logger> logger =
                        std::shared_ptr<logging::Logger>());
+
+    CPHDReader(const CPHDReader&) = delete;
+    CPHDReader& operator=(const CPHDReader&) = delete;
+    CPHDReader(CPHDReader&&) = default;
+    CPHDReader& operator=(CPHDReader&&) = default;
 
     //! Get parameter functions
     size_t getNumChannels() const
@@ -152,14 +158,6 @@ private:
     PVPBlock mPVPBlock;
     //! Signal block book-keeping info read in from CPHD file
     std::unique_ptr<Wideband> mWideband;
-
-    /*
-     *  Read in header, metadata, supportblock, pvpblock and wideband
-     */
-    void initialize(std::shared_ptr<io::SeekableInputStream> inStream,
-                    size_t numThreads,
-                    std::shared_ptr<logging::Logger> logger,
-                    const std::vector<std::string>& schemaPaths);
 };
 }
 

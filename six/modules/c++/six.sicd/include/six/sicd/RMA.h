@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_RMA_H__
 #define __SIX_RMA_H__
 
@@ -31,6 +32,7 @@
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/SCPCOA.h"
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -42,7 +44,7 @@ namespace sicd
  *  \brief   Parameters for Range Migration with Along Track phase
  *           stabilization.
  */
-struct RMAT
+struct SIX_SICD_API RMAT
 {
     //!  Constructor
     RMAT();
@@ -109,7 +111,7 @@ private:
  *  Note: this is a repeat of parameters in RMAT but
  *        we recreate them to avoid confusion
  */
-struct RMCR
+struct SIX_SICD_API RMCR
 {
     //!  Constructor
     RMCR();
@@ -154,7 +156,7 @@ private:
  *  \struct  INCA
  *  \brief   Parameters for Imaging Near Closest Approach.
  */
-struct INCA
+struct SIX_SICD_API INCA
 {
     //!  Constructor
     INCA();
@@ -214,7 +216,7 @@ private:
  *  \brief   Range Migration Algorithm (RMA) parameters, included when
  *           the image is formed with RMA.
  */
-struct RMA
+struct SIX_SICD_API RMA
 {
     //! Constructor
     RMA();

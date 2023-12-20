@@ -67,9 +67,8 @@ void preview(const fs::path& outputFile)
  */
 void registerHandlers()
 {
-
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
-    six::XMLControlFactory::getInstance().addCreator<six::sidd::DerivedXMLControl>();
+    six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
+    six::getXMLControlFactory().addCreator<six::sidd::DerivedXMLControl>();
 }
 /*
  * Dump all files out to the local directory
@@ -95,7 +94,7 @@ std::vector<std::string> extractXML(std::string inputFile,
         nitf::Off size = deReader.getSize();
 
         const auto typeID = subheader.typeID();
-        const std::string outputFile = FmtX("%s-%s%d.xml", prefix, typeID, i);
+        const auto outputFile = str::Format("%s-%s%d.xml", prefix, typeID, i);
         const auto fileName = outputDir / outputFile;
         {
             std::vector<char> xml(size);
@@ -157,8 +156,7 @@ void run(const fs::path& inputFile_, std::string dataType)
                                                 : six::DataType::DERIVED;
 
         logging::NullLogger log;
-        six::XMLControl *control =
-                six::XMLControlFactory::getInstance().newXMLControl(dt, &log);
+        six::XMLControl *control = six::getXMLControlFactory().newXMLControl(dt, &log);
 
         six::Data *data = control->fromXML(treeBuilder.getDocument(),
                                            std::vector<std::string>());

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_MATCH_INFORMATION_H__
 #define __SIX_MATCH_INFORMATION_H__
 
@@ -26,6 +27,7 @@
 #include <six/Init.h>
 #include <six/Parameter.h>
 #include <six/ParameterCollection.h>
+#include <six/Exports.h>
 
 namespace six
 {
@@ -39,7 +41,7 @@ namespace six
  *      - coreName
  *      - parameters
  */
-struct MatchCollect
+struct SIX_SIX_API MatchCollect
 {
     //! Constructor
     MatchCollect();
@@ -75,7 +77,7 @@ struct MatchCollect
  *  collection.  Match types are text strings describing the
  *  collection (e.g., COHERENT, STEREO)
  */
-struct MatchType
+struct SIX_SIX_API MatchType
 {
     //! Constructor
     MatchType();
@@ -119,7 +121,7 @@ struct MatchType
  *  or related to this collection.  This parameter block is optional
  *  in the SICD and SIDD specs.
  */
-struct MatchInformation
+struct SIX_SIX_API MatchInformation
 {
 public:
     //!  Constructor.  Creates a single default-constructed collection.
@@ -146,7 +148,7 @@ public:
     /*
      *  Ostream operators for six::MatchInformation type
      */
-    friend std::ostream& operator<< (std::ostream& os, const MatchInformation& m);
+    SIX_SIX_API friend std::ostream& operator<< (std::ostream& os, const MatchInformation& m);
 };
 }
 

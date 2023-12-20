@@ -37,11 +37,7 @@ public:
     {
         std::map<std::string, Vector3>::const_iterator p = mVecs.find(k);
         if (p == mVecs.end())
-            throw except::Exception(
-                Ctxt(
-                    FmtX("Key not found: %s", k.c_str())
-                    )
-                );
+            throw except::Exception(Ctxt(str::Format("Key not found: %s", k)));
         return p->second;
     }
 
@@ -72,11 +68,7 @@ SceneInfo loadSceneInfo(std::string infoProps)
             std::string v = d[k].str();
             std::vector<std::string> toks = str::Tokenizer(v, ",");
             if (toks.size() != 3)
-                throw except::Exception(
-                    Ctxt(
-                        FmtX("Expected triple, received: %s", v.c_str())
-                        )
-                    );
+                throw except::Exception(Ctxt(str::Format("Expected triple, received: %s", v)));
             
             Vector3 vec;
             vec[0] = str::toType<double>(toks[0]);

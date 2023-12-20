@@ -26,6 +26,7 @@
 #include <std/string>
 
 #include <str/Encoding.h>
+#include <sys/Path.h>
 
 #include "six/Utilities.h"
 #include "six/sidd/DerivedXMLControl.h"
@@ -563,11 +564,8 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromFile(const std::filesystem:
 std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::string& xmlStr_,
         const std::vector<std::string>& schemaPaths_, logging::Logger& log)
 {
-    const auto xmlStr = str::u8FromString(xmlStr_);
-
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
+    const auto xmlStr = str::u8FromNative(xmlStr_);
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
 
     auto result = parseDataFromString(xmlStr, &schemaPaths, &log);
     return std::unique_ptr<DerivedData>(result.release());
@@ -580,15 +578,18 @@ std::unique_ptr<DerivedData> Utilities::parseDataFromString(const std::u8string&
     return dataParser.fromXML(xmlStr);
 }
 
-std::string Utilities::toXMLString(const DerivedData& data,
+std::u8string Utilities::toXMLString(const DerivedData& data,
                                    const std::vector<std::string>& schemaPaths_, logging::Logger* logger)
 {
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
-    const auto result = toXMLString(data, &schemaPaths, logger);
-    return str::toString(result);
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
+    return toXMLString(data, &schemaPaths, logger);
+}
+std::string Utilities::toXMLString_(const DerivedData& data,
+    const std::vector<std::string>& schemaPaths,
+    logging::Logger* logger)
+{
+    const auto result = toXMLString(data, schemaPaths, logger);
+    return str::to_native(result);
 }
 std::u8string Utilities::toXMLString(const DerivedData& data,
     const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLogger)

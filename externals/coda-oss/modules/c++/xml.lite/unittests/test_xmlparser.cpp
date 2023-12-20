@@ -23,6 +23,7 @@
 #include <std/string>
 #include <std/filesystem>
 #include <std/optional>
+#include <std/span>
 
 #include "io/StringStream.h"
 #include "io/FileInputStream.h"
@@ -59,7 +60,7 @@ static const std::u8string& text8()
 
 static const auto& iso88591Text1252()
 {
-    static const str::W1252string retval = str::cast<str::W1252string::const_pointer>("T\xc9XT");  // ISO8859-1, "TÉXT"
+    static const auto retval = str::make_string<str::W1252string>("T\xc9XT");  // ISO8859-1, "TÉXT"
     return retval;
 }
 static auto pIso88591Text_()
@@ -70,7 +71,7 @@ static auto pIso88591Text_()
 
 static const auto& utf8Text8()
 {
-    static const coda_oss::u8string retval = str::cast<coda_oss::u8string::const_pointer>("T\xc3\x89XT"); // UTF-8,  "TÉXT"
+    static const auto retval = str::make_string<coda_oss::u8string>("T\xc3\x89XT"); // UTF-8,  "TÉXT"
     return retval;
 } 
 static const auto pUtf8Text_()
@@ -105,7 +106,7 @@ static std::filesystem::path find_unittest_file(const std::filesystem::path& nam
 static void test_a_element(const std::string& testName, const xml::lite::Element& root)
 {
     const auto aElements = root.getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(std::ssize(aElements), 1);
     const auto& a = *(aElements[0]);
 
     const auto characterData = a.getCharacterData();
@@ -124,7 +125,7 @@ TEST_CASE(testXmlParseSimple)
         
     const auto docElements = root.getElementsByTagName("doc");
     TEST_ASSERT_FALSE(docElements.empty());
-    TEST_ASSERT_EQ(docElements.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(std::ssize(docElements), 1);
     test_a_element(testName, *docElements[0]);
 }
 
@@ -365,7 +366,7 @@ static void testReadXmlFile(const std::string& testName, const std::string& xmlF
     const auto& root = getRootElement(getDocument(xmlParser));
 
     const auto aElements = root.getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(aElements.size(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(std::ssize(aElements), 1);
     const auto& a = *(aElements[0]);
 
     auto characterData = a.getCharacterData();
@@ -462,8 +463,8 @@ static void testValidateXmlFile_(const std::string& testName, const std::string&
     static const auto xsd = find_unittest_file("doc.xsd");
     const auto path = find_unittest_file(xmlFile);
 
-    const std::vector<std::filesystem::path> schemaPaths{xsd.parent_path()}; // fs::path -> new string-conversion code
-    const xml::lite::Validator validator(schemaPaths, nullptr /*log*/);
+    const std::vector<std::filesystem::path> schemaPaths{xsd.parent_path()};
+    const xml::lite::Validator validator(schemaPaths);
 
     io::FileInputStream fis(path);
     std::vector<xml::lite::ValidationInfo> errors;

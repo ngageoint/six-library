@@ -33,6 +33,7 @@
 #include <cphd/Enums.h>
 #include <cphd/Metadata.h>
 #include <cphd/Types.h>
+#include <cphd/CPHDXMLControl.h>
 
 
 #define ENFORCESPEC 0
@@ -45,12 +46,18 @@ typedef xml::lite::Element* XMLElem;
 namespace cphd
 {
 
+static std::string strUriFromVersion(Version version)
+{
+    auto&& map = CPHDXMLControl::getVersionUriMap();
+    return map.at(version).value;
+}
+
 CPHDXMLParser::CPHDXMLParser(
-        const std::string& uri,
+        Version version,
         bool addClassAttributes,
         logging::Logger* log,
         bool ownLog) :
-    six::XMLParser(uri, addClassAttributes, log, ownLog),
+    six::XMLParser(strUriFromVersion(version), addClassAttributes, log, ownLog),
     mCommon(getDefaultURI(), addClassAttributes, getDefaultURI(), log)
 {
 }
@@ -1012,13 +1019,12 @@ XMLElem CPHDXMLParser::toXML(const MatchInformation& matchInfo, XMLElem parent)
 /*
  * FROM XML
  */
-
-std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
-        const xml::lite::Document* doc)
+Metadata CPHDXMLParser::fromXML(const xml::lite::Document& doc, Version version)
 {
-    std::unique_ptr<Metadata> cphd(new Metadata());
+    Metadata retval(version);
+    auto cphd = &retval;
 
-    const auto root = doc->getRootElement();
+    const auto root = doc.getRootElement();
 
     XMLElem collectionIDXML   = getFirstAndOnly(root, "CollectionID");
     XMLElem globalXML         = getFirstAndOnly(root, "Global");
@@ -1084,7 +1090,13 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(
         fromXML(matchInfoXML, *(cphd->matchInfo));
     }
 
-    return cphd;
+    return retval;
+}
+std::unique_ptr<Metadata> CPHDXMLParser::fromXML(const xml::lite::Document* doc)
+{
+    const auto version = CPHDXMLControl::uriToVersion(xml::lite::Uri(getDefaultURI()));
+    auto result = fromXML(*doc, version);
+    return std::make_unique<Metadata>(std::move(result));
 }
 
 void CPHDXMLParser::fromXML(const xml::lite::Element* collectionIDXML, CollectionInformation& collectionID)
@@ -2285,13 +2297,13 @@ size_t CPHDXMLParser::parsePVPType(const xml::lite::Element& paramXML, PVPType& 
     {
         std::ostringstream ostr;
         ostr << "Specified size: " << size << " does not match default size: " << param.getSize();
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
     if (param.getFormat() != format)
     {
         std::ostringstream ostr;
         ostr << "Specified format: " << format << " does not match default format: " << param.getFormat();
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
     return offset;
 }

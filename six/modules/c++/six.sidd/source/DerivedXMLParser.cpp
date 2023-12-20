@@ -1173,7 +1173,7 @@ XMLElem DerivedXMLParser::createLUTImpl(const LUT *lut, XMLElem lutElem) const
         {
             std::ostringstream ostr;
             ostr << "Invalid element size [" << lut->elementSize << "]";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
         if ((lut->numEntries - 1) != i)
             oss << ' ';
@@ -1190,7 +1190,7 @@ XMLElem DerivedXMLParser::createFootprint(const std::string& name,
     XMLElem footprint = newElement(name, getDefaultURI(), parent);
     xml::lite::AttributeNode node;
     node.setQName("size");
-    node.setValue(str::toString(LatLonCorners::NUM_CORNERS));
+    node.setValue(std::to_string(LatLonCorners::NUM_CORNERS));
 
     footprint->getAttributes().add(node);
 
@@ -1200,7 +1200,7 @@ XMLElem DerivedXMLParser::createFootprint(const std::string& name,
 
     for (size_t corner = 0; corner < LatLonCorners::NUM_CORNERS; ++corner)
     {
-        node.setValue(str::toString(corner + 1));
+        node.setValue(std::to_string(corner + 1));
         common().createLatLon(cornerName,
                              corners.getCorner(corner),
                              footprint)->getAttributes().add(node);
@@ -1236,7 +1236,7 @@ XMLElem DerivedXMLParser::convertProductProcessingToXML(
     // error checking
     if (productProcessing->processingModules.empty())
     {
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
                 "There must be at least [1] ProcessingModule in "\
                 "ProductProcessing, [%d] found",
                 productProcessing->processingModules.size())));
@@ -1847,7 +1847,7 @@ XMLElem DerivedXMLParser::createSFALine(
 
     // error check the vertices
     if (l->vertices.size() < 2)
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
                 "Must be at least two Vertices in LineString. Only [%d] " \
                 "found", l->vertices.size())));
 
@@ -1948,7 +1948,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
 
         // error check the vertices
         if (p->vertices.size() < 2)
-            throw except::Exception(Ctxt(FmtX(
+            throw except::Exception(Ctxt(str::Format(
                     "Must be at least two Vertices in LineString. Only [%d] " \
                     "found", p->vertices.size())));
 
@@ -1960,9 +1960,7 @@ XMLElem DerivedXMLParser::convertSFAGeometryToXML(
     }
     else
     {
-        throw except::InvalidArgumentException(Ctxt(FmtX(
-                "Invalid geo type: [%s]",
-                geoType.c_str())));
+        throw except::InvalidArgumentException(Ctxt(str::Format("Invalid geo type: [%s]", geoType)));
     }
 
     return geoElem;

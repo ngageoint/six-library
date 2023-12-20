@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_DATA_H__
 #define __CPHD_DATA_H__
 
@@ -34,6 +34,7 @@
 #include <six/Init.h>
 #include <cphd/Enums.h>
 #include <cphd/Utilities.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -45,7 +46,7 @@ namespace cphd
  *
  *  See section 2.3 through 2.6
  */
-struct Data
+struct SIX_CPHD_API Data
 {
     /*
      *  \struct SupportArray
@@ -58,7 +59,7 @@ struct Data
      */
     // There's another SupportArray type in the Metadata,
     // so hiding this inside Data
-    struct SupportArray
+    struct SIX_CPHD_API SupportArray
     {
 
         /*
@@ -95,6 +96,14 @@ struct Data
         {
             return numRows * numCols * bytesPerElement;
         }
+        size_t size() const
+        {
+            return numRows * numCols;
+        }
+        size_t size_bytes() const // c.f., std::span::size_bytes()
+        {
+            return size() * bytesPerElement;
+        }
 
         //! Unique string that identifies this support array
         //! (SA_ID).
@@ -127,7 +136,7 @@ struct Data
      */
     // There's another Channel type in the Metadata,
     // so hiding this inside Data
-    struct Channel
+    struct SIX_CPHD_API Channel
     {
         /*
          *  \func Channel

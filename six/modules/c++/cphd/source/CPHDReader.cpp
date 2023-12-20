@@ -31,53 +31,46 @@
 #include <mem/ScopedArray.h>
 #include <xml/lite/MinidomParser.h>
 #include <gsl/gsl.h>
+#include <sys/Path.h>
 
 #include <six/XmlLite.h>
 #include <cphd/CPHDXMLControl.h>
 
-namespace cphd
-{
-CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
+cphd::CPHDReader::CPHDReader(const std::string& fromFile,
                        size_t numThreads,
                        const std::vector<std::string>& schemaPaths,
                        std::shared_ptr<logging::Logger> logger)
+    : CPHDReader(std::make_shared<io::FileInputStream>(fromFile), numThreads, schemaPaths, logger)
 {
-    initialize(inStream, numThreads, logger, schemaPaths);
 }
 
-CPHDReader::CPHDReader(const std::string& fromFile,
-                       size_t numThreads,
-                       const std::vector<std::string>& schemaPaths,
-                       std::shared_ptr<logging::Logger> logger)
+static cphd::Metadata fromXML(io::SeekableInputStream& inStream,
+    const std::vector<std::string>& schemaPaths_,
+    std::shared_ptr<logging::Logger> logger,
+    const cphd::FileHeader& mFileHeader)
 {
-    initialize(std::make_shared<io::FileInputStream>(fromFile),
-        numThreads, logger, schemaPaths);
-}
-
-void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
-                            size_t numThreads,
-                            std::shared_ptr<logging::Logger> logger,
-                            const std::vector<std::string>& schemaPaths_)
-{
-    mFileHeader.read(*inStream);
-
     // Read in the XML string
-    inStream->seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);
+    inStream.seek(mFileHeader.getXMLBlockByteOffset(), io::Seekable::START);
 
     six::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
-    xmlParser.parse(*inStream, gsl::narrow<int>(mFileHeader.getXMLBlockSize()));
+    xmlParser.parse(inStream, gsl::narrow<int>(mFileHeader.getXMLBlockSize()));
 
     if (logger.get() == nullptr)
     {
         logger = std::make_shared<logging::NullLogger>();
     }
 
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-    mMetadata = CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument(), schemaPaths);
-
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
+    return cphd::CPHDXMLControl(logger.get()).fromXML(xmlParser.getDocument(), schemaPaths);
+}
+cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
+                       size_t numThreads,
+                       const std::vector<std::string>& schemaPaths_,
+                       std::shared_ptr<logging::Logger> logger)
+    : mFileHeader(cphd::FileHeader::read(*inStream)),
+    mMetadata(fromXML(*inStream, schemaPaths_, logger, mFileHeader))
+{
     mSupportBlock = std::make_unique<SupportBlock>(inStream, mMetadata.data, mFileHeader);
 
     // Load the PVPBlock into memory
@@ -87,5 +80,4 @@ void CPHDReader::initialize(std::shared_ptr<io::SeekableInputStream> inStream,
     // Setup for wideband reading
     mWideband = std::make_unique<Wideband>(inStream, mMetadata,
         mFileHeader.getSignalBlockByteOffset(), mFileHeader.getSignalBlockSize());
-}
 }

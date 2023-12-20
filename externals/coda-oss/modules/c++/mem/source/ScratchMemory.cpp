@@ -212,9 +212,8 @@ const ScratchMemory::Segment& ScratchMemory::lookupSegment(
     if (mBuffer.data == nullptr)
     {
         std::ostringstream oss;
-        oss << "Tried to get scratch memory for \"" << key
-            << "\" before running setup.";
-        throw except::Exception(Ctxt(oss.str()));
+        oss << "Tried to get scratch memory for \"" << key << "\" before running setup.";
+        throw except::Exception(Ctxt(oss));
     }
 
     std::map<std::string, Segment>::const_iterator iterSeg = mSegments.find(key);
@@ -222,7 +221,7 @@ const ScratchMemory::Segment& ScratchMemory::lookupSegment(
     {
         std::ostringstream oss;
         oss << "Scratch memory segment was not found for \"" << key << "\"";
-        throw except::Exception(Ctxt(oss.str()));
+        throw except::Exception(Ctxt(oss));
     }
 
     const Segment& segment = iterSeg->second;
@@ -230,9 +229,8 @@ const ScratchMemory::Segment& ScratchMemory::lookupSegment(
     {
         std::ostringstream oss;
         oss << "Trying to get buffer index " << indexBuffer << " for \""
-            << key << "\", which has only " << segment.buffers.size()
-            << " buffers";
-        throw except::Exception(Ctxt(oss.str()));
+            << key << "\", which has only " << segment.buffers.size() << " buffers";
+        throw except::Exception(Ctxt(oss));
     }
     return segment;
 }

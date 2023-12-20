@@ -500,7 +500,7 @@ int main(int /*argc*/, char** /*argv*/)
         const std::vector<std::string> schemaPaths;
 
         // create an XML registry
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         // Run tests with no funky segmentation
         bool success = true;
@@ -539,15 +539,15 @@ int main(int /*argc*/, char** /*argv*/)
 
         return (success ? 0 : 1);
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << "Caught except::Exception: " << ex.getMessage()
-                  << std::endl;
+            << std::endl;
+        return 1;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
         return 1;
     }
     catch (...)

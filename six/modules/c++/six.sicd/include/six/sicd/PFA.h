@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_PFA_H__
 #define __SIX_PFA_H__
 
@@ -29,6 +30,7 @@
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Position.h"
 #include "six/sicd/SCPCOA.h"
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -42,7 +44,7 @@ struct Grid;
  *  Parameters to describe image domain slow time
  *  deskew processing.  Name changed for API consistency
  */
-struct SlowTimeDeskew
+struct SIX_SICD_API SlowTimeDeskew
 {
     //!  Constructor
     SlowTimeDeskew();
@@ -77,7 +79,7 @@ struct SlowTimeDeskew
  *  \note This is currently limited to a one item choice in SICD,
  *  which would make it hard to do anything else
  */
-struct PFA
+struct SIX_SICD_API PFA
 {
     //!  Constructor, nothing defined
     PFA();

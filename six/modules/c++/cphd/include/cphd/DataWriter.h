@@ -20,16 +20,20 @@
  *
  */
 
+#pragma once
 #ifndef SIX_cphd_DataWriter_h_INCLUDED_
 #define SIX_cphd_DataWriter_h_INCLUDED_
-#pragma once
 
 #include <vector>
 #include <std/bit>
 #include <std/cstddef> // std::byte
+#include <std/span>
 
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
+#include <sys/Span.h>
+
+#include "cphd/Exports.h"
 
 namespace cphd
 {
@@ -39,7 +43,7 @@ namespace cphd
  *
  *  \brief Class to handle writing to file and byte swapping
  */
-struct DataWriter
+struct SIX_CPHD_API DataWriter
 {
     /*
      *  \func DataWriter
@@ -69,7 +73,13 @@ struct DataWriter
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    virtual void operator()(const void* data, size_t numElements, size_t elementSize) = 0;
+    virtual void operator()(std::span<const std::byte>, size_t elementSize) = 0;
+    void operator()(const void* data_, size_t numElements, size_t elementSize)
+    {
+        const auto pData = static_cast<const std::byte*>(data_);
+        std::span<const std::byte> data(pData, numElements * elementSize);
+        (*this)(data, elementSize);
+    }
 
 protected:
     //! Output stream of CPHD
@@ -85,7 +95,7 @@ protected:
  *
  *  For little endian to big endian storage
  */
-struct DataWriterLittleEndian final : public DataWriter
+struct SIX_CPHD_API DataWriterLittleEndian final : public DataWriter
 {
     /*
      *  \func DataWriterLittleEndian
@@ -112,7 +122,12 @@ struct DataWriterLittleEndian final : public DataWriter
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    void operator()(const void* data, size_t numElements,  size_t elementSize) override;
+    void operator()(std::span<const std::byte>, size_t elementSize) override;
+    void operator()(const sys::ubyte* data, size_t numElements, size_t elementSize) // for existing SWIG bindings
+    {
+      DataWriter* const pThis = this;
+      (*pThis)(data, numElements, elementSize);
+    }
 
 private:
     // Scratch space buffer
@@ -126,7 +141,7 @@ private:
  *
  *  No byte swap. Already big endian.
  */
-struct DataWriterBigEndian final : public DataWriter
+struct SIX_CPHD_API DataWriterBigEndian final : public DataWriter
 {
     /*
      *  \func DataWriter
@@ -154,7 +169,12 @@ struct DataWriterBigEndian final : public DataWriter
      *  \param numElements Total number of elements in array
      *  \param elementSize Size of each element
      */
-    void operator()(const void* data, size_t numElements, size_t elementSize) override;
+    void operator()(std::span<const std::byte>, size_t elementSize) override;
+    void operator()(const sys::ubyte* data, size_t numElements, size_t elementSize) // for existing SWIG bindings
+    {
+      DataWriter* const pThis = this;
+      (*pThis)(data, numElements, elementSize);
+    }
 };
 
 // Create the appropriate DataWriter instance using std::endian::native.  There are fancier

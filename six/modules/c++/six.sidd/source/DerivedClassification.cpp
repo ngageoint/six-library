@@ -48,8 +48,7 @@ void DerivedClassification::setSecurity(const std::string& prefix,
 
             const std::string fieldKey =
                 NITFImageInfo::generateFieldKey(NITFImageInfo::REL, prefix);
-            log.debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                fieldKey.c_str(), releasableToStr.c_str())));
+            log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]", fieldKey, releasableToStr)));
         }
 
         if (!classifiedBy.empty())
@@ -58,8 +57,7 @@ void DerivedClassification::setSecurity(const std::string& prefix,
 
             std::string fieldKey =
                 NITFImageInfo::generateFieldKey(NITFImageInfo::CAUT, prefix);
-            log.debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                fieldKey.c_str(), classifiedBy.c_str())));
+            log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]", fieldKey, classifiedBy)));
 
             // classifiedBy attribute represents the name of the original
             // classification authority
@@ -68,9 +66,7 @@ void DerivedClassification::setSecurity(const std::string& prefix,
 
             fieldKey =
                 NITFImageInfo::generateFieldKey(NITFImageInfo::CATP, prefix);
-            log.debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                fieldKey.c_str(),
-                                classAuthorityType.c_str())));
+            log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]", fieldKey, classAuthorityType)));
         }
 
         if (!classificationReason.empty())
@@ -79,9 +75,7 @@ void DerivedClassification::setSecurity(const std::string& prefix,
 
             const std::string fieldKey =
                 NITFImageInfo::generateFieldKey(NITFImageInfo::CRSN, prefix);
-            log.debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                fieldKey.c_str(),
-                                classificationReason.c_str())));
+            log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]", fieldKey, classificationReason)));
         }
 
         // By default, mark as exempt from automatic declassification
@@ -96,9 +90,7 @@ void DerivedClassification::setSecurity(const std::string& prefix,
 
             const std::string fieldKey =
                 NITFImageInfo::generateFieldKey(NITFImageInfo::DCDT, prefix);
-            log.debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                fieldKey.c_str(),
-                                declassDateStr.c_str())));
+            log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]", fieldKey, declassDateStr)));
 
             // Declassify on a specific date
             declassType = "DD";
@@ -109,11 +101,8 @@ void DerivedClassification::setSecurity(const std::string& prefix,
             security.getClassificationText().set(declassEvent);
 
             const std::string fieldKey =
-                NITFImageInfo::generateFieldKey(NITFImageInfo::CLTX,
-                                                prefix);
-            log.debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                fieldKey.c_str(),
-                                declassEvent.c_str())));
+                NITFImageInfo::generateFieldKey(NITFImageInfo::CLTX, prefix);
+            log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]", fieldKey, declassEvent)));
 
             // Declassify upon occurrence of an event
             declassType = "DE";
@@ -133,11 +122,8 @@ void DerivedClassification::setSecurity(const std::string& prefix,
                     exemptedSourceType);
 
                 const std::string fieldKey =
-                    NITFImageInfo::generateFieldKey(NITFImageInfo::DCXM,
-                                                    prefix);
-                log.debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                    fieldKey.c_str(),
-                                    exemptedSourceType.c_str())));
+                    NITFImageInfo::generateFieldKey(NITFImageInfo::DCXM, prefix);
+                log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]", fieldKey, exemptedSourceType)));
 
                 // Exempt from automatic declassification
                 declassType = "X";
@@ -172,11 +158,8 @@ void DerivedClassification::setSecurity(const std::string& prefix,
                 security.getDeclassificationExemption().set(declassExemption);
 
                 const std::string fieldKey =
-                    NITFImageInfo::generateFieldKey(NITFImageInfo::DCXM,
-                                                    prefix);
-                log.debug(Ctxt(FmtX("Setting NITF [%s] from sicd/sidd: [%s]",
-                                    fieldKey.c_str(),
-                                    declassExemption.c_str())));
+                    NITFImageInfo::generateFieldKey(NITFImageInfo::DCXM, prefix);
+                log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]", fieldKey, declassExemption)));
 
                 // Exempt from automatic declassification
                 declassType = "X";
@@ -186,11 +169,8 @@ void DerivedClassification::setSecurity(const std::string& prefix,
         // Now that we've gone through all the things that could modify the
         // declassification type, set it
         security.getDeclassificationType().set(declassType);
-        log.debug(Ctxt(FmtX(
-            "Setting NITF [%s] from sicd/sidd: [%s]",
-            NITFImageInfo::generateFieldKey(NITFImageInfo::DCTP,
-                                            prefix).c_str(),
-            declassType.c_str())));
+        log.debug(Ctxt(str::Format("Setting NITF [%s] from sicd/sidd: [%s]",
+            NITFImageInfo::generateFieldKey(NITFImageInfo::DCTP, prefix), declassType)));
     }
 }
 
@@ -212,8 +192,7 @@ void DerivedClassification::putImpl(const std::string& name,
     os << name << ":\n";
     for (size_t ii = 0; ii < params.size(); ++ii)
     {
-        os << "    [" << params[ii].getName() << " = "
-           << params[ii].str() << "]\n";
+        os << "    [" << params[ii].getName() << " = " << params[ii] << "]\n";
     }
 }
 

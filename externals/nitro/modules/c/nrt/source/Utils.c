@@ -744,7 +744,7 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
     }
 }
 
-NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src)
+NRTPROT(void) nrt_strcpy_s(char* dest, size_t sz, const char* src)
 {
     assert(sz > 0);
     #ifdef _MSC_VER // str*_s() is in C11
@@ -754,7 +754,7 @@ NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src)
     #endif       
 }
 
-NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars)
+NRTPROT(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars)
 {
     assert(dest_sz > 0);
     #ifdef _MSC_VER // str*_s() is in C11
@@ -764,7 +764,7 @@ NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t s
     #endif       
 }
 
-NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src)
+NRTPROT(void) nrt_strcat_s(char* dest, size_t sz, const char* src)
 {
     assert(sz > 0);
     #ifdef _MSC_VER // str*_s() is in C11
@@ -774,7 +774,7 @@ NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src)
     #endif
 }
 
-NRTAPI(char*) nrt_strdup(const char* src)
+NRTPROT(char*) nrt_strdup(const char* src)
 {
     if (src != NULL)
     {
@@ -790,19 +790,19 @@ NRTAPI(char*) nrt_strdup(const char* src)
     return NULL;
 }
 
-NRTAPI(size_t) nrt_strlen(const char* src)
+NRTPROT(size_t) nrt_strlen(const char* src)
 {
     return strlen(src);
 }
-NRTAPI(uint32_t) nrt_strlen32(const char* src)
+NRTPROT(uint32_t) nrt_strlen32(const char* src)
 {
     return (uint32_t) strlen(src);
 }
-NRTAPI(uint16_t) nrt_strlen16(const char* src)
+NRTPROT(uint16_t) nrt_strlen16(const char* src)
 {
     return (uint16_t)strlen(src);
 }
-NRTAPI(uint8_t) nrt_strlen8(const char* src)
+NRTPROT(uint8_t) nrt_strlen8(const char* src)
 {
     return (uint8_t)strlen(src);
 }

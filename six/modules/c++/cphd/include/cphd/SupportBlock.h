@@ -19,15 +19,15 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __CPHD_SUPPORT_BLOCK_H__
 #define __CPHD_SUPPORT_BLOCK_H__
-#pragma once
 
 #include <iostream>
 #include <string>
 #include <complex>
 #include <unordered_map>
-
+#include <vector>
 #include <std/cstddef>
 
 #include <scene/sys_Conf.h>
@@ -38,6 +38,7 @@
 
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -50,7 +51,7 @@ namespace cphd
  *  \brief This class contains information about the SupportBlock CPHD data.
  */
 //  Provides methods to read support block data from CPHD file/stream
-struct SupportBlock final
+struct SIX_CPHD_API SupportBlock final
 {
     /*
      *  \func SupportBlock
@@ -118,13 +119,7 @@ struct SupportBlock final
     void read(const std::string& id,
               size_t numThreads,
               const mem::BufferView<sys::ubyte>& data) const;
-    void read(const std::string& id,
-              size_t numThreads,
-              std::span<std::byte> data) const
-    {
-        mem::BufferView<sys::ubyte> data_(reinterpret_cast<sys::ubyte*>(data.data()), data.size());
-        read(id, numThreads, data_);
-    }
+    void read(const std::string& id, size_t numThreads, std::span<std::byte> data) const;
 
     /*
      *  \func read
@@ -139,17 +134,8 @@ struct SupportBlock final
      *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
      */
     // Same as above but allocates the memory
-    void read(const std::string& id,
-              size_t numThreads,
-              std::unique_ptr<sys::ubyte[]>& data) const;
-    void read(const std::string& id,
-              size_t numThreads,
-              std::unique_ptr<std::byte[]>& data) const
-    {
-        std::unique_ptr<sys::ubyte[]> data_;
-        read(id, numThreads, data_);
-        data.reset(reinterpret_cast<std::byte*>(data_.release()));
-    }
+    std::vector<std::byte> read(const std::string& id, size_t numThreads) const;
+    void read(const std::string& id, size_t numThreads, mem::ScopedArray<sys::ubyte>&) const; // for existing SWIG bindings
 
     /*
      *  \func readAll
@@ -163,22 +149,10 @@ struct SupportBlock final
      *  \param[out] data std::unique_ptr<[]> that will hold the data read from the file.
      *
      */
-    void readAll(size_t numThreads,
-                std::unique_ptr<sys::ubyte[]>& data) const;
-    void readAll(size_t numThreads,
-                 std::unique_ptr<std::byte[]>& data) const
-    {
-        std::unique_ptr<sys::ubyte[]> data_;
-        readAll(numThreads, data_);
-        data.reset(reinterpret_cast<std::byte*>(data_.release()));
-    }
-
+    std::vector<std::byte> readAll(size_t numThreads) const;
+    void readAll(size_t numThreads, mem::ScopedArray<sys::ubyte>&) const; // for existing SWIG bindings
 
 private:
-    //! Initialize mOffsets for each array
-    // both for uncompressed and compressed data
-    void initialize();
-
     const std::shared_ptr<io::SeekableInputStream> mInStream;
     cphd::Data mData;
     const int64_t mSupportOffset;       // offset in bytes to start of SupportBlock

@@ -27,7 +27,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription MPDSRA_description[] = {
     {NITF_BCS_A, 2, "Image Block Number", "blkno" },
     {NITF_BCS_A, 2, "Commanded IPR", "cdipr" },
     {NITF_BCS_N, 2, "No of Blocks in WDG", "nblkw" },
@@ -56,6 +56,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(MPDSRA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(MPDSRA)
 
 NITF_CXX_ENDGUARD

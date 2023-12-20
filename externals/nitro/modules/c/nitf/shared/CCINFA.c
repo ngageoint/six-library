@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CCINFA_description[] = {
     {NITF_BCS_N, 3, "Number of defined codes", "NUMCODE" },
     {NITF_LOOP, 0, NULL, "NUMCODE"},
         {NITF_BCS_N, 1, "Length of the CODE field", "CODE_LEN" },
@@ -43,6 +43,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CCINFA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CCINFA)
 
 NITF_CXX_ENDGUARD

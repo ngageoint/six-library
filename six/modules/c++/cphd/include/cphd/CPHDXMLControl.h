@@ -19,10 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_CPHD_XML_CONTROL_H__
 #define __CPHD_CPHD_XML_CONTROL_H__
-#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -36,6 +35,7 @@
 #include <xml/lite/Document.h>
 #include <cphd/CPHDXMLParser.h>
 #include <cphd/Types.h>
+#include <cphd/Exports.h>
 #include <six/Logger.h>
 
 namespace cphd
@@ -46,7 +46,7 @@ namespace cphd
  *  \brief This class converts a Metadata object into a CPHD XML
  *  Document Object Model (DOM) and vice-versa.
  */
-class CPHDXMLControl
+class SIX_CPHD_API CPHDXMLControl
 {
 public:
     /*!
@@ -145,8 +145,10 @@ public:
         const std::vector<std::filesystem::path>& schemaPaths = std::vector<std::filesystem::path>());
 
     //! \return Suported version to uri mapping
-    static std::unordered_map<std::string, xml::lite::Uri> getVersionUriMap();
-    static void getVersionUriMap(std::map<Version, xml::lite::Uri>&);
+    static std::map<Version, xml::lite::Uri> getVersionUriMap();
+
+    // Given the URI get associated version
+    static Version uriToVersion(const xml::lite::Uri&);
 
 protected:
     logging::Logger *mLog = nullptr;
@@ -178,10 +180,7 @@ private:
      *  \param uri A string specifying CPHD uri
      */
     std::unique_ptr<CPHDXMLParser>
-    getParser(const xml::lite::Uri&) const;
-
-    // Given the URI get associated version
-    Version uriToVersion(const xml::lite::Uri&) const;
+    getParser(Version) const;
 };
 }
 

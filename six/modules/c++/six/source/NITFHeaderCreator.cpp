@@ -21,6 +21,9 @@
  */
 #include <iomanip>
 #include <sstream>
+#include <std/optional>
+#include <string>
+#include <functional>
 
 #include <io/ByteStream.h>
 #include <math/Round.h>
@@ -50,10 +53,8 @@ void setField(const std::string& field,
         std::ostringstream ostr;
         ostr << "Tried to set field '" << field << "' to '" << value
              << "' but this is " << value.length() << " characters when the "
-             << "field can only contain " << treField.getLength()
-             << " characters";
-
-        throw except::Exception(Ctxt(ostr.str()));
+             << "field can only contain " << treField.getLength() << " characters";
+        throw except::Exception(Ctxt(ostr));
     }
 
     treField = value;
@@ -243,103 +244,49 @@ void NITFHeaderCreator::setDESecurity(const six::Classification& classification,
     setSecurity(classification, subheader.getSecurityGroup(), "DES");
 }
 
+struct SecurityParameterSetter final
+{
+    const std::string& prefix;
+    const Options ops;
+    void operator()(const std::string& field, std::function<nitf::Field()> getField) const
+    {
+        const auto k = NITFImageInfo::generateFieldKey(field, prefix);
+        if (ops.hasParameter(k))
+        {
+            Parameter p = ops.getParameter(k);
+            getField().set(p.str());
+        }
+    }
+    SecurityParameterSetter& operator=(const SecurityParameterSetter&) = delete;
+    #if _MSC_VER
+    // doing `= delete` for the default constructor causes the line below not to compile w/C++20
+    #pragma warning(disable: 4623) // '...': default constructor was implicitly defined as deleted
+    #endif
+};
+
 void NITFHeaderCreator::setSecurity(const six::Classification& classification,
                                     nitf::FileSecurity security,
                                     const std::string& prefix)
 {
-    std::string k;
-    const Options& ops = classification.fileOptions;
-
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLSY, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getClassificationSystem().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CODE, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getCodewords().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CTLH, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getControlAndHandling().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::REL, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getReleasingInstructions().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCTP, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getDeclassificationType().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCDT, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getDeclassificationDate().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DCXM, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getDeclassificationExemption().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DG, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getDowngrade().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::DGDT, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getDowngradeDateTime().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CLTX, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getClassificationText().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CATP, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getClassificationAuthorityType().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CAUT, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getClassificationAuthority().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CRSN, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getClassificationReason().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::SRDT, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getSecuritySourceDate().set(p.str());
-    }
-    k = NITFImageInfo::generateFieldKey(NITFImageInfo::CTLN, prefix);
-    if (ops.hasParameter(k))
-    {
-        Parameter p = ops.getParameter(k);
-        security.getSecurityControlNumber().set(p.str());
-    }
+    const SecurityParameterSetter setSecurityParameter_{ prefix,  classification.fileOptions };
+    #define setSecurityParameter(code_, getter_) \
+        setSecurityParameter_(NITFImageInfo::code_, [&]() { return security.get ## getter_(); })
+    setSecurityParameter(CLSY, ClassificationSystem);
+    setSecurityParameter(CODE, Codewords);
+    setSecurityParameter(CTLH, ControlAndHandling);
+    setSecurityParameter(REL, ReleasingInstructions);
+    setSecurityParameter(DCTP, DeclassificationType);
+    setSecurityParameter(DCDT, DeclassificationDate);
+    setSecurityParameter(DCXM, DeclassificationExemption);
+    setSecurityParameter(DG, Downgrade);
+    setSecurityParameter(DGDT, DowngradeDateTime);
+    setSecurityParameter(CLTX, ClassificationText);
+    setSecurityParameter(CATP, ClassificationAuthorityType);
+    setSecurityParameter(CAUT, ClassificationAuthority);
+    setSecurityParameter(CRSN, ClassificationReason);
+    setSecurityParameter(SRDT, SecuritySourceDate);
+    setSecurityParameter(CTLN, SecurityControlNumber);
+    #undef setSecurityParameter
 
     // Now, do some specific overrides
     if (security.getClassificationSystem().toString().empty())
@@ -793,9 +740,8 @@ void NITFHeaderCreator::initialize(std::shared_ptr<Container> container)
             {
                 std::ostringstream ostr;
                 ostr << "Row offset cannot exceed " << maxRows
-                     << ", but for image segment " << jj << " it is "
-                     << segmentInfo.getFirstRow();
-                throw except::Exception(Ctxt(ostr.str()));
+                     << ", but for image segment " << jj << " it is " << segmentInfo.getFirstRow();
+                throw except::Exception(Ctxt(ostr));
             }
 
             subheader.getImageLocation().set(generateILOC(segmentInfo.getRowOffset(), 0));

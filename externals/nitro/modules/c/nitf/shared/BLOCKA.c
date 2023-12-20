@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription BLOCKA_description[] = {
     {NITF_BCS_N, 2, "Block Number", "BLOCK_INSTANCE" },
     {NITF_BCS_A, 5, "No. of Gray Pixels", "N_GRAY" },
     {NITF_BCS_N, 5, "Lines", "L_LINES" },
@@ -40,6 +40,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(BLOCKA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(BLOCKA)
 
 NITF_CXX_ENDGUARD

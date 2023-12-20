@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_PVP_BLOCK_H__
 #define __CPHD_PVP_BLOCK_H__
 
@@ -37,6 +37,7 @@
 #include <cphd/PVP.h>
 #include <cphd/Metadata.h>
 #include <cphd/ByteSwap.h>
+#include <cphd/Exports.h>
 #include <six/Parameter.h>
 
 namespace cphd
@@ -92,7 +93,7 @@ struct AddedPVP<std::string>
  *
  *  PVPBlock handles reading PVPBlock from CPHD file, and loading the data structure
  */
-struct PVPBlock
+struct SIX_CPHD_API PVPBlock
 {
     PVPBlock() = default;
 
@@ -194,8 +195,7 @@ struct PVPBlock
             return aP.getAddedPVP(mData[channel][set].addedPVP.find(name)->second);
             // return AddPVPNamespace::getAddedPVP<T>(mData[channel][set].addedPVP.find(name)->second);
         }
-        throw except::Exception(Ctxt(
-                "Parameter was not set"));
+        throw except::Exception(Ctxt("Parameter was not set"));
     }
 
     //! Setter functions
@@ -236,11 +236,9 @@ struct PVPBlock
                 mData[channel][set].addedPVP.find(name)->second.setValue(value);
                 return;
             }
-            throw except::Exception(Ctxt(
-                                "Additional parameter requested already exists"));
+            throw except::Exception(Ctxt("Additional parameter requested already exists"));
         }
-        throw except::Exception(Ctxt(
-                                "Parameter was not specified in XML"));
+        throw except::Exception(Ctxt("Parameter was not specified in XML"));
     }
 
     /*
@@ -252,9 +250,9 @@ struct PVPBlock
      *  be resized and zeroed internally.
      */
     void getPVPdata(size_t channel,
-                    std::vector<sys::ubyte>& data) const;
-    void getPVPdata(size_t channel,
                     std::vector<std::byte>& data) const;
+    void getPVPdata(size_t channel,
+                    std::vector<sys::ubyte>& data) const; // for existing SWIG bindings
 
     /*
      *  \func getPVPdata
@@ -359,7 +357,7 @@ protected:
      *  Each channel consists of a PVP Array,
      *  which consists of multiple sets
      */
-    struct PVPSet
+    struct PVPSet final
     {
         /*!
          *  \func PVPSet
@@ -456,7 +454,7 @@ protected:
         //! (Optional) Additional parameters
         std::unordered_map<std::string,six::Parameter> addedPVP;
     };
-    friend std::ostream& operator<< (std::ostream& os, const PVPSet& p);
+    SIX_CPHD_API friend std::ostream& operator<< (std::ostream& os, const PVPSet& p);
 
 private:
     //! The PVP Block [Num Channles][Num Parameters]
@@ -478,7 +476,7 @@ private:
     bool mSignalEnabled;
 
     //! Ostream operator
-    friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);
+    SIX_CPHD_API friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);
 };
 }
 #endif

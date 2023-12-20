@@ -19,11 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_GRID_ECEF_TRANSFORM_H__
 #define __SCENE_GRID_ECEF_TRANSFORM_H__
 
 #include <types/RowCol.h>
 #include <scene/Types.h>
+#include <scene/Exports.h>
 
 namespace scene
 {
@@ -32,7 +34,7 @@ namespace scene
  * \brief Used to convert from row/col pixel space to ECEF space and vice
  * versa
  */
-class GridECEFTransform
+class SIX_SCENE_API GridECEFTransform
 {
 public:
     virtual ~GridECEFTransform();
@@ -71,7 +73,7 @@ public:
  * \class PlanarGridECEFTransform
  * \brief Implementation for a planar gridded display (PGD)
  */
-class PlanarGridECEFTransform : public GridECEFTransform
+class SIX_SCENE_API PlanarGridECEFTransform : public GridECEFTransform
 {
 public:
     /*
@@ -118,7 +120,7 @@ private:
  * \class CylindricalGridECEFTransform
  * \brief Implementation for a cylindrical gridded display (CGD)
  */
-class CylindricalGridECEFTransform : public GridECEFTransform
+class SIX_SCENE_API CylindricalGridECEFTransform : public GridECEFTransform
 {
 public:
     CylindricalGridECEFTransform(const types::RowCol<double>& sampleSpacing,
@@ -149,7 +151,7 @@ private:
  * \class GeographicRowColECEFTransform
  * \brief Implementation for a geographic gridded display (GGD)
  */
-struct GeographicGridECEFTransform : public GridECEFTransform
+struct SIX_SCENE_API GeographicGridECEFTransform : public GridECEFTransform
 {
     GeographicGridECEFTransform(const types::RowCol<double>& sampleSpacing,
                                 const types::RowCol<double>& sceneCenter,

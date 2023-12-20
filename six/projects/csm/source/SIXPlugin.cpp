@@ -83,9 +83,7 @@ std::string SIXPlugin::getModelName(size_t modelIndex) const
     case SIDD_MODEL_INDEX:
         return SIDDSensorModel::NAME;
     default:
-        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
-                           "Model index is " + str::toString(modelIndex),
-                            "SIXPlugin::getModelName");
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE, "Model index is " + std::to_string(modelIndex), "SIXPlugin::getModelName");
     }
 }
 
@@ -98,9 +96,7 @@ std::string SIXPlugin::getModelFamily(size_t modelIndex) const
     case SIDD_MODEL_INDEX:
         return SIDDSensorModel::FAMILY;
     default:
-        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
-                           "Model index is " + str::toString(modelIndex),
-                            "SIXPlugin::getModelFamily");
+        throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE, "Model index is " + std::to_string(modelIndex), "SIXPlugin::getModelFamily");
     }
 }
 

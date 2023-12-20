@@ -189,7 +189,7 @@ static int main_(int argc, char** argv)
     const std::string inputPath(options->get<std::string>("input"));
     std::vector<std::string> inputPathnames = getPathnames(inputPath);
     const std::string logFile(options->get<std::string>("log"));
-    std::string level(options->get<std::string>("level"));
+    auto level = str::upper(options->get<std::string>("level"));
     std::vector<std::string> schemaPaths;
     getSchemaPaths(*options, "--schema", "schema", schemaPaths);
 
@@ -200,7 +200,6 @@ static int main_(int argc, char** argv)
     xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
     xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
-    str::upper(level);
     str::trim(level);
     std::unique_ptr<logging::Logger> log =
         logging::setupLogger(fs::path(argv[0]).filename().string(), level, logFile);
@@ -261,14 +260,14 @@ int main(int argc, char** argv)
     {
         return main_(argc, argv);
     }
-    catch (const std::exception& ex)
-    {
-        std::cerr << ex.what() << std::endl;
-    }
     catch (const except::Exception& ex)
     {
         std::cerr << ex.toString() << std::endl;
         return 1;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
     }
     catch (...)
     {

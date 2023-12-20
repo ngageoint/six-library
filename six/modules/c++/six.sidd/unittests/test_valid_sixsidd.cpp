@@ -74,7 +74,7 @@ static std::unique_ptr<six::sidd::DerivedData> test_assert_round_trip(const std:
     const auto strXML = six::sidd::Utilities::toXMLString(derivedData, pSchemaPaths);
     TEST_ASSERT_FALSE(strXML.empty());
 
-    const auto xml_ = str::toString(strXML); // for debugging
+    const auto xml_ = str::to_native(strXML); // for debugging
     TEST_ASSERT_FALSE(xml_.empty());
 
     return six::sidd::Utilities::parseDataFromString(strXML, pSchemaPaths);
@@ -128,7 +128,7 @@ TEST_CASE(test_read_sidd200_no_LUT)
 {
     static const auto pathname = get_sample_nitf_path("2023-07-26-11-37-27_UMBRA-04_SIDD.nitf");
 
-    six::XMLControlRegistry& xml_registry = six::XMLControlFactory::getInstance();
+    six::XMLControlRegistry& xml_registry = six::getXMLControlFactory();
     xml_registry.addCreator(six::DataType::DERIVED,
         new six::XMLControlCreatorT<six::sidd::DerivedXMLControl>());
 

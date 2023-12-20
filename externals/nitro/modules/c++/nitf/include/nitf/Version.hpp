@@ -38,9 +38,10 @@
  // 2.11.2	December 14, 2022
  // 2.11.3	June 5, 2023
  // 2.11.4	August 18, 2023
+ // 2.11.5	October 23, 2023
 #define NITF_VERSION_MAJOR	2
 #define NITF_VERSION_MINOR	11
-#define NITF_VERSION_PATCH	4  // a.k.a. "point," but too similar to "patch."
+#define NITF_VERSION_PATCH	5  // a.k.a. "point," but too similar to "patch."
 #define NITF_VERSION_BUILD		0 // a.k.a. "patch," but too similar to "point."
 #define NITF_VERSION CODA_OSS_MAKE_VERSION_MMPB(NITF_VERSION_MAJOR, NITF_VERSION_MINOR, NITF_VERSION_PATCH, NITF_VERSION_BUILD)
 

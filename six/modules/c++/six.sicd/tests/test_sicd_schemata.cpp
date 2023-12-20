@@ -2422,7 +2422,7 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
         // parse the programetically generated SICD XML string
         xml::lite::MinidomParser parser;
         io::StringStream oss;
-        oss.write(xmlText.c_str(), xmlText.size());
+        oss.write(xmlText);
         parser.parse(oss);
 
         // apply parsed XML to document, print its XML string and compare to original XML string
@@ -2435,7 +2435,7 @@ bool cmpRoundTripXMLs(std::string xmlText, std::string xmlPath = "",
 
         // translate XML into Complex Data structure
         const std::unique_ptr<six::XMLControl> xmlControl(
-            six::XMLControlFactory::getInstance().newXMLControl(six::DataType::COMPLEX, log.get()));
+            six::getXMLControlFactory().newXMLControl(six::DataType::COMPLEX, log.get()));
         six::sicd::ComplexData* data = (
             six::sicd::ComplexData*)xmlControl->fromXML(doc, std::vector<std::string>());
 
@@ -2573,7 +2573,7 @@ int main(int argc, char** argv)
         params.push_back(options->get<std::string> ("xmlPath"));
         params.push_back(options->get<std::string> ("verbose"));
 
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         // Validate that the resultant XML data from SICD Complex Data
         //   matches before and after round-trip for each format and algorithm

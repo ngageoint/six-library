@@ -55,7 +55,7 @@ StreamSplitter::StreamSplitter(io::InputStream& inputStream,
         std::ostringstream os;
         os << "bufferSize must be >= twice the delimiter size + 1 byte. "
            << "Normally it should be much larger for good performance.";
-        throw except::InvalidArgumentException(Ctxt(os.str()));
+        throw except::InvalidArgumentException(Ctxt(os));
     }
 }
 

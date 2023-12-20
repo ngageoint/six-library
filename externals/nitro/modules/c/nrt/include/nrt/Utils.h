@@ -144,7 +144,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
+NRTAPI(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer7);
 NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLat(int degrees, int minutes, double seconds);
 
@@ -153,7 +153,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLat(int degrees, int minutes, double seco
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
+NRTAPI(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer8);
 NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLon(int degrees, int minutes, double seconds);
 
@@ -162,23 +162,23 @@ NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLon(int degrees, int minutes, double seco
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7);
+NRTAPI(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7);
 
 /*!
  *  Turn the decimal value into a string +-ddd.ddd.  You must have a buffer
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_decimalLonToCharArray(double decimal, char *buffer8);
+NRTAPI(void) nrt_Utils_decimalLonToCharArray(double decimal, char *buffer8);
 
-NRTPROT(void) nrt_Utils_decimalLatToGeoCharArray(double decimal, char *buffer7);
+NRTAPI(void) nrt_Utils_decimalLatToGeoCharArray(double decimal, char *buffer7);
 
 /*!
  *  Turn the decimal value into a string +-ddd.ddd.  You must have a buffer
  *  with 7 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
-NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8);
+NRTAPI(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8);
 
 /*!
  *  Convert the corners type to a string.  If for some reason, the type
@@ -198,14 +198,14 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
 NRTAPI(void) nrt_Utils_byteSwap(uint8_t* value, size_t size);
 
 NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src);
-NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars);
+NRTPROT(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars);
 NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src);
 NRTAPI(char*) nrt_strdup(const char* src);
 
-NRTAPI(size_t) nrt_strlen(const char* src); // aka strlen()
-NRTAPI(uint32_t) nrt_strlen32(const char* src);
-NRTAPI(uint16_t) nrt_strlen16(const char* src);
-NRTAPI(uint8_t) nrt_strlen8(const char* src);
+NRTPROT(size_t) nrt_strlen(const char* src); // aka strlen()
+NRTPROT(uint32_t) nrt_strlen32(const char* src);
+NRTPROT(uint16_t) nrt_strlen16(const char* src);
+NRTPROT(uint8_t) nrt_strlen8(const char* src);
 
 NRT_CXX_ENDGUARD
 #endif

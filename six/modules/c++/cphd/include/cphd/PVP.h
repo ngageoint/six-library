@@ -37,6 +37,7 @@
 #include <six/XsElement.h>
 
 #include "cphd/Types.h"
+#include "cphd/Exports.h"
 
 namespace cphd
 {
@@ -50,7 +51,7 @@ namespace cphd
  *  the binary parameter in the set of Per Vector
  *  parameters provided for each vector.
  */
-struct PVPType
+struct SIX_CPHD_API PVPType
 {
     static constexpr size_t WORD_BYTE_SIZE = 8;
 
@@ -124,7 +125,7 @@ protected:
     std::string mFormat;
 };
 void setOffset(PVPType&, size_t offset);
-
+std::ostream& operator<< (std::ostream& os, const PVPType& p);
 
 /*!
  *  \struct APVPType
@@ -133,7 +134,7 @@ void setOffset(PVPType&, size_t offset);
  *
  *  Specifies additional (or custom) per vector parameters
  */
-struct APVPType : PVPType
+struct SIX_CPHD_API APVPType : PVPType
 {
     //! Constructor
     APVPType();
@@ -191,7 +192,7 @@ private:
 /*!
  *  \struct PerVectorParameterXYZ
  */
-struct PerVectorParameterXYZ final
+struct SIX_CPHD_API PerVectorParameterXYZ final
 {
     PerVectorParameterXYZ();
     ~PerVectorParameterXYZ() = default;
@@ -211,13 +212,19 @@ struct PerVectorParameterXYZ final
 
     PVPType param;
 };
+inline std::ostream& operator<<(std::ostream& os, const PerVectorParameterXYZ& v)
+{
+    os << v.param << "\n";
+    return os;
+}
+
 
 /*!
  *  \struct PerVectorParameterEB
  *
  *  \brief Per vector parameters for Electrical Boresight
  */
-struct PerVectorParameterEB final
+struct SIX_CPHD_API PerVectorParameterEB final
 {
     PerVectorParameterEB();
     ~PerVectorParameterEB() = default;
@@ -237,6 +244,12 @@ struct PerVectorParameterEB final
 
     PVPType param;
 };
+inline std::ostream& operator<<(std::ostream& os, const PerVectorParameterEB& v)
+{
+    os << v.param << "\n";
+    return os;
+}
+
 
 /*!
  *  \struct TxAntenna
@@ -245,7 +258,7 @@ struct PerVectorParameterEB final
  * Parameters included that specify the Transmit Antenna ACF orientation and the EB Steering vector.
  * (New in CPHD 1.1.0)
  */
-struct TxAntenna final
+struct SIX_CPHD_API TxAntenna final
 {
     bool operator==(const TxAntenna& other) const
     {
@@ -267,6 +280,13 @@ struct TxAntenna final
     //! TxEB PVP Structure
     six::XsElement<PerVectorParameterEB> txEB{ "TxEB" };
 };
+inline std::ostream& operator<<(std::ostream& os, const TxAntenna& v)
+{
+    os << v.txACX << "\n";
+    os << v.txACY << "\n";
+    os << v.txEB << "\n";
+    return os;
+}
 
 /*!
  *  \struct RcvAntenna
@@ -275,7 +295,7 @@ struct TxAntenna final
  * Parameters included that specify the Receive Antenna ACF orientation and the EB Steering vector.
  * (New in CPHD 1.1.0)
  */
-struct RcvAntenna final
+struct SIX_CPHD_API RcvAntenna final
 {
     bool operator==(const RcvAntenna& other) const
     {
@@ -297,6 +317,13 @@ struct RcvAntenna final
     //! RcvEB PVP Structure
     six::XsElement<PerVectorParameterEB> rcvEB{ "RcvEB" };
 };
+inline std::ostream& operator<<(std::ostream& os, const RcvAntenna& v)
+{
+    os << v.rcvACX << "\n";
+    os << v.rcvACY << "\n";
+    os << v.rcvEB << "\n";
+    return os;
+}
 
 /*!
  *  \struct Pvp
@@ -306,7 +333,7 @@ struct RcvAntenna final
  *
  *  Provided for each channel of a given product.
  */
-struct Pvp final
+struct SIX_CPHD_API Pvp final
 {
     /*!
      *  Transmit time for the center of the transmitted pulse relative to the
@@ -597,16 +624,10 @@ private:
      * Set default size and format for each parameter
      */
     void setDefaultValues(size_t size, const std::string& format, PVPType& param);
-
-    /*
-     * Initializes default size and format for parameters
-     */
-    void initialize();
 };
 
 //! Ostream operators
-std::ostream& operator<< (std::ostream& os, const PVPType& p);
-std::ostream& operator<< (std::ostream& os, const APVPType& a);
-std::ostream& operator<< (std::ostream& os, const Pvp& p);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const APVPType& a);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const Pvp& p);
 }
 #endif // SIX_cphd_PVP_h_INCLUDED_

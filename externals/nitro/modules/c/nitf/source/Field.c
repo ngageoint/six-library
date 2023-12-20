@@ -1121,11 +1121,11 @@ static void nitf_Field_snprint_(char* buffer, size_t buf_size, nitf_Field* field
         break;
     }
 }
-NITFPROT(void) nitf_Field_print(nitf_Field * field)
+NITFAPI(void) nitf_Field_print(nitf_Field * field)
 {
     nitf_Field_snprint_(NULL /*buffer*/, 0 /*buf_size*/, field);
 }
-NITFPROT(void) nitf_Field_snprint(char* buffer, size_t buf_size, nitf_Field* field)
+NITFAPI(void) nitf_Field_snprint(char* buffer, size_t buf_size, nitf_Field* field)
 {
     nitf_Field_snprint_(buffer, buf_size, field);
 }

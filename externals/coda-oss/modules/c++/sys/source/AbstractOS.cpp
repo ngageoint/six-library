@@ -86,29 +86,14 @@ AbstractOS::search(const std::vector<std::string>& searchPaths,
     return elementsFound;
 }
 
-inline auto convert(const std::vector<fs::path>& paths)
-{
-    std::vector<std::string> retval;
-    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
-                   [](const fs::path& p) { return p.string(); });
-    return retval;
-}
-inline auto convert(const std::vector<std::string>& paths)
-{
-    std::vector<fs::path> retval;
-    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
-                   [](const auto& p) { return p; });
-    return retval;
-}
-
 std::vector<coda_oss::filesystem::path> AbstractOS::search(
         const std::vector<coda_oss::filesystem::path>& searchPaths,
         const std::string& fragment,
         const std::string& extension,
         bool recursive) const
 {
-    const auto results = search(convert(searchPaths), fragment, extension, recursive);
-    return convert(results);
+    const auto results = search(convertPaths(searchPaths), fragment, extension, recursive);
+    return convertPaths(results);
 }
 
 void AbstractOS::remove(const std::string& path) const
@@ -292,7 +277,7 @@ static std::string getSpecialEnv_PID(const AbstractOS& os, const std::string& en
     UNREFERENCED_PARAMETER(envVar);
     #endif
     const auto pid = os.getProcessId();
-    return str::toString(pid);
+    return std::to_string(pid);
 }
 
 static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& envVar)
@@ -394,7 +379,7 @@ static std::string getSpecialEnv_SECONDS_()
     // https://en.cppreference.com/w/cpp/chrono/c/difftime
     static const auto start = std::time(nullptr);
     const auto diff = static_cast<int64_t>(std::difftime(std::time(nullptr), start));
-    return str::toString(diff);
+    return std::to_string(diff);
 }
 static std::string getSpecialEnv_SECONDS(const AbstractOS&, const std::string& envVar)
 {
@@ -475,7 +460,7 @@ std::string AbstractOS::getSpecialEnv(const std::string& envVar) const
 
     if (envVar == "EPOCHSECONDS")
     {
-        return str::toString(sys::DateTime::getEpochSeconds());
+        return std::to_string(sys::DateTime::getEpochSeconds());
     }
 
     if (envVar == "OSTYPE")

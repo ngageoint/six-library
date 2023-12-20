@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_IMAGE_DATA_H__
 #define __SIX_IMAGE_DATA_H__
 
@@ -37,6 +38,8 @@
 #include "six/Init.h"
 #include "six/Parameter.h"
 
+#include "six/sicd/Exports.h"
+
 namespace six
 {
 namespace sicd
@@ -48,7 +51,7 @@ class GeoData;
  *
  *  This block describes image pixel data
  */
-struct ImageData
+struct SIX_SICD_API ImageData
 {
     //!  Everything is undefined at this time
     ImageData() = default;
@@ -109,6 +112,9 @@ struct ImageData
      */
     static const six::Amp8iPhs8iLookup_t& getLookup(const six::AmplitudeTable* pAmplitudeTable);
 };
+
+SIX_SICD_API const details::ComplexToAMP8IPHS8I& make_ComplexToAMP8IPHS8I(const six::AmplitudeTable*);
+SIX_SICD_API AMP8I_PHS8I_t nearest_neighbor(const details::ComplexToAMP8IPHS8I&, const six::zfloat& v);
 
 }
 }

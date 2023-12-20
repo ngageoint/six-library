@@ -319,7 +319,7 @@ struct CODA_OSS_API Element  // SOAPElement derives :-(
      *  \return the charater data
      */
     std::string getCharacterData() const;
-    coda_oss::u8string& getCharacterData(coda_oss::u8string& result) const;
+    const coda_oss::u8string& getCharacterData(coda_oss::u8string& result) const;
     //explicit operator coda_oss::u8string() const
     //{
     //    coda_oss::u8string result;
@@ -499,7 +499,7 @@ private:
     coda_oss::u8string mCharacterData;
 };
 
-Element& add(const xml::lite::QName&, const std::string& value, Element& parent);
+CODA_OSS_API Element& add(const xml::lite::QName&, const std::string& value, Element& parent);
 
 #ifndef SWIG
 // The (old) version of SWIG we're using doesn't like certain C++11 features.

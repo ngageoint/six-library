@@ -25,6 +25,7 @@
 #include <std/memory>
 
 #include <except/Exception.h>
+#include <sys/Span.h>
 
 #include <cphd/ByteSwap.h>
 #undef min
@@ -53,18 +54,30 @@ DataWriterLittleEndian::DataWriterLittleEndian(
         size_t scratchSize) : DataWriterLittleEndian(*stream, numThreads, scratchSize)
 {
 }
-void DataWriterLittleEndian::operator()(const void* pData, size_t numElements, size_t elementSize)
-{
-    const auto data = static_cast<const sys::ubyte*>(pData);
 
+static auto adjust_span(std::span<const std::byte> data, size_t dataProcessed)
+{
+    const auto pData = data.data() + dataProcessed;
+    const auto size = data.size() - dataProcessed;
+    return sys::make_span(pData, size);
+}
+
+void DataWriterLittleEndian::operator()(std::span<const std::byte> pData, size_t elementSize)
+{
     size_t dataProcessed = 0;
-    const size_t dataSize = numElements * elementSize;
+    const auto dataSize = pData.size();
     while (dataProcessed < dataSize)
     {
+        // `capacity()`, not `size()`; https://en.cppreference.com/w/cpp/container/vector/capacity
+        // "Returns the number of elements that the container has currently allocated space for."
+        // `assign()` (below) will alter `size()` to the number of current elements.
         const size_t dataToProcess =
-                std::min(mScratch.size(), dataSize - dataProcessed);
+                std::min(mScratch.capacity(), dataSize - dataProcessed);
 
-        memcpy(mScratch.data(), data + dataProcessed, dataToProcess);
+        const auto data = adjust_span(pData, dataProcessed);
+        const auto begin = data.begin();
+        const auto end = begin + dataToProcess;
+        mScratch.assign(begin, end); // see above; changes `size()`.
 
         cphd::byteSwap(mScratch.data(),
                        elementSize,
@@ -86,9 +99,9 @@ DataWriterBigEndian::DataWriterBigEndian(
         size_t numThreads) : DataWriterBigEndian(*stream, numThreads)
 {
 }
-void DataWriterBigEndian::operator()(const void* data, size_t numElements, size_t elementSize)
+void DataWriterBigEndian::operator()(std::span<const std::byte> pData, size_t /*elementSize*/)
 {
-    mStream.write(data, numElements * elementSize);
+    mStream.write(pData.data(), pData.size());
 }
 
 }

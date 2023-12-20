@@ -31,6 +31,8 @@
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <mem/ScopedArray.h>
+#include <sys/Path.h>
+
 #include <six/NITFWriteControl.h>
 #include <six/sicd/Utilities.h>
 #include <six/sicd/SlantPlanePixelTransformer.h>
@@ -126,8 +128,7 @@ void cropSICD(six::NITFReadControl& reader,
     // Write the AOI SICD out
     six::NITFWriteControl writer(std::move(aoiData));
     const std::span<const six::zfloat> image(buffer.get(), origDims.area());
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     writer.save_image(image, outPathname, schemaPaths);
 }
 

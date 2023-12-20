@@ -42,11 +42,6 @@ APVPType::APVPType()
 
 Pvp::Pvp()
 {
-    initialize();
-}
-
-void Pvp::initialize()
-{
     // Default size and formats for each PVP
     // listed in Table 11-6 CPHD1.0 Spec
     setDefaultValues(1,"F8", txTime);
@@ -255,6 +250,14 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
     if(!six::Init::isUndefined<size_t>(p.signal.getOffset()))
     {
         os << "  SIGNAL        : \n" << p.signal << "\n";
+    }
+    if (has_value(p.txAntenna))
+    {
+        os << "  TxAntenna        : \n" << p.txAntenna << "\n";
+    }
+    if (has_value(p.rcvAntenna))
+    {
+        os << "  RcvAntenna        : \n" << p.rcvAntenna << "\n";
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
