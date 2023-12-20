@@ -28,6 +28,8 @@
 #include <memory>
 #include <std/numbers>
 #include <algorithm>
+#include <functional>
+#include <unordered_map>
 
 #include <coda_oss/CPlusPlus.h>
 #if CODA_OSS_cpp17
@@ -186,7 +188,7 @@ six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor_(co
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // i.e. dot product.
     auto&& phase_direction = phase_directions[retval.phase];
-    const auto projection = phase_direction.real() * v.real() + phase_direction.imag() * v.imag();
+    const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     retval.amplitude = nearest(magnitudes, projection);
     return retval;
@@ -249,6 +251,101 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 
     std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
     transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
+    return retval;
+}
+
+// https://en.cppreference.com/w/cpp/utility/hash
+// Custom hash can be a standalone function object.
+struct MyHash final
+{
+    std::size_t operator()(const six::zfloat& z) const noexcept
+    {
+        std::size_t h1 = std::hash<float>{}(z.real());
+        std::size_t h2 = std::hash<float>{}(z.imag());
+        return h1 ^ (h2 << 1); // or use boost::hash_combine
+    }
+};
+
+
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unrolled(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make_(pAmplitudeTable);
+    const auto magnitudes_begin = converter.magnitudes.begin();
+    const auto magnitudes_end = converter.magnitudes.end();
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    //auto first = inputs.begin();
+    //const auto last = inputs.end();
+    //auto dest = retval.begin();
+    //for (; first != last; ++first, ++dest)
+    //{
+    //    const auto& v = *first;
+    //    auto& result = *dest;
+    std::unordered_map<zfloat, AMP8I_PHS8I_t, MyHash> v_to_AMP8I_PHS8I;
+    for (size_t i = 0; i < inputs.size(); i++)
+    {
+        static const MyHash myHash;
+
+        const auto& v = inputs[i];
+        auto& result = retval[i];
+
+        const auto result_it = v_to_AMP8I_PHS8I.find(v);
+        if (result_it != v_to_AMP8I_PHS8I.end())
+        {
+            result = result_it->second;
+            continue;
+        }
+
+        double phase = std::arg(v);
+        if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
+        result.phase = gsl::narrow_cast<uint8_t>(std::round(phase / converter.phase_delta));
+
+        // We have to do a 1D nearest neighbor search for magnitude.
+        // But it's not the magnitude of the input complex value - it's the projection of
+        // the complex value onto the ray of candidate magnitudes at the selected phase.
+        // i.e. dot product.
+        auto&& phase_direction = converter.phase_directions[result.phase];
+        const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
+        //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
+
+        //const auto it_lb = std::lower_bound(magnitudes_begin, magnitudes_end, projection);
+        auto first = magnitudes_begin;
+        decltype(first) it;
+        auto count = std::distance(first, magnitudes_end);
+        while (count > 0)
+        {
+            it = first;
+            const auto step = count / 2;
+            std::advance(it, step);
+
+            if (*it < projection)
+            {
+                first = ++it;
+                count -= step + 1;
+            }
+            else
+                count = step;
+        }
+        const auto it_lb = first;
+
+        if (it_lb == magnitudes_begin)
+        {
+            result.amplitude = 0;
+        }
+        else
+        {
+            const auto prev_it = std::prev(it_lb);
+            const auto nearest_it = it_lb == magnitudes_end ? prev_it :
+                (projection - *prev_it <= *it_lb - projection ? prev_it : it_lb);
+            const auto distance = std::distance(magnitudes_begin, nearest_it);
+            assert(distance <= std::numeric_limits<uint8_t>::max());
+            result.amplitude = gsl::narrow<uint8_t>(distance);
+        }
+
+        v_to_AMP8I_PHS8I[v] = result;
+    }
     return retval;
 }
 

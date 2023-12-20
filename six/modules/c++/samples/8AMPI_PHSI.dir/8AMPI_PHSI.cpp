@@ -90,7 +90,7 @@ static std::vector<AMP8I_PHS8I_t> fromComplex_nearest_neighbors(std::span<const 
 //    converter.nearest_neighbors_simd(inputs, results);
 //}
 
-constexpr auto iterations = 10;
+constexpr auto iterations = 250;
 template<typename TFunc>
 static std::chrono::duration<double> test(TFunc f, const std::vector<six::zfloat>& inputs)
 {
@@ -107,7 +107,7 @@ static std::chrono::duration<double> test(TFunc f, const std::vector<six::zfloat
 int main()
 {
     #ifdef NDEBUG
-    constexpr auto inputs_size = 10000000;
+    constexpr auto inputs_size = 1000000;
     #else
     constexpr auto inputs_size = 100;
     #endif
