@@ -48,10 +48,11 @@ auto make_inputs(size_t count)
     return retval;
 }
 
-
 static std::vector<AMP8I_PHS8I_t> fromComplex_nearest_neighbors(std::span<const six::zfloat> inputs)
 {
-    return six::sicd::ImageData::testing_fromComplex_(inputs);
+    static const six::sicd::ImageData imageData;
+    assert(imageData.amplitudeTable.get() == nullptr);
+    return imageData.fromComplex(inputs);
 }
 //static std::vector<AMP8I_PHS8I_t> fromComplex_nearest_neighbors2(std::span<const six::zfloat> inputs)
 //{

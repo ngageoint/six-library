@@ -278,9 +278,3 @@ std::vector<AMP8I_PHS8I_t> ImageData::fromComplex(std::span<const six::zfloat> i
     return six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, amplitudeTable.get());
 }
 
-std::vector<AMP8I_PHS8I_t> ImageData::testing_fromComplex_(std::span<const six::zfloat> inputs)
-{
-    static const ImageData imageData;
-    assert(imageData.amplitudeTable.get() == nullptr);
-    return imageData.fromComplex(inputs);
-}

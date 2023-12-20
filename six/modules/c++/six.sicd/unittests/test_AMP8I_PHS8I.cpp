@@ -542,6 +542,13 @@ TEST_CASE(test_create_sicd_from_mem_8i)
     test_create_sicd_from_mem(testName, "test_create_sicd_from_mem_8i_noamp.sicd", six::PixelType::AMP8I_PHS8I, false /*makeAmplitudeTable*/);
 }
 
+static std::vector<AMP8I_PHS8I_t> testing_fromComplex(std::span<const six::zfloat> inputs)
+{
+    static const six::sicd::ImageData imageData;
+    assert(imageData.amplitudeTable.get() == nullptr);
+    return imageData.fromComplex(inputs);
+}
+
 static void test_adjusted_values(const std::string& testName, const std::vector<six::zfloat>& values,
     const std::vector<AMP8I_PHS8I_t>& expected, six::zfloat delta)
 {
@@ -551,7 +558,7 @@ static void test_adjusted_values(const std::string& testName, const std::vector<
         v += delta;
     }
     std::span<const six::zfloat> values_(adjusted_values.data(), adjusted_values.size());
-    const auto actual = six::sicd::ImageData::testing_fromComplex_(values_);
+    const auto actual = testing_fromComplex(values_);
     for (size_t i = 0; i < expected.size(); i++)
     {
         TEST_ASSERT_EQ(expected[i].amplitude, actual[i].amplitude);
@@ -571,7 +578,7 @@ TEST_CASE(test_nearest_neighbor)
         {static_cast<uint8_t>(141), static_cast<uint8_t>(96)},
         {static_cast<uint8_t>(255), static_cast<uint8_t>(160)} };
 
-    const auto actual = six::sicd::ImageData::testing_fromComplex_(sys::make_span(values));
+    const auto actual = testing_fromComplex(sys::make_span(values));
     for (size_t i = 0; i < expected.size(); i++)
     {
         TEST_ASSERT_EQ(expected[i].amplitude, actual[i].amplitude);
