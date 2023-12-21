@@ -431,6 +431,70 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return retval;
 }
 
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_mapped(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make_(pAmplitudeTable);
+
+    const Amp8iPhs8iLookup_t values(converter.mResults.data(), lookupDims);
+    using float_to_value = std::map<float, AMP8I_PHS8I_t>;
+    using map_t = std::map<float, float_to_value>;
+    map_t map_;
+    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
+    {
+        for (const auto phase : six::sicd::Utilities::iota_0_256())
+        {
+            const auto r = values(amplitude, phase).real();
+            auto& v = map_[r];
+
+            const auto i = values(amplitude, phase).imag();
+            v[i] = AMP8I_PHS8I_t{ amplitude, phase };
+        }
+    }
+    const auto& map = map_;
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    //transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
+    for (size_t i = 0; i < inputs.size(); i++)
+    {
+        //retval[i] = nearest_neighbor(inputs[i]);
+
+        auto value = inputs[i].real();
+        auto it = map.lower_bound(value);
+        if (it != map.begin())
+        {
+            const auto prev_it = std::prev(it);
+            if (it == map.end())
+            {
+                it = prev_it;
+            }
+            else
+            {
+                it = (value - prev_it->first < it->first - value ? prev_it : it);
+            }
+        }
+        const auto& m = it->second;
+
+        value = inputs[i].imag();
+        auto r = m.lower_bound(value);
+        if (r != m.begin())
+        {
+            const auto prev_it = std::prev(r);
+            if (r == m.end())
+            {
+                r = prev_it;
+            }
+            else
+            {
+                r = (value - prev_it->first < r->first - value ? prev_it : r);
+            }
+        }
+        retval[i] = r->second;
+    };
+    return retval;
+}
+
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make_(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
