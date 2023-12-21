@@ -146,14 +146,12 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
     assert(p0 == 0.0);
     assert(p1 > p0);
     phase_delta = gsl::narrow_cast<float>(p1 - p0);
-    size_t i = 0;
-    for(const auto value : six::sicd::Utilities::iota_0_256())
+    for(size_t i = 0; i < 256; i++)
     {
-        const units::Radians<float> angle{ static_cast<float>(p0) + value * phase_delta };
+        const units::Radians<float> angle{ static_cast<float>(p0) + i * phase_delta };
         float y, x;
         SinCos(angle, y, x);
         phase_directions[i] = { x, y };
-        i++;
     }
 }
 
@@ -254,19 +252,6 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return retval;
 }
 
-// https://en.cppreference.com/w/cpp/utility/hash
-// Custom hash can be a standalone function object.
-struct MyHash final
-{
-    std::size_t operator()(const six::zfloat& z) const noexcept
-    {
-        std::size_t h1 = std::hash<float>{}(z.real());
-        std::size_t h2 = std::hash<float>{}(z.imag());
-        return h1 ^ (h2 << 1); // or use boost::hash_combine
-    }
-};
-
-
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unrolled(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
@@ -283,20 +268,10 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     //{
     //    const auto& v = *first;
     //    auto& result = *dest;
-    std::unordered_map<zfloat, AMP8I_PHS8I_t, MyHash> v_to_AMP8I_PHS8I;
     for (size_t i = 0; i < inputs.size(); i++)
     {
-        static const MyHash myHash;
-
         const auto& v = inputs[i];
         auto& result = retval[i];
-
-        const auto result_it = v_to_AMP8I_PHS8I.find(v);
-        if (result_it != v_to_AMP8I_PHS8I.end())
-        {
-            result = result_it->second;
-            continue;
-        }
 
         double phase = std::arg(v);
         if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
@@ -343,8 +318,6 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
             assert(distance <= std::numeric_limits<uint8_t>::max());
             result.amplitude = gsl::narrow<uint8_t>(distance);
         }
-
-        v_to_AMP8I_PHS8I[v] = result;
     }
     return retval;
 }
