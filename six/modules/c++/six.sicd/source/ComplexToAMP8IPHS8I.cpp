@@ -45,6 +45,7 @@
 #include <units/Angles.h>
 
 #include "six/sicd/Utilities.h"
+#include "six/sicd/vectorclass/version2/vectorclass.h"
 
 // https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353
 /*
