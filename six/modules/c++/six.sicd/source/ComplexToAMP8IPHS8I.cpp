@@ -45,7 +45,6 @@
 #include <units/Angles.h>
 
 #include "six/sicd/Utilities.h"
-#include "six/sicd/vectorclass/version2/vectorclass.h"
 
 // https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353
 /*
@@ -285,7 +284,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 }
 
 template<typename TInputIter, typename TOutputIter>
-static bool get_phase(float phase_delta,
+static inline bool get_phase(float phase_delta,
     TInputIter first, TInputIter last, TOutputIter dest)
 {
     // Phase is determined via arithmetic because it's equally spaced.
@@ -294,7 +293,7 @@ static bool get_phase(float phase_delta,
     auto v = *first;
     double phase = std::arg(v);
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
-    dest->phase = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    dest->phase = gsl::narrow_cast<uint8_t>(std::round(phase / phase_delta));
 
     const auto next = std::next(first);
     if (next == last)
@@ -305,7 +304,41 @@ static bool get_phase(float phase_delta,
     ++dest;
     phase = std::arg(v);
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
-    dest->phase = gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    dest->phase = gsl::narrow_cast<uint8_t>(std::round(phase / phase_delta));
+    return false;
+}
+
+#define VCL_NAMESPACE vcl
+#include "six/sicd/vectorclass/version2/vectorclass.h"
+#include "six/sicd/vectorclass/version2/vectormath_trig.h"
+#include "six/sicd/vectorclass/complex/complexvec1.h"
+template<typename TInputIter, typename TOutputIter>
+static inline bool get_phase_vcl(float phase_delta,
+    TInputIter first, TInputIter last, TOutputIter dest)
+{
+    const auto next = std::next(first);
+    if (next == last)
+    {
+        // Phase is determined via arithmetic because it's equally spaced.
+        // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
+        // handles cases that are close to 2PI.
+        auto v = *first;
+        double phase = std::arg(v);
+        if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
+        dest->phase = gsl::narrow_cast<uint8_t>(std::round(phase / phase_delta));
+
+        return true;
+    }
+
+    vcl::Complex2f z2(first->real(), first->imag(), next->real(), next->imag());
+    auto vcl_phase = atan2(z2.real(), z2.imag()); // arg()
+    vcl_phase = select(vcl_phase < 0.0, vcl_phase + std::numbers::pi_v<float> *2.0f, vcl_phase); // Wrap from [0, 2PI]
+    const auto phases = roundi(vcl_phase / phase_delta);
+
+    dest->phase = gsl::narrow_cast<uint8_t>(phases[0]);
+    ++dest;
+    dest->phase = gsl::narrow_cast<uint8_t>(phases[1]);
+
     return false;
 }
 
@@ -334,7 +367,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     auto dest = retval.begin();
     for (; first != last; ++first, ++dest)
     {
-        const auto at_end = get_phase(converter.phase_delta, first, last, dest);
+        const auto at_end = get_phase_vcl(converter.phase_delta, first, last, dest);
 
         nearest_neighbor(*first, converter.phase_directions, converter.magnitudes, *dest);
         if (!at_end)
