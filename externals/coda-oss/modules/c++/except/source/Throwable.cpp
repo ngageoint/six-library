@@ -34,8 +34,7 @@ void except::Throwable::doGetBacktrace()
     (void)except::getBacktrace(supported, mBacktrace);
 }
 
-template <typename TThrowable>
-except::Throwable::Throwable(const Context* pContext, const TThrowable* pThrowable, const std::string* pMessage, bool callGetBacktrace, std::nullptr_t)
+except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowable, const std::string* pMessage, bool callGetBacktrace, std::nullptr_t)
 {
     if (pThrowable != nullptr)
     {
@@ -62,7 +61,7 @@ except::Throwable::Throwable(const Context* pContext, const TThrowable* pThrowab
 
     // This will record a back-trace from where the Throwable object was instantiated.
     // That's not necessarily where the "throw" will occur, but it's often the case; Throwable
-    // instances ususally aren't passed around.  That is, hardly anybody does:
+    // instances usually aren't passed around.  That is, hardly anybody does:
     //    Exception e; // Throwable instance
     //    might_throw(e);
     // rather, the idiom is usually
@@ -73,10 +72,6 @@ except::Throwable::Throwable(const Context* pContext, const TThrowable* pThrowab
     }
 }
 except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowable, const std::string* pMessage, bool callGetBacktrace)
-: Throwable(pContext, pThrowable, pMessage, callGetBacktrace, nullptr)
-{
-}
-except::Throwable::Throwable(const Context* pContext, const ThrowableEx* pThrowable, const std::string* pMessage, bool callGetBacktrace)
 : Throwable(pContext, pThrowable, pMessage, callGetBacktrace, nullptr)
 {
 }
@@ -92,9 +87,4 @@ except::Throwable::Throwable(except::Context c) : Throwable(&c)
 except::Throwable::Throwable(const except::Throwable& t, except::Context c) : Throwable(&c, &t)
 {
 }
-except::Throwable::Throwable(const except::ThrowableEx& t, except::Context c) : Throwable(&c, &t)
-{
-}
-except::Throwable::Throwable(const except::ThrowableEx& t) : Throwable(nullptr, &t)
-{
-}
+
