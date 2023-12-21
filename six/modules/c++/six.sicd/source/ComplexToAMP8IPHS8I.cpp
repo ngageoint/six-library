@@ -138,9 +138,40 @@ static const std::vector<float>& get_magnitudes(const six::AmplitudeTable* pAmpl
     return uncached_magnitudes;
 }
 
+constexpr std::array<size_t, 2> lookupDims{ 256, 256 }; // size 256 x 256 matrix of complex values.
+static auto createValues()
+{
+    using value_type = six::AMP8I_PHS8I_t;
+    std::vector<value_type> retval(lookupDims[0] * lookupDims[1]);
+    std::mdspan<value_type, std::dextents<size_t, 2>> values(retval.data(), lookupDims);
+
+    // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
+    // complex<float> value.
+    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
+    {
+        for (const auto phase : six::sicd::Utilities::iota_0_256())
+        {
+            values(amplitude, phase) = value_type{ amplitude, phase };
+        }
+    }
+
+    return retval;
+}
+static auto getValues()
+{
+    static const auto values = createValues();
+    return sys::make_span(values);
+}
+
+
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
     : magnitudes(get_magnitudes(pAmplitudeTable, uncached_magnitudes))
 {
+    const auto lookup = ImageData::getLookup(pAmplitudeTable);
+    const auto values = getValues();
+    mResults.resize(values.size());
+    ImageData::toComplex(lookup, values, mResults);
+
     const auto p0 = GetPhase(Utilities::toComplex(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::toComplex(1, 1, pAmplitudeTable));
     assert(p0 == 0.0);
@@ -261,21 +292,15 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     const auto magnitudes_end = converter.magnitudes.end();
 
     std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    //auto first = inputs.begin();
-    //const auto last = inputs.end();
-    //auto dest = retval.begin();
-    //for (; first != last; ++first, ++dest)
-    //{
-    //    const auto& v = *first;
-    //    auto& result = *dest;
-    for (size_t i = 0; i < inputs.size(); i++)
+    auto first = inputs.begin();
+    const auto last = inputs.end();
+    auto dest = retval.begin();
+    for (; first != last; ++first, ++dest)
     {
-        const auto& v = inputs[i];
-        auto& result = retval[i];
+        const auto& v = *first;
+        auto& result = *dest;
 
-        double phase = std::arg(v);
-        if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
-        result.phase = gsl::narrow_cast<uint8_t>(std::round(phase / converter.phase_delta));
+        result.phase = converter.getPhase(v);
 
         // We have to do a 1D nearest neighbor search for magnitude.
         // But it's not the magnitude of the input complex value - it's the projection of
@@ -284,41 +309,125 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
         auto&& phase_direction = converter.phase_directions[result.phase];
         const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
         //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
+        result.amplitude = nearest(converter.magnitudes, projection);
+    }
+    return retval;
+}
 
-        //const auto it_lb = std::lower_bound(magnitudes_begin, magnitudes_end, projection);
-        auto first = magnitudes_begin;
-        decltype(first) it;
-        auto count = std::distance(first, magnitudes_end);
-        while (count > 0)
+template<typename TKey, typename TValue>
+static auto keys(const std::map<TKey, TValue>& map)
+{
+    std::vector<TKey> retval;
+    retval.reserve(map.size());
+    for (auto&& kv : map)
+    {
+        retval.push_back(kv.first);
+    }
+
+    if (!std::is_sorted(retval.begin(), retval.end()))
+    {
+        throw std::runtime_error("keys must be sorted");
+    }
+    return retval;
+}
+
+template<typename TKey, typename TValue>
+static const TValue& index(const std::map<TKey, TValue>& map, const TKey& k)
+{
+    //return map[k];
+    const auto it = map.find(k);
+    //if (it == map.end())
+    //{
+    //    throw std::logic_error("key not found");
+    //}
+    return it->second;
+}
+
+template<typename TContainer>
+static ptrdiff_t lower_bound(const TContainer& c, typename TContainer::value_type value)
+{
+    const auto it = std::lower_bound(c.begin(), c.end(), value);
+    if (it == c.end())
+    {
+        throw std::logic_error("Can't find value");
+    }
+    if (it == c.begin())
+    {
+        return std::distance(c.begin(), it);
+    }
+
+    const auto prev_it = std::prev(it);
+    const auto nearest_it = it == c.end() ? prev_it :
+        (value - *prev_it <= *it - value ? prev_it : it);
+    return std::distance(c.begin(), nearest_it);
+}
+
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_cached(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make_(pAmplitudeTable);
+
+    const Amp8iPhs8iLookup_t values(converter.mResults.data(), lookupDims);
+    //using float_to_value = std::map<float, AMP8I_PHS8I_t>;
+    struct float_to_value final
+    {
+        std::map<float, AMP8I_PHS8I_t> map;
+        std::vector<float> keys;
+        std::vector<AMP8I_PHS8I_t> values;
+    };
+    //using map_t = std::map<float, float_to_value>;
+    struct map_t final
+    {
+        std::map<float, float_to_value> map;
+        std::vector<float> keys;
+        std::vector<float_to_value> values;
+    };
+    map_t map_;
+    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
+    {
+        for (const auto phase : six::sicd::Utilities::iota_0_256())
         {
-            it = first;
-            const auto step = count / 2;
-            std::advance(it, step);
+            const auto r = values(amplitude, phase).real();
+            auto& v = map_.map[r];
 
-            if (*it < projection)
+            const auto i = values(amplitude, phase).imag();
+            v.map[i] = AMP8I_PHS8I_t{ amplitude, phase };
+            v.keys = keys(v.map);
+
+            v.values.clear();
+            for (const auto& key : v.keys)
             {
-                first = ++it;
-                count -= step + 1;
+                v.values.push_back(v.map[key]);
             }
-            else
-                count = step;
-        }
-        const auto it_lb = first;
-
-        if (it_lb == magnitudes_begin)
-        {
-            result.amplitude = 0;
-        }
-        else
-        {
-            const auto prev_it = std::prev(it_lb);
-            const auto nearest_it = it_lb == magnitudes_end ? prev_it :
-                (projection - *prev_it <= *it_lb - projection ? prev_it : it_lb);
-            const auto distance = std::distance(magnitudes_begin, nearest_it);
-            assert(distance <= std::numeric_limits<uint8_t>::max());
-            result.amplitude = gsl::narrow<uint8_t>(distance);
         }
     }
+    map_.keys = keys(map_.map);
+    for (const auto& key : map_.keys)
+    {
+        auto& m = map_.map[key];
+        m.map.clear();
+        map_.values.push_back(m);
+    }
+    map_.map.clear();
+    const auto& map = map_;
+    const auto& r_keys = map.keys;
+
+    const auto nearest_neighbor = [&](const auto& v)
+    {
+        auto index = lower_bound(r_keys, v.real());
+        const auto& m = map.values[index];
+
+        index = lower_bound(m.keys, v.imag());
+        return m.values[index];
+    };
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
+    //for (size_t i = 0; i < inputs.size(); i++)
+    //{
+    //    retval[i] = nearest_neighbor(inputs[i]);
+    //};
     return retval;
 }
 

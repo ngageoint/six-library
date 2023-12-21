@@ -42,8 +42,9 @@ auto make_inputs(size_t count)
     retval.reserve(count);
     for (size_t i = 0; i < count; i++)
     {
-        AMP8I_PHS8I_t item { static_cast<uint8_t>(i*i), static_cast<uint8_t>(i+i * -1) };
-        retval.push_back(item);
+        const auto amplitude = static_cast<uint8_t>(i * i);
+        const auto phase = static_cast<uint8_t>(~amplitude);
+        retval.push_back(AMP8I_PHS8I_t{ amplitude, phase });
     }
     return retval;
 }
@@ -90,7 +91,11 @@ static std::vector<AMP8I_PHS8I_t> fromComplex_nearest_neighbors(std::span<const 
 //    converter.nearest_neighbors_simd(inputs, results);
 //}
 
-constexpr auto iterations = 250;
+#ifdef NDEBUG
+constexpr auto iterations = 25;
+#else
+constexpr auto iterations = 1;
+#endif
 template<typename TFunc>
 static std::chrono::duration<double> test(TFunc f, const std::vector<six::zfloat>& inputs)
 {
@@ -107,7 +112,7 @@ static std::chrono::duration<double> test(TFunc f, const std::vector<six::zfloat
 int main()
 {
     #ifdef NDEBUG
-    constexpr auto inputs_size = 1000000;
+    constexpr auto inputs_size = 10000000;
     #else
     constexpr auto inputs_size = 100;
     #endif

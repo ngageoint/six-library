@@ -204,6 +204,7 @@ public:
     AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs,  const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unrolled(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_cached(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
 
 private:
     //! The sorted set of possible magnitudes order from small to large.
@@ -216,6 +217,8 @@ private:
 
     //! Unit vector rays that represent each direction that phase can point.
     std::array<six::zfloat, UINT8_MAX + 1> phase_directions;
+
+    std::vector<six::zfloat> mResults;
 };
 }
 }
