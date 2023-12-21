@@ -92,7 +92,7 @@ static std::vector<AMP8I_PHS8I_t> fromComplex_nearest_neighbors(std::span<const 
 //}
 
 #ifdef NDEBUG
-constexpr auto iterations = 25;
+constexpr auto iterations = 10;
 #else
 constexpr auto iterations = 1;
 #endif

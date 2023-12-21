@@ -288,8 +288,6 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 {
     // make a structure to quickly find the nearest neighbor
     const auto& converter = make_(pAmplitudeTable);
-    const auto magnitudes_begin = converter.magnitudes.begin();
-    const auto magnitudes_end = converter.magnitudes.end();
 
     std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
     auto first = inputs.begin();
@@ -299,135 +297,8 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     {
         const auto& v = *first;
         auto& result = *dest;
-
-        result.phase = converter.getPhase(v);
-
-        // We have to do a 1D nearest neighbor search for magnitude.
-        // But it's not the magnitude of the input complex value - it's the projection of
-        // the complex value onto the ray of candidate magnitudes at the selected phase.
-        // i.e. dot product.
-        auto&& phase_direction = converter.phase_directions[result.phase];
-        const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
-        //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-        result.amplitude = nearest(converter.magnitudes, projection);
+        result = converter.nearest_neighbor_(v);
     }
-    return retval;
-}
-
-template<typename TKey, typename TValue>
-static auto keys(const std::map<TKey, TValue>& map)
-{
-    std::vector<TKey> retval;
-    retval.reserve(map.size());
-    for (auto&& kv : map)
-    {
-        retval.push_back(kv.first);
-    }
-
-    if (!std::is_sorted(retval.begin(), retval.end()))
-    {
-        throw std::runtime_error("keys must be sorted");
-    }
-    return retval;
-}
-
-template<typename TKey, typename TValue>
-static const TValue& index(const std::map<TKey, TValue>& map, const TKey& k)
-{
-    //return map[k];
-    const auto it = map.find(k);
-    //if (it == map.end())
-    //{
-    //    throw std::logic_error("key not found");
-    //}
-    return it->second;
-}
-
-template<typename TContainer>
-static ptrdiff_t lower_bound(const TContainer& c, typename TContainer::value_type value)
-{
-    const auto it = std::lower_bound(c.begin(), c.end(), value);
-    if (it == c.end())
-    {
-        throw std::logic_error("Can't find value");
-    }
-    if (it == c.begin())
-    {
-        return std::distance(c.begin(), it);
-    }
-
-    const auto prev_it = std::prev(it);
-    const auto nearest_it = it == c.end() ? prev_it :
-        (value - *prev_it <= *it - value ? prev_it : it);
-    return std::distance(c.begin(), nearest_it);
-}
-
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_cached(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    const Amp8iPhs8iLookup_t values(converter.mResults.data(), lookupDims);
-    //using float_to_value = std::map<float, AMP8I_PHS8I_t>;
-    struct float_to_value final
-    {
-        std::map<float, AMP8I_PHS8I_t> map;
-        std::vector<float> keys;
-        std::vector<AMP8I_PHS8I_t> values;
-    };
-    //using map_t = std::map<float, float_to_value>;
-    struct map_t final
-    {
-        std::map<float, float_to_value> map;
-        std::vector<float> keys;
-        std::vector<float_to_value> values;
-    };
-    map_t map_;
-    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
-    {
-        for (const auto phase : six::sicd::Utilities::iota_0_256())
-        {
-            const auto r = values(amplitude, phase).real();
-            auto& v = map_.map[r];
-
-            const auto i = values(amplitude, phase).imag();
-            v.map[i] = AMP8I_PHS8I_t{ amplitude, phase };
-            v.keys = keys(v.map);
-
-            v.values.clear();
-            for (const auto& key : v.keys)
-            {
-                v.values.push_back(v.map[key]);
-            }
-        }
-    }
-    map_.keys = keys(map_.map);
-    for (const auto& key : map_.keys)
-    {
-        auto& m = map_.map[key];
-        m.map.clear();
-        map_.values.push_back(m);
-    }
-    map_.map.clear();
-    const auto& map = map_;
-    const auto& r_keys = map.keys;
-
-    const auto nearest_neighbor = [&](const auto& v)
-    {
-        auto index = lower_bound(r_keys, v.real());
-        const auto& m = map.values[index];
-
-        index = lower_bound(m.keys, v.imag());
-        return m.values[index];
-    };
-
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
-    //for (size_t i = 0; i < inputs.size(); i++)
-    //{
-    //    retval[i] = nearest_neighbor(inputs[i]);
-    //};
     return retval;
 }
 

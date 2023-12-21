@@ -204,7 +204,6 @@ public:
     AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs,  const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unrolled(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_cached(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_mapped(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
 
 private:
