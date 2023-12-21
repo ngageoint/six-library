@@ -302,6 +302,24 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return retval;
 }
 
+template<typename TKey, typename TValue>
+static inline auto lower_bound(const std::map<TKey, TValue>& map, const TKey& key)
+{
+    auto it = map.lower_bound(key);
+    if (it == map.begin())
+    {
+        return it;
+    }
+
+    const auto prev_it = std::prev(it);
+    if (it == map.end())
+    {
+        return prev_it;
+    }
+
+    return key - prev_it->first < it->first - key ? prev_it : it;
+}
+
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_mapped(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
@@ -331,38 +349,12 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     {
         //retval[i] = nearest_neighbor(inputs[i]);
 
-        auto value = inputs[i].real();
-        auto it = map.lower_bound(value);
-        if (it != map.begin())
-        {
-            const auto prev_it = std::prev(it);
-            if (it == map.end())
-            {
-                it = prev_it;
-            }
-            else
-            {
-                it = (value - prev_it->first < it->first - value ? prev_it : it);
-            }
-        }
+        const auto it = lower_bound(map, inputs[i].real());
         const auto& m = it->second;
 
-        value = inputs[i].imag();
-        auto r = m.lower_bound(value);
-        if (r != m.begin())
-        {
-            const auto prev_it = std::prev(r);
-            if (r == m.end())
-            {
-                r = prev_it;
-            }
-            else
-            {
-                r = (value - prev_it->first < r->first - value ? prev_it : r);
-            }
-        }
+        const auto r = lower_bound(m, inputs[i].imag());
         retval[i] = r->second;
-    };
+    }
     return retval;
 }
 
