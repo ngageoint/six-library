@@ -307,8 +307,9 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 
-template<typename TVclComplex>
-static auto get_phase_vcl(float phase_delta, const six::zfloat* p)
+template<typename TVclComplex, typename TOutputIter>
+static inline void nearest_neighbors_unseq_n(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
+    const six::zfloat* p, TOutputIter dest)
 {
     // https://en.cppreference.com/w/cpp/numeric/complex
     // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
@@ -321,41 +322,20 @@ static auto get_phase_vcl(float phase_delta, const six::zfloat* p)
     // handles cases that are close to 2PI.
     auto phase = atan2(v.imag(), v.real()); // arg()
     phase = select(phase < 0.0, phase + std::numbers::pi_v<float> *2.0f, phase); // Wrap from [0, 2PI]
-    return roundi(phase / phase_delta);
-}
+    const auto phase_ = roundi(phase / phase_delta);
 
-template<typename TVclVectorI, typename TOutputIter>
-static void find_nearest_vcl(const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-    int i, const six::zfloat* p, const TVclVectorI& phase, TOutputIter& dest)
-{
-    dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
-    dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
-    ++dest;
-}
-
-template<int count, typename TVclComplex, typename TOutputIter>
-static inline void nearest_neighbors_unseq_n(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-    const six::zfloat* p, TOutputIter dest)
-{
-    const auto phase = get_phase_vcl<TVclComplex>(phase_delta, p);
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < TVclComplex::size(); i++)
     {
-        find_nearest_vcl(phase_directions, magnitudes, i, p, phase, dest);
+        // We have to do a 1D nearest neighbor search for magnitude.
+        // But it's not the magnitude of the input complex value - it's the projection of
+        // the complex value onto the ray of candidate magnitudes at the selected phase.
+        // i.e. dot product.
+        dest->phase = gsl::narrow_cast<uint8_t>(phase_[i]);
+        dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
+
+        ++dest;
     }
 }
-template<typename TOutputIter>
-static void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-    const six::zfloat*p, TOutputIter dest)
-{
-    nearest_neighbors_unseq_n<2, vcl::Complex2f>(phase_delta, phase_directions, magnitudes, p, dest);
-}
-template<typename TOutputIter>
-static inline void nearest_neighbors_unseq_4(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-    const six::zfloat* p, TOutputIter dest)
-{
-    nearest_neighbors_unseq_n<4, vcl::Complex4f>(phase_delta, phase_directions, magnitudes, p, dest);
-}
-
 template <typename TInputIt, typename TOutputIt>
 void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
 {
@@ -363,15 +343,8 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt f
     {
         const auto distance = std::distance(first, last);
         assert(distance > 0); // should be out of the loop!
-        switch (distance % 4)
+        switch (distance % 8)
         {
-            case 0:
-            {
-                nearest_neighbors_unseq_4(phase_delta, phase_directions, magnitudes, &(*first), dest);
-                first += 3; dest += 3;
-                break;
-            }
-
             case 1:
             {
                 nearest_neighbors_seq(first, last, dest);
@@ -381,8 +354,28 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt f
             case 2:
             case 3:
             {
-                nearest_neighbors_unseq_2(phase_delta, phase_directions, magnitudes, &(*first), dest);
+                nearest_neighbors_unseq_n<vcl::Complex2f>(phase_delta, phase_directions, magnitudes,
+                    &(*first), dest);
                 first += 1; dest += 1;
+                break;
+            }
+
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            {
+                nearest_neighbors_unseq_n<vcl::Complex4f>(phase_delta, phase_directions, magnitudes,
+                    &(*first), dest);
+                first += 3; dest += 3;
+                break;
+            }
+
+            case 0:
+            {
+                nearest_neighbors_unseq_n<vcl::Complex8f>(phase_delta, phase_directions, magnitudes,
+                    &(*first), dest);
+                first += 7; dest += 7;
                 break;
             }
 
