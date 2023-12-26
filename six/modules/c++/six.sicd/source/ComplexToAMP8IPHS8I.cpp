@@ -308,8 +308,14 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 
 template<typename TVclComplex>
-static auto get_phase_vcl(float phase_delta, const TVclComplex& v)
+static auto get_phase_vcl(float phase_delta, const six::zfloat* p)
 {
+    // https://en.cppreference.com/w/cpp/numeric/complex
+    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
+    // > is the real part of the complex number `p[i]`, ...
+    TVclComplex v;
+    v.load(reinterpret_cast<const float*>(p));
+
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
@@ -327,33 +333,27 @@ static void find_nearest_vcl(const  std::array<six::zfloat, UINT8_MAX + 1>& phas
     ++dest;
 }
 
+template<int count, typename TVclComplex, typename TOutputIter>
+static inline void nearest_neighbors_unseq_n(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
+    const six::zfloat* p, TOutputIter dest)
+{
+    const auto phase = get_phase_vcl<TVclComplex>(phase_delta, p);
+    for (int i = 0; i < count; i++)
+    {
+        find_nearest_vcl(phase_directions, magnitudes, i, p, phase, dest);
+    }
+}
 template<typename TOutputIter>
-static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
+static void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
     const six::zfloat*p, TOutputIter dest)
 {
-    // https://en.cppreference.com/w/cpp/numeric/complex
-    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
-    // > is the real part of the complex number `p[i]`, ...
-    vcl::Complex2f v; v.load(reinterpret_cast<const float*>(p));
-
-    const auto phase = get_phase_vcl(phase_delta, v);
-    find_nearest_vcl(phase_directions, magnitudes, 0, p, phase, dest);
-    find_nearest_vcl(phase_directions, magnitudes, 1, p, phase, dest);
+    nearest_neighbors_unseq_n<2, vcl::Complex2f>(phase_delta, phase_directions, magnitudes, p, dest);
 }
 template<typename TOutputIter>
 static inline void nearest_neighbors_unseq_4(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
     const six::zfloat* p, TOutputIter dest)
 {
-    // https://en.cppreference.com/w/cpp/numeric/complex
-    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
-    // > is the real part of the complex number `p[i]`, ...
-    vcl::Complex4f v; v.load(reinterpret_cast<const float*>(p));
-
-    const auto phase = get_phase_vcl(phase_delta, v);
-    find_nearest_vcl(phase_directions, magnitudes, 0, p, phase, dest);
-    find_nearest_vcl(phase_directions, magnitudes, 1, p, phase, dest);
-    find_nearest_vcl(phase_directions, magnitudes, 2, p, phase, dest);
-    find_nearest_vcl(phase_directions, magnitudes, 3, p, phase, dest);
+    nearest_neighbors_unseq_n<4, vcl::Complex4f>(phase_delta, phase_directions, magnitudes, p, dest);
 }
 
 template <typename TInputIt, typename TOutputIt>
