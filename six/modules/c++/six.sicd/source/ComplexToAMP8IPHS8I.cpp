@@ -46,6 +46,9 @@
 
 #include "six/sicd/Utilities.h"
 
+#undef min
+#undef max
+
 // https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353
 /*
 I can add more detail, but be warned that my powerpoint skills aren't amazing and this is best drawn on a whiteboard or graph paper.
@@ -138,40 +141,9 @@ static const std::vector<float>& get_magnitudes(const six::AmplitudeTable* pAmpl
     return uncached_magnitudes;
 }
 
-constexpr std::array<size_t, 2> lookupDims{ 256, 256 }; // size 256 x 256 matrix of complex values.
-static auto createValues()
-{
-    using value_type = six::AMP8I_PHS8I_t;
-    std::vector<value_type> retval(lookupDims[0] * lookupDims[1]);
-    std::mdspan<value_type, std::dextents<size_t, 2>> values(retval.data(), lookupDims);
-
-    // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
-    // complex<float> value.
-    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
-    {
-        for (const auto phase : six::sicd::Utilities::iota_0_256())
-        {
-            values(amplitude, phase) = value_type{ amplitude, phase };
-        }
-    }
-
-    return retval;
-}
-static auto getValues()
-{
-    static const auto values = createValues();
-    return sys::make_span(values);
-}
-
-
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
     : magnitudes(get_magnitudes(pAmplitudeTable, uncached_magnitudes))
 {
-    const auto lookup = ImageData::getLookup(pAmplitudeTable);
-    const auto values = getValues();
-    mResults.resize(values.size());
-    ImageData::toComplex(lookup, values, mResults);
-
     const auto p0 = GetPhase(Utilities::toComplex(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::toComplex(1, 1, pAmplitudeTable));
     assert(p0 == 0.0);
@@ -491,44 +463,6 @@ static inline auto lower_bound(const std::map<TKey, TValue>& map, const TKey& ke
     }
 
     return key - prev_it->first < it->first - key ? prev_it : it;
-}
-
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_maps(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    const Amp8iPhs8iLookup_t values(converter.mResults.data(), lookupDims);
-    using float_to_value = std::map<float, AMP8I_PHS8I_t>;
-    using map_t = std::map<float, float_to_value>;
-    map_t map_;
-    for (const auto amplitude : six::sicd::Utilities::iota_0_256())
-    {
-        for (const auto phase : six::sicd::Utilities::iota_0_256())
-        {
-            const auto r = values(amplitude, phase).real();
-            auto& v = map_[r];
-
-            const auto i = values(amplitude, phase).imag();
-            v[i] = AMP8I_PHS8I_t{ amplitude, phase };
-        }
-    }
-    const auto& map = map_;
-
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    //transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
-    for (size_t i = 0; i < inputs.size(); i++)
-    {
-        //retval[i] = nearest_neighbor(inputs[i]);
-
-        const auto it = lower_bound(map, inputs[i].real());
-        const auto& m = it->second;
-
-        const auto r = lower_bound(m, inputs[i].imag());
-        retval[i] = r->second;
-    }
-    return retval;
 }
 
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make_(const six::AmplitudeTable* pAmplitudeTable)
