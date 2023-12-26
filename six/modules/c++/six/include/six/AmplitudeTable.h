@@ -205,6 +205,7 @@ public:
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
 
     template <typename TInputIt, typename TOutputIt>
@@ -213,6 +214,8 @@ public:
     void nearest_neighbors_par(TInputIt first, TInputIt last, TOutputIt dest) const;
     template <typename TInputIt, typename TOutputIt>
     void nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
+    template <typename TInputIt, typename TOutputIt>
+    void nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
 
 private:
 
