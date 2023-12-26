@@ -230,23 +230,21 @@ six::AMP8I_PHS8I_t six::sicd::nearest_neighbor(const details::ComplexToAMP8IPHS8
  // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
  // parallel algorithms which might be a better way of satisfying our immediate
  // needs (below) ... although we're still at C++14.
-template <typename InputIt, typename OutputIt, typename TFunc>
-static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
+template <typename InputIt, typename OutputIt, typename TTransformFunc>
+static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TTransformFunc transform_f,
     typename std::iterator_traits<InputIt>::difference_type cutoff)
 {
     // https://en.cppreference.com/w/cpp/thread/async
     const auto len = std::distance(first1, last1);
     if (len < cutoff)
     {
-        return std::transform(first1, last1, d_first, f);
+        return transform_f(first1, last1, d_first);
     }
-
-    constexpr auto policy = std::launch::async;
 
     const auto mid1 = first1 + len / 2;
     const auto d_mid = d_first + len / 2;
-    auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff);
-    transform_async(first1, mid1, d_first, f, cutoff);
+    auto handle = std::async(transform_async<InputIt, OutputIt, TTransformFunc>, mid1, last1, d_mid, transform_f, cutoff);
+    transform_async(first1, mid1, d_first, transform_f, cutoff);
     return handle.get();
 }
 
@@ -257,16 +255,21 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par(TInputIt fir
     {
         return this->nearest_neighbor_(v);
     };
-
+     
 #if SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
     std::ignore = std::transform(std::execution::par, first, last, dest, nearest_neighbor);
 #else
     constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
     // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-    constexpr auto dimension = 128 * 8;
-    constexpr auto default_cutoff = dimension * dimension;
+    constexpr auto dimension = 256;
+    constexpr auto default_cutoff = (dimension * dimension) * 4;
     const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-    std::ignore = transform_async(first, last, dest, nearest_neighbor, cutoff);
+
+    const auto transform_f = [&](const TInputIt first1, const TInputIt last1, TOutputIt d_first)
+    {
+        return std::transform(first1, last1, d_first, nearest_neighbor);
+    };
+    std::ignore = transform_async(first, last, dest, transform_f, cutoff);
 #endif // SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
 }
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par(
@@ -285,7 +288,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 {
     // TODO: there could be more complicated logic here to decide between
     // _seq, _par, and _unseq.
-    return nearest_neighbors_par_unseq(inputs, pAmplitudeTable);
+    return nearest_neighbors_par(inputs, pAmplitudeTable);
 }
 
 #define VCL_NAMESPACE vcl
@@ -381,27 +384,6 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return retval;
 }
 
-// See comments above at transform_async()
-template <typename InputIt, typename OutputIt>
-static inline void nearest_neighbors_unseq_async(const six::sicd::details::ComplexToAMP8IPHS8I* pConverter,
-    const InputIt first1, const InputIt last1, OutputIt d_first, typename std::iterator_traits<InputIt>::difference_type cutoff)
-{
-    // https://en.cppreference.com/w/cpp/thread/async
-    const auto len = std::distance(first1, last1);
-    if (len < cutoff)
-    {
-        pConverter->nearest_neighbors_unseq(first1, last1, d_first);
-        return;
-    }
-
-    constexpr auto policy = std::launch::async;
-
-    const auto mid1 = first1 + len / 2;
-    const auto d_mid = d_first + len / 2;
-    auto handle = std::async(policy, nearest_neighbors_unseq_async<InputIt, OutputIt>, pConverter, mid1, last1, d_mid, cutoff);
-    nearest_neighbors_unseq_async(pConverter, first1, mid1, d_first, cutoff);
-    handle.get();
-}
 template <typename TInputIt, typename TOutputIt>
 void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
 {
@@ -410,7 +392,14 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(TInput
     constexpr auto dimension = 128 * 8;
     constexpr auto default_cutoff = dimension * dimension;
     const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-    nearest_neighbors_unseq_async(this, first, last, dest, cutoff);
+
+    const auto transform_f = [&](const TInputIt first1, const TInputIt last1, TOutputIt d_first)
+    {
+        nearest_neighbors_unseq(first1, last1, d_first);
+        static const TOutputIt retval;
+        return retval;
+    };
+    std::ignore = transform_async(first, last, dest, transform_f, cutoff);
 }
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
