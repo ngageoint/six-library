@@ -318,6 +318,15 @@ static auto get_phase_vcl(float phase_delta, const TVclComplex& v)
     return roundi(phase / phase_delta);
 }
 
+template<typename TVclVectorI, typename TOutputIter>
+static void find_nearest_vcl(const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
+    int i, const six::zfloat* p, const TVclVectorI& phase, TOutputIter& dest)
+{
+    dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
+    dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
+    ++dest;
+}
+
 template<typename TOutputIter>
 static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
     const six::zfloat*p, TOutputIter dest)
@@ -328,13 +337,8 @@ static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::arra
     vcl::Complex2f v; v.load(reinterpret_cast<const float*>(p));
 
     const auto phase = get_phase_vcl(phase_delta, v);
-
-    dest->phase = gsl::narrow_cast<uint8_t>(phase[0]);
-    dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[0]);
-
-    ++dest;
-    dest->phase = gsl::narrow_cast<uint8_t>(phase[1]);
-    dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[1]);
+    find_nearest_vcl(phase_directions, magnitudes, 0, p, phase, dest);
+    find_nearest_vcl(phase_directions, magnitudes, 1, p, phase, dest);
 }
 //template<typename TInputIter, typename TOutputIter>
 //static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions_, const std::vector<float>& magnitudes,
