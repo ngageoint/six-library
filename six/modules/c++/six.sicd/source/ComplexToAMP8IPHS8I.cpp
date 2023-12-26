@@ -307,24 +307,11 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 
-template<typename TInputIter, typename TOutputIter>
-static inline void get_phase_unseq_1(float phase_delta,
-    TInputIter first, TInputIter last, TOutputIter dest)
+template<typename TOutputIter>
+static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
+    six::zfloat z1, six::zfloat z2, TOutputIter dest)
 {
-    dest->phase = get_phase_(phase_delta, *first);
-}
-template<typename TInputIter, typename TOutputIter>
-static inline void get_phase_unseq_2(float phase_delta,
-    TInputIter first, TInputIter last, TOutputIter dest)
-{
-    const auto next = std::next(first);
-    if (next == last)
-    {
-        get_phase_unseq_1(phase_delta, first, last, dest);
-        return;
-    }
-
-    const vcl::Complex2f v(first->real(), first->imag(), next->real(), next->imag());
+    const vcl::Complex2f v(z1.real(), z1.imag(), z2.real(), z2.imag());
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
@@ -333,63 +320,44 @@ static inline void get_phase_unseq_2(float phase_delta,
     const auto phase_ = roundi(phase / phase_delta);
 
     dest->phase = gsl::narrow_cast<uint8_t>(phase_[0]);
+    auto phase_direction = &(phase_directions[dest->phase]);
+    dest->amplitude = find_nearest(magnitudes, *phase_direction, z1);
+
     ++dest;
     dest->phase = gsl::narrow_cast<uint8_t>(phase_[1]);
+    phase_direction = &(phase_directions[dest->phase]);
+    dest->amplitude = find_nearest(magnitudes, *phase_direction, z2);
 }
-
 //template<typename TInputIter, typename TOutputIter>
-//static void nearest_neighbor(const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
+//static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions_, const std::vector<float>& magnitudes,
 //    TInputIter first, TInputIter last, TOutputIter dest)
 //{
-//    const auto& v = *first;
-//    auto& result = *dest;
-//
-//    // We have to do a 1D nearest neighbor search for magnitude.
-//    // But it's not the magnitude of the input complex value - it's the projection of
-//    // the complex value onto the ray of candidate magnitudes at the selected phase.
-//    // i.e. dot product.
-//    auto&& phase_direction = phase_directions[result.phase];
-//    const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
-//    //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-//    result.amplitude = nearest(magnitudes, projection);
-//}
-//
-//template<typename TInputIter, typename TOutputIter>
-//static inline void nearest_neighbor_vcl(const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-//    TInputIter first, TInputIter last, TOutputIter dest)
-//{
-//    const auto next = std::next(first);
-//    if (next == last)
-//    {
-//        nearest_neighbor(phase_directions, magnitudes, first, last, dest);
-//        return;
-//    }
-//    const auto dest_next = std::next(dest);
+//    auto next = std::next(first);
 //
 //    const vcl::Complex2f v(first->real(), first->imag(), next->real(), next->imag());
+//    // Phase is determined via arithmetic because it's equally spaced.
+//    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
+//    // handles cases that are close to 2PI.
+//    auto phase = atan2(v.imag(), v.real()); // arg()
+//    phase = select(phase < 0.0, phase + std::numbers::pi_v<float> *2.0f, phase); // Wrap from [0, 2PI]
+//    const auto phase_ = roundi(phase / phase_delta);
+//
+//    auto dest_next = std::next(dest);
+//    dest->phase = gsl::narrow_cast<uint8_t>(phase_[0]);
+//    dest_next->phase = gsl::narrow_cast<uint8_t>(phase_[1]);
+//
 //    // We have to do a 1D nearest neighbor search for magnitude.
 //    // But it's not the magnitude of the input complex value - it's the projection of
 //    // the complex value onto the ray of candidate magnitudes at the selected phase.
 //    // i.e. dot product.     
-//    const vcl::Complex2f phase_direction(phase_directions[dest->phase].real(), phase_directions[dest->phase].imag(),
-//        phase_directions[dest_next->phase].real(), phase_directions[dest_next->phase].imag());
+//    const vcl::Complex2f phase_direction(phase_directions_[dest->phase].real(), phase_directions_[dest->phase].imag(),
+//        phase_directions_[dest_next->phase].real(), phase_directions_[dest_next->phase].imag());
+//    //const auto phase_direction = vcl::lookup<UINT8_MAX + 1>(phase_, phase_directions_);
 //    const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
 //
 //    dest->amplitude = nearest(magnitudes, projection[0]);
 //    dest_next->amplitude = nearest(magnitudes, projection[1]);
 //}
-
-template<typename TInputIter, typename TOutputIter>
-static inline void find_nearest_2(const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-    TInputIter first, TInputIter last, TOutputIter dest)
-{
-    auto phase_direction = &(phase_directions[dest->phase]);
-    dest->amplitude = find_nearest(magnitudes, *phase_direction, *first);
-
-    ++first; ++dest;
-    phase_direction = &(phase_directions[dest->phase]);
-    dest->amplitude = find_nearest(magnitudes, *phase_direction, *first);
-}
 
 template <typename TInputIt, typename TOutputIt>
 void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
@@ -397,16 +365,14 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt f
     for (; first != last; ++first, ++dest)
     {
         const auto distance = std::distance(first, last);
-        assert(distance >= 0); // should be out of the loop!
-        if (distance == 0)
+        assert(distance > 0); // should be out of the loop!
+        if (distance == 1)
         {
             nearest_neighbors_seq(first, last, dest);
             continue;
         }
 
-        assert(std::next(first) != last); // don't support 3 or 4 ... yet
-        get_phase_unseq_2(phase_delta, first, last, dest);
-        find_nearest_2(phase_directions, magnitudes, first, last, dest);
+        nearest_neighbors_unseq_2(phase_delta, phase_directions, magnitudes, *first, *std::next(first), dest);
         ++first; ++dest;
     }
 }
