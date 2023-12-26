@@ -307,26 +307,34 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 
-template<typename TOutputIter>
-static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-    six::zfloat z1, six::zfloat z2, TOutputIter dest)
+template<typename TVclComplex>
+static auto get_phase_vcl(float phase_delta, const TVclComplex& v)
 {
-    const vcl::Complex2f v(z1.real(), z1.imag(), z2.real(), z2.imag());
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
     auto phase = atan2(v.imag(), v.real()); // arg()
     phase = select(phase < 0.0, phase + std::numbers::pi_v<float> *2.0f, phase); // Wrap from [0, 2PI]
-    const auto phase_ = roundi(phase / phase_delta);
+    return roundi(phase / phase_delta);
+}
 
-    dest->phase = gsl::narrow_cast<uint8_t>(phase_[0]);
-    auto phase_direction = &(phase_directions[dest->phase]);
-    dest->amplitude = find_nearest(magnitudes, *phase_direction, z1);
+template<typename TOutputIter>
+static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
+    const six::zfloat*p, TOutputIter dest)
+{
+    // https://en.cppreference.com/w/cpp/numeric/complex
+    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
+    // > is the real part of the complex number `p[i]`, ...
+    vcl::Complex2f v; v.load(reinterpret_cast<const float*>(p));
+
+    const auto phase = get_phase_vcl(phase_delta, v);
+
+    dest->phase = gsl::narrow_cast<uint8_t>(phase[0]);
+    dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[0]);
 
     ++dest;
-    dest->phase = gsl::narrow_cast<uint8_t>(phase_[1]);
-    phase_direction = &(phase_directions[dest->phase]);
-    dest->amplitude = find_nearest(magnitudes, *phase_direction, z2);
+    dest->phase = gsl::narrow_cast<uint8_t>(phase[1]);
+    dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[1]);
 }
 //template<typename TInputIter, typename TOutputIter>
 //static inline void nearest_neighbors_unseq_2(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions_, const std::vector<float>& magnitudes,
@@ -372,7 +380,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt f
             continue;
         }
 
-        nearest_neighbors_unseq_2(phase_delta, phase_directions, magnitudes, *first, *std::next(first), dest);
+        nearest_neighbors_unseq_2(phase_delta, phase_directions, magnitudes, &(*first), dest);
         ++first; ++dest;
     }
 }
