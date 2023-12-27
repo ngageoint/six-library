@@ -334,6 +334,42 @@ static auto lookup(const vcl::Vec8i& zindex, const std::array<six::zfloat, UINT8
     return vcl::Complex8f(lookup);
 }
 
+template<typename TRetval, typename TValue>
+static auto nearest_T(const std::vector<float>& magnitudes, const TValue& value)
+{
+    const auto begin = magnitudes.begin();
+    const auto end = magnitudes.end();
+
+    TRetval retval;
+    for (int i = 0; i < value.size(); i++)
+    {
+        const auto value_ = value[i];
+
+        const auto it = std::lower_bound(begin, end, value[i]);
+        if (it == begin) 
+        {
+            retval.insert(i, 0);
+            continue;
+        }
+
+        const auto prev_it = std::prev(it);
+        const auto nearest_it = it == end ? prev_it :
+            (value_ - *prev_it <= *it - value_ ? prev_it : it);
+        const auto distance = std::distance(begin, nearest_it);
+        assert(distance <= std::numeric_limits<uint8_t>::max());
+        retval.insert(i, gsl::narrow_cast<uint8_t>(distance));
+    }
+    return retval;
+}
+inline auto nearest_(const std::vector<float>& magnitudes, const vcl::Vec4f& value)
+{
+    return nearest_T<vcl::Vec16uc>(magnitudes, value);
+}
+inline auto nearest_(const std::vector<float>& magnitudes, const vcl::Vec8f& value)
+{
+    return nearest_T<vcl::Vec16uc>(magnitudes, value);
+}
+
 template<typename TVclComplex, typename TOutputIter>
 void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const six::zfloat* p, TOutputIter dest) const
 {
@@ -350,15 +386,17 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
     phase_ = if_add(phase_ < 0.0, phase_, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
     const auto phase = roundi(phase_ / phase_delta);
 
-    //// We have to do a 1D nearest neighbor search for magnitude.
-    //// But it's not the magnitude of the input complex value - it's the projection of
-    //// the complex value onto the ray of candidate magnitudes at the selected phase.
-    //// i.e. dot product.
-    //const auto phase_directions_ = lookup(phase, phase_directions);
-    //const auto projection = (phase_directions_.real() * v.real()) + (phase_directions_.imag() * v.imag());
+    // We have to do a 1D nearest neighbor search for magnitude.
+    // But it's not the magnitude of the input complex value - it's the projection of
+    // the complex value onto the ray of candidate magnitudes at the selected phase.
+    // i.e. dot product.
+    const auto phase_directions_ = lookup(phase, phase_directions);
+    const auto projection = (phase_directions_.real() * v.real()) + (phase_directions_.imag() * v.imag());
 
-    //constexpr auto size = projection.size();
-    constexpr auto size = TVclComplex::size();
+    const auto nearest = nearest_(magnitudes, projection);
+
+    constexpr auto size = projection.size();
+    //constexpr auto size = TVclComplex::size();
     for (int i = 0; i < size; i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
@@ -367,9 +405,10 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
         // But it's not the magnitude of the input complex value - it's the projection of
         // the complex value onto the ray of candidate magnitudes at the selected phase.
         // i.e. dot product.
-        dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
+        //dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
         //assert(std::abs(projection[i] - std::abs(v)) < 1e-5); // TODO ???
         //dest->amplitude = nearest(magnitudes, projection[i]);
+        dest->amplitude = nearest[i];
 
         ++dest;
     }
