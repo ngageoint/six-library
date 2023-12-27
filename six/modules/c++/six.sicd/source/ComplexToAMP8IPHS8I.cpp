@@ -287,8 +287,8 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // TODO: there could be more complicated logic here to decide between
-    // _seq, _par, and _unseq.
-    return nearest_neighbors_par(inputs, pAmplitudeTable);
+    // _seq, _par, _unseq, and _par_unseq
+    return nearest_neighbors_par_unseq(inputs, pAmplitudeTable);
 }
 
 #define VCL_NAMESPACE vcl
@@ -309,17 +309,18 @@ static inline void nearest_neighbors_unseq_n(float phase_delta, const  std::arra
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
-    auto phase = atan2(v.imag(), v.real()); // arg()
-    phase = select(phase < 0.0, phase + std::numbers::pi_v<float> *2.0f, phase); // Wrap from [0, 2PI]
-    const auto phase_ = roundi(phase / phase_delta);
+    auto phase_ = atan2(v.imag(), v.real()); // arg()
+    phase_ = select(phase_ < 0.0, phase_ + std::numbers::pi_v<float> *2.0f, phase_); // Wrap from [0, 2PI]
+    const auto phase = roundi(phase_ / phase_delta);
 
-    for (int i = 0; i < TVclComplex::size(); i++)
+    constexpr auto size = TVclComplex::size();
+    for (int i = 0; i < size; i++)
     {
         // We have to do a 1D nearest neighbor search for magnitude.
         // But it's not the magnitude of the input complex value - it's the projection of
         // the complex value onto the ray of candidate magnitudes at the selected phase.
         // i.e. dot product.
-        dest->phase = gsl::narrow_cast<uint8_t>(phase_[i]);
+        dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
         dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
 
         ++dest;
@@ -389,8 +390,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(TInput
 {
     constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
     // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-    constexpr auto dimension = 128 * 8;
-    constexpr auto default_cutoff = dimension * dimension;
+    constexpr auto default_cutoff = UINT16_MAX * 32;
     const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
 
     const auto transform_f = [&](const TInputIt first1, const TInputIt last1, TOutputIt d_first)

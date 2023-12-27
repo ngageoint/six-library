@@ -92,7 +92,7 @@ static std::vector<AMP8I_PHS8I_t> fromComplex_nearest_neighbors(std::span<const 
 //}
 
 #ifdef NDEBUG
-constexpr auto iterations = 10;
+constexpr auto iterations = 12;
 #else
 constexpr auto iterations = 1;
 #endif
@@ -112,7 +112,7 @@ static std::chrono::duration<double> test(TFunc f, const std::vector<six::zfloat
 int main()
 {
     #ifdef NDEBUG
-    constexpr auto inputs_size = 10000000;
+    constexpr auto inputs_size = 20000000;
     #else
     constexpr auto inputs_size = 100;
     #endif
