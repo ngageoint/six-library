@@ -297,8 +297,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 
 template<typename TVclComplex, typename TOutputIter>
-static inline void nearest_neighbors_unseq_n(float phase_delta, const  std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-    const six::zfloat* p, TOutputIter dest)
+void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const six::zfloat* p, TOutputIter dest) const
 {
     // https://en.cppreference.com/w/cpp/numeric/complex
     // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
@@ -340,31 +339,21 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt f
                 nearest_neighbors_seq(first, last, dest);
                 break;
             }
-
-            case 2:
-            case 3:
+            case 2: case 3:
             {
-                nearest_neighbors_unseq_n<vcl::Complex2f>(phase_delta, phase_directions, magnitudes,
-                    &(*first), dest);
+                nearest_neighbors_unseq_n<vcl::Complex2f>(&(*first), dest);
                 first += 1; dest += 1;
                 break;
             }
-
-            case 4:
-            case 5:
-            case 6:
-            case 7:
+            case 4: case 5: case 6: case 7:
             {
-                nearest_neighbors_unseq_n<vcl::Complex4f>(phase_delta, phase_directions, magnitudes,
-                    &(*first), dest);
+                nearest_neighbors_unseq_n<vcl::Complex4f>(&(*first), dest);
                 first += 3; dest += 3;
                 break;
             }
-
             case 0:
             {
-                nearest_neighbors_unseq_n<vcl::Complex8f>(phase_delta, phase_directions, magnitudes,
-                    &(*first), dest);
+                nearest_neighbors_unseq_n<vcl::Complex8f>(&(*first), dest);
                 first += 7; dest += 7;
                 break;
             }
