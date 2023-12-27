@@ -288,7 +288,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 {
     // TODO: there could be more complicated logic here to decide between
     // _seq, _par, _unseq, and _par_unseq
-    return nearest_neighbors_par_unseq(inputs, pAmplitudeTable);
+    return nearest_neighbors_unseq(inputs, pAmplitudeTable);
 }
 
 #define VCL_NAMESPACE vcl
