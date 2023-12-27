@@ -296,6 +296,21 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 
+inline auto interleave(const vcl::Vec4i& a, const vcl::Vec4i& b)
+{
+    // The blend() indicies are based on one large array
+    const auto index0 = vcl::blend4<0, 4, 1, 5>(a, b); // i.e., a[0], b[0], a[1], b[1]
+    const auto index1 = vcl::blend4<2, 6, 3, 7>(a, b);    
+    return vcl::Vec8i(index0, index1);
+}
+inline auto interleave(const vcl::Vec8i& a, const vcl::Vec8i& b)
+{
+    // The blend() indicies are based on one large array
+    const auto index0 = vcl::blend8<0, 8, 1, 9, 2, 10, 3, 11>(a, b); // i.e., a[0], b[0], a[1], b[1], ...
+    const auto index1 = vcl::blend8<4, 12, 5, 13, 6, 14, 7, 15>(a, b);
+    return vcl::Vec16i(index0, index1);
+}
+
 // There's no lookup() for vcl::ComplexN, implement using floats
 static auto lookup(const vcl::Vec4i& zindex, const std::array<six::zfloat, UINT8_MAX + 1>& table_)
 {
@@ -306,11 +321,7 @@ static auto lookup(const vcl::Vec4i& zindex, const std::array<six::zfloat, UINT8
     const auto real_index = zindex * 2;
     // The imaginary part is after the real part
     const auto imag_index = real_index + 1; // [n] is real, [n+1] is imag
-
-    // The blend() indicies are based on one large array
-    const auto index0 = vcl::blend4<0, 4, 1, 5>(real_index, imag_index); // i.e., real[0], imag[0], real[1], imag[1]
-    const auto index1 = vcl::blend4<2, 6, 3, 7>(real_index, imag_index);
-    const vcl::Vec8i index(index0, index1);
+    const auto index = interleave(real_index, imag_index);
 
     auto lookup = vcl::lookup<size_as_floats>(index, table);
     return vcl::Complex4f(lookup);
@@ -324,11 +335,7 @@ static auto lookup(const vcl::Vec8i& zindex, const std::array<six::zfloat, UINT8
     const auto real_index = zindex * 2;
     // The imaginary part is after the real part
     const auto imag_index = real_index + 1; // [n] is real, [n+1] is imag
-
-    // The blend() indicies are based on one large array
-    const auto index0 = vcl::blend8<0, 8, 1, 9, 2, 10, 3, 11>(real_index, imag_index); // i.e., real[0], imag[0], real[1], imag[1]
-    const auto index1 = vcl::blend8<4, 12, 5, 13, 6, 14, 7, 15>(real_index, imag_index);
-    const vcl::Vec16i index(index0, index1);
+    const auto index = interleave(real_index, imag_index);
 
     auto lookup = vcl::lookup<size_as_floats>(index, table);
     return vcl::Complex8f(lookup);
@@ -434,12 +441,12 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
     // But it's not the magnitude of the input complex value - it's the projection of
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // i.e. dot product.
-    //const auto phase_directions_ = lookup(phase, phase_directions);
-    //const auto projection = (phase_directions_.real() * v.real()) + (phase_directions_.imag() * v.imag());
-    //const auto nearest = nearest_(magnitudes, projection);
-    //constexpr auto size = projection.size();
+    const auto phase_directions_ = lookup(phase, phase_directions);
+    const auto projection = (phase_directions_.real() * v.real()) + (phase_directions_.imag() * v.imag());
+    const auto nearest = nearest_(magnitudes, projection);
 
-    constexpr auto size = TVclComplex::size();
+    constexpr auto size = projection.size();
+    //constexpr auto size = TVclComplex::size();
     for (int i = 0; i < size; i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
@@ -448,10 +455,10 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
         // But it's not the magnitude of the input complex value - it's the projection of
         // the complex value onto the ray of candidate magnitudes at the selected phase.
         // i.e. dot product.
-        dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
+        //dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
         //assert(std::abs(projection[i] - std::abs(v)) < 1e-5); // TODO ???
         //dest->amplitude = nearest(magnitudes, projection[i]);
-        //dest->amplitude = nearest[i];
+        dest->amplitude = nearest[i];
 
         ++dest;
     }
