@@ -309,7 +309,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
     auto phase_ = atan2(v.imag(), v.real()); // arg()
-    phase_ = select(phase_ < 0.0, phase_ + std::numbers::pi_v<float> *2.0f, phase_); // Wrap from [0, 2PI]
+    phase_ = if_add(phase_ < 0.0, phase_, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
     const auto phase = roundi(phase_ / phase_delta);
 
     constexpr auto size = TVclComplex::size();
