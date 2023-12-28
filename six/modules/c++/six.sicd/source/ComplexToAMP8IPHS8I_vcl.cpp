@@ -104,46 +104,6 @@ static auto lookup(const vcl::Vec8i& zindex, const std::array<six::zfloat, UINT8
     return vcl::Complex8f(lookup);
 }
 
-//template<typename T>
-//inline size_t lower_bound_(const std::vector<float>& magnitudes, const T& value)
-//{
-//    size_t first = 0;
-//    const auto last = magnitudes.size();
-//
-//    ptrdiff_t count = last - first;
-//    while (count > 0)
-//    {
-//        auto it = first;
-//        const auto step = count / 2;
-//        it += step;
-//
-//        if (magnitudes[it] < value)
-//        {
-//            first = ++it;
-//            count -= step + 1;
-//        }
-//        else
-//            count = step;
-//    }
-//    return first;
-//}
-template<typename TRetval, typename TValue>
-inline auto lower_bound(const std::vector<float>& magnitudes, const TValue& value)
-{
-    const auto begin = magnitudes.begin();
-    const auto end = magnitudes.end();
-
-    TRetval retval;
-    for (int i = 0; i < value.size(); i++)
-    {
-        //const auto result = lower_bound_(magnitudes, value[i]);
-        const auto it = std::lower_bound(begin, end, value[i]);
-        const auto result = std::distance(begin, it);
-        retval.insert(i, gsl::narrow<int>(result));
-    }
-    return retval;
-}
-
 template<typename TVclComplex>
 static auto getPhase(const TVclComplex& v, float phase_delta)
 {
@@ -155,6 +115,21 @@ static auto getPhase(const TVclComplex& v, float phase_delta)
     return roundi(phase / phase_delta);
 }
 
+template<typename TRetval, typename TValue>
+inline auto lower_bound(const std::vector<float>& magnitudes, const TValue& value)
+{
+    const auto begin = magnitudes.begin();
+    const auto end = magnitudes.end();
+
+    TRetval retval;
+    for (int i = 0; i < value.size(); i++)
+    {
+        const auto it = std::lower_bound(begin, end, value[i]);
+        const auto result = std::distance(begin, it);
+        retval.insert(i, gsl::narrow<int>(result));
+    }
+    return retval;
+}
 template<typename TRetval, typename TValue>
 static auto nearest_T(const std::vector<float>& magnitudes, const TValue& value)
 {
@@ -185,13 +160,25 @@ static auto nearest_T(const std::vector<float>& magnitudes, const TValue& value)
         ));
     return retval;
 }
-inline auto nearest_(const std::vector<float>& magnitudes, const vcl::Vec4f& value)
+inline auto nearest(const std::vector<float>& magnitudes, const vcl::Vec4f& value)
 {
     return nearest_T<vcl::Vec4i>(magnitudes, value);
 }
-inline auto nearest_(const std::vector<float>& magnitudes, const vcl::Vec8f& value)
+inline auto nearest(const std::vector<float>& magnitudes, const vcl::Vec8f& value)
 {
     return nearest_T<vcl::Vec8i>(magnitudes, value);
+}
+template<typename TVclComplex1, typename TVclComplex2>
+static auto find_nearest(const std::vector<float>& magnitudes, const TVclComplex1& phase_direction,
+    const TVclComplex2& v)
+{
+    // We have to do a 1D nearest neighbor search for magnitude.
+    // But it's not the magnitude of the input complex value - it's the projection of
+    // the complex value onto the ray of candidate magnitudes at the selected phase.
+    // i.e. dot product.
+    const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
+    //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
+    return nearest(magnitudes, projection);
 }
 
 template<typename TVclComplex, typename TOutputIter>
@@ -205,15 +192,10 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
 
     const auto phase = ::getPhase(v, phase_delta);
 
-    // We have to do a 1D nearest neighbor search for magnitude.
-    // But it's not the magnitude of the input complex value - it's the projection of
-    // the complex value onto the ray of candidate magnitudes at the selected phase.
-    // i.e. dot product.
-    const auto phase_directions_ = lookup(phase, phase_directions);
-    const auto projection = (phase_directions_.real() * v.real()) + (phase_directions_.imag() * v.imag());
-    const auto nearest = nearest_(magnitudes, projection);
+    const auto phase_direction = lookup(phase, phase_directions);
+    const auto amplitude = find_nearest(magnitudes, phase_direction, v);
 
-    const auto results_ = interleave(nearest, phase); // amplitude, phase
+    const auto results_ = interleave(amplitude, phase);
     vcl::Vec16uc results;
     for (int i = 0; i < results_.size(); i++)
     {

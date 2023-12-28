@@ -178,7 +178,7 @@ static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
     assert(distance <= std::numeric_limits<uint8_t>::max());
     return gsl::narrow<uint8_t>(distance);
 }
-static inline auto find_nearest(const std::vector<float>& magnitudes, six::zfloat phase_direction,
+static auto find_nearest(const std::vector<float>& magnitudes, six::zfloat phase_direction,
     six::zfloat v)
 {
     // We have to do a 1D nearest neighbor search for magnitude.
