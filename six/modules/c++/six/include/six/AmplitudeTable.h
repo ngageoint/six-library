@@ -34,6 +34,7 @@
 #include <std/mdspan>
 
 #include <import/except.h>
+#include <coda_oss/CPlusPlus.h>
 
 #include <nitf/LookupTable.hpp>
 #include <scene/sys_Conf.h>
@@ -170,6 +171,47 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     uint8_t phase;
 };
 
+// Control a few details of the ComplexToAMP8IPHS8I implementation, espeically "unseq" (i.e., SIMD).
+#ifndef SIX_sicd_has_VCL
+    // Do we have the "vectorclass" library? https://github.com/vectorclass/version2
+    #if !CODA_OSS_cpp17 // VCL needs C++17
+        #define SIX_sicd_has_VCL 0
+    #else
+        // __has_include is part of C++17
+        #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
+            __has_include("six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h")
+       #define SIX_sicd_has_VCL 1
+        #else
+        #define SIX_sicd_has_VCL 0
+        #endif // __has_include
+    #endif // C++17
+#endif
+
+#ifndef SIX_sicd_has_experimental_simd
+    // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
+    #if (__GNUC__ >= 11)
+        // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
+        #include <experimental/simd>
+        #define SIX_sicd_has_experimental_simd 1
+    #else
+        #define SIX_sicd_has_experimental_simd 0
+    #endif // __GNUC__
+#endif
+
+#if SIX_sicd_has_VCL && SIX_sicd_has_experimental_simd
+    // This is because there is a single ComplexToAMP8IPHS8I::nearest_neighbors_unseq() method.
+    // Other than that, it should be possible to use both VCL and std::experimental::simd
+    #error "Can't enable both VCL and std::experimental::simd at the same time'"
+#endif
+#ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    #if SIX_sicd_has_VCL || SIX_sicd_has_experimental_simd
+    #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
+    #else
+    #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
+    #endif // SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
+#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
+
+
 struct AmplitudeTable; // forward
 namespace sicd
 {
@@ -205,10 +247,13 @@ public:
     AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    #endif
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
 
+private:
     template <typename TInputIt, typename TOutputIt>
     void nearest_neighbors_seq(TInputIt first, TInputIt last, TOutputIt dest) const;
     template <typename TInputIt, typename TOutputIt>
@@ -218,7 +263,6 @@ public:
     template <typename TInputIt, typename TOutputIt>
     void nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
 
-private:
     template< typename TOutputIter>
     void nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const;
 

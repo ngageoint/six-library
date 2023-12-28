@@ -289,7 +289,11 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 {
     // TODO: there could be more complicated logic here to decide between
     // _seq, _par, _unseq, and _par_unseq
+    #if SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
     return nearest_neighbors_par_unseq(inputs, pAmplitudeTable);
+    #else
+    return nearest_neighbors_par(inputs, pAmplitudeTable);
+    #endif
 }
 
 
@@ -309,6 +313,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(TInput
     };
     std::ignore = transform_async(first, last, dest, transform_f, cutoff);
 }
+#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
@@ -319,6 +324,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     converter.nearest_neighbors_par_unseq(inputs.begin(), inputs.end(), retval.begin());
     return retval;
 }
+#endif //  SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
 
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make_(const six::AmplitudeTable* pAmplitudeTable)
 {

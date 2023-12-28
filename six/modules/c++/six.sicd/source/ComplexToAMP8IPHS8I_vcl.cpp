@@ -39,6 +39,8 @@
 #undef min
 #undef max
 
+#if SIX_sicd_has_VCL
+
 #define VCL_NAMESPACE vcl
 #if _MSC_VER
 #pragma warning(disable: 4100) // '...': unreferenced formal parameter
@@ -233,3 +235,5 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     converter.nearest_neighbors_unseq(inputs.begin(), inputs.end(), retval.begin());
     return retval;
 }
+
+#endif // SIX_sicd_have_VCL
