@@ -189,7 +189,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 
 #ifndef SIX_sicd_has_experimental_simd
     // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
-    #if (__GNUC__ >= 11)
+    #if (__GNUC__ >= 11) && CODA_OSS_cpp20
         // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
         #include <experimental/simd>
         #define SIX_sicd_has_experimental_simd 1
