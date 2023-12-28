@@ -289,7 +289,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 {
     // TODO: there could be more complicated logic here to decide between
     // _seq, _par, _unseq, and _par_unseq
-    return nearest_neighbors_unseq(inputs, pAmplitudeTable);
+    return nearest_neighbors_par_unseq(inputs, pAmplitudeTable);
 }
 
 
@@ -298,7 +298,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(TInput
 {
     constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
     // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-    constexpr auto default_cutoff = UINT16_MAX * 32;
+    constexpr auto default_cutoff = (256 * 256) * 2;
     const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
 
     const auto transform_f = [&](const TInputIt first1, const TInputIt last1, TOutputIt d_first)
