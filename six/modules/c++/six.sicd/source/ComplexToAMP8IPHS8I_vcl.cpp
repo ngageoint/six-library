@@ -44,38 +44,39 @@
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 
+// https://en.cppreference.com/w/cpp/experimental/simd
+using zfloatv = vcl::Complex8f;
+using floatv = vcl::Vec8f;
+using intv = vcl::Vec8i;
+
 // https://en.cppreference.com/w/cpp/numeric/complex/arg
 // > `std::atan2(std::imag(z), std::real(z))`
-inline auto arg(const vcl::Complex2f& z)
+inline auto arg(const floatv& real, const floatv& imag)
 {
-    return atan2(z.imag(), z.real()); // arg()
+    return atan2(imag, real); // arg()
 }
-inline auto arg(const vcl::Complex4f& z)
+inline auto arg(const zfloatv& z)
 {
-    return atan2(z.imag(), z.real()); // arg()
-}
-inline auto arg(const vcl::Complex8f& z)
-{
-    return atan2(z.imag(), z.real()); // arg()
+    return arg(z.real(), z.imag());
 }
 
 inline auto interleave(const vcl::Vec4i& a, const vcl::Vec4i& b)
 {
     // The blend() indicies are based on one large array
-    const auto index0 = vcl::blend4<0, 4, 1, 5>(a, b); // i.e., a[0], b[0], a[1], b[1]
-    const auto index1 = vcl::blend4<2, 6, 3, 7>(a, b);    
-    return vcl::Vec8i(index0, index1);
+    auto index0 = vcl::blend4<0, 4, 1, 5>(a, b); // i.e., a[0], b[0], a[1], b[1]
+    auto index1 = vcl::blend4<2, 6, 3, 7>(a, b);    
+    return intv(std::move(index0), std::move(index1));
 }
-inline auto interleave(const vcl::Vec8i& a, const vcl::Vec8i& b)
+inline auto interleave(const intv& a, const intv& b)
 {
     // The blend() indicies are based on one large array
-    const auto index0 = vcl::blend8<0, 8, 1, 9, 2, 10, 3, 11>(a, b); // i.e., a[0], b[0], a[1], b[1], ...
-    const auto index1 = vcl::blend8<4, 12, 5, 13, 6, 14, 7, 15>(a, b);
-    return vcl::Vec16i(index0, index1);
+    auto index0 = vcl::blend8<0, 8, 1, 9, 2, 10, 3, 11>(a, b); // i.e., a[0], b[0], a[1], b[1], ...
+    auto index1 = vcl::blend8<4, 12, 5, 13, 6, 14, 7, 15>(a, b);
+    return vcl::Vec16i(std::move(index0), std::move(index1));
 }
 
 // There's no lookup() for vcl::ComplexN, implement using floats
-static auto lookup(const vcl::Vec4i& zindex, const std::array<six::zfloat, UINT8_MAX + 1>& table_)
+static auto lookup(const intv& zindex, const std::array<six::zfloat, UINT8_MAX + 1>& table_)
 {
     const auto table = reinterpret_cast<const float*>(table_.data());
     constexpr auto size_as_floats = (UINT8_MAX + 1) * 2; // table_t is six::zfloat
@@ -87,25 +88,10 @@ static auto lookup(const vcl::Vec4i& zindex, const std::array<six::zfloat, UINT8
     const auto index = interleave(real_index, imag_index);
 
     auto lookup = vcl::lookup<size_as_floats>(index, table);
-    return vcl::Complex4f(lookup);
-}
-static auto lookup(const vcl::Vec8i& zindex, const std::array<six::zfloat, UINT8_MAX + 1>& table_)
-{
-    const auto table = reinterpret_cast<const float*>(table_.data());
-    constexpr auto size_as_floats = (UINT8_MAX + 1) * 2; // table_t is six::zfloat
-
-    // A `six::zfloat` at *n* is at *2n* when viewed as `float`.
-    const auto real_index = zindex * 2;
-    // The imaginary part is after the real part
-    const auto imag_index = real_index + 1; // [n] is real, [n+1] is imag
-    const auto index = interleave(real_index, imag_index);
-
-    auto lookup = vcl::lookup<size_as_floats>(index, table);
-    return vcl::Complex8f(lookup);
+    return zfloatv(lookup);
 }
 
-template<typename TVclComplex>
-static auto getPhase(const TVclComplex& v, float phase_delta)
+static auto getPhase(const zfloatv& v, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
@@ -115,13 +101,12 @@ static auto getPhase(const TVclComplex& v, float phase_delta)
     return roundi(phase / phase_delta);
 }
 
-template<typename TRetval, typename TValue>
-inline auto lower_bound(const std::vector<float>& magnitudes, const TValue& value)
+inline auto lower_bound(const std::vector<float>& magnitudes, const floatv& value)
 {
     const auto begin = magnitudes.begin();
     const auto end = magnitudes.end();
 
-    TRetval retval;
+    intv retval;
     for (int i = 0; i < value.size(); i++)
     {
         const auto it = std::lower_bound(begin, end, value[i]);
@@ -130,8 +115,7 @@ inline auto lower_bound(const std::vector<float>& magnitudes, const TValue& valu
     }
     return retval;
 }
-template<typename TRetval, typename TValue>
-static auto nearest_T(const std::vector<float>& magnitudes, const TValue& value)
+static auto nearest(const std::vector<float>& magnitudes, const floatv& value)
 {
     /*
         const auto it = std::lower_bound(begin, end, value);
@@ -144,33 +128,23 @@ static auto nearest_T(const std::vector<float>& magnitudes, const TValue& value)
         assert(distance <= std::numeric_limits<uint8_t>::max());
         return gsl::narrow<uint8_t>(distance);
     */
-    const auto it = ::lower_bound<TRetval>(magnitudes, value);
+    const auto it = ::lower_bound(magnitudes, value);
     const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
 
     const auto v0 = value - vcl::lookup<256>(prev_it, magnitudes.data()); // value - *prev_it
     const auto v1 = vcl::lookup<256>(it, magnitudes.data()) - value; // *it - value
     //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
     
-    const TRetval end(gsl::narrow<int>(magnitudes.size()));
+    const intv end = gsl::narrow<int>(magnitudes.size());
     //const auto end_test = select(it == end, prev_it, nearest_it); // it == end ? prev_it  : ...
-    const TRetval zero(0);
+    const intv zero = 0;
     auto retval = select(it == 0, zero, // if (it == begin) return 0;
         select(it == end, prev_it,  // it == end ? prev_it  : ...
             select(v0 <=v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
         ));
     return retval;
 }
-inline auto nearest(const std::vector<float>& magnitudes, const vcl::Vec4f& value)
-{
-    return nearest_T<vcl::Vec4i>(magnitudes, value);
-}
-inline auto nearest(const std::vector<float>& magnitudes, const vcl::Vec8f& value)
-{
-    return nearest_T<vcl::Vec8i>(magnitudes, value);
-}
-template<typename TVclComplex1, typename TVclComplex2>
-static auto find_nearest(const std::vector<float>& magnitudes, const TVclComplex1& phase_direction,
-    const TVclComplex2& v)
+static auto find_nearest(const std::vector<float>& magnitudes, const zfloatv& phase_direction, const zfloatv& v)
 {
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
@@ -181,13 +155,14 @@ static auto find_nearest(const std::vector<float>& magnitudes, const TVclComplex
     return nearest(magnitudes, projection);
 }
 
-template<typename TVclComplex, typename TOutputIter>
-void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const six::zfloat* p, TOutputIter dest) const
+template< typename TOutputIter>
+static void nearest_neighbors_unseq_(float phase_delta, const std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
+    const six::zfloat* p, TOutputIter dest)
 {
     // https://en.cppreference.com/w/cpp/numeric/complex
     // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
     // > is the real part of the complex number `p[i]`, ...
-    TVclComplex v;
+    zfloatv v;
     v.load(reinterpret_cast<const float*>(p));
 
     const auto phase = ::getPhase(v, phase_delta);
@@ -203,7 +178,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
     }
 
     auto pDest = &(*dest);
-    results.store_partial(TVclComplex::size()*2, pDest);
+    results.store_partial(v.size()*2, pDest);
 
     ////constexpr auto size = TVclComplex::size();
     //for (int i = 0; i < size; i++)
@@ -222,41 +197,29 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
     //    ++dest;
     //}
 }
+
 template <typename TInputIt, typename TOutputIt>
 void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
 {
+    // The above code is simpler (no templates) if we use just a single VCL
+    // complex type: `zfloatv`.  If there is any performance differ4ence,
+    // it will only be for extreme edge cases since the smaller types are only used
+    // at the end of the loop.
+    //
+    // It also makes this loop simpler as we handle all non-multiples-of-8 in
+    // the same way.
     for (; first != last; ++first, ++dest)
     {
         const auto distance = std::distance(first, last);
         assert(distance > 0); // should be out of the loop!
-        switch (distance % 8)
+        if (distance % 8 == 0)
         {
-            case 1:
-            {
-                nearest_neighbors_seq(first, last, dest);
-                break;
-            }
-            case 2: case 3:
-            {
-                nearest_neighbors_unseq_n<vcl::Complex2f>(&(*first), dest);
-                first += 1; dest += 1;
-                break;
-            }
-            case 4: case 5: case 6: case 7:
-            {
-                nearest_neighbors_unseq_n<vcl::Complex4f>(&(*first), dest);
-                first += 3; dest += 3;
-                break;
-            }
-            case 0:
-            {
-                nearest_neighbors_unseq_n<vcl::Complex8f>(&(*first), dest);
-                first += 7; dest += 7;
-                break;
-            }
-
-            default:
-                throw std::logic_error("Can't figure out which nearest_neighbors_unseq() to use");
+            nearest_neighbors_unseq_(phase_delta , phase_directions, magnitudes, &(*first), dest);
+            first += 7; dest += 7;
+        }
+        else
+        {
+            nearest_neighbors_seq(first, last, dest);
         }
     }
 }

@@ -61,9 +61,8 @@ public:
     // Default constructor:
     Vec512b() = default;
     // Constructor to build from two Vec256b:
-    Vec512b(Vec256b const a0, Vec256b const a1) {
-        z0 = a0;  z1 = a1;
-    }
+    Vec512b(const Vec256b& a0, const Vec256b& a1) : z0(a0), z1(a1) { }
+    Vec512b(Vec256b&& a0, Vec256b&& a1) : z0(std::move(a0)), z1(std::move(a1)) { }
     // Member function to load from array (unaligned)
     Vec512b & load(void const * p) {
         z0 = Vec8i().load(p);
@@ -666,8 +665,11 @@ public:
         z1 = Vec8i(i8, i9, i10, i11, i12, i13, i14, i15);
     }
     // Constructor to build from two Vec8i:
-    Vec16i(Vec8i const a0, Vec8i const a1) {
+    Vec16i(const Vec8i& a0, const Vec8i& a1) {
         *this = Vec512b(a0, a1);
+    }
+    Vec16i(Vec8i&& a0, Vec8i&& a1) {
+        *this = Vec512b(std::move(a0), std::move(a1));
     }
     // Constructor to convert from type Vec512b
     Vec16i(Vec512b const & x) {

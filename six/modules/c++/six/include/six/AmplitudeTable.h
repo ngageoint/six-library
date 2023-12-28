@@ -218,9 +218,6 @@ public:
     void nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
 
 private:
-    template<typename TVclComplex, typename TOutputIter>
-    void nearest_neighbors_unseq_n(const six::zfloat* p, TOutputIter dest) const;
-
     //! The sorted set of possible magnitudes order from small to large.
     std::vector<float> uncached_magnitudes; // Order is important! This must be ...
     const std::vector<float>& magnitudes; // ... before this.
