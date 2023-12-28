@@ -25,7 +25,7 @@
 NITF_CXX_GUARD
 
 // MIL-PRF-89034, Table 69 (page 131).
-static nitf_TREDescription description[] = {
+static nitf_TREDescription IMRFCA_description[] = {
     {NITF_LOOP, 0, NITF_CONST_N, "20"},
     {NITF_BCS_A, 22, "X Image Numerator", "XINC" },
     {NITF_ENDLOOP, 0, NULL, NULL},
@@ -41,6 +41,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(IMRFCA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(IMRFCA)
 
 NITF_CXX_ENDGUARD

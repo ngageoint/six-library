@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription GRDPSB_description[] = {
     {NITF_BCS_N, 2, "Number of Location Grids", "NUM_GRDS" },
 
     {NITF_LOOP, 0, NULL, "NUM_GRDS"},
@@ -42,6 +42,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL },
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(GRDPSB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(GRDPSB)
 
 NITF_CXX_ENDGUARD

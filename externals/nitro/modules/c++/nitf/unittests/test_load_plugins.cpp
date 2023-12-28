@@ -49,10 +49,6 @@ static const auto& all_TREs()
 {
     static const std::vector<std::string> retval
     {
-    #if _MSC_VER && NITRO_PCH
-        // only build a handful in Visual Studio
-        "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "CSEXRB", "ENGRDA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
-    #else
         "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
         "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
         "ACCVTB", "BLOCKA", "CSEXRA", "GRDPSB", "MATESA", "OFFSET", "PIAPRD", "RPFDES", "RSMPIA", "TEST_DES",
@@ -63,7 +59,6 @@ static const auto& all_TREs()
         "AIPBCA", "CMETAA", "EXOPTA", "IMRFCA", "MSTGTA", "PIAIMB", "PRADAA", "RSMECA", "SNSRA",
         "ASTORA", "CSCCGA", "EXPLTA", "IOMAPA", "MTIRPA", "PIAIMC", "PRJPSB", "RSMGGA", "SOURCB",
         "BANDSA", "CSCRNA", "EXPLTB", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
-    #endif
     };
     return retval;
 }

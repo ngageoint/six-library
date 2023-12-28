@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription SNSRA_description[] = {
     {NITF_BCS_N, 4, "VERNUM", "VERNUM" },
     {NITF_BCS_A, 20, "SENNAME", "SENNAME" },
     {NITF_BCS_A, 1, "SENTYPE", "SENTYPE" },
@@ -107,6 +107,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(SNSRA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(SNSRA)
 
 NITF_CXX_ENDGUARD

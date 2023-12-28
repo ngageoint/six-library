@@ -27,6 +27,10 @@
 #include <std/filesystem>
 #include <algorithm>
 
+#include <mem/ScopedArray.h>
+#include <import/logging.h>
+#include <sys/Path.h>
+
 #include "six/Types.h"
 #include "six/Region.h"
 #include "six/Container.h"
@@ -34,8 +38,6 @@
 #include "six/XMLControlFactory.h"
 #include "six/Logger.h"
 #include "six/Exports.h"
-#include <mem/ScopedArray.h>
-#include <import/logging.h>
 
 namespace six
 {
@@ -95,7 +97,7 @@ struct SIX_SIX_API ReadControl
         std::vector<std::string> schemaPaths_;
         if (pSchemaPaths != nullptr)
         {
-            std::transform(pSchemaPaths->begin(), pSchemaPaths->end(), std::back_inserter(schemaPaths_), [](const std::filesystem::path& p) { return p.string(); });
+            schemaPaths_ = sys::convertPaths(*pSchemaPaths);
         }
         load(fromFile.string(), schemaPaths_);
     }

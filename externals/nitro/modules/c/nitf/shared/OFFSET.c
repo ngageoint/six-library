@@ -24,12 +24,12 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription OFFSET_description[] = {
     {NITF_BCS_N, 8, "Align-Scan Offset of First Pixel", "LINE" },
     {NITF_BCS_N, 8, "Cross-Scan Offset of First Pixel", "SAMPLE" },
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(OFFSET, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(OFFSET)
 
 NITF_CXX_ENDGUARD

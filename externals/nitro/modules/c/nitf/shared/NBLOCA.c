@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription NBLOCA_description[] = {
     {NITF_BINARY, 4, "First Image Frame Offset", "FRAME_1_OFFSET" },
     {NITF_BINARY, 4, "Number of Blocks", "NUMBER_OF_FRAMES" },
     {NITF_LOOP, 0, "- 1", "NUMBER_OF_FRAMES"},
@@ -33,6 +33,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(NBLOCA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(NBLOCA)
 
 NITF_CXX_ENDGUARD

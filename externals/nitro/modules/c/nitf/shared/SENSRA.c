@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription SENSRA_description[] = {
     {NITF_BCS_N, 8, "Ref Row", "REFROW" },
     {NITF_BCS_N, 8, "Ref Col", "REFCOL" },
     {NITF_BCS_A, 6, "Sensor Model", "SNSMODEL" },
@@ -53,6 +53,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(SENSRA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(SENSRA)
 
 NITF_CXX_ENDGUARD

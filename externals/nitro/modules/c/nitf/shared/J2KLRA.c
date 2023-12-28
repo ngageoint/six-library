@@ -26,7 +26,7 @@
 NITF_CXX_GUARD
 
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription J2KLRA_description[] = {
     {NITF_BCS_N,  1,  "original compressed data",     "ORIG" },
     {NITF_BCS_N,  2,  "number wavelet levels",        "NLEVELS_O" },
     {NITF_BCS_N,  5,  "number bands",                 "NBANDS_O" },
@@ -55,6 +55,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(J2KLRA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(J2KLRA)
 
 NITF_CXX_ENDGUARD

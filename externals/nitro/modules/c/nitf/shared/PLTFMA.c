@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PLTFMA_description[] = {
     {NITF_BCS_N, 4, "VERNUM", "VERNUM" },
     {NITF_BCS_A, 12, "P_NAME", "P_NAME" },
     {NITF_BCS_A, 40, "P_DESCR", "P_DESCR" },
@@ -76,6 +76,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PLTFMA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PLTFMA)
 
 NITF_CXX_ENDGUARD

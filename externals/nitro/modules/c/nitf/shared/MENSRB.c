@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription MENSRB_description[] = {
     {NITF_BCS_A, 25, "Aircraft Location", "ACFT_LOC" },
     {NITF_BCS_A, 6, "Aircraft Location Accuracy", "ACFT_LOC_ACCY" },
     {NITF_BCS_A, 6, "Aircraft Altitude", "ACFT_ALT" },
@@ -55,6 +55,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(MENSRB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(MENSRB)
 
 NITF_CXX_ENDGUARD

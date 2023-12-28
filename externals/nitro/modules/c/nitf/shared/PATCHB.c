@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PATCHB_description[] = {
 
     {NITF_BCS_A, 4, "Patch Number", "PAT_NO" },
     {NITF_BCS_A, 1, "Last Patch of Search Scene", "LAST_PAT_FLAG" },
@@ -52,6 +52,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PATCHB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PATCHB)
 
 NITF_CXX_ENDGUARD

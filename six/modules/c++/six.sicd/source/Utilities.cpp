@@ -48,6 +48,7 @@
 #include <sys/Span.h>
 #include <types/RowCol.h>
 #include <units/Angles.h>
+#include <sys/Path.h>
 
 #include <six/NITFReadControl.h>
 #include <six/sicd/SICDWriteControl.h>
@@ -219,7 +220,7 @@ class SICD_readerAndConverter final
     }
     const types::RowCol<size_t>& offset;
     six::zfloat* buffer;
-    const six::Amp8iPhs8iLookup_t& lookup;
+    six::Amp8iPhs8iLookup_t lookup;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
@@ -632,8 +633,7 @@ void Utilities::readSicd(const fs::path& sicdPathname,
                          std::unique_ptr<ComplexData>& complexData,
                         std::vector<six::zfloat>& widebandData)
 {
-    std::vector<std::string> schemaPaths_;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
+    const auto schemaPaths_ = sys::convertPaths(schemaPaths);
     readSicd(sicdPathname.string(), schemaPaths_, complexData, widebandData);
 }
 ComplexImageResult Utilities::readSicd(const fs::path& sicdPathname, const std::vector<fs::path>& schemaPaths)
@@ -717,10 +717,8 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
-    std::string extension = fs::path(pathname).extension().string();
-    str::lower(extension);
-
-    if (extension == ".xml")
+    const auto extension = fs::path(pathname).extension().string();
+    if (str::eq(extension, ".xml"))
     {
         logging::NullLogger log;
         return parseDataFromFile(pathname, schemaPaths, log);
@@ -1026,11 +1024,7 @@ std::unique_ptr<ComplexData> Utilities::parseDataFromString(
         logging::Logger& log)
 {
     const auto xmlStr = str::u8FromNative(xmlStr_);
-
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     return parseDataFromString(xmlStr, &schemaPaths, &log);
 }
 std::unique_ptr<ComplexData> Utilities::parseDataFromString(const std::u8string& xmlStr,
@@ -1045,10 +1039,7 @@ std::u8string Utilities::toXMLString(const ComplexData& data,
                                    const std::vector<std::string>& schemaPaths_,
                                    logging::Logger* logger)
 {
-    std::vector<std::filesystem::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths),
-        [](const std::string& s) { return s; });
-
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     return toXMLString(data, &schemaPaths, logger);
  }
 std::string Utilities::toXMLString_(const ComplexData& data,
@@ -1641,8 +1632,7 @@ static void writeAsNITF(const fs::path& pathname, const std::vector<std::string>
     writer.setLogger(logging::setupLogger("out"));
 
     const std::span<const six::zfloat> image(image_, getExtent(data).area());
-    std::vector<fs::path> schemaPaths;
-    std::transform(schemaPaths_.begin(), schemaPaths_.end(), std::back_inserter(schemaPaths), [](const std::string& s) { return s; });
+    const auto schemaPaths = sys::convertPaths(schemaPaths_);
     writer.save_image(image, pathname, schemaPaths);
 }
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::string>& schemaPaths, const ComplexData& data, std::span<const six::zfloat> image)
@@ -1655,8 +1645,7 @@ void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<std::str
 }
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexData& data, std::span<const six::zfloat> image)
 {
-    std::vector<std::string> schemaPaths_;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_), [](const fs::path& p) { return p.string(); });
+    const auto schemaPaths_ = sys::convertPaths(schemaPaths);
     writeAsNITF(pathname, schemaPaths_, data, image);
 }
 void six::sicd::writeAsNITF(const fs::path& pathname, const std::vector<fs::path>& schemaPaths, const ComplexImage& image)

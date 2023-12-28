@@ -29,6 +29,7 @@
 #include <string>
 #include <mutex>
 #include <type_traits>
+#include <memory>
 
 #include "config/compiler_extensions.h"
 #include "config/Exports.h"
@@ -411,17 +412,20 @@ struct XercesErrorHandler final : public XercesErrorHandlerInterface_T
  */
 struct CODA_OSS_API XercesContext final
 {
-    //! Constructor
     XercesContext();
-    
-    //! Destructor
     ~XercesContext();
+
+    XercesContext(const XercesContext&) = delete;
+    XercesContext& operator=(const XercesContext&) = delete;
+    XercesContext(XercesContext&&) = delete;
+    XercesContext& operator=(XercesContext&&) = delete;
 
     void destroy();
     
 private:
-    static std::mutex mMutex;
-    bool mIsDestroyed;
+    struct Impl;
+    static std::shared_ptr<Impl> getInstance();
+    std::shared_ptr<Impl> mpImpl;
 };
 }
 }

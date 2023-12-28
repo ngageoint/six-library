@@ -49,7 +49,7 @@ public:
     virtual void onPluginError(except::Context& c) = 0;
 };
 
-class CODA_OSS_API DefaultErrorHandler final : public ErrorHandler
+class CODA_OSS_API DefaultErrorHandler : public ErrorHandler
 {
 public:
     DefaultErrorHandler(logging::LoggerPtr logger = logging::LoggerPtr());
