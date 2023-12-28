@@ -253,31 +253,43 @@ public:
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
 
 private:
-    template <typename TInputIt, typename TOutputIt>
-    void nearest_neighbors_seq(TInputIt first, TInputIt last, TOutputIt dest) const;
-    template <typename TInputIt, typename TOutputIt>
-    void nearest_neighbors_par(TInputIt first, TInputIt last, TOutputIt dest) const;
-    template <typename TInputIt, typename TOutputIt>
-    void nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
-    template <typename TInputIt, typename TOutputIt>
-    void nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
+    struct Impl final
+    {
+        const ComplexToAMP8IPHS8I& converter;
+        Impl(const ComplexToAMP8IPHS8I& c) : converter(c) {}
+        ~Impl() = default;
+        Impl(const Impl&) = delete;
+        Impl& operator=(const Impl&) = delete;
+        Impl(Impl&&) = delete; // implicitly deleted because of =delete for copy
+        Impl& operator=(Impl&&) = delete; // implicitly deleted because of =delete for copy
 
-    template< typename TOutputIter>
-    void nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const;
+        template <typename TInputIt, typename TOutputIt>
+        void nearest_neighbors_seq(TInputIt first, TInputIt last, TOutputIt dest) const;
+        template <typename TInputIt, typename TOutputIt>
+        void nearest_neighbors_par(TInputIt first, TInputIt last, TOutputIt dest) const;
+        template <typename TInputIt, typename TOutputIt>
+        void nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
+        template <typename TInputIt, typename TOutputIt>
+        void nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
 
-    //! The sorted set of possible magnitudes order from small to large.
-    std::array<float, AmplitudeTableSize> uncached_magnitudes; // Order is important! This must be ...
-    std::span<const float> magnitudes; // ... before this.
-    uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
+        template< typename TOutputIter>
+        void nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const;
 
-    //! The difference in phase angle between two UINT phase values.
-    float phase_delta;
-    uint8_t getPhase(six::zfloat) const;
+        //! The sorted set of possible magnitudes order from small to large.
+        std::array<float, AmplitudeTableSize> uncached_magnitudes;
+        std::span<const float> magnitudes;
+        uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
 
-    //! Unit vector rays that represent each direction that phase can point.
-    std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
-    std::array<float, AmplitudeTableSize> phase_directions_real;
-    std::array<float, AmplitudeTableSize> phase_directions_imag;
+        //! The difference in phase angle between two UINT phase values.
+        float phase_delta;
+        uint8_t getPhase(six::zfloat) const;
+
+        //! Unit vector rays that represent each direction that phase can point.
+        std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
+        std::array<float, AmplitudeTableSize> phase_directions_real;
+        std::array<float, AmplitudeTableSize> phase_directions_imag;
+    };
+    Impl impl;
 };
 }
 }

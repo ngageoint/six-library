@@ -179,7 +179,7 @@ static inline auto find_nearest(std::span<const float> magnitudes, const floatv&
 }
 
 template< typename TOutputIter>
-void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const
 {
     // https://en.cppreference.com/w/cpp/numeric/complex
     // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
@@ -211,7 +211,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_(const six
 }
 
 template <typename TInputIt, typename TOutputIt>
-void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
 {
     // The above code is simpler (no templates) if we use just a single VCL
     // complex type: `zfloatv`.  If there is any performance differ4ence,
@@ -242,7 +242,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     const auto& converter = make_(pAmplitudeTable);
 
     std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    converter.nearest_neighbors_unseq(inputs.begin(), inputs.end(), retval.begin());
+    converter.impl.nearest_neighbors_unseq(inputs.begin(), inputs.end(), retval.begin());
     return retval;
 }
 
