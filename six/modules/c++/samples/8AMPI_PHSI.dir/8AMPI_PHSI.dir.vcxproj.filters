@@ -18,7 +18,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="8AMPI_PHSI.cpp">
+    <ClCompile Include="..\8AMPI_PHSI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
