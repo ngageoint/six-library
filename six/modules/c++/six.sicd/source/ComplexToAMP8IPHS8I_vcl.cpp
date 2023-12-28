@@ -29,6 +29,16 @@
 #include <std/numbers>
 #include <algorithm>
 #include <functional>
+#include <type_traits>
+
+#include <coda_oss/CPlusPlus.h>
+#if CODA_OSS_cpp17
+    // <execution> is broken with the older version of GCC we're using
+    #if (__GNUC__ >= 10) || _MSC_VER
+    #include <execution>
+    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
+    #endif
+#endif
 
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
@@ -235,5 +245,206 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     converter.nearest_neighbors_unseq(inputs.begin(), inputs.end(), retval.begin());
     return retval;
 }
+
+/**********************************************************************
+
+// This is here (instead of **ComplexToAMP8IPHS8I.cpp**) because par_unseq() might
+// need to know implementation details of _unseq()
+using input_it = std::span<const six::zfloat>::iterator;
+using output_it = std::vector<six::AMP8I_PHS8I_t>::iterator;
+
+struct const_iterator final
+{
+    using Type = input_it::value_type;
+
+    using iterator_category = std::random_access_iterator_tag;
+    using value_type = std::remove_cv_t<Type>;
+    using difference_type = std::ptrdiff_t;
+    using pointer = Type*;
+    using reference = Type&;
+    using const_reference = const Type&;
+
+    input_it current_;
+
+    const_iterator() = default;
+    const_iterator(input_it it) : current_(it) {}
+
+    const_reference operator*() const noexcept
+    {
+        return *current_;
+    }
+
+    const_iterator& operator++() noexcept
+    {
+       ++current_;
+        return *this;
+    }
+    const_iterator operator++(int) noexcept
+    {
+        auto ret = *this;
+        ++* this;
+        return ret;
+    }
+
+    const_iterator& operator--() noexcept
+    {
+        --current_;
+        return *this;
+    }
+    const_iterator operator--(int) noexcept
+    {
+        auto ret = *this;
+        --* this;
+        return ret;
+    }
+
+    const_iterator& operator+=(const difference_type n) noexcept
+    {
+        current_ += n;
+        return *this;
+    }
+    const_iterator operator+(const difference_type n) const noexcept
+    {
+        auto ret = *this;
+        ret += n;
+        return ret;
+    }
+
+    const_iterator& operator-=(const difference_type n) noexcept
+    {
+        current_ -= n;
+        return *this;
+    }
+    const_iterator operator-(const difference_type n) const noexcept
+    {
+        auto ret = *this;
+        ret -= n;
+        return ret;
+    }
+    difference_type operator-(const const_iterator& rhs) const noexcept
+    {
+        return current_ - rhs.current_;
+    }
+
+    bool operator==(const const_iterator& rhs) const noexcept
+    {
+        return current_ == rhs.current_;
+    }
+    bool operator!=(const const_iterator& rhs) const noexcept
+    {
+        return !(*this == rhs);
+    }
+};
+
+struct iterator final
+{
+    using Type = output_it::value_type;
+
+    using iterator_category = std::random_access_iterator_tag;
+    using value_type = std::remove_cv_t<Type>;
+    using difference_type = std::ptrdiff_t;
+    using pointer = Type*;
+    using reference = Type&;
+
+    output_it current_;
+
+    iterator() = default;
+    iterator(output_it it) : current_(it) {}
+
+    reference operator*() const noexcept
+    {
+        return *current_;
+    }
+
+    iterator& operator++() noexcept
+    {
+        ++current_;
+        return *this;
+    }
+    iterator operator++(int) noexcept
+    {
+        auto ret = *this;
+        ++* this;
+        return ret;
+    }
+
+    iterator& operator--() noexcept
+    {
+        --current_;
+        return *this;
+    }
+    iterator operator--(int) noexcept
+    {
+        auto ret = *this;
+        --* this;
+        return ret;
+    }
+
+    iterator& operator+=(const difference_type n) noexcept
+    {
+        current_ += n;
+        return *this;
+    }
+    iterator operator+(const difference_type n) const noexcept
+    {
+        auto ret = *this;
+        ret += n;
+        return ret;
+    }
+
+    iterator& operator-=(const difference_type n) noexcept
+    {
+        current_ -= n;
+        return *this;
+    }
+    iterator operator-(const difference_type n) const noexcept
+    {
+        auto ret = *this;
+        ret -= n;
+        return ret;
+    }
+
+    bool operator==(const iterator& rhs) const noexcept
+    {
+        return current_ == rhs.current_;
+    }
+    bool operator!=(const iterator& rhs) const noexcept
+    {
+        return !(*this == rhs);
+    }
+};
+
+
+template <typename TInputIt, typename TOutputIt>
+void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
+{
+    const const_iterator f(first);
+    const const_iterator l(last);
+    const iterator d(dest);
+
+    const auto func = [&](const auto& v) {
+        auto const pV = &v;
+        auto const pF = &(*first);
+        assert(pV == pF);
+
+        static const six::AMP8I_PHS8I_t retval{};
+        return retval;
+    };
+    std::ignore = std::transform(std::execution::seq, f, l, d, func);
+}
+#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make_(pAmplitudeTable);
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    converter.nearest_neighbors_par_unseq(inputs.begin(), inputs.end(), retval.begin());
+    return retval;
+}
+#endif //  SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
+
+**********************************************************************/
 
 #endif // SIX_sicd_have_VCL
