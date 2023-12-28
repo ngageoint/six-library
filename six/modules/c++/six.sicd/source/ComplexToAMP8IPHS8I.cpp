@@ -94,7 +94,7 @@ template<typename TToComplexFunc>
 static std::vector<float> make_magnitudes_(TToComplexFunc toComplex)
 {
     std::vector<float> retval;
-    retval.reserve(UINT8_MAX + 1);
+    retval.reserve(six::AmplitudeTableSize);
     for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
         // AmpPhase -> Complex

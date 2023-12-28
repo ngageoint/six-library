@@ -160,6 +160,7 @@ struct SIX_SIX_API LUT
 
  // Store the computed `six::zfloat` for every possible 
  // amp/phs pair, a total of 256*256 values.
+static constexpr size_t AmplitudeTableSize = 256; // "This is a fixed size (256-element) LUT"
 using Amp8iPhs8iLookup_t = std::mdspan<const six::zfloat, std::dextents<size_t, 2>>;
  
  // More descriptive than std::pair<uint8_t, uint8_t>
@@ -231,7 +232,7 @@ private:
     uint8_t getPhase(six::zfloat) const;
 
     //! Unit vector rays that represent each direction that phase can point.
-    std::array<six::zfloat, UINT8_MAX + 1> phase_directions;
+    std::array<six::zfloat, AmplitudeTableSize> phase_directions;
 };
 }
 }
@@ -240,7 +241,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
     AmplitudeTable(size_t elementSize) noexcept(false) :
-        LUT(UINT8_MAX + 1 /*i.e., 256*/, elementSize)
+        LUT(AmplitudeTableSize /*i.e., 256*/, elementSize)
     {
     }
     AmplitudeTable() noexcept(false) :  AmplitudeTable(sizeof(double)) 
@@ -248,7 +249,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     }
     AmplitudeTable(const nitf::LookupTable& lookupTable) noexcept(false) : LUT(lookupTable)
     {
-        if (size() != 256)
+        if (size() != AmplitudeTableSize)
         {
             throw std::invalid_argument("lookupTable should have 256 elements.");
         }
@@ -262,6 +263,10 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     size_t size() const noexcept
     {
         return numEntries;
+    }
+    static constexpr auto ssize() noexcept // signed size()
+    {
+        return gsl::narrow<ptrdiff_t>(AmplitudeTableSize);
     }
 
     bool operator==(const AmplitudeTable& rhs) const

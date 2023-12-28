@@ -68,11 +68,12 @@ static inline auto interleave(const intv& a, const intv& b)
     return vcl::Vec16i(std::move(index0), std::move(index1));
 }
 
-// There's no lookup() for vcl::ComplexN, implement using floats
-static auto lookup(const intv& zindex, const std::array<six::zfloat, UINT8_MAX + 1>& table_)
+// There's no `vcl::lookup()` for `std::complex<T>*`, implement using floats
+template<size_t N>
+static auto lookup(const intv& zindex, const std::array<six::zfloat, N>& table_)
 {
     const auto table = reinterpret_cast<const float*>(table_.data());
-    constexpr auto size_as_floats = (UINT8_MAX + 1) * 2; // table_t is six::zfloat
+    constexpr auto size_as_floats = N * 2; // table_t is six::zfloat
 
     // A `six::zfloat` at *n* is at *2n* when viewed as `float`.
     const auto real_index = zindex * 2;
@@ -81,7 +82,7 @@ static auto lookup(const intv& zindex, const std::array<six::zfloat, UINT8_MAX +
     const auto index = interleave(real_index, imag_index);
 
     auto lookup = vcl::lookup<size_as_floats>(index, table);
-    return zfloatv(lookup);
+    return zfloatv(std::move(lookup));
 }
 
 static auto getPhase(const zfloatv& v, float phase_delta)
@@ -110,6 +111,8 @@ inline auto lower_bound(const std::vector<float>& magnitudes, const floatv& valu
 }
 static auto nearest(const std::vector<float>& magnitudes, const floatv& value)
 {
+    assert(magnitudes.size() == six::AmplitudeTableSize);
+
     /*
         const auto it = std::lower_bound(begin, end, value);
         if (it == begin) return 0;
@@ -124,8 +127,8 @@ static auto nearest(const std::vector<float>& magnitudes, const floatv& value)
     const auto it = ::lower_bound(magnitudes, value);
     const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
 
-    const auto v0 = value - vcl::lookup<256>(prev_it, magnitudes.data()); // value - *prev_it
-    const auto v1 = vcl::lookup<256>(it, magnitudes.data()) - value; // *it - value
+    const auto v0 = value - vcl::lookup<six::AmplitudeTableSize>(prev_it, magnitudes.data()); // value - *prev_it
+    const auto v1 = vcl::lookup<six::AmplitudeTableSize>(it, magnitudes.data()) - value; // *it - value
     //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
     
     const intv end = gsl::narrow<int>(magnitudes.size());

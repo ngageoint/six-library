@@ -189,8 +189,7 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-
-constexpr std::array<size_t, 2> lookupDims{ 256, 256 }; // size 256 x 256 matrix of complex values.
+constexpr std::array<size_t, 2> lookupDims{ AmplitudeTableSize, AmplitudeTableSize }; // size 256 x 256 matrix of complex values.
 template<typename TToComplexFunc>
 static auto createLookup(TToComplexFunc toComplex)
 {

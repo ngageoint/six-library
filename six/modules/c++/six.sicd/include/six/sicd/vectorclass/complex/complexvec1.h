@@ -1132,8 +1132,9 @@ public:
         y = x;
     }
 #else
-    Complex8f(Vec16f const x) {  // constructor to convert from emulated Vec16f
-        y = x;
+    Complex8f(const Vec16f& x) : y(x)  {  // constructor to convert from emulated Vec16f
+    }
+    Complex8f(Vec16f&& x) : y(std::move(x)) {  // constructor to convert from emulated Vec16f
     }
 #endif
     // Assignment operator to convert from type __m512 used in intrinsics or Vec256fe used in emulation
