@@ -156,8 +156,7 @@ static auto find_nearest(const std::vector<float>& magnitudes, const zfloatv& ph
 }
 
 template< typename TOutputIter>
-static void nearest_neighbors_unseq_(float phase_delta, const std::array<six::zfloat, UINT8_MAX + 1>& phase_directions, const std::vector<float>& magnitudes,
-    const six::zfloat* p, TOutputIter dest)
+void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const
 {
     // https://en.cppreference.com/w/cpp/numeric/complex
     // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
@@ -167,8 +166,8 @@ static void nearest_neighbors_unseq_(float phase_delta, const std::array<six::zf
 
     const auto phase = ::getPhase(v, phase_delta);
 
-    const auto phase_direction = lookup(phase, phase_directions);
-    const auto amplitude = find_nearest(magnitudes, phase_direction, v);
+    //const auto phase_direction = lookup(phase, phase_directions);
+    //const auto amplitude = find_nearest(magnitudes, phase_direction, v);
 
     // interleave() and store() is slower than an explicit loop.
     for (int i = 0; i < v.size(); i++)
@@ -179,10 +178,10 @@ static void nearest_neighbors_unseq_(float phase_delta, const std::array<six::zf
         // But it's not the magnitude of the input complex value - it's the projection of
         // the complex value onto the ray of candidate magnitudes at the selected phase.
         // i.e. dot product.
-        //dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
+        dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
         //assert(std::abs(projection[i] - std::abs(v)) < 1e-5); // TODO ???
         //dest->amplitude = nearest(magnitudes, projection[i]);
-        dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
+        //dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
 
         ++dest;
     }
@@ -204,7 +203,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt f
         assert(distance > 0); // should be out of the loop!
         if (distance % 8 == 0)
         {
-            nearest_neighbors_unseq_(phase_delta , phase_directions, magnitudes, &(*first), dest);
+            nearest_neighbors_unseq_(&(*first), dest);
             first += 7; dest += 7;
         }
         else

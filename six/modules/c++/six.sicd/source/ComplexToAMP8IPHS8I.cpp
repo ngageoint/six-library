@@ -163,7 +163,7 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
  * @param value query value
  * @return index of nearest value within the iterator range.
  */
-static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
+static uint8_t nearest(const std::vector<float>& magnitudes, float value)
 {
     const auto begin = magnitudes.begin();
     const auto end = magnitudes.end();
@@ -178,8 +178,7 @@ static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
     assert(distance <= std::numeric_limits<uint8_t>::max());
     return gsl::narrow<uint8_t>(distance);
 }
-static auto find_nearest(const std::vector<float>& magnitudes, six::zfloat phase_direction,
-    six::zfloat v)
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::find_nearest(six::zfloat phase_direction, six::zfloat v) const
 {
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
@@ -195,7 +194,7 @@ six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor_(co
     retval.phase = getPhase(v);
 
     auto&& phase_direction = phase_directions[retval.phase];
-    retval.amplitude = find_nearest(magnitudes, phase_direction, v);
+    retval.amplitude = find_nearest(phase_direction, v);
     return retval;
 }
 template <typename TInputIt, typename TOutputIt>
