@@ -297,7 +297,6 @@
     <ClInclude Include="tiff\include\tiff\ImageReader.h" />
     <ClInclude Include="tiff\include\tiff\ImageWriter.h" />
     <ClInclude Include="tiff\include\tiff\KnownTags.h" />
-    <ClInclude Include="tiff\include\tiff\TiffUtils.h" />
     <ClInclude Include="tiff\include\tiff\TypeFactory.h" />
     <ClInclude Include="tiff\include\tiff\Utils.h" />
     <ClInclude Include="types\include\types\Complex.h" />
@@ -474,7 +473,6 @@
     <ClCompile Include="tiff\source\ImageReader.cpp" />
     <ClCompile Include="tiff\source\ImageWriter.cpp" />
     <ClCompile Include="tiff\source\KnownTags.cpp" />
-    <ClCompile Include="tiff\source\TiffUtils.cpp" />
     <ClCompile Include="tiff\source\TypeFactory.cpp" />
     <ClCompile Include="tiff\source\Utils.cpp" />
     <ClCompile Include="types\source\Range.cpp" />
@@ -542,6 +540,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -559,6 +558,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>coda-oss.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -567,7 +567,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1;CODA_OSS_EXPORTS;CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -585,9 +585,6 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -614,9 +611,6 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <WarningLevel>Level3</WarningLevel>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
