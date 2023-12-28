@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <iterator>
 #include <future>
+#include <std/mdspan>
 
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
@@ -188,11 +189,12 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
+constexpr std::array<size_t, 2> lookupDims{ AmplitudeTableSize, AmplitudeTableSize }; // size 256 x 256 matrix of complex values.
 template<typename TToComplexFunc>
 static auto createLookup(TToComplexFunc toComplex)
 {
-    auto retval = std::make_unique<six::Amp8iPhs8iLookup_t>(); // too big for the stack
-    auto& values = *retval;
+    std::vector<six::zfloat> retval(lookupDims[0] * lookupDims[1]); 
+    std::mdspan<six::zfloat, std::dextents<size_t, 2>> values(retval.data(), lookupDims);
 
     // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
     // complex<float> value.
@@ -200,7 +202,7 @@ static auto createLookup(TToComplexFunc toComplex)
     {
         for (const auto phase : Utilities::iota_0_256())
         {
-            values[amplitude][phase] = toComplex(amplitude, phase);
+            values(amplitude, phase) = toComplex(amplitude, phase);
         }
     }
 
@@ -221,19 +223,19 @@ static auto createLookup()
     return createLookup(toComplex);
 }
 
-static const six::Amp8iPhs8iLookup_t* getCachedLookup(const six::AmplitudeTable* pAmplitudeTable)
+static const std::vector<six::zfloat>* getCachedLookup(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
         static const auto lookup_no_table = createLookup();
-        return lookup_no_table.get();
+        return &lookup_no_table;
     }
 
     // Maybe one has already been created and stored on the table?
     return pAmplitudeTable->getLookup();
 }
 
-const six::Amp8iPhs8iLookup_t& ImageData::getLookup(const six::AmplitudeTable* pAmplitudeTable)
+six::Amp8iPhs8iLookup_t ImageData::getLookup(const six::AmplitudeTable* pAmplitudeTable)
 {
     auto pLookup = getCachedLookup(pAmplitudeTable);
     if (pLookup == nullptr)
@@ -245,14 +247,14 @@ const six::Amp8iPhs8iLookup_t& ImageData::getLookup(const six::AmplitudeTable* p
         pLookup = amplitudeTable.getLookup();
     }
     assert(pLookup != nullptr);
-    return *pLookup;
+    return six::Amp8iPhs8iLookup_t(pLookup->data(), lookupDims);
 }
 
-void ImageData::toComplex(const six::Amp8iPhs8iLookup_t& values, std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results)
+void ImageData::toComplex(six::Amp8iPhs8iLookup_t values, std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results)
 {
     const auto toComplex_ = [&values](const auto& v)
     {
-        return values[v.amplitude][v.phase];
+        return values(v.amplitude, v.phase);
     };
     transform(inputs, results, toComplex_);
 }
@@ -275,9 +277,3 @@ std::vector<AMP8I_PHS8I_t> ImageData::fromComplex(std::span<const six::zfloat> i
     return six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, amplitudeTable.get());
 }
 
-std::vector<AMP8I_PHS8I_t> ImageData::testing_fromComplex_(std::span<const six::zfloat> inputs)
-{
-    static const ImageData imageData;
-    assert(imageData.amplitudeTable.get() == nullptr);
-    return imageData.fromComplex(inputs);
-}
