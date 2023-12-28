@@ -171,7 +171,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     uint8_t phase;
 };
 
-// Control a few details of the ComplexToAMP8IPHS8I implementation, espeically "unseq" (i.e., SIMD).
+// Control a few details of the ComplexToAMP8IPHS8I implementation, especially "unseq" (i.e., SIMD).
 #ifndef SIX_sicd_has_VCL
     // Do we have the "vectorclass" library? https://github.com/vectorclass/version2
     #if !CODA_OSS_cpp17 // VCL needs C++17
@@ -189,9 +189,8 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 
 #ifndef SIX_sicd_has_experimental_simd
     // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
-    #if (__GNUC__ >= 11) && CODA_OSS_cpp20
+    #if (__GNUC__ >= 999) && CODA_OSS_cpp20 // TODO: 11 instead of 999
         // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
-        #include <experimental/simd>
         #define SIX_sicd_has_experimental_simd 1
     #else
         #define SIX_sicd_has_experimental_simd 0
