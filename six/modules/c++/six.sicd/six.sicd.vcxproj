@@ -63,12 +63,9 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -96,9 +93,6 @@
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -160,7 +154,6 @@
     <ClCompile Include="source\ComplexData.cpp" />
     <ClCompile Include="source\ComplexDataBuilder.cpp" />
     <ClCompile Include="source\ComplexToAMP8IPHS8I.cpp" />
-    <ClCompile Include="source\ComplexToAMP8IPHS8I_vcl.cpp" />
     <ClCompile Include="source\ComplexXMLControl.cpp" />
     <ClCompile Include="source\ComplexXMLParser.cpp" />
     <ClCompile Include="source\ComplexXMLParser040.cpp" />
