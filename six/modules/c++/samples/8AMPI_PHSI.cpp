@@ -1,7 +1,9 @@
 // 8AMPI_PHSI.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 
 #include <assert.h>

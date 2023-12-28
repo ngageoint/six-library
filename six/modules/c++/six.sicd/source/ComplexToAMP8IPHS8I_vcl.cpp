@@ -40,6 +40,9 @@
 #undef max
 
 #define VCL_NAMESPACE vcl
+#if _MSC_VER
+#pragma warning(disable: 4100) // '...': unreferenced formal parameter
+#endif
 #include "six/sicd/vectorclass/version2/vectorclass.h"
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
