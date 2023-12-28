@@ -60,14 +60,7 @@ inline auto arg(const zfloatv& z)
     return arg(z.real(), z.imag());
 }
 
-inline auto interleave(const vcl::Vec4i& a, const vcl::Vec4i& b)
-{
-    // The blend() indicies are based on one large array
-    auto index0 = vcl::blend4<0, 4, 1, 5>(a, b); // i.e., a[0], b[0], a[1], b[1]
-    auto index1 = vcl::blend4<2, 6, 3, 7>(a, b);    
-    return intv(std::move(index0), std::move(index1));
-}
-inline auto interleave(const intv& a, const intv& b)
+static inline auto interleave(const intv& a, const intv& b)
 {
     // The blend() indicies are based on one large array
     auto index0 = vcl::blend8<0, 8, 1, 9, 2, 10, 3, 11>(a, b); // i.e., a[0], b[0], a[1], b[1], ...
@@ -179,8 +172,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_(const six
         // the complex value onto the ray of candidate magnitudes at the selected phase.
         // i.e. dot product.
         dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
-        //assert(std::abs(projection[i] - std::abs(v)) < 1e-5); // TODO ???
-        //dest->amplitude = nearest(magnitudes, projection[i]);
+
         //dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
 
         ++dest;
