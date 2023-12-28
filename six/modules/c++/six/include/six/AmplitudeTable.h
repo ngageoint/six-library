@@ -223,8 +223,8 @@ private:
     void nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const;
 
     //! The sorted set of possible magnitudes order from small to large.
-    std::vector<float> uncached_magnitudes; // Order is important! This must be ...
-    const std::vector<float>& magnitudes; // ... before this.
+    std::array<float, AmplitudeTableSize> uncached_magnitudes; // Order is important! This must be ...
+    std::span<const float> magnitudes; // ... before this.
     uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
 
     //! The difference in phase angle between two UINT phase values.

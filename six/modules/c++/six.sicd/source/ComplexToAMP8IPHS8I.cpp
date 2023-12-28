@@ -91,24 +91,27 @@ uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
 }
 
 template<typename TToComplexFunc>
-static std::vector<float> make_magnitudes_(TToComplexFunc toComplex)
+static auto make_magnitudes_(TToComplexFunc toComplex)
 {
-    std::vector<float> retval;
-    retval.reserve(six::AmplitudeTableSize);
+    std::vector<float> result;
+    result.reserve(six::AmplitudeTableSize);
     for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
         // AmpPhase -> Complex
         const auto phase = amplitude;
         const auto complex = toComplex(amplitude, phase);
-        retval.push_back(std::abs(complex));
+        result.push_back(std::abs(complex));
     }
 
     // I don't know if we can guarantee that the amplitude table is non-decreasing.
     // Check to verify property at runtime.
-    if (!std::is_sorted(retval.begin(), retval.end()))
+    if (!std::is_sorted(result.begin(), result.end()))
     {
         throw std::runtime_error("magnitudes must be sorted");
     }
+
+    std::array<float, six::AmplitudeTableSize> retval;
+    std::copy(result.begin(), result.end(), retval.begin());
     return retval;
 }
 static inline auto make_magnitudes(const six::AmplitudeTable& amplitudeTable)
@@ -128,17 +131,17 @@ static inline auto make_magnitudes()
     return make_magnitudes_(toComplex);
 }
 
-static const std::vector<float>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
-    std::vector<float>& uncached_magnitudes)
+static std::span<const float> get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
+    std::array<float, six::AmplitudeTableSize>& uncached_magnitudes)
 {
     if (pAmplitudeTable == nullptr)
     {
         static const auto magnitudes = make_magnitudes(); // OK to cache, won't change
-        return magnitudes;
+        return sys::make_span(magnitudes);
     }
     
     uncached_magnitudes = make_magnitudes(*pAmplitudeTable);
-    return uncached_magnitudes;
+    return sys::make_const_span(uncached_magnitudes);
 }
 
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
@@ -163,7 +166,7 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
  * @param value query value
  * @return index of nearest value within the iterator range.
  */
-static uint8_t nearest(const std::vector<float>& magnitudes, float value)
+static uint8_t nearest(std::span<const float> magnitudes, float value)
 {
     const auto begin = magnitudes.begin();
     const auto end = magnitudes.end();

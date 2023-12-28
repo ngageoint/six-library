@@ -95,7 +95,7 @@ static auto getPhase(const zfloatv& v, float phase_delta)
     return roundi(phase / phase_delta);
 }
 
-inline auto lower_bound(const std::vector<float>& magnitudes, const floatv& value)
+inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 {
     const auto begin = magnitudes.begin();
     const auto end = magnitudes.end();
@@ -109,7 +109,7 @@ inline auto lower_bound(const std::vector<float>& magnitudes, const floatv& valu
     }
     return retval;
 }
-static auto nearest(const std::vector<float>& magnitudes, const floatv& value)
+static auto nearest(std::span<const float> magnitudes, const floatv& value)
 {
     assert(magnitudes.size() == six::AmplitudeTableSize);
 
@@ -140,7 +140,7 @@ static auto nearest(const std::vector<float>& magnitudes, const floatv& value)
         ));
     return retval;
 }
-static auto find_nearest(const std::vector<float>& magnitudes, const zfloatv& phase_direction, const zfloatv& v)
+static auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
 {
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
@@ -163,7 +163,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_(const six
     const auto phase = ::getPhase(v, phase_delta);
 
     //const auto phase_direction = lookup(phase, phase_directions);
-    //const auto amplitude = find_nearest(magnitudes, phase_direction, v);
+    //const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
 
     // interleave() and store() is slower than an explicit loop.
     for (int i = 0; i < v.size(); i++)
