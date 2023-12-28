@@ -170,32 +170,22 @@ static void nearest_neighbors_unseq_(float phase_delta, const std::array<six::zf
     const auto phase_direction = lookup(phase, phase_directions);
     const auto amplitude = find_nearest(magnitudes, phase_direction, v);
 
-    const auto results_ = interleave(amplitude, phase);
-    vcl::Vec16uc results;
-    for (int i = 0; i < results_.size(); i++)
+    // interleave() and store() is slower than an explicit loop.
+    for (int i = 0; i < v.size(); i++)
     {
-        results.insert(i, gsl::narrow<uint8_t>(results_[i]));
+        dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
+
+        // We have to do a 1D nearest neighbor search for magnitude.
+        // But it's not the magnitude of the input complex value - it's the projection of
+        // the complex value onto the ray of candidate magnitudes at the selected phase.
+        // i.e. dot product.
+        //dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
+        //assert(std::abs(projection[i] - std::abs(v)) < 1e-5); // TODO ???
+        //dest->amplitude = nearest(magnitudes, projection[i]);
+        dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
+
+        ++dest;
     }
-
-    auto pDest = &(*dest);
-    results.store_partial(v.size()*2, pDest);
-
-    ////constexpr auto size = TVclComplex::size();
-    //for (int i = 0; i < size; i++)
-    //{
-    //    dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
-
-    //    // We have to do a 1D nearest neighbor search for magnitude.
-    //    // But it's not the magnitude of the input complex value - it's the projection of
-    //    // the complex value onto the ray of candidate magnitudes at the selected phase.
-    //    // i.e. dot product.
-    //    //dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
-    //    //assert(std::abs(projection[i] - std::abs(v)) < 1e-5); // TODO ???
-    //    //dest->amplitude = nearest(magnitudes, projection[i]);
-    //    dest->amplitude = nearest[i];
-
-    //    ++dest;
-    //}
 }
 
 template <typename TInputIt, typename TOutputIt>
