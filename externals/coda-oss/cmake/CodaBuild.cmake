@@ -147,11 +147,15 @@ macro(coda_initialize_build)
     set(CMAKE_CXX_EXTENSIONS OFF)
 
     # Turn on AVX2 by default ... it's from 2013.
-    if (NOT ENABLE_AVX512F)
-        if (NOT DISABLE_AVX2)
-            set(ENABLE_AVX2 true)
-        endif()
-    endif()
+    # Well, no :-( ... it seems to cause crashes w/older
+    # compilers on build servers. :-(
+    set(ENABLE_AVX2 false)
+    set(ENABLE_AVX512F false)
+    #if (NOT ENABLE_AVX512F)
+    #    if (NOT DISABLE_AVX2)
+    #        set(ENABLE_AVX2 true)
+    #    endif()
+    #endif()
 
     # MSVC-specific flags and options.
     if (MSVC)
