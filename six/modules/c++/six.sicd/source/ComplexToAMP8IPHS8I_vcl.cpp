@@ -44,6 +44,21 @@
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 
+// https://en.cppreference.com/w/cpp/numeric/complex/arg
+// > `std::atan2(std::imag(z), std::real(z))`
+inline auto arg(const vcl::Complex2f& z)
+{
+    return atan2(z.imag(), z.real()); // arg()
+}
+inline auto arg(const vcl::Complex4f& z)
+{
+    return atan2(z.imag(), z.real()); // arg()
+}
+inline auto arg(const vcl::Complex8f& z)
+{
+    return atan2(z.imag(), z.real()); // arg()
+}
+
 inline auto interleave(const vcl::Vec4i& a, const vcl::Vec4i& b)
 {
     // The blend() indicies are based on one large array
@@ -129,6 +144,17 @@ inline auto lower_bound(const std::vector<float>& magnitudes, const TValue& valu
     return retval;
 }
 
+template<typename TVclComplex>
+static auto getPhase(const TVclComplex& v, float phase_delta)
+{
+    // Phase is determined via arithmetic because it's equally spaced.
+    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
+    // handles cases that are close to 2PI.
+    auto phase = arg(v);
+    phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
+    return roundi(phase / phase_delta);
+}
+
 template<typename TRetval, typename TValue>
 static auto nearest_T(const std::vector<float>& magnitudes, const TValue& value)
 {
@@ -177,12 +203,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
     TVclComplex v;
     v.load(reinterpret_cast<const float*>(p));
 
-    // Phase is determined via arithmetic because it's equally spaced.
-    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
-    // handles cases that are close to 2PI.
-    auto phase_ = atan2(v.imag(), v.real()); // arg()
-    phase_ = if_add(phase_ < 0.0, phase_, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
-    const auto phase = roundi(phase_ / phase_delta);
+    const auto phase = ::getPhase(v, phase_delta);
 
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
@@ -196,7 +217,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
     vcl::Vec16uc results;
     for (int i = 0; i < results_.size(); i++)
     {
-        results.insert(i, results_[i]);
+        results.insert(i, gsl::narrow<uint8_t>(results_[i]));
     }
 
     auto pDest = &(*dest);

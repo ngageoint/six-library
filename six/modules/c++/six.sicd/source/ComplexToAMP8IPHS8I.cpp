@@ -83,15 +83,11 @@ inline auto GetPhase(std::complex<double> v)
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
-static inline auto get_phase_(float phase_delta, std::complex<double> v)
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
 {
     // Phase is determined via arithmetic because it's equally spaced.
     const auto phase = GetPhase(v);
     return gsl::narrow_cast<uint8_t>(std::round(phase / phase_delta));
-}
-uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
-{
-    return get_phase_(phase_delta, v);
 }
 
 template<typename TToComplexFunc>
