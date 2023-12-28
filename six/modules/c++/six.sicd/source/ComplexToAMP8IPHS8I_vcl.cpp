@@ -172,6 +172,9 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_(const six
         // the complex value onto the ray of candidate magnitudes at the selected phase.
         // i.e. dot product.
         dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
+        
+        //const auto phase_direction_ = phase_direction.extract(i);
+        //dest->amplitude = find_nearest(six::zfloat(phase_direction_.real(), phase_direction_.imag()), p[i]);
 
         //dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
 
