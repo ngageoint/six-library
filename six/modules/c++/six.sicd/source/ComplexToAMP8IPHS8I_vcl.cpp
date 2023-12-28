@@ -141,7 +141,7 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
     return retval;
 }
 
-static auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
+static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
 {
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
@@ -151,7 +151,7 @@ static auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     return nearest(magnitudes, projection);
 }
-static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_direction_real, const floatv& phase_direction_imag,
+static inline auto find_nearest(std::span<const float> magnitudes, const floatv& phase_direction_real, const floatv& phase_direction_imag,
     const zfloatv& v)
 {
     // We have to do a 1D nearest neighbor search for magnitude.
