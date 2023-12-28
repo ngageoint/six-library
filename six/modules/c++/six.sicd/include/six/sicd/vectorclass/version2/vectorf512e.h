@@ -333,10 +333,9 @@ public:
         z1 = Vec8f(f8, f9, f10, f11, f12, f13, f14, f15);
     }
     // Constructor to build from two Vec8f:
-    Vec16f(Vec8f const a0, Vec8f const a1) {
-        z0 = a0;
-        z1 = a1;
-    }
+    Vec16f(const Vec8f& a0, const Vec8f& a1) : z0(a0), z1(a1) { }
+    Vec16f(Vec8f&& a0, Vec8f&& a1) : z0(std::move(a0)), z1(std::move(a1)) { }
+
     // split into two halves
     Vec8f get_low() const {
         return z0;

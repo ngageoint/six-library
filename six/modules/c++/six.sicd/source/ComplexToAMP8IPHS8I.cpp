@@ -158,6 +158,9 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
         float y, x;
         SinCos(angle, y, x);
         phase_directions[i] = { x, y };
+
+        phase_directions_real[i] = phase_directions[i].real();
+        phase_directions_imag[i] = phase_directions[i].imag();
     }
 }
 

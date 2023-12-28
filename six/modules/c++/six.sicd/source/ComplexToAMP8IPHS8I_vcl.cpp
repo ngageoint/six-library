@@ -140,6 +140,7 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
         ));
     return retval;
 }
+
 static auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
 {
     // We have to do a 1D nearest neighbor search for magnitude.
@@ -147,6 +148,17 @@ static auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // i.e. dot product.
     const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
+    //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
+    return nearest(magnitudes, projection);
+}
+static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_direction_real, const floatv& phase_direction_imag,
+    const zfloatv& v)
+{
+    // We have to do a 1D nearest neighbor search for magnitude.
+    // But it's not the magnitude of the input complex value - it's the projection of
+    // the complex value onto the ray of candidate magnitudes at the selected phase.
+    // i.e. dot product.
+    const auto projection = (phase_direction_real * v.real()) + (phase_direction_imag * v.imag());
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     return nearest(magnitudes, projection);
 }
@@ -164,21 +176,19 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_(const six
 
     //const auto phase_direction = lookup(phase, phase_directions);
     //const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
+    const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
+    const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
+    //const auto amplitude = ::find_nearest(magnitudes, phase_direction_real, phase_direction_imag, v);
 
     // interleave() and store() is slower than an explicit loop.
     for (int i = 0; i < v.size(); i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
 
-        // We have to do a 1D nearest neighbor search for magnitude.
-        // But it's not the magnitude of the input complex value - it's the projection of
-        // the complex value onto the ray of candidate magnitudes at the selected phase.
-        // i.e. dot product.
-        dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
-        
+        //dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
         //const auto phase_direction_ = phase_direction.extract(i);
         //dest->amplitude = find_nearest(six::zfloat(phase_direction_.real(), phase_direction_.imag()), p[i]);
-
+        dest->amplitude = find_nearest(six::zfloat(phase_direction_real[i], phase_direction_imag[i]), p[i]);
         //dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
 
         ++dest;

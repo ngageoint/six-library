@@ -232,7 +232,9 @@ private:
     uint8_t getPhase(six::zfloat) const;
 
     //! Unit vector rays that represent each direction that phase can point.
-    std::array<six::zfloat, AmplitudeTableSize> phase_directions;
+    std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
+    std::array<float, AmplitudeTableSize> phase_directions_real;
+    std::array<float, AmplitudeTableSize> phase_directions_imag;
 };
 }
 }
