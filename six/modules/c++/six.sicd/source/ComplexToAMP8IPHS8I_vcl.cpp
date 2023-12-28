@@ -39,27 +39,6 @@
 #undef min
 #undef max
 
-// https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353
-/*
-I can add more detail, but be warned that my powerpoint skills aren't amazing and this is best drawn on a whiteboard or graph paper.
-The 8-bit amplitude and phase values that we're mapping to have a systematic distribution in the complex domain. Here's what I mean
-by systematic distribution:
-![radial_plot](https://user-images.githubusercontent.com/16496326/151909984-f0b0cd4f-6607-4c05-9d98-038e54118daf.png)
-
-A couple things to point out:
-- The graph only shows 16 phase angles and 7 magnitudes per angle. A more realistic plot would have 256 phase angles and 256 magnitudes per angle.
-- The `phase_direction[]` array contains a unit vector for each possible phase direction. Just the second vector is labeled in the plot.
-- The `phase_delta` is the angular difference between each `phase_direction`.
-- The `magnitudes` are the ordered set of possible magnitudes and they're identical for each phase angle.
-
-Given any complex value `V`, we can determine the nearest phase angle by computing `round(phase(V) / phase_delta)`.
-Determining the nearest magnitude value for `V` is slighly more complex:
-![dot_product](https://user-images.githubusercontent.com/16496326/151910329-bede78ff-e4cb-4d6f-93f8-fb72b66cb361.png)
-
-The complex value `V` is projected onto the nearest `phase_direction` via the dot product.
-The resulting green point is then what's used to find the nearest magnitude via binary search (`std::lower_bound`).
-*/
-
 #define VCL_NAMESPACE vcl
 #include "six/sicd/vectorclass/version2/vectorclass.h"
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
@@ -178,7 +157,6 @@ static auto nearest_T(const std::vector<float>& magnitudes, const TValue& value)
         select(it == end, prev_it,  // it == end ? prev_it  : ...
             select(v0 <=v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
         ));
-
     return retval;
 }
 inline auto nearest_(const std::vector<float>& magnitudes, const vcl::Vec4f& value)
@@ -214,23 +192,32 @@ void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_n(const si
     const auto projection = (phase_directions_.real() * v.real()) + (phase_directions_.imag() * v.imag());
     const auto nearest = nearest_(magnitudes, projection);
 
-    constexpr auto size = projection.size();
-    //constexpr auto size = TVclComplex::size();
-    for (int i = 0; i < size; i++)
+    const auto results_ = interleave(nearest, phase); // amplitude, phase
+    vcl::Vec16uc results;
+    for (int i = 0; i < results_.size(); i++)
     {
-        dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
-
-        // We have to do a 1D nearest neighbor search for magnitude.
-        // But it's not the magnitude of the input complex value - it's the projection of
-        // the complex value onto the ray of candidate magnitudes at the selected phase.
-        // i.e. dot product.
-        //dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
-        //assert(std::abs(projection[i] - std::abs(v)) < 1e-5); // TODO ???
-        //dest->amplitude = nearest(magnitudes, projection[i]);
-        dest->amplitude = nearest[i];
-
-        ++dest;
+        results.insert(i, results_[i]);
     }
+
+    auto pDest = &(*dest);
+    results.store_partial(TVclComplex::size()*2, pDest);
+
+    ////constexpr auto size = TVclComplex::size();
+    //for (int i = 0; i < size; i++)
+    //{
+    //    dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
+
+    //    // We have to do a 1D nearest neighbor search for magnitude.
+    //    // But it's not the magnitude of the input complex value - it's the projection of
+    //    // the complex value onto the ray of candidate magnitudes at the selected phase.
+    //    // i.e. dot product.
+    //    //dest->amplitude = find_nearest(magnitudes, phase_directions[dest->phase], p[i]);
+    //    //assert(std::abs(projection[i] - std::abs(v)) < 1e-5); // TODO ???
+    //    //dest->amplitude = nearest(magnitudes, projection[i]);
+    //    dest->amplitude = nearest[i];
+
+    //    ++dest;
+    //}
 }
 template <typename TInputIt, typename TOutputIt>
 void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
