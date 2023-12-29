@@ -110,18 +110,46 @@ static auto getPhase(const zfloatv& v, float phase_delta)
     return roundi(phase / phase_delta);
 }
 
+inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
+{
+    intv first = 0;
+    const intv last = gsl::narrow<int>(magnitudes.size());
+
+    auto count = last - first;
+    while (horizontal_add(count) > 0)
+    {
+        auto it = first;
+        const auto step = count / 2;
+        it += step;
+
+        auto next = it; ++next; // first = ++it;
+        auto advance = count; advance -= step + 1;  // count -= step + 1;
+
+        const auto c = vcl::lookup<six::AmplitudeTableSize>(it, magnitudes.data()); // magnituides[it]
+        const auto test = c < v;
+        it = select(test, next, it); // ++it
+        first = select(test, it, first); // first = ++it
+        count = select(test, advance, step); // count -= step + 1
+    }
+    return first;
+}
 inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 {
-    const auto begin = magnitudes.begin();
-    const auto end = magnitudes.end();
+    //const auto begin = magnitudes.begin();
+    //const auto end = magnitudes.end();
 
-    intv retval;
-    for (int i = 0; i < value.size(); i++)
-    {
-        const auto it = std::lower_bound(begin, end, value[i]);
-        const auto result = std::distance(begin, it);
-        retval.insert(i, gsl::narrow<int>(result));
-    }
+    auto retval = lower_bound_(magnitudes, value);
+
+    //intv retval_;
+    //for (int i = 0; i < value.size(); i++)
+    //{
+    //    const auto it = std::lower_bound(begin, end, value[i]);
+    //    const auto result = std::distance(begin, it);
+    //    retval_.insert(i, gsl::narrow<int>(result));
+
+    //    assert(retval[i] == retval_[i]);
+    //}
+
     return retval;
 }
 static auto nearest(std::span<const float> magnitudes, const floatv& value)
@@ -193,7 +221,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(con
     //const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
     const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
     const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
-    //const auto amplitude = ::find_nearest(magnitudes, phase_direction_real, phase_direction_imag, v);
+    const auto amplitude = ::find_nearest(magnitudes, phase_direction_real, phase_direction_imag, v);
 
     // interleave() and store() is slower than an explicit loop.
     for (int i = 0; i < v.size(); i++)
@@ -203,8 +231,8 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(con
         //dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
         //const auto phase_direction_ = phase_direction.extract(i);
         //dest->amplitude = find_nearest(six::zfloat(phase_direction_.real(), phase_direction_.imag()), p[i]);
-        dest->amplitude = find_nearest(six::zfloat(phase_direction_real[i], phase_direction_imag[i]), p[i]);
-        //dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
+        //dest->amplitude = find_nearest(six::zfloat(phase_direction_real[i], phase_direction_imag[i]), p[i]);
+        dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
 
         ++dest;
     }
