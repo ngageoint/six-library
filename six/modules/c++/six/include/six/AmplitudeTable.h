@@ -187,27 +187,22 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #endif // C++17
 #endif
 
-#ifndef SIX_sicd_has_experimental_simd
+#ifndef SIX_sicd_has_simd
     // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
     #if (__GNUC__ >= 999) && CODA_OSS_cpp20 // TODO: 11 instead of 999
         // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
-        #define SIX_sicd_has_experimental_simd 1
+        #define SIX_sicd_has_simd 1
     #else
-        #define SIX_sicd_has_experimental_simd 0
+        #define SIX_sicd_has_simd 0
     #endif // __GNUC__
 #endif
 
-#if SIX_sicd_has_VCL && SIX_sicd_has_experimental_simd
-    // This is because there is a single ComplexToAMP8IPHS8I::nearest_neighbors_unseq() method.
-    // Other than that, it should be possible to use both VCL and std::experimental::simd
-    #error "Can't enable both VCL and std::experimental::simd at the same time'"
-#endif
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    #if SIX_sicd_has_VCL || SIX_sicd_has_experimental_simd
+    #if SIX_sicd_has_VCL || SIX_sicd_has_simd
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
     #else
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
-    #endif // SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
+    #endif // SIX_sicd_have_VCL || SIX_sicd_has_simd
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
 
@@ -246,10 +241,19 @@ public:
     AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+
+    #if SIX_sicd_has_VCL
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_vcl(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     #endif
+    #if SIX_sicd_has_simd
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_simd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    #endif
+    #endif
+    
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
 
 private:

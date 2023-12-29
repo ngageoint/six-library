@@ -29,6 +29,7 @@
 #include <std/numbers>
 #include <algorithm>
 #include <functional>
+#include <stdexcept>
 
 #include <coda_oss/CPlusPlus.h>
 #if CODA_OSS_cpp17
@@ -299,6 +300,21 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     #endif
 }
 
+#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    #if SIX_sicd_has_VCL
+    return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
+    #elif SIX_sicd_has_simd
+    return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
+    #else
+    #error "Don't know how to implement nearest_neighbors_unseq()"
+    #endif
+
+    throw std::logic_error("Don't know how to implement nearest_neighbors_unseq()");
+}
+#endif
 
 template <typename TInputIt, typename TOutputIt>
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
