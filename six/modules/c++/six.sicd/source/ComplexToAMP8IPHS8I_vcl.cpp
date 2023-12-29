@@ -122,14 +122,14 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
         const auto step = count / 2;
         it += step;
 
-        auto next = it; ++next; // first = ++it;
-        auto advance = count; advance -= step + 1;  // count -= step + 1;
+        auto next = it; ++next; // ... ++it;
+        auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
         const auto c = vcl::lookup<six::AmplitudeTableSize>(it, magnitudes.data()); // magnituides[it]
         const auto test = c < v;
-        it = select(test, next, it); // ++it
-        first = select(test, it, first); // first = ++it
-        count = select(test, advance, step); // count -= step + 1
+        it = select(test, next, it); // ... ++it
+        first = select(test, it, first); // first = ...
+        count = select(test, advance, step); // count -= step + 1 <...OR...> count = step
     }
     return first;
 }
@@ -184,17 +184,7 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
     return retval;
 }
 
-static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
-{
-    // We have to do a 1D nearest neighbor search for magnitude.
-    // But it's not the magnitude of the input complex value - it's the projection of
-    // the complex value onto the ray of candidate magnitudes at the selected phase.
-    // i.e. dot product.
-    const auto projection = (phase_direction.real() * v.real()) + (phase_direction.imag() * v.imag());
-    //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    return nearest(magnitudes, projection);
-}
-static inline auto find_nearest(std::span<const float> magnitudes, const floatv& phase_direction_real, const floatv& phase_direction_imag,
+static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_direction_real, const floatv& phase_direction_imag,
     const zfloatv& v)
 {
     // We have to do a 1D nearest neighbor search for magnitude.
@@ -204,6 +194,10 @@ static inline auto find_nearest(std::span<const float> magnitudes, const floatv&
     const auto projection = (phase_direction_real * v.real()) + (phase_direction_imag * v.imag());
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     return nearest(magnitudes, projection);
+}
+static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
+{
+    return find_nearest(magnitudes, phase_direction.real(), phase_direction.imag(), v);
 }
 
 template< typename TOutputIter>
@@ -242,25 +236,30 @@ template <typename TInputIt, typename TOutputIt>
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
 {
     // The above code is simpler (no templates) if we use just a single VCL
-    // complex type: `zfloatv`.  If there is any performance differ4ence,
+    // complex type: `zfloatv`.  If there is any performance difference,
     // it will only be for extreme edge cases since the smaller types are only used
     // at the end of the loop.
     //
     // It also makes this loop simpler as we handle all non-multiples-of-8 in
     // the same way.
+    constexpr auto elements_per_iteration = 8;
+
+    // Can do these checks one-time outside of the loop
+    const auto distance = std::distance(first, last);
+
+    // First, do multiples of 8
+    const auto distance_ = distance - (distance % elements_per_iteration);
+    const auto last_ = first + distance_;
+    for (; first != last_; first += elements_per_iteration, dest += elements_per_iteration)
+    {
+        nearest_neighbors_unseq_(&(*first), dest);
+    }
+
+    // Then finish off anything left
+    assert(std::distance(first, last) < elements_per_iteration);
     for (; first != last; ++first, ++dest)
     {
-        const auto distance = std::distance(first, last);
-        assert(distance > 0); // should be out of the loop!
-        if (distance % 8 == 0)
-        {
-            nearest_neighbors_unseq_(&(*first), dest);
-            first += 7; dest += 7;
-        }
-        else
-        {
-            nearest_neighbors_seq(first, last, dest);
-        }
+        nearest_neighbors_seq(first, last, dest);
     }
 }
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_vcl(
