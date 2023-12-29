@@ -116,7 +116,7 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
     const intv last = gsl::narrow<int>(magnitudes.size());
 
     auto count = last - first;
-    while (horizontal_add(count) > 0)
+    while (horizontal_or(count > 0))
     {
         auto it = first;
         const auto step = count / 2;
