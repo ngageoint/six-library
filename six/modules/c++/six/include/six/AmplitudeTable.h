@@ -267,17 +267,14 @@ private:
         Impl(Impl&&) = delete; // implicitly deleted because of =delete for copy
         Impl& operator=(Impl&&) = delete; // implicitly deleted because of =delete for copy
 
-        template <typename TInputIt, typename TOutputIt>
-        void nearest_neighbors_seq(TInputIt first, TInputIt last, TOutputIt dest) const;
-        template <typename TInputIt, typename TOutputIt>
-        void nearest_neighbors_par(TInputIt first, TInputIt last, TOutputIt dest) const;
-        template <typename TInputIt, typename TOutputIt>
-        void nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
-        template <typename TInputIt, typename TOutputIt>
-        void nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
+        void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
-        template< typename TOutputIter>
-        void nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const;
+        void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        #endif 
 
         //! The sorted set of possible magnitudes order from small to large.
         std::array<float, AmplitudeTableSize> uncached_magnitudes;
