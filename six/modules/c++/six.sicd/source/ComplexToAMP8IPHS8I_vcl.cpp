@@ -281,7 +281,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return retval;
 }
 
-///**********************************************************************
+/**********************************************************************
 
 // This is here (instead of **ComplexToAMP8IPHS8I.cpp**) because par_unseq() might
 // need to know implementation details of _unseq()
@@ -438,6 +438,6 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 }
 #endif //  SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
-//**********************************************************************/
+**********************************************************************/
 
 #endif // SIX_sicd_have_VCL
