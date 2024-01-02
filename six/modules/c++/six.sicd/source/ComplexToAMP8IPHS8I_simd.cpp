@@ -51,6 +51,23 @@ using floatv = std::experimental::native_simd<float>;
 using intv = std::experimental::rebind_simd_t<int, floatv>;
 using zfloatv = std::array<floatv, 2>;
 
+auto& real(std::array<floatv, 2>& z)
+{
+    return z[0];
+}
+const auto& real(const std::array<floatv, 2>& z)
+{
+    return z[0];
+}
+auto& imag(std::array<floatv, 2>& z)
+{
+    return z[1];
+}
+const auto& imag(const std::array<floatv, 2>& z)
+{
+    return z[1];
+}
+
 static inline auto load(std::span<const six::zfloat> p)
 {
     const auto generate_real = [&](size_t i) {
@@ -61,8 +78,8 @@ static inline auto load(std::span<const six::zfloat> p)
     };
 
     zfloatv retval;
-    retval[0] = floatv(generate_real);
-    retval[1] = floatv(generate_imag);
+    real(retval) = floatv(generate_real);
+    imag(retval) = floatv(generate_imag);
     return retval;
 }
 
@@ -81,12 +98,26 @@ static auto getPhase(const floatv& real, const floatv& imag, float phase_delta)
     // handles cases that are close to 2PI.
     auto phase = arg(real, imag);
     where (phase < 0.0f, phase) += std::numbers::pi_v<float> * 2.0f; // Wrap from [0, 2PI]
-    return round(phase / phase_delta);
+    return static_simd_cast<intv>(round(phase / phase_delta));
 }
 static inline auto getPhase(const zfloatv& v, float phase_delta)
 {
-    return getPhase(v[0], v[1], phase_delta);
+    return getPhase(real(v), imag(v), phase_delta);
 }
+
+template<size_t N>
+static auto lookup(const intv& zindex, const std::array<float, N>& reals, const std::array<float, N>& imags)
+{
+    zfloatv retval;
+    for (size_t i = 0; i < zindex.size(); i++)
+    {
+        const auto index = zindex[i];
+        real(retval)[i] = reals[index];
+        imag(retval)[i] = imags[index];
+    }
+    return retval;
+}
+
 
 #if 0
 
@@ -186,6 +217,15 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     {
         const auto ph = getPhase(p[i]);
         assert(ph == gsl::narrow_cast<uint8_t>(phase[i]));
+    }
+
+    //     where(phase_direction_real, phase) = phase_directions_real.data();
+    const auto phase_direction = lookup<six::AmplitudeTableSize>(phase, phase_directions_real, phase_directions_imag);
+    for (size_t i = 0; i < phase.size(); i++)
+    {
+        const auto pd = phase_directions[phase[i]];
+        assert(pd.real() == real(phase_direction)[i]);
+        assert(pd.imag() == imag(phase_direction)[i]);
     }
 
     /*
