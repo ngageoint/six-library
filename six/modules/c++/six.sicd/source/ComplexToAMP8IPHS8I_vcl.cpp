@@ -65,6 +65,16 @@ using zfloatv = vcl::Complex8f;
 using floatv = vcl::Vec8f;
 using intv = vcl::Vec8i;
 
+static inline auto load(std::span<const six::zfloat> p)
+{
+    // https://en.cppreference.com/w/cpp/numeric/complex
+    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
+    // > is the real part of the complex number `p[i]`, ...
+    zfloatv retval;
+    retval.load(reinterpret_cast<const float*>(p.data()));
+    return retval;
+}
+
 // https://en.cppreference.com/w/cpp/numeric/complex/arg
 // > `std::atan2(std::imag(z), std::real(z))`
 inline auto arg(const floatv& real, const floatv& imag)
@@ -203,13 +213,14 @@ static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
-    // https://en.cppreference.com/w/cpp/numeric/complex
-    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
-    // > is the real part of the complex number `p[i]`, ...
-    zfloatv v;
-    v.load(reinterpret_cast<const float*>(p.data()));
+    const auto v = load(p);
 
     const auto phase = ::getPhase(v, phase_delta);
+    for (int i = 0; i < phase.size(); i++)
+    {
+        const auto ph = getPhase(p[i]);
+        assert(ph == gsl::narrow_cast<uint8_t>(phase[i]));
+    }
 
     //const auto phase_direction = lookup(phase, phase_directions);
     //const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
