@@ -30,15 +30,7 @@
 #include <algorithm>
 #include <functional>
 #include <type_traits>
-
-#include <coda_oss/CPlusPlus.h>
-#if CODA_OSS_cpp17
-    // <execution> is broken with the older version of GCC we're using
-    #if (__GNUC__ >= 10) || _MSC_VER
-    #include <execution>
-    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
-    #endif
-#endif
+#include <execution>
 
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
@@ -47,23 +39,14 @@
 
 #include "six/sicd/Utilities.h"
 
-#undef min
-#undef max
+#if SIX_sicd_has_simd
 
-#if SIX_sicd_has_VCL
-
-#define VCL_NAMESPACE vcl
-#if _MSC_VER
-#pragma warning(disable: 4100) // '...': unreferenced formal parameter
-#endif
-#include "six/sicd/vectorclass/version2/vectorclass.h"
-#include "six/sicd/vectorclass/version2/vectormath_trig.h"
-#include "six/sicd/vectorclass/complex/complexvec1.h"
+#include <experimental/simd>
 
 // https://en.cppreference.com/w/cpp/experimental/simd
-using zfloatv = vcl::Complex8f;
-using floatv = vcl::Vec8f;
-using intv = vcl::Vec8i;
+//using zfloatv = vcl::Complex8f;
+using floatv = native_simd<float>;
+using intv = native_simd<int>;
 
 // https://en.cppreference.com/w/cpp/numeric/complex/arg
 // > `std::atan2(std::imag(z), std::real(z))`
@@ -440,4 +423,4 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 
 **********************************************************************/
 
-#endif // SIX_sicd_have_VCL
+#endif // SIX_sicd_has_simd
