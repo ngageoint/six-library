@@ -31,6 +31,8 @@
 #include <functional>
 #include <type_traits>
 #include <execution>
+#include <array>
+#include <span>
 
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
@@ -44,9 +46,25 @@
 #include <experimental/simd>
 
 // https://en.cppreference.com/w/cpp/experimental/simd
-//using zfloatv = vcl::Complex8f;
-using floatv = native_simd<float>;
-using intv = native_simd<int>;
+using floatv = std::experimental::native_simd<float>;
+using intv = std::experimental::native_simd<int>;
+using zfloatv = std::array<floatv, 2>;
+
+static inline auto load(std::span<const six::zfloat> p)
+{
+    const auto generate_real = [&](size_t i) {
+        return p[i].real();
+    };
+    const auto generate_imag = [&](size_t i) {
+        return p[i].imag();
+    };
+
+    zfloatv retval;
+    retval[0] = floatv(generate_real);
+    retval[1] = floatv(generate_imag);
+    return retval;
+}
+
 
 // https://en.cppreference.com/w/cpp/numeric/complex/arg
 // > `std::atan2(std::imag(z), std::real(z))`
@@ -54,45 +72,23 @@ inline auto arg(const floatv& real, const floatv& imag)
 {
     return atan2(imag, real); // arg()
 }
-inline auto arg(const zfloatv& z)
-{
-    return arg(z.real(), z.imag());
-}
 
-static inline auto interleave(const intv& a, const intv& b)
-{
-    // The blend() indicies are based on one large array
-    auto index0 = vcl::blend8<0, 8, 1, 9, 2, 10, 3, 11>(a, b); // i.e., a[0], b[0], a[1], b[1], ...
-    auto index1 = vcl::blend8<4, 12, 5, 13, 6, 14, 7, 15>(a, b);
-    return vcl::Vec16i(std::move(index0), std::move(index1));
-}
-
-// There's no `vcl::lookup()` for `std::complex<T>*`, implement using floats
-template<size_t N>
-static auto lookup(const intv& zindex, const std::array<six::zfloat, N>& table_)
-{
-    const auto table = reinterpret_cast<const float*>(table_.data());
-    constexpr auto size_as_floats = N * 2; // table_t is six::zfloat
-
-    // A `six::zfloat` at *n* is at *2n* when viewed as `float`.
-    const auto real_index = zindex * 2;
-    // The imaginary part is after the real part
-    const auto imag_index = real_index + 1; // [n] is real, [n+1] is imag
-    const auto index = interleave(real_index, imag_index);
-
-    auto lookup = vcl::lookup<size_as_floats>(index, table);
-    return zfloatv(std::move(lookup));
-}
-
-static auto getPhase(const zfloatv& v, float phase_delta)
+static auto getPhase(const floatv& real, const floatv& imag, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
-    auto phase = arg(v);
-    phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
-    return roundi(phase / phase_delta);
+    auto phase = arg(real, imag);
+    static const floatv zero(0.0f);
+    //if (phase >= zero) phase += std::numbers::pi_v<float> * 2.0f; // Wrap from [0, 2PI]
+    return round(phase / phase_delta);
 }
+static auto getPhase(const zfloatv& v, float phase_delta)
+{
+    return getPhase(v[0], v[1], phase_delta);
+}
+
+#if 0
 
 inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 {
@@ -179,21 +175,20 @@ static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     return nearest(magnitudes, projection);
 }
-static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
-{
-    return find_nearest(magnitudes, phase_direction.real(), phase_direction.imag(), v);
-}
+#endif // #if 0
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
-    // https://en.cppreference.com/w/cpp/numeric/complex
-    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
-    // > is the real part of the complex number `p[i]`, ...
-    zfloatv v;
-    v.load(reinterpret_cast<const float*>(p.data()));
+    const auto v = load(p);
 
     const auto phase = ::getPhase(v, phase_delta);
+    for (size_t i = 0; i < phase.size(); i++)
+    {
+        std::clog << static_cast<int>(static_cast<uint8_t>(phase[i])) << ' ';
+    }
+    std::clog << '\n';
 
+    /*
     //const auto phase_direction = lookup(phase, phase_directions);
     //const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
     const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
@@ -214,6 +209,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
 
         ++dest;
     }
+    */
 }
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const

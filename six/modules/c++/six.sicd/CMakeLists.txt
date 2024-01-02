@@ -8,6 +8,7 @@ coda_add_module(
         source/ComplexData.cpp
         source/ComplexDataBuilder.cpp
         source/ComplexToAMP8IPHS8I.cpp
+        source/ComplexToAMP8IPHS8I_simd.cpp
         source/ComplexToAMP8IPHS8I_vcl.cpp
         source/ComplexXMLControl.cpp
         source/ComplexXMLParser.cpp
