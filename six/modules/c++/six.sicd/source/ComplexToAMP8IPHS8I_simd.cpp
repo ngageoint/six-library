@@ -47,7 +47,8 @@
 
 // https://en.cppreference.com/w/cpp/experimental/simd
 using floatv = std::experimental::native_simd<float>;
-using intv = std::experimental::native_simd<int>;
+// using doublev = std::experimental::rebind_simd_t<double, floatv>;
+using intv = std::experimental::rebind_simd_t<int, floatv>;
 using zfloatv = std::array<floatv, 2>;
 
 static inline auto load(std::span<const six::zfloat> p)
@@ -79,11 +80,10 @@ static auto getPhase(const floatv& real, const floatv& imag, float phase_delta)
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
     auto phase = arg(real, imag);
-    static const floatv zero(0.0f);
-    //if (phase >= zero) phase += std::numbers::pi_v<float> * 2.0f; // Wrap from [0, 2PI]
+    where (phase < 0.0f, phase) += std::numbers::pi_v<float> * 2.0f; // Wrap from [0, 2PI]
     return round(phase / phase_delta);
 }
-static auto getPhase(const zfloatv& v, float phase_delta)
+static inline auto getPhase(const zfloatv& v, float phase_delta)
 {
     return getPhase(v[0], v[1], phase_delta);
 }
@@ -184,9 +184,9 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     const auto phase = ::getPhase(v, phase_delta);
     for (size_t i = 0; i < phase.size(); i++)
     {
-        std::clog << static_cast<int>(static_cast<uint8_t>(phase[i])) << ' ';
+        const auto ph = getPhase(p[i]);
+        assert(ph == gsl::narrow_cast<uint8_t>(phase[i]));
     }
-    std::clog << '\n';
 
     /*
     //const auto phase_direction = lookup(phase, phase_directions);
