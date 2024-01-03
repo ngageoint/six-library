@@ -51,19 +51,19 @@ using floatv = std::experimental::native_simd<float>;
 using intv = std::experimental::rebind_simd_t<int, floatv>;
 using zfloatv = std::array<floatv, 2>;
 
-auto& real(std::array<floatv, 2>& z)
+auto& real(zfloatv& z)
 {
     return z[0];
 }
-const auto& real(const std::array<floatv, 2>& z)
+const auto& real(const zfloatv& z)
 {
     return z[0];
 }
-auto& imag(std::array<floatv, 2>& z)
+auto& imag(zfloatv& z)
 {
     return z[1];
 }
-const auto& imag(const std::array<floatv, 2>& z)
+const auto& imag(const zfloatv& z)
 {
     return z[1];
 }
@@ -97,6 +97,11 @@ inline auto arg(const floatv& real, const floatv& imag)
     return atan2(imag, real); // arg()
 }
 
+inline auto roundi(const floatv& v)
+{
+    return static_simd_cast<intv>(round(v));
+}
+
 static auto getPhase(const floatv& real, const floatv& imag, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
@@ -104,7 +109,7 @@ static auto getPhase(const floatv& real, const floatv& imag, float phase_delta)
     // handles cases that are close to 2PI.
     auto phase = arg(real, imag);
     where (phase < 0.0f, phase) += std::numbers::pi_v<float> * 2.0f; // Wrap from [0, 2PI]
-    return static_simd_cast<intv>(round(phase / phase_delta));
+    return roundi(phase / phase_delta);
 }
 static inline auto getPhase(const zfloatv& v, float phase_delta)
 {
@@ -157,20 +162,16 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 }
 inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 {
-    //const auto begin = magnitudes.begin();
-    //const auto end = magnitudes.end();
-
     auto retval = lower_bound_(magnitudes, value);
 
-    //intv retval_;
-    //for (int i = 0; i < value.size(); i++)
-    //{
-    //    const auto it = std::lower_bound(begin, end, value[i]);
-    //    const auto result = std::distance(begin, it);
-    //    retval_.insert(i, gsl::narrow<int>(result));
-
-    //    assert(retval[i] == retval_[i]);
-    //}
+    #ifndef NDEBUG // i.e., debug
+    for (int i = 0; i < value.size(); i++)
+    {
+        const auto it = std::lower_bound(magnitudes.begin(), magnitudes.end(), value[i]);
+        const auto result = gsl::narrow<int>(std::distance(magnitudes.begin(), it));
+        assert(retval[i] == result);
+    }
+    #endif
 
     return retval;
 }
@@ -205,6 +206,7 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
         ));
     return retval;
 }
+#endif // #if 0
 
 static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_direction_real, const floatv& phase_direction_imag,
     const zfloatv& v)
@@ -213,11 +215,15 @@ static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_
     // But it's not the magnitude of the input complex value - it's the projection of
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // i.e. dot product.
-    const auto projection = (phase_direction_real * v.real()) + (phase_direction_imag * v.imag());
+    const auto projection = (phase_direction_real * real(v)) + (phase_direction_imag * imag(v));
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    return nearest(magnitudes, projection);
+    //return nearest(magnitudes, projection);
+    return projection; // TODO
 }
-#endif // #if 0
+static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
+{
+    return find_nearest(magnitudes, real(phase_direction), imag(phase_direction), v);
+}
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
@@ -238,13 +244,13 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
         assert(pd.imag() == imag(phase_direction)[i]);
     }
 
-    /*
-    //const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
-    const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
-    const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
-    const auto amplitude = ::find_nearest(magnitudes, phase_direction_real, phase_direction_imag, v);
+    const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
+    for (size_t i = 0; i < amplitude.size(); i++)
+    {
+    }
 
-    // interleave() and store() is slower than an explicit loop.
+    /*
+
     auto dest = results.begin();
     for (int i = 0; i < v.size(); i++)
     {
@@ -308,164 +314,5 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     converter.impl.nearest_neighbors_unseq(inputs, sys::make_span(retval));
     return retval;
 }
-
-/**********************************************************************
-
-// This is here (instead of **ComplexToAMP8IPHS8I.cpp**) because par_unseq() might
-// need to know implementation details of _unseq()
-using input_it = std::span<const six::zfloat>::iterator;
-using output_it = std::span<six::AMP8I_PHS8I_t>::iterator;
-
-struct const_iterator final
-{
-    using Type = input_it::value_type;
-
-    using iterator_category = std::random_access_iterator_tag;
-    using value_type = std::remove_cv_t<Type>;
-    using difference_type = std::ptrdiff_t;
-    using pointer = Type*;
-    using reference = Type&;
-    using const_reference = const Type&;
-
-    input_it current_;
-
-    const_iterator() = default;
-    const_iterator(input_it it) : current_(it) {}
-
-    const_reference operator*() const noexcept
-    {
-        return *current_;
-    }
-
-    const_iterator& operator++() noexcept
-    {
-        for (ptrdiff_t i = 0; i < 8; i++)
-        {
-            ++current_;
-        }
-        return *this;
-    }
-
-    const_iterator& operator--() noexcept
-    {
-        --current_;
-        return *this;
-    }
-
-    const_iterator& operator-=(const difference_type n) noexcept
-    {
-        current_ -= n;
-        return *this;
-    }
-    const_iterator operator-(const difference_type n) const noexcept
-    {
-        auto ret = *this;
-        ret -= n;
-        return ret;
-    }
-    difference_type operator-(const const_iterator& rhs) const noexcept
-    {
-        return current_ - rhs.current_;
-    }
-
-    bool operator!=(const const_iterator& rhs) const noexcept
-    {
-        return current_ != rhs.current_;
-    }
-};
-
-struct result_wrapper final
-{
-    output_it current_;
-
-    result_wrapper& operator=(const std::vector<six::AMP8I_PHS8I_t>& values)
-    {
-        for (auto& v : values)
-        {
-            *current_ = v;
-            ++current_;
-        }
-        return *this;
-    }
-};
-
-struct iterator final
-{
-    using Type = output_it::value_type;
-
-    using iterator_category = std::random_access_iterator_tag;
-    using value_type = std::remove_cv_t<Type>;
-    using difference_type = std::ptrdiff_t;
-    using pointer = Type*;
-    using reference = Type&;
-
-    output_it current_;
-
-    iterator() = default;
-    iterator(output_it it) : current_(it) {}
-
-    result_wrapper operator*() noexcept
-    {
-        return result_wrapper{ current_};
-    }
-
-    iterator& operator++() noexcept
-    {
-        for (ptrdiff_t i = 0; i < 8; i++)
-        {
-            ++current_;
-        }
-        return *this;
-    }
-
-    iterator& operator--() noexcept
-    {
-        --current_;
-        return *this;
-    }
-
-    iterator& operator-=(const difference_type n) noexcept
-    {
-        current_ -= n;
-        return *this;
-    }
-
-    bool operator!=(const iterator& rhs) const noexcept
-    {
-        return current_ != rhs.current_;
-    }
-};
-
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
-{
-    const auto first = inputs.begin();
-    const auto last = inputs.end();
-    auto dest = results.begin();
-
-    const auto func = [&](const auto& v) {
-        std::span<const six::zfloat> values(&v, 8);
-
-        std::vector<six::AMP8I_PHS8I_t> retval(values.size());
-        nearest_neighbors_unseq(values, sys::make_span(retval));
-        return retval;
-    };
-
-    std::ignore = std::transform(std::execution::seq,
-        const_iterator{ first }, const_iterator{ last }, iterator{ dest }, func);
-}
-#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_par_unseq(inputs, sys::make_span(retval));
-    return retval;
-}
-#endif //  SIX_sicd_ComplexToAMP8IPHS8I_unseq
-
-**********************************************************************/
 
 #endif // SIX_sicd_has_simd
