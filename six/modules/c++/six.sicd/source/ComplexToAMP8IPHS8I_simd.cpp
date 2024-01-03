@@ -68,19 +68,25 @@ const auto& imag(const std::array<floatv, 2>& z)
     return z[1];
 }
 
-static inline auto load(std::span<const six::zfloat> p)
+// https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
+template<typename TGeneratorReal, typename TGeneratorImag>
+inline auto make_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag)
 {
-    const auto generate_real = [&](size_t i) {
-        return p[i].real();
-    };
-    const auto generate_imag = [&](size_t i) {
-        return p[i].imag();
-    };
-
     zfloatv retval;
     real(retval) = floatv(generate_real);
     imag(retval) = floatv(generate_imag);
     return retval;
+}
+
+static inline auto load(std::span<const six::zfloat> p)
+{
+    auto generate_real = [&](size_t i) {
+        return p[i].real();
+    };
+    auto generate_imag = [&](size_t i) {
+        return p[i].imag();
+    };
+    return make_zfloatv(generate_real, generate_imag);
 }
 
 
@@ -106,16 +112,21 @@ static inline auto getPhase(const zfloatv& v, float phase_delta)
 }
 
 template<size_t N>
-static auto lookup(const intv& zindex, const std::array<float, N>& reals, const std::array<float, N>& imags)
+static inline auto lookup(const intv& zindex, const std::array<six::zfloat, N>& phase_directions)
 {
-    zfloatv retval;
-    for (size_t i = 0; i < zindex.size(); i++)
-    {
-        const auto index = zindex[i];
-        real(retval)[i] = reals[index];
-        imag(retval)[i] = imags[index];
-    }
-    return retval;
+    // It seems that the "generator" constuctor is called with SIMD instructions.
+    // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
+    // > The calls to `generator` are unsequenced with respect to each other.
+
+    const auto generate_real = [&](size_t i) {
+        const auto i_ = zindex[i];
+        return phase_directions[i_].real();
+    };
+    const auto generate_imag = [&](size_t i) {
+        const auto i_ = zindex[i];
+        return phase_directions[i_].imag();
+    };
+    return make_zfloatv(generate_real, generate_imag);
 }
 
 
@@ -219,8 +230,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
         assert(ph == gsl::narrow_cast<uint8_t>(phase[i]));
     }
 
-    //     where(phase_direction_real, phase) = phase_directions_real.data();
-    const auto phase_direction = lookup<six::AmplitudeTableSize>(phase, phase_directions_real, phase_directions_imag);
+    const auto phase_direction = lookup<six::AmplitudeTableSize>(phase, phase_directions);
     for (size_t i = 0; i < phase.size(); i++)
     {
         const auto pd = phase_directions[phase[i]];
@@ -229,7 +239,6 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     }
 
     /*
-    //const auto phase_direction = lookup(phase, phase_directions);
     //const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
     const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
     const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
