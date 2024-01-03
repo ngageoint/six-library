@@ -45,10 +45,18 @@
 
 #include <experimental/simd>
 
+// https://en.cppreference.com/w/cpp/experimental/simd/simd_cast
+// > The TS specification is missing `simd_cast` and `static_simd_cast` overloads for `simd_mask`. ...
+namespace stdx
+{
+    using namespace std::experimental;
+    using namespace std::experimental::__proposed;
+}
+
 // https://en.cppreference.com/w/cpp/experimental/simd
-using floatv = std::experimental::native_simd<float>;
-// using doublev = std::experimental::rebind_simd_t<double, floatv>;
-using intv = std::experimental::rebind_simd_t<int, floatv>;
+using floatv = stdx::native_simd<float>;
+// using doublev = stdx::rebind_simd_t<double, floatv>;
+using intv = stdx::rebind_simd_t<int, floatv>;
 using zfloatv = std::array<floatv, 2>;
 
 auto& real(zfloatv& z)
@@ -106,6 +114,20 @@ inline auto roundi(const floatv& v) // match vcl::roundi()
     return static_simd_cast<intv>(round(v));
 }
 
+template<typename TTest, typename TResult>
+inline auto select(const TTest& test_, const TResult& t, const TResult& f)
+{
+    //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
+    const auto test = stdx::static_simd_cast<typename TResult::mask_type>(test_); // https://github.com/VcDevel/std-simd/issues/41
+
+    // https://en.cppreference.com/w/cpp/experimental/simd/where_expression
+    // > ... All other elements are left unchanged.
+    TResult retval;
+    where(test, retval) = t;
+    where(!test, retval) = f;
+    return retval;
+}
+
 static inline auto getPhase(const zfloatv& v, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
@@ -161,6 +183,19 @@ ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
     return first;
 }
 */
+template<size_t N>
+static inline auto lookup(const intv& zindex, std::span<const float> magnitudes)
+{
+    // It seems that the "generator" constuctor is called with SIMD instructions.
+    // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
+    // > The calls to `generator` are unsequenced with respect to each other.
+
+    const auto generate = [&](size_t i) {
+        const auto i_ = zindex[i];
+        return magnitudes[i_];
+    };
+    return floatv(generate);
+}
 inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 {
     intv first = 0;
@@ -176,21 +211,27 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
         auto next = it; ++next; // ... ++it;
         auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
-        const auto c = lookup<six::AmplitudeTableSize>(it, magnitudes.data()); // magnituides[it]
-        const auto test = c < v;
+        const auto c = lookup<six::AmplitudeTableSize>(it, magnitudes); // magnituides[it]
+
+        const auto test = c < v; // (c < v).__cvt(); // https://github.com/VcDevel/std-simd/issues/41
+
+        //where(test, it) = next; // ... ++it
+        //where(test, first) = it; // first = ...
+        //// count -= step + 1 <...OR...> count = step
+        //where(test, count) = advance;
+        //where(!test, count) = step;
         it = select(test, next, it); // ... ++it
         first = select(test, it, first); // first = ...
         count = select(test, advance, step); // count -= step + 1 <...OR...> count = step
     }
     return first;
 }
-#if 0
 inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 {
     auto retval = lower_bound_(magnitudes, value);
 
     #ifndef NDEBUG // i.e., debug
-    for (int i = 0; i < value.size(); i++)
+    for (size_t i = 0; i < value.size(); i++)
     {
         const auto it = std::lower_bound(magnitudes.begin(), magnitudes.end(), value[i]);
         const auto result = gsl::narrow<int>(std::distance(magnitudes.begin(), it));
@@ -217,8 +258,10 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
         return gsl::narrow<uint8_t>(distance);
     */
     const auto it = ::lower_bound(magnitudes, value);
-    const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
+    //const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
+    return it; // TODO
 
+#if 0
     const auto v0 = value - vcl::lookup<six::AmplitudeTableSize>(prev_it, magnitudes.data()); // value - *prev_it
     const auto v1 = vcl::lookup<six::AmplitudeTableSize>(it, magnitudes.data()) - value; // *it - value
     //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
@@ -231,8 +274,8 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
             select(v0 <=v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
         ));
     return retval;
-}
 #endif // #if 0
+}
 
 static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_direction_real, const floatv& phase_direction_imag,
     const zfloatv& v)
@@ -243,8 +286,7 @@ static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_
     // i.e. dot product.
     const auto projection = (phase_direction_real * real(v)) + (phase_direction_imag * imag(v));
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    //return nearest(magnitudes, projection);
-    return projection; // TODO
+    return nearest(magnitudes, projection);
 }
 static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
 {
