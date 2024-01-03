@@ -157,23 +157,20 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 }
 inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 {
-    //const auto begin = magnitudes.begin();
-    //const auto end = magnitudes.end();
-
     auto retval = lower_bound_(magnitudes, value);
 
-    //intv retval_;
-    //for (int i = 0; i < value.size(); i++)
-    //{
-    //    const auto it = std::lower_bound(begin, end, value[i]);
-    //    const auto result = std::distance(begin, it);
-    //    retval_.insert(i, gsl::narrow<int>(result));
-
-    //    assert(retval[i] == retval_[i]);
-    //}
+    #ifndef NDEBUG // i.e., debug
+    for (int i = 0; i < value.size(); i++)
+    {
+        const auto it = std::lower_bound(magnitudes.begin(), magnitudes.end(), value[i]);
+        const auto result = gsl::narrow<int>(std::distance(magnitudes.begin(), it));
+        assert(retval[i] == result);
+    }
+    #endif
 
     return retval;
 }
+
 static auto nearest(std::span<const float> magnitudes, const floatv& value)
 {
     assert(magnitudes.size() == six::AmplitudeTableSize);
@@ -213,13 +210,9 @@ static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_
     // But it's not the magnitude of the input complex value - it's the projection of
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // i.e. dot product.
-    const auto projection = (phase_direction_real * v.real()) + (phase_direction_imag * v.imag());
+    const auto projection = (phase_direction_real * real(v)) + (phase_direction_imag * imag(v));
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     return nearest(magnitudes, projection);
-}
-static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
-{
-    return find_nearest(magnitudes, real(phase_direction), imag(phase_direction), v);
 }
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
@@ -227,11 +220,6 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     const auto v = load(p);
 
     const auto phase = ::getPhase(v, phase_delta);
-    for (int i = 0; i < phase.size(); i++)
-    {
-        const auto ph = getPhase(p[i]);
-        assert(ph == gsl::narrow_cast<uint8_t>(phase[i]));
-    }
 
     const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
     const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
