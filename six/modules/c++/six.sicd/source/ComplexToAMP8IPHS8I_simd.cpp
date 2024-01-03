@@ -258,12 +258,10 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
         return gsl::narrow<uint8_t>(distance);
     */
     const auto it = ::lower_bound(magnitudes, value);
-    //const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
-    return it; // TODO
+    const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
 
-#if 0
-    const auto v0 = value - vcl::lookup<six::AmplitudeTableSize>(prev_it, magnitudes.data()); // value - *prev_it
-    const auto v1 = vcl::lookup<six::AmplitudeTableSize>(it, magnitudes.data()) - value; // *it - value
+    const auto v0 = value - lookup<six::AmplitudeTableSize>(prev_it, magnitudes); // value - *prev_it
+    const auto v1 = lookup<six::AmplitudeTableSize>(it, magnitudes) - value; // *it - value
     //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
     
     const intv end = gsl::narrow<int>(magnitudes.size());
@@ -274,7 +272,6 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
             select(v0 <=v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
         ));
     return retval;
-#endif // #if 0
 }
 
 static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_direction_real, const floatv& phase_direction_imag,
@@ -300,17 +297,24 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     const auto phase = ::getPhase(v, phase_delta);
 
     const auto phase_direction = lookup<six::AmplitudeTableSize>(phase, phase_directions);
+    #ifndef NDEBUG // i.e., debug
     for (size_t i = 0; i < phase.size(); i++)
     {
         const auto pd = phase_directions[phase[i]];
         assert(pd.real() == real(phase_direction)[i]);
         assert(pd.imag() == imag(phase_direction)[i]);
     }
+    #endif
 
     const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
+    #ifndef NDEBUG // i.e., debug
     for (size_t i = 0; i < amplitude.size(); i++)
     {
+        const auto i_ = phase[i];
+        const auto a = find_nearest(phase_directions[i_], p[i]);
+        assert(a == amplitude[i]);
     }
+    #endif
 
     /*
 
