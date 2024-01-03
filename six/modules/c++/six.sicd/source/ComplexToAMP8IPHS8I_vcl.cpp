@@ -170,6 +170,7 @@ inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 
     return retval;
 }
+
 static auto nearest(std::span<const float> magnitudes, const floatv& value)
 {
     assert(magnitudes.size() == six::AmplitudeTableSize);

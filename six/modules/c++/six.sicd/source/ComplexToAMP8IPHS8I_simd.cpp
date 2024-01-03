@@ -134,15 +134,40 @@ static inline auto lookup(const intv& zindex, const std::array<six::zfloat, N>& 
     return make_zfloatv(generate_real, generate_imag);
 }
 
-#if 0
+// https://en.cppreference.com/w/cpp/algorithm/lower_bound
+/*
+template<class ForwardIt, class T>
+ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
+{
+    ForwardIt it;
+    typename std::iterator_traits<ForwardIt>::difference_type count, step;
+    count = std::distance(first, last);
 
+    while (count > 0)
+    {
+        it = first;
+        step = count / 2;
+        std::advance(it, step);
+
+        if (*it < value)
+        {
+            first = ++it;
+            count -= step + 1;
+        }
+        else
+            count = step;
+    }
+
+    return first;
+}
+*/
 inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 {
     intv first = 0;
     const intv last = gsl::narrow<int>(magnitudes.size());
 
     auto count = last - first;
-    while (horizontal_or(count > 0))
+    while (any_of(count > 0))
     {
         auto it = first;
         const auto step = count / 2;
@@ -151,7 +176,7 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
         auto next = it; ++next; // ... ++it;
         auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
-        const auto c = vcl::lookup<six::AmplitudeTableSize>(it, magnitudes.data()); // magnituides[it]
+        const auto c = lookup<six::AmplitudeTableSize>(it, magnitudes.data()); // magnituides[it]
         const auto test = c < v;
         it = select(test, next, it); // ... ++it
         first = select(test, it, first); // first = ...
@@ -159,6 +184,7 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
     }
     return first;
 }
+#if 0
 inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 {
     auto retval = lower_bound_(magnitudes, value);
@@ -174,6 +200,7 @@ inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 
     return retval;
 }
+
 static auto nearest(std::span<const float> magnitudes, const floatv& value)
 {
     assert(magnitudes.size() == six::AmplitudeTableSize);
