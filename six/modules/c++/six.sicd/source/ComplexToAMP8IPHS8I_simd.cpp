@@ -51,19 +51,19 @@ using floatv = std::experimental::native_simd<float>;
 using intv = std::experimental::rebind_simd_t<int, floatv>;
 using zfloatv = std::array<floatv, 2>;
 
-auto& real(std::array<floatv, 2>& z)
+auto& real(zfloatv& z)
 {
     return z[0];
 }
-const auto& real(const std::array<floatv, 2>& z)
+const auto& real(const zfloatv& z)
 {
     return z[0];
 }
-auto& imag(std::array<floatv, 2>& z)
+auto& imag(zfloatv& z)
 {
     return z[1];
 }
-const auto& imag(const std::array<floatv, 2>& z)
+const auto& imag(const zfloatv& z)
 {
     return z[1];
 }
@@ -97,6 +97,11 @@ inline auto arg(const floatv& real, const floatv& imag)
     return atan2(imag, real); // arg()
 }
 
+inline auto roundi(const floatv& v)
+{
+    return static_simd_cast<intv>(round(v));
+}
+
 static auto getPhase(const floatv& real, const floatv& imag, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
@@ -104,7 +109,7 @@ static auto getPhase(const floatv& real, const floatv& imag, float phase_delta)
     // handles cases that are close to 2PI.
     auto phase = arg(real, imag);
     where (phase < 0.0f, phase) += std::numbers::pi_v<float> * 2.0f; // Wrap from [0, 2PI]
-    return static_simd_cast<intv>(round(phase / phase_delta));
+    return roundi(phase / phase_delta);
 }
 static inline auto getPhase(const zfloatv& v, float phase_delta)
 {
@@ -244,7 +249,6 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
     const auto amplitude = ::find_nearest(magnitudes, phase_direction_real, phase_direction_imag, v);
 
-    // interleave() and store() is slower than an explicit loop.
     auto dest = results.begin();
     for (int i = 0; i < v.size(); i++)
     {
