@@ -312,13 +312,18 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 {
     #if SIX_sicd_has_VCL
     return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
+
     #elif SIX_sicd_has_simd
     return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
+
+    #elif (SIX_sicd_has_ximd && CODA_OSS_DEBUG)
+    return nearest_neighbors_unseq_ximd(inputs, pAmplitudeTable);
+
     #else
     #error "Don't know how to implement nearest_neighbors_unseq()"
-    #endif
-
     throw std::logic_error("Don't know how to implement nearest_neighbors_unseq()");
+
+    #endif
 }
 #endif
 

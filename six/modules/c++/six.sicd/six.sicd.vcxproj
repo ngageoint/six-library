@@ -156,6 +156,7 @@
     <ClCompile Include="source\ComplexToAMP8IPHS8I.cpp" />
     <ClCompile Include="source\ComplexToAMP8IPHS8I_simd.cpp" />
     <ClCompile Include="source\ComplexToAMP8IPHS8I_vcl.cpp" />
+    <ClCompile Include="source\ComplexToAMP8IPHS8I_ximd.cpp" />
     <ClCompile Include="source\ComplexXMLControl.cpp" />
     <ClCompile Include="source\ComplexXMLParser.cpp" />
     <ClCompile Include="source\ComplexXMLParser040.cpp" />

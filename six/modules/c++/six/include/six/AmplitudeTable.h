@@ -197,8 +197,15 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #endif // __GNUC__
 #endif
 
+#ifndef SIX_sicd_has_ximd
+    // This is a "hacked up" version of std::experimental::simd using std::array.
+    // It's primarily for development and testing: VCL needs C++17 and
+    // std::experimental::simd is G++11/C++20.
+    #define SIX_sicd_has_ximd 1
+#endif
+
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    #if SIX_sicd_has_VCL || SIX_sicd_has_simd
+    #if SIX_sicd_has_VCL || SIX_sicd_has_simd || SIX_sicd_has_ximd
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
     #else
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
@@ -251,6 +258,9 @@ public:
     #endif
     #if SIX_sicd_has_simd
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_simd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    #endif
+    #if SIX_sicd_has_ximd
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_ximd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     #endif
     #endif
     
