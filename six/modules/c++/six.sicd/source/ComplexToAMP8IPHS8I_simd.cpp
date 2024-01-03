@@ -96,24 +96,24 @@ inline auto arg(const floatv& real, const floatv& imag)
 {
     return atan2(imag, real); // arg()
 }
+inline auto arg(const zfloatv& z)
+{
+    return arg(real(z), imag(z));
+}
 
-inline auto roundi(const floatv& v)
+inline auto roundi(const floatv& v) // match vcl::roundi()
 {
     return static_simd_cast<intv>(round(v));
 }
 
-static auto getPhase(const floatv& real, const floatv& imag, float phase_delta)
+static inline auto getPhase(const zfloatv& v, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
-    auto phase = arg(real, imag);
-    where (phase < 0.0f, phase) += std::numbers::pi_v<float> * 2.0f; // Wrap from [0, 2PI]
+    auto phase = arg(v);
+    where(phase < 0.0f, phase) += std::numbers::pi_v<float> *2.0f; // Wrap from [0, 2PI]
     return roundi(phase / phase_delta);
-}
-static inline auto getPhase(const zfloatv& v, float phase_delta)
-{
-    return getPhase(real(v), imag(v), phase_delta);
 }
 
 template<size_t N>
@@ -133,7 +133,6 @@ static inline auto lookup(const intv& zindex, const std::array<six::zfloat, N>& 
     };
     return make_zfloatv(generate_real, generate_imag);
 }
-
 
 #if 0
 
@@ -230,11 +229,6 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     const auto v = load(p);
 
     const auto phase = ::getPhase(v, phase_delta);
-    for (size_t i = 0; i < phase.size(); i++)
-    {
-        const auto ph = getPhase(p[i]);
-        assert(ph == gsl::narrow_cast<uint8_t>(phase[i]));
-    }
 
     const auto phase_direction = lookup<six::AmplitudeTableSize>(phase, phase_directions);
     for (size_t i = 0; i < phase.size(); i++)

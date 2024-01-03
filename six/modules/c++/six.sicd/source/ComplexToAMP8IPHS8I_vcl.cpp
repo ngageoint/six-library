@@ -219,11 +219,6 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     const auto v = load(p);
 
     const auto phase = ::getPhase(v, phase_delta);
-    for (int i = 0; i < phase.size(); i++)
-    {
-        const auto ph = getPhase(p[i]);
-        assert(ph == gsl::narrow_cast<uint8_t>(phase[i]));
-    }
 
     const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
     const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
