@@ -224,17 +224,20 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
     const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
     const auto amplitude = ::find_nearest(magnitudes, phase_direction_real, phase_direction_imag, v);
+    #ifndef NDEBUG // i.e., debug
+    for (int i = 0; i < amplitude.size(); i++)
+    {
+        const auto i_ = phase[i];
+        const auto a = find_nearest(phase_directions[i_], p[i]);
+        assert(a == amplitude[i]);
+    }
+    #endif
 
     // interleave() and store() is slower than an explicit loop.
     auto dest = results.begin();
     for (int i = 0; i < v.size(); i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
-
-        //dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
-        //const auto phase_direction_ = phase_direction.extract(i);
-        //dest->amplitude = find_nearest(six::zfloat(phase_direction_.real(), phase_direction_.imag()), p[i]);
-        //dest->amplitude = find_nearest(six::zfloat(phase_direction_real[i], phase_direction_imag[i]), p[i]);
         dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
 
         ++dest;
