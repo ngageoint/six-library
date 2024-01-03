@@ -316,22 +316,14 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     }
     #endif
 
-    /*
-
     auto dest = results.begin();
-    for (int i = 0; i < v.size(); i++)
+    for (size_t i = 0; i < v.size(); i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
-
-        //dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
-        //const auto phase_direction_ = phase_direction.extract(i);
-        //dest->amplitude = find_nearest(six::zfloat(phase_direction_.real(), phase_direction_.imag()), p[i]);
-        //dest->amplitude = find_nearest(six::zfloat(phase_direction_real[i], phase_direction_imag[i]), p[i]);
         dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
 
         ++dest;
     }
-    */
 }
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
