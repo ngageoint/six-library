@@ -287,8 +287,10 @@ private:
 
         //! Unit vector rays that represent each direction that phase can point.
         std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
+        #ifdef SIX_sicd_has_VCL
         std::array<float, AmplitudeTableSize> phase_directions_real;
         std::array<float, AmplitudeTableSize> phase_directions_imag;
+        #endif
     };
     Impl impl;
 };

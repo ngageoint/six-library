@@ -163,8 +163,11 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
         SinCos(angle, y, x);
         impl.phase_directions[i] = { x, y };
 
+        // Only need the parallel array when using the "vectorclass" library.
+        #ifdef SIX_sicd_has_VCL
         impl.phase_directions_real[i] = impl.phase_directions[i].real();
         impl.phase_directions_imag[i] = impl.phase_directions[i].imag();
+        #endif
     }
 }
 
