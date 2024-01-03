@@ -30,15 +30,9 @@
 #include <algorithm>
 #include <functional>
 #include <type_traits>
-
-#include <coda_oss/CPlusPlus.h>
-#if CODA_OSS_cpp17
-    // <execution> is broken with the older version of GCC we're using
-    #if (__GNUC__ >= 10) || _MSC_VER
-    #include <execution>
-    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
-    #endif
-#endif
+#include <execution>
+#include <array>
+#include <span>
 
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
@@ -47,42 +41,62 @@
 
 #include "six/sicd/Utilities.h"
 
-#undef min
-#undef max
+#if SIX_sicd_has_simd
 
-#if SIX_sicd_has_VCL
+#include <experimental/simd>
 
-#define VCL_NAMESPACE vcl
-#if _MSC_VER
-#pragma warning(disable: 4100) // '...': unreferenced formal parameter
-#endif
-#include "six/sicd/vectorclass/version2/vectorclass.h"
-#include "six/sicd/vectorclass/version2/vectormath_trig.h"
-#include "six/sicd/vectorclass/complex/complexvec1.h"
+// https://en.cppreference.com/w/cpp/experimental/simd/simd_cast
+// > The TS specification is missing `simd_cast` and `static_simd_cast` overloads for `simd_mask`. ...
+namespace stdx
+{
+    using namespace std::experimental;
+    using namespace std::experimental::__proposed;
+}
 
 // https://en.cppreference.com/w/cpp/experimental/simd
-using zfloatv = vcl::Complex8f;
-using floatv = vcl::Vec8f;
-using intv = vcl::Vec8i;
+using floatv = stdx::native_simd<float>;
+// using doublev = stdx::rebind_simd_t<double, floatv>;
+using intv = stdx::rebind_simd_t<int, floatv>;
+using zfloatv = std::array<floatv, 2>;
 
-auto real(const zfloatv& z)
+auto& real(zfloatv& z)
 {
-    return z.real();
+    return z[0];
 }
-auto imag(const zfloatv& z)
+const auto& real(const zfloatv& z)
 {
-    return z.imag();
+    return z[0];
+}
+auto& imag(zfloatv& z)
+{
+    return z[1];
+}
+const auto& imag(const zfloatv& z)
+{
+    return z[1];
+}
+
+// https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
+template<typename TGeneratorReal, typename TGeneratorImag>
+inline auto make_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag)
+{
+    zfloatv retval;
+    real(retval) = floatv(generate_real);
+    imag(retval) = floatv(generate_imag);
+    return retval;
 }
 
 static inline auto load(std::span<const six::zfloat> p)
 {
-    // https://en.cppreference.com/w/cpp/numeric/complex
-    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
-    // > is the real part of the complex number `p[i]`, ...
-    zfloatv retval;
-    retval.load(reinterpret_cast<const float*>(p.data()));
-    return retval;
+    auto generate_real = [&](size_t i) {
+        return p[i].real();
+    };
+    auto generate_imag = [&](size_t i) {
+        return p[i].imag();
+    };
+    return make_zfloatv(generate_real, generate_imag);
 }
+
 
 // https://en.cppreference.com/w/cpp/numeric/complex/arg
 // > `std::atan2(std::imag(z), std::real(z))`
@@ -95,14 +109,51 @@ inline auto arg(const zfloatv& z)
     return arg(real(z), imag(z));
 }
 
-static auto getPhase(const zfloatv& v, float phase_delta)
+inline auto roundi(const floatv& v) // match vcl::roundi()
+{
+    return static_simd_cast<intv>(round(v));
+}
+
+template<typename TTest, typename TResult>
+inline auto select(const TTest& test_, const TResult& t, const TResult& f)
+{
+    //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
+    const auto test = stdx::static_simd_cast<typename TResult::mask_type>(test_); // https://github.com/VcDevel/std-simd/issues/41
+
+    // https://en.cppreference.com/w/cpp/experimental/simd/where_expression
+    // > ... All other elements are left unchanged.
+    TResult retval;
+    where(test, retval) = t;
+    where(!test, retval) = f;
+    return retval;
+}
+
+static inline auto getPhase(const zfloatv& v, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
     auto phase = arg(v);
-    phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
+    where(phase < 0.0f, phase) += std::numbers::pi_v<float> *2.0f; // Wrap from [0, 2PI]
     return roundi(phase / phase_delta);
+}
+
+template<size_t N>
+static inline auto lookup(const intv& zindex, const std::array<six::zfloat, N>& phase_directions)
+{
+    // It seems that the "generator" constuctor is called with SIMD instructions.
+    // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
+    // > The calls to `generator` are unsequenced with respect to each other.
+
+    const auto generate_real = [&](size_t i) {
+        const auto i_ = zindex[i];
+        return phase_directions[i_].real();
+    };
+    const auto generate_imag = [&](size_t i) {
+        const auto i_ = zindex[i];
+        return phase_directions[i_].imag();
+    };
+    return make_zfloatv(generate_real, generate_imag);
 }
 
 // https://en.cppreference.com/w/cpp/algorithm/lower_bound
@@ -132,13 +183,26 @@ ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
     return first;
 }
 */
+template<size_t N>
+static inline auto lookup(const intv& zindex, std::span<const float> magnitudes)
+{
+    // It seems that the "generator" constuctor is called with SIMD instructions.
+    // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
+    // > The calls to `generator` are unsequenced with respect to each other.
+
+    const auto generate = [&](size_t i) {
+        const auto i_ = zindex[i];
+        return magnitudes[i_];
+    };
+    return floatv(generate);
+}
 inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 {
     intv first = 0;
     const intv last = gsl::narrow<int>(magnitudes.size());
 
     auto count = last - first;
-    while (horizontal_or(count > 0))
+    while (any_of(count > 0))
     {
         auto it = first;
         const auto step = count / 2;
@@ -147,8 +211,15 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
         auto next = it; ++next; // ... ++it;
         auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
-        const auto c = vcl::lookup<six::AmplitudeTableSize>(it, magnitudes.data()); // magnituides[it]
-        const auto test = c < v;
+        const auto c = lookup<six::AmplitudeTableSize>(it, magnitudes); // magnituides[it]
+
+        const auto test = c < v; // (c < v).__cvt(); // https://github.com/VcDevel/std-simd/issues/41
+
+        //where(test, it) = next; // ... ++it
+        //where(test, first) = it; // first = ...
+        //// count -= step + 1 <...OR...> count = step
+        //where(test, count) = advance;
+        //where(!test, count) = step;
         it = select(test, next, it); // ... ++it
         first = select(test, it, first); // first = ...
         count = select(test, advance, step); // count -= step + 1 <...OR...> count = step
@@ -160,7 +231,7 @@ inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
     auto retval = lower_bound_(magnitudes, value);
 
     #ifndef NDEBUG // i.e., debug
-    for (int i = 0; i < value.size(); i++)
+    for (size_t i = 0; i < value.size(); i++)
     {
         const auto it = std::lower_bound(magnitudes.begin(), magnitudes.end(), value[i]);
         const auto result = gsl::narrow<int>(std::distance(magnitudes.begin(), it));
@@ -189,8 +260,8 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
     const auto it = ::lower_bound(magnitudes, value);
     const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
 
-    const auto v0 = value - vcl::lookup<six::AmplitudeTableSize>(prev_it, magnitudes.data()); // value - *prev_it
-    const auto v1 = vcl::lookup<six::AmplitudeTableSize>(it, magnitudes.data()) - value; // *it - value
+    const auto v0 = value - lookup<six::AmplitudeTableSize>(prev_it, magnitudes); // value - *prev_it
+    const auto v1 = lookup<six::AmplitudeTableSize>(it, magnitudes) - value; // *it - value
     //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
     
     const intv end = gsl::narrow<int>(magnitudes.size());
@@ -214,6 +285,10 @@ static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     return nearest(magnitudes, projection);
 }
+static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv& phase_direction, const zfloatv& v)
+{
+    return find_nearest(magnitudes, real(phase_direction), imag(phase_direction), v);
+}
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
@@ -221,11 +296,19 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
 
     const auto phase = ::getPhase(v, phase_delta);
 
-    const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
-    const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
-    const auto amplitude = ::find_nearest(magnitudes, phase_direction_real, phase_direction_imag, v);
+    const auto phase_direction = lookup<six::AmplitudeTableSize>(phase, phase_directions);
     #ifndef NDEBUG // i.e., debug
-    for (int i = 0; i < amplitude.size(); i++)
+    for (size_t i = 0; i < phase.size(); i++)
+    {
+        const auto pd = phase_directions[phase[i]];
+        assert(pd.real() == real(phase_direction)[i]);
+        assert(pd.imag() == imag(phase_direction)[i]);
+    }
+    #endif
+
+    const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
+    #ifndef NDEBUG // i.e., debug
+    for (size_t i = 0; i < amplitude.size(); i++)
     {
         const auto i_ = phase[i];
         const auto a = find_nearest(phase_directions[i_], p[i]);
@@ -233,9 +316,8 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     }
     #endif
 
-    // interleave() and store() is slower than an explicit loop.
     auto dest = results.begin();
-    for (int i = 0; i < v.size(); i++)
+    for (size_t i = 0; i < v.size(); i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
         dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
@@ -292,163 +374,4 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return retval;
 }
 
-/**********************************************************************
-
-// This is here (instead of **ComplexToAMP8IPHS8I.cpp**) because par_unseq() might
-// need to know implementation details of _unseq()
-using input_it = std::span<const six::zfloat>::iterator;
-using output_it = std::span<six::AMP8I_PHS8I_t>::iterator;
-
-struct const_iterator final
-{
-    using Type = input_it::value_type;
-
-    using iterator_category = std::random_access_iterator_tag;
-    using value_type = std::remove_cv_t<Type>;
-    using difference_type = std::ptrdiff_t;
-    using pointer = Type*;
-    using reference = Type&;
-    using const_reference = const Type&;
-
-    input_it current_;
-
-    const_iterator() = default;
-    const_iterator(input_it it) : current_(it) {}
-
-    const_reference operator*() const noexcept
-    {
-        return *current_;
-    }
-
-    const_iterator& operator++() noexcept
-    {
-        for (ptrdiff_t i = 0; i < 8; i++)
-        {
-            ++current_;
-        }
-        return *this;
-    }
-
-    const_iterator& operator--() noexcept
-    {
-        --current_;
-        return *this;
-    }
-
-    const_iterator& operator-=(const difference_type n) noexcept
-    {
-        current_ -= n;
-        return *this;
-    }
-    const_iterator operator-(const difference_type n) const noexcept
-    {
-        auto ret = *this;
-        ret -= n;
-        return ret;
-    }
-    difference_type operator-(const const_iterator& rhs) const noexcept
-    {
-        return current_ - rhs.current_;
-    }
-
-    bool operator!=(const const_iterator& rhs) const noexcept
-    {
-        return current_ != rhs.current_;
-    }
-};
-
-struct result_wrapper final
-{
-    output_it current_;
-
-    result_wrapper& operator=(const std::vector<six::AMP8I_PHS8I_t>& values)
-    {
-        for (auto& v : values)
-        {
-            *current_ = v;
-            ++current_;
-        }
-        return *this;
-    }
-};
-
-struct iterator final
-{
-    using Type = output_it::value_type;
-
-    using iterator_category = std::random_access_iterator_tag;
-    using value_type = std::remove_cv_t<Type>;
-    using difference_type = std::ptrdiff_t;
-    using pointer = Type*;
-    using reference = Type&;
-
-    output_it current_;
-
-    iterator() = default;
-    iterator(output_it it) : current_(it) {}
-
-    result_wrapper operator*() noexcept
-    {
-        return result_wrapper{ current_};
-    }
-
-    iterator& operator++() noexcept
-    {
-        for (ptrdiff_t i = 0; i < 8; i++)
-        {
-            ++current_;
-        }
-        return *this;
-    }
-
-    iterator& operator--() noexcept
-    {
-        --current_;
-        return *this;
-    }
-
-    iterator& operator-=(const difference_type n) noexcept
-    {
-        current_ -= n;
-        return *this;
-    }
-
-    bool operator!=(const iterator& rhs) const noexcept
-    {
-        return current_ != rhs.current_;
-    }
-};
-
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
-{
-    const auto first = inputs.begin();
-    const auto last = inputs.end();
-    auto dest = results.begin();
-
-    const auto func = [&](const auto& v) {
-        std::span<const six::zfloat> values(&v, 8);
-
-        std::vector<six::AMP8I_PHS8I_t> retval(values.size());
-        nearest_neighbors_unseq(values, sys::make_span(retval));
-        return retval;
-    };
-
-    std::ignore = std::transform(std::execution::seq,
-        const_iterator{ first }, const_iterator{ last }, iterator{ dest }, func);
-}
-#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_par_unseq(inputs, sys::make_span(retval));
-    return retval;
-}
-#endif //  SIX_sicd_ComplexToAMP8IPHS8I_unseq
-
-**********************************************************************/
-
-#endif // SIX_sicd_have_VCL
+#endif // SIX_sicd_has_simd

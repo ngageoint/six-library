@@ -171,7 +171,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     uint8_t phase;
 };
 
-// Control a few details of the ComplexToAMP8IPHS8I implementation, espeically "unseq" (i.e., SIMD).
+// Control a few details of the ComplexToAMP8IPHS8I implementation, especially "unseq" (i.e., SIMD).
 #ifndef SIX_sicd_has_VCL
     // Do we have the "vectorclass" library? https://github.com/vectorclass/version2
     #if !CODA_OSS_cpp17 // VCL needs C++17
@@ -187,28 +187,22 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #endif // C++17
 #endif
 
-#ifndef SIX_sicd_has_experimental_simd
+#ifndef SIX_sicd_has_simd
     // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
     #if (__GNUC__ >= 11) && CODA_OSS_cpp20
         // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
-        #include <experimental/simd>
-        #define SIX_sicd_has_experimental_simd 1
+        #define SIX_sicd_has_simd 1
     #else
-        #define SIX_sicd_has_experimental_simd 0
+        #define SIX_sicd_has_simd 0
     #endif // __GNUC__
 #endif
 
-#if SIX_sicd_has_VCL && SIX_sicd_has_experimental_simd
-    // This is because there is a single ComplexToAMP8IPHS8I::nearest_neighbors_unseq() method.
-    // Other than that, it should be possible to use both VCL and std::experimental::simd
-    #error "Can't enable both VCL and std::experimental::simd at the same time'"
-#endif
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    #if SIX_sicd_has_VCL || SIX_sicd_has_experimental_simd
+    #if SIX_sicd_has_VCL || SIX_sicd_has_simd
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
     #else
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
-    #endif // SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
+    #endif // SIX_sicd_have_VCL || SIX_sicd_has_simd
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
 
@@ -247,38 +241,58 @@ public:
     AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+
+    #if SIX_sicd_has_VCL
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_vcl(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     #endif
+    #if SIX_sicd_has_simd
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_simd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    #endif
+    #endif
+    
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
 
 private:
-    template <typename TInputIt, typename TOutputIt>
-    void nearest_neighbors_seq(TInputIt first, TInputIt last, TOutputIt dest) const;
-    template <typename TInputIt, typename TOutputIt>
-    void nearest_neighbors_par(TInputIt first, TInputIt last, TOutputIt dest) const;
-    template <typename TInputIt, typename TOutputIt>
-    void nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
-    template <typename TInputIt, typename TOutputIt>
-    void nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
+    struct Impl final
+    {
+        const ComplexToAMP8IPHS8I& converter;
+        Impl(const ComplexToAMP8IPHS8I& c) : converter(c) {}
+        ~Impl() = default;
+        Impl(const Impl&) = delete;
+        Impl& operator=(const Impl&) = delete;
+        Impl(Impl&&) = delete; // implicitly deleted because of =delete for copy
+        Impl& operator=(Impl&&) = delete; // implicitly deleted because of =delete for copy
 
-    template< typename TOutputIter>
-    void nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const;
+        void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
-    //! The sorted set of possible magnitudes order from small to large.
-    std::array<float, AmplitudeTableSize> uncached_magnitudes; // Order is important! This must be ...
-    std::span<const float> magnitudes; // ... before this.
-    uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
+        void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        #endif 
 
-    //! The difference in phase angle between two UINT phase values.
-    float phase_delta;
-    uint8_t getPhase(six::zfloat) const;
+        //! The sorted set of possible magnitudes order from small to large.
+        std::array<float, AmplitudeTableSize> uncached_magnitudes;
+        std::span<const float> magnitudes;
+        uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
 
-    //! Unit vector rays that represent each direction that phase can point.
-    std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
-    std::array<float, AmplitudeTableSize> phase_directions_real;
-    std::array<float, AmplitudeTableSize> phase_directions_imag;
+        //! The difference in phase angle between two UINT phase values.
+        float phase_delta;
+        uint8_t getPhase(six::zfloat) const;
+
+        //! Unit vector rays that represent each direction that phase can point.
+        std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
+        #ifdef SIX_sicd_has_VCL
+        std::array<float, AmplitudeTableSize> phase_directions_real;
+        std::array<float, AmplitudeTableSize> phase_directions_imag;
+        #endif
+    };
+    Impl impl;
 };
 }
 }
