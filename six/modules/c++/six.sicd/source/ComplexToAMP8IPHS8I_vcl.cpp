@@ -65,6 +65,25 @@ using zfloatv = vcl::Complex8f;
 using floatv = vcl::Vec8f;
 using intv = vcl::Vec8i;
 
+auto real(const zfloatv& z)
+{
+    return z.real();
+}
+auto imag(const zfloatv& z)
+{
+    return z.imag();
+}
+
+static inline auto load(std::span<const six::zfloat> p)
+{
+    // https://en.cppreference.com/w/cpp/numeric/complex
+    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
+    // > is the real part of the complex number `p[i]`, ...
+    zfloatv retval;
+    retval.load(reinterpret_cast<const float*>(p.data()));
+    return retval;
+}
+
 // https://en.cppreference.com/w/cpp/numeric/complex/arg
 // > `std::atan2(std::imag(z), std::real(z))`
 inline auto arg(const floatv& real, const floatv& imag)
@@ -73,32 +92,7 @@ inline auto arg(const floatv& real, const floatv& imag)
 }
 inline auto arg(const zfloatv& z)
 {
-    return arg(z.real(), z.imag());
-}
-
-static inline auto interleave(const intv& a, const intv& b)
-{
-    // The blend() indicies are based on one large array
-    auto index0 = vcl::blend8<0, 8, 1, 9, 2, 10, 3, 11>(a, b); // i.e., a[0], b[0], a[1], b[1], ...
-    auto index1 = vcl::blend8<4, 12, 5, 13, 6, 14, 7, 15>(a, b);
-    return vcl::Vec16i(std::move(index0), std::move(index1));
-}
-
-// There's no `vcl::lookup()` for `std::complex<T>*`, implement using floats
-template<size_t N>
-static auto lookup(const intv& zindex, const std::array<six::zfloat, N>& table_)
-{
-    const auto table = reinterpret_cast<const float*>(table_.data());
-    constexpr auto size_as_floats = N * 2; // table_t is six::zfloat
-
-    // A `six::zfloat` at *n* is at *2n* when viewed as `float`.
-    const auto real_index = zindex * 2;
-    // The imaginary part is after the real part
-    const auto imag_index = real_index + 1; // [n] is real, [n+1] is imag
-    const auto index = interleave(real_index, imag_index);
-
-    auto lookup = vcl::lookup<size_as_floats>(index, table);
-    return zfloatv(std::move(lookup));
+    return arg(real(z), imag(z));
 }
 
 static auto getPhase(const zfloatv& v, float phase_delta)
@@ -111,6 +105,33 @@ static auto getPhase(const zfloatv& v, float phase_delta)
     return roundi(phase / phase_delta);
 }
 
+// https://en.cppreference.com/w/cpp/algorithm/lower_bound
+/*
+template<class ForwardIt, class T>
+ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
+{
+    ForwardIt it;
+    typename std::iterator_traits<ForwardIt>::difference_type count, step;
+    count = std::distance(first, last);
+
+    while (count > 0)
+    {
+        it = first;
+        step = count / 2;
+        std::advance(it, step);
+
+        if (*it < value)
+        {
+            first = ++it;
+            count -= step + 1;
+        }
+        else
+            count = step;
+    }
+
+    return first;
+}
+*/
 inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 {
     intv first = 0;
@@ -136,23 +157,20 @@ inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 }
 inline auto lower_bound(std::span<const float> magnitudes, const floatv& value)
 {
-    //const auto begin = magnitudes.begin();
-    //const auto end = magnitudes.end();
-
     auto retval = lower_bound_(magnitudes, value);
 
-    //intv retval_;
-    //for (int i = 0; i < value.size(); i++)
-    //{
-    //    const auto it = std::lower_bound(begin, end, value[i]);
-    //    const auto result = std::distance(begin, it);
-    //    retval_.insert(i, gsl::narrow<int>(result));
-
-    //    assert(retval[i] == retval_[i]);
-    //}
+    #ifndef NDEBUG // i.e., debug
+    for (int i = 0; i < value.size(); i++)
+    {
+        const auto it = std::lower_bound(magnitudes.begin(), magnitudes.end(), value[i]);
+        const auto result = gsl::narrow<int>(std::distance(magnitudes.begin(), it));
+        assert(retval[i] == result);
+    }
+    #endif
 
     return retval;
 }
+
 static auto nearest(std::span<const float> magnitudes, const floatv& value)
 {
     assert(magnitudes.size() == six::AmplitudeTableSize);
@@ -192,7 +210,7 @@ static auto find_nearest(std::span<const float> magnitudes, const floatv& phase_
     // But it's not the magnitude of the input complex value - it's the projection of
     // the complex value onto the ray of candidate magnitudes at the selected phase.
     // i.e. dot product.
-    const auto projection = (phase_direction_real * v.real()) + (phase_direction_imag * v.imag());
+    const auto projection = (phase_direction_real * real(v)) + (phase_direction_imag * imag(v));
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     return nearest(magnitudes, projection);
 }
@@ -203,30 +221,27 @@ static inline auto find_nearest(std::span<const float> magnitudes, const zfloatv
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
-    // https://en.cppreference.com/w/cpp/numeric/complex
-    // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
-    // > is the real part of the complex number `p[i]`, ...
-    zfloatv v;
-    v.load(reinterpret_cast<const float*>(p.data()));
+    const auto v = load(p);
 
     const auto phase = ::getPhase(v, phase_delta);
 
-    //const auto phase_direction = lookup(phase, phase_directions);
-    //const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
     const auto phase_direction_real = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_real.data());
     const auto phase_direction_imag = vcl::lookup<six::AmplitudeTableSize>(phase, phase_directions_imag.data());
     const auto amplitude = ::find_nearest(magnitudes, phase_direction_real, phase_direction_imag, v);
+    #ifndef NDEBUG // i.e., debug
+    for (int i = 0; i < amplitude.size(); i++)
+    {
+        const auto i_ = phase[i];
+        const auto a = find_nearest(phase_directions[i_], p[i]);
+        assert(a == amplitude[i]);
+    }
+    #endif
 
     // interleave() and store() is slower than an explicit loop.
     auto dest = results.begin();
     for (int i = 0; i < v.size(); i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
-
-        //dest->amplitude = find_nearest(phase_directions[dest->phase], p[i]);
-        //const auto phase_direction_ = phase_direction.extract(i);
-        //dest->amplitude = find_nearest(six::zfloat(phase_direction_.real(), phase_direction_.imag()), p[i]);
-        //dest->amplitude = find_nearest(six::zfloat(phase_direction_real[i], phase_direction_imag[i]), p[i]);
         dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
 
         ++dest;

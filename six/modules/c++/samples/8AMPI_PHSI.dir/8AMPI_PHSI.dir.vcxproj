@@ -66,7 +66,6 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,7 +91,6 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,9 +132,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\six.sicd\six.sicd.vcxproj">
       <Project>{34ac2314-fbd1-42ad-aaf4-0cebc6bf737e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\six.sidd\six.sidd.vcxproj">
-      <Project>{ddc587c2-53ba-44a9-94e7-07be52af3d0b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\six\six.vcxproj">
       <Project>{62aad4dd-35ba-41a0-8263-1f4dfd755689}</Project>

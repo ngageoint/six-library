@@ -163,8 +163,11 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
         SinCos(angle, y, x);
         impl.phase_directions[i] = { x, y };
 
+        // Only need the parallel array when using the "vectorclass" library.
+        #ifdef SIX_sicd_has_VCL
         impl.phase_directions_real[i] = impl.phase_directions[i].real();
         impl.phase_directions_imag[i] = impl.phase_directions[i].imag();
+        #endif
     }
 }
 
@@ -273,7 +276,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par(std::s
     constexpr auto default_cutoff = (dimension * dimension) * 4;
     const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
 
-    const auto transform_f = [&](const TInputIt first1, const TInputIt last1, TOutputIt d_first)
+    const auto transform_f = [&](auto first1, auto last1, auto d_first)
     {
         return std::transform(first1, last1, d_first, nearest_neighbor);
     };
@@ -302,6 +305,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return nearest_neighbors_par(inputs, pAmplitudeTable);
     #endif
 }
+#endif //  SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
@@ -309,13 +313,18 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 {
     #if SIX_sicd_has_VCL
     return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
+
     #elif SIX_sicd_has_simd
     return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
+
+    #elif SIX_sicd_has_ximd
+    return nearest_neighbors_unseq_ximd(inputs, pAmplitudeTable);
+
     #else
     #error "Don't know how to implement nearest_neighbors_unseq()"
-    #endif
-
     throw std::logic_error("Don't know how to implement nearest_neighbors_unseq()");
+
+    #endif
 }
 #endif
 
