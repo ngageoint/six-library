@@ -305,7 +305,6 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return nearest_neighbors_par(inputs, pAmplitudeTable);
     #endif
 }
-#endif //  SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
@@ -326,7 +325,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 
     #endif
 }
-#endif
+#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
 //template <typename TInputIt, typename TOutputIt>
 //void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const
