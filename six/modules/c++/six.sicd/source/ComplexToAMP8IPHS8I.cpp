@@ -316,7 +316,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     #elif SIX_sicd_has_simd
     return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
 
-    #elif (SIX_sicd_has_ximd && CODA_OSS_DEBUG)
+    #elif SIX_sicd_has_ximd
     return nearest_neighbors_unseq_ximd(inputs, pAmplitudeTable);
 
     #else

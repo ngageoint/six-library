@@ -48,8 +48,12 @@ using zfloat = six::zfloat;
 #endif
 #include <sys/Ximd.h>
 
-using floatv = sys::Ximd<float>;
-using intv = sys::Ximd<int>;
+template<typename T>
+using simd = sys::ximd::Ximd<T>;
+using intv = simd<int>;
+using floatv = simd<float>;
+using intv_mask = sys::ximd::ximd_mask;
+using floatv_mask = sys::ximd::ximd_mask;
 
 // Manage a SIMD complex as an array of two SIMDs
 using zfloatv = std::array<floatv, 2>;
@@ -80,7 +84,7 @@ static inline auto arg(const zfloatv& z)
 {
     // https://en.cppreference.com/w/cpp/numeric/complex/arg
     // > `std::atan2(std::imag(z), std::real(z))`
-    return atan2(real(z), imag(z));  // arg()
+    return atan2(imag(z), real(z));  // arg()
 }
 
 template <typename TGeneratorReal, typename TGeneratorImag>
@@ -98,7 +102,7 @@ static inline auto make_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&&
 template <typename T>
 static inline auto copy_from(std::span<const T> p)
 {
-    sys::Ximd<T> retval;
+    simd<T> retval;
     assert(p.size() == retval.size());
     retval.copy_from(p.data());
     return retval;
@@ -111,9 +115,9 @@ static inline auto copy_from(std::span<const zfloat> p)
 }
 
 template<typename T>
-static inline auto copy_to(const sys::Ximd<T>& v)
+static inline auto copy_to(const simd<T>& v)
 {
-    std::vector<typename sys::Ximd<T>::value_type> retval(v.size());
+    std::vector<typename simd<T>::value_type> retval(v.size());
     v.copy_to(retval.data());
     return retval;
 }
@@ -135,8 +139,8 @@ static inline auto roundi(const floatv& v)  // match vcl::roundi()
     return intv(generate_roundi);
 }
 
-template<typename TResult>
-static inline auto select(const sys::ximd_mask& test, const TResult& t, const TResult& f)
+template<typename TTest, typename TResult>
+static inline auto select(const TTest& test, const TResult& t, const TResult& f)
 {
     TResult retval;
     for (size_t i = 0; i < test.size(); i++)
@@ -146,7 +150,7 @@ static inline auto select(const sys::ximd_mask& test, const TResult& t, const TR
     return retval;
 }
 
-static auto if_add(const sys::ximd_mask& m, const floatv& v, typename floatv::value_type c)
+static auto if_add(const floatv_mask& m, const floatv& v, typename floatv::value_type c)
 {
     // phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
     const auto generate_add = [&](size_t i) {
@@ -210,16 +214,17 @@ ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
     return first;
 }
 */
-template<size_t N>
-static inline auto lookup(const intv& zindex, std::span<const float> magnitudes)
+static auto lookup(const intv& zindex, std::span<const float> magnitudes)
 {
-    // It seems that the "generator" constuctor is called with SIMD instructions.
-    // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
-    // > The calls to `generator` are unsequenced with respect to each other.
-
     const auto generate = [&](size_t i) {
         const auto i_ = zindex[i];
-        return magnitudes[i_];
+
+        // The index may be out of range. This is expected because `i` might be "don't care."
+        if ((i_ >= 0) && (i_ < std::ssize(magnitudes)))
+        {
+            return magnitudes[i_];
+        }
+        return NAN; // propogate "don't care"
     };
     return floatv(generate);
 }
@@ -238,7 +243,7 @@ static auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
         auto next = it; ++next; // ... ++it;
         auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
-        const auto c = lookup<six::AmplitudeTableSize>(it, magnitudes); // magnituides[it]
+        const auto c = lookup(it, magnitudes); // magnituides[it]
 
         const auto test = c < v; // (c < v).__cvt(); // https://github.com/VcDevel/std-simd/issues/41
 
@@ -287,8 +292,8 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
     const auto it = lower_bound(magnitudes, value);
     const auto prev_it = it - 1;  // const auto prev_it = std::prev(it);
 
-    const auto v0 = value - lookup<six::AmplitudeTableSize>(prev_it, magnitudes); // value - *prev_it
-    const auto v1 = lookup<six::AmplitudeTableSize>(it, magnitudes) - value; // *it - value
+    const auto v0 = value - lookup(prev_it, magnitudes); // value - *prev_it
+    const auto v1 = lookup(it, magnitudes) - value; // *it - value
     //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
 
     intv end; end = gsl::narrow<int>(magnitudes.size());
@@ -359,7 +364,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std
     #endif
 
     auto dest = results.begin();
-    for (size_t i = 0; i < v.size(); i++)
+    for (size_t i = 0; i < size(v); i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
         dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
@@ -381,7 +386,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
     //
     // It also makes this loop simpler as we handle all non-multiples-of-8 in
     // the same way.
-    constexpr auto elements_per_iteration = sys::ximd_mask::size();
+    constexpr auto elements_per_iteration = floatv_mask::size();
 
     // Can do these checks one-time outside of the loop
     const auto distance = std::distance(first, last);

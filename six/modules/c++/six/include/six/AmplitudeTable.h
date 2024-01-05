@@ -35,6 +35,7 @@
 
 #include <import/except.h>
 #include <coda_oss/CPlusPlus.h>
+#include <sys/Dbg.h>
 
 #include <nitf/LookupTable.hpp>
 #include <scene/sys_Conf.h>
@@ -201,7 +202,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     // This is a "hacked up" version of std::experimental::simd using std::array.
     // It's primarily for development and testing: VCL needs C++17 and
     // std::experimental::simd is G++11/C++20.
-    #define SIX_sicd_has_ximd 1
+    #define SIX_sicd_has_ximd CODA_OSS_DEBUG
 #endif
 
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq

@@ -39,8 +39,12 @@
 
 using zfloat = std::complex<float>;
 
-using intv = sys::Ximd<int>;
-using floatv = sys::Ximd<float>;
+template<typename T>
+using simd = sys::ximd::Ximd<T>;
+using intv = simd<int>;
+using floatv = simd<float>;
+using intv_mask = sys::ximd::ximd_mask;
+using floatv_mask = sys::ximd::ximd_mask;
 
 // Manage a SIMD complex as an array of two SIMDs
 using zfloatv = std::array<floatv, 2>;
@@ -71,7 +75,7 @@ static inline auto arg(const zfloatv& z)
 {
     // https://en.cppreference.com/w/cpp/numeric/complex/arg
     // > `std::atan2(std::imag(z), std::real(z))`
-    return atan2(real(z), imag(z));  // arg()
+    return atan2(imag(z), real(z));  // arg()
 }
 
 template <typename TGeneratorReal, typename TGeneratorImag>
@@ -89,7 +93,7 @@ static inline auto make_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&&
 template <typename T>
 static inline auto copy_from(std::span<const T> p)
 {
-    sys::Ximd<T> retval;
+    simd<T> retval;
     assert(p.size() == retval.size());
     retval.copy_from(p.data());
     return retval;
@@ -102,9 +106,9 @@ static inline auto copy_from(std::span<const zfloat> p)
 }
 
 template<typename T>
-static inline auto copy_to(const sys::Ximd<T>& v)
+static inline auto copy_to(const simd<T>& v)
 {
-    std::vector<typename sys::Ximd<T>::value_type> retval(v.size());
+    std::vector<typename simd<T>::value_type> retval(v.size());
     v.copy_to(retval.data());
     return retval;
 }
@@ -133,7 +137,7 @@ TEST_CASE(testDefaultConstructor)
 }
 
 // Sample code from SIX; see **ComplexToAMP8IPHS8I.cpp**.
-static inline auto GetPhase(std::complex<double> v)
+static auto GetPhase(std::complex<double> v)
 {
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
@@ -148,7 +152,7 @@ static uint8_t getPhase(zfloat v, float phase_delta)
     return gsl::narrow_cast<uint8_t>(std::round(phase / phase_delta));
 }
 
-static inline auto if_add(const sys::ximd_mask& m, const floatv& lhs, typename floatv::value_type rhs)
+static inline auto if_add(const floatv_mask& m, const floatv& lhs, typename floatv::value_type rhs)
 {
     const auto generate_add = [&](size_t i) {
         return m[i] ? lhs[i] + rhs : lhs[i];
@@ -162,7 +166,7 @@ static inline auto roundi(const floatv& v)  // match vcl::roundi()
     { return static_cast<typename intv::value_type>(rounded[i]); };
     return intv(generate_roundi);
 }
-static inline auto getPhase(const zfloatv& v, float phase_delta)
+static auto getPhase(const zfloatv& v, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
@@ -172,10 +176,12 @@ static inline auto getPhase(const zfloatv& v, float phase_delta)
     phase = if_add(phase < 0.0f, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
     return roundi(phase / phase_delta);
 }
-
-static const auto& cxValues()
+static inline const auto& cxValues()
 {
-    static const std::vector<zfloat> retval{/*{0, 0},*/ {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+    //static const std::vector<zfloat> retval{/*{0, 0},*/ {1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+    static const std::vector<zfloat> retval{{0.0, 0.0}, {1.0, 1.0}, {10.0, -10.0}, {-100.0, 100.0}, {-1000.0, -1000.0}, // sample data from SIX
+            {-1.0, -1.0}, {1.0, -1.0}, {-1.0, 1.0} // "pad" to multiple of floatv::size()
+    };
     return retval;
 }
 
@@ -276,7 +282,7 @@ static auto getPhaseDirections_()
     }
     return phase_directions;
 }
-static const auto& getPhaseDirections()
+static inline const auto& getPhaseDirections()
 {
     static const auto retval = getPhaseDirections_();
     return retval;
@@ -372,7 +378,7 @@ static auto make_magnitudes_()
     std::copy(result.begin(), result.end(), retval.begin());
     return retval;
 }
-static std::span<const float> magnitudes()
+static inline std::span<const float> magnitudes()
 {
     //! The sorted set of possible magnitudes order from small to large.
     static const auto cached_magnitudes = make_magnitudes_();
@@ -411,25 +417,31 @@ static uint8_t find_nearest(zfloat phase_direction, zfloat v)
 }
 
 template<typename TTest, typename TResult>
-static inline auto select(const TTest& test_, const TResult& t, const TResult& f)
+static inline auto select(const TTest& test, const TResult& t, const TResult& f)
 {
     TResult retval;
-    for (size_t i = 0; i < test_.size(); i++)
+    for (size_t i = 0; i < test.size(); i++)
     {
-        retval[i] = test_[i] ? t[i] : f[i];
+        retval[i] = test[i] ? t[i] : f[i];
     }
     return retval;
 }
 
-template<size_t N>
-static inline auto lookup(const intv& zindex, std::span<const float> magnitudes)
+static auto lookup(const intv& zindex, std::span<const float> magnitudes)
 {
     const auto generate = [&](size_t i) {
         const auto i_ = zindex[i];
-        return magnitudes[i_];
+        
+        // The index may be out of range. This is expected because `i` might be "don't care."
+        if ((i_ >= 0) && (i_ < std::ssize(magnitudes)))
+        {
+            return magnitudes[i_];
+        }
+        return NAN; // propogate "don't care"
     };
     return floatv(generate);
 }
+
 static inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
 {
     intv first; first = 0;
@@ -445,7 +457,7 @@ static inline auto lower_bound_(std::span<const float> magnitudes, const floatv&
         auto next = it; ++next; // ... ++it;
         auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
-        const auto c = lookup<AmplitudeTableSize>(it, magnitudes); // magnituides[it]
+        const auto c = lookup(it, magnitudes); // magnituides[it]
 
         const auto test = c < v; // (c < v).__cvt(); // https://github.com/VcDevel/std-simd/issues/41
 
@@ -483,8 +495,8 @@ static auto nearest(std::span<const float> magnitudes, const floatv& value)
     const auto it = lower_bound(magnitudes, value);
     const auto prev_it  = it - 1;  // const auto prev_it = std::prev(it);
 
-    const auto v0 = value - lookup<AmplitudeTableSize>(prev_it, magnitudes); // value - *prev_it
-    const auto v1 = lookup<AmplitudeTableSize>(it, magnitudes) - value; // *it - value
+    const auto v0 = value - lookup(prev_it, magnitudes); // value - *prev_it
+    const auto v1 = lookup(it, magnitudes) - value; // *it - value
     //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
     
     intv end; end = gsl::narrow<int>(magnitudes.size());

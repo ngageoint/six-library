@@ -47,33 +47,31 @@
 #include <functional>
 #include <cmath>
 
-// By default, we'll put things in the `sys` namespace as everything
-// else here does; but a developer might want to change that.
-#ifndef CODA_OSS_Ximd_namespace
-#define CODA_OSS_Ximd_namespace sys
-#endif
-namespace CODA_OSS_Ximd_namespace
+namespace sys
 {
+namespace ximd
+{
+
 // Need a class for the "broadcast" constructor (not impelemented).
 // Also helps to avoid overloading `std::array`.
 template <typename T, int N = 4>
 struct Ximd final
 {
     static_assert(std::is_arithmetic<T>::value, "T must be arithmetic");
-    //static_assert(std::is_same<T, std::remove_cv<T>::type>::value, "no `const` for T");
+    // static_assert(std::is_same<T, std::remove_cv<T>::type>::value, "no `const` for T");
 
     using value_type = T;
     using reference = T&;
 
     Ximd() = default;
     // This is the same as the "generater" overload below ... avoid enable_if gunk for now.
-    //template<typename U>
-    //Ximd(U&& v) noexcept
+    // template<typename U>
+    // Ximd(U&& v) noexcept
     //{
     //    *this = Ximd([&](size_t) { return v; });
     //}
-    template<typename U>
-    Ximd& operator=(U&& v) noexcept // work-around missing ctor, above
+    template <typename U>
+    Ximd& operator=(U&& v) noexcept  // work-around missing ctor, above
     {
         *this = Ximd([&](size_t) { return v; });
         return *this;
@@ -83,7 +81,7 @@ struct Ximd final
     {
         *this = other;
     }
-    template<typename U>
+    template <typename U>
     Ximd(const U* mem)
     {
         copy_from(mem);
@@ -141,15 +139,15 @@ struct Ximd final
         return tmp;
     }
 
- private:
+private:
     std::array<value_type, N> value{};
 };
 
-//template<typename T, int N>
-//using fixed_size_ximd = Ximd<T, N>;
+// template<typename T, int N>
+// using fixed_size_ximd = Ximd<T, N>;
 //
-//template<typename T, int N>
-//using native_ximd = Ximd<T>;
+// template<typename T, int N>
+// using native_ximd = Ximd<T>;
 
 using ximd_mask = Ximd<bool>;
 
@@ -175,7 +173,7 @@ inline auto operator-(const Ximd<T>& lhs, typename Ximd<T>::value_type rhs) noex
 {
     Ximd<T> rhs_;
     rhs_ = rhs;
-    return lhs-  rhs_;
+    return lhs - rhs_;
 }
 template <typename T>
 inline auto operator*(const Ximd<T>& lhs, const Ximd<T>& rhs) noexcept
@@ -219,6 +217,18 @@ inline auto operator==(const Ximd<T>& lhs, typename Ximd<T>::value_type rhs) noe
     Ximd<T> rhs_;
     rhs_ = rhs;
     return lhs == rhs_;
+}
+template <typename T>
+inline auto operator!=(const Ximd<T>& lhs, const Ximd<T>& rhs) noexcept
+{
+    return ximd_mask([&](size_t i) { return lhs[i] != rhs[i]; });
+}
+template <typename T>
+inline auto operator!=(const Ximd<T>& lhs, typename Ximd<T>::value_type rhs) noexcept
+{
+    Ximd<T> rhs_;
+    rhs_ = rhs;
+    return lhs != rhs_;
 }
 template <typename T>
 inline auto operator<(const Ximd<T>& lhs, const Ximd<T>& rhs) noexcept
@@ -265,7 +275,7 @@ inline bool any_of(const ximd_mask& m)
 template <typename T>
 inline auto atan2(const Ximd<T>& real, const Ximd<T>& imag)
 {
-    return Ximd<T>([&](size_t i) { return std::atan2(imag[i], real[i]); });
+    return Ximd<T>([&](size_t i) { return std::atan2(real[i], imag[i]); });
 }
 template <typename T>
 inline auto round(const Ximd<T>& v)
@@ -273,6 +283,7 @@ inline auto round(const Ximd<T>& v)
     return Ximd<T>([&](size_t i) { return std::round(v[i]); });
 }
 
-} // CODA_OSS_Ximd_namespace
+} // ximd
+} // sys
 
 #endif
