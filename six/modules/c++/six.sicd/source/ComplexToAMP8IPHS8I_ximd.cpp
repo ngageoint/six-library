@@ -402,7 +402,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
     }
 
     // Then finish off anything left
-    assert(std::distance(first, last) < elements_per_iteration);
+    assert(std::distance(first, last) < gsl::narrow<int>(elements_per_iteration));
     for (; first != last; ++first, ++dest)
     {
         const auto f = sys::make_span(&(*first), 1);
