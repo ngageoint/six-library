@@ -157,14 +157,14 @@ static inline auto if_add(const floatv_mask& m, const floatv& lhs, typename floa
     const auto generate_add = [&](size_t i) {
         return m[i] ? lhs[i] + rhs : lhs[i];
     };
-    return floatv(generate_add);
+    return floatv::generate(generate_add);
 }
 static inline auto roundi(const floatv& v)  // match vcl::roundi()
 {
     const auto rounded = round(v);
     const auto generate_roundi = [&](size_t i)
     { return static_cast<typename intv::value_type>(rounded[i]); };
-    return intv(generate_roundi);
+    return intv::generate(generate_roundi);
 }
 static auto getPhase(const zfloatv& v, float phase_delta)
 {
@@ -439,7 +439,7 @@ static auto lookup(const intv& zindex, std::span<const float> magnitudes)
         }
         return NAN; // propogate "don't care"
     };
-    return floatv(generate);
+    return floatv::generate(generate);
 }
 
 static inline auto lower_bound_(std::span<const float> magnitudes, const floatv& v)
