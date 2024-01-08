@@ -24,6 +24,7 @@
 #define __TIFF_UTILS_H__
 
 #include "tiff/IFD.h"
+#include "tiff/TiffUtils.h"
 
 namespace tiff
 {
@@ -40,6 +41,31 @@ private:
     {
     }
 
+};
+
+class SetErrorHandler final
+{
+    tiff_errorhandler_t mpHandler = nullptr;
+
+public:
+    SetErrorHandler(tiff_errorhandler_t pHandler = nullptr);
+    ~SetErrorHandler();
+    SetErrorHandler(const SetErrorHandler&) = delete;
+    SetErrorHandler& operator=(const SetErrorHandler&) = delete;
+    SetErrorHandler(SetErrorHandler&&) = default;
+    SetErrorHandler& operator=(SetErrorHandler&&) = default;
+};
+class SetWarningHandler final
+{
+    tiff_errorhandler_t mpHandler = nullptr;
+
+public:
+    SetWarningHandler(tiff_errorhandler_t pHandler = nullptr);
+    ~SetWarningHandler();
+    SetWarningHandler(const SetWarningHandler&) = delete;
+    SetWarningHandler& operator=(const SetWarningHandler&) = delete;
+    SetWarningHandler(SetWarningHandler&&) = default;
+    SetWarningHandler& operator=(SetWarningHandler&&) = default;
 };
 
 }

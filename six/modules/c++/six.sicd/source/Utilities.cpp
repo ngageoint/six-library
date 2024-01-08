@@ -220,7 +220,7 @@ class SICD_readerAndConverter final
     }
     const types::RowCol<size_t>& offset;
     six::zfloat* buffer;
-    const six::Amp8iPhs8iLookup_t& lookup;
+    six::Amp8iPhs8iLookup_t lookup;
     
 public:
     SICD_readerAndConverter(six::NITFReadControl& reader, size_t imageNumber,
@@ -717,10 +717,8 @@ std::unique_ptr<ComplexData> Utilities::getComplexData(
         const std::string& pathname,
         const std::vector<std::string>& schemaPaths)
 {
-    std::string extension = fs::path(pathname).extension().string();
-    str::lower(extension);
-
-    if (extension == ".xml")
+    const auto extension = fs::path(pathname).extension().string();
+    if (str::eq(extension, ".xml"))
     {
         logging::NullLogger log;
         return parseDataFromFile(pathname, schemaPaths, log);

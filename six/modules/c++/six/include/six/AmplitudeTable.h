@@ -31,8 +31,10 @@
 #include <string>
 #include <memory>
 #include <array>
+#include <std/mdspan>
 
 #include <import/except.h>
+#include <coda_oss/CPlusPlus.h>
 
 #include <nitf/LookupTable.hpp>
 #include <scene/sys_Conf.h>
@@ -157,19 +159,58 @@ struct SIX_SIX_API LUT
  *  double precision amplitude value
  */
 
-// Store the computed `six::zfloat` for every possible 
-// amp/phs pair, a total of 256*256 values.
- //! Fixed size 256 element array of complex values.
-using phase_values_t = std::array<six::zfloat, UINT8_MAX + 1>;
-//! Fixed size 256 x 256 matrix of complex values.
-using Amp8iPhs8iLookup_t = std::array<phase_values_t, UINT8_MAX + 1>;
-
-// More descriptive than std::pair<uint8_t, uint8_t>
+ // Store the computed `six::zfloat` for every possible 
+ // amp/phs pair, a total of 256*256 values.
+static constexpr size_t AmplitudeTableSize = 256; // "This is a fixed size (256-element) LUT"
+using Amp8iPhs8iLookup_t = std::mdspan<const six::zfloat, std::dextents<size_t, 2>>;
+ 
+ // More descriptive than std::pair<uint8_t, uint8_t>
 struct SIX_SIX_API AMP8I_PHS8I_t final
 {
     uint8_t amplitude;
     uint8_t phase;
 };
+
+// Control a few details of the ComplexToAMP8IPHS8I implementation, espeically "unseq" (i.e., SIMD).
+#ifndef SIX_sicd_has_VCL
+    // Do we have the "vectorclass" library? https://github.com/vectorclass/version2
+    #if !CODA_OSS_cpp17 // VCL needs C++17
+        #define SIX_sicd_has_VCL 0
+    #else
+        // __has_include is part of C++17
+        #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
+            __has_include("six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h")
+       #define SIX_sicd_has_VCL 1
+        #else
+        #define SIX_sicd_has_VCL 0
+        #endif // __has_include
+    #endif // C++17
+#endif
+
+#ifndef SIX_sicd_has_experimental_simd
+    // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
+    #if (__GNUC__ >= 11) && CODA_OSS_cpp20
+        // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
+        #include <experimental/simd>
+        #define SIX_sicd_has_experimental_simd 1
+    #else
+        #define SIX_sicd_has_experimental_simd 0
+    #endif // __GNUC__
+#endif
+
+#if SIX_sicd_has_VCL && SIX_sicd_has_experimental_simd
+    // This is because there is a single ComplexToAMP8IPHS8I::nearest_neighbors_unseq() method.
+    // Other than that, it should be possible to use both VCL and std::experimental::simd
+    #error "Can't enable both VCL and std::experimental::simd at the same time'"
+#endif
+#ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    #if SIX_sicd_has_VCL || SIX_sicd_has_experimental_simd
+    #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
+    #else
+    #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
+    #endif // SIX_sicd_have_VCL || SIX_sicd_have_experimental_simd
+#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
+
 
 struct AmplitudeTable; // forward
 namespace sicd
@@ -204,21 +245,40 @@ public:
      * @return nearest amplitude and phase value
      */
     AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs,  const six::AmplitudeTable*);
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    #endif
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
 
 private:
-    std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs) const;
+    template <typename TInputIt, typename TOutputIt>
+    void nearest_neighbors_seq(TInputIt first, TInputIt last, TOutputIt dest) const;
+    template <typename TInputIt, typename TOutputIt>
+    void nearest_neighbors_par(TInputIt first, TInputIt last, TOutputIt dest) const;
+    template <typename TInputIt, typename TOutputIt>
+    void nearest_neighbors_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
+    template <typename TInputIt, typename TOutputIt>
+    void nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const;
+
+    template< typename TOutputIter>
+    void nearest_neighbors_unseq_(const six::zfloat* p, TOutputIter dest) const;
 
     //! The sorted set of possible magnitudes order from small to large.
-    std::vector<float> uncached_magnitudes; // Order is important! This must be ...
-    const std::vector<float>& magnitudes; // ... before this.
+    std::array<float, AmplitudeTableSize> uncached_magnitudes; // Order is important! This must be ...
+    std::span<const float> magnitudes; // ... before this.
+    uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
 
     //! The difference in phase angle between two UINT phase values.
     float phase_delta;
     uint8_t getPhase(six::zfloat) const;
 
     //! Unit vector rays that represent each direction that phase can point.
-    std::array<six::zfloat, UINT8_MAX + 1> phase_directions;
+    std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
+    std::array<float, AmplitudeTableSize> phase_directions_real;
+    std::array<float, AmplitudeTableSize> phase_directions_imag;
 };
 }
 }
@@ -227,7 +287,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
     AmplitudeTable(size_t elementSize) noexcept(false) :
-        LUT(UINT8_MAX + 1 /*i.e., 256*/, elementSize)
+        LUT(AmplitudeTableSize /*i.e., 256*/, elementSize)
     {
     }
     AmplitudeTable() noexcept(false) :  AmplitudeTable(sizeof(double)) 
@@ -235,7 +295,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     }
     AmplitudeTable(const nitf::LookupTable& lookupTable) noexcept(false) : LUT(lookupTable)
     {
-        if (size() != 256)
+        if (size() != AmplitudeTableSize)
         {
             throw std::invalid_argument("lookupTable should have 256 elements.");
         }
@@ -249,6 +309,10 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     size_t size() const noexcept
     {
         return numEntries;
+    }
+    static constexpr auto ssize() noexcept // signed size()
+    {
+        return gsl::narrow<ptrdiff_t>(AmplitudeTableSize);
     }
 
     bool operator==(const AmplitudeTable& rhs) const
@@ -300,13 +364,13 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     // This is a "cache" mostly because this is a convenient place to store the data; it
     // doesn't take that long to generate the lookup table.  Note that existing code wants
     // to work with a `const AmplitudeTable &`, thus `mutable` ... <shrug>.
-    void cacheLookup_(std::unique_ptr<Amp8iPhs8iLookup_t>&& lookup) const
+    void cacheLookup_(std::vector<six::zfloat>&& lookup_) const
     {
-        pLookup = std::move(lookup);
+        lookup = std::move(lookup_);
     }
-    const Amp8iPhs8iLookup_t* getLookup() const
+    const std::vector<six::zfloat>* getLookup() const
     {
-        return pLookup.get();
+        return lookup.empty() ? nullptr : &lookup;
     }
 
     // Again, this is a convenient place to store the data as it depends on an AmplitudeTable instance.
@@ -320,7 +384,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     }
 
 private:
-    mutable std::unique_ptr<Amp8iPhs8iLookup_t> pLookup; // to big for the stack
+    mutable std::vector<six::zfloat> lookup;
     mutable std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pFromComplex;    
 };
 

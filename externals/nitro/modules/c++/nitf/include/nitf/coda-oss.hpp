@@ -31,6 +31,7 @@
 #include <std/span>
 #include <std/optional>
 
+#include <config/Exports.h> // need #pragma warning(disable) outside push/pop
 CODA_OSS_disable_warning_push
 #if _MSC_VER
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
