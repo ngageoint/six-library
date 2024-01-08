@@ -218,9 +218,9 @@ static inline size_t size(const six::sicd::ximd::zfloatv& z) noexcept
     return retval;
 }
 template<typename T>
-static inline int ssize(const six::sicd::ximd::simd<T>& v) noexcept
+static inline auto ssize(const six::sicd::ximd::simd<T>& v) noexcept
 {
-    return v.size();
+    return gsl::narrow<int>(v.size());
 }
 
 namespace six

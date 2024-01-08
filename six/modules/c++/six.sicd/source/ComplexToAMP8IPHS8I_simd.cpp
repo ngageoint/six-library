@@ -32,7 +32,7 @@
 #include <type_traits>
 #include <execution>
 #include <array>
-#include <span>
+#include <std/span>
 
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
