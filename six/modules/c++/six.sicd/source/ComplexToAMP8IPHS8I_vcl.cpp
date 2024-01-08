@@ -54,11 +54,17 @@
 
 #define VCL_NAMESPACE vcl
 #if _MSC_VER
+#pragma warning(push)
 #pragma warning(disable: 4100) // '...': unreferenced formal parameter
+#pragma warning(disable: 4127) // conditional expression is constant
+#pragma warning(disable: 4244) // '...': conversion from '...' to '...', possible loss of data
 #endif
 #include "six/sicd/vectorclass/version2/vectorclass.h"
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 // https://en.cppreference.com/w/cpp/experimental/simd
 using zfloatv = vcl::Complex8f;
