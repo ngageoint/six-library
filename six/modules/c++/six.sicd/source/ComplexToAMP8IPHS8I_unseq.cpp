@@ -60,6 +60,7 @@ using zfloat = six::zfloat;
 #pragma warning(disable: 4100) // '...': unreferenced formal parameter
 #pragma warning(disable: 4127) // conditional expression is constant
 #pragma warning(disable: 4244) // '...': conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4723) // potential divide by 0
 #endif
 #include "six/sicd/vectorclass/version2/vectorclass.h"
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
