@@ -285,6 +285,19 @@ private:
         void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
         void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+
+        template<typename FloatV>
+        void nearest_neighbors_unseq_T(const FloatV&, std::span<AMP8I_PHS8I_t>) const;
+        #if SIX_sicd_has_VCL
+        void nearest_neighbors_unseq_vcl_(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+        #endif
+        #if SIX_sicd_has_simd
+        void nearest_neighbors_unseq_simd_(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+        #endif
+        #if SIX_sicd_has_ximd
+        void nearest_neighbors_unseq_ximd_(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+        #endif
+
         #endif 
 
         //! The sorted set of possible magnitudes order from small to large.
