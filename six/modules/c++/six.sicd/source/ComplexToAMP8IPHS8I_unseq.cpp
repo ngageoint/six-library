@@ -222,6 +222,10 @@ static inline size_t size(const six::sicd::ximd::zfloatv& z) noexcept
     assert(retval == imag(z).size());
     return retval;
 }
+static inline auto ssize(const six::sicd::ximd::zfloatv& z) noexcept
+{
+    return gsl::narrow<int>(size(z));
+}
 template<typename T>
 static inline auto ssize(const six::sicd::ximd::simd<T>& v) noexcept
 {
@@ -485,6 +489,8 @@ template<typename ZFloatV>
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
     ZFloatV v;
+    assert(p.size() == size(v));
+
     copy_from(p, v);
     #if CODA_OSS_DEBUG
     for (int i = 0; i < ssize(v); i++)
