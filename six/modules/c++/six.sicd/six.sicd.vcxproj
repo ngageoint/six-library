@@ -162,6 +162,10 @@
     <ClCompile Include="source\ComplexToAMP8IPHS8I.cpp" />
     <ClCompile Include="source\ComplexToAMP8IPHS8I_simd.cpp" />
     <ClCompile Include="source\ComplexToAMP8IPHS8I_unseq.cpp" />
+    <ClCompile Include="source\ComplexToAMP8IPHS8I_ximd.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="source\ComplexXMLControl.cpp" />
     <ClCompile Include="source\ComplexXMLParser.cpp" />
     <ClCompile Include="source\ComplexXMLParser040.cpp" />
