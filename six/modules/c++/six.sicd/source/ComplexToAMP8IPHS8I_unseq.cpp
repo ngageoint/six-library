@@ -111,6 +111,12 @@ inline auto arg(const six::sicd::vcl::zfloatv& z)
     return arg(real(z), imag(z));
 }
 
+template<typename T>
+inline auto if_add(const T& f, const six::sicd::vcl::floatv& a, float b)
+{
+    return vcl::if_add(f, a, b);
+}
+
 inline bool any_of(const six::sicd::vcl::intv& m)
 {
     return horizontal_or(m);
@@ -251,7 +257,7 @@ static inline auto roundi(const six::sicd::ximd::floatv& v)  // match vcl::round
     const auto rounded = round(v);
     const auto generate_roundi = [&](size_t i)
     { return static_cast<typename six::sicd::ximd::intv::value_type>(rounded[i]); };
-    return six::sicd::ximd::intv(generate_roundi);
+    return six::sicd::ximd::intv::generate(generate_roundi);
 }
 
 static inline auto select(const six::sicd::ximd::floatv_mask& test, const  six::sicd::ximd::floatv& t, const  six::sicd::ximd::floatv& f)
@@ -269,7 +275,7 @@ static inline auto if_add(const six::sicd::ximd::floatv_mask& m, const six::sicd
     const auto generate_add = [&](size_t i) {
         return m[i] ? v[i] + c : v[i];
     };
-    return six::sicd::ximd::floatv(generate_add);
+    return six::sicd::ximd::floatv::generate(generate_add);
 }
 
 template<size_t N>
@@ -302,11 +308,10 @@ static auto lookup(const six::sicd::ximd::intv& zindex, std::span<const float> m
         }
         return NAN; // propogate "don't care"
     };
-    return six::sicd::ximd::floatv(generate);
+    return six::sicd::ximd::floatv::generate(generate);
 }
 
 #endif // SIX_sicd_has_ximd
-
 
 template<typename ZFloatV>
 static auto getPhase(const ZFloatV& v, float phase_delta)
@@ -349,8 +354,8 @@ ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
 template<typename IntV, typename FloatV>
 inline auto lower_bound_(std::span<const float> magnitudes, const FloatV& v)
 {
-    IntV first; first = 0;
-    IntV last; last = gsl::narrow<int>(magnitudes.size());
+    IntV first = 0;
+    const IntV last = gsl::narrow<int>(magnitudes.size());
 
     auto count = last - first;
     while (any_of(count > 0))
@@ -410,9 +415,9 @@ static auto nearest(std::span<const float> magnitudes, const FloatV& value)
     const auto v1 = lookup(it, magnitudes) - value; // *it - value
     //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
     
-    IntV end; end = gsl::narrow<int>(magnitudes.size());
+    const IntV end = gsl::narrow<int>(magnitudes.size());
     //const auto end_test = select(it == end, prev_it, nearest_it); // it == end ? prev_it  : ...
-    IntV zero; zero = 0;
+    const IntV zero = 0;
     auto retval = select(it == 0, zero, // if (it == begin) return 0;
         select(it == end, prev_it,  // it == end ? prev_it  : ...
             select(v0 <=v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
@@ -435,10 +440,32 @@ static auto find_nearest(std::span<const float> magnitudes,
 }
 
 #if SIX_sicd_has_VCL
-
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_vcl_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
+    const six::sicd::vcl::intv& phase, const  six::sicd::vcl::zfloatv& v)
 {
-    vcl::zfloatv v;
+    const auto& impl = converter.impl;
+
+    const auto phase_direction_real = lookup(phase, impl.phase_directions_real);
+    const auto phase_direction_imag = lookup(phase, impl.phase_directions_imag);
+    return ::find_nearest<six::sicd::vcl::intv>(impl.magnitudes, phase_direction_real, phase_direction_imag, v);
+}
+#endif
+
+#if SIX_sicd_has_ximd
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
+    const six::sicd::ximd::intv& phase, const  six::sicd::ximd::zfloatv& v)
+{
+    const auto& impl = converter.impl;
+
+    const auto phase_direction = lookup(phase, impl.phase_directions);
+    return ::find_nearest<six::sicd::ximd::intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+}
+#endif
+
+template<typename ZFloatV>
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
+{
+    ZFloatV v;
     copy_from(p, v);
     #if CODA_OSS_DEBUG
     for (int i = 0; i < ssize(v); i++)
@@ -458,9 +485,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_vcl_
     }
     #endif
 
-    const auto phase_direction_real = lookup(phase, phase_directions_real);
-    const auto phase_direction_imag = lookup(phase, phase_directions_imag);
-    const auto amplitude = ::find_nearest<six::sicd::vcl::intv>(magnitudes, phase_direction_real, phase_direction_imag, v);
+    const auto amplitude = lookup_and_find_nearest(converter, phase, v);
     #if CODA_OSS_DEBUG
     for (int i = 0; i < amplitude.size(); i++)
     {
@@ -479,64 +504,40 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_vcl_
 
         ++dest;
     }
+}
 
+
+#if SIX_sicd_has_VCL
+
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_vcl_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
+{
+    nearest_neighbors_unseq_T<vcl::zfloatv>(p, results);
 }
 #endif // SIX_sicd_has_VCL
 
 #if SIX_sicd_has_ximd
-static inline auto find_nearest(std::span<const float> magnitudes, const six::sicd::ximd::zfloatv& phase_direction, const six::sicd::ximd::zfloatv& v)
-{
-    return ::find_nearest<six::sicd::ximd::intv>(magnitudes, real(phase_direction), imag(phase_direction), v);
-}
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_ximd_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
-    ximd::zfloatv v;
-    copy_from(p, v);
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(v); i++)
-    {
-        const auto z = p[i];
-        assert(real(v)[i] == z.real());
-        assert(imag(v)[i] == z.imag());
-    }
-    #endif
-
-    const auto phase = ::getPhase(v, phase_delta);
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < phase.size(); i++)
-    {
-        const auto phase_ = getPhase(p[i]);
-        assert(static_cast<uint8_t>(phase[i]) == phase_);
-    }
-    #endif
-
-    const auto phase_direction = lookup(phase, phase_directions);
-    const auto amplitude = ::find_nearest(magnitudes, phase_direction, v);
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < amplitude.size(); i++)
-    {
-        const auto i_ = phase[i];
-        const auto a = find_nearest(phase_directions[i_], p[i]);
-        assert(a == amplitude[i]);
-    }
-    #endif
-
-    // interleave() and store() is slower than an explicit loop.
-    auto dest = results.begin();
-    for (int i = 0; i < v.size(); i++)
-    {
-        dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
-        dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
-
-        ++dest;
-    }
-
+    nearest_neighbors_unseq_T<ximd::zfloatv>(p, results);
 }
 #endif // SIX_sicd_has_ximd
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
+    #if SIX_sicd_has_VCL
     nearest_neighbors_unseq_vcl_(p, results);
+
+    #elif SIX_sicd_has_simd
+    nearest_neighbors_unseq_simd_(p, results);
+
+    #elif SIX_sicd_has_ximd
+    nearest_neighbors_unseq_ximd_(p, results);
+
+    #else
+    #error "Don't know how to implement nearest_neighbors_unseq()"
+    throw std::logic_error("Don't know how to implement nearest_neighbors_unseq()");
+
+    #endif
 }
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {

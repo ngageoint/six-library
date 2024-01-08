@@ -286,8 +286,8 @@ private:
 
         void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
-        template<typename FloatV>
-        void nearest_neighbors_unseq_T(const FloatV&, std::span<AMP8I_PHS8I_t>) const;
+        template<typename ZFloatV>
+        void nearest_neighbors_unseq_T(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
         #if SIX_sicd_has_VCL
         void nearest_neighbors_unseq_vcl_(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
         #endif
@@ -316,6 +316,7 @@ private:
         std::array<float, AmplitudeTableSize> phase_directions_imag;
         #endif
     };
+public:
     Impl impl;
 };
 }
