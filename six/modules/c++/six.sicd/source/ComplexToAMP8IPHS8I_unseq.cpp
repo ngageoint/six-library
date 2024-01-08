@@ -77,8 +77,8 @@ namespace vcl
 
 using floatv = ::vcl::Vec8f;
 using intv = ::vcl::Vec8i;
-
 using zfloatv = ::vcl::Complex8f;
+
 } // vcl
 } // sicd
 } // six
@@ -96,6 +96,14 @@ static inline size_t size(const six::sicd::vcl::zfloatv& z) noexcept
     return z.size();
 }
 static inline int ssize(const six::sicd::vcl::zfloatv& z) noexcept
+{
+    return z.size();
+}
+static inline int ssize(const six::sicd::vcl::floatv& z) noexcept
+{
+    return z.size();
+}
+static inline int ssize(const six::sicd::vcl::intv& z) noexcept
 {
     return z.size();
 }
@@ -202,11 +210,17 @@ static inline const auto& imag(const six::sicd::ximd::zfloatv& z) noexcept
 {
     return z[1];
 }
+
 static inline size_t size(const six::sicd::ximd::zfloatv& z) noexcept
 {
     auto retval = real(z).size();
     assert(retval == imag(z).size());
     return retval;
+}
+template<typename T>
+static inline int ssize(const six::sicd::ximd::simd<T>& v) noexcept
+{
+    return v.size();
 }
 
 namespace six
@@ -380,8 +394,8 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& value)
 {
     auto retval = lower_bound_<IntV>(magnitudes, value);
 
-    #ifndef NDEBUG // i.e., debug
-    for (int i = 0; i < value.size(); i++)
+    #if CODA_OSS_DEBUG
+    for (int i = 0; i < ssize(value); i++)
     {
         const auto it = std::lower_bound(magnitudes.begin(), magnitudes.end(), value[i]);
         const auto result = gsl::narrow<int>(std::distance(magnitudes.begin(), it));
@@ -478,7 +492,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(st
 
     const auto phase = ::getPhase(v, phase_delta);
     #if CODA_OSS_DEBUG
-    for (int i = 0; i < phase.size(); i++)
+    for (int i = 0; i < ssize(phase); i++)
     {
         const auto phase_ = getPhase(p[i]);
         assert(static_cast<uint8_t>(phase[i]) == phase_);
@@ -487,7 +501,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(st
 
     const auto amplitude = lookup_and_find_nearest(converter, phase, v);
     #if CODA_OSS_DEBUG
-    for (int i = 0; i < amplitude.size(); i++)
+    for (int i = 0; i < ssize(amplitude); i++)
     {
         const auto i_ = phase[i];
         const auto a = find_nearest(phase_directions[i_], p[i]);
@@ -497,7 +511,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(st
 
     // interleave() and store() is slower than an explicit loop.
     auto dest = results.begin();
-    for (int i = 0; i < v.size(); i++)
+    for (int i = 0; i < ssize(v); i++)
     {
         dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
         dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
