@@ -300,16 +300,29 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     // TODO: there could be more complicated logic here to decide between
     // _seq, _par, _unseq, and _par_unseq
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    return nearest_neighbors_unseq(inputs, pAmplitudeTable);
+
+    // None of our SIMD implementations are dramatically slower when
+    // running unittests; that's mostly because there's lots of IO.  So that
+    // the more interesting code-path is tested, use UNSEQ in debugging.
+    #if CODA_OSS_DEBUG
+    return nearest_neighbors_unseq(inputs, pAmplitudeTable); // TODO:
     #else
     return nearest_neighbors_par(inputs, pAmplitudeTable);
     #endif
+
+    #else
+    return nearest_neighbors_par(inputs, pAmplitudeTable);
+
+#endif
 }
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
+    // TODO: there could be more complicated logic here to determine which UNSEQ
+    // implementation to use.
+
     #if SIX_sicd_has_VCL
     return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
 

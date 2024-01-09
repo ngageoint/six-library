@@ -181,7 +181,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
         // __has_include is part of C++17
         #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
             __has_include("six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h")
-       #define SIX_sicd_has_VCL 1
+        #define SIX_sicd_has_VCL 1
         #else
         #define SIX_sicd_has_VCL 0
         #endif // __has_include
@@ -190,7 +190,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 
 #ifndef SIX_sicd_has_simd
     // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
-    #if (__GNUC__ >= 11) && CODA_OSS_cpp20
+    #if (__GNUC__ >= 999) && CODA_OSS_cpp20 // TODO: 11 instead of 999
         // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
         #define SIX_sicd_has_simd 1
     #else
@@ -281,10 +281,13 @@ private:
         void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+        template<typename ZFloatV, int elements_per_iteration>
         void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
-        void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        template<typename ZFloatV>
+        void nearest_neighbors_unseq_T(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+
         #endif 
 
         //! The sorted set of possible magnitudes order from small to large.
@@ -303,6 +306,7 @@ private:
         std::array<float, AmplitudeTableSize> phase_directions_imag;
         #endif
     };
+public:
     Impl impl;
 };
 }

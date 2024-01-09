@@ -12,6 +12,7 @@ def build(bld):
                'project_slant_to_output'             : 'cli io six six.sicd sio.lite',
                'image_to_scene'                      : 'six.sicd six.sidd',
                'round_trip_six'                      : 'cli six.convert six.sicd six.sidd',
+               '8AMPI_PHSI'                          : 'six.sicd',
                'test_create_sicd'                    : 'cli six.sicd sio.lite',
                'test_create_sicd_from_mem'           : 'cli six.sicd',
                '8AMPI_PHSI'                             : 'six.sicd',
