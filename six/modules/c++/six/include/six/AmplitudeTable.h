@@ -35,6 +35,7 @@
 
 #include <import/except.h>
 #include <coda_oss/CPlusPlus.h>
+#include <sys/Dbg.h>
 
 #include <nitf/LookupTable.hpp>
 #include <scene/sys_Conf.h>
@@ -180,7 +181,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
         // __has_include is part of C++17
         #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
             __has_include("six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h")
-       #define SIX_sicd_has_VCL 1
+        #define SIX_sicd_has_VCL 1
         #else
         #define SIX_sicd_has_VCL 0
         #endif // __has_include
@@ -197,8 +198,15 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #endif // __GNUC__
 #endif
 
+#ifndef SIX_sicd_has_ximd
+    // This is a "hacked up" version of std::experimental::simd using std::array.
+    // It's primarily for development and testing: VCL needs C++17 and
+    // std::experimental::simd is G++11/C++20.
+    #define SIX_sicd_has_ximd CODA_OSS_DEBUG
+#endif
+
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    #if SIX_sicd_has_VCL || SIX_sicd_has_simd
+    #if SIX_sicd_has_VCL || SIX_sicd_has_simd || SIX_sicd_has_ximd
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
     #else
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
@@ -252,6 +260,9 @@ public:
     #if SIX_sicd_has_simd
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_simd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     #endif
+    #if SIX_sicd_has_ximd
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_ximd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    #endif
     #endif
     
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
@@ -270,10 +281,13 @@ private:
         void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+        template<typename ZFloatV, int elements_per_iteration>
         void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
-        void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        template<typename ZFloatV>
+        void nearest_neighbors_unseq_T(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+
         #endif 
 
         //! The sorted set of possible magnitudes order from small to large.
@@ -292,6 +306,7 @@ private:
         std::array<float, AmplitudeTableSize> phase_directions_imag;
         #endif
     };
+public:
     Impl impl;
 };
 }

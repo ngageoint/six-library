@@ -276,7 +276,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par(std::s
     constexpr auto default_cutoff = (dimension * dimension) * 4;
     const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
 
-    const auto transform_f = [&](const TInputIt first1, const TInputIt last1, TOutputIt d_first)
+    const auto transform_f = [&](auto first1, auto last1, auto d_first)
     {
         return std::transform(first1, last1, d_first, nearest_neighbor);
     };
@@ -300,27 +300,45 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     // TODO: there could be more complicated logic here to decide between
     // _seq, _par, _unseq, and _par_unseq
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    return nearest_neighbors_unseq(inputs, pAmplitudeTable);
+
+    // None of our SIMD implementations are dramatically slower when
+    // running unittests; that's mostly because there's lots of IO.  So that
+    // the more interesting code-path is tested, use UNSEQ in debugging.
+    #if CODA_OSS_DEBUG
+    return nearest_neighbors_unseq(inputs, pAmplitudeTable); // TODO:
     #else
     return nearest_neighbors_par(inputs, pAmplitudeTable);
     #endif
+
+    #else
+    return nearest_neighbors_par(inputs, pAmplitudeTable);
+
+#endif
 }
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
+    // TODO: there could be more complicated logic here to determine which UNSEQ
+    // implementation to use.
+
     #if SIX_sicd_has_VCL
     return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
+
     #elif SIX_sicd_has_simd
     return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
+
+    #elif SIX_sicd_has_ximd
+    return nearest_neighbors_unseq_ximd(inputs, pAmplitudeTable);
+
     #else
     #error "Don't know how to implement nearest_neighbors_unseq()"
-    #endif
-
     throw std::logic_error("Don't know how to implement nearest_neighbors_unseq()");
+
+    #endif
 }
-#endif
+#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
 //template <typename TInputIt, typename TOutputIt>
 //void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(TInputIt first, TInputIt last, TOutputIt dest) const

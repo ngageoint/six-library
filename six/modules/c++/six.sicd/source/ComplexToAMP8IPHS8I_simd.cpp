@@ -32,7 +32,7 @@
 #include <type_traits>
 #include <execution>
 #include <array>
-#include <span>
+#include <std/span>
 
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
@@ -88,10 +88,10 @@ inline auto make_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&& genera
 
 static inline auto load(std::span<const six::zfloat> p)
 {
-    auto generate_real = [&](size_t i) {
+    const auto generate_real = [&](size_t i) {
         return p[i].real();
     };
-    auto generate_imag = [&](size_t i) {
+    const auto generate_imag = [&](size_t i) {
         return p[i].imag();
     };
     return make_zfloatv(generate_real, generate_imag);
