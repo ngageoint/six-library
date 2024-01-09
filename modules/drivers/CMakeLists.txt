@@ -78,5 +78,3 @@ if (CODA_ENABLE_HDF5 OR CODA_HDF5_HOME)
     add_subdirectory("hdf5")
     add_subdirectory("highfive")
 endif()
-
-add_subdirectory("libtiff")
