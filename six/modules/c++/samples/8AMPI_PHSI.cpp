@@ -9,7 +9,7 @@
 #include <assert.h>
 
 #include <iostream>
-#include <span>
+#include <std/span>
 #include <algorithm>
 #include <iterator>
 #include <future>

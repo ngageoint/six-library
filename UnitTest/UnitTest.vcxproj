@@ -71,6 +71,7 @@
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <ControlFlowGuard>Guard</ControlFlowGuard>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
