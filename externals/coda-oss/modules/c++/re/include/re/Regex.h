@@ -25,21 +25,12 @@
 
 #include <string>
 #include <vector>
+#include <regex>
 
 #include "config/Exports.h"
 
 #if !defined(RE_ENABLE_STD_REGEX)
-#include <re/re_config.h>
-#endif
-
-#ifdef RE_ENABLE_STD_REGEX
-#include <regex>
-#else
-// This must be defined prior to pcre2.h
-#define PCRE2_CODE_UNIT_WIDTH 8
-#include <pcre2.h>
-
-#include <sys/Conf.h>
+#define RE_ENABLE_STD_REGEX
 #endif
 
 /*!
@@ -173,7 +164,6 @@ public:
 private:
     std::string mPattern;
 
-#ifdef RE_ENABLE_STD_REGEX
     /*!
      *  Replace non-escaped "." with "[\s\S]" to get PCRE2_DOTALL newline
      *  behavior
@@ -204,18 +194,6 @@ private:
 
     //! The regex object
     std::regex mRegex;
-
-#else
-    // Internal function for passing flags to pcre2_match()
-    std::string search(const std::string& matchString,
-                       size_t startIndex,
-                       sys::Uint32_T flag,
-                       size_t& begin,
-                       size_t& end);
-
-    //! The pcre object
-    pcre2_code* mPCRE = nullptr;
-#endif
 };
 }
 

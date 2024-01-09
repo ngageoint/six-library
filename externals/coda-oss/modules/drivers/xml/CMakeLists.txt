@@ -4,9 +4,5 @@ if (MSVC)
     add_compile_options(/wd4005) # '...': macro redefinition
 endif()
 
-set(CODA_XML_LAYER "XercesC" CACHE STRING "XML backend to use (currently only XercesC is supported)")
-set("USE_${CODA_XML_LAYER}" TRUE CACHE INTERNAL "")
+add_subdirectory("xerces")
 
-if (CODA_XML_LAYER STREQUAL "XercesC")
-    add_subdirectory("xerces")
-endif()

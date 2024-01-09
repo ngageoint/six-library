@@ -24,8 +24,9 @@
 #ifndef CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_XMLReaderXerces_h_INCLUDED_
 
-#include "xml/lite/xml_lite_config.h"
-
+#if !defined(USE_XERCES)
+#define USE_XERCES
+#endif
 #if defined(USE_XERCES)
 
 #include <string>
@@ -61,7 +62,7 @@ namespace lite
  */
 class CODA_OSS_API XMLReaderXerces final : public XMLReaderInterface
 {
-    XercesContext mCtxt;
+    XercesContext mCtxt;    //! this must be the first member listed
     std::unique_ptr<SAX2XMLReader>        mNative;
     std::unique_ptr<XercesContentHandler> mDriverContentHandler;
     std::unique_ptr<XercesErrorHandler>   mErrorHandler;

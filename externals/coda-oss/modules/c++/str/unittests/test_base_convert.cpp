@@ -216,18 +216,21 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     }
 }
 
-template<typename TChar>
-static void test_change_case_(const std::string& testName,
-    const std::basic_string<TChar>& lower, const  std::basic_string<TChar>& upper)
+template<typename TString>
+static void test_change_case_(const std::string& testName, const TString& lower, const TString& upper)
 {
-    auto s = str::lower(upper);
+    auto s = upper;
+    str::lower(s);
     TEST_ASSERT(s == lower);
-    s = str::upper(lower);
+    s = lower;
+    str::upper(s);
     TEST_ASSERT(s == upper);
 
-    s = str::upper(upper);
+    s = upper;
+    str::upper(s);
     TEST_ASSERT(s == upper);
-    s = str::lower(lower);
+    s = lower;
+    str::lower(s);
     TEST_ASSERT(s == lower);
 }
 TEST_CASE(test_change_case)
@@ -240,16 +243,14 @@ TEST_CASE(test_change_case)
     //const std::wstring abc_w = L"abc";
     //test_change_case_(testName, abc_w, ABC_w);
 
-    // Yes, this can really come up, "non classifié" is French (Canadian) for "unclassified".
-    const std::string DEF_1252_{'D', '\xc9', 'F'}; // "DÉF" Windows-1252
-    const auto DEF_1252 = str::str<str::W1252string>(DEF_1252_);
-    const auto DEF8 = str::to_u8string(DEF_1252);
+    //// Yes, this can really come up, "non classifié" is French (Canadian) for "unclassified".
+    //const std::string DEF_1252{'D', '\xc9', 'F'}; // "DÉF" Windows-1252
+    //const auto DEF8 = from_windows1252(DEF_1252);
 
-    const std::string def_1252_{'d', '\xe9', 'f'};  // "déf" Windows-1252
-    const auto def_1252 = str::str<str::W1252string>(def_1252_);
-    const auto def8 = str::to_u8string(def_1252);
+    //const std::string def_1252{'d', '\xe9', 'f'};  // "déf" Windows-1252
+    //const auto def8 = from_windows1252(def_1252);
 
-    //test_change_case_(testName, def8, DEF8);
+    ////test_change_case_(testName, def, DEF);
     //test_change_case_(testName, def_1252, DEF_1252);
 }
 

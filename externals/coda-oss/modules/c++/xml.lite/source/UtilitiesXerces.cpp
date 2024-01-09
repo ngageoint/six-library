@@ -28,6 +28,8 @@ namespace xml
 {
 namespace lite
 {
+std::mutex XercesContext::mMutex;
+
 XercesLocalString::XercesLocalString(XMLCh* xmlStr) :
     mLocal(xmlStr)
 {
@@ -184,16 +186,8 @@ fatalError(const SAXParseException &exception)
     throw except::Error(Ctxt(xex.getMessage()));
 }
 
-/*!
- *  \class XercesContext::Impl
- *  \brief This class safely creates and destroys Xerces
- */
-struct XercesContext::Impl final
-{
-    static std::mutex mMutex;
-    bool mIsDestroyed = false;
-
-Impl()
+XercesContext::XercesContext() :
+    mIsDestroyed(false)
 {
     //! XMLPlatformUtils::Initialize is not thread safe!
     try
@@ -209,7 +203,7 @@ Impl()
     }
 }
 
-~Impl()
+XercesContext::~XercesContext()
 {
     try
     {
@@ -220,7 +214,7 @@ Impl()
     }
 }
 
-void destroy()
+void XercesContext::destroy()
 {
     // wrapping it here saves the mutex lock
     if (!mIsDestroyed)
@@ -241,28 +235,7 @@ void destroy()
         }
     }
 }
-};
-std::mutex XercesContext::Impl::mMutex;
-
-std::shared_ptr<XercesContext::Impl> XercesContext::getInstance()
-{
-    // The one and only instance; call  XMLPlatformUtils::Initialize() and XMLPlatformUtils::Terminate() just once.
-    static auto  impl = std::make_shared<XercesContext::Impl>();
-    return impl; // increment reference count
 }
-XercesContext::XercesContext() : mpImpl(getInstance()) // increment reference count
-{
 }
-XercesContext::~XercesContext()
-{
-    destroy();
-}
-void XercesContext::destroy()
-{
-    mpImpl.reset();
-}
-
-} // lite
-} // xml
 
 #endif

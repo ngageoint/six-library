@@ -1,4 +1,0 @@
-distclean = options = configure = lambda p: None
-
-def build(bld):
-  bld.swigModule(name = 'math.poly', use = 'math.poly-c++ numpyutils-c++ except-python math.linear-python types-python config-python', package='coda')

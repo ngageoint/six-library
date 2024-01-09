@@ -35,9 +35,7 @@
 #include <mem/SharedPtr.h>
 #include <config/Exports.h>
 
-#if !defined(MT_DEFAULT_PINNING)
-#include "mt/mt_config.h"
-#endif
+#undef MT_DEFAULT_PINNING
 #include <mt/CPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializer.h>
 
