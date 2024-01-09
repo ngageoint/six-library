@@ -52,6 +52,7 @@
 
 using zfloat = six::zfloat;
 
+#undef SIX_sicd_has_VCL
 #if SIX_sicd_has_VCL
 
 #define VCL_NAMESPACE vcl
