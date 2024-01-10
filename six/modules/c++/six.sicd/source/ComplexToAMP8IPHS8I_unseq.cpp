@@ -264,7 +264,7 @@ static inline auto arg(const six::sicd::ximd::zfloatv& z)
     return atan2(imag(z), real(z));  // arg()
 }
 
-static inline auto copy_from(std::span<float> p, six::sicd::ximd::floatv& result)
+static inline auto copy_from(std::span<const float> p, six::sicd::ximd::floatv& result)
 {
     assert(p.size() == result.size());
     result.copy_from(p.data());
@@ -340,7 +340,14 @@ static auto lookup(const six::sicd::ximd::intv& zindex, std::span<const float> m
 #if SIX_sicd_has_simd
 
 #include <experimental/simd>
-namespace stdx = std::experimental;
+
+// https://en.cppreference.com/w/cpp/experimental/simd/simd_cast
+// > The TS specification is missing `simd_cast` and `static_simd_cast` overloads for `simd_mask`. ...
+namespace stdx
+{
+    using namespace std::experimental;
+    using namespace std::experimental::__proposed;
+}
 
 namespace six
 {
@@ -443,10 +450,10 @@ static inline auto arg(const six::sicd::simd::zfloatv& z)
     return atan2(imag(z), real(z));  // arg()
 }
 
-static inline auto copy_from(std::span<float> p, six::sicd::simd::floatv& result)
+static inline auto copy_from(std::span<const float> p, six::sicd::simd::floatv& result)
 {
     assert(p.size() == result.size());
-    result.copy_from(p.data());
+    result.copy_from(p.data(), stdx::element_aligned);
 }
 static inline auto copy_from(std::span<const zfloat> p, six::sicd::simd::zfloatv& result)
 {
@@ -461,11 +468,13 @@ inline auto roundi(const six::sicd::simd::floatv& v) // match vcl::roundi()
     return static_simd_cast<six::sicd::simd::intv>(round(v));
 }
 
-static inline auto select(const six::sicd::simd::floatv_mask& test, const  six::sicd::simd::floatv& t, const  six::sicd::simd::floatv& f)
+template<typename TMask>
+static inline auto select(const TMask& test, const  six::sicd::simd::floatv& t, const  six::sicd::simd::floatv& f)
 {
     return six::sicd::simd::select(test, t, f);
 }
-static inline auto select(const six::sicd::simd::intv_mask& test, const  six::sicd::simd::intv& t, const  six::sicd::simd::intv& f)
+template<typename TMask>
+static inline auto select(const TMask& test, const  six::sicd::simd::intv& t, const  six::sicd::simd::intv& f)
 {
     return six::sicd::simd::select(test, t, f);
 }
@@ -519,7 +528,7 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
     auto phase = arg(v);
-    phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
+    phase = if_add(phase < 0.0f, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
     return roundi(phase / phase_delta);
 }
 
