@@ -181,7 +181,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
         // __has_include is part of C++17
         #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
             __has_include("six/sicd/vectorclass/version2/vectorclass.h")
-        #define SIX_sicd_has_VCL 0 // TODO
+        #define SIX_sicd_has_VCL !CODA_OSS_cpp20 // TODO: works with C++17, but not C++20 ... ?
         #else
         #define SIX_sicd_has_VCL 0
         #endif // __has_include
