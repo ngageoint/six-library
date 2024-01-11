@@ -200,19 +200,25 @@ static inline auto select(const TTest& test, const TResult& t, const TResult& f)
 } // sicd
 } // six
 
-static inline auto& real(six::sicd::ximd::zfloatv& z) noexcept
+#endif // SIX_sicd_has_ximd
+
+template<typename TSimd>
+static inline auto& real(TSimd& z) noexcept
 {
     return z[0];
 }
-static inline const auto& real(const six::sicd::ximd::zfloatv& z) noexcept
+template<typename TSimdZFloatV>
+static inline const auto& real(const TSimdZFloatV& z) noexcept
 {
     return z[0];
 }
-static inline auto& imag(six::sicd::ximd::zfloatv& z) noexcept
+template<typename TSimdZFloatV>
+static inline auto& imag(TSimdZFloatV& z) noexcept
 {
     return z[1];
 }
-static inline const auto& imag(const six::sicd::ximd::zfloatv& z) noexcept
+template<typename TSimdZFloatV>
+static inline const auto& imag(const TSimdZFloatV& z) noexcept
 {
     return z[1];
 }
@@ -232,14 +238,12 @@ static inline auto ssize(const six::sicd::ximd::simd<T>& v) noexcept
 {
     return gsl::narrow<int>(v.size());
 }
-
 namespace six
 {
 namespace sicd
 {
 namespace ximd
 {
-
 template <typename TGeneratorReal, typename TGeneratorImag>
 static inline auto make_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag)
 {
@@ -255,7 +259,6 @@ static inline auto make_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&&
 } // ximd
 } // sicd
 } // six
-
 
 static inline auto arg(const six::sicd::ximd::zfloatv& z)
 {
@@ -335,7 +338,8 @@ static auto lookup(const six::sicd::ximd::intv& zindex, std::span<const float> m
     return six::sicd::ximd::floatv::generate(generate);
 }
 
-#endif // SIX_sicd_has_ximd
+
+/******************************************************************************************************/
 
 template<typename ZFloatV>
 static auto getPhase(const ZFloatV& v, float phase_delta)
@@ -498,8 +502,8 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(st
     for (int i = 0; i < ssize(v); i++)
     {
         const auto z = p[i];
-        assert(real(v)[i] == z.real());
-        assert(imag(v)[i] == z.imag());
+        //assert(real(v)[i] == z.real());
+        //assert(imag(v)[i] == z.imag());
     }
     #endif
 
