@@ -462,7 +462,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(st
     #if CODA_OSS_DEBUG
     for (int i = 0; i < ssize(v); i++)
     {
-        const auto z = p[i];
+        //const auto z = p[i];
         //assert(real(v)[i] == z.real());
         //assert(imag(v)[i] == z.imag());
     }
