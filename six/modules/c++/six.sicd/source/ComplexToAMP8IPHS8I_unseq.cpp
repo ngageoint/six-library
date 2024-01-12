@@ -217,7 +217,7 @@ static inline auto make_ximd_zfloatv(TGeneratorReal&& generate_real, TGeneratorI
 }
 
 template<typename TTest, typename TResult>
-static inline auto select_(const TTest& test, const TResult& t, const TResult& f)
+static inline auto ximd_select_(const TTest& test, const TResult& t, const TResult& f)
 {
     TResult retval;
     for (size_t i = 0; i < test.size(); i++)
@@ -227,7 +227,7 @@ static inline auto select_(const TTest& test, const TResult& t, const TResult& f
     return retval;
 }
 
-static inline auto copy_from(std::span<float> p, ximd_floatv& result)
+static inline auto copy_from(std::span<const float> p, ximd_floatv& result)
 {
     assert(p.size() == result.size());
     result.copy_from(p.data());
@@ -249,11 +249,11 @@ static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
 
 static inline auto select(const ximd_floatv_mask& test, const  ximd_floatv& t, const  ximd_floatv& f)
 {
-    return select_(test, t, f);
+    return ximd_select_(test, t, f);
 }
 static inline auto select(const ximd_intv_mask& test, const  ximd_intv& t, const  ximd_intv& f)
 {
-    return select_(test, t, f);
+    return ximd_select_(test, t, f);
 }
 
 static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typename ximd_floatv::value_type c)
@@ -300,6 +300,173 @@ static auto lookup(const ximd_intv& zindex, std::span<const float> magnitudes)
 
 #endif // SIX_sicd_has_ximd
 
+#if SIX_sicd_has_simd
+
+#include <experimental/simd>
+
+// https://en.cppreference.com/w/cpp/experimental/simd/simd_cast
+// > The TS specification is missing `simd_cast` and `static_simd_cast` overloads for `simd_mask`. ...
+namespace stdx
+{
+    using namespace std::experimental;
+    using namespace std::experimental::__proposed;
+}
+
+template<typename T>
+using simd = stdx::simd<T>;
+
+using simd_intv = simd<int>;
+using simd_intv_mask = typename simd_intv::mask_type;
+
+using simd_floatv = simd<float>;
+using simd_floatv_mask = typename simd_floatv::mask_type;
+
+constexpr auto simd_elements_per_iteration = simd_floatv::size();
+
+template<typename T>
+static inline auto ssize(const simd<T>& v) noexcept
+{
+    return gsl::narrow<int>(v.size());
+}
+
+// Manage a SIMD complex as an array of two SIMDs
+using simd_zfloatv = std::array<simd_floatv, 2>;
+inline auto& real(simd_zfloatv& z) noexcept
+{
+    return z[0];
+}
+inline const auto& real(const simd_zfloatv& z) noexcept
+{
+    return z[0];
+}
+inline auto& imag(simd_zfloatv& z) noexcept
+{
+    return z[1];
+}
+inline const auto& imag(const simd_zfloatv& z) noexcept
+{
+    return z[1];
+}
+inline size_t size(const simd_zfloatv& z) noexcept
+{
+    auto retval = real(z).size();
+    assert(retval == imag(z).size());
+    return retval;
+}
+inline auto ssize(const simd_zfloatv& z) noexcept
+{
+    return gsl::narrow<int>(size(z));
+}
+
+inline auto arg(const simd_zfloatv& z)
+{
+    // https://en.cppreference.com/w/cpp/numeric/complex/arg
+    // > `std::atan2(std::imag(z), std::real(z))`
+    return atan2(imag(z), real(z));  // arg()
+}
+
+template <typename TGeneratorReal, typename TGeneratorImag>
+static inline auto make_simd_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag)
+{
+    simd_zfloatv retval;
+    for (size_t i = 0; i < size(retval); i++)
+    {
+        real(retval)[i] = generate_real(i);
+        imag(retval)[i] = generate_imag(i);
+    }
+    return retval;
+}
+
+template<typename TTest, typename TResult>
+static inline auto simd_select_(const TTest& test, const TResult& t, const TResult& f)
+{
+    // https://en.cppreference.com/w/cpp/experimental/simd/where_expression
+    // > ... All other elements are left unchanged.
+    TResult retval;
+    where(test, retval) = t;
+    where(!test, retval) = f;
+    return retval;
+}
+
+static inline auto copy_from(std::span<const float> p, simd_floatv& result)
+{
+    assert(p.size() == result.size());
+    result.copy_from(p.data(), stdx::element_aligned);
+}
+static inline auto copy_from(std::span<const zfloat> p, simd_zfloatv& result)
+{
+    const auto generate_real = [&](size_t i) { return p[i].real(); };
+    const auto generate_imag = [&](size_t i) { return p[i].imag(); };
+    result = make_simd_zfloatv(generate_real, generate_imag);
+}
+
+static inline auto roundi(const simd_floatv& v)  // match vcl::roundi()
+{
+    const auto rounded = round(v);
+    const auto generate_roundi = [&](size_t i)
+    { return static_cast<typename simd_intv::value_type>(rounded[i]); };
+    return simd_intv(generate_roundi);
+}
+
+template<typename TMask>
+static inline auto select(const TMask& test_, const  simd_floatv& t, const  simd_floatv& f)
+{
+    //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
+    const auto test = stdx::static_simd_cast<simd_floatv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
+    return simd_select_(test, t, f);
+}
+template<typename TMask>
+static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_intv& f)
+{
+    //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
+    const auto test = stdx::static_simd_cast<simd_intv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
+    return simd_select_(test, t, f);
+}
+
+static inline auto if_add(const simd_floatv_mask& m, const simd_floatv& v, typename simd_floatv::value_type c)
+{
+    // phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
+    const auto generate_add = [&](size_t i) {
+        return m[i] ? v[i] + c : v[i];
+    };
+    return simd_floatv(generate_add);
+}
+
+template<size_t N>
+static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& phase_directions)
+{
+    // It seems that the "generator" constuctor is called with SIMD instructions.
+    // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
+    // > The calls to `generator` are unsequenced with respect to each other.
+
+    const auto generate_real = [&](size_t i) {
+        const auto i_ = zindex[i];
+        return phase_directions[i_].real();
+    };
+    const auto generate_imag = [&](size_t i) {
+        const auto i_ = zindex[i];
+        return phase_directions[i_].imag();
+    };
+    return make_simd_zfloatv(generate_real, generate_imag);
+}
+
+static auto lookup(const simd_intv& zindex, std::span<const float> magnitudes)
+{
+    const auto generate = [&](size_t i) {
+        const auto i_ = zindex[i];
+
+        // The index may be out of range. This is expected because `i` might be "don't care."
+        if ((i_ >= 0) && (i_ < std::ssize(magnitudes)))
+        {
+            return magnitudes[i_];
+        }
+        return NAN; // propogate "don't care"
+    };
+    return simd_floatv(generate);
+}
+
+#endif // SIX_sicd_has_simd
+
 /******************************************************************************************************/
 
 template<typename ZFloatV>
@@ -309,7 +476,7 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
     auto phase = arg(v);
-    phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
+    phase = if_add(phase < 0.0f, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
     return roundi(phase / phase_delta);
 }
 
@@ -409,7 +576,7 @@ static auto nearest(std::span<const float> magnitudes, const FloatV& value)
     const IntV zero = 0;
     auto retval = select(it == 0, zero, // if (it == begin) return 0;
         select(it == end, prev_it,  // it == end ? prev_it  : ...
-            select(v0 <=v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
+            select(v0 <= v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
         ));
     return retval;
 }
@@ -448,6 +615,17 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
 
     const auto phase_direction = lookup(phase, impl.phase_directions);
     return ::find_nearest<ximd_intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+}
+#endif
+
+#if SIX_sicd_has_simd
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
+    const simd_intv& phase, const  simd_zfloatv& v)
+{
+    const auto& impl = converter.impl;
+
+    const auto phase_direction = lookup(phase, impl.phase_directions);
+    return ::find_nearest<simd_intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
 }
 #endif
 
@@ -564,3 +742,15 @@ std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neig
 }
 #endif // SIX_sicd_has_ximd
 
+#if SIX_sicd_has_simd
+std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_simd(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make_(pAmplitudeTable);
+
+    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
+    converter.impl.nearest_neighbors_unseq<simd_zfloatv, simd_elements_per_iteration>(inputs, sys::make_span(retval));
+    return retval;
+}
+#endif // SIX_sicd_has_simd
