@@ -264,6 +264,30 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 
 #endif
 }
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(execution_policy policy,
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    #if SIX_sicd_ComplexToAMP8IPHS8I_unseq    
+    if (policy == execution_policy::unseq)
+    {
+        return nearest_neighbors_unseq(inputs, pAmplitudeTable);
+    }
+    #endif
+
+    if (policy == execution_policy::par)
+    {
+        return nearest_neighbors_par(inputs, pAmplitudeTable);
+    }
+    if (policy == execution_policy::seq)
+    {
+        return nearest_neighbors_seq(inputs, pAmplitudeTable);
+    }
+
+    // https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t
+    // > If the implementation cannot parallelize or vectorize (e.g. due to lack of resources),
+    // > all standard execution policies can fall back to sequential execution.
+    return nearest_neighbors(inputs, pAmplitudeTable); // no policy specified, "default policy"
+}
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
