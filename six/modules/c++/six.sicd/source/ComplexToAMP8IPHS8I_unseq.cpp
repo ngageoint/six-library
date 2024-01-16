@@ -160,6 +160,17 @@ static inline auto ssize(const ximd<T>& v) noexcept
     return gsl::narrow<int>(v.size());
 }
 
+template <typename TGenerator>
+static inline auto ximd_intv_generate(TGenerator&& generator)
+{
+    return ximd_intv::generate(generator);
+}
+template <typename TGenerator>
+static inline auto ximd_floatv_generate(TGenerator&& generator)
+{
+    return ximd_floatv::generate(generator);
+}
+
 // Manage a SIMD complex as an array of two SIMDs
 using ximd_zfloatv = std::array<ximd_floatv, 2>;
 inline auto& real(ximd_zfloatv& z) noexcept
@@ -197,7 +208,7 @@ inline auto arg(const ximd_zfloatv& z)
 }
 
 template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto make_ximd_zfloatv(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag)
+static inline auto ximd_zfloatv_generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag)
 {
     ximd_zfloatv retval;
     for (size_t i = 0; i < size(retval); i++)
@@ -228,7 +239,7 @@ static inline auto copy_from(std::span<const zfloat> p, ximd_zfloatv& result)
 {
     const auto generate_real = [&](size_t i) { return p[i].real(); };
     const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = make_ximd_zfloatv(generate_real, generate_imag);
+    result = ximd_zfloatv_generate(generate_real, generate_imag);
 }
 
 static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
@@ -236,7 +247,7 @@ static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
     const auto rounded = round(v);
     const auto generate_roundi = [&](size_t i)
     { return static_cast<typename ximd_intv::value_type>(rounded[i]); };
-    return ximd_intv::generate(generate_roundi);
+    return ximd_intv_generate(generate_roundi);
 }
 
 static inline auto select(const ximd_floatv_mask& test, const  ximd_floatv& t, const  ximd_floatv& f)
@@ -254,7 +265,7 @@ static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typen
     const auto generate_add = [&](size_t i) {
         return m[i] ? v[i] + c : v[i];
     };
-    return ximd_floatv::generate(generate_add);
+    return ximd_floatv_generate(generate_add);
 }
 
 template<size_t N>
@@ -272,7 +283,7 @@ static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& 
         const auto i_ = zindex[i];
         return phase_directions[i_].imag();
     };
-    return make_ximd_zfloatv(generate_real, generate_imag);
+    return ximd_zfloatv_generate(generate_real, generate_imag);
 }
 
 static auto lookup(const ximd_intv& zindex, std::span<const float> magnitudes)
@@ -287,7 +298,7 @@ static auto lookup(const ximd_intv& zindex, std::span<const float> magnitudes)
         }
         return NAN; // propogate "don't care"
     };
-    return ximd_floatv::generate(generate);
+    return ximd_floatv_generate(generate);
 }
 
 #endif // SIX_sicd_has_ximd
