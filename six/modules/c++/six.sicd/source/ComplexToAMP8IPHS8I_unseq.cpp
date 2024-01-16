@@ -389,14 +389,18 @@ static auto roundi_(const FloatV& v)  // match vcl::roundi()
     { return static_cast<typename IntV::value_type>(rounded[i]); };
     return generate(generate_roundi, IntV{});
 }
+#if SIX_sicd_has_ximd
 static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
 {
     return roundi_<ximd_intv>(v);
 }
+#endif
+#if SIX_sicd_has_simd
 static inline auto roundi(const simd_floatv& v)  // match vcl::roundi()
 {
     return roundi_<simd_intv>(v);
 }
+#endif
 
 template<typename TFloatVMask, typename TFloatV>
 static auto if_add_(const TFloatVMask& m, const TFloatV& v, typename TFloatV::value_type c)
@@ -406,14 +410,18 @@ static auto if_add_(const TFloatVMask& m, const TFloatV& v, typename TFloatV::va
     };
     return generate(generate_add, TFloatV{});
 }
+#if SIX_sicd_has_ximd
 static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typename ximd_floatv::value_type c)
 {
     return if_add_(m, v, c);
 }
+#endif
+#if SIX_sicd_has_simd
 static inline auto if_add(const simd_floatv_mask& m, const simd_floatv& v, typename simd_floatv::value_type c)
 {
     return if_add_(m, v, c);
 }
+#endif
 
 template<typename ZFloatV, typename IntV, size_t N>
 static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_directions)
@@ -432,16 +440,20 @@ static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_direc
     };
     return generate(generate_real, generate_imag, ZFloatV{});
 }
+#if SIX_sicd_has_ximd
 template<size_t N>
 static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& phase_directions)
 {
     return lookup_<ximd_zfloatv>(zindex, phase_directions);
 }
+#endif
+#if SIX_sicd_has_simd
 template<size_t N>
 static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& phase_directions)
 {
     return lookup_<simd_zfloatv>(zindex, phase_directions);
 }
+#endif
 
 template<typename FloatV, typename IntV>
 static auto lookup_(const IntV& zindex, std::span<const float> magnitudes)
@@ -458,14 +470,18 @@ static auto lookup_(const IntV& zindex, std::span<const float> magnitudes)
     };
     return generate(lookup_f, FloatV{});
 }
+#if SIX_sicd_has_ximd
 static inline auto lookup(const ximd_intv& zindex, std::span<const float> magnitudes)
 {
     return lookup_<ximd_floatv>(zindex, magnitudes);
 }
+#endif
+#if SIX_sicd_has_simd
 static inline auto lookup(const simd_intv& zindex, std::span<const float> magnitudes)
 {
     return lookup_<simd_floatv>(zindex, magnitudes);
 }
+#endif
 #endif // SIX_sicd_has_ximd || SIX_sicd_has_simd
 
 /******************************************************************************************************/
