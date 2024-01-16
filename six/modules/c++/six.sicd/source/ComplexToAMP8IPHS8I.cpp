@@ -31,15 +31,7 @@
 #include <functional>
 #include <stdexcept>
 
-#include <coda_oss/CPlusPlus.h>
-#if CODA_OSS_cpp17
-    // <execution> is broken with the older version of GCC we're using
-    #if (__GNUC__ >= 10) || _MSC_VER
-    #include <execution>
-    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
-    #endif
-#endif
-
+#include <mt/Algorithm.h>
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
 #include <units/Angles.h>
@@ -231,30 +223,6 @@ six::AMP8I_PHS8I_t six::sicd::nearest_neighbor(const details::ComplexToAMP8IPHS8
     return i.nearest_neighbor_(v);
 }
 
- // Yes, this is duplicated code :-(  1) hopefully it will go away someday "soon,"
- // that is, we'll be at C++17; 2) the cutoff/dimension values may be different.
- //
- // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
- // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
- // parallel algorithms which might be a better way of satisfying our immediate
- // needs (below) ... although we're still at C++14.
-template <typename InputIt, typename OutputIt, typename TTransformFunc>
-static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TTransformFunc transform_f,
-    typename std::iterator_traits<InputIt>::difference_type cutoff)
-{
-    // https://en.cppreference.com/w/cpp/thread/async
-    const auto len = std::distance(first1, last1);
-    if (len < cutoff)
-    {
-        return transform_f(first1, last1, d_first);
-    }
-
-    const auto mid1 = first1 + len / 2;
-    const auto d_mid = d_first + len / 2;
-    auto handle = std::async(transform_async<InputIt, OutputIt, TTransformFunc>, mid1, last1, d_mid, transform_f, cutoff);
-    transform_async(first1, mid1, d_first, transform_f, cutoff);
-    return handle.get();
-}
 
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
@@ -262,26 +230,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par(std::s
     {
         return converter.nearest_neighbor_(v);
     };
-
-    const auto first = inputs.begin();
-    const auto last = inputs.end();
-    const auto dest = results.begin();
-     
-#if SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
-    std::ignore = std::transform(std::execution::par, first, last, dest, nearest_neighbor);
-#else
-    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
-    // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-    constexpr auto dimension = 256;
-    constexpr auto default_cutoff = (dimension * dimension) * 4;
-    const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-
-    const auto transform_f = [&](auto first1, auto last1, auto d_first)
-    {
-        return std::transform(first1, last1, d_first, nearest_neighbor);
-    };
-    std::ignore = transform_async(first, last, dest, transform_f, cutoff);
-#endif // SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
+    std::ignore = mt::Transform_par(inputs.begin(), inputs.end(), results.begin(), nearest_neighbor);
 }
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
