@@ -180,8 +180,12 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #else
         // __has_include is part of C++17
         #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
-            __has_include("six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h")
-        #define SIX_sicd_has_VCL 1
+            __has_include("six/sicd/vectorclass/version2/vectorclass.h")
+            #if _MSC_VER
+                #define SIX_sicd_has_VCL !CODA_OSS_cpp20 // TODO: MSVC works with C++17, but not C++20 ... ?
+            #else
+                #define SIX_sicd_has_VCL 1
+            #endif // _MSC_VER
         #else
         #define SIX_sicd_has_VCL 0
         #endif // __has_include
@@ -189,8 +193,8 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 #endif
 
 #ifndef SIX_sicd_has_simd
-    // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
-    #if (__GNUC__ >= 999) && CODA_OSS_cpp20 // TODO: 11 instead of 999
+    // Do we have `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
+    #if (__GNUC__ >= 11) && CODA_OSS_cpp20
         // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
         #define SIX_sicd_has_simd 1
     #else
@@ -199,7 +203,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 #endif
 
 #ifndef SIX_sicd_has_ximd
-    // This is a "hacked up" version of std::experimental::simd using std::array.
+    // This is a "hacked up" version of std::experimental::simd using std::valarray.
     // It's primarily for development and testing: VCL needs C++17 and
     // std::experimental::simd is G++11/C++20.
     #define SIX_sicd_has_ximd CODA_OSS_DEBUG
@@ -278,29 +282,29 @@ private:
         Impl(Impl&&) = delete; // implicitly deleted because of =delete for copy
         Impl& operator=(Impl&&) = delete; // implicitly deleted because of =delete for copy
 
-        void nearest_neighbors_seq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-
+        void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
         template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
         template<typename ZFloatV>
-        void nearest_neighbors_unseq_T(std::span<const zfloat>, std::span<AMP8I_PHS8I_t>) const;
+        void nearest_neighbors_unseq_T(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+
         #endif 
 
         //! The sorted set of possible magnitudes order from small to large.
         std::array<float, AmplitudeTableSize> uncached_magnitudes;
         std::span<const float> magnitudes;
-        uint8_t find_nearest(zfloat phase_direction, zfloat v) const;
+        uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
 
         //! The difference in phase angle between two UINT phase values.
         float phase_delta;
-        uint8_t getPhase(zfloat) const;
+        uint8_t getPhase(six::zfloat) const;
 
         //! Unit vector rays that represent each direction that phase can point.
-        std::array<zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
+        std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
         #ifdef SIX_sicd_has_VCL
         std::array<float, AmplitudeTableSize> phase_directions_real;
         std::array<float, AmplitudeTableSize> phase_directions_imag;
