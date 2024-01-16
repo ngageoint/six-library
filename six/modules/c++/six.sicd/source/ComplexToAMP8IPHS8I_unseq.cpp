@@ -31,19 +31,11 @@
 #include <functional>
 #include <type_traits>
 
-#include <coda_oss/CPlusPlus.h>
-#if CODA_OSS_cpp17
-    // <execution> is broken with the older version of GCC we're using
-    #if (__GNUC__ >= 10) || _MSC_VER
-    #include <execution>
-    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
-    #endif
-#endif
-
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
 #include <units/Angles.h>
 #include <sys/Span.h>
+#include <mt/Algorithm.h>
 
 #include "six/sicd/Utilities.h"
 
