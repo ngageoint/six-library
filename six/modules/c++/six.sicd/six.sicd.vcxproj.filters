@@ -248,13 +248,7 @@
     <ClCompile Include="source\DataParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\ComplexToAMP8IPHS8I_vcl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\ComplexToAMP8IPHS8I_simd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ComplexToAMP8IPHS8I_ximd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
