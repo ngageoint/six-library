@@ -208,7 +208,7 @@ inline auto arg(const ximd_zfloatv& z)
 }
 
 template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto ximd_zfloatv_generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag)
+static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, ximd_zfloatv)
 {
     ximd_zfloatv retval;
     for (size_t i = 0; i < size(retval); i++)
@@ -239,7 +239,7 @@ static inline auto copy_from(std::span<const zfloat> p, ximd_zfloatv& result)
 {
     const auto generate_real = [&](size_t i) { return p[i].real(); };
     const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = ximd_zfloatv_generate(generate_real, generate_imag);
+    result = generate(generate_real, generate_imag, ximd_zfloatv{});
 }
 
 static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
@@ -283,7 +283,7 @@ static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& 
         const auto i_ = zindex[i];
         return phase_directions[i_].imag();
     };
-    return ximd_zfloatv_generate(generate_real, generate_imag);
+    return generate(generate_real, generate_imag, ximd_zfloatv{});
 }
 
 #endif // SIX_sicd_has_ximd
@@ -365,7 +365,7 @@ inline auto arg(const simd_zfloatv& z)
 }
 
 template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto simd_zfloatv_generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag)
+static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, simd_zfloatv)
 {
     simd_zfloatv retval;
     for (size_t i = 0; i < size(retval); i++)
@@ -396,7 +396,7 @@ static inline auto copy_from(std::span<const zfloat> p, simd_zfloatv& result)
 {
     const auto generate_real = [&](size_t i) { return p[i].real(); };
     const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = simd_zfloatv_generate(generate_real, generate_imag);
+    result = generate(generate_real, generate_imag, simd_zfloatv{});
 }
 
 static inline auto roundi(const simd_floatv& v)  // match vcl::roundi()
@@ -446,7 +446,7 @@ static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& 
         const auto i_ = zindex[i];
         return phase_directions[i_].imag();
     };
-    return simd_zfloatv_generate(generate_real, generate_imag);
+    return generate(generate_real, generate_imag, simd_zfloatv{});
 }
 
 #endif // SIX_sicd_has_simd
