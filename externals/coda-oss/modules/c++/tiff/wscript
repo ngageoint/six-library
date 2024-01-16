@@ -1,7 +1,6 @@
 NAME            = 'tiff'
 VERSION         = '1.0'
-MODULE_DEPS     = 'libtiff mt io'
-USELIB_LOCAL    = 'libtiff-c'
+MODULE_DEPS     = 'mt io'
 
 options = configure = distclean = lambda p: None
 

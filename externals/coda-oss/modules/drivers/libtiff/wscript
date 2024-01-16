@@ -1,8 +1,0 @@
-NAME            = 'libtiff'
-VERSION         = '4.6.0'
-LANG            = 'c'
-
-distclean = options = configure = lambda p: None
-
-def build(bld):
-    bld.module(**globals())
