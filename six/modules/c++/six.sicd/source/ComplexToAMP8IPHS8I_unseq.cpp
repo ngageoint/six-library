@@ -161,7 +161,7 @@ static inline auto ssize(const ximd<T>& v) noexcept
 }
 
 template <typename TGenerator>
-static inline auto ximd_intv_generate(TGenerator&& generator)
+static inline auto generate(TGenerator&& generator, ximd_intv)
 {
     return ximd_intv::generate(generator);
 }
@@ -247,7 +247,7 @@ static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
     const auto rounded = round(v);
     const auto generate_roundi = [&](size_t i)
     { return static_cast<typename ximd_intv::value_type>(rounded[i]); };
-    return ximd_intv_generate(generate_roundi);
+    return generate(generate_roundi, ximd_intv{});
 }
 
 static inline auto select(const ximd_floatv_mask& test, const  ximd_floatv& t, const  ximd_floatv& f)
@@ -318,7 +318,7 @@ static inline auto ssize(const simd<T>& v) noexcept
 }
 
 template <typename TGenerator>
-static inline auto simd_intv_generate(TGenerator&& generator)
+static inline auto generate(TGenerator&& generator, simd_intv)
 {
     return simd_intv(generator);
 }
@@ -404,7 +404,7 @@ static inline auto roundi(const simd_floatv& v)  // match vcl::roundi()
     const auto rounded = round(v);
     const auto generate_roundi = [&](size_t i)
     { return static_cast<typename simd_intv::value_type>(rounded[i]); };
-    return simd_intv_generate(generate_roundi);
+    return generate(generate_roundi, simd_intv{});
 }
 
 template<typename TMask>
@@ -451,6 +451,8 @@ static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& 
 
 #endif // SIX_sicd_has_simd
 
+#if SIX_sicd_has_ximd || SIX_sicd_has_simd
+
 template<typename FloatV, typename IntV>
 static auto lookup_(const IntV& zindex, std::span<const float> magnitudes)
 {
@@ -474,6 +476,7 @@ static inline auto lookup(const simd_intv& zindex, std::span<const float> magnit
 {
     return lookup_<simd_floatv>(zindex, magnitudes);
 }
+#endif // SIX_sicd_has_ximd || SIX_sicd_has_simd
 
 /******************************************************************************************************/
 
