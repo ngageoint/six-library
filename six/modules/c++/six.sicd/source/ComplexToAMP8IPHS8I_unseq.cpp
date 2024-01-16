@@ -166,7 +166,7 @@ static inline auto ximd_intv_generate(TGenerator&& generator)
     return ximd_intv::generate(generator);
 }
 template <typename TGenerator>
-static inline auto ximd_floatv_generate(TGenerator&& generator)
+static inline auto generate(TGenerator&& generator, ximd_floatv)
 {
     return ximd_floatv::generate(generator);
 }
@@ -265,7 +265,7 @@ static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typen
     const auto generate_add = [&](size_t i) {
         return m[i] ? v[i] + c : v[i];
     };
-    return ximd_floatv_generate(generate_add);
+    return generate(generate_add, ximd_floatv{});
 }
 
 template<size_t N>
@@ -284,21 +284,6 @@ static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& 
         return phase_directions[i_].imag();
     };
     return ximd_zfloatv_generate(generate_real, generate_imag);
-}
-
-static auto lookup(const ximd_intv& zindex, std::span<const float> magnitudes)
-{
-    const auto generate = [&](size_t i) {
-        const auto i_ = zindex[i];
-
-        // The index may be out of range. This is expected because `i` might be "don't care."
-        if ((i_ >= 0) && (i_ < std::ssize(magnitudes)))
-        {
-            return magnitudes[i_];
-        }
-        return NAN; // propogate "don't care"
-    };
-    return ximd_floatv_generate(generate);
 }
 
 #endif // SIX_sicd_has_ximd
@@ -338,7 +323,7 @@ static inline auto simd_intv_generate(TGenerator&& generator)
     return simd_intv(generator);
 }
 template <typename TGenerator>
-static inline auto simd_floatv_generate(TGenerator&& generator)
+static inline auto generate(TGenerator&& generator, simd_floatv)
 {
     return simd_floatv(generator);
 }
@@ -443,7 +428,7 @@ static inline auto if_add(const simd_floatv_mask& m, const simd_floatv& v, typen
     const auto generate_add = [&](size_t i) {
         return m[i] ? v[i] + c : v[i];
     };
-    return simd_floatv_generate(generate_add);
+    return generate(generate_add, simd_floatv{});
 }
 
 template<size_t N>
@@ -464,9 +449,12 @@ static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& 
     return simd_zfloatv_generate(generate_real, generate_imag);
 }
 
-static auto lookup(const simd_intv& zindex, std::span<const float> magnitudes)
+#endif // SIX_sicd_has_simd
+
+template<typename FloatV, typename IntV>
+static auto lookup_(const IntV& zindex, std::span<const float> magnitudes)
 {
-    const auto generate = [&](size_t i) {
+    const auto lookup_f = [&](size_t i) {
         const auto i_ = zindex[i];
 
         // The index may be out of range. This is expected because `i` might be "don't care."
@@ -476,10 +464,16 @@ static auto lookup(const simd_intv& zindex, std::span<const float> magnitudes)
         }
         return NAN; // propogate "don't care"
     };
-    return simd_floatv_generate(generate);
+    return generate(lookup_f, FloatV{});
 }
-
-#endif // SIX_sicd_has_simd
+static inline auto lookup(const ximd_intv& zindex, std::span<const float> magnitudes)
+{
+    return lookup_<ximd_floatv>(zindex, magnitudes);
+}
+static inline auto lookup(const simd_intv& zindex, std::span<const float> magnitudes)
+{
+    return lookup_<simd_floatv>(zindex, magnitudes);
+}
 
 /******************************************************************************************************/
 
