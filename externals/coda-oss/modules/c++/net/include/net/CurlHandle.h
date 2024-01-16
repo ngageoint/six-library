@@ -20,10 +20,11 @@
  *
  */
 
-#ifndef __NET_CURL_HANDLE_H__
-#define __NET_CURL_HANDLE_H__
+#pragma once
+#ifndef CODA_OSS_net_CurlHandle_h_INCLUDED_
+#define CODA_OSS_net_CurlHandle_h_INCLUDED_
 
-#include <net/net_config.h>
+#include <net/config.h>
 
 #ifdef NET_CURL_SUPPORT
 #include <curl/curl.h>
@@ -129,4 +130,4 @@ private:
 }
 
 #endif
-#endif
+#endif  // CODA_OSS_net_CurlHandle_h_INCLUDED_

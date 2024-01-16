@@ -169,13 +169,15 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
                 // Full name.
                 len = DAY[i].size();
                 std::string day(bp, len);
-                if (str::eq(day, DAY[i]))
+                str::lower(day);
+                if (day == DAY[i])
                     break;
 
                 // Abbreviated name.
                 len = AB_DAY[i].size();
                 day = std::string(bp, len);
-                if (str::eq(day, AB_DAY[i]))
+                str::lower(day);
+                if (day == AB_DAY[i])
                     break;
             }
 
@@ -200,13 +202,15 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
                 // Full name.
                 len = MONTH[i].size();
                 std::string month(bp, len);
-                if (str::eq(month, MONTH[i]))
+                str::lower(month);
+                if (month == MONTH[i])
                     break;
 
                 // Abbreviated name.
                 len = AB_MONTH[i].size();
                 month = std::string(bp, len);
-                if (str::eq(month, AB_MONTH[i]))
+                str::lower(month);
+                if (month == AB_MONTH[i])
                     break;
             }
 
@@ -463,7 +467,9 @@ std::string sys::DateTime::dayOfWeekToStringAbbr(int dayOfWeek)
 
 int sys::DateTime::monthToValue(const std::string& month)
 {
-    const auto m = str::lower(month);
+    std::string m = month;
+    str::lower(m);
+
     if (str::startsWith(m, "jan"))
         return 1;
     else if (str::startsWith(m, "feb"))
@@ -495,7 +501,9 @@ int sys::DateTime::monthToValue(const std::string& month)
 
 int sys::DateTime::dayOfWeekToValue(const std::string& dayOfWeek)
 {
-    const auto d = str::lower(dayOfWeek);
+    std::string d = dayOfWeek;
+    str::lower(d);
+
     if (str::startsWith(d, "sun"))
         return 1;
     else if (str::startsWith(d, "mon"))

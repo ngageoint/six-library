@@ -5,38 +5,6 @@ if (WIN32)
     # linking with the system library rpcrt4
     set(UUID_LIB rpcrt4 CACHE INTERNAL "library for providing UUID")
 else()
-    set(UUID_HOME "" CACHE PATH "path to UUID installation")
-    if (UUID_HOME)
-        find_library(${TARGET_NAME}_PATH
-                     ${TARGET_NAME}
-                     PATHS ${UUID_HOME}
-                     PATH_SUFFIXES lib lib64
-                     NO_DEFAULT_PATH)
-        if ("${${TARGET_NAME}_PATH}" STREQUAL "${TARGET_NAME}_PATH-NOTFOUND")
-            message(FATAL_ERROR "${TARGET_NAME} not found at UUID_HOME ${UUID_HOME}")
-        else()
-            message("Found ${TARGET_NAME} at ${${TARGET_NAME}_PATH}")
-        endif()
-
-        # verify we can link the found library
-        set(CMAKE_REQUIRED_INCLUDES "${UUID_HOME}/include")
-        set(CMAKE_REQUIRED_LIBRARIES ${${TARGET_NAME}_PATH})
-        unset(UUID_HOME_VALID CACHE)
-        check_cxx_source_compiles("
-            #include <uuid/uuid.h>
-            int main() { auto f = &uuid_generate; return 0; };"
-            UUID_HOME_VALID)
-        unset(CMAKE_REQUIRED_LIBRARIES)
-        unset(CMAKE_REQUIRED_INCLUDES)
-        if (NOT UUID_HOME_VALID)
-            message(FATAL_ERROR "Could not link with UUID from UUID_HOME ${UUID_HOME}")
-        endif()
-
-        # create interface library pointing to the external library
-        add_library(${TARGET_NAME} INTERFACE)
-        target_include_directories(${TARGET_NAME} INTERFACE "${UUID_HOME}/include")
-        target_link_libraries(${TARGET_NAME} INTERFACE ${uuid_PATH})
-    else()
         message("UUID_HOME not specified, so it will be built")
 
         coda_fetch_driver(
@@ -72,7 +40,6 @@ else()
         install(FILES "${SOURCE_DIR}/lib/uuid/uuid.h"
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/uuid"
                 ${CODA_INSTALL_OPTION})
-    endif()
 
     install(TARGETS ${TARGET_NAME}
             EXPORT ${CODA_EXPORT_SET_NAME}

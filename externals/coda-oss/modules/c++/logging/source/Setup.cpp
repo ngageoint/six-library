@@ -53,7 +53,8 @@ logging::setupLogger(const path& program_,
     // setup logging formatter
     std::unique_ptr <logging::Formatter> formatter;
     const auto logFile = logFile_.string();
-    const auto file = str::lower(logFile);
+    auto file = logFile;
+    str::lower(file);
     if (str::endsWith(file, ".xml"))
     {
         formatter.reset(

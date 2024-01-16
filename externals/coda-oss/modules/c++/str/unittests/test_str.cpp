@@ -57,78 +57,16 @@ TEST_CASE(testData)
 
 TEST_CASE(testUpper)
 {
-    const std::string s_ = "test-something1";
-    std::string s = s_;
-    TEST_ASSERT(str::eq(s, "TEST-SOMETHING1"));
+    std::string s = "test-something1";
     str::upper( s);
     TEST_ASSERT_EQ(s, "TEST-SOMETHING1");
-
-    //#if _WIN32
-    //s = "<×àa`öo\"øo/þb÷>";
-    //str::w1252_upper(s);
-    //TEST_ASSERT_EQ(s, "<×ÀA`ÖO\"ØO/ÞB÷>");
-    //#endif
-}
-
-TEST_CASE(test_toupper)
-{
-    for (uint16_t i = 0x20; i <= 0xff; i++) // uint16_t to avoid wrap-around
-    {
-        const auto w1252 = static_cast<str::Windows1252_T>(i);
-        const auto w1252_upper = str::to_w1252_upper(w1252);
-
-        const auto w1252_lower = w1252 == w1252_upper ? w1252 : str::to_w1252_lower(w1252_upper); // round-trip
-        TEST_ASSERT_EQ(static_cast<uint8_t>(w1252), static_cast<uint8_t>(w1252_lower));
-
-        if (i <= 0x7f) // ASCII
-        {
-            const auto ch = static_cast<char>(i);
-            const auto upper = toupper(ch);
-            TEST_ASSERT_EQ(static_cast<uint8_t>(upper), static_cast<uint8_t>(w1252_upper));
-
-            const auto lower = ch == upper ? ch : tolower(upper); // round-trip
-            TEST_ASSERT_EQ(ch, lower);
-            TEST_ASSERT_EQ(static_cast<uint8_t>(lower), static_cast<uint8_t>(w1252_lower));
-        }
-    }
 }
 
 TEST_CASE(testLower)
 {
-    const std::string s_ = "TEST1";
-    std::string s = s_;
-    TEST_ASSERT(str::eq(s, "test1"));
-    str::lower(s);
+    std::string s = "TEST1";
+    str::lower( s);
     TEST_ASSERT_EQ(s, "test1");
-
-    //#if _WIN32
-    //s = "[×ÀÖØÞ÷]";
-    //str::w1252_lower(s);
-    //TEST_ASSERT_EQ(s, "[×àöøþ÷]");
-    //#endif
-}
-
-TEST_CASE(test_tolower)
-{
-    for (uint16_t i = 0x20; i <= 0xff; i++) // uint16_t to avoid wrap-around
-    {
-        const auto w1252 = static_cast<str::Windows1252_T>(i);
-        const auto w1252_lower = str::to_w1252_lower(w1252);
-
-        const auto w1252_upper = w1252 == w1252_lower ? w1252 : str::to_w1252_upper(w1252_lower); // round-trip
-        TEST_ASSERT_EQ(static_cast<uint8_t>(w1252), static_cast<uint8_t>(w1252_upper));
-
-        if (i <= 0x7f) // ASCII
-        {
-            const auto ch = static_cast<char>(i);
-            const auto lower = tolower(ch);
-            TEST_ASSERT_EQ(static_cast<uint8_t>(lower), static_cast<uint8_t>(w1252_lower));
-
-            const auto upper = ch == lower ? ch : toupper(lower); // round-trip
-            TEST_ASSERT_EQ(ch, upper);
-            TEST_ASSERT_EQ(static_cast<uint8_t>(upper), static_cast<uint8_t>(w1252_upper));
-        }
-    }
 }
 
 TEST_CASE(test_eq_ne)
@@ -245,7 +183,7 @@ TEST_CASE(testContainsOnly)
 }
 TEST_CASE(testRoundDouble)
 {
-    double eps = std::numeric_limits<double>::epsilon();
+    constexpr auto eps = 0.01;
     double numerator = 10005.0;
     double denom = 10007.0;
     double v = numerator / denom;
@@ -371,9 +309,7 @@ TEST_MAIN(
     TEST_CHECK(testTrim);
     TEST_CHECK(testData);
     TEST_CHECK(testUpper);
-    TEST_CHECK(test_toupper);
     TEST_CHECK(testLower);
-    TEST_CHECK(test_tolower);
     TEST_CHECK(test_eq_ne);
     TEST_CHECK(testReplace);
     TEST_CHECK(testReplaceAllInfinite);

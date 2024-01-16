@@ -1,4 +1,0 @@
-distclean = options = configure = lambda p: None
-
-def build(bld):
-  bld.swigModule(name = 'xml.lite', use = 'xml.lite-c++ config-python', package='coda')
