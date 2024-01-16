@@ -219,17 +219,6 @@ static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& gen
     return retval;
 }
 
-template<typename TTest, typename TResult>
-static inline auto ximd_select_(const TTest& test, const TResult& t, const TResult& f)
-{
-    TResult retval;
-    for (size_t i = 0; i < test.size(); i++)
-    {
-        retval[i] = test[i] ? t[i] : f[i];
-    }
-    return retval;
-}
-
 static inline auto copy_from(std::span<const float> p, ximd_floatv& result)
 {
     assert(p.size() == result.size());
@@ -242,6 +231,16 @@ static inline auto copy_from(std::span<const zfloat> p, ximd_zfloatv& result)
     result = generate(generate_real, generate_imag, ximd_zfloatv{});
 }
 
+template<typename TTest, typename TResult>
+static auto ximd_select_(const TTest& test, const TResult& t, const TResult& f)
+{
+    TResult retval;
+    for (size_t i = 0; i < test.size(); i++)
+    {
+        retval[i] = test[i] ? t[i] : f[i];
+    }
+    return retval;
+}
 static inline auto select(const ximd_floatv_mask& test, const  ximd_floatv& t, const  ximd_floatv& f)
 {
     return ximd_select_(test, t, f);
@@ -341,17 +340,6 @@ static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& gen
     return retval;
 }
 
-template<typename TTest, typename TResult>
-static inline auto simd_select_(const TTest& test, const TResult& t, const TResult& f)
-{
-    // https://en.cppreference.com/w/cpp/experimental/simd/where_expression
-    // > ... All other elements are left unchanged.
-    TResult retval;
-    where(test, retval) = t;
-    where(!test, retval) = f;
-    return retval;
-}
-
 static inline auto copy_from(std::span<const float> p, simd_floatv& result)
 {
     assert(p.size() == result.size());
@@ -364,6 +352,16 @@ static inline auto copy_from(std::span<const zfloat> p, simd_zfloatv& result)
     result = generate(generate_real, generate_imag, simd_zfloatv{});
 }
 
+template<typename TTest, typename TResult>
+static auto simd_select_(const TTest& test, const TResult& t, const TResult& f)
+{
+    // https://en.cppreference.com/w/cpp/experimental/simd/where_expression
+    // > ... All other elements are left unchanged.
+    TResult retval;
+    where(test, retval) = t;
+    where(!test, retval) = f;
+    return retval;
+}
 template<typename TMask>
 static inline auto select(const TMask& test_, const  simd_floatv& t, const  simd_floatv& f)
 {
@@ -609,27 +607,30 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
     return ::find_nearest<vcl_intv>(impl.magnitudes, phase_direction_real, phase_direction_imag, v);
 }
 #endif
+#if SIX_sicd_has_ximd || SIX_sicd_has_simd
+template<typename IntV, typename ZFloatV>
+static auto lookup_and_find_nearest_(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
+    const IntV& phase, const  ZFloatV& v)
+{
+    const auto& impl = converter.impl;
 
+    const auto phase_direction = lookup(phase, impl.phase_directions);
+    return ::find_nearest<IntV>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+}
 #if SIX_sicd_has_ximd
 static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const ximd_intv& phase, const  ximd_zfloatv& v)
 {
-    const auto& impl = converter.impl;
-
-    const auto phase_direction = lookup(phase, impl.phase_directions);
-    return ::find_nearest<ximd_intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+    return lookup_and_find_nearest_(converter, phase, v);
 }
 #endif
-
 #if SIX_sicd_has_simd
 static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const simd_intv& phase, const  simd_zfloatv& v)
 {
-    const auto& impl = converter.impl;
-
-    const auto phase_direction = lookup(phase, impl.phase_directions);
-    return ::find_nearest<simd_intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+    return lookup_and_find_nearest_(converter, phase, v);
 }
+#endif
 #endif
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
