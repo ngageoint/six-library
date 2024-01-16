@@ -259,15 +259,6 @@ static inline auto select(const ximd_intv_mask& test, const  ximd_intv& t, const
     return ximd_select_(test, t, f);
 }
 
-static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typename ximd_floatv::value_type c)
-{
-    // phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
-    const auto generate_add = [&](size_t i) {
-        return m[i] ? v[i] + c : v[i];
-    };
-    return generate(generate_add, ximd_floatv{});
-}
-
 #endif // SIX_sicd_has_ximd
 
 #if SIX_sicd_has_simd
@@ -404,18 +395,26 @@ static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_i
     return simd_select_(test, t, f);
 }
 
-static inline auto if_add(const simd_floatv_mask& m, const simd_floatv& v, typename simd_floatv::value_type c)
-{
-    // phase = if_add(phase < 0.0, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
-    const auto generate_add = [&](size_t i) {
-        return m[i] ? v[i] + c : v[i];
-    };
-    return generate(generate_add, simd_floatv{});
-}
-
 #endif // SIX_sicd_has_simd
 
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
+
+template<typename TFloatVMask, typename TFloatV>
+static auto if_add_(const TFloatVMask& m, const TFloatV& v, typename TFloatV::value_type c)
+{
+    const auto generate_add = [&](size_t i) {
+        return m[i] ? v[i] + c : v[i];
+    };
+    return generate(generate_add, TFloatV{});
+}
+static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typename ximd_floatv::value_type c)
+{
+    return if_add_(m, v, c);
+}
+static inline auto if_add(const simd_floatv_mask& m, const simd_floatv& v, typename simd_floatv::value_type c)
+{
+    return if_add_(m, v, c);
+}
 
 template<typename ZFloatV, typename IntV, size_t N>
 static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_directions)
