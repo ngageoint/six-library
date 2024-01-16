@@ -180,8 +180,12 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #else
         // __has_include is part of C++17
         #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
-            __has_include("six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h")
-        #define SIX_sicd_has_VCL 1
+            __has_include("six/sicd/vectorclass/version2/vectorclass.h")
+            #if _MSC_VER
+                #define SIX_sicd_has_VCL !CODA_OSS_cpp20 // TODO: MSVC works with C++17, but not C++20 ... ?
+            #else
+                #define SIX_sicd_has_VCL 1
+            #endif // _MSC_VER
         #else
         #define SIX_sicd_has_VCL 0
         #endif // __has_include
@@ -189,8 +193,8 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 #endif
 
 #ifndef SIX_sicd_has_simd
-    // Do we have the `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
-    #if (__GNUC__ >= 999) && CODA_OSS_cpp20 // TODO: 11 instead of 999
+    // Do we have `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
+    #if (__GNUC__ >= 11) && CODA_OSS_cpp20
         // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
         #define SIX_sicd_has_simd 1
     #else
@@ -199,7 +203,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 #endif
 
 #ifndef SIX_sicd_has_ximd
-    // This is a "hacked up" version of std::experimental::simd using std::array.
+    // This is a "hacked up" version of std::experimental::simd using std::valarray.
     // It's primarily for development and testing: VCL needs C++17 and
     // std::experimental::simd is G++11/C++20.
     #define SIX_sicd_has_ximd CODA_OSS_DEBUG

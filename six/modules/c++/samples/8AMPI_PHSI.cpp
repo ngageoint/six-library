@@ -14,7 +14,6 @@
 #include <iterator>
 #include <future>
 #include <vector>
-//#include <execution>
 #include <chrono>
 
 #include "six/AmplitudeTable.h"
