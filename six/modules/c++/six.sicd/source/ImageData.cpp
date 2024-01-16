@@ -32,14 +32,6 @@
 
 #include <gsl/gsl.h>
 #include <mt/Algorithm.h>
-#include <coda_oss/CPlusPlus.h>
-#if CODA_OSS_cpp17
-    // <execution> is broken with the older version of GCC we're using
-    #if (__GNUC__ >= 10) || _MSC_VER
-    #include <execution>
-    #define SIX_six_sicd_ImageData_has_execution 1
-    #endif
-#endif
 #include <sys/Span.h>
 
 #include "six/AmplitudeTable.h"
@@ -48,54 +40,6 @@
 
 using namespace six;
 using namespace six::sicd;
-
- // This was in coda-oss, but I removed it.
- //
- // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
- // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
- // parallel algorithms which might be a better way of satisfying our immediate
- // needs (below) ... although we're still at C++14.
-template <typename InputIt, typename OutputIt, typename TFunc>
-static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-    typename std::iterator_traits<InputIt>::difference_type cutoff)
-{
-    // https://en.cppreference.com/w/cpp/thread/async
-    const auto len = std::distance(first1, last1);
-    if (len < cutoff)
-    {
-        return std::transform(first1, last1, d_first, f);
-    }
-
-    constexpr auto policy = std::launch::async;
-
-    const auto mid1 = first1 + len / 2;
-    const auto d_mid = d_first + len / 2;
-    auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff);
-    transform_async(first1, mid1, d_first, f, cutoff);
-    return handle.get();
-}
-template <typename TInputs, typename TResults, typename TFunc>
-static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
-{
-#if SIX_six_sicd_ImageData_has_execution
-    std::ignore = std::transform(std::execution::par, inputs.begin(), inputs.end(), results.begin(), f);
-#else
-    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
-    //if (cutoff_ < 0)
-    //{
-    //    std::ignore = std::transform(inputs.begin(), inputs.end(), results.begin(), f);
-    //}
-    //else
-    {
-        // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-        constexpr auto dimension = 128 * 8;
-        constexpr auto default_cutoff = dimension * dimension;
-        const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;
-        
-        std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(), f, cutoff);
-    }
-#endif // CODA_OSS_cpp17
-}
 
 bool ImageData::operator==(const ImageData& rhs) const
 {
@@ -256,7 +200,7 @@ void ImageData::toComplex(six::Amp8iPhs8iLookup_t values, std::span<const AMP8I_
     {
         return values(v.amplitude, v.phase);
     };
-    transform(inputs, results, toComplex_);
+    std::ignore = mt::Transform_par(inputs.begin(), inputs.end(), results.begin(), toComplex_);
 }
 std::vector<six::zfloat> ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inputs) const
 {
