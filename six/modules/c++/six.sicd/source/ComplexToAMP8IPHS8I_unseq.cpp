@@ -268,24 +268,6 @@ static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typen
     return generate(generate_add, ximd_floatv{});
 }
 
-template<size_t N>
-static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& phase_directions)
-{
-    // It seems that the "generator" constuctor is called with SIMD instructions.
-    // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
-    // > The calls to `generator` are unsequenced with respect to each other.
-
-    const auto generate_real = [&](size_t i) {
-        const auto i_ = zindex[i];
-        return phase_directions[i_].real();
-    };
-    const auto generate_imag = [&](size_t i) {
-        const auto i_ = zindex[i];
-        return phase_directions[i_].imag();
-    };
-    return generate(generate_real, generate_imag, ximd_zfloatv{});
-}
-
 #endif // SIX_sicd_has_ximd
 
 #if SIX_sicd_has_simd
@@ -431,8 +413,12 @@ static inline auto if_add(const simd_floatv_mask& m, const simd_floatv& v, typen
     return generate(generate_add, simd_floatv{});
 }
 
-template<size_t N>
-static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& phase_directions)
+#endif // SIX_sicd_has_simd
+
+#if SIX_sicd_has_ximd || SIX_sicd_has_simd
+
+template<typename ZFloatV, typename IntV, size_t N>
+static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_directions)
 {
     // It seems that the "generator" constuctor is called with SIMD instructions.
     // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
@@ -446,12 +432,18 @@ static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& 
         const auto i_ = zindex[i];
         return phase_directions[i_].imag();
     };
-    return generate(generate_real, generate_imag, simd_zfloatv{});
+    return generate(generate_real, generate_imag, ZFloatV{});
 }
-
-#endif // SIX_sicd_has_simd
-
-#if SIX_sicd_has_ximd || SIX_sicd_has_simd
+template<size_t N>
+static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& phase_directions)
+{
+    return lookup_<ximd_zfloatv>(zindex, phase_directions);
+}
+template<size_t N>
+static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& phase_directions)
+{
+    return lookup_<simd_zfloatv>(zindex, phase_directions);
+}
 
 template<typename FloatV, typename IntV>
 static auto lookup_(const IntV& zindex, std::span<const float> magnitudes)
