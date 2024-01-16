@@ -31,19 +31,11 @@
 #include <functional>
 #include <type_traits>
 
-#include <coda_oss/CPlusPlus.h>
-#if CODA_OSS_cpp17
-    // <execution> is broken with the older version of GCC we're using
-    #if (__GNUC__ >= 10) || _MSC_VER
-    #include <execution>
-    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
-    #endif
-#endif
-
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
 #include <units/Angles.h>
 #include <sys/Span.h>
+#include <mt/Algorithm.h>
 
 #include "six/sicd/Utilities.h"
 
@@ -51,7 +43,6 @@
 #undef max
 
 using zfloat = six::zfloat;
-using AMP8I_PHS8I_t = six::AMP8I_PHS8I_t;
 
 #if SIX_sicd_has_VCL
 
@@ -629,9 +620,8 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
 }
 #endif
 
-#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 template<typename ZFloatV>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(std::span<const zfloat> p, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(std::span<const six::zfloat> p, std::span<AMP8I_PHS8I_t> results) const
 {
     ZFloatV v;
     assert(p.size() == size(v));
@@ -677,7 +667,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(st
 }
 
 template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
     auto first = inputs.begin();
     const auto last = inputs.end();
@@ -714,10 +704,9 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
         nearest_neighbors_seq(f, d);
     }
 }
-#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
 #if SIX_sicd_has_VCL
-std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_vcl(
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_vcl(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
@@ -730,7 +719,7 @@ std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neig
 #endif // SIX_sicd_has_VCL
 
 #if SIX_sicd_has_ximd
-std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_ximd(
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_ximd(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
