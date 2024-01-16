@@ -242,14 +242,6 @@ static inline auto copy_from(std::span<const zfloat> p, ximd_zfloatv& result)
     result = generate(generate_real, generate_imag, ximd_zfloatv{});
 }
 
-static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
-{
-    const auto rounded = round(v);
-    const auto generate_roundi = [&](size_t i)
-    { return static_cast<typename ximd_intv::value_type>(rounded[i]); };
-    return generate(generate_roundi, ximd_intv{});
-}
-
 static inline auto select(const ximd_floatv_mask& test, const  ximd_floatv& t, const  ximd_floatv& f)
 {
     return ximd_select_(test, t, f);
@@ -372,14 +364,6 @@ static inline auto copy_from(std::span<const zfloat> p, simd_zfloatv& result)
     result = generate(generate_real, generate_imag, simd_zfloatv{});
 }
 
-static inline auto roundi(const simd_floatv& v)  // match vcl::roundi()
-{
-    const auto rounded = round(v);
-    const auto generate_roundi = [&](size_t i)
-    { return static_cast<typename simd_intv::value_type>(rounded[i]); };
-    return generate(generate_roundi, simd_intv{});
-}
-
 template<typename TMask>
 static inline auto select(const TMask& test_, const  simd_floatv& t, const  simd_floatv& f)
 {
@@ -398,6 +382,23 @@ static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_i
 #endif // SIX_sicd_has_simd
 
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
+
+template<typename IntV, typename FloatV>
+static auto roundi_(const FloatV& v)  // match vcl::roundi()
+{
+    const auto rounded = round(v);
+    const auto generate_roundi = [&](size_t i)
+    { return static_cast<typename IntV::value_type>(rounded[i]); };
+    return generate(generate_roundi, IntV{});
+}
+static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
+{
+    return roundi_<ximd_intv>(v);
+}
+static inline auto roundi(const simd_floatv& v)  // match vcl::roundi()
+{
+    return roundi_<simd_intv>(v);
+}
 
 template<typename TFloatVMask, typename TFloatV>
 static auto if_add_(const TFloatVMask& m, const TFloatV& v, typename TFloatV::value_type c)
