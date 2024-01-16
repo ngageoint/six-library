@@ -632,6 +632,35 @@ TEST_CASE(test_nearest_neighbor)
     test_nearest_neighbor_(testName, six::execution_policy::par);
     test_nearest_neighbor_(testName, six::execution_policy::unseq);
     test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
+
+    extern std::string six_sicd_set_nearest_neighbors_unseq(std::string unseq);
+    const auto default_unseq = six_sicd_set_nearest_neighbors_unseq("xyz");
+    try
+    {
+        test_nearest_neighbor_(testName, six::execution_policy::unseq);
+        TEST_FAIL;
+    }
+    catch (const std::logic_error&)
+    {
+        TEST_SUCCESS;
+    }
+
+    #if SIX_sicd_has_simd
+    six_sicd_set_nearest_neighbors_unseq("simd");
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    #endif
+
+    #if SIX_sicd_has_VCL
+    six_sicd_set_nearest_neighbors_unseq("vcl");
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    #endif
+
+    #if SIX_sicd_has_ximd
+    six_sicd_set_nearest_neighbors_unseq("ximd");
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    #endif
+
+    six_sicd_set_nearest_neighbors_unseq(default_unseq); // restore default
 }
 
 TEST_CASE(test_verify_phase_uint8_ordering)
