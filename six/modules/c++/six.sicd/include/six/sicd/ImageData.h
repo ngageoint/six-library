@@ -103,7 +103,9 @@ struct SIX_SICD_API ImageData
 
     static void toComplex(six::Amp8iPhs8iLookup_t lookup, std::span<const AMP8I_PHS8I_t>, std::span<six::zfloat>);
     std::vector<six::zfloat> toComplex(std::span<const AMP8I_PHS8I_t>) const;
+    
     std::vector<AMP8I_PHS8I_t> fromComplex(std::span<const six::zfloat>) const;
+    std::vector<AMP8I_PHS8I_t> fromComplex(six::execution_policy, std::span<const six::zfloat>) const;
 
     /*!
      * Create a lookup table for converting from AMP8I_PHS8I to complex.
