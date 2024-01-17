@@ -290,69 +290,6 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     return nearest_neighbors(inputs, pAmplitudeTable); // no policy specified, "default policy"
 }
 
-#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-
-static std::string nearest_neighbors_unseq_ =
-#if SIX_sicd_has_simd
-"simd";
-#elif SIX_sicd_has_VCL
-"vcl";
-#elif SIX_sicd_has_ximd
-"ximd";
-#else
-#error "Don't know how to implement nearest_neighbors_unseq()"
-#endif
-std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
-{
-    // We'll "validate" when the string is actually used; this minimizes
-    // the places that need updating when things change.
-    auto retval = nearest_neighbors_unseq_;
-    nearest_neighbors_unseq_ = std::move(unseq);
-    return retval;
-}
-
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // TODO: there could be more complicated logic here to determine which UNSEQ
-    // implementation to use.
-
-    // This is very simple as it's only used for unit-testing
-    const auto& unseq = nearest_neighbors_unseq_;
-    if (unseq == "simd")
-    {
-        #if SIX_sicd_has_simd
-        return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
-        #endif
-    }
-    if (unseq == "vcl")
-    {
-        #if SIX_sicd_has_VCL
-        return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
-        #endif
-    }
-    if (unseq == "ximd")
-    {
-        #if SIX_sicd_has_ximd
-        return nearest_neighbors_unseq_ximd(inputs, pAmplitudeTable);
-        #endif
-    }
-
-    throw std::logic_error("Don't know how to implement nearest_neighbors_unseq() for unseq=" + unseq);
-}
-
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_par_unseq(inputs, sys::make_span(retval));
-    return retval;
-}
-#endif //  SIX_sicd_ComplexToAMP8IPHS8I_unseq
-
 const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make_(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)

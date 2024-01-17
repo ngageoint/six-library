@@ -777,6 +777,38 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
         nearest_neighbors_seq(f, d);
     }
 }
+
+template<typename ZFloatV, int elements_per_iteration>
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+{
+    const auto array_size = inputs.size() / elements_per_iteration;
+
+    // View the data as chunks of *elements_per_iteration*.  This allows iterating
+    // to go *elements_per_iteration* at a time; and each chunk can be processed
+    // using `nearest_neighbors_unseq_T()`, above.
+
+    using input_t = std::array<const zfloat, elements_per_iteration>;
+    const void* const pInputs = inputs.data();
+    const std::span<const input_t> first(static_cast<const input_t*>(pInputs), array_size);
+
+    using result_t = AMP8I_PHS8I_array<elements_per_iteration>;
+    void* const pDest = results.data();
+    const std::span<result_t> dest(static_cast<result_t*>(pDest), array_size);
+
+    const auto f = [&](const auto& v)
+    {
+        return  nearest_neighbors_unseq_T<ZFloatV>(v);
+    };
+    mt::Transform_par(first.begin(), first.end(), dest.begin(), f);
+
+    // Then finish off anything left
+    const auto remaining = inputs.size() % elements_per_iteration;
+    const auto processed_count = inputs.size() - remaining;
+    auto const first_remaining = sys::make_span(inputs.data() + processed_count, remaining);
+    auto const dest_remaining = sys::make_span(results.data() + processed_count, remaining);
+    nearest_neighbors_seq(first_remaining, dest_remaining);
+}
+
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
 #if SIX_sicd_has_VCL
@@ -819,45 +851,63 @@ std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neig
 #endif // SIX_sicd_has_simd
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+
+static std::string nearest_neighbors_unseq_ =
+#if SIX_sicd_has_simd
+"simd";
+#elif SIX_sicd_has_VCL
+"vcl";
+#elif SIX_sicd_has_ximd
+"ximd";
+#else
+#error "Don't know how to implement six_sicd_set_nearest_neighbors_unseq()"
+#endif
+std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
 {
-    const auto array_size = inputs.size() / elements_per_iteration;
-
-    // View the data as chunks of *elements_per_iteration*.  This allows iterating
-    // to go *elements_per_iteration* at a time; and each chunk can be processed
-    // using `nearest_neighbors_unseq_T()`, above.
-
-    using input_t = std::array<const zfloat, elements_per_iteration>;
-    const void* const pInputs = inputs.data();
-    const std::span<const input_t> first(static_cast<const input_t*>(pInputs), array_size);
-
-    using result_t = AMP8I_PHS8I_array<elements_per_iteration>;
-    void* const pDest = results.data();
-    const std::span<result_t> dest(static_cast<result_t*>(pDest), array_size);
-
-    const auto f = [&](const auto& v)
-    {
-        return  nearest_neighbors_unseq_T<ZFloatV>(v);
-    };
-    mt::Transform_par(first.begin(), first.end(), dest.begin(), f);
-
-    // Then finish off anything left
-    const auto remaining = inputs.size() % elements_per_iteration;
-    const auto processed_count = inputs.size() - remaining;
-    auto const first_remaining = sys::make_span(inputs.data() + processed_count, remaining);
-    auto const dest_remaining = sys::make_span(results.data() + processed_count, remaining);
-    nearest_neighbors_seq(first_remaining, dest_remaining);
+    // We'll "validate" when the string is actually used; this minimizes
+    // the places that need updating when things change.
+    auto retval = nearest_neighbors_unseq_;
+    nearest_neighbors_unseq_ = std::move(unseq);
+    return retval;
 }
+
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    // TODO: there could be more complicated logic here to determine which UNSEQ
+    // implementation to use.
+
+    // This is very simple as it's only used for unit-testing
+    const auto& unseq = nearest_neighbors_unseq_;
+    if (unseq == "simd")
+    {
+        #if SIX_sicd_has_simd
+        return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
+        #endif
+    }
+    if (unseq == "vcl")
+    {
+        #if SIX_sicd_has_VCL
+        return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
+        #endif
+    }
+    if (unseq == "ximd")
+    {
+        #if SIX_sicd_has_ximd
+        return nearest_neighbors_unseq_ximd(inputs, pAmplitudeTable);
+        #endif
+    }
+
+    throw std::logic_error("Don't know how to implement nearest_neighbors_unseq() for unseq=" + unseq);
+}
+
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
 
     // This is very simple as it's only used for unit-testing
-    extern std::string six_sicd_set_nearest_neighbors_unseq(std::string unseq);
-    const auto unseq = six_sicd_set_nearest_neighbors_unseq(""); // set & get previous
-    std::ignore = six_sicd_set_nearest_neighbors_unseq(unseq); // restore value
+    const auto& unseq = nearest_neighbors_unseq_;
     if (unseq == "simd")
     {
         #if SIX_sicd_has_simd
@@ -878,5 +928,15 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(
     }
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_par_unseq() for unseq=" + unseq);
+}
+std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
+    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+{
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make_(pAmplitudeTable);
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    converter.impl.nearest_neighbors_par_unseq(inputs, sys::make_span(retval));
+    return retval;
 }
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
