@@ -779,7 +779,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
 }
 
 template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
     const auto array_size = inputs.size() / elements_per_iteration;
 
@@ -809,49 +809,6 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_
     nearest_neighbors_seq(first_remaining, dest_remaining);
 }
 
-#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
-
-#if SIX_sicd_has_VCL
-std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_vcl(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_unseq<vcl_zfloatv, vcl_elements_per_iteration>(inputs, sys::make_span(retval));
-    return retval;
-}
-#endif // SIX_sicd_has_VCL
-
-#if SIX_sicd_has_ximd
-std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_ximd(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_unseq<ximd_zfloatv, ximd_elements_per_iteration>(inputs, sys::make_span(retval));
-    return retval;
-}
-#endif // SIX_sicd_has_ximd
-
-#if SIX_sicd_has_simd
-std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_simd(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_unseq<simd_zfloatv, simd_elements_per_iteration>(inputs, sys::make_span(retval));
-    return retval;
-}
-#endif // SIX_sicd_has_simd
-
-#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-
 static std::string nearest_neighbors_unseq_ =
 #if SIX_sicd_has_simd
 "simd";
@@ -877,24 +834,31 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
 
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make_(pAmplitudeTable);
+    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
+
     // This is very simple as it's only used for unit-testing
     const auto& unseq = nearest_neighbors_unseq_;
     if (unseq == "simd")
     {
         #if SIX_sicd_has_simd
-        return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
+        converter.impl.nearest_neighbors_unseq<simd_zfloatv, simd_elements_per_iteration>(inputs, sys::make_span(retval));
+        return retval;
         #endif
     }
     if (unseq == "vcl")
     {
         #if SIX_sicd_has_VCL
-        return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
+        converter.impl.nearest_neighbors_unseq<vcl_zfloatv, vcl_elements_per_iteration>(inputs, sys::make_span(retval));
+        return retval;
         #endif
     }
     if (unseq == "ximd")
     {
         #if SIX_sicd_has_ximd
-        return nearest_neighbors_unseq_ximd(inputs, pAmplitudeTable);
+        converter.impl.nearest_neighbors_unseq<ximd_zfloatv, ximd_elements_per_iteration>(inputs, sys::make_span(retval));
+        return retval;
         #endif
     }
 
@@ -911,19 +875,19 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(
     if (unseq == "simd")
     {
         #if SIX_sicd_has_simd
-        return nearest_neighbors_par_unseq_<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
+        return nearest_neighbors_par_unseq_T<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
         #endif
     }
     if (unseq == "vcl")
     {
         #if SIX_sicd_has_VCL
-        return nearest_neighbors_par_unseq_<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
+        return nearest_neighbors_par_unseq_T<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
         #endif
     }
     if (unseq == "ximd")
     {
         #if SIX_sicd_has_ximd
-        return nearest_neighbors_par_unseq_<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
+        return nearest_neighbors_par_unseq_T<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
         #endif
     }
 

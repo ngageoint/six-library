@@ -262,23 +262,10 @@ public:
     AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-
-    #if SIX_sicd_has_VCL
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_vcl(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-    #if SIX_sicd_has_simd
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_simd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-    #if SIX_sicd_has_ximd
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_ximd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-
-    #endif
-    
+    #endif    
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(execution_policy, std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
 
@@ -296,15 +283,14 @@ private:
         void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_par_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-
         template<typename ZFloatV, size_t N>
         auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
+        template<typename ZFloatV, int elements_per_iteration>
+        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
+        template<typename ZFloatV, int elements_per_iteration>
+        void nearest_neighbors_par_unseq_T(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         #endif 
 
         //! The sorted set of possible magnitudes order from small to large.
