@@ -300,8 +300,8 @@ private:
         void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
-        template<typename ZFloatV>
-        void nearest_neighbors_unseq_T(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+        template<typename ZFloatV, size_t N>
+        void nearest_neighbors_unseq_T(const std::array<const zfloat, N>&, std::span<AMP8I_PHS8I_t>) const; // TODO: std::span<T, N> ... ?
 
         #endif 
 

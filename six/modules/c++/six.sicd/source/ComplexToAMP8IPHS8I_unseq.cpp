@@ -650,8 +650,18 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
 #endif
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-template<typename ZFloatV>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(std::span<const zfloat> p, std::span<AMP8I_PHS8I_t> results) const
+
+template<typename IntV>
+struct AMP8I_PHS8I_unseq final
+{
+    IntV amplitude;
+    IntV phase;
+};
+
+// The compiler can sometimes do better optimizatoin with fixed-size structures.
+// TODO: std::span<T, N> ... ?
+template<typename ZFloatV, size_t N>
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p, std::span<AMP8I_PHS8I_t> results) const
 {
     ZFloatV v;
     assert(p.size() == size(v));
@@ -719,10 +729,17 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
     const auto last_ = first + distance_;
     for (; first != last_; first += elements_per_iteration, dest += elements_per_iteration)
     {
-        const auto f = sys::make_span(&(*first), elements_per_iteration);
+        // View this chunk as a fixed-size array.
+        using input_t = std::array<const zfloat, elements_per_iteration>;
+        const void* const pFirst = &(*first);
+        auto const f = static_cast<const input_t*>(pFirst);
+
+        //using result_t = std::array<AMP8I_PHS8I_t, elements_per_iteration>;
+        //void* const pDest = &(*dest);
+        //auto d = static_cast<result_t*>(pDest);
         const auto d = sys::make_span(&(*dest), elements_per_iteration);
 
-        nearest_neighbors_unseq_T<ZFloatV>(f, d);
+        nearest_neighbors_unseq_T<ZFloatV>(*f, d);
     }
 
     // Then finish off anything left
