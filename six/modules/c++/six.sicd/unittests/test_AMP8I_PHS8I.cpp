@@ -649,16 +649,19 @@ TEST_CASE(test_nearest_neighbor)
     #if SIX_sicd_has_simd
     six_sicd_set_nearest_neighbors_unseq("simd");
     test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
     #endif
 
     #if SIX_sicd_has_VCL
     six_sicd_set_nearest_neighbors_unseq("vcl");
     test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
     #endif
 
     #if SIX_sicd_has_ximd
     six_sicd_set_nearest_neighbors_unseq("ximd");
     test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
     #endif
 
     six_sicd_set_nearest_neighbors_unseq(default_unseq); // restore default
