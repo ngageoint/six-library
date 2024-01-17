@@ -381,6 +381,9 @@ static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_i
 
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
 
+// There are slicker ways of doing this, but `std::enable_if` is complex.  This
+// is simple and easy to understand.  Simplify with concedpts in C++20?
+
 template<typename IntV, typename FloatV>
 static auto roundi_(const FloatV& v)  // match vcl::roundi()
 {
@@ -658,6 +661,44 @@ struct AMP8I_PHS8I_unseq final
     IntV phase;
 };
 
+template<typename IntV>
+static auto copy_to(const AMP8I_PHS8I_unseq<IntV>& result, std::span<AMP8I_PHS8I_t> mem) // https://en.cppreference.com/w/cpp/experimental/simd/simd/copy_to
+{
+    assert(result.phase.size() == mem.size());
+
+    // interleave() and store() is slower than an explicit loop.
+    for (int i = 0; i < ssize(result.phase); i++)
+    {
+        mem[i].phase = gsl::narrow_cast<uint8_t>(result.phase[i]);
+        mem[i].amplitude = gsl::narrow_cast<uint8_t>(result.amplitude[i]);
+    }
+}
+
+// Inside of `std::transform()`, there is a copy; something like
+// ```
+// *dest = f(*first);
+// ```
+// We want to avoid an extra copy from `AMP8I_PHS8I_unseq` to a temporary
+// `std::array<AMP8I_PHS8I_t, N>`.
+//
+// Using inheritance to avoid padding at the end of the `struct`. ... needed?
+template<size_t N>
+struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I_t, N>
+{
+    template<typename IntV>
+    AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>& other)
+    {
+        copy_to(other, *this);
+        return *this;
+    }
+    template<typename IntV>
+    AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other)
+    {
+        copy_to(other, *this);
+        return *this;
+    }
+};
+
 // The compiler can sometimes do better optimizatoin with fixed-size structures.
 // TODO: std::span<T, N> ... ?
 template<typename ZFloatV, size_t N>
@@ -699,17 +740,6 @@ auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(co
     #endif
 
     return retval;
-}
-
-template<typename IntV>
-static auto copy_to(const AMP8I_PHS8I_unseq<IntV>& result, std::span<AMP8I_PHS8I_t> mem)
-{
-    // interleave() and store() is slower than an explicit loop.
-    for (int i = 0; i < ssize(result.phase); i++)
-    {
-        mem[i].phase = gsl::narrow_cast<uint8_t>(result.phase[i]);
-        mem[i].amplitude = gsl::narrow_cast<uint8_t>(result.amplitude[i]);
-    }
 }
 
 template<typename ZFloatV, int elements_per_iteration>
@@ -787,3 +817,66 @@ std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neig
     return retval;
 }
 #endif // SIX_sicd_has_simd
+
+#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+template<typename ZFloatV, int elements_per_iteration>
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+{
+    const auto array_size = inputs.size() / elements_per_iteration;
+
+    // View the data as chunks of *elements_per_iteration*.  This allows iterating
+    // to go *elements_per_iteration* at a time; and each chunk can be processed
+    // using `nearest_neighbors_unseq_T()`, above.
+
+    using input_t = std::array<const zfloat, elements_per_iteration>;
+    const void* const pInputs = inputs.data();
+    const std::span<const input_t> first(static_cast<const input_t*>(pInputs), array_size);
+
+    using result_t = AMP8I_PHS8I_array<elements_per_iteration>;
+    void* const pDest = results.data();
+    const std::span<result_t> dest(static_cast<result_t*>(pDest), array_size);
+
+    const auto f = [&](const auto& v)
+    {
+        return  nearest_neighbors_unseq_T<ZFloatV>(v);
+    };
+    mt::Transform_par(first.begin(), first.end(), dest.begin(), f);
+
+    // Then finish off anything left
+    const auto remaining = inputs.size() % elements_per_iteration;
+    const auto processed_count = inputs.size() - remaining;
+    auto const first_remaining = sys::make_span(inputs.data() + processed_count, remaining);
+    auto const dest_remaining = sys::make_span(results.data() + processed_count, remaining);
+    nearest_neighbors_seq(first_remaining, dest_remaining);
+}
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+{
+    // TODO: there could be more complicated logic here to determine which UNSEQ
+    // implementation to use.
+
+    // This is very simple as it's only used for unit-testing
+    extern std::string six_sicd_set_nearest_neighbors_unseq(std::string unseq);
+    const auto unseq = six_sicd_set_nearest_neighbors_unseq(""); // set & get previous
+    std::ignore = six_sicd_set_nearest_neighbors_unseq(unseq); // restore value
+    if (unseq == "simd")
+    {
+        #if SIX_sicd_has_simd
+        return nearest_neighbors_par_unseq_<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
+        #endif
+    }
+    if (unseq == "vcl")
+    {
+        #if SIX_sicd_has_VCL
+        return nearest_neighbors_par_unseq_<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
+        #endif
+    }
+    if (unseq == "ximd")
+    {
+        #if SIX_sicd_has_ximd
+        return nearest_neighbors_par_unseq_<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
+        #endif
+    }
+
+    throw std::logic_error("Don't know how to implement nearest_neighbors_par_unseq() for unseq=" + unseq);
+}
+#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq

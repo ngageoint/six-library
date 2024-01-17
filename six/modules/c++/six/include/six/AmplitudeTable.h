@@ -298,6 +298,8 @@ private:
         #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
         template<typename ZFloatV, int elements_per_iteration>
         void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        template<typename ZFloatV, int elements_per_iteration>
+        void nearest_neighbors_par_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
         template<typename ZFloatV, size_t N>
