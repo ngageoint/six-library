@@ -661,7 +661,7 @@ struct AMP8I_PHS8I_unseq final
 // The compiler can sometimes do better optimizatoin with fixed-size structures.
 // TODO: std::span<T, N> ... ?
 template<typename ZFloatV, size_t N>
-auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p, std::span<AMP8I_PHS8I_t> results) const
+auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p) const
 {
     ZFloatV v;
     assert(p.size() == size(v));
@@ -698,17 +698,18 @@ auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(co
     }
     #endif
 
-    // interleave() and store() is slower than an explicit loop.
-    auto dest = results.begin();
-    for (int i = 0; i < ssize(v); i++)
-    {
-        dest->phase = gsl::narrow_cast<uint8_t>(retval.phase[i]);
-        dest->amplitude = gsl::narrow_cast<uint8_t>(retval.amplitude[i]);
-
-        ++dest;
-    }
-
     return retval;
+}
+
+template<typename IntV>
+static auto copy_to(const AMP8I_PHS8I_unseq<IntV>& result, std::span<AMP8I_PHS8I_t> mem)
+{
+    // interleave() and store() is slower than an explicit loop.
+    for (int i = 0; i < ssize(result.phase); i++)
+    {
+        mem[i].phase = gsl::narrow_cast<uint8_t>(result.phase[i]);
+        mem[i].amplitude = gsl::narrow_cast<uint8_t>(result.amplitude[i]);
+    }
 }
 
 template<typename ZFloatV, int elements_per_iteration>
@@ -718,18 +719,10 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
     const auto last = inputs.end();
     auto dest = results.begin();
 
-    // The above code is simpler (no templates) if we use just a single VCL
-    // complex type: `zfloatv`.  If there is any performance difference,
-    // it will only be for extreme edge cases since the smaller types are only used
-    // at the end of the loop.
-    //
-    // It also makes this loop simpler as we handle all non-multiples-of-8 in
-    // the same way.
-
-    // Can do these checks one-time outside of the loop
+    // Can do these calculations one-time outside of the loop
     const auto distance = std::distance(first, last);
 
-    // First, do multiples of 8
+    // First, do multiples of <elements_per_iteration>
     const auto distance_ = distance - (distance % elements_per_iteration);
     const auto last_ = first + distance_;
     for (; first != last_; first += elements_per_iteration, dest += elements_per_iteration)
@@ -739,12 +732,10 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
         const void* const pFirst = &(*first);
         auto const f = static_cast<const input_t*>(pFirst);
 
-        //using result_t = std::array<AMP8I_PHS8I_t, elements_per_iteration>;
-        //void* const pDest = &(*dest);
-        //auto d = static_cast<result_t*>(pDest);
-        const auto d = sys::make_span(&(*dest), elements_per_iteration);
+        const auto results_unseq = nearest_neighbors_unseq_T<ZFloatV>(*f);
 
-        nearest_neighbors_unseq_T<ZFloatV>(*f, d);
+        const auto d = sys::make_span(&(*dest), elements_per_iteration);
+        copy_to(results_unseq, d);
     }
 
     // Then finish off anything left
