@@ -633,6 +633,7 @@ TEST_CASE(test_nearest_neighbor)
     test_nearest_neighbor_(testName, six::execution_policy::unseq);
     test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
 
+    #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
     extern std::string six_sicd_set_nearest_neighbors_unseq(std::string unseq);
     const auto default_unseq = six_sicd_set_nearest_neighbors_unseq("xyz");
     try
@@ -661,6 +662,7 @@ TEST_CASE(test_nearest_neighbor)
     #endif
 
     six_sicd_set_nearest_neighbors_unseq(default_unseq); // restore default
+    #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 }
 
 TEST_CASE(test_verify_phase_uint8_ordering)
