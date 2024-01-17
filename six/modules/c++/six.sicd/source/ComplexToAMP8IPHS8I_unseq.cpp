@@ -62,8 +62,8 @@ using AMP8I_PHS8I_t = six::AMP8I_PHS8I_t;
 #pragma warning(pop)
 #endif
 
-using vcl_intv = vcl::Vec4i; 
-using vcl_floatv = vcl::Vec4f;
+using vcl_intv = vcl::Vec8i; 
+using vcl_floatv = vcl::Vec8f;
 constexpr auto vcl_elements_per_iteration = vcl_floatv::size();
 
 inline int ssize(const vcl_intv& z) noexcept
@@ -75,7 +75,7 @@ inline int ssize(const vcl_floatv& z) noexcept
     return z.size();
 }
 
-using vcl_zfloatv = vcl::Complex4f;
+using vcl_zfloatv = vcl::Complex8f;
 auto real(const vcl_zfloatv& z)
 {
     return z.real();
