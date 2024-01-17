@@ -43,7 +43,7 @@
 #undef max
 
 using zfloat = six::zfloat;
-using AMP8I_PHS8I_t = six::AMP8I_PHS8I_t;
+using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 
 #if SIX_sicd_has_VCL
 
@@ -802,7 +802,7 @@ struct AMP8I_PHS8I_unseq final
 };
 
 template<typename IntV>
-static auto copy_to(const AMP8I_PHS8I_unseq<IntV>& result, std::span<AMP8I_PHS8I_t> mem) // https://en.cppreference.com/w/cpp/experimental/simd/simd/copy_to
+static auto copy_to(const AMP8I_PHS8I_unseq<IntV>& result, std::span<AMP8I_PHS8I> mem) // https://en.cppreference.com/w/cpp/experimental/simd/simd/copy_to
 {
     assert(result.phase.size() == mem.size());
 
@@ -819,11 +819,11 @@ static auto copy_to(const AMP8I_PHS8I_unseq<IntV>& result, std::span<AMP8I_PHS8I
 // *dest = f(*first);
 // ```
 // We want to avoid an extra copy from `AMP8I_PHS8I_unseq` to a temporary
-// `std::array<AMP8I_PHS8I_t, N>`.
+// `std::array<AMP8I_PHS8I, N>`.
 //
 // Using inheritance to avoid padding at the end of the `struct`. ... needed?
 template<size_t N>
-struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I_t, N>
+struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
 {
     template<typename IntV>
     AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>& other)
@@ -883,7 +883,7 @@ auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(co
 }
 
 template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     auto first = inputs.begin();
     const auto last = inputs.end();
@@ -919,7 +919,7 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std:
 }
 
 template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     const auto array_size = inputs.size() / elements_per_iteration;
 
@@ -970,7 +970,7 @@ std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
     return retval;
 }
 
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
+std::vector<AMP8I_PHS8I> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
@@ -978,7 +978,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
 
     // make a structure to quickly find the nearest neighbor
     const auto& converter = make_(pAmplitudeTable);
-    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
+    std::vector<AMP8I_PHS8I> retval(inputs.size());
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = nearest_neighbors_unseq_;
@@ -1014,7 +1014,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     throw std::logic_error("Don't know how to implement nearest_neighbors_unseq() for unseq=" + unseq);
 }
 
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
@@ -1048,13 +1048,13 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_par_unseq() for unseq=" + unseq);
 }
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
+std::vector<AMP8I_PHS8I> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
     const auto& converter = make_(pAmplitudeTable);
 
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    std::vector<AMP8I_PHS8I> retval(inputs.size());
     converter.impl.nearest_neighbors_par_unseq(inputs, sys::make_span(retval));
     return retval;
 }
