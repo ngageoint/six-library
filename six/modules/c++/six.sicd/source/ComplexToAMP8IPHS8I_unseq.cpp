@@ -661,7 +661,7 @@ struct AMP8I_PHS8I_unseq final
 // The compiler can sometimes do better optimizatoin with fixed-size structures.
 // TODO: std::span<T, N> ... ?
 template<typename ZFloatV, size_t N>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p, std::span<AMP8I_PHS8I_t> results) const
+auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p, std::span<AMP8I_PHS8I_t> results) const
 {
     ZFloatV v;
     assert(p.size() == size(v));
@@ -676,22 +676,25 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(co
     }
     #endif
 
-    const auto phase = ::getPhase(v, phase_delta);
+    using intv_t = decltype(::getPhase(v, phase_delta));
+    AMP8I_PHS8I_unseq<intv_t> retval;
+
+    retval.phase = ::getPhase(v, phase_delta);
     #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(phase); i++)
+    for (int i = 0; i < ssize(retval.phase); i++)
     {
         const auto phase_ = getPhase(p[i]);
-        assert(static_cast<uint8_t>(phase[i]) == phase_);
+        assert(static_cast<uint8_t>(retval.phase[i]) == phase_);
     }
     #endif
 
-    const auto amplitude = lookup_and_find_nearest(converter, phase, v);
+    retval.amplitude = lookup_and_find_nearest(converter, retval.phase, v);
     #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(amplitude); i++)
+    for (int i = 0; i < ssize(retval.amplitude); i++)
     {
-        const auto i_ = phase[i];
+        const auto i_ = retval.phase[i];
         const auto a = find_nearest(phase_directions[i_], p[i]);
-        assert(a == amplitude[i]);
+        assert(a == retval.amplitude[i]);
     }
     #endif
 
@@ -699,11 +702,13 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(co
     auto dest = results.begin();
     for (int i = 0; i < ssize(v); i++)
     {
-        dest->phase = gsl::narrow_cast<uint8_t>(phase[i]);
-        dest->amplitude = gsl::narrow_cast<uint8_t>(amplitude[i]);
+        dest->phase = gsl::narrow_cast<uint8_t>(retval.phase[i]);
+        dest->amplitude = gsl::narrow_cast<uint8_t>(retval.amplitude[i]);
 
         ++dest;
     }
+
+    return retval;
 }
 
 template<typename ZFloatV, int elements_per_iteration>
