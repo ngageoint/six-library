@@ -217,12 +217,21 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #endif // SIX_sicd_have_VCL || SIX_sicd_has_simd
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
+// We're still at C++14, so we don't have the types in <execution>
+// https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag
+// For now, our use is very limited; so don't try to
+// mimic C++17 (these should be types, not `enum` values).
+enum class execution_policy
+{
+    seq, par, par_unseq, unseq
+};
 
 struct AmplitudeTable; // forward
 namespace sicd
 {
 namespace details
 {
+
 /*!
  * \brief A utility that's used to convert complex values into 8-bit amplitude and phase values.
  * 
@@ -267,9 +276,11 @@ public:
     #if SIX_sicd_has_ximd
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_ximd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     #endif
+
     #endif
     
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
+    static std::vector<AMP8I_PHS8I_t> nearest_neighbors(execution_policy, std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
 
 private:
     struct Impl final
@@ -287,10 +298,12 @@ private:
         #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
         template<typename ZFloatV, int elements_per_iteration>
         void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+        template<typename ZFloatV, int elements_per_iteration>
+        void nearest_neighbors_par_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
-        template<typename ZFloatV>
-        void nearest_neighbors_unseq_T(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
+        template<typename ZFloatV, size_t N>
+        auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
 
         #endif 
 
