@@ -43,7 +43,7 @@
 #undef max
 
 using zfloat = six::zfloat;
-using AMP8I_PHS8I_t = six::AMP8I_PHS8I_t;
+using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 
 #if SIX_sicd_has_VCL
 
@@ -62,8 +62,8 @@ using AMP8I_PHS8I_t = six::AMP8I_PHS8I_t;
 #pragma warning(pop)
 #endif
 
-using vcl_intv = vcl::Vec4i; 
-using vcl_floatv = vcl::Vec4f;
+using vcl_intv = vcl::Vec8i; 
+using vcl_floatv = vcl::Vec8f;
 constexpr auto vcl_elements_per_iteration = vcl_floatv::size();
 
 inline int ssize(const vcl_intv& z) noexcept
@@ -75,7 +75,7 @@ inline int ssize(const vcl_floatv& z) noexcept
     return z.size();
 }
 
-using vcl_zfloatv = vcl::Complex4f;
+using vcl_zfloatv = vcl::Complex8f;
 auto real(const vcl_zfloatv& z)
 {
     return z.real();
@@ -136,6 +136,130 @@ inline auto lookup(const vcl_intv& zindex, std::span<const float> magnitudes)
 }
 
 #endif // SIX_sicd_has_VCL
+
+#if SIX_sicd_has_valarray
+#include <valarray>
+
+using valarray_intv = std::valarray<int>;
+using valarray_intv_mask = std::valarray<bool>;
+
+using valarray_floatv = std::valarray<float>;
+using valarray_floatv_mask = std::valarray<bool>;
+
+constexpr auto valarray_elements_per_iteration = 4; // valarray is not fixed size
+
+template<typename T>
+static inline auto ssize(const std::valarray<T>& v) noexcept
+{
+    return gsl::narrow<int>(v.size());
+}
+
+template <typename TValArray, typename G>
+static auto valarray_generate(G&& generator) noexcept
+{
+    TValArray retval(valarray_elements_per_iteration);
+    for (size_t i = 0; i < retval.size(); i++)
+    {
+        retval[i] = generator(i);
+    }
+    return retval;
+}
+template <typename TGenerator>
+static inline auto generate(TGenerator&& generator, valarray_intv)
+{
+    return valarray_generate<valarray_intv>(generator);
+}
+template <typename TGenerator>
+static inline auto generate(TGenerator&& generator, valarray_floatv)
+{
+    return valarray_generate<valarray_floatv>(generator);
+}
+
+// Manage a SIMD complex as an array of two SIMDs
+using valarray_zfloatv = std::array<valarray_floatv, 2>;
+inline auto& real(valarray_zfloatv& z) noexcept
+{
+    return z[0];
+}
+inline const auto& real(const valarray_zfloatv& z) noexcept
+{
+    return z[0];
+}
+inline auto& imag(valarray_zfloatv& z) noexcept
+{
+    return z[1];
+}
+inline const auto& imag(const valarray_zfloatv& z) noexcept
+{
+    return z[1];
+}
+inline size_t size(const valarray_zfloatv& z) noexcept
+{
+    auto retval = real(z).size();
+    assert(retval == imag(z).size());
+    return retval;
+}
+inline auto ssize(const valarray_zfloatv& z) noexcept
+{
+    return gsl::narrow<int>(size(z));
+}
+
+inline auto arg(const valarray_zfloatv& z)
+{
+    // https://en.cppreference.com/w/cpp/numeric/complex/arg
+    // > `std::atan2(std::imag(z), std::real(z))`
+    return std::atan2(imag(z), real(z));  // arg()
+}
+
+template <typename TGeneratorReal, typename TGeneratorImag>
+static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, valarray_zfloatv)
+{
+    valarray_zfloatv retval;
+    real(retval) = generate(generate_real, valarray_floatv{});
+    imag(retval) = generate(generate_imag, valarray_floatv{});
+    return retval;
+}
+
+static inline auto copy_from(std::span<const float> p, valarray_floatv& result)
+{
+    assert(p.size() == result.size());
+    result = valarray_floatv(p.data(), p.size());
+}
+static inline auto copy_from(std::span<const zfloat> p, valarray_zfloatv& result)
+{
+    const auto generate_real = [&](size_t i) { return p[i].real(); };
+    const auto generate_imag = [&](size_t i) { return p[i].imag(); };
+    result = generate(generate_real, generate_imag, valarray_zfloatv{});
+}
+
+template<typename TTest, typename TResult>
+static auto valarray_select_(const TTest& test, const TResult& t, const TResult& f)
+{
+    TResult retval;
+    for (size_t i = 0; i < test.size(); i++)
+    {
+        retval[i] = test[i] ? t[i] : f[i];
+    }
+    return retval;
+}
+static inline auto select(const valarray_floatv_mask& test, const  valarray_floatv& t, const  valarray_floatv& f)
+{
+    return valarray_select_(test, t, f);
+}
+static inline auto select(const valarray_intv_mask& test, const  valarray_intv& t, const  valarray_intv& f)
+{
+    return valarray_select_(test, t, f);
+}
+
+static auto if_add(const valarray_floatv_mask& m, const valarray_floatv& v, typename valarray_floatv::value_type c)
+{
+    const auto generate_add = [&](size_t i) {
+        return m[i] ? v[i] + c : v[i];
+    };
+    return generate(generate_add, valarray_floatv{});
+}
+
+#endif // SIX_sicd_has_valarray
 
 #if SIX_sicd_has_ximd
 #ifndef CODA_OSS_Ximd_ENABLE
@@ -211,20 +335,17 @@ template <typename TGeneratorReal, typename TGeneratorImag>
 static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, ximd_zfloatv)
 {
     ximd_zfloatv retval;
-    for (size_t i = 0; i < size(retval); i++)
-    {
-        real(retval)[i] = generate_real(i);
-        imag(retval)[i] = generate_imag(i);
-    }
+    real(retval) = generate(generate_real, ximd_floatv{});
+    imag(retval) = generate(generate_imag, ximd_floatv{});
     return retval;
 }
 
-static inline auto copy_from(std::span<const float> p, ximd_floatv& result)
+static inline void copy_from(std::span<const float> p, ximd_floatv& result)
 {
     assert(p.size() == result.size());
     result.copy_from(p.data());
 }
-static inline auto copy_from(std::span<const zfloat> p, ximd_zfloatv& result)
+static inline void copy_from(std::span<const zfloat> p, ximd_zfloatv& result)
 {
     const auto generate_real = [&](size_t i) { return p[i].real(); };
     const auto generate_imag = [&](size_t i) { return p[i].imag(); };
@@ -443,6 +564,13 @@ static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_direc
     };
     return generate(generate_real, generate_imag, ZFloatV{});
 }
+#if SIX_sicd_has_valarray
+template<size_t N>
+static inline auto lookup(const valarray_intv& zindex, const std::array<zfloat, N>& phase_directions)
+{
+    return lookup_<valarray_zfloatv>(zindex, phase_directions);
+}
+#endif
 #if SIX_sicd_has_ximd
 template<size_t N>
 static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& phase_directions)
@@ -626,6 +754,18 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
     return ::find_nearest<vcl_intv>(impl.magnitudes, phase_direction_real, phase_direction_imag, v);
 }
 #endif
+
+#if SIX_sicd_has_valarray
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
+    const valarray_intv& phase, const  valarray_zfloatv& v)
+{
+    const auto& impl = converter.impl;
+
+    const auto phase_direction = lookup(phase, impl.phase_directions);
+    return ::find_nearest<valarray_intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+}
+#endif
+
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
 template<typename IntV, typename ZFloatV>
 static auto lookup_and_find_nearest_(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
@@ -661,43 +801,54 @@ struct AMP8I_PHS8I_unseq final
     IntV phase;
 };
 
-template<typename IntV>
-static auto copy_to(const AMP8I_PHS8I_unseq<IntV>& result, std::span<AMP8I_PHS8I_t> mem) // https://en.cppreference.com/w/cpp/experimental/simd/simd/copy_to
+// Cast a blob of T* into "chunks" of T[N]; "undecay" an array.
+// This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
+template<size_t N, typename T>
+static inline auto array_cast(std::span<const T> data)
 {
-    assert(result.phase.size() == mem.size());
-
-    // interleave() and store() is slower than an explicit loop.
-    for (int i = 0; i < ssize(result.phase); i++)
-    {
-        mem[i].phase = gsl::narrow_cast<uint8_t>(result.phase[i]);
-        mem[i].amplitude = gsl::narrow_cast<uint8_t>(result.amplitude[i]);
-    }
+    using chunk_t = std::array<const T, N>;
+    const auto number_of_chunks = data.size() / N;
+    const void* const pData = data.data();
+    return sys::make_span(static_cast<const chunk_t*>(pData), number_of_chunks);
 }
 
 // Inside of `std::transform()`, there is a copy; something like
 // ```
-// *dest = f(*first);
+//    *dest = func(*first);
 // ```
-// We want to avoid an extra copy from `AMP8I_PHS8I_unseq` to a temporary
-// `std::array<AMP8I_PHS8I_t, N>`.
+// By returning our own class from `func()`, we can take control of the assignment operator
+// and use that to copy from `AMP8I_PHS8I_unseq` to `std::array<AMP8I_PHS8I, N>&`.
+// (Unlike most other operators, `operator=()` *must* be a member-function.)
 //
 // Using inheritance to avoid padding at the end of the `struct`. ... needed?
-template<size_t N>
-struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I_t, N>
+template<typename IntV, size_t N>
+static void move_to(std::array<AMP8I_PHS8I, N>& results, AMP8I_PHS8I_unseq<IntV>&& result)
 {
-    template<typename IntV>
-    AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>& other)
+    for (size_t i = 0; i < N; i++)
     {
-        copy_to(other, *this);
-        return *this;
+        results[i].phase = gsl::narrow<uint8_t>(result.phase[i]);
+        results[i].amplitude = gsl::narrow<uint8_t>(result.amplitude[i]);
     }
-    template<typename IntV>
+}
+template<typename IntV, size_t N>
+struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
+{
+    AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>&) = delete; // should only be using move-assignment
     AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other)
     {
-        copy_to(other, *this);
+        move_to(*this, std::move(other));
         return *this;
     }
 };
+template<typename IntV, size_t N>
+static inline auto AMP8I_PHS8I_array_cast(std::span<AMP8I_PHS8I> data)
+{
+    // This isn't quite kosher, see `array_cast()` above.
+    using chunk_t = AMP8I_PHS8I_array<IntV, N>;
+    const auto number_of_chunks = data.size() / N;
+    void* const pDest = data.data();
+    return std::span<chunk_t>(static_cast<chunk_t*>(pDest), number_of_chunks);
+}
 
 // The compiler can sometimes do better optimizatoin with fixed-size structures.
 // TODO: std::span<T, N> ... ?
@@ -742,121 +893,74 @@ auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(co
     return retval;
 }
 
-template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+template<size_t elements_per_iteration>
+static void finish_nearest_neighbors_unseq(const six::sicd::details::ComplexToAMP8IPHS8I::Impl& impl,
+    std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results)
 {
-    auto first = inputs.begin();
-    const auto last = inputs.end();
-    auto dest = results.begin();
-
-    // Can do these calculations one-time outside of the loop
-    const auto distance = std::distance(first, last);
-
-    // First, do multiples of <elements_per_iteration>
-    const auto distance_ = distance - (distance % elements_per_iteration);
-    const auto last_ = first + distance_;
-    for (; first != last_; first += elements_per_iteration, dest += elements_per_iteration)
-    {
-        // View this chunk as a fixed-size array.
-        using input_t = std::array<const zfloat, elements_per_iteration>;
-        const void* const pFirst = &(*first);
-        auto const f = static_cast<const input_t*>(pFirst);
-
-        const auto results_unseq = nearest_neighbors_unseq_T<ZFloatV>(*f);
-
-        const auto d = sys::make_span(&(*dest), elements_per_iteration);
-        copy_to(results_unseq, d);
-    }
-
     // Then finish off anything left
-    assert(std::distance(first, last) < elements_per_iteration);
-    for (; first != last; ++first, ++dest)
+    const auto remaining_count = inputs.size() % elements_per_iteration;
+    if (remaining_count > 0)
     {
-        const auto f = sys::make_span(&(*first), 1);
-        const auto d = sys::make_span(&(*dest), 1);
-        nearest_neighbors_seq(f, d);
+        const auto remaining_index = inputs.size() - remaining_count;
+        const auto remaining_inputs = sys::make_span(&(inputs[remaining_index]), remaining_count);
+        const auto remaining_results = sys::make_span(&(results[remaining_index]), remaining_count);
+        impl.nearest_neighbors_seq(remaining_inputs, remaining_results);
     }
 }
 
 template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    const auto array_size = inputs.size() / elements_per_iteration;
+    using intv_t = decltype(::getPhase(ZFloatV{}, phase_delta));
 
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
     // using `nearest_neighbors_unseq_T()`, above.
+    //
+    // This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
+    auto const first = array_cast<elements_per_iteration>(inputs);
+    auto const dest = AMP8I_PHS8I_array_cast<intv_t, elements_per_iteration>(results);
 
-    using input_t = std::array<const zfloat, elements_per_iteration>;
-    const void* const pInputs = inputs.data();
-    const std::span<const input_t> first(static_cast<const input_t*>(pInputs), array_size);
-
-    using result_t = AMP8I_PHS8I_array<elements_per_iteration>;
-    void* const pDest = results.data();
-    const std::span<result_t> dest(static_cast<result_t*>(pDest), array_size);
-
-    const auto f = [&](const auto& v)
+    const auto func = [&](const auto& v)
     {
-        return  nearest_neighbors_unseq_T<ZFloatV>(v);
+        return nearest_neighbors_unseq_T<ZFloatV>(v);
     };
-    mt::Transform_par(first.begin(), first.end(), dest.begin(), f);
+    std::transform(first.begin(), first.end(), dest.begin(), func);
 
     // Then finish off anything left
-    const auto remaining = inputs.size() % elements_per_iteration;
-    const auto processed_count = inputs.size() - remaining;
-    auto const first_remaining = sys::make_span(inputs.data() + processed_count, remaining);
-    auto const dest_remaining = sys::make_span(results.data() + processed_count, remaining);
-    nearest_neighbors_seq(first_remaining, dest_remaining);
+    finish_nearest_neighbors_unseq<elements_per_iteration>(*this, inputs, results);
 }
 
-#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
-
-#if SIX_sicd_has_VCL
-std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_vcl(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
+template<typename ZFloatV, int elements_per_iteration>
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
+    using intv_t = decltype(::getPhase(ZFloatV{}, phase_delta));
 
-    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_unseq<vcl_zfloatv, vcl_elements_per_iteration>(inputs, sys::make_span(retval));
-    return retval;
+    // View the data as chunks of *elements_per_iteration*.  This allows iterating
+    // to go *elements_per_iteration* at a time; and each chunk can be processed
+    // using `nearest_neighbors_unseq_T()`, above.
+    //
+    // This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
+    auto const first = array_cast<elements_per_iteration>(inputs);
+    auto const dest = AMP8I_PHS8I_array_cast<intv_t, elements_per_iteration>(results);
+
+    const auto func = [&](const auto& v)
+    {
+        return nearest_neighbors_unseq_T<ZFloatV>(v);
+    };
+    mt::Transform_par(first.begin(), first.end(), dest.begin(), func);
+
+    // Then finish off anything left
+    finish_nearest_neighbors_unseq<elements_per_iteration>(*this, inputs, results);
 }
-#endif // SIX_sicd_has_VCL
-
-#if SIX_sicd_has_ximd
-std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_ximd(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_unseq<ximd_zfloatv, ximd_elements_per_iteration>(inputs, sys::make_span(retval));
-    return retval;
-}
-#endif // SIX_sicd_has_ximd
-
-#if SIX_sicd_has_simd
-std::vector<AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq_simd(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_unseq<simd_zfloatv, simd_elements_per_iteration>(inputs, sys::make_span(retval));
-    return retval;
-}
-#endif // SIX_sicd_has_simd
-
-#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
 static std::string nearest_neighbors_unseq_ =
 #if SIX_sicd_has_simd
 "simd";
 #elif SIX_sicd_has_VCL
 "vcl";
+#elif SIX_sicd_has_valarray
+"valarray";
 #elif SIX_sicd_has_ximd
 "ximd";
 #else
@@ -871,37 +975,51 @@ std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
     return retval;
 }
 
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
+std::vector<AMP8I_PHS8I> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
+
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter = make_(pAmplitudeTable);
+    std::vector<AMP8I_PHS8I> retval(inputs.size());
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = nearest_neighbors_unseq_;
     if (unseq == "simd")
     {
         #if SIX_sicd_has_simd
-        return nearest_neighbors_unseq_simd(inputs, pAmplitudeTable);
+        converter.impl.nearest_neighbors_unseq<simd_zfloatv, simd_elements_per_iteration>(inputs, sys::make_span(retval));
+        return retval;
         #endif
     }
     if (unseq == "vcl")
     {
         #if SIX_sicd_has_VCL
-        return nearest_neighbors_unseq_vcl(inputs, pAmplitudeTable);
+        converter.impl.nearest_neighbors_unseq<vcl_zfloatv, vcl_elements_per_iteration>(inputs, sys::make_span(retval));
+        return retval;
+        #endif
+    }
+    if (unseq == "valarray")
+    {
+        #if SIX_sicd_has_valarray
+        converter.impl.nearest_neighbors_unseq<valarray_zfloatv, valarray_elements_per_iteration>(inputs, sys::make_span(retval));
+        return retval;
         #endif
     }
     if (unseq == "ximd")
     {
         #if SIX_sicd_has_ximd
-        return nearest_neighbors_unseq_ximd(inputs, pAmplitudeTable);
+        converter.impl.nearest_neighbors_unseq<ximd_zfloatv, ximd_elements_per_iteration>(inputs, sys::make_span(retval));
+        return retval;
         #endif
     }
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_unseq() for unseq=" + unseq);
 }
 
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
@@ -911,31 +1029,37 @@ void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq(
     if (unseq == "simd")
     {
         #if SIX_sicd_has_simd
-        return nearest_neighbors_par_unseq_<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
+        return nearest_neighbors_par_unseq_T<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
         #endif
     }
     if (unseq == "vcl")
     {
         #if SIX_sicd_has_VCL
-        return nearest_neighbors_par_unseq_<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
+        return nearest_neighbors_par_unseq_T<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
+        #endif
+    }
+    if (unseq == "valarray")
+    {
+        #if SIX_sicd_has_valarray
+        return nearest_neighbors_par_unseq_T<valarray_zfloatv, valarray_elements_per_iteration>(inputs, results);
         #endif
     }
     if (unseq == "ximd")
     {
         #if SIX_sicd_has_ximd
-        return nearest_neighbors_par_unseq_<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
+        return nearest_neighbors_par_unseq_T<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
         #endif
     }
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_par_unseq() for unseq=" + unseq);
 }
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
+std::vector<AMP8I_PHS8I> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
 {
     // make a structure to quickly find the nearest neighbor
     const auto& converter = make_(pAmplitudeTable);
 
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    std::vector<AMP8I_PHS8I> retval(inputs.size());
     converter.impl.nearest_neighbors_par_unseq(inputs, sys::make_span(retval));
     return retval;
 }
