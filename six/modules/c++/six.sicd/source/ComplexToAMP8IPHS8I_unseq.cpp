@@ -850,7 +850,7 @@ static inline auto AMP8I_PHS8I_array_cast(std::span<AMP8I_PHS8I> data)
     return std::span<chunk_t>(static_cast<chunk_t*>(pDest), number_of_chunks);
 }
 
-// The compiler can sometimes do better optimizatoin with fixed-size structures.
+// The compiler can sometimes do better optimization with fixed-size structures.
 // TODO: std::span<T, N> ... ?
 template<typename ZFloatV, size_t N>
 auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p) const

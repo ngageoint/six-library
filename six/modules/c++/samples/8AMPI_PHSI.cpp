@@ -21,12 +21,6 @@
 
 using namespace six;
 
-static std::vector<AMP8I_PHS8I_t> do_nothing(std::span<const six::zfloat> inputs)
-{
-    std::vector<AMP8I_PHS8I_t> retval(inputs.size());
-    return retval;
-}
-
 static const six::sicd::ImageData imageData;
 static std::vector<AMP8I_PHS8I_t> fromComplex(std::span<const six::zfloat> inputs)
 {
@@ -97,7 +91,7 @@ int main()
     std::vector<six::zfloat> results(inputs.size());
 
     /*********************************************************************************/
-    auto diff = test(do_nothing, results);
+    std::chrono::duration<double> diff;
 
     TEST(fromComplex);
     TEST(fromComplex_seq);
@@ -105,4 +99,3 @@ int main()
     TEST(fromComplex_unseq);
     TEST(fromComplex_par_unseq);
 }
-
