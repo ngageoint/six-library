@@ -801,43 +801,54 @@ struct AMP8I_PHS8I_unseq final
     IntV phase;
 };
 
-template<typename IntV>
-static auto copy_to(const AMP8I_PHS8I_unseq<IntV>& result, std::span<AMP8I_PHS8I> mem) // https://en.cppreference.com/w/cpp/experimental/simd/simd/copy_to
+// Cast a blob of T* into "chunks" of T[N]; "undecay" an array.
+// This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
+template<size_t N, typename T>
+static inline auto array_cast(std::span<const T> data)
 {
-    assert(result.phase.size() == mem.size());
-
-    // interleave() and store() is slower than an explicit loop.
-    for (int i = 0; i < ssize(result.phase); i++)
-    {
-        mem[i].phase = gsl::narrow_cast<uint8_t>(result.phase[i]);
-        mem[i].amplitude = gsl::narrow_cast<uint8_t>(result.amplitude[i]);
-    }
+    using chunk_t = std::array<const T, N>;
+    const auto number_of_chunks = data.size() / N;
+    const void* const pData = data.data();
+    return sys::make_span(static_cast<const chunk_t*>(pData), number_of_chunks);
 }
 
 // Inside of `std::transform()`, there is a copy; something like
 // ```
-// *dest = f(*first);
+//    *dest = func(*first);
 // ```
-// We want to avoid an extra copy from `AMP8I_PHS8I_unseq` to a temporary
-// `std::array<AMP8I_PHS8I, N>`.
+// By returning our own class from `func()`, we can take control of the assignment operator
+// and use that to copy from `AMP8I_PHS8I_unseq` to `std::array<AMP8I_PHS8I, N>&`.
+// (Unlike most other operators, `operator=()` *must* be a member-function.)
 //
 // Using inheritance to avoid padding at the end of the `struct`. ... needed?
-template<size_t N>
+template<typename IntV, size_t N>
+static void move_to(std::array<AMP8I_PHS8I, N>& results, AMP8I_PHS8I_unseq<IntV>&& result)
+{
+    for (size_t i = 0; i < N; i++)
+    {
+        results[i].phase = gsl::narrow<uint8_t>(result.phase[i]);
+        results[i].amplitude = gsl::narrow<uint8_t>(result.amplitude[i]);
+    }
+}
+template<typename IntV, size_t N>
 struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
 {
-    template<typename IntV>
-    AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>& other)
-    {
-        copy_to(other, *this);
-        return *this;
-    }
-    template<typename IntV>
+    AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>&) = delete; // should only be using move-assignment
     AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other)
     {
-        copy_to(other, *this);
+        move_to(*this, std::move(other));
         return *this;
     }
 };
+template<typename IntV, size_t N>
+static inline auto AMP8I_PHS8I_array_cast(std::span<AMP8I_PHS8I> data)
+{
+    // This isn't quite kosher, see `array_cast()` above.
+    using chunk_t = AMP8I_PHS8I_array<IntV, N>;
+    const auto number_of_chunks = data.size() / N;
+    void* const pDest = data.data();
+    return std::span<chunk_t>(static_cast<chunk_t*>(pDest), number_of_chunks);
+}
 
 // The compiler can sometimes do better optimizatoin with fixed-size structures.
 // TODO: std::span<T, N> ... ?
@@ -882,71 +893,65 @@ auto six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq_T(co
     return retval;
 }
 
+template<size_t elements_per_iteration>
+static void finish_nearest_neighbors_unseq(const six::sicd::details::ComplexToAMP8IPHS8I::Impl& impl,
+    std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results)
+{
+    // Then finish off anything left
+    const auto remaining_count = inputs.size() % elements_per_iteration;
+    if (remaining_count > 0)
+    {
+        const auto remaining_index = inputs.size() - remaining_count;
+        const auto remaining_inputs = sys::make_span(&(inputs[remaining_index]), remaining_count);
+        const auto remaining_results = sys::make_span(&(results[remaining_index]), remaining_count);
+        impl.nearest_neighbors_seq(remaining_inputs, remaining_results);
+    }
+}
+
 template<typename ZFloatV, int elements_per_iteration>
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    auto first = inputs.begin();
-    const auto last = inputs.end();
-    auto dest = results.begin();
+    using intv_t = decltype(::getPhase(ZFloatV{}, phase_delta));
 
-    // Can do these calculations one-time outside of the loop
-    const auto distance = std::distance(first, last);
+    // View the data as chunks of *elements_per_iteration*.  This allows iterating
+    // to go *elements_per_iteration* at a time; and each chunk can be processed
+    // using `nearest_neighbors_unseq_T()`, above.
+    //
+    // This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
+    auto const first = array_cast<elements_per_iteration>(inputs);
+    auto const dest = AMP8I_PHS8I_array_cast<intv_t, elements_per_iteration>(results);
 
-    // First, do multiples of <elements_per_iteration>
-    const auto distance_ = distance - (distance % elements_per_iteration);
-    const auto last_ = first + distance_;
-    for (; first != last_; first += elements_per_iteration, dest += elements_per_iteration)
+    const auto func = [&](const auto& v)
     {
-        // View this chunk as a fixed-size array.
-        using input_t = std::array<const zfloat, elements_per_iteration>;
-        const void* const pFirst = &(*first);
-        auto const f = static_cast<const input_t*>(pFirst);
-
-        const auto results_unseq = nearest_neighbors_unseq_T<ZFloatV>(*f);
-
-        const auto d = sys::make_span(&(*dest), elements_per_iteration);
-        copy_to(results_unseq, d);
-    }
+        return nearest_neighbors_unseq_T<ZFloatV>(v);
+    };
+    std::transform(first.begin(), first.end(), dest.begin(), func);
 
     // Then finish off anything left
-    assert(std::distance(first, last) < elements_per_iteration);
-    for (; first != last; ++first, ++dest)
-    {
-        const auto f = sys::make_span(&(*first), 1);
-        const auto d = sys::make_span(&(*dest), 1);
-        nearest_neighbors_seq(f, d);
-    }
+    finish_nearest_neighbors_unseq<elements_per_iteration>(*this, inputs, results);
 }
 
 template<typename ZFloatV, int elements_per_iteration>
 void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    const auto array_size = inputs.size() / elements_per_iteration;
+    using intv_t = decltype(::getPhase(ZFloatV{}, phase_delta));
 
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
     // using `nearest_neighbors_unseq_T()`, above.
+    //
+    // This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
+    auto const first = array_cast<elements_per_iteration>(inputs);
+    auto const dest = AMP8I_PHS8I_array_cast<intv_t, elements_per_iteration>(results);
 
-    using input_t = std::array<const zfloat, elements_per_iteration>;
-    const void* const pInputs = inputs.data();
-    const std::span<const input_t> first(static_cast<const input_t*>(pInputs), array_size);
-
-    using result_t = AMP8I_PHS8I_array<elements_per_iteration>;
-    void* const pDest = results.data();
-    const std::span<result_t> dest(static_cast<result_t*>(pDest), array_size);
-
-    const auto f = [&](const auto& v)
+    const auto func = [&](const auto& v)
     {
-        return  nearest_neighbors_unseq_T<ZFloatV>(v);
+        return nearest_neighbors_unseq_T<ZFloatV>(v);
     };
-    mt::Transform_par(first.begin(), first.end(), dest.begin(), f);
+    mt::Transform_par(first.begin(), first.end(), dest.begin(), func);
 
     // Then finish off anything left
-    const auto remaining = inputs.size() % elements_per_iteration;
-    const auto processed_count = inputs.size() - remaining;
-    auto const first_remaining = sys::make_span(inputs.data() + processed_count, remaining);
-    auto const dest_remaining = sys::make_span(results.data() + processed_count, remaining);
-    nearest_neighbors_seq(first_remaining, dest_remaining);
+    finish_nearest_neighbors_unseq<elements_per_iteration>(*this, inputs, results);
 }
 
 static std::string nearest_neighbors_unseq_ =
