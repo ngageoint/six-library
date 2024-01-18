@@ -97,6 +97,7 @@
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
