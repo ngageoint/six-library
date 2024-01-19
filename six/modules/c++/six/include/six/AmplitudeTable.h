@@ -181,11 +181,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
         // __has_include is part of C++17
         #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
             __has_include("six/sicd/vectorclass/version2/vectorclass.h")
-            #if _MSC_VER
-                #define SIX_sicd_has_VCL !CODA_OSS_cpp20 // TODO: MSVC works with C++17, but not C++20 ... ?
-            #else
-                #define SIX_sicd_has_VCL 1
-            #endif // _MSC_VER
+        #define SIX_sicd_has_VCL 1
         #else
         #define SIX_sicd_has_VCL 0
         #endif // __has_include
@@ -276,48 +272,26 @@ public:
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(execution_policy, std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
 
+    void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+    void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+
+    uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
+    uint8_t getPhase(six::zfloat) const;
+
 private:
-    struct Impl final
-    {
-        const ComplexToAMP8IPHS8I& converter;
-        Impl(const ComplexToAMP8IPHS8I& c) : converter(c) {}
-        ~Impl() = default;
-        Impl(const Impl&) = delete;
-        Impl& operator=(const Impl&) = delete;
-        Impl(Impl&&) = delete; // implicitly deleted because of =delete for copy
-        Impl& operator=(Impl&&) = delete; // implicitly deleted because of =delete for copy
+    //! The sorted set of possible magnitudes order from small to large.
+    std::array<float, AmplitudeTableSize> uncached_magnitudes;
+    std::span<const float> magnitudes;
 
-        void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-        template<typename ZFloatV, size_t N>
-        auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+    //! The difference in phase angle between two UINT phase values.
+    float phase_delta;
 
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_par_unseq_T(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        #endif 
-
-        //! The sorted set of possible magnitudes order from small to large.
-        std::array<float, AmplitudeTableSize> uncached_magnitudes;
-        std::span<const float> magnitudes;
-        uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
-
-        //! The difference in phase angle between two UINT phase values.
-        float phase_delta;
-        uint8_t getPhase(six::zfloat) const;
-
-        //! Unit vector rays that represent each direction that phase can point.
-        std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
-        #ifdef SIX_sicd_has_VCL
-        std::array<float, AmplitudeTableSize> phase_directions_real;
-        std::array<float, AmplitudeTableSize> phase_directions_imag;
-        #endif
-    };
-public:
-    Impl impl;
+    //! Unit vector rays that represent each direction that phase can point.
+    std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
+    #ifdef SIX_sicd_has_VCL
+    std::array<float, AmplitudeTableSize> phase_directions_real;
+    std::array<float, AmplitudeTableSize> phase_directions_imag;
+    #endif
 };
 }
 }
