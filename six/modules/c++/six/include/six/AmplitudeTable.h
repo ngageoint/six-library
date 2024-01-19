@@ -289,16 +289,6 @@ private:
 
         void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
         void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-        template<typename ZFloatV, size_t N>
-        auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_par_unseq_T(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        #endif 
 
         //! The sorted set of possible magnitudes order from small to large.
         std::array<float, AmplitudeTableSize> uncached_magnitudes;
