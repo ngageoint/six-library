@@ -83,7 +83,7 @@ int main()
     assert(imageData.amplitudeTable.get() == nullptr);
 
     #ifdef NDEBUG
-    constexpr auto inputs_size = 25000000;
+    constexpr auto inputs_size = 10000000;
     #else
     constexpr auto inputs_size = 100;
     #endif
@@ -91,7 +91,7 @@ int main()
     std::vector<six::zfloat> results(inputs.size());
 
     /*********************************************************************************/
-    auto diff = test(fromComplex, results);
+    std::chrono::duration<double> diff;
 
     TEST(fromComplex);
     TEST(fromComplex_seq);
@@ -99,4 +99,3 @@ int main()
     TEST(fromComplex_unseq);
     TEST(fromComplex_par_unseq);
 }
-

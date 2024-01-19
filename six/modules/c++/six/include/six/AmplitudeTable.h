@@ -181,11 +181,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
         // __has_include is part of C++17
         #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
             __has_include("six/sicd/vectorclass/version2/vectorclass.h")
-            #if _MSC_VER
-                #define SIX_sicd_has_VCL !CODA_OSS_cpp20 // TODO: MSVC works with C++17, but not C++20 ... ?
-            #else
-                #define SIX_sicd_has_VCL 1
-            #endif // _MSC_VER
+        #define SIX_sicd_has_VCL 1
         #else
         #define SIX_sicd_has_VCL 0
         #endif // __has_include
@@ -208,9 +204,16 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     // std::experimental::simd is G++11/C++20.
     #define SIX_sicd_has_ximd CODA_OSS_DEBUG
 #endif
+#ifndef SIX_sicd_has_valarray
+    // This is the "old way" of doing things.  Note that GCC implements
+    // much of this using expresson templates which means writing
+    // generic routines must be done carefully.  Turn this on by default
+    // so that "interesting" code is executed.
+    #define SIX_sicd_has_valarray 0 // TODO: finish implementing
+#endif
 
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    #if SIX_sicd_has_VCL || SIX_sicd_has_simd || SIX_sicd_has_ximd
+    #if SIX_sicd_has_VCL || SIX_sicd_has_simd || SIX_sicd_has_valarray || SIX_sicd_has_ximd
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
     #else
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
@@ -262,69 +265,33 @@ public:
     AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-
-    #if SIX_sicd_has_VCL
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_vcl(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-    #if SIX_sicd_has_simd
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_simd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-    #if SIX_sicd_has_ximd
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_ximd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-
-    #endif
-    
+    #endif    
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
     static std::vector<AMP8I_PHS8I_t> nearest_neighbors(execution_policy, std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
 
+    void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+    void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+
+    uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
+    uint8_t getPhase(six::zfloat) const;
+
 private:
-    struct Impl final
-    {
-        const ComplexToAMP8IPHS8I& converter;
-        Impl(const ComplexToAMP8IPHS8I& c) : converter(c) {}
-        ~Impl() = default;
-        Impl(const Impl&) = delete;
-        Impl& operator=(const Impl&) = delete;
-        Impl(Impl&&) = delete; // implicitly deleted because of =delete for copy
-        Impl& operator=(Impl&&) = delete; // implicitly deleted because of =delete for copy
+    //! The sorted set of possible magnitudes order from small to large.
+    std::array<float, AmplitudeTableSize> uncached_magnitudes;
+    std::span<const float> magnitudes;
 
-        void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_par_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+    //! The difference in phase angle between two UINT phase values.
+    float phase_delta;
 
-        template<typename ZFloatV, size_t N>
-        auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
-
-        #endif 
-
-        //! The sorted set of possible magnitudes order from small to large.
-        std::array<float, AmplitudeTableSize> uncached_magnitudes;
-        std::span<const float> magnitudes;
-        uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
-
-        //! The difference in phase angle between two UINT phase values.
-        float phase_delta;
-        uint8_t getPhase(six::zfloat) const;
-
-        //! Unit vector rays that represent each direction that phase can point.
-        std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
-        #ifdef SIX_sicd_has_VCL
-        std::array<float, AmplitudeTableSize> phase_directions_real;
-        std::array<float, AmplitudeTableSize> phase_directions_imag;
-        #endif
-    };
-public:
-    Impl impl;
+    //! Unit vector rays that represent each direction that phase can point.
+    std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
+    #ifdef SIX_sicd_has_VCL
+    std::array<float, AmplitudeTableSize> phase_directions_real;
+    std::array<float, AmplitudeTableSize> phase_directions_imag;
+    #endif
 };
 }
 }
