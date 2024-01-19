@@ -77,7 +77,7 @@ inline auto GetPhase(std::complex<double> v)
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
 }
-uint8_t six::sicd::details::ComplexToAMP8IPHS8I::Impl::getPhase(six::zfloat v) const
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
 {
     // Phase is determined via arithmetic because it's equally spaced.
     const auto phase = GetPhase(v);
@@ -140,26 +140,25 @@ static std::span<const float> get_magnitudes(const six::AmplitudeTable* pAmplitu
 
 
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
-    :impl(*this)
 {
-    impl.magnitudes = get_magnitudes(pAmplitudeTable, impl.uncached_magnitudes);
+    magnitudes = get_magnitudes(pAmplitudeTable, uncached_magnitudes);
 
     const auto p0 = GetPhase(Utilities::toComplex(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::toComplex(1, 1, pAmplitudeTable));
     assert(p0 == 0.0);
     assert(p1 > p0);
-    impl.phase_delta = gsl::narrow_cast<float>(p1 - p0);
+    phase_delta = gsl::narrow_cast<float>(p1 - p0);
     for(size_t i = 0; i < 256; i++)
     {
-        const units::Radians<float> angle{ static_cast<float>(p0) + i * impl.phase_delta };
+        const units::Radians<float> angle{ static_cast<float>(p0) + i * phase_delta };
         float y, x;
         SinCos(angle, y, x);
-        impl.phase_directions[i] = { x, y };
+        phase_directions[i] = { x, y };
 
         // Only need the parallel array when using the "vectorclass" library.
         #ifdef SIX_sicd_has_VCL
-        impl.phase_directions_real[i] = impl.phase_directions[i].real();
-        impl.phase_directions_imag[i] = impl.phase_directions[i].imag();
+        phase_directions_real[i] = phase_directions[i].real();
+        phase_directions_imag[i] = phase_directions[i].imag();
         #endif
     }
 }
@@ -184,7 +183,7 @@ static uint8_t nearest(std::span<const float> magnitudes, float value)
     assert(distance <= std::numeric_limits<uint8_t>::max());
     return gsl::narrow<uint8_t>(distance);
 }
-uint8_t six::sicd::details::ComplexToAMP8IPHS8I::Impl::find_nearest(six::zfloat phase_direction, six::zfloat v) const
+uint8_t six::sicd::details::ComplexToAMP8IPHS8I::find_nearest(six::zfloat phase_direction, six::zfloat v) const
 {
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
@@ -197,16 +196,16 @@ uint8_t six::sicd::details::ComplexToAMP8IPHS8I::Impl::find_nearest(six::zfloat 
 six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor_(const six::zfloat &v) const
 {
     six::AMP8I_PHS8I_t retval;
-    retval.phase = impl.getPhase(v);
+    retval.phase = getPhase(v);
 
-    auto&& phase_direction = impl.phase_directions[retval.phase];
-    retval.amplitude = impl.find_nearest(phase_direction, v);
+    auto&& phase_direction = phase_directions[retval.phase];
+    retval.amplitude = find_nearest(phase_direction, v);
     return retval;
 }
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
     std::transform(inputs.begin(), inputs.end(), results.begin(),
-        [&](const auto& v) { return converter.nearest_neighbor_(v); });
+        [&](const auto& v) { return nearest_neighbor_(v); });
 }
 std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_seq(
     std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
@@ -215,7 +214,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     const auto& converter = make_(pAmplitudeTable);
 
     std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_seq(inputs, retval);
+    converter.nearest_neighbors_seq(inputs, retval);
     return retval;
 }
 
@@ -225,11 +224,11 @@ six::AMP8I_PHS8I_t six::sicd::nearest_neighbor(const details::ComplexToAMP8IPHS8
 }
 
 
-void six::sicd::details::ComplexToAMP8IPHS8I::Impl::nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+void six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
     const auto nearest_neighbor = [&](const auto& v)
     {
-        return converter.nearest_neighbor_(v);
+        return nearest_neighbor_(v);
     };
     std::ignore = mt::Transform_par(inputs.begin(), inputs.end(), results.begin(), nearest_neighbor);
 }
@@ -240,7 +239,7 @@ std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest
     const auto& converter = make_(pAmplitudeTable);
 
     std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    converter.impl.nearest_neighbors_par(inputs, sys::make_span(retval));
+    converter.nearest_neighbors_par(inputs, sys::make_span(retval));
     return retval;
 }
 
