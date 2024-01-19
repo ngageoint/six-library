@@ -852,21 +852,16 @@ static inline auto array_cast(std::span<const T> data)
 //
 // Using inheritance to avoid padding at the end of the `struct`. ... needed?
 template<typename IntV, size_t N>
-static void move_to(std::array<AMP8I_PHS8I, N>& results, AMP8I_PHS8I_unseq<IntV>&& result)
-{
-    for (int i = 0; i < N; i++)
-    {
-        results[i].phase = gsl::narrow<uint8_t>(result.phase[i]);
-        results[i].amplitude = gsl::narrow<uint8_t>(result.amplitude[i]);
-    }
-}
-template<typename IntV, size_t N>
 struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
 {
     AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>&) = delete; // should only be using move-assignment
     AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other)
     {
-        move_to(*this, std::move(other));
+        for (int i = 0; i < N; i++)
+        {
+            (*this)[i].phase = gsl::narrow<uint8_t>(other.phase[i]);
+            (*this)[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i]);
+        }
         return *this;
     }
 };
