@@ -629,12 +629,12 @@ struct ComplexToAMP8IPHS8I_unseq_Impl final
     template<typename ZFloatV, size_t N>
     auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
     template<typename ZFloatV, int elements_per_iteration>
-    void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
-    void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
+    void nearest_neighbors_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
+    void nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
 
     template<typename ZFloatV, int elements_per_iteration>
-    void nearest_neighbors_par_unseq_T(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
-    void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
+    void nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
+    void nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
 #endif 
 
     //! The sorted set of possible magnitudes order from small to large.
@@ -644,7 +644,7 @@ struct ComplexToAMP8IPHS8I_unseq_Impl final
     float phase_delta;
 
     //! Unit vector rays that represent each direction that phase can point.
-    const std::array<six::zfloat, six::AmplitudeTableSize>& phase_directions; // interleaved, std::complex<float>
+    const std::array<zfloat, six::AmplitudeTableSize>& phase_directions; // interleaved, std::complex<float>
 #ifdef SIX_sicd_has_VCL
     const std::array<float, six::AmplitudeTableSize>& phase_directions_real;
     const std::array<float, six::AmplitudeTableSize>& phase_directions_imag;
