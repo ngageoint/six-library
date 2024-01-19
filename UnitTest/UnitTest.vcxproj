@@ -74,6 +74,7 @@
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -101,6 +102,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <ControlFlowGuard>Guard</ControlFlowGuard>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <EnableModules>true</EnableModules>
     </ClCompile>
     <Link>
