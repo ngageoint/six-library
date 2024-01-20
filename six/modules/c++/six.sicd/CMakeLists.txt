@@ -8,7 +8,6 @@ coda_add_module(
         source/ComplexData.cpp
         source/ComplexDataBuilder.cpp
         source/ComplexToAMP8IPHS8I.cpp
-        source/ComplexToAMP8IPHS8I_unseq.cpp
         source/ComplexXMLControl.cpp
         source/ComplexXMLParser.cpp
         source/ComplexXMLParser040.cpp
@@ -26,6 +25,8 @@ coda_add_module(
         source/Grid.cpp
         source/ImageData.cpp
         source/ImageFormation.cpp
+        source/NearestNeighbors.cpp
+        source/NearestNeighbors_unseq.cpp
         source/NITFReadComplexXMLControl.cpp
         source/PFA.cpp
         source/Position.cpp
