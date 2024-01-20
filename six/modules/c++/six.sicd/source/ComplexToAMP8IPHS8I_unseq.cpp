@@ -629,12 +629,12 @@ struct ComplexToAMP8IPHS8I_unseq_Impl final
     template<typename ZFloatV, size_t N>
     auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
     template<typename ZFloatV, int elements_per_iteration>
-    void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
-    void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
+    void nearest_neighbors_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
+    void nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
 
     template<typename ZFloatV, int elements_per_iteration>
-    void nearest_neighbors_par_unseq_T(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
-    void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
+    void nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
+    void nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
 #endif 
 
     //! The sorted set of possible magnitudes order from small to large.
@@ -644,7 +644,7 @@ struct ComplexToAMP8IPHS8I_unseq_Impl final
     float phase_delta;
 
     //! Unit vector rays that represent each direction that phase can point.
-    const std::array<six::zfloat, six::AmplitudeTableSize>& phase_directions; // interleaved, std::complex<float>
+    const std::array<zfloat, six::AmplitudeTableSize>& phase_directions; // interleaved, std::complex<float>
 #ifdef SIX_sicd_has_VCL
     const std::array<float, six::AmplitudeTableSize>& phase_directions_real;
     const std::array<float, six::AmplitudeTableSize>& phase_directions_imag;
@@ -780,11 +780,9 @@ static auto find_nearest(std::span<const float> magnitudes,
 }
 
 #if SIX_sicd_has_VCL
-static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
+static auto lookup_and_find_nearest(const ComplexToAMP8IPHS8I_unseq_Impl& impl,
     const vcl_intv& phase, const  vcl_zfloatv& v)
 {
-    const auto& impl = converter.impl;
-
     const auto phase_direction_real = lookup(phase, impl.phase_directions_real);
     const auto phase_direction_imag = lookup(phase, impl.phase_directions_imag);
     return ::find_nearest<vcl_intv>(impl.magnitudes, phase_direction_real, phase_direction_imag, v);
@@ -792,11 +790,9 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
 #endif
 
 #if SIX_sicd_has_valarray
-static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
+static auto lookup_and_find_nearest(const ComplexToAMP8IPHS8I_unseq_Impl& impl,
     const valarray_intv& phase, const  valarray_zfloatv& v)
 {
-    const auto& impl = converter.impl;
-
     const auto phase_direction = lookup(phase, impl.phase_directions);
     return ::find_nearest<valarray_intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
 }
@@ -856,21 +852,16 @@ static inline auto array_cast(std::span<const T> data)
 //
 // Using inheritance to avoid padding at the end of the `struct`. ... needed?
 template<typename IntV, size_t N>
-static void move_to(std::array<AMP8I_PHS8I, N>& results, AMP8I_PHS8I_unseq<IntV>&& result)
-{
-    for (size_t i = 0; i < N; i++)
-    {
-        results[i].phase = gsl::narrow<uint8_t>(result.phase[i]);
-        results[i].amplitude = gsl::narrow<uint8_t>(result.amplitude[i]);
-    }
-}
-template<typename IntV, size_t N>
 struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
 {
     AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>&) = delete; // should only be using move-assignment
     AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other)
     {
-        move_to(*this, std::move(other));
+        for (int i = 0; i < gsl::narrow<int>(N); i++)
+        {
+            (*this)[i].phase = gsl::narrow<uint8_t>(other.phase[i]);
+            (*this)[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i]);
+        }
         return *this;
     }
 };
