@@ -57,6 +57,21 @@ auto make_inputs(size_t count)
     return retval;
 }
 
+auto make_cxinputs(size_t count)
+{
+    std::vector<zfloat> retval;
+    retval.reserve(count);
+    for (size_t i = 0; i < count; i++)
+    {
+        float f = static_cast<float>(i);
+        retval.emplace_back(f, f);
+        retval.emplace_back(-f, f);
+        retval.emplace_back(f, -f);
+        retval.emplace_back(-f, -f);
+    }
+    return retval;
+}
+
 #ifdef NDEBUG
 constexpr auto iterations = 10;
 #else
@@ -75,7 +90,7 @@ static std::chrono::duration<double> test(TFunc f, const std::vector<six::zfloat
     return end - start;
 }
 
-#define TEST(name) diff = test(name, results); \
+#define TEST(name) diff = test(name, inputs); \
 std::cout << "Time (" #name "): " << std::setw(9) << diff.count() << "\n"
 
 int main()
@@ -83,17 +98,16 @@ int main()
     assert(imageData.amplitudeTable.get() == nullptr);
 
     #ifdef NDEBUG
-    constexpr auto inputs_size = 10000000;
+    constexpr auto inputs_size = 1'000'000;
     #else
     constexpr auto inputs_size = 100;
     #endif
-    const auto inputs = make_inputs(inputs_size * 4);
-    std::vector<six::zfloat> results(inputs.size());
+    const auto inputs = make_cxinputs(inputs_size * 4);
 
     /*********************************************************************************/
     std::chrono::duration<double> diff;
 
-    TEST(fromComplex);
+    //TEST(fromComplex);
     TEST(fromComplex_seq);
     TEST(fromComplex_par);
     TEST(fromComplex_unseq);
