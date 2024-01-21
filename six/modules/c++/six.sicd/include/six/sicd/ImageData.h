@@ -115,6 +115,7 @@ struct SIX_SICD_API ImageData
     static six::Amp8iPhs8iLookup_t getLookup(const six::AmplitudeTable* pAmplitudeTable);
 };
 
+// for unit-testing
 SIX_SICD_API const details::ComplexToAMP8IPHS8I& make_ComplexToAMP8IPHS8I(const six::AmplitudeTable*);
 SIX_SICD_API AMP8I_PHS8I_t nearest_neighbor(const details::ComplexToAMP8IPHS8I&, const six::zfloat& v);
 

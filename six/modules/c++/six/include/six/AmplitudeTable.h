@@ -257,41 +257,32 @@ public:
     ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = delete; // implicitly deleted because of =delete for copy
     ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = delete; // implicitly deleted because of =delete for copy
 
-    /*!
-     * Get the nearest amplitude and phase value given a complex value
-     * @param v complex value to query with
-     * @return nearest amplitude and phase value
-     */
-    AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif    
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors(execution_policy, std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    std::span<const float> magnitudes() const;
+    float phase_delta() const;
 
-    void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-    void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+    //! Unit vector rays that represent each direction that phase can point.
+    struct phase_directions final
+    {
+        std::array<zfloat, AmplitudeTableSize> value; // interleaved, std::complex<float>
+        #ifdef SIX_sicd_has_VCL
+        std::array<float, AmplitudeTableSize> real;
+        std::array<float, AmplitudeTableSize> imag;
+        #endif
+    };
+    const phase_directions& get_phase_directions() const;
 
-    uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
-    uint8_t getPhase(six::zfloat) const;
+    uint8_t getPhase(six::zfloat v) const;
 
 private:
     //! The sorted set of possible magnitudes order from small to large.
-    std::array<float, AmplitudeTableSize> uncached_magnitudes;
-    std::span<const float> magnitudes;
+    std::array<float, AmplitudeTableSize> uncached_magnitudes_;
+    std::span<const float> magnitudes_;
 
     //! The difference in phase angle between two UINT phase values.
-    float phase_delta;
+    float phase_delta_;
 
     //! Unit vector rays that represent each direction that phase can point.
-    std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
-    #ifdef SIX_sicd_has_VCL
-    std::array<float, AmplitudeTableSize> phase_directions_real;
-    std::array<float, AmplitudeTableSize> phase_directions_imag;
-    #endif
+    phase_directions phase_directions_;
 };
 }
 }
@@ -397,7 +388,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     }
 
 private:
-    mutable std::vector<six::zfloat> lookup;
+    mutable std::vector<zfloat> lookup;
     mutable std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pFromComplex;    
 };
 
