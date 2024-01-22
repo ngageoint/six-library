@@ -821,8 +821,10 @@ struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
     {
         for (int i = 0; i < gsl::narrow<int>(N); i++)
         {
-            (*this)[i].phase = gsl::narrow<uint8_t>(other.phase[i]);
-            (*this)[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i]);
+	    int v = other.amplitude[i];
+            (*this)[i].amplitude = gsl::narrow<uint8_t>(v);
+	    v = other.phase[i];
+            (*this)[i].phase = gsl::narrow<uint8_t>(v);
         }
         return *this;
     }
