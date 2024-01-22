@@ -37,6 +37,8 @@
 #include "six/AmplitudeTable.h"
 #include "six/sicd/GeoData.h"
 #include "six/sicd/Utilities.h"
+#include "six/sicd/NearestNeighbors.h"
+
 
 using namespace six;
 using namespace six::sicd;
@@ -218,6 +220,21 @@ std::vector<six::zfloat> ImageData::toComplex(std::span<const AMP8I_PHS8I_t> inp
 
 std::vector<AMP8I_PHS8I_t> ImageData::fromComplex(std::span<const six::zfloat> inputs) const
 {
-    return six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(inputs, amplitudeTable.get());
-}
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter_ = six::sicd::details::ComplexToAMP8IPHS8I::make_(amplitudeTable.get());
+    const six::sicd::NearestNeighbors converter(converter_);
 
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    converter.nearest_neighbors(inputs, retval);
+    return retval;
+}
+std::vector<AMP8I_PHS8I_t> ImageData::fromComplex(execution_policy policy, std::span<const six::zfloat> inputs) const
+{
+    // make a structure to quickly find the nearest neighbor
+    const auto& converter_ = six::sicd::details::ComplexToAMP8IPHS8I::make_(amplitudeTable.get());
+    const six::sicd::NearestNeighbors converter(converter_);
+
+    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
+    converter.nearest_neighbors(policy, inputs, retval);
+    return retval;
+}
