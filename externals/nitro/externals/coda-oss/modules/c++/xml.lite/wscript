@@ -1,0 +1,22 @@
+NAME            = 'xml.lite'
+VERSION         = '1.2'
+MODULE_DEPS     = 'io mem mt logging str coda_oss'
+USELIB_CHECK    = 'XML'
+TEST_FILTER     = 'MMParserTest1.cpp MinidomParserTest2.cpp'
+TEST_DEPS       = 'cli'
+
+options = distclean = lambda p: None
+
+from waflib import Options
+from build import writeConfig
+
+def configure(conf):
+    # callback function to check for #defines used by the xml.lite module
+    def xml_lite_callback(conf):
+        if Options.options.xml_layer == 'xerces':
+            conf.define('USE_XERCES', '', quote=False)
+
+    writeConfig(conf, xml_lite_callback, NAME)
+
+def build(bld):
+    bld.module(**globals())
