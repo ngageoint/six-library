@@ -26,6 +26,7 @@
 #include <iterator>
 #include <future>
 
+#include "config/compiler_extensions.h"
 #include "coda_oss/CPlusPlus.h"
 #if CODA_OSS_cpp17
 	// <execution> is broken with the older version of GCC we're using
@@ -83,6 +84,7 @@ inline OutputIt Transform_par(InputIt first1, InputIt last1, OutputIt d_first, U
     Transform_par_settings settings = Transform_par_settings{})
 {
 #if CODA_OSS_mt_Algorithm_has_execution
+    CODA_OSS_mark_symbol_unused(settings);
     return std::transform(std::execution::par, first1, last1, d_first, unary_op);
 #else
     return Transform_par_(first1, last1, d_first, unary_op, settings);
