@@ -1,4 +1,0 @@
-distclean = options = configure = lambda p: None
-
-def build(bld):
-  bld.swigModule(name = 'sio.lite', use = 'sio.lite-c++ io-python sys-python except-python config-python', package='coda')
