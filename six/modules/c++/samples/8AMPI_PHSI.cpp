@@ -81,7 +81,7 @@ int main()
     assert(imageData.amplitudeTable.get() == nullptr);
 
     #ifdef NDEBUG
-    constexpr auto inputs_size = 5'000'000;
+    constexpr auto inputs_size = 1'000'000;
     #else
     constexpr auto inputs_size = 100;
     #endif
