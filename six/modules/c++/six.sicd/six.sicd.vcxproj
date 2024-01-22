@@ -136,6 +136,7 @@
     <ClInclude Include="include\six\sicd\ImageCreation.h" />
     <ClInclude Include="include\six\sicd\ImageData.h" />
     <ClInclude Include="include\six\sicd\ImageFormation.h" />
+    <ClInclude Include="include\six\sicd\NearestNeighbors.h" />
     <ClInclude Include="include\six\sicd\NITFReadComplexXMLControl.h" />
     <ClInclude Include="include\six\sicd\PFA.h" />
     <ClInclude Include="include\six\sicd\Position.h" />
@@ -162,7 +163,7 @@
     <ClCompile Include="source\ComplexData.cpp" />
     <ClCompile Include="source\ComplexDataBuilder.cpp" />
     <ClCompile Include="source\ComplexToAMP8IPHS8I.cpp" />
-    <ClCompile Include="source\ComplexToAMP8IPHS8I_unseq.cpp" />
+    <ClCompile Include="source\NearestNeighbors_unseq.cpp" />
     <ClCompile Include="source\ComplexXMLControl.cpp" />
     <ClCompile Include="source\ComplexXMLParser.cpp" />
     <ClCompile Include="source\ComplexXMLParser040.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="source\Grid.cpp" />
     <ClCompile Include="source\ImageData.cpp" />
     <ClCompile Include="source\ImageFormation.cpp" />
+    <ClCompile Include="source\NearestNeighbors.cpp" />
     <ClCompile Include="source\NITFReadComplexXMLControl.cpp" />
     <ClCompile Include="source\PFA.cpp" />
     <ClCompile Include="source\Position.cpp" />

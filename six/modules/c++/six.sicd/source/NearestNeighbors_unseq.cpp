@@ -19,25 +19,22 @@
 * see <http://www.gnu.org/licenses/>.
 *
 */
-#include "six/AmplitudeTable.h"
+#include "six/sicd/NearestNeighbors.h"
 
 #include <math.h>
 #include <assert.h>
 
 #include <cassert>
 #include <memory>
-#include <std/numbers>
 #include <algorithm>
 #include <functional>
-#include <type_traits>
+#include <std/numbers>
 
 #include <gsl/gsl.h>
-#include <math/Utilities.h>
-#include <units/Angles.h>
 #include <sys/Span.h>
 #include <mt/Algorithm.h>
 
-#include "six/sicd/Utilities.h"
+#include "six/sicd/Exports.h"
 
 #undef min
 #undef max
@@ -617,42 +614,6 @@ static inline auto lookup(const simd_intv& zindex, std::span<const float> magnit
 
 /******************************************************************************************************/
 
-// Put as much stuff stand-alone in this file as is reasonably possible so that
-// the code can more easily be used in isolated test cases.  Developing
-// SIMD code isn't necessarily straight-forward, even with help from libraries.
-
-struct ComplexToAMP8IPHS8I_unseq_Impl final
-{
-    const six::sicd::details::ComplexToAMP8IPHS8I& converter;
-    
-#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    template<typename ZFloatV, size_t N>
-    auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
-    template<typename ZFloatV, int elements_per_iteration>
-    void nearest_neighbors_unseq_(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
-    void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
-
-    template<typename ZFloatV, int elements_per_iteration>
-    void nearest_neighbors_par_unseq_T(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
-    void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I> results) const;
-#endif 
-
-    //! The sorted set of possible magnitudes order from small to large.
-    std::span<const float> magnitudes;
-
-    //! The difference in phase angle between two UINT phase values.
-    float phase_delta;
-
-    //! Unit vector rays that represent each direction that phase can point.
-    const std::array<six::zfloat, six::AmplitudeTableSize>& phase_directions; // interleaved, std::complex<float>
-#ifdef SIX_sicd_has_VCL
-    const std::array<float, six::AmplitudeTableSize>& phase_directions_real;
-    const std::array<float, six::AmplitudeTableSize>& phase_directions_imag;
-#endif
-};
-
-
-
 template<typename ZFloatV>
 static auto getPhase(const ZFloatV& v, float phase_delta)
 {
@@ -780,44 +741,45 @@ static auto find_nearest(std::span<const float> magnitudes,
 }
 
 #if SIX_sicd_has_VCL
-static auto lookup_and_find_nearest(const ComplexToAMP8IPHS8I_unseq_Impl& impl,
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const vcl_intv& phase, const  vcl_zfloatv& v)
 {
-    const auto phase_direction_real = lookup(phase, impl.phase_directions_real);
-    const auto phase_direction_imag = lookup(phase, impl.phase_directions_imag);
-    return ::find_nearest<vcl_intv>(impl.magnitudes, phase_direction_real, phase_direction_imag, v);
+    const auto phase_direction_real = lookup(phase, converter.get_phase_directions().real);
+    const auto phase_direction_imag = lookup(phase, converter.get_phase_directions().imag);
+    return ::find_nearest<vcl_intv>(converter.magnitudes(), phase_direction_real, phase_direction_imag, v);
 }
 #endif
 
 #if SIX_sicd_has_valarray
-static auto lookup_and_find_nearest(const ComplexToAMP8IPHS8I_unseq_Impl& impl,
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const valarray_intv& phase, const  valarray_zfloatv& v)
 {
-    const auto phase_direction = lookup(phase, impl.phase_directions);
-    return ::find_nearest<valarray_intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+    const auto phase_direction = lookup(phase, converter.get_phase_directions().value);
+    return ::find_nearest<valarray_intv>(converter.magnitudes(), real(phase_direction), imag(phase_direction), v);
 }
 #endif
 
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
 template<typename IntV, typename ZFloatV>
-static auto lookup_and_find_nearest_(const ComplexToAMP8IPHS8I_unseq_Impl& impl,
+static auto lookup_and_find_nearest_(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const IntV& phase, const  ZFloatV& v)
 {
-    const auto phase_direction = lookup(phase, impl.phase_directions);
-    return ::find_nearest<IntV>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+    const auto& phase_directions = converter.get_phase_directions().value;
+    const auto phase_direction = lookup(phase, phase_directions);
+    return ::find_nearest<IntV>(converter.magnitudes(), real(phase_direction), imag(phase_direction), v);
 }
 #if SIX_sicd_has_ximd
-static auto lookup_and_find_nearest(const ComplexToAMP8IPHS8I_unseq_Impl& impl,
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const ximd_intv& phase, const  ximd_zfloatv& v)
 {
-    return lookup_and_find_nearest_(impl, phase, v);
+    return lookup_and_find_nearest_(converter, phase, v);
 }
 #endif
 #if SIX_sicd_has_simd
-static auto lookup_and_find_nearest(const sComplexToAMP8IPHS8I_unseq_Impl& impl,
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const simd_intv& phase, const  simd_zfloatv& v)
 {
-    return lookup_and_find_nearest_(impl, phase, v);
+    return lookup_and_find_nearest_(converter, phase, v);
 }
 #endif
 #endif
@@ -857,7 +819,7 @@ struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
     AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>&) = delete; // should only be using move-assignment
     AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other)
     {
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < gsl::narrow<int>(N); i++)
         {
             (*this)[i].phase = gsl::narrow<uint8_t>(other.phase[i]);
             (*this)[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i]);
@@ -875,10 +837,12 @@ static inline auto AMP8I_PHS8I_array_cast(std::span<AMP8I_PHS8I> data)
     return std::span<chunk_t>(static_cast<chunk_t*>(pDest), number_of_chunks);
 }
 
+template<typename ZFloatV>
+using IntV = decltype(::getPhase(ZFloatV{}, 0.0f));
+
 // The compiler can sometimes do better optimization with fixed-size structures.
-// TODO: std::span<T, N> ... ?
 template<typename ZFloatV, size_t N>
-auto ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p) const
+auto six::sicd::NearestNeighbors::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p) const // TODO: std::span<T, N> ... ?
 {
     ZFloatV v;
     assert(p.size() == size(v));
@@ -893,24 +857,25 @@ auto ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_unseq_T(const std::array<
     }
     #endif
 
-    using intv_t = decltype(::getPhase(v, phase_delta));
+    using intv_t = IntV<ZFloatV>;
     AMP8I_PHS8I_unseq<intv_t> retval;
 
-    retval.phase = ::getPhase(v, phase_delta);
+    retval.phase = ::getPhase(v, converter_.phase_delta());
     #if CODA_OSS_DEBUG
     for (int i = 0; i < ssize(retval.phase); i++)
     {
-        const auto phase_ = converter.getPhase(p[i]);
+        const auto phase_ = converter_.getPhase(p[i]);
         assert(static_cast<uint8_t>(retval.phase[i]) == phase_);
     }
     #endif
 
-    retval.amplitude = lookup_and_find_nearest(*this, retval.phase, v);
+    retval.amplitude = lookup_and_find_nearest(converter_, retval.phase, v);
     #if CODA_OSS_DEBUG
     for (int i = 0; i < ssize(retval.amplitude); i++)
     {
         const auto i_ = retval.phase[i];
-        const auto a = converter.find_nearest(phase_directions[i_], p[i]);
+        const auto& phase_directions = converter_.get_phase_directions().value;
+        const auto a = find_nearest(phase_directions[i_], p[i]);
         assert(a == retval.amplitude[i]);
     }
     #endif
@@ -919,7 +884,7 @@ auto ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_unseq_T(const std::array<
 }
 
 template<size_t elements_per_iteration>
-static void finish_nearest_neighbors_unseq(const ComplexToAMP8IPHS8I_unseq_Impl& unseq_impl,
+static void finish_nearest_neighbors_unseq(const six::sicd::NearestNeighbors& impl,
     std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results)
 {
     // Then finish off anything left
@@ -929,14 +894,14 @@ static void finish_nearest_neighbors_unseq(const ComplexToAMP8IPHS8I_unseq_Impl&
         const auto remaining_index = inputs.size() - remaining_count;
         const auto remaining_inputs = sys::make_span(&(inputs[remaining_index]), remaining_count);
         const auto remaining_results = sys::make_span(&(results[remaining_index]), remaining_count);
-        unseq_impl.converter.nearest_neighbors_seq(remaining_inputs, remaining_results);
+        impl.nearest_neighbors_seq(remaining_inputs, remaining_results);
     }
 }
 
 template<typename ZFloatV, int elements_per_iteration>
-void ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
+void six::sicd::NearestNeighbors::nearest_neighbors_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    using intv_t = decltype(::getPhase(ZFloatV{}, phase_delta));
+    using intv_t = IntV<ZFloatV>;
 
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
@@ -957,9 +922,9 @@ void ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_unseq_(std::span<const zf
 }
 
 template<typename ZFloatV, int elements_per_iteration>
-void ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
+void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    using intv_t = decltype(::getPhase(ZFloatV{}, phase_delta));
+    using intv_t = IntV<ZFloatV>;
 
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
@@ -979,15 +944,27 @@ void ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_par_unseq_T(std::span<con
     finish_nearest_neighbors_unseq<elements_per_iteration>(*this, inputs, results);
 }
 
+#if SIX_sicd_has_simd
+static const std::string unseq_simd = "simd";
+#endif
+#if SIX_sicd_has_VCL
+static const std::string unseq_vcl = "vcl";
+#endif
+#if SIX_sicd_has_valarray
+static const std::string unseq_valarray = "valarray";
+#endif
+#if SIX_sicd_has_ximd
+static const std::string unseq_ximd = "ximd";
+#endif
 static std::string nearest_neighbors_unseq_ =
 #if SIX_sicd_has_simd
-"simd";
+unseq_simd;
 #elif SIX_sicd_has_VCL
-"vcl";
+unseq_vcl;
 #elif SIX_sicd_has_valarray
-"valarray";
+unseq_valarray;
 #elif SIX_sicd_has_ximd
-"ximd";
+unseq_ximd;
 #else
 #error "Don't know how to implement six_sicd_set_nearest_neighbors_unseq()"
 #endif
@@ -1000,7 +977,7 @@ std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
     return retval;
 }
 
-void ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
+void six::sicd::NearestNeighbors::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
@@ -1008,101 +985,66 @@ void ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_unseq(std::span<const zfl
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = ::nearest_neighbors_unseq_;
-    if (unseq == "simd")
+    #if SIX_sicd_has_simd
+    if (unseq == unseq_simd)
     {
-        #if SIX_sicd_has_simd
         return nearest_neighbors_unseq_<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "vcl")
+    #endif
+    #if SIX_sicd_has_VCL
+    if (unseq == unseq_vcl)
     {
-        #if SIX_sicd_has_VCL
         return nearest_neighbors_unseq_<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "valarray")
+    #endif
+    #if SIX_sicd_has_valarray
+    if (unseq == unseq_valarray)
     {
-        #if SIX_sicd_has_valarray
         return nearest_neighbors_unseq_<valarray_zfloatv, valarray_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "ximd")
+    #endif
+    #if SIX_sicd_has_ximd
+    if (unseq == unseq_ximd)
     {
-        #if SIX_sicd_has_ximd
         return nearest_neighbors_unseq_<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
-        #endif
     }
+    #endif
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_unseq() for unseq=" + unseq);
 }
-std::vector<AMP8I_PHS8I> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_unseq(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // TODO: there could be more complicated logic here to determine which UNSEQ
-    // implementation to use.
 
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    const ComplexToAMP8IPHS8I_unseq_Impl unseq_impl{ converter, converter.magnitudes, converter.phase_delta, converter.phase_directions
-#ifdef SIX_sicd_has_VCL
-        , converter.phase_directions_real, converter.phase_directions_imag
-#endif
-    };
-
-    std::vector<AMP8I_PHS8I> retval(inputs.size());
-    unseq_impl.nearest_neighbors_unseq(inputs, sys::make_span(retval));
-    return retval;
-}
-
-void ComplexToAMP8IPHS8I_unseq_Impl::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
+void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = ::nearest_neighbors_unseq_;
-    if (unseq == "simd")
+    #if SIX_sicd_has_simd
+    if (unseq == unseq_simd)
     {
-        #if SIX_sicd_has_simd
         return nearest_neighbors_par_unseq_T<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "vcl")
+    #endif
+    #if SIX_sicd_has_VCL
+    if (unseq == unseq_vcl)
     {
-        #if SIX_sicd_has_VCL
         return nearest_neighbors_par_unseq_T<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "valarray")
+    #endif
+    #if SIX_sicd_has_valarray
+    if (unseq == unseq_valarray)
     {
-        #if SIX_sicd_has_valarray
         return nearest_neighbors_par_unseq_T<valarray_zfloatv, valarray_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "ximd")
+    #endif
+    #if SIX_sicd_has_ximd
+    if (unseq == unseq_ximd)
     {
-        #if SIX_sicd_has_ximd
         return nearest_neighbors_par_unseq_T<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
-        #endif
     }
+    #endif
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_par_unseq() for unseq=" + unseq);
-}
-std::vector<AMP8I_PHS8I> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors_par_unseq(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make_(pAmplitudeTable);
-
-    const ComplexToAMP8IPHS8I_unseq_Impl unseq_impl{ converter, converter.magnitudes, converter.phase_delta, converter.phase_directions
-#ifdef SIX_sicd_has_VCL
-        , converter.phase_directions_real, converter.phase_directions_imag
-#endif
-    };
-
-    std::vector<AMP8I_PHS8I> retval(inputs.size());
-    unseq_impl.nearest_neighbors_par_unseq(inputs, sys::make_span(retval));
-    return retval;
 }
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
