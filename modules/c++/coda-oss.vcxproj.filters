@@ -36,13 +36,7 @@
     <ClInclude Include="coda_oss\include\coda_oss\optional.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\optional_.h">
-      <Filter>coda_oss</Filter>
-    </ClInclude>
     <ClInclude Include="coda_oss\include\coda_oss\span.h">
-      <Filter>coda_oss</Filter>
-    </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\span_.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
     <ClInclude Include="coda_oss\include\coda_oss\string.h">
@@ -813,24 +807,6 @@
     <ClInclude Include="xml.lite\include\xml\lite\XMLReaderXerces.h">
       <Filter>xml.lite</Filter>
     </ClInclude>
-    <ClInclude Include="dbi\include\dbi\DatabaseClientFactory.h">
-      <Filter>dbi</Filter>
-    </ClInclude>
-    <ClInclude Include="dbi\include\dbi\DatabaseConnection.h">
-      <Filter>dbi</Filter>
-    </ClInclude>
-    <ClInclude Include="dbi\include\dbi\MySQLConnection.h">
-      <Filter>dbi</Filter>
-    </ClInclude>
-    <ClInclude Include="dbi\include\dbi\OracleConnection.h">
-      <Filter>dbi</Filter>
-    </ClInclude>
-    <ClInclude Include="dbi\include\dbi\PgSQLConnection.h">
-      <Filter>dbi</Filter>
-    </ClInclude>
-    <ClInclude Include="dbi\include\import\dbi.h">
-      <Filter>dbi</Filter>
-    </ClInclude>
     <ClInclude Include="net\include\net\AllocStrategy.h">
       <Filter>net</Filter>
     </ClInclude>
@@ -945,21 +921,22 @@
     <ClInclude Include="hdf5.lite\include\hdf5\lite\H5_.h">
       <Filter>hdf5.lite</Filter>
     </ClInclude>
-    <ClInclude Include="mem\include\mem\AutoPtr.h">
-      <Filter>mem</Filter>
+    <ClInclude Include="net\include\net\config.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="net.ssl\include\net\ssl\config.h">
+      <Filter>net.ssl</Filter>
     </ClInclude>
     <ClInclude Include="str\include\str\W1252string.h">
       <Filter>str</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\mdspan.h">
-      <Filter>coda_oss</Filter>
+    <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
+    <ClInclude Include="tiff\include\tiff\TiffUtils.h">
+      <Filter>tiff</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\mdspan_.h">
-      <Filter>coda_oss</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\Ximd.h">
-      <Filter>sys</Filter>
-    </ClInclude>
+    <ClInclude Include="mem\include\mem\AutoPtr.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan_.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -1350,18 +1327,6 @@
     <ClCompile Include="xml.lite\source\XMLReaderXerces.cpp">
       <Filter>xml.lite</Filter>
     </ClCompile>
-    <ClCompile Include="dbi\source\DatabaseClientFactory.cpp">
-      <Filter>dbi</Filter>
-    </ClCompile>
-    <ClCompile Include="dbi\source\MySQLConnection.cpp">
-      <Filter>dbi</Filter>
-    </ClCompile>
-    <ClCompile Include="dbi\source\OracleConnection.cpp">
-      <Filter>dbi</Filter>
-    </ClCompile>
-    <ClCompile Include="dbi\source\PgSQLConnection.cpp">
-      <Filter>dbi</Filter>
-    </ClCompile>
     <ClCompile Include="net\source\CurlHandle.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -1406,6 +1371,9 @@
     </ClCompile>
     <ClCompile Include="unique\source\UUID.cpp">
       <Filter>unique</Filter>
+    </ClCompile>
+    <ClCompile Include="tiff\source\TiffUtils.cpp">
+      <Filter>tiff</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1486,9 +1454,6 @@
     </Filter>
     <Filter Include="xml.lite">
       <UniqueIdentifier>{1bb6daf3-40dd-44d8-8680-0e77e2c3bd17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dbi">
-      <UniqueIdentifier>{13c98009-f1f9-4297-a2b3-bde23f3bea55}</UniqueIdentifier>
     </Filter>
     <Filter Include="net">
       <UniqueIdentifier>{6575592b-9b28-49eb-be76-27f40825475e}</UniqueIdentifier>
