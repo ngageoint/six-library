@@ -817,12 +817,15 @@ template<typename IntV, size_t N>
 struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
 {
     AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>&) = delete; // should only be using move-assignment
-    AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other)
+    AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other_)
     {
+        // Can't "move" for any of our current SIMD implementations, and
+        // non-`const` gets the wrong `operator[]` for `stdx::simd`.
+        const auto& other = other_;
         for (int i = 0; i < gsl::narrow<int>(N); i++)
         {
-            (*this)[i].phase = gsl::narrow<uint8_t>(other.phase[i]);
             (*this)[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i]);
+            (*this)[i].phase = gsl::narrow<uint8_t>(other.phase[i]);
         }
         return *this;
     }
