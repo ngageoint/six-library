@@ -841,9 +841,8 @@ template<typename ZFloatV>
 using IntV = decltype(::getPhase(ZFloatV{}, 0.0f));
 
 // The compiler can sometimes do better optimization with fixed-size structures.
-// TODO: std::span<T, N> ... ?
 template<typename ZFloatV, size_t N>
-auto six::sicd::NearestNeighbors::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p) const
+auto six::sicd::NearestNeighbors::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p) const // TODO: std::span<T, N> ... ?
 {
     ZFloatV v;
     assert(p.size() == size(v));
@@ -945,15 +944,27 @@ void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq_T(std::span<const 
     finish_nearest_neighbors_unseq<elements_per_iteration>(*this, inputs, results);
 }
 
+#if SIX_sicd_has_simd
+static const std::string unseq_simd = "simd";
+#endif
+#if SIX_sicd_has_VCL
+static const std::string unseq_vcl = "vcl";
+#endif
+#if SIX_sicd_has_valarray
+static const std::string unseq_valarray = "valarray";
+#endif
+#if SIX_sicd_has_ximd
+static const std::string unseq_ximd = "ximd";
+#endif
 static std::string nearest_neighbors_unseq_ =
 #if SIX_sicd_has_simd
-"simd";
+unseq_simd;
 #elif SIX_sicd_has_VCL
-"vcl";
+unseq_vcl;
 #elif SIX_sicd_has_valarray
-"valarray";
+unseq_valarray;
 #elif SIX_sicd_has_ximd
-"ximd";
+unseq_ximd;
 #else
 #error "Don't know how to implement six_sicd_set_nearest_neighbors_unseq()"
 #endif
@@ -974,30 +985,30 @@ void six::sicd::NearestNeighbors::nearest_neighbors_unseq(std::span<const zfloat
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = ::nearest_neighbors_unseq_;
-    if (unseq == "simd")
+    #if SIX_sicd_has_simd
+    if (unseq == unseq_simd)
     {
-        #if SIX_sicd_has_simd
         return nearest_neighbors_unseq_<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "vcl")
+    #endif
+    #if SIX_sicd_has_VCL
+    if (unseq == unseq_vcl)
     {
-        #if SIX_sicd_has_VCL
         return nearest_neighbors_unseq_<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "valarray")
+    #endif
+    #if SIX_sicd_has_valarray
+    if (unseq == unseq_valarray)
     {
-        #if SIX_sicd_has_valarray
         return nearest_neighbors_unseq_<valarray_zfloatv, valarray_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "ximd")
+    #endif
+    #if SIX_sicd_has_ximd
+    if (unseq == unseq_ximd)
     {
-        #if SIX_sicd_has_ximd
         return nearest_neighbors_unseq_<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
-        #endif
     }
+    #endif
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_unseq() for unseq=" + unseq);
 }
@@ -1009,30 +1020,30 @@ void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq(std::span<const zf
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = ::nearest_neighbors_unseq_;
-    if (unseq == "simd")
+    #if SIX_sicd_has_simd
+    if (unseq == unseq_simd)
     {
-        #if SIX_sicd_has_simd
         return nearest_neighbors_par_unseq_T<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "vcl")
+    #endif
+    #if SIX_sicd_has_VCL
+    if (unseq == unseq_vcl)
     {
-        #if SIX_sicd_has_VCL
         return nearest_neighbors_par_unseq_T<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "valarray")
+    #endif
+    #if SIX_sicd_has_valarray
+    if (unseq == unseq_valarray)
     {
-        #if SIX_sicd_has_valarray
         return nearest_neighbors_par_unseq_T<valarray_zfloatv, valarray_elements_per_iteration>(inputs, results);
-        #endif
     }
-    if (unseq == "ximd")
+    #endif
+    #if SIX_sicd_has_ximd
+    if (unseq == unseq_ximd)
     {
-        #if SIX_sicd_has_ximd
         return nearest_neighbors_par_unseq_T<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
-        #endif
     }
+    #endif
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_par_unseq() for unseq=" + unseq);
 }
