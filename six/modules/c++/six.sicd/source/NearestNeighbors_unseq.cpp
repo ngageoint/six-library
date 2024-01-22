@@ -741,21 +741,21 @@ static auto find_nearest(std::span<const float> magnitudes,
 }
 
 #if SIX_sicd_has_VCL
-static auto lookup_and_find_nearest(const NearestNeighbors_unseq_Impl& impl,
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const vcl_intv& phase, const  vcl_zfloatv& v)
 {
-    const auto phase_direction_real = lookup(phase, impl.phase_directions_real);
-    const auto phase_direction_imag = lookup(phase, impl.phase_directions_imag);
-    return ::find_nearest<vcl_intv>(impl.magnitudes, phase_direction_real, phase_direction_imag, v);
+    const auto phase_direction_real = lookup(phase, converter.get_phase_directions().real);
+    const auto phase_direction_imag = lookup(phase, converter.get_phase_directions().imag);
+    return ::find_nearest<vcl_intv>(converter.magnitudes(), phase_direction_real, phase_direction_imag, v);
 }
 #endif
 
 #if SIX_sicd_has_valarray
-static auto lookup_and_find_nearest(const NearestNeighbors_unseq_Impl& impl,
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const valarray_intv& phase, const  valarray_zfloatv& v)
 {
-    const auto phase_direction = lookup(phase, impl.phase_directions);
-    return ::find_nearest<valarray_intv>(impl.magnitudes, real(phase_direction), imag(phase_direction), v);
+    const auto phase_direction = lookup(phase, converter.get_phase_directions().value);
+    return ::find_nearest<valarray_intv>(converter.magnitudes(), real(phase_direction), imag(phase_direction), v);
 }
 #endif
 

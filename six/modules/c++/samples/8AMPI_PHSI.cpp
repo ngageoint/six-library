@@ -11,9 +11,8 @@
 #include <iostream>
 #include <std/span>
 #include <algorithm>
-#include <iterator>
-#include <future>
 #include <vector>
+#include <tuple>
 #include <chrono>
 
 #include "six/AmplitudeTable.h"
@@ -22,11 +21,6 @@
 using namespace six;
 
 static const six::sicd::ImageData imageData;
-static std::vector<AMP8I_PHS8I_t> fromComplex(std::span<const six::zfloat> inputs)
-{
-    return imageData.fromComplex(inputs);
-}
-
 static std::vector<AMP8I_PHS8I_t> fromComplex_seq(std::span<const six::zfloat> inputs)
 {
     return imageData.fromComplex(six::execution_policy::seq, inputs);
@@ -44,20 +38,7 @@ static std::vector<AMP8I_PHS8I_t> fromComplex_par_unseq(std::span<const six::zfl
     return imageData.fromComplex(six::execution_policy::par_unseq, inputs);
 }
 
-auto make_inputs(size_t count)
-{
-    std::vector<AMP8I_PHS8I_t> retval;
-    retval.reserve(count);
-    for (size_t i = 0; i < count; i++)
-    {
-        const auto amplitude = static_cast<uint8_t>(i * i);
-        const auto phase = static_cast<uint8_t>(~amplitude);
-        retval.push_back(AMP8I_PHS8I_t{ amplitude, phase });
-    }
-    return retval;
-}
-
-auto make_cxinputs(size_t count)
+static auto make_cxinputs(size_t count)
 {
     std::vector<zfloat> retval;
     retval.reserve(count);
@@ -78,13 +59,15 @@ constexpr auto iterations = 10;
 constexpr auto iterations = 1;
 #endif
 template<typename TFunc>
-static std::chrono::duration<double> test(TFunc f, const std::vector<six::zfloat>& inputs)
+static std::chrono::duration<double> test(TFunc func, const std::vector<six::zfloat>& inputs_)
 {
-    auto ap_results = f(inputs);
+    const auto inputs = sys::make_span(inputs_);
+
+    std::ignore = func(inputs);
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < iterations; i++)
     {
-        ap_results = f(inputs);
+        std::ignore = func(inputs);
     }
     auto end = std::chrono::high_resolution_clock::now();
     return end - start;
@@ -98,7 +81,7 @@ int main()
     assert(imageData.amplitudeTable.get() == nullptr);
 
     #ifdef NDEBUG
-    constexpr auto inputs_size = 1'000'000;
+    constexpr auto inputs_size = 5'000'000;
     #else
     constexpr auto inputs_size = 100;
     #endif
@@ -107,7 +90,6 @@ int main()
     /*********************************************************************************/
     std::chrono::duration<double> diff;
 
-    //TEST(fromComplex);
     TEST(fromComplex_seq);
     TEST(fromComplex_par);
     TEST(fromComplex_unseq);
