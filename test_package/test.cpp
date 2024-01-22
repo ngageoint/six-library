@@ -1,6 +1,6 @@
-#include <six/sicd/ComplexData.h>
+#include <nitf/Reader.hpp>
 
 int main() {
-    six::sicd::ComplexData cd;
+    nitf::Reader reader;
     return 0;
 }

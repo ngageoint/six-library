@@ -33,8 +33,6 @@
 #include <stdexcept>
 #include <vector>
 
-#include "types/RowCol.h"
-
 #include "H5_.h"
 #include "SpanRC.h"
 

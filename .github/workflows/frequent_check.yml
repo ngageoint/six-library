@@ -39,8 +39,7 @@ jobs:
         msbuild-architecture: x64
     - name: msbuild
       run: |
-        msbuild six.sln /p:configuration=${{ matrix.configuration }}
-        msbuild six.sln /p:configuration=${{ matrix.configuration }} /t:Clean
+        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
 
   build-msbuild-windows:
     strategy:
@@ -69,8 +68,7 @@ jobs:
         msbuild-architecture: x64
     - name: msbuild
       run: |
-        msbuild six.sln /p:configuration=${{ matrix.configuration }}
-        msbuild six.sln /p:configuration=${{ matrix.configuration }} /t:Clean
+        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
     #- name: vstest 
     #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
     #  with:
@@ -96,15 +94,16 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir target
-        cd target
-        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7 ..
+        mkdir target-Release
+        cd target-Release
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7
     - name: make
       run: |
-        cd target
-        cmake --build . -j 8
+        cd target-Release
+        # using the default number of threads (-j) causes G++ to crash
+        cmake --build . -j 6
         cmake --build . --target install
     - name: test
       run: |
-        cd target
+        cd target-Release
         ctest --output-on-failure

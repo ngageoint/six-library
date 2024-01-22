@@ -1,7 +1,7 @@
 from conans import ConanFile, CMake
 import os
 
-class SixTestConan(ConanFile):
+class NitroTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake_paths"
 

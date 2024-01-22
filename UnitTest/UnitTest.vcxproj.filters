@@ -1,194 +1,135 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="CppUnitTestAssert.cpp" />
+    <Filter Include="nrt">
+      <UniqueIdentifier>{d6b8959a-344d-4af2-b926-05be973609a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nitf-c">
+      <UniqueIdentifier>{a03980e8-d43d-473b-9f2a-a883ddd94df0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nitf-c++">
+      <UniqueIdentifier>{555282a7-bf5d-4012-842a-435bfb7324ab}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nrt.cpp">
+      <Filter>nrt</Filter>
+    </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Test.cpp" />
-    <ClCompile Include="cphd.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_utils.c">
+      <Filter>nrt</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_channel.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="CppUnitTestAssert.cpp" />
+    <ClCompile Include="..\modules\c\nrt\unittests\test_buffer_adapter.c">
+      <Filter>nrt</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_compressed_signal_block_round.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_core_values.c">
+      <Filter>nrt</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_cphd_xml_control.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_list.c">
+      <Filter>nrt</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_cphd_xml_optional.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_nrt_byte_swap.c">
+      <Filter>nrt</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_dwell.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_nrt_datetime.c">
+      <Filter>nrt</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_file_header.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_tree.c">
+      <Filter>nrt</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_pvp.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="nitf-c.cpp">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_pvp_block.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_create.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_pvp_block_round.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_create_nitf.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_read_wideband.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_field.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_reference_geometry.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_geo_utils.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_signal_block_round.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_image_io.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd\unittests\test_support_block_round.cpp">
-      <Filter>cphd</Filter>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_mem_source.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="cphd03.cpp">
-      <Filter>cphd03</Filter>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_moveTREs.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd03\unittests\test_cphd_read_unscaled_int.cpp">
-      <Filter>cphd03</Filter>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_zero_field.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd03\unittests\test_cphd_write.cpp">
-      <Filter>cphd03</Filter>
+    <ClCompile Include="nitf-c++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\cphd03\unittests\test_vbm.cpp">
-      <Filter>cphd03</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_create_nitf++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="sicd.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_field++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_AMP8I_PHS8I.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_hash_table_1++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_area_plane.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_blocker.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_CollectionInfo.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_loading++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_filling_geo_data.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_segment_blank_nm_compression.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_filling_grid.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_segment_computer.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_filling_pfa.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_image_writer.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_filling_position.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_j2k_compress_tile.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_filling_rgazcomp.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_j2k_compressed_byte_provider.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_filling_rma.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_j2k_loading++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_filling_scpcoa.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_j2k_read_tile.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_get_segment.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_load_plugins.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_projection_polynomial_fitter.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_nitf_buffer_list.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_radar_collection.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_tre_create++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_update_sicd_version.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_tre_mods.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_utilities.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_tre_mods++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_valid_six.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_tre_read.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sicd\unittests\test_valid_sixsicd.cpp">
-      <Filter>sicd</Filter>
+    <ClCompile Include="..\modules\c++\nitf\unittests\test_writer_3++.cpp">
+      <Filter>nitf-c++</Filter>
     </ClCompile>
-    <ClCompile Include="sidd.cpp">
-      <Filter>sidd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sidd\unittests\test_annotations_equality.cpp">
-      <Filter>sidd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sidd\unittests\test_geometric_chip.cpp">
-      <Filter>sidd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sidd\unittests\test_read_sidd_legend.cpp">
-      <Filter>sidd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sidd\unittests\test_valid_sixsidd.cpp">
-      <Filter>sidd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six.sidd\unittests\unittest_sidd_byte_provider.cpp">
-      <Filter>sidd</Filter>
-    </ClCompile>
-    <ClCompile Include="six.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six\unittests\test_fft_sign_conversions.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six\unittests\test_polarization_type_conversions.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six\unittests\test_serialize.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
-    <ClCompile Include="..\six\modules\c++\six\unittests\test_xml_control.cpp">
-      <Filter>six</Filter>
-    </ClCompile>
+    <ClCompile Include="UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestCase.h" />
     <ClInclude Include="Test.h" />
-    <ClInclude Include="cphd_Test.h">
-      <Filter>cphd</Filter>
-    </ClInclude>
-    <ClInclude Include="cphd03_Test.h">
-      <Filter>cphd03</Filter>
-    </ClInclude>
-    <ClInclude Include="sicd_Test.h">
-      <Filter>sicd</Filter>
-    </ClInclude>
-    <ClInclude Include="sidd_Test.h">
-      <Filter>sidd</Filter>
-    </ClInclude>
-    <ClInclude Include="six_Test.h">
-      <Filter>six</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="cphd">
-      <UniqueIdentifier>{004a37ca-2175-4642-988e-94516ea1a147}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="cphd03">
-      <UniqueIdentifier>{ef494548-4aed-4ebb-a93c-b56a11f17f5e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sicd">
-      <UniqueIdentifier>{593807ae-bc84-424f-ba11-0537277cd2fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sidd">
-      <UniqueIdentifier>{f8053c57-ba04-41c4-8dd8-2056f5a19f25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="six">
-      <UniqueIdentifier>{8d8a73fb-96b1-4bdf-a055-2b34d7f94e14}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="..\six\modules\c++\six.sidd\tests\sample_xml\sidd200.xml">
-      <Filter>sidd</Filter>
-    </Xml>
-    <Xml Include="..\six\modules\c++\six.sidd\tests\sample_xml\sidd300.xml">
-      <Filter>sidd</Filter>
-    </Xml>
   </ItemGroup>
 </Project>

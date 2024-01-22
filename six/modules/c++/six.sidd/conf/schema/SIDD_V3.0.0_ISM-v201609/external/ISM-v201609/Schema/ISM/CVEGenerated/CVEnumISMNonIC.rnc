@@ -1,1 +1,0 @@
-CVEnumISMNonIC.att = attribute CVEnumISMNonIC { list { "DS"?, "XD"?, "ND"?, "SBU"?, "SBU-NF"?, "LES"?, "LES-NF"?, "SSI"?, "NNPI"? }  } 
