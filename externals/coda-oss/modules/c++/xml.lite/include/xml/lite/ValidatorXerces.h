@@ -30,7 +30,9 @@
 
 #include "config/Exports.h"
 
-#include <xml/lite/xml_lite_config.h>
+#if !defined(USE_XERCES)
+#define USE_XERCES
+#endif
 #ifdef USE_XERCES
 #include "xerces_.h"
 
@@ -89,8 +91,12 @@ private:
  *
  * This class is the Xercesc schema validator
  */
-struct CODA_OSS_API ValidatorXerces : public ValidatorInterface
+class CODA_OSS_API ValidatorXerces : public ValidatorInterface
 {
+    XercesContext mCtxt;    //! this must be the first member listed
+
+public:
+
     /*! 
      *  Constructor
      *  \param schemaPaths  Vector of both paths and singular schemas
@@ -100,10 +106,10 @@ struct CODA_OSS_API ValidatorXerces : public ValidatorInterface
      *                      input
      */
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
-                    logging::Logger* log = nullptr,
+                    logging::Logger* log,
                     bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&,
-                    logging::Logger* log = nullptr,
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, // fs::path -> mLegacyStringConversion = false
+                    logging::Logger* log,
                     bool recursive = true);
 
     ValidatorXerces(const ValidatorXerces&) = delete;
@@ -129,8 +135,6 @@ struct CODA_OSS_API ValidatorXerces : public ValidatorInterface
     static std::vector<coda_oss::filesystem::path> loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
 
 private:
-    XercesContext mCtxt;
-
     bool validate_(const coda_oss::u8string& xml, 
                    const std::string& xmlID,
                    std::vector<ValidationInfo>& errors) const;

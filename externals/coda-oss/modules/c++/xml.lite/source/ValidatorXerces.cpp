@@ -37,13 +37,14 @@ CODA_OSS_disable_warning(-Wshadow)
 CODA_OSS_disable_warning_pop
 
 #include <sys/OS.h>
-#include <sys/Path.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>
 
 namespace fs = std::filesystem;
 
-#include <xml/lite/xml_lite_config.h>
+#if !defined(USE_XERCES)
+#define USE_XERCES
+#endif
 #ifdef USE_XERCES
 #include <xml/lite/ValidatorXerces.h>
 
@@ -90,11 +91,26 @@ bool ValidationErrorHandler::handleError(
     return true;
 }
 
+inline std::vector<std::string> convert(const std::vector<fs::path>& schemaPaths)
+{
+    std::vector<std::string> retval;
+    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
+                   [](const fs::path& p) { return p.string(); });
+    return retval;
+}
+inline auto convert(const std::vector<std::string>& paths)
+{
+    std::vector<fs::path> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const auto& p) { return p; });
+    return retval;
+}
+
 ValidatorXerces::ValidatorXerces(
         const std::vector<fs::path>& schemaPaths,
         logging::Logger* log,
         bool recursive) :
-    ValidatorXerces(sys::convertPaths(schemaPaths), log, recursive)
+    ValidatorXerces(convert(schemaPaths), log, recursive)
 {
 }
 ValidatorXerces::ValidatorXerces(
@@ -155,7 +171,7 @@ ValidatorXerces::ValidatorXerces(
 
     // load our schemas --
     // search each directory for schemas
-    const auto schemas = loadSchemas(sys::convertPaths(schemaPaths), recursive);
+    const auto schemas = loadSchemas(convert(schemaPaths), recursive);
 
     //  add the schema to the validator
     //  add the schema to the validator
@@ -165,12 +181,9 @@ ValidatorXerces::ValidatorXerces(
                                      xercesc::Grammar::SchemaGrammarType,
                                      true))
         {
-            if (log != nullptr)
-            {
-                std::ostringstream oss;
-                oss << "Error: Failure to load schema " << schema;
-                log->warn(Ctxt(oss));
-            }
+            std::ostringstream oss;
+            oss << "Error: Failure to load schema " << schema;
+            log->warn(Ctxt(oss));
         }
     }
 
