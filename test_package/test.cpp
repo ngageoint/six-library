@@ -1,6 +1,9 @@
-#include <six/sicd/ComplexData.h>
+#include <import/types.h>
+#include <import/str.h>
 
 int main() {
-    six::sicd::ComplexData cd;
+    types::RowCol<int> ind;
+    std::string testString = " test ";
+    str::trim(testString);
     return 0;
 }

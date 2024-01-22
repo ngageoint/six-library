@@ -1,48 +1,139 @@
-![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
+     _________________________
+    |   ____  _||_  ___  __   |
+    |  /___ \/_||_\| __\/  \  |
+    | //   \// || \||  \\ _ \ |
+    | ||   [===||===]  ||(_)| |
+    | ||   _|| || |||  ||__ | |
+    | \\ _/ |\_||_/||__/|| || |
+    |  \___/ \_||_/|___/|| || |
+    |__________||_____________|
 
-## What SIX does
+CODA is a set of modules, and each module, while complimentary to one another, has
+a very specific and largely independent purpose.
 
-NGA is working to standardize Synthetic Aperture RADAR (SAR) systems in use throughout the community on a common format for complex SAR data (both wideband and narrowband metadata) as well as data derived from these data sets.  By providing access through GitHub to the SIX library, the community will have access not only to the sensor-independent complex data (SICD) specification and the sensor independent derived data (SIDD) specification documents, but also a well-vetted, mature implementation of software code providing the basic functions necessary to use these formats.  Additionally, the SIX library includes robust methods to validate the XML metadata in these files to provide developers and researchers with a means of testing that their files are compliant with the metadata and file format schema.  By providing this support to the community, the US Government may reduce the costs incurred in reformatting SAR data to our standards and more easily benefit from a wider array of SAR data from a variety of platforms and sensors. Additionally, the SICD and SIDD standards represent value to the community because they are the result of significant research and engineering into the mechanisms necessary (and found optimal) in representing a diverse array of SAR collection and processing metadata so that processing and visualization tools can work with them appropriately.
+Building CODA
+--------------
 
-### Origin
+CODA may be built using Waf or CMake. Below are all of the options available for Waf. See cmake/README.md for CMake build instructions.
 
-The SIX (Sensor Independent XML) library was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration
-with [Maxar](http://maxar.com) (formerly Radiant Solutions and MDA). The government has "unlimited rights" and is releasing
-this software to increase the impact of government investments by providing developers with the opportunity to take things
-in new directions. The software use, modification, and distribution rights are stipulated within the LGPL 3.0 license.
+    > python waf --help
+    waf [command] [options]
 
-The SIX library is a cross-platform C++ API for reading and writing NGA's complex phase history (CPHD), complex (SICD),
-and derived (SIDD) sensor independent radar formats; Python bindings are gradually being added as well.  Additionally it
-is the official reference implementation library for the
-[SIDD](https://github.com/ngageoint/six-library/wiki/Sensor-Independent-Derived-Data-(SIDD)-Standard) format. The library
-also provides a [sensor model implementation](https://github.com/ngageoint/six-library/wiki) of many equations in the
-SICD and SIDD document.  This sensor model implementation provides the foundations for the SICD and SIDD
-[CSM](https://github.com/sminster/csm) (Community Sensor Model) implementation.
+    Main commands (example: ./waf build -j4)
+      build    : builds the project
+      clean    : removes the build files
+      configure: configures the project
+      dist     : makes a tarball for redistributing the sources
+      distcheck: checks if the sources compile (tarball from 'dist')
+      install  : installs the build files
+      uninstall: removes the installed files
 
-It is available as open-source software under the Lesser GNU Public License (LGPL). This license is commonly used in the
-open-source community, and allows applications that are not open source to make use of the library without penalty. As with
-other open source projects, the library is available as-is, with no warranty.
+    Options:
+      --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -j JOBS, --jobs=JOBS  amount of parallel jobs (8)
+      -k, --keep            keep running happily on independent task groups
+      -v, --verbose         verbosity level -v -vv or -vvv [default: 0]
+      --nocache             ignore the WAFCACHE (if set)
+      --zones=ZONES         debugging zones (task_gen, deps, tasks, etc)
+      -p, --progress        -p: progress bar; -pp: ide output
+      --targets=COMPILE_TARGETS
+                            build given task generators, e.g. "target1,target2"
+      --enable-warnings     Enable warnings
+      --enable-debugging    Enable debugging
+      --enable-64bit        Enable 64bit builds
+      --enable-32bit        Enable 32bit builds
+      --enable-doxygen      Enable running doxygen
+      --with-cflags=FLAGS   Set non-standard CFLAGS
+      --with-cxxflags=FLAGS
+                            Set non-standard CXXFLAGS (C++)
+      --with-linkflags=FLAGS
+                            Set non-standard LINKFLAGS (C/C++)
+      --with-defs=DEFS      Use DEFS as macro definitions
+      --with-optz=OPTZ      Specify the optimization level for optimized/release builds
+      --libs-only           Only build the libs (skip building the tests, etc.)
+      --shared              Build all libs as shared libs
+      --disable-symlinks    Disable creating symlinks for libs
+      --unittests           Build-time option to run unit tests after the build has completed
+      --disable-pcre        turn off PCRE
+      --enable-pcre         turn on PCRE (default)
+      --with-pcre-home=WITH_PCRE_HOME
+                            Specify the PCRE Home - where PCRE is installed to
+      --build-pcre          force building PCRE from scratch
+      --nobuild-pcre        force building PCRE from scratch
+      --disable-xml         turn off XML
+      --enable-xml-layer=XML_LAYER
+                            Specify the XML layer
+      --with-xml-home=XML_HOME
+                            Specify the XML Home - where the XML library is installed to
+      --build-xml           force building XML library (expat) from scratch
+      --nobuild-xml         force not building XML library from scratch
+      --enable-sql-layer=SQL_LAYER
+                            Specify the SQL layer
+      --with-sql-home=SQL_HOME
+                            Specify the SQL Home - where the SQL library is installed to
+      --with-fft-home=FFT_HOME
+                            Specify the FFT Home - where an FFT library is installed
+      --with-fftw3-home=FFT3_HOME
+                            Specify the FFT3 Home - where the FFT3 library is installed
+      --disable-fft         turn off building FFT (default)
+      --enable-fft          turn on FFT
+      --enable-fft-double   turn on double precision FFT
+      --build-fft           force building FFT library (fftw) from scratch
+      --nobuild-fft         force building FFT library (fftw) from scratch
+      --with-zip-home=ZIP_HOME
+                            Specify the ZIP Home - where the ZIP library is installed
+      --disable-zip         will not build the zip (zlib) library
+      --enable-zip          will build the zip (libz) library if not found on the system (default)
+      --build-zip           force building zip (zlib) library from scratch
+      --nobuild-zip         force building zip (zlib) library from scratch
+      --disable-uuid        will not build the uuid library
+      --enable-uuid         will build the uuid library if not found on the system (default)
+      --build-uuid          force building libuuid from scratch
+      --nobuild-uuid        force building libuuid from scratch
+      --with-uuid-home=UUID_HOME
+                            Specify the UUID lib/headers home
 
-See the [manual](https://github.com/ngageoint/six-library/blob/master/docs/six-manual.pdf) for detailed information including
-build instructions and API documentation.
+      configuration options:
+        -b BLDDIR, --blddir=BLDDIR
+                            build dir for the project (configuration)
+        -s SRCDIR, --srcdir=SRCDIR
+                            src dir for the project (configuration)
+        --prefix=PREFIX     installation prefix (configuration) [default: '/usr/local/']
 
-A preliminary CMake build system is available on Linux and Windows. See [coda-oss CMake README.md](externals/coda-oss/cmake/README.md)
-and [nitro README.md](externals/nitro/README.md) for information on how to build using CMake. The same configuration options
-may be passed to SIX.
+      installation options:
+        --destdir=DESTDIR   installation root [default: '']
+        -f, --force         force file installation
 
-The latest version of the library is available at https://github.com/ngageoint/six-library.git.
+      C Compiler Options:
+        --check-c-compiler=CHECK_C_COMPILER
+                            On this platform (linux) the following C-Compiler will be checked by default: "gcc icc suncc"
 
-### Releases
-The master is considered stable, but official [releases](https://github.com/ngageoint/six-library/releases) also occur as
-major features are added.
+      C++ Compiler Options:
+        --check-cxx-compiler=CHECK_CXX_COMPILER
+                            On this platform (linux) the following C++ Compiler will be checked by default: "g++ icpc sunc++"
 
-### Pull Requests
 
-All pull request contributions to this project will be released under the LGPL 3.0 license.
+Sample Build Scenario
+---------------------
+    > cd modules
+    > python waf configure --enable-debugging --prefix=installed
+    > python waf build
+    > python waf install
 
-Software source code previously released under an open source license and then modified by NGA staff is considered a
-"joint work" (see 17 USC 101); it is partially copyrighted, partially public domain, and as a whole is protected by the
-copyrights of the non-government authors and must be released according to the terms of the original open source license.
 
-### Contact
-February 2022, Dan <dot> Smith <at> maxar <dot> <see><oh><em>
+Enabling a debugger
+-------------------
+`-g` and its variants can be achieved at configure time using the
+`--enable-debugging` switch at waf configure time
+
+Common Errors
+-------------
+    Fatal Python error: initfsencoding: unable to load the file system codec
+    ModuleNotFoundError: No module named 'encodings'
+
+Problem: Python is unable to find its `modules` directory, necessary for using the Python C API.
+
+Solution: Set the `PYTHONHOME` environment variable. On Windows, this may look like:
+
+    set PYTHONHOME=C:\ProgramData\Anaconda3\

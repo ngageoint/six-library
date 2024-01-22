@@ -1,43 +1,49 @@
+# - CODA-OSS CMake Build script.
+#
+# Author:  Scott A. Colcord
+
 cmake_minimum_required(VERSION 3.14)
-project(six-library)
+project(coda-oss)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED true)
 
-if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
-    # we are the top-level project and are responsible for configuration
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # build and package with conan
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+
+    include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
+endif()
+
+if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
+    # this is the top level project
 
     # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
     # we'll dial-back warnings as necessary.
     if (MSVC)
        add_compile_options(/WX) # warnings as errors
-       add_compile_options(/MP) # multi-processor build
+       add_compile_options(/MP) # multi-processor compile
     elseif (UNIX)
        add_compile_options(-Werror) # warnings as errors
     endif()
 
-    if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
-        # use pre-built dependencies from conan packages
-        include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
-        find_package(coda-oss REQUIRED)
-        find_package(nitro REQUIRED)
-        include(CodaBuild)
-        coda_initialize_build()
-    else()
-        # build dependencies ourselves
-        set(CODA_OSS_DIR "coda-oss")
-        list(APPEND CMAKE_MODULE_PATH
-             "${CMAKE_CURRENT_SOURCE_DIR}/externals/${CODA_OSS_DIR}/cmake")
-        include(CodaBuild)
-        coda_initialize_build()
-        add_subdirectory("externals")
-    endif()
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+    include(CodaBuild)
+
+    coda_initialize_build()
+
+    # install our cmake build modules for downstream use
+    install(DIRECTORY "cmake/"
+            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake/"
+            FILES_MATCHING PATTERN "*.cmake")
 endif()
 
-# needed to run some unit tests from the build directory
-file(COPY "croppedNitfs"
-     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+add_subdirectory("modules")
 
-add_subdirectory(six)
-
-coda_generate_package_config()
+# generate package config, with the following paths exported
+set(JARS_DIR ${CODA_STD_PROJECT_LIB_DIR} CACHE INTERNAL
+    "path to installed jars, needed by downstream projects")
+set(SWIG_INCLUDE_DIR "${CODA_STD_PROJECT_INCLUDE_DIR}/swig" CACHE INTERNAL
+    "path to installed SWIG includes, needed by downstream projects")
+coda_generate_package_config(JARS_DIR SWIG_INCLUDE_DIR)

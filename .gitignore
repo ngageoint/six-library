@@ -1,67 +1,56 @@
-*.whl
-*.pyc
-*~
 *.swp
-*venv
-
-# Eclipse
-.cproject
-.project
-
-# VS Code
-.vscode
-packages/
-.vs
-*.vcxproj.user
-
-# Waf
-.lock-waf*
-.waf*
+*~
+*.pyc
+__pycache__/
 
 # Build artifacts
-target/
-target.dbg/
 install/
-install.dbg/
-**/install-*/
+install-*/
+target/
+
+# Conan
+modules/drivers/**/build
 test_package/build/
-out/build/
-out/install/
-test_package/build/
-*.pyc
-*.swp
-.depproj
-**/Debug/
-**/Release/
-*.a
-*.so*
 
 # CMake
 _deps/
-CMakeFiles/
 CMakeCache.txt
-CMakeSettings.json
-# cmake generates these Makefiles
-externals/*/Makefile
-externals/coda-oss/modules/c++/**/Makefile
-externals/coda-oss/modules/python/**/Makefile
-externals/nitro/modules/**/Makefile
-Makefile
-six/Makefile
-six/modules/**/Makefile
+CMakeFiles/
 *_config.h
-*_config.hpp
-# ignore build directories ...
-build/
+Makefile
+modules/**/Makefile
 out/
-# ... but not coda-oss/build
-!/externals/coda-oss/build/
+CMakeSettings.json
+
+# Waf
+.waf-*
+waf-*
+.waf3-*
+waf3-*
+.lock-waf*
+build/waf*/
+
+# Eclipse
+.project
+.cproject
 
 # Drivers
-six/projects/csm/external/csm-master/
+modules/drivers/fftw/fftw-2.1.*/
+modules/drivers/jpeg/jpeg-9/
+modules/drivers/jpeg/jpeg-9d/
+modules/drivers/j2k/openjpeg/openjpeg-2.3.*_mod/
+modules/drivers/pcre/pcre2-10.*/
+modules/drivers/uuid/e2fsprogs-1.*.*/
+modules/drivers/xml/xerces/xerces-c-*/
+modules/drivers/zlib/zlib-1.2.*/
 
-# Giant test files
-regression_files/
-six/modules/c++/cphd/tests/sample_cphd/
-outputPathname.ntf
+# VS
+.vs/
+project.sln
+.depproj/
+*.tlog
+**/x64/
+*.vcxproj.user
 
+# Unit-tests
+TEST_*_TMP*.*

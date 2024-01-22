@@ -1,106 +1,98 @@
-![alt tag](https://raw.github.com/ngageoint/six-library/master/docs/six_logo.png?raw=true)
+﻿# coda-oss Release Notes
 
-# SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
+## [Release 202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+* Update to [HighFive 2.8.0](https://github.com/BlueBrain/HighFive/releases/tag/v2.8.0).
 
-## [Version 3.2.5](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.5); October 23, 2023
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-10-23](https://github.com/mdaus/coda-oss/releases/tag/2023-10-23)
-* [nitro](https://github.com/mdaus/nitro) version [2.11.5](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.5)
-* Simplify 8AMP_PHSI interfaces.
-* Be more explicit about the CPHD version being used.
-* *io::OutputStream* overloads to make it easier to write CPHD data in pieces.
-* Be sure XML strings are UTF-8.
+## [Release 2023-10-23](https://github.com/mdaus/coda-oss/releases/tag/2023-10-23)
+* Tweaked **.gitattributes**.
+* Removed *str::EncodedStringView*; made *str* conversion routines more consistent.
+* *FmtX()* uses overloads rather than C-style varargs.
+* Add [`std::ssize()`](https://en.cppreference.com/w/cpp/iterator/size).
+* `ENABLE_AVX2` and `ENABLE_AVX512F` flags for CMake builds.
+* Build cleanly with ASAN.
 
-## [Version 3.2.4](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.4); August 21, 2023
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-08-18](https://github.com/mdaus/coda-oss/releases/tag/2023-08-18)
-* [nitro](https://github.com/mdaus/nitro) version [2.11.4](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.4)
-* Prepare for deprecating [`std::complex<short>`](https://en.cppreference.com/w/cpp/numeric/complex), et. al.
-* Allow XML metadata to be parsed with `preserveCharacterData(true)` to keep white-space.
-* Added support for [CPHD 1.1.0](https://nsgreg.nga.mil/doc/view?i=5388) XML metadata.
-* Bugfix: read SIDDs [without a LUT](https://github.com/ngageoint/six-library/pull/683).
-* Bugfix: [CPHD 'releaseInfo' can be empty](https://github.com/ngageoint/six-library/pull/670).
-* Added **.gitattributes** and normalized line-endings (`\n` for most text files).
+## [Release 2023-08-18](https://github.com/mdaus/coda-oss/releases/tag/2023-08-18)
+* New `sys::OS::getSIMDInstructionSet()` utility routine; SSE2 is required (default with 64-bit builds).
+* `types::ComplexInteger` to work-around `std::complex<short>` no longer being [valid C++](https://en.cppreference.com/w/cpp/numeric/complex).
+* Another round of reducing various compiler warnings (of note: `NULL` -> `nullptr`).
+* Some support for [`std::numbers`](https://en.cppreference.com/w/cpp/header/numbers) from C++20.
+* Update to [HighFive 2.7.1](https://github.com/BlueBrain/HighFive/releases/tag/v2.7.1).
+* Update to [e2fsprogs 1.47.0](https://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.47.0).
+* Update to [xerces-c 3.2.4](https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12350542&styleName=Text&projectId=10510).
+* Update to [HDF5](https://www.hdfgroup.org/) [1.14.2](https://github.com/HDFGroup/hdf5/releases/tag/hdf5-1_14_2).
+* `mem::ComplexView`s renamed to be more descriptive.
+* **hdf5.lite** removed, use [HighFive](https://github.com/BlueBrain/HighFive/) (included).
+* added **.gitattributes** and normalized line-endings (`\n` for most text files).
 
-## [Version 3.2.3](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.3); June 5, 2023
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)
-* [nitro](https://github.com/mdaus/nitro) version [2.11.3](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.3)
-* Integrated [ISM v201609](https://www.dni.gov/index.php/who-we-are/organizations/ic-cio/ic-cio-related-menus/ic-cio-related-links/ic-technical-specifications/information-security-marking-metadata) into SIDD 3.0.
-* Retain "legacy" support for ISM-v13 with SIDD 3.0.
-* Tweak `DataWriter` implementation in preperation for future changes.
-* CPHD wasn't parsing all optional fields correctly.
-* Adjust compiler flags for clean *CMake* builds.
+## [Release 2023-06-05](https://github.com/mdaus/coda-oss/releases/tag/2023-06-05)
+* *zlib* updated to [1.2.13](https://github.com/madler/zlib/releases/tag/v1.2.13).
+* new `mem::ComplexView` class to make it easier to process complex data stored in parallel. 
+* adjust compiler flags for clean *CMake* builds.
+* wrap common "file open" routines (e.g., `fopen()`) to support `sys::expandEnvironmentVariables()`.
+* add header-only [HighFive](https://github.com/BlueBrain/HighFive) HDF5-wrapper library.
+* Added a handful of [HighFive](https://github.com/BlueBrain/HighFive) utility routines.
+* `mt::transform_async()` removed, it doesn't match C++17 techniques.
+* Revamp `sys::byteSwap()` for improved type-safety and
+  [better performance](https://devblogs.microsoft.com/cppblog/a-tour-of-4-msvc-backend-improvements/).
+ * Added case-insensitive string comparison utilities: `str::eq()` and `str::ne()`;
+   `xml::lite::Uri`s compare case-insensitive.
 
-## [Version 3.2.2](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.2); December 14, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
-* [nitro](https://github.com/mdaus/nitro) version [2.11.2](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.2)
-* [Fixed slantToImagePartials not operating in slant plane](https://github.com/ngageoint/six-library/pull/613)
-* Continued effort at getting unittests to run in other projects.
+## [Release 2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
+* removed remaining vestiges of `std::auto_ptr`, provide `mem::AutoPtr` for the tiny handful of
+  places (e.g., SWIG bindings) that still need copying.
+* `xml::lite::Element` overloads to make creating new XML documents easier; see unittests for examples.
+* try even harder to find unittest files in various scenarios.
+* build *hdf5.lite* with **waf**.
+* New `--optz=fastest-possible` (**waf** only) which adds
+  [`-march=native`](https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options)
+  to *fastest* for **waf** builds.  There is a new *faster* option (the default) which is currently
+  the same as *fastest* (i.e., no `-march=native`).
 
-## [Version 3.2.1](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.1); November 4, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
-* [nitro](https://github.com/mdaus/nitro) version [2.11.1](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.1)
-* cphd::PhaseSGN accepts both `1` and `+1`, toString() is now `"1"` instead of `"+1"`.
-* CPHD XML parser handles URI's for versions 1.0.0, 1.0.1, and 1.1.0; unit test updated to test metadata parsing extensions
+## [Release 2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
+* "Cut" from [main](https://github.com/mdaus/coda-oss/tree/main), not *master*.
+* The [HDFGroup](https://hdfgroup.org/)s [HDF5 library](https://github.com/HDFGroup/hdf5) is built
+   and installed; a simple (and very incomplete!) wrapper is provided, this is at the "hello world!" stage.
+* A few **cli** routines have been tweaked to make unit-testing easier.
+* Utility routines for finding various files when unit-testing.
+* Removed C++14 work-arounds needed in C++11. Legacy C++ exception specifications removed.
+* Rebuild `waf` for FIPS error; added more debug options.
+ 
+## [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
+* XML is now always written as UTF-8; the code will still try to read Windows-1252.
+* `Uri`s are no longer validated by default.
+* Minor tweaks from other projects.
+* ~~Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/mdaus/coda-oss/tree/main).~~
 
-## [Version 3.2.0](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.0); August 30, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30_cpp14](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30_cpp14)
-* [nitro](https://github.com/mdaus/nitro) version [2.11.0](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.0)
-* This version is identical to [Version 3.1.14](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.14) except that C++14 is now required.
+## [Release 2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
+* remove *Expat* and *libXML* modules and support in **xml.lite**; only *Xerces* was actively used.
+* ~~fix `waf` to work-around FIPS warning because of insecure *md5* hashing.~~
+* tweak `str::EncodedStringView` and `str::EncodedString` for
+  [future XML changes](https://github.com/mdaus/coda-oss/tree/feature/always-write-xml-as-utf8).
 
-## [Version 3.1.14](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.14); August 30, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
-* [nitro](https://github.com/mdaus/nitro) version [2.10.12](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.12)
-* Routines that "traffic" in XML strings (e.g., `parseDataFromString()` or `toXMLString()`) now use
-  `std::u8string` (actually `coda_oss::u8string`) instead of `std::string`.
-* Fixed memory leak in `ComplexXMLParser`.
-* Files in **six/projects/csm/external/csm-3.0.4** are unchanged (almost!) from [CSM 3.0.4](https://github.com/ngageoint/csm/releases/tag/v3.0.4).
-* Final C++11 release 🤞🏻; future releases will be C++14 from [main](https://github.com/ngageoint/six-library/tree/main).
+## [Release 2022-06-29](https://github.com/mdaus/coda-oss/releases/tag/2022-06-29)
+* remove **modules/drivers/boost** as it was empty (and unused);
+  **modules/c++/serialize** depended on boost, so it has also been removed.
+* Update to [zlib 1.2.12](https://www.zlib.net/zlib-1.2.12.tar.gz),
+  ["Due to the bug fixes, any installations of 1.2.11 should be replaced with 1.2.12."](https://www.zlib.net/)
+* Build most code in Visual Studio 2022
+* Removed more compiler warnings
+* Begin work on `CODA_OSS_API` (needed for building a shared-library/DLL)
+* Add `run1D()` method to `mt::GenerationThreadPool` 
 
-## [Version 3.1.13](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.13); August 2, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-08-02](https://github.com/mdaus/coda-oss/releases/tag/2022-08-02)
-* [nitro](https://github.com/mdaus/nitro) version [2.10.11](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.11)
-* Better handling of optional error fields
-* `vtsSetEnv` command
+## [Release 2022-05-03](https://github.com/mdaus/coda-oss/releases/tag/2022-05-03)
+* Fixed a bug in `Poly2D::atY()`; improved `flipXY()` behavior.
+* Implement [std::filesystem::file_size()](https://en.cppreference.com/w/cpp/filesystem/file_size).
+* use `inline` functions for `TEST_` macros
+* force use of [64-bit `time_t`](https://en.wikipedia.org/wiki/Year_2038_problem)
+* more routines now support a `std::span` overload; e.g., `io::InputStream::read()`.
 
-## [Version 3.1.12](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.12); June 29, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-06-29](https://github.com/mdaus/coda-oss/releases/tag/2022-06-29)
-* [nitro](https://github.com/mdaus/nitro) version [2.10.10](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.10)
-* Support `OTHER.*` polarization values in XML from SIDD 3.0/SICD 1.3
-* Updated to [CSM 3.0.4](https://github.com/ngageoint/csm/releases/tag/v3.0.4).
-* Implements the back-end C++ changes from #351.
+## [Release 2022-02-22](https://github.com/mdaus/coda-oss/releases/tag/2022-02-22)
+* new `EnocdedString` and `EncodedStringView` to manage strings in different encodings
+* XML containing UTF-8 characters can now be validated
+* Update to [GSL 4.0.0](https://github.com/microsoft/GSL/releases/tag/v4.0.0)
+* our implementation of `std` stuff is all in the `coda_oss` namespace
+* old, unused **log4j.jar** deleted to remove any questions about the security vulnerability
 
-   * Support writing multiple CPHD channels to file from a single wideband buffer.
-   * Support 1-, 2-, and 4-byte datatypes within the `PVPBlock`. All user-defined PVP were hard-coded to 8-byte types before.
-   * Make `cphd::PVPBlock` used `std::map` to store added PVP parameters instead of `std::unordered_map`;
-    this was needed to support older versions of SWIG.
-   * Fix signal datatype in PVP to be 8-byte integer according to the CPHD v1.x spec. Was set to double previously.
-
-* Fix `getARPVector()` and `getARPVelocityVector()` methods to return vectors filled with constant values;
-  these values are used when performing `imageToSceneAdjustment`.
-
-## [Version 3.1.11](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.11); May 13, 2022
-* Lastest [coda-oss](https://github.com/mdaus/coda-oss) and [nitro](https://github.com/mdaus/nitro) (updates from **master**, no new releases)
-* Fix bug in XML serializaton where `double`s were given a class of `xs::double` (two `:`s) instead of `xs:double`.
-
-## [Version 3.1.10](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.10); May 3, 2022
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-05-03](https://github.com/mdaus/coda-oss/releases/tag/2022-05-03)
-* [nitro](https://github.com/mdaus/nitro) version [2.10.9](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.9)
-* improve performance of *AMP8I_PHS8I* reading.
-
-## [Version 3.1.9](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.9); February 22, 2022 (aka 2/22/22)
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2022-02-22](https://github.com/mdaus/coda-oss/releases/tag/2022-02-22)
-* [nitro](https://github.com/mdaus/nitro) version [2.10.8](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.8)
-* replace KDTree *`std::complex<float>` -> AMP8I_PHS8I conversion* with a
-  ["math based" approach](https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353).
-* restore SIDD 2.0 `AngleMagnitudeType`, SIDD 3.0 is `AngleZeroToExclusive360MagnitudeType`
-* bugfix: "We found a bug/mistake/error in **six.sicd/source/RadarCollection.cpp**, specifically the function to rotate the Area\Plane\SegmentList block."
-
-## [Version 3.1.8](https://github.com/ngageoint/six-library/releases/tag/SIX-3.1.8); December 13, 2021
-* [coda-oss](https://github.com/mdaus/coda-oss) version [2021-12-13](https://github.com/mdaus/coda-oss/releases/tag/2021-12-13)
-* [nitro](https://github.com/mdaus/nitro) version [2.10.7](https://github.com/mdaus/nitro/releases/tag/NITRO-2.10.7)
-* write [8AMPI_PHSI](https://github.com/ngageoint/six-library/tree/feature/8AMPI_PHSI) files
-* update schema for [SIDD 3.0](https://github.com/ngageoint/six-library/tree/feature/SIDD-3.0)
-
------
-
-## Contact
-February 2022, Dan <dot> Smith <at> Maxar <dot> <see><oh><em>
+## [Release 2021-12-13](https://github.com/mdaus/coda-oss/releases/tag/2021-12-13)
+* Try hard to parse XML encoded in various ways
+* Simplify XML element creation for common idioms

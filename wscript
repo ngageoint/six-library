@@ -1,35 +1,33 @@
 import os
-import subprocess
-from os.path import join
+from build import CPPOptionsContext, enableWafUnitTests
 from waflib import Scripting, Options, Context
-from build import CPPOptionsContext
 
-# Version is set in six/modules directory
-# Set it there because someone may be building SIX as part of another repo and
-# skipping our top-level wscript
-APPNAME = 'SIX'
+VERSION = '3.0-dev'
+APPNAME = 'CODA-OSS'
 Context.APPNAME = APPNAME
 top  = '.'
 out  = 'target'
 
-TOOLS = 'build swig matlabtool pythontool'
-coda_oss = 'coda-oss'
-TOOLS_DIR = join('externals', coda_oss, 'build')
-DIRS = 'externals six'
+DIRS = 'modules'
+
+TOOLS = 'build pythontool swig'
 
 def options(opt):
-    opt.load(TOOLS, tooldir=TOOLS_DIR)
+    opt.load(TOOLS, tooldir='./build/')
+    # always set_options on all
     opt.recurse(DIRS)
 
 def configure(conf):
-    conf.load(TOOLS, tooldir=TOOLS_DIR)
+    conf.options.swigver = '3.0.12'
+    conf.load(TOOLS, tooldir='./build/')
     conf.recurse(DIRS)
 
 def build(bld):
-    bld.launch_dir = join(bld.launch_dir, 'six')
+    if bld.options.all_tests:
+        enableWafUnitTests(bld, False)
     bld.recurse(DIRS)
+    enableWafUnitTests(bld)
 
-def distclean(context):
-    context.recurse(DIRS)
-    Scripting.distclean(context)
-
+def distclean(ctxt):
+    ctxt.recurse(DIRS)
+    Scripting.distclean(ctxt)

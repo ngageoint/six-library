@@ -1,100 +1,59 @@
-//
-// pch.h
-// Header for standard system include files.
-//
+// pch.h: This is a precompiled header file.
+// Files listed below are compiled only once, improving build performance for future builds.
+// This also affects IntelliSense performance, including code completion and many code browsing features.
+// However, files listed here are ALL re-compiled if any one of them is updated between builds.
+// Do not add files here that you will be updating frequently as this negates the performance advantage.
 
-#pragma once
+#ifndef PCH_H
+#define PCH_H
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+// add headers that you want to pre-compile here
 
-// We're building in Visual Studio ... used to control where we get a little bit of config info
-#define NITRO_PCH 1
-
-#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
-#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
-#pragma warning(disable: 4710) // '...': function not inlined
-
-#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
-
-#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
-#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
-#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
-#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
-
-// TODO: get rid of these someday?
-#pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
-#pragma warning(disable: 4267) // '...': conversion from '...' to '...', possible loss of data
-#pragma warning(disable: 4244) // 	'...': conversion from '...' to '...', possible loss of data
-#pragma warning(disable: 4242) // '...': conversion from '...' to '...', possible loss of data
-#pragma warning(disable: 4018) // '...': signed / unsigned mismatch
-#pragma warning(disable: 4389) // '...': signed / unsigned mismatch
-#pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed / unsigned mismatch
-#pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
-#pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
-#pragma warning(disable: 5039) // '...' : pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
-#pragma warning(disable: 5267) // definition of implicit copy constructor for '...' is deprecated because it has a user-provided destructor
-
-// TODO: get rid of these someday? ... from Visual Studio code-analysis
-#pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
-#pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow(io.2).
-#pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.
-#pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
-
+#define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
 #pragma warning(push)
-#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
-#pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
-
-#include "six/modules/c++/cpp_pch.h"
-#include <fstream>
-
-#include <nitf/coda-oss.hpp>
-
+#pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
+#include <WinSock.h>
+#include <windows.h>
+#include <comdef.h>
 #pragma warning(pop)
+#undef min
+#undef max
 
-#include <import/except.h>
-#include <import/types.h>
-#pragma warning(push)
-#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
-#pragma warning(disable: 26493) // Don't use C-style casts (type.4).
-#pragma warning(disable: 26473) // Don't cast between pointer types where the source type and the target type are the same (type.1).
-#include <import/sys.h>
-#include <import/io.h>
-#include <io/TempFile.h>
-#include <io/StringStream.h>
-#include <import/mt.h>
-#pragma warning(pop)
-#include <import/str.h>
-#include <import/logging.h>
-#include <math/Utilities.h>
-#include <xml/lite/Element.h>
-#include <xml/lite/Validator.h>
-#include <xml/lite/MinidomParser.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <assert.h>
 
-#include <import/nitf.hpp>
-#include <import/nitf.h>
-#include <import/nrt.h>
-
-#include <import/scene.h>
-#include <import/six.h>
-#include <import/six/sicd.h>
-#include <import/six/sidd.h>
-#include <import/cphd.h>
-#include <import/cphd03.h>
-
-#pragma comment(lib, "ws2_32")
-
-#pragma warning(push)
-#pragma warning(disable: 4800) // Implicit conversion from '...' to bool. Possible information loss
-#pragma warning(disable: 4388) // '...': signed / unsigned mismatch
-#pragma warning(disable: 4866) // compiler may not enforce left-to-right evaluation order for call to '...'
+#include "import/std.h"
+#include <std/bit>
+#include <std/cstddef>
+#include <std/filesystem>
+#include <std/numbers>
+#include <std/optional>
+#include <std/span>
+#include <std/string>
+#include <std/type_traits>
 
 #include "CppUnitTest.h"
-#pragma warning(pop)
 
-#pragma warning(disable: 4464) // relative include path contains '..'
+#include <gsl/gsl.h>
+#include <import/except.h>
+#include <import/str.h>
+#include <import/sys.h>
+#include <import/math.h>
+#include <import/math/linear.h>
+#include <import/math/poly.h>
+#include <import/mem.h>
+#include <import/cli.h>
+#include <import/mt.h>
+#include <import/logging.h>
+#include <import/re.h>
+#include <import/zip.h>
+#include <import/xml/lite.h>
+#include <import/hdf5/lite.h>
 
-#include "six_Test.h"
-#include "sidd_Test.h"
-#include "sicd_Test.h"
-#include "cphd_Test.h"
-#include "cphd03_Test.h"
+#include <io/ReadUtils.h>
+#include <hdf5/lite/highfive.h>
+
+#include "TestCase.h"
+
+#endif //PCH_H
