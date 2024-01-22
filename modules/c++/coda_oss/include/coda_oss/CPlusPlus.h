@@ -79,8 +79,8 @@
 #define CODA_OSS_cpp20 (CODA_OSS_cplusplus >= CODA_OSS_cplusplus20)
 #define CODA_OSS_cpp23 (CODA_OSS_cplusplus >= CODA_OSS_cplusplus23)
 
-#if !CODA_OSS_cpp14
-#error "Must compile with C++14 or greater."
+#if !CODA_OSS_cpp17
+#error "Must compile with C++17 or greater."
 #endif
 
 // Get feature-testing macros: https://en.cppreference.com/w/cpp/feature_test

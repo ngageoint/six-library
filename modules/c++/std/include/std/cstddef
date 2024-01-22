@@ -18,33 +18,10 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
+#pragma once
 #ifndef CODA_OSS_std_cstddef_INCLUDED_
 #define CODA_OSS_std_cstddef_INCLUDED_
-#pragma once
-
-#include <stdint.h>
 
 #include <cstddef>
-#include <type_traits>
-#include "coda_oss/cstddef.h"
-#include "coda_oss/CPlusPlus.h"
-
-// Make it (too?) easy for clients to get our various std:: implementations
-#ifndef CODA_OSS_NO_std_byte
-    #if defined(__cpp_lib_byte) && (__cpp_lib_byte >= 201603L) // https://en.cppreference.com/w/cpp/utility/feature_test
-        #undef CODA_OSS_NO_std_byte
-        #define CODA_OSS_NO_std_byte 1  // provided by implementation, probably C++20
-    #else
-        #define CODA_OSS_NO_std_byte 0  // use our own
-    #endif
-#endif
-
-#if !CODA_OSS_NO_std_byte
-namespace std // This is slightly uncouth: we're not supposed to augment "std".
-{
-    using coda_oss::byte;
-}
-static_assert(!std::is_same<std::byte, uint8_t>::value, "'std::byte' should be a unique type.");
-#endif  // !CODA_OSS_NO_std_byte
 
 #endif  // CODA_OSS_std_cstddef_INCLUDED_

@@ -60,17 +60,14 @@
       _Name##Exception_(const except::Context& c) : _Base(c){} \
       _Name##Exception_(const std::string& msg) : _Base(msg){} \
       _Name##Exception_(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
-      _Name##Exception_(const except::ThrowableEx& t, const except::Context& c) : _Base(t, c){} \
       CODA_OSS_except_Exception_suppress_26447_BEGIN_ \
       std::string getType() const noexcept override { return #_Name #Exception_; } \
       CODA_OSS_except_Exception_suppress_26447_END_ }
 #define DECLARE_EXTENDED_EXCEPTION(_Name, _Base) DECLARE_EXTENDED_EXCEPTION_(_Name, Exception, _Base)
-#define DECLARE_EXTENDED_EXCEPTIONEX(_Name, _Base) DECLARE_EXTENDED_EXCEPTION_(_Name, ExceptionEx, _Base)
 
 // Need to keep this around for existing code
-#define DECLARE_EXCEPTION(_Name) \
-    DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception); \
-    DECLARE_EXTENDED_EXCEPTIONEX(_Name, except::ExceptionEx)
+#define DECLARE_EXCEPTION(_Name) DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception); \
+  using _Name ## ExceptionEx = _Name ##Exception
 
 namespace except
 {
@@ -104,9 +101,6 @@ struct Exception : public Throwable
         Throwable(t, c)
     {
     }
-    Exception(const ThrowableEx& t, const Context& c) : Throwable(t, c)
-    {
-    }
 
     /*!
      * Constructor.  Takes a message
@@ -126,46 +120,9 @@ struct Exception : public Throwable
 
 // Use this in new code: name is FooException (not FooExceptionEx), base is except::ExceptionEx (not except::Exception).
 #define CODA_OSS_DECLARE_EXTENDED_EXCEPTION(name_, base_) DECLARE_EXTENDED_EXCEPTION_(name_, Exception, base_)
-#define CODA_OSS_DECLARE_EXCEPTION(name_) CODA_OSS_DECLARE_EXTENDED_EXCEPTION(name_, except::ExceptionEx)
+#define CODA_OSS_DECLARE_EXCEPTION(name_) CODA_OSS_DECLARE_EXTENDED_EXCEPTION(name_, except::Exception)
 
-struct ExceptionEx : public ThrowableEx
-{
-    ExceptionEx() = default;
-    virtual ~ExceptionEx() = default;
-
-    /*!
-     * Constructor. Takes a Context
-     * \param c The Context
-     */
-    ExceptionEx(const Context& c) : ThrowableEx(c)
-    {
-    }
-
-    /*!
-     * Constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    ExceptionEx(const ThrowableEx& t, const Context& c) : ThrowableEx(t, c)
-    {
-    }
-    ExceptionEx(const Throwable& t, const Context& c) : ThrowableEx(t, c)
-    {
-    }
-
-    /*!
-     * Constructor.  Takes a message
-     * \param message The message
-     */
-    ExceptionEx(const std::string& message) : ThrowableEx(message)
-    {
-    }
-
-    std::string getType() const noexcept override
-    {
-        return "ExceptionEx";
-    }
-};
+using ExceptionEx = Exception;
 using Exception11 = ExceptionEx; // keep old name around for other projects
 
 /*!

@@ -298,6 +298,7 @@
     <ClInclude Include="tiff\include\tiff\ImageReader.h" />
     <ClInclude Include="tiff\include\tiff\ImageWriter.h" />
     <ClInclude Include="tiff\include\tiff\KnownTags.h" />
+    <ClInclude Include="tiff\include\tiff\TiffUtils.h" />
     <ClInclude Include="tiff\include\tiff\TypeFactory.h" />
     <ClInclude Include="tiff\include\tiff\Utils.h" />
     <ClInclude Include="types\include\types\Complex.h" />
@@ -474,6 +475,7 @@
     <ClCompile Include="tiff\source\ImageReader.cpp" />
     <ClCompile Include="tiff\source\ImageWriter.cpp" />
     <ClCompile Include="tiff\source\KnownTags.cpp" />
+    <ClCompile Include="tiff\source\TiffUtils.cpp" />
     <ClCompile Include="tiff\source\TypeFactory.cpp" />
     <ClCompile Include="tiff\source\Utils.cpp" />
     <ClCompile Include="types\source\Range.cpp" />
@@ -541,7 +543,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -586,6 +587,9 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -612,6 +616,9 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
       <WarningLevel>Level3</WarningLevel>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
