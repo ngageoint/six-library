@@ -127,6 +127,10 @@ void six::sicd::NearestNeighbors::nearest_neighbors(std::span<const zfloat> inpu
 void six::sicd::NearestNeighbors::nearest_neighbors(execution_policy policy, std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq    
+    if (policy == execution_policy::par_unseq)
+    {
+        return nearest_neighbors_par_unseq(inputs, results);
+    }
     if (policy == execution_policy::unseq)
     {
         return nearest_neighbors_unseq(inputs, results);
@@ -145,6 +149,9 @@ void six::sicd::NearestNeighbors::nearest_neighbors(execution_policy policy, std
     // https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t
     // > If the implementation cannot parallelize or vectorize (e.g. due to lack of resources),
     // > all standard execution policies can fall back to sequential execution.
+    #if CODA_OSS_DEBUG
+    throw std::logic_error("Unhandled execution_policy value.");
+    #endif
     return nearest_neighbors(inputs, results); // no policy specified, "default policy"
 }
 

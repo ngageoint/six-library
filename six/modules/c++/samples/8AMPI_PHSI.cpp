@@ -85,7 +85,7 @@ int main()
     #else
     constexpr auto inputs_size = 100;
     #endif
-    const auto inputs = make_cxinputs(inputs_size * 4);
+    const auto inputs = make_cxinputs(inputs_size);
 
     /*********************************************************************************/
     std::chrono::duration<double> diff;
