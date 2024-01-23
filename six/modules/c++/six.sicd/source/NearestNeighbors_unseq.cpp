@@ -890,17 +890,17 @@ auto cend(coda_oss::mdspan<T, TExtents> md)
 // ```
 // By returning our own class from `func()`, we can take control of the assignment operator.
 // (Unlike most other operators, `operator=()` *must* be a member-function.)
-template<typename IntV>
 struct mdspan_iterator_value final
 {
     std::span<AMP8I_PHS8I> p_;
 
     mdspan_iterator_value(std::span<AMP8I_PHS8I> s) : p_(s) {}
+    template<typename IntV>
     mdspan_iterator_value& operator=(const AMP8I_PHS8I_unseq<IntV>& other) {
         //assert(p_.size() <= size(other.amplitude));
         for (size_t i = 0; i < p_.size(); i++)
         {
-	    const auto i_ = gsl::narrow<int>(i);
+	        const auto i_ = gsl::narrow<int>(i);
             p_[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i_]);
             p_[i].phase = gsl::narrow<uint8_t>(other.phase[i_]);
         }
@@ -986,7 +986,7 @@ void six::sicd::NearestNeighbors::nearest_neighbors_unseq_(std::span<const zfloa
 
     const coda_oss::mdspan<AMP8I_PHS8I, extents_t> md_results(results.data(), extents);
     assert(md_results.size() <= results.size());
-    auto const d = begin<mdspan_iterator_value<intv_t>>(md_results);
+    auto const d = begin<mdspan_iterator_value>(md_results);
 
     const auto func = [&](const auto& v)
     {
@@ -1015,7 +1015,7 @@ void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq_T(std::span<const 
 
     const coda_oss::mdspan<AMP8I_PHS8I, extents_t> md_results(results.data(), extents);
     assert(md_results.size() <= results.size());
-    auto const d = begin<mdspan_iterator_value<intv_t>>(md_results);
+    auto const d = begin<mdspan_iterator_value>(md_results);
 
     const auto func = [&](const auto& v)
     {
