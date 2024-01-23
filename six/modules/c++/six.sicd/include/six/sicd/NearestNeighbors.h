@@ -68,15 +68,15 @@ private:
     uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
     uint8_t getPhase(six::zfloat) const;
 
-#if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    template<typename ZFloatV, size_t N>
-    auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
-    template<typename ZFloatV, int elements_per_iteration>
-    void nearest_neighbors_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+    #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    void nearest_neighbors_(execution_policy, std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+
+    template<typename ZFloatV>
+    auto unseq_nearest_neighbors(std::span<const zfloat> p) const; // TODO: std::span<T, N> ... ?
 
     template<typename ZFloatV, int elements_per_iteration>
-    void nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-#endif 
+    void nearest_neighbors_T(execution_policy, std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+    #endif 
 
 };
 }

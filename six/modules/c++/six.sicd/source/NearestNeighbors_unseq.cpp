@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <functional>
 #include <std/numbers>
+#include <std/mdspan>
 
 #include <gsl/gsl.h>
 #include <sys/Span.h>
@@ -679,18 +680,7 @@ inline auto lower_bound_(std::span<const float> magnitudes, const FloatV& v)
 template<typename IntV, typename FloatV>
 inline auto lower_bound(std::span<const float> magnitudes, const FloatV& value)
 {
-    auto retval = lower_bound_<IntV>(magnitudes, value);
-
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(value); i++)
-    {
-        const auto it = std::lower_bound(magnitudes.begin(), magnitudes.end(), value[i]);
-        const auto result = gsl::narrow<int>(std::distance(magnitudes.begin(), it));
-        assert(retval[i] == result);
-    }
-    #endif
-
-    return retval;
+    return lower_bound_<IntV>(magnitudes, value);
 }
 
 template<typename IntV, typename FloatV>
@@ -786,6 +776,8 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
+/******************************************************************************************************/
+
 template<typename IntV>
 struct AMP8I_PHS8I_unseq final
 {
@@ -793,92 +785,132 @@ struct AMP8I_PHS8I_unseq final
     IntV phase;
 };
 
-// Cast a blob of T* into "chunks" of T[N]; "undecay" an array.
-// This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
-template<size_t N, typename T>
-static inline auto array_cast(std::span<const T> data)
+// This isn't someplace more widely available because:
+// 1. there is no standard iteration for `mdspan` (not even in C++23), and
+// 2. the particular needs are quite varied and require a lot of parameterization.
+//
+// Keep things simple for now and do this "in place."
+template<typename T, typename TExtents, typename TValueType = std::span<T>>
+struct mdspan_iterator final
 {
-    using chunk_t = std::array<const T, N>;
-    const auto number_of_chunks = data.size() / N;
-    const void* const pData = data.data();
-    return sys::make_span(static_cast<const chunk_t*>(pData), number_of_chunks);
+    using difference_type = std::ptrdiff_t;
+    using size_type = size_t;
+    using value_type = TValueType;
+    using pointer = TValueType*;
+    using const_pointer = const TValueType*;
+    using reference = TValueType;
+    using const_reference = const TValueType;
+    using iterator_category = std::random_access_iterator_tag;
+
+    mdspan_iterator() = default;
+    mdspan_iterator(coda_oss::mdspan<T, TExtents> md, difference_type row = 0) : md_(md), row_(row) {}
+
+    value_type operator*() const
+    {
+        return make_span();
+    }
+
+    mdspan_iterator& operator++() noexcept
+    {
+        ++row_;
+        return *this;
+    }
+
+    mdspan_iterator& operator+=(const difference_type n) noexcept
+    {
+        row_ += n;
+        return *this;
+    }
+    mdspan_iterator operator+(const difference_type n) const noexcept
+    {
+        auto ret = *this;
+        ret += n;
+        return ret;
+    }
+
+    difference_type operator-(const mdspan_iterator& rhs) const noexcept
+    {
+        return row_ - rhs.row_;
+    }
+
+    bool operator!=(const mdspan_iterator& rhs) const noexcept
+    {
+        return row_ != rhs.row_;
+    }
+
+private:
+    coda_oss::mdspan<T, TExtents> md_;
+    difference_type row_ = 0;
+
+    auto make_span() const
+    {
+        // We know our mdspan is contiguous, so this is OK
+        auto&& v = md_(row_, 0); // beginning of the the current row
+        return std::span<T>(&v, md_.extent(1)); // span for the whole row
+    }
+};
+template<typename TValueType, typename T, typename TExtents>
+auto begin(coda_oss::mdspan<T, TExtents> md)
+{
+    return mdspan_iterator<T, TExtents, TValueType>(md, 0);
+}
+template<typename T, typename TExtents>
+auto end(coda_oss::mdspan<T, TExtents> md)
+{
+    return mdspan_iterator<T, TExtents>(md, md.extent(0));
 }
 
-// Inside of `std::transform()`, there is a copy; something like
+template<typename T, typename TExtents>
+using const_mdspan_iterator = mdspan_iterator<std::add_const_t<T>, TExtents>;
+template<typename T, typename TExtents>
+auto cbegin(coda_oss::mdspan<T, TExtents> md)
+{
+    return const_mdspan_iterator<T, TExtents>(md, 0);
+}
+template<typename T, typename TExtents>
+auto cend(coda_oss::mdspan<T, TExtents> md)
+{
+    return const_mdspan_iterator<T, TExtents>(md, md.extent(0));
+}
+
+// Inside of `std::transform()`, there is an assignment; something like
 // ```
 //    *dest = func(*first);
 // ```
-// By returning our own class from `func()`, we can take control of the assignment operator
-// and use that to copy from `AMP8I_PHS8I_unseq` to `std::array<AMP8I_PHS8I, N>&`.
+// By returning our own class from `func()`, we can take control of the assignment operator.
 // (Unlike most other operators, `operator=()` *must* be a member-function.)
-//
-// Using inheritance to avoid padding at the end of the `struct`. ... needed?
-template<typename IntV, size_t N>
-struct AMP8I_PHS8I_array final : public std::array<AMP8I_PHS8I, N>
+struct mdspan_iterator_value final
 {
-    AMP8I_PHS8I_array& operator=(const AMP8I_PHS8I_unseq<IntV>&) = delete; // should only be using move-assignment
-    AMP8I_PHS8I_array& operator=(AMP8I_PHS8I_unseq<IntV>&& other)
-    {
-        for (int i = 0; i < gsl::narrow<int>(N); i++)
+    std::span<AMP8I_PHS8I> p_;
+
+    mdspan_iterator_value(std::span<AMP8I_PHS8I> s) : p_(s) {}
+    template<typename IntV>
+    mdspan_iterator_value& operator=(const AMP8I_PHS8I_unseq<IntV>& other) {
+        //assert(p_.size() <= size(other.amplitude));
+        for (size_t i = 0; i < p_.size(); i++)
         {
-            (*this)[i].phase = gsl::narrow<uint8_t>(other.phase[i]);
-            (*this)[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i]);
+	        const auto i_ = gsl::narrow<int>(i);
+            p_[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i_]);
+            p_[i].phase = gsl::narrow<uint8_t>(other.phase[i_]);
         }
         return *this;
     }
 };
-template<typename IntV, size_t N>
-static inline auto AMP8I_PHS8I_array_cast(std::span<AMP8I_PHS8I> data)
-{
-    // This isn't quite kosher, see `array_cast()` above.
-    using chunk_t = AMP8I_PHS8I_array<IntV, N>;
-    const auto number_of_chunks = data.size() / N;
-    void* const pDest = data.data();
-    return std::span<chunk_t>(static_cast<chunk_t*>(pDest), number_of_chunks);
-}
 
 template<typename ZFloatV>
 using IntV = decltype(::getPhase(ZFloatV{}, 0.0f));
 
-// The compiler can sometimes do better optimization with fixed-size structures.
-template<typename ZFloatV, size_t N>
-auto six::sicd::NearestNeighbors::nearest_neighbors_unseq_T(const std::array<const zfloat, N>& p) const // TODO: std::span<T, N> ... ?
+template<typename ZFloatV>
+auto six::sicd::NearestNeighbors::unseq_nearest_neighbors(std::span<const zfloat> p) const // TODO: std::span<T, N> ... ?  The compiler can sometimes do better optimization with fixed-size structures.
 {
     ZFloatV v;
     assert(p.size() == size(v));
-
     copy_from(p, v);
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(v); i++)
-    {
-        //const auto z = p[i];
-        //assert(real(v)[i] == z.real());
-        //assert(imag(v)[i] == z.imag());
-    }
-    #endif
 
     using intv_t = IntV<ZFloatV>;
     AMP8I_PHS8I_unseq<intv_t> retval;
-
     retval.phase = ::getPhase(v, converter_.phase_delta());
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(retval.phase); i++)
-    {
-        const auto phase_ = converter_.getPhase(p[i]);
-        assert(static_cast<uint8_t>(retval.phase[i]) == phase_);
-    }
-    #endif
-
     retval.amplitude = lookup_and_find_nearest(converter_, retval.phase, v);
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(retval.amplitude); i++)
-    {
-        const auto i_ = retval.phase[i];
-        const auto& phase_directions = converter_.get_phase_directions().value;
-        const auto a = find_nearest(phase_directions[i_], p[i]);
-        assert(a == retval.amplitude[i]);
-    }
-    #endif
 
     return retval;
 }
@@ -899,46 +931,41 @@ static void finish_nearest_neighbors_unseq(const six::sicd::NearestNeighbors& im
 }
 
 template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::NearestNeighbors::nearest_neighbors_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
+void six::sicd::NearestNeighbors::nearest_neighbors_T(execution_policy policy,
+    std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    using intv_t = IntV<ZFloatV>;
-
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
     // using `nearest_neighbors_unseq_T()`, above.
-    //
-    // This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
-    auto const first = array_cast<elements_per_iteration>(inputs);
-    auto const dest = AMP8I_PHS8I_array_cast<intv_t, elements_per_iteration>(results);
+    using extents_t = coda_oss::dextents<size_t, 2>; // two dimensions: M×N
+    const extents_t extents{ inputs.size() / elements_per_iteration, elements_per_iteration };
+    const coda_oss::mdspan<const zfloat, extents_t> md_inputs(inputs.data(), extents);
+    assert(md_inputs.size() <= inputs.size());
+    auto const b = cbegin(md_inputs);
+    auto const e = cend(md_inputs);
+
+    const coda_oss::mdspan<AMP8I_PHS8I, extents_t> md_results(results.data(), extents);
+    assert(md_results.size() <= results.size());
+    auto const d = begin<mdspan_iterator_value>(md_results);
 
     const auto func = [&](const auto& v)
     {
-        return nearest_neighbors_unseq_T<ZFloatV>(v);
+        return unseq_nearest_neighbors<ZFloatV>(v);
     };
-    std::transform(first.begin(), first.end(), dest.begin(), func);
 
-    // Then finish off anything left
-    finish_nearest_neighbors_unseq<elements_per_iteration>(*this, inputs, results);
-}
-
-template<typename ZFloatV, int elements_per_iteration>
-void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
-{
-    using intv_t = IntV<ZFloatV>;
-
-    // View the data as chunks of *elements_per_iteration*.  This allows iterating
-    // to go *elements_per_iteration* at a time; and each chunk can be processed
-    // using `nearest_neighbors_unseq_T()`, above.
-    //
-    // This isn't quite kosher, see: https://stackoverflow.com/questions/47924103/pointer-interconvertibility-vs-having-the-same-address
-    auto const first = array_cast<elements_per_iteration>(inputs);
-    auto const dest = AMP8I_PHS8I_array_cast<intv_t, elements_per_iteration>(results);
-
-    const auto func = [&](const auto& v)
+    if (policy == execution_policy::unseq)
     {
-        return nearest_neighbors_unseq_T<ZFloatV>(v);
-    };
-    mt::Transform_par(first.begin(), first.end(), dest.begin(), func);
+        std::transform(/*std::execution::unseq,*/ b, e, d, func);
+    }
+    else if (policy == execution_policy::par_unseq)
+    {
+        //std::transform(std::execution::par_unseq, b, e, d, func);
+        mt::Transform_par(b, e, d, func);
+    }
+    else
+    {
+        throw std::logic_error("Unsupported execution_policy");
+    }
 
     // Then finish off anything left
     finish_nearest_neighbors_unseq<elements_per_iteration>(*this, inputs, results);
@@ -977,74 +1004,51 @@ std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
     return retval;
 }
 
+void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
+    std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
+{
+    // TODO: there could be more complicated logic here to determine which UNSEQ
+    // implementation to use.
+
+    // This is very simple as it's only used for unit-testing
+    const auto& unseq = ::nearest_neighbors_unseq_;
+    #if SIX_sicd_has_simd
+    if (unseq == unseq_simd)
+    {
+        return nearest_neighbors_T<simd_zfloatv, simd_elements_per_iteration>(policy, inputs, results);
+    }
+    #endif
+    #if SIX_sicd_has_VCL
+    if (unseq == unseq_vcl)
+    {
+        return nearest_neighbors_T<vcl_zfloatv, vcl_elements_per_iteration>(policy, inputs, results);
+    }
+    #endif
+    #if SIX_sicd_has_valarray
+    if (unseq == unseq_valarray)
+    {
+        return nearest_neighbors_T<valarray_zfloatv, valarray_elements_per_iteration>(policy, inputs, results);
+    }
+    #endif
+    #if SIX_sicd_has_ximd
+    if (unseq == unseq_ximd)
+    {
+        return nearest_neighbors_T<ximd_zfloatv, ximd_elements_per_iteration>(policy, inputs, results);
+    }
+    #endif
+
+    throw std::logic_error("Don't know how to implement nearest_neighbors_() for unseq=" + unseq);
+}
 void six::sicd::NearestNeighbors::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
-
-
-    // This is very simple as it's only used for unit-testing
-    const auto& unseq = ::nearest_neighbors_unseq_;
-    #if SIX_sicd_has_simd
-    if (unseq == unseq_simd)
-    {
-        return nearest_neighbors_unseq_<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
-    }
-    #endif
-    #if SIX_sicd_has_VCL
-    if (unseq == unseq_vcl)
-    {
-        return nearest_neighbors_unseq_<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
-    }
-    #endif
-    #if SIX_sicd_has_valarray
-    if (unseq == unseq_valarray)
-    {
-        return nearest_neighbors_unseq_<valarray_zfloatv, valarray_elements_per_iteration>(inputs, results);
-    }
-    #endif
-    #if SIX_sicd_has_ximd
-    if (unseq == unseq_ximd)
-    {
-        return nearest_neighbors_unseq_<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
-    }
-    #endif
-
-    throw std::logic_error("Don't know how to implement nearest_neighbors_unseq() for unseq=" + unseq);
+    nearest_neighbors_(execution_policy::unseq, inputs, results);
 }
-
 void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     // TODO: there could be more complicated logic here to determine which UNSEQ
     // implementation to use.
-
-    // This is very simple as it's only used for unit-testing
-    const auto& unseq = ::nearest_neighbors_unseq_;
-    #if SIX_sicd_has_simd
-    if (unseq == unseq_simd)
-    {
-        return nearest_neighbors_par_unseq_T<simd_zfloatv, simd_elements_per_iteration>(inputs, results);
-    }
-    #endif
-    #if SIX_sicd_has_VCL
-    if (unseq == unseq_vcl)
-    {
-        return nearest_neighbors_par_unseq_T<vcl_zfloatv, vcl_elements_per_iteration>(inputs, results);
-    }
-    #endif
-    #if SIX_sicd_has_valarray
-    if (unseq == unseq_valarray)
-    {
-        return nearest_neighbors_par_unseq_T<valarray_zfloatv, valarray_elements_per_iteration>(inputs, results);
-    }
-    #endif
-    #if SIX_sicd_has_ximd
-    if (unseq == unseq_ximd)
-    {
-        return nearest_neighbors_par_unseq_T<ximd_zfloatv, ximd_elements_per_iteration>(inputs, results);
-    }
-    #endif
-
-    throw std::logic_error("Don't know how to implement nearest_neighbors_par_unseq() for unseq=" + unseq);
+    nearest_neighbors_(execution_policy::par_unseq, inputs, results);
 }
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
