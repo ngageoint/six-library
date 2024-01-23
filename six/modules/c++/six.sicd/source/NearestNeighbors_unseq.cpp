@@ -850,8 +850,8 @@ struct mdspan_iterator final
     }
 
 private:
-    difference_type row_ = 0;
     coda_oss::mdspan<T, TExtents> md_;
+    difference_type row_ = 0;
 
     auto make_span() const
     {
