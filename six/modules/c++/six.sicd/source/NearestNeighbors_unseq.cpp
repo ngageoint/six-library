@@ -809,8 +809,8 @@ struct mdspan_iterator final
     using value_type = TValueType;
     using pointer = TValueType*;
     using const_pointer = const TValueType*;
-    using reference = TValueType&;
-    using const_reference = const TValueType&;
+    using reference = TValueType;
+    using const_reference = const TValueType;
     using iterator_category = std::random_access_iterator_tag;
 
     mdspan_iterator() = default;
@@ -972,8 +972,6 @@ static void finish_nearest_neighbors_unseq(const six::sicd::NearestNeighbors& im
 template<typename ZFloatV, int elements_per_iteration>
 void six::sicd::NearestNeighbors::nearest_neighbors_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    using intv_t = IntV<ZFloatV>;
-
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
     // using `nearest_neighbors_unseq_T()`, above.
@@ -1001,8 +999,6 @@ void six::sicd::NearestNeighbors::nearest_neighbors_unseq_(std::span<const zfloa
 template<typename ZFloatV, int elements_per_iteration>
 void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq_T(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    using intv_t = IntV<ZFloatV>;
-
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
     // using `nearest_neighbors_unseq_T()`, above.
