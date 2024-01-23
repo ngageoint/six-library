@@ -680,18 +680,7 @@ inline auto lower_bound_(std::span<const float> magnitudes, const FloatV& v)
 template<typename IntV, typename FloatV>
 inline auto lower_bound(std::span<const float> magnitudes, const FloatV& value)
 {
-    auto retval = lower_bound_<IntV>(magnitudes, value);
-
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(value); i++)
-    {
-        const auto it = std::lower_bound(magnitudes.begin(), magnitudes.end(), value[i]);
-        const auto result = gsl::narrow<int>(std::distance(magnitudes.begin(), it));
-        assert(retval[i] == result);
-    }
-    #endif
-
-    return retval;
+    return lower_bound_<IntV>(magnitudes, value);
 }
 
 template<typename IntV, typename FloatV>
@@ -911,45 +900,17 @@ struct mdspan_iterator_value final
 template<typename ZFloatV>
 using IntV = decltype(::getPhase(ZFloatV{}, 0.0f));
 
-// The compiler can sometimes do better optimization with fixed-size structures.
 template<typename ZFloatV>
-auto six::sicd::NearestNeighbors::nearest_neighbors_unseq_T(std::span<const zfloat> p) const // TODO: std::span<T, N> ... ?
+auto six::sicd::NearestNeighbors::nearest_neighbors_unseq_T(std::span<const zfloat> p) const // TODO: std::span<T, N> ... ?  The compiler can sometimes do better optimization with fixed-size structures.
 {
     ZFloatV v;
     assert(p.size() == size(v));
-
     copy_from(p, v);
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(v); i++)
-    {
-        //const auto z = p[i];
-        //assert(real(v)[i] == z.real());
-        //assert(imag(v)[i] == z.imag());
-    }
-    #endif
 
     using intv_t = IntV<ZFloatV>;
     AMP8I_PHS8I_unseq<intv_t> retval;
-
     retval.phase = ::getPhase(v, converter_.phase_delta());
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(retval.phase); i++)
-    {
-        const auto phase_ = converter_.getPhase(p[i]);
-        assert(static_cast<uint8_t>(retval.phase[i]) == phase_);
-    }
-    #endif
-
     retval.amplitude = lookup_and_find_nearest(converter_, retval.phase, v);
-    #if CODA_OSS_DEBUG
-    for (int i = 0; i < ssize(retval.amplitude); i++)
-    {
-        const auto i_ = retval.phase[i];
-        const auto& phase_directions = converter_.get_phase_directions().value;
-        const auto a = find_nearest(phase_directions[i_], p[i]);
-        assert(a == retval.amplitude[i]);
-    }
-    #endif
 
     return retval;
 }
