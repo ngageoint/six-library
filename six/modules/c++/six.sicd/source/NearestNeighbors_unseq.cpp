@@ -898,10 +898,11 @@ struct mdspan_iterator_value final
     mdspan_iterator_value(std::span<AMP8I_PHS8I> s) : p_(s) {}
     mdspan_iterator_value& operator=(const AMP8I_PHS8I_unseq<IntV>& other) {
         //assert(p_.size() <= size(other.amplitude));
-        for (int i = 0; i < p_.size(); i++)
+        for (size_t i = 0; i < p_.size(); i++)
         {
-            p_[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i]);
-            p_[i].phase = gsl::narrow<uint8_t>(other.phase[i]);
+	    const auto i_ = gsl::narrow<ptrdiff_t>(i);
+            p_[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i_]);
+            p_[i].phase = gsl::narrow<uint8_t>(other.phase[i_]);
         }
         return *this;
     }
