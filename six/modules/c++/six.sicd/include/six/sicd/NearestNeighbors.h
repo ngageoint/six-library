@@ -69,8 +69,8 @@ private:
     uint8_t getPhase(six::zfloat) const;
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    template<typename ZFloatV, size_t N>
-    auto nearest_neighbors_unseq_T(const std::array<const zfloat, N>&) const; // TODO: std::span<T, N> ... ?
+    template<typename ZFloatV>
+    auto nearest_neighbors_unseq_T(std::span<const zfloat> p) const; // TODO: std::span<T, N> ... ?
     template<typename ZFloatV, int elements_per_iteration>
     void nearest_neighbors_unseq_(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
