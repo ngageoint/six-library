@@ -900,7 +900,7 @@ struct mdspan_iterator_value final
         //assert(p_.size() <= size(other.amplitude));
         for (size_t i = 0; i < p_.size(); i++)
         {
-	    const auto i_ = gsl::narrow<ptrdiff_t>(i);
+	    const auto i_ = gsl::narrow<int>(i);
             p_[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i_]);
             p_[i].phase = gsl::narrow<uint8_t>(other.phase[i_]);
         }
