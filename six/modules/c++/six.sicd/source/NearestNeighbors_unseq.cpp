@@ -61,17 +61,14 @@ using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 #pragma warning(pop)
 #endif
 
-using vcl_intv = vcl::Vec<8, int32_t>; 
-using vcl_floatv = vcl::Vec<8, float>;
-constexpr auto vcl_elements_per_iteration = vcl_floatv::size();
+constexpr auto vcl_elements_per_iteration = 8;
+using vcl_intv = vcl::Vec<vcl_elements_per_iteration, int32_t>;
+using vcl_floatv = vcl::Vec<vcl_elements_per_iteration, float>;
 
-inline int ssize(const vcl_intv& z) noexcept
+template<size_t N, typename T>
+inline ptrdiff_t ssize(const vcl::Vec<N, T>& v) noexcept
 {
-    return z.size();
-}
-inline int ssize(const vcl_floatv& z) noexcept
-{
-    return z.size();
+    return v.size();
 }
 
 using vcl_zfloatv = vcl::Complex8f;
@@ -90,13 +87,6 @@ inline size_t size(const vcl_zfloatv& z) noexcept
 inline int ssize(const vcl_zfloatv& z) noexcept
 {
     return z.size();
-}
-
-inline auto arg(const vcl_zfloatv& z)
-{
-    // https://en.cppreference.com/w/cpp/numeric/complex/arg
-    // > `std::atan2(std::imag(z), std::real(z))`
-    return atan2(z.imag(), z.real()); // arg()
 }
 
 template<typename T>
@@ -154,9 +144,9 @@ using ximd_floatv_mask = six::ximd::ximd_mask;
 constexpr auto ximd_elements_per_iteration = ximd_floatv::size();
 
 template<typename T>
-static inline auto ssize(const ximd<T>& v) noexcept
+static inline ptrdiff_t ssize(const ximd<T>& v) noexcept
 {
-    return gsl::narrow<int>(v.size());
+    return gsl::narrow<ptrdiff_t>(v.size());
 }
 
 template <typename TGenerator>
@@ -194,16 +184,9 @@ inline size_t size(const ximd_zfloatv& z) noexcept
     assert(retval == imag(z).size());
     return retval;
 }
-inline auto ssize(const ximd_zfloatv& z) noexcept
+inline ptrdiff_t ssize(const ximd_zfloatv& z) noexcept
 {
-    return gsl::narrow<int>(size(z));
-}
-
-inline auto arg(const ximd_zfloatv& z)
-{
-    // https://en.cppreference.com/w/cpp/numeric/complex/arg
-    // > `std::atan2(std::imag(z), std::real(z))`
-    return atan2(imag(z), real(z));  // arg()
+    return gsl::narrow<ptrdiff_t>(size(z));
 }
 
 template <typename TGeneratorReal, typename TGeneratorImag>
@@ -312,16 +295,9 @@ inline size_t size(const simd_zfloatv& z) noexcept
     assert(retval == imag(z).size());
     return retval;
 }
-inline auto ssize(const simd_zfloatv& z) noexcept
+inline ptrdiff_t ssize(const simd_zfloatv& z) noexcept
 {
-    return gsl::narrow<int>(size(z));
-}
-
-inline auto arg(const simd_zfloatv& z)
-{
-    // https://en.cppreference.com/w/cpp/numeric/complex/arg
-    // > `std::atan2(std::imag(z), std::real(z))`
-    return atan2(imag(z), real(z));  // arg()
+    return gsl::narrow<ptrdiff_t>(size(z));
 }
 
 template <typename TGeneratorReal, typename TGeneratorImag>
@@ -485,6 +461,14 @@ static inline auto lookup(const simd_intv& zindex, std::span<const float> magnit
 
 /******************************************************************************************************/
 
+template<typename TZFloatV>
+inline auto arg(const TZFloatV& z)
+{
+    // https://en.cppreference.com/w/cpp/numeric/complex/arg
+    // > `std::atan2(std::imag(z), std::real(z))`
+    return atan2(imag(z), real(z));
+}
+
 template<typename ZFloatV>
 static auto getPhase(const ZFloatV& v, float phase_delta)
 {
@@ -497,34 +481,8 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
 }
 
 // https://en.cppreference.com/w/cpp/algorithm/lower_bound
-/*
-template<class ForwardIt, class T>
-ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
-{
-    ForwardIt it;
-    typename std::iterator_traits<ForwardIt>::difference_type count, step;
-    count = std::distance(first, last);
-
-    while (count > 0)
-    {
-        it = first;
-        step = count / 2;
-        std::advance(it, step);
-
-        if (*it < value)
-        {
-            first = ++it;
-            count -= step + 1;
-        }
-        else
-            count = step;
-    }
-
-    return first;
-}
-*/
 template<typename IntV, typename FloatV>
-inline auto lower_bound_(std::span<const float> magnitudes, const FloatV& v)
+inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
 {
     IntV first = 0;
     const IntV last = gsl::narrow<int>(magnitudes.size());
@@ -543,41 +501,29 @@ inline auto lower_bound_(std::span<const float> magnitudes, const FloatV& v)
         const auto test = c < v;
         it = select(test, next, it); // ... ++it
         first = select(test, it, first); // first = ...
-        count = select(test, advance, step); // count -= step + 1 <...OR...> count = step
+        count = select(test, advance, step); // `count -= step + 1` —<OR>— `count = step`
     }
     return first;
 }
-template<typename IntV, typename FloatV>
-inline auto lower_bound(std::span<const float> magnitudes, const FloatV& value)
-{
-    return lower_bound_<IntV>(magnitudes, value);
-}
 
+/*!
+ * Find the nearest element given an iterator range.
+ * @param value query value
+ * @return index of nearest value within the iterator range.
+ */
 template<typename IntV, typename FloatV>
 static auto nearest(std::span<const float> magnitudes, const FloatV& value)
 {
+    // see `::nearest()` in **NearestNeighbors.cpp**
     assert(magnitudes.size() == six::AmplitudeTableSize);
 
-    /*
-        const auto it = std::lower_bound(begin, end, value);
-        if (it == begin) return 0;
-
-        const auto prev_it = std::prev(it);
-        const auto nearest_it = it == end ? prev_it  :
-            (value - *prev_it <= *it - value ? prev_it : it);
-        const auto distance = std::distance(begin, nearest_it);
-        assert(distance <= std::numeric_limits<uint8_t>::max());
-        return gsl::narrow<uint8_t>(distance);
-    */
     const auto it = ::lower_bound<IntV>(magnitudes, value);
     const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
 
     const auto v0 = value - lookup(prev_it, magnitudes); // value - *prev_it
     const auto v1 = lookup(it, magnitudes) - value; // *it - value
-    //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
-    
+
     const IntV end = gsl::narrow<int>(magnitudes.size());
-    //const auto end_test = select(it == end, prev_it, nearest_it); // it == end ? prev_it  : ...
     const IntV zero = 0;
     auto retval = select(it == 0, zero, // if (it == begin) return 0;
         select(it == end, prev_it,  // it == end ? prev_it  : ...
