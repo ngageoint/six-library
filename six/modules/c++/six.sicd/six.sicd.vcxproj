@@ -144,7 +144,7 @@
     <ClInclude Include="include\six\sicd\Timeline.h" />
     <ClInclude Include="include\six\sicd\Utilities.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="source\Ximd.h" />
+    <ClInclude Include="source\unseq_Ximd.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
