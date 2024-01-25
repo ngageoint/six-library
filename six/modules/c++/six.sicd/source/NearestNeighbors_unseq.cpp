@@ -54,23 +54,21 @@ using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 #pragma warning(disable: 4723) // potential divide by 0
 #endif
 #include "six/sicd/vectorclass/version2/vectorclass.h"
+#include "six/sicd/vectorclass/version2/vector.h"
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 #if _MSC_VER
 #pragma warning(pop)
 #endif
 
-using vcl_intv = vcl::Vec8i; 
-using vcl_floatv = vcl::Vec8f;
-constexpr auto vcl_elements_per_iteration = vcl_floatv::size();
+constexpr auto vcl_elements_per_iteration = 8;
+using vcl_intv = vcl::Vec<vcl_elements_per_iteration, int32_t>;
+using vcl_floatv = vcl::Vec<vcl_elements_per_iteration, float>;
 
-inline int ssize(const vcl_intv& z) noexcept
+template<size_t N, typename T>
+inline ptrdiff_t ssize(const vcl::Vec<N, T>& v) noexcept
 {
-    return z.size();
-}
-inline int ssize(const vcl_floatv& z) noexcept
-{
-    return z.size();
+    return v.size();
 }
 
 using vcl_zfloatv = vcl::Complex8f;
@@ -89,13 +87,6 @@ inline size_t size(const vcl_zfloatv& z) noexcept
 inline int ssize(const vcl_zfloatv& z) noexcept
 {
     return z.size();
-}
-
-inline auto arg(const vcl_zfloatv& z)
-{
-    // https://en.cppreference.com/w/cpp/numeric/complex/arg
-    // > `std::atan2(std::imag(z), std::real(z))`
-    return atan2(z.imag(), z.real()); // arg()
 }
 
 template<typename T>
@@ -135,219 +126,39 @@ inline auto lookup(const vcl_intv& zindex, std::span<const float> magnitudes)
 
 #endif // SIX_sicd_has_VCL
 
-#if SIX_sicd_has_valarray
-#include <valarray>
-
-using valarray_intv = std::valarray<int>;
-using valarray_intv_mask = std::valarray<bool>;
-
-using valarray_floatv = std::valarray<float>;
-using valarray_floatv_mask = std::valarray<bool>;
-
-constexpr auto valarray_elements_per_iteration = 4; // valarray is not fixed size
-
-template<typename T>
-static inline auto ssize(const std::valarray<T>& v) noexcept
-{
-    return gsl::narrow<int>(v.size());
-}
-
-template <typename TValArray, typename G>
-static auto valarray_generate(G&& generator) noexcept
-{
-    TValArray retval(valarray_elements_per_iteration);
-    for (size_t i = 0; i < retval.size(); i++)
-    {
-        retval[i] = generator(i);
-    }
-    return retval;
-}
-template <typename TGenerator>
-static inline auto generate(TGenerator&& generator, valarray_intv)
-{
-    return valarray_generate<valarray_intv>(generator);
-}
-template <typename TGenerator>
-static inline auto generate(TGenerator&& generator, valarray_floatv)
-{
-    return valarray_generate<valarray_floatv>(generator);
-}
-
-// Manage a SIMD complex as an array of two SIMDs
-using valarray_zfloatv = std::array<valarray_floatv, 2>;
-inline auto& real(valarray_zfloatv& z) noexcept
-{
-    return z[0];
-}
-inline const auto& real(const valarray_zfloatv& z) noexcept
-{
-    return z[0];
-}
-inline auto& imag(valarray_zfloatv& z) noexcept
-{
-    return z[1];
-}
-inline const auto& imag(const valarray_zfloatv& z) noexcept
-{
-    return z[1];
-}
-inline size_t size(const valarray_zfloatv& z) noexcept
-{
-    auto retval = real(z).size();
-    assert(retval == imag(z).size());
-    return retval;
-}
-inline auto ssize(const valarray_zfloatv& z) noexcept
-{
-    return gsl::narrow<int>(size(z));
-}
-
-inline auto arg(const valarray_zfloatv& z)
-{
-    // https://en.cppreference.com/w/cpp/numeric/complex/arg
-    // > `std::atan2(std::imag(z), std::real(z))`
-    return std::atan2(imag(z), real(z));  // arg()
-}
-
-template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, valarray_zfloatv)
-{
-    valarray_zfloatv retval;
-    real(retval) = generate(generate_real, valarray_floatv{});
-    imag(retval) = generate(generate_imag, valarray_floatv{});
-    return retval;
-}
-
-static inline auto copy_from(std::span<const float> p, valarray_floatv& result)
-{
-    assert(p.size() == result.size());
-    result = valarray_floatv(p.data(), p.size());
-}
-static inline auto copy_from(std::span<const zfloat> p, valarray_zfloatv& result)
-{
-    const auto generate_real = [&](size_t i) { return p[i].real(); };
-    const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = generate(generate_real, generate_imag, valarray_zfloatv{});
-}
-
-template<typename TTest, typename TResult>
-static auto valarray_select_(const TTest& test, const TResult& t, const TResult& f)
-{
-    TResult retval;
-    for (size_t i = 0; i < test.size(); i++)
-    {
-        retval[i] = test[i] ? t[i] : f[i];
-    }
-    return retval;
-}
-static inline auto select(const valarray_floatv_mask& test, const  valarray_floatv& t, const  valarray_floatv& f)
-{
-    return valarray_select_(test, t, f);
-}
-static inline auto select(const valarray_intv_mask& test, const  valarray_intv& t, const  valarray_intv& f)
-{
-    return valarray_select_(test, t, f);
-}
-
-static auto if_add(const valarray_floatv_mask& m, const valarray_floatv& v, typename valarray_floatv::value_type c)
-{
-    const auto generate_add = [&](size_t i) {
-        return m[i] ? v[i] + c : v[i];
-    };
-    return generate(generate_add, valarray_floatv{});
-}
-
-#endif // SIX_sicd_has_valarray
-
 #if SIX_sicd_has_ximd
-#ifndef CODA_OSS_Ximd_ENABLE
-#define CODA_OSS_Ximd_ENABLE 1
+#ifndef SIX_Ximd_ENABLED
+#define SIX_Ximd_ENABLED 1
 #endif
-#include <sys/Ximd.h>
+#include "unseq_Ximd.h"
 
 template<typename T>
-using ximd = sys::ximd::Ximd<T>;
+using ximd = six::ximd::Ximd<T>;
 
 using ximd_intv = ximd<int>;
-using ximd_intv_mask = sys::ximd::ximd_mask;
+using ximd_intv_mask = six::ximd::ximd_mask;
 
 using ximd_floatv = ximd<float>;
-using ximd_floatv_mask = sys::ximd::ximd_mask;
+using ximd_floatv_mask = six::ximd::ximd_mask;
 
 constexpr auto ximd_elements_per_iteration = ximd_floatv::size();
 
 template<typename T>
-static inline auto ssize(const ximd<T>& v) noexcept
+static inline ptrdiff_t ssize(const ximd<T>& v) noexcept
 {
-    return gsl::narrow<int>(v.size());
+    return gsl::narrow<ptrdiff_t>(v.size());
 }
 
-template <typename TGenerator>
-static inline auto generate(TGenerator&& generator, ximd_intv)
+template<typename TGenerator, typename T>
+static inline auto generate(TGenerator&& generator, ximd<T>)
 {
-    return ximd_intv::generate(generator);
-}
-template <typename TGenerator>
-static inline auto generate(TGenerator&& generator, ximd_floatv)
-{
-    return ximd_floatv::generate(generator);
-}
-
-// Manage a SIMD complex as an array of two SIMDs
-using ximd_zfloatv = std::array<ximd_floatv, 2>;
-inline auto& real(ximd_zfloatv& z) noexcept
-{
-    return z[0];
-}
-inline const auto& real(const ximd_zfloatv& z) noexcept
-{
-    return z[0];
-}
-inline auto& imag(ximd_zfloatv& z) noexcept
-{
-    return z[1];
-}
-inline const auto& imag(const ximd_zfloatv& z) noexcept
-{
-    return z[1];
-}
-inline size_t size(const ximd_zfloatv& z) noexcept
-{
-    auto retval = real(z).size();
-    assert(retval == imag(z).size());
-    return retval;
-}
-inline auto ssize(const ximd_zfloatv& z) noexcept
-{
-    return gsl::narrow<int>(size(z));
-}
-
-inline auto arg(const ximd_zfloatv& z)
-{
-    // https://en.cppreference.com/w/cpp/numeric/complex/arg
-    // > `std::atan2(std::imag(z), std::real(z))`
-    return atan2(imag(z), real(z));  // arg()
-}
-
-template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, ximd_zfloatv)
-{
-    ximd_zfloatv retval;
-    real(retval) = generate(generate_real, ximd_floatv{});
-    imag(retval) = generate(generate_imag, ximd_floatv{});
-    return retval;
+    return ximd<T>(generator, nullptr);
 }
 
 static inline void copy_from(std::span<const float> p, ximd_floatv& result)
 {
     assert(p.size() == result.size());
     result.copy_from(p.data());
-}
-static inline void copy_from(std::span<const zfloat> p, ximd_zfloatv& result)
-{
-    const auto generate_real = [&](size_t i) { return p[i].real(); };
-    const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = generate(generate_real, generate_imag, ximd_zfloatv{});
 }
 
 template<typename TTest, typename TResult>
@@ -400,75 +211,16 @@ static inline auto ssize(const simd<T>& v) noexcept
     return gsl::narrow<int>(v.size());
 }
 
-template <typename TGenerator>
-static inline auto generate(TGenerator&& generator, simd_intv)
+template<typename TGenerator, typename T>
+static inline auto generate(TGenerator&& generator, simd<T>)
 {
-    return simd_intv(generator);
-}
-template <typename TGenerator>
-static inline auto generate(TGenerator&& generator, simd_floatv)
-{
-    return simd_floatv(generator);
-}
-
-// Manage a SIMD complex as an array of two SIMDs
-using simd_zfloatv = std::array<simd_floatv, 2>;
-inline auto& real(simd_zfloatv& z) noexcept
-{
-    return z[0];
-}
-inline const auto& real(const simd_zfloatv& z) noexcept
-{
-    return z[0];
-}
-inline auto& imag(simd_zfloatv& z) noexcept
-{
-    return z[1];
-}
-inline const auto& imag(const simd_zfloatv& z) noexcept
-{
-    return z[1];
-}
-inline size_t size(const simd_zfloatv& z) noexcept
-{
-    auto retval = real(z).size();
-    assert(retval == imag(z).size());
-    return retval;
-}
-inline auto ssize(const simd_zfloatv& z) noexcept
-{
-    return gsl::narrow<int>(size(z));
-}
-
-inline auto arg(const simd_zfloatv& z)
-{
-    // https://en.cppreference.com/w/cpp/numeric/complex/arg
-    // > `std::atan2(std::imag(z), std::real(z))`
-    return atan2(imag(z), real(z));  // arg()
-}
-
-template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, simd_zfloatv)
-{
-    simd_zfloatv retval;
-    for (size_t i = 0; i < size(retval); i++)
-    {
-        real(retval)[i] = generate_real(i);
-        imag(retval)[i] = generate_imag(i);
-    }
-    return retval;
+    return simd<T>(generator);
 }
 
 static inline auto copy_from(std::span<const float> p, simd_floatv& result)
 {
     assert(p.size() == result.size());
     result.copy_from(p.data(), stdx::element_aligned);
-}
-static inline auto copy_from(std::span<const zfloat> p, simd_zfloatv& result)
-{
-    const auto generate_real = [&](size_t i) { return p[i].real(); };
-    const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = generate(generate_real, generate_imag, simd_zfloatv{});
 }
 
 template<typename TTest, typename TResult>
@@ -499,9 +251,67 @@ static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_i
 #endif // SIX_sicd_has_simd
 
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
+// Manage a SIMD complex as an array of two SIMDs
+template<typename FloatV>
+using zfloatv = std::array<FloatV, 2>;
+
+template<typename FloatV>
+inline auto& real(zfloatv<FloatV>& z) noexcept
+{
+    return z[0];
+}
+template<typename FloatV>
+inline const auto& real(const zfloatv<FloatV>& z) noexcept
+{
+    return z[0];
+}
+template<typename FloatV>
+inline auto& imag(zfloatv<FloatV>& z) noexcept
+{
+    return z[1];
+}
+template<typename FloatV>
+inline const auto& imag(const zfloatv<FloatV>& z) noexcept
+{
+    return z[1];
+}
+template<typename FloatV>
+inline size_t size(const zfloatv<FloatV>& z) noexcept
+{
+    auto retval = real(z).size();
+    assert(retval == imag(z).size());
+    return retval;
+}
+template<typename FloatV>
+inline ptrdiff_t ssize(const zfloatv<FloatV>& z) noexcept
+{
+    return gsl::narrow<ptrdiff_t>(size(z));
+}
+#if SIX_sicd_has_ximd
+using ximd_zfloatv = zfloatv<ximd_floatv>;
+#endif
+#if SIX_sicd_has_simd
+using simd_zfloatv = zfloatv<simd_floatv>;
+#endif
+
+template <typename FloatV,
+    typename TGeneratorReal, typename TGeneratorImag>
+static inline void zgenerate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, zfloatv<FloatV>& result)
+{
+    real(result) = generate(generate_real, FloatV{});
+    imag(result) = generate(generate_imag, FloatV{});
+}
+
+template<typename FloatV>
+static inline void copy_from(std::span<const zfloat> mem, zfloatv<FloatV>& result)
+{
+    const auto generate_real = [&](size_t i) { return mem[i].real(); };
+    const auto generate_imag = [&](size_t i) { return mem[i].imag(); };
+    zgenerate(generate_real, generate_imag, result);
+}
 
 // There are slicker ways of doing this, but `std::enable_if` is complex.  This
-// is simple and easy to understand.  Simplify with concedpts in C++20?
+// is simple and easy to understand.  Simplify with concepts in C++20?
 
 template<typename IntV, typename FloatV>
 static auto roundi_(const FloatV& v)  // match vcl::roundi()
@@ -560,15 +370,10 @@ static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_direc
         const auto i_ = zindex[i];
         return phase_directions[i_].imag();
     };
-    return generate(generate_real, generate_imag, ZFloatV{});
+    ZFloatV retval;
+    zgenerate(generate_real, generate_imag, retval);
+    return retval;
 }
-#if SIX_sicd_has_valarray
-template<size_t N>
-static inline auto lookup(const valarray_intv& zindex, const std::array<zfloat, N>& phase_directions)
-{
-    return lookup_<valarray_zfloatv>(zindex, phase_directions);
-}
-#endif
 #if SIX_sicd_has_ximd
 template<size_t N>
 static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& phase_directions)
@@ -616,6 +421,14 @@ static inline auto lookup(const simd_intv& zindex, std::span<const float> magnit
 /******************************************************************************************************/
 
 template<typename ZFloatV>
+inline auto arg(const ZFloatV& z)
+{
+    // https://en.cppreference.com/w/cpp/numeric/complex/arg
+    // > `std::atan2(std::imag(z), std::real(z))`
+    return atan2(imag(z), real(z));
+}
+
+template<typename ZFloatV>
 static auto getPhase(const ZFloatV& v, float phase_delta)
 {
     // Phase is determined via arithmetic because it's equally spaced.
@@ -627,34 +440,8 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
 }
 
 // https://en.cppreference.com/w/cpp/algorithm/lower_bound
-/*
-template<class ForwardIt, class T>
-ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
-{
-    ForwardIt it;
-    typename std::iterator_traits<ForwardIt>::difference_type count, step;
-    count = std::distance(first, last);
-
-    while (count > 0)
-    {
-        it = first;
-        step = count / 2;
-        std::advance(it, step);
-
-        if (*it < value)
-        {
-            first = ++it;
-            count -= step + 1;
-        }
-        else
-            count = step;
-    }
-
-    return first;
-}
-*/
 template<typename IntV, typename FloatV>
-inline auto lower_bound_(std::span<const float> magnitudes, const FloatV& v)
+inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
 {
     IntV first = 0;
     const IntV last = gsl::narrow<int>(magnitudes.size());
@@ -673,41 +460,29 @@ inline auto lower_bound_(std::span<const float> magnitudes, const FloatV& v)
         const auto test = c < v;
         it = select(test, next, it); // ... ++it
         first = select(test, it, first); // first = ...
-        count = select(test, advance, step); // count -= step + 1 <...OR...> count = step
+        count = select(test, advance, step); // `count -= step + 1` —<OR>— `count = step`
     }
     return first;
 }
-template<typename IntV, typename FloatV>
-inline auto lower_bound(std::span<const float> magnitudes, const FloatV& value)
-{
-    return lower_bound_<IntV>(magnitudes, value);
-}
 
+/*!
+ * Find the nearest element given an iterator range.
+ * @param value query value
+ * @return index of nearest value within the iterator range.
+ */
 template<typename IntV, typename FloatV>
 static auto nearest(std::span<const float> magnitudes, const FloatV& value)
 {
+    // see `::nearest()` in **NearestNeighbors.cpp**
     assert(magnitudes.size() == six::AmplitudeTableSize);
 
-    /*
-        const auto it = std::lower_bound(begin, end, value);
-        if (it == begin) return 0;
-
-        const auto prev_it = std::prev(it);
-        const auto nearest_it = it == end ? prev_it  :
-            (value - *prev_it <= *it - value ? prev_it : it);
-        const auto distance = std::distance(begin, nearest_it);
-        assert(distance <= std::numeric_limits<uint8_t>::max());
-        return gsl::narrow<uint8_t>(distance);
-    */
     const auto it = ::lower_bound<IntV>(magnitudes, value);
     const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
 
     const auto v0 = value - lookup(prev_it, magnitudes); // value - *prev_it
     const auto v1 = lookup(it, magnitudes) - value; // *it - value
-    //const auto nearest_it = select(v0 <= v1, prev_it, it); //  (value - *prev_it <= *it - value ? prev_it : it);
-    
+
     const IntV end = gsl::narrow<int>(magnitudes.size());
-    //const auto end_test = select(it == end, prev_it, nearest_it); // it == end ? prev_it  : ...
     const IntV zero = 0;
     auto retval = select(it == 0, zero, // if (it == begin) return 0;
         select(it == end, prev_it,  // it == end ? prev_it  : ...
@@ -739,39 +514,15 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
     return ::find_nearest<vcl_intv>(converter.magnitudes(), phase_direction_real, phase_direction_imag, v);
 }
 #endif
-
-#if SIX_sicd_has_valarray
-static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
-    const valarray_intv& phase, const  valarray_zfloatv& v)
-{
-    const auto phase_direction = lookup(phase, converter.get_phase_directions().value);
-    return ::find_nearest<valarray_intv>(converter.magnitudes(), real(phase_direction), imag(phase_direction), v);
-}
-#endif
-
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
-template<typename IntV, typename ZFloatV>
-static auto lookup_and_find_nearest_(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
-    const IntV& phase, const  ZFloatV& v)
+template<typename IntV, typename FloatV>
+static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
+    const IntV& phase, const zfloatv<FloatV>& v)
 {
     const auto& phase_directions = converter.get_phase_directions().value;
     const auto phase_direction = lookup(phase, phase_directions);
     return ::find_nearest<IntV>(converter.magnitudes(), real(phase_direction), imag(phase_direction), v);
 }
-#if SIX_sicd_has_ximd
-static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
-    const ximd_intv& phase, const  ximd_zfloatv& v)
-{
-    return lookup_and_find_nearest_(converter, phase, v);
-}
-#endif
-#if SIX_sicd_has_simd
-static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
-    const simd_intv& phase, const  simd_zfloatv& v)
-{
-    return lookup_and_find_nearest_(converter, phase, v);
-}
-#endif
 #endif
 
 #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
@@ -977,9 +728,6 @@ static const std::string unseq_simd = "simd";
 #if SIX_sicd_has_VCL
 static const std::string unseq_vcl = "vcl";
 #endif
-#if SIX_sicd_has_valarray
-static const std::string unseq_valarray = "valarray";
-#endif
 #if SIX_sicd_has_ximd
 static const std::string unseq_ximd = "ximd";
 #endif
@@ -988,8 +736,6 @@ static std::string nearest_neighbors_unseq_ =
 unseq_simd;
 #elif SIX_sicd_has_VCL
 unseq_vcl;
-#elif SIX_sicd_has_valarray
-unseq_valarray;
 #elif SIX_sicd_has_ximd
 unseq_ximd;
 #else
@@ -1024,31 +770,39 @@ void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
         return nearest_neighbors_T<vcl_zfloatv, vcl_elements_per_iteration>(policy, inputs, results);
     }
     #endif
-    #if SIX_sicd_has_valarray
-    if (unseq == unseq_valarray)
-    {
-        return nearest_neighbors_T<valarray_zfloatv, valarray_elements_per_iteration>(policy, inputs, results);
-    }
-    #endif
     #if SIX_sicd_has_ximd
+    // XIMD is a hack just for development, it shouldn't normally be enabled
+    // for a release build; only use it for debug.
     if (unseq == unseq_ximd)
     {
+        #if CODA_OSS_DEBUG
+        // The XIMD implementations are dramatically slower when running unittests;
+        // that's mostly because there's lots of IO. This is the  "more interesting" code path.
         return nearest_neighbors_T<ximd_zfloatv, ximd_elements_per_iteration>(policy, inputs, results);
+
+        #else
+        // Use the corresponding "regular" (not UNSEQ) policy, this is either "par" or "seq".
+        if (policy == execution_policy::par_unseq)
+        {
+            return nearest_neighbors_par(inputs, results);
+        }
+        if (policy == execution_policy::unseq)
+        {
+            return nearest_neighbors_seq(inputs, results);
+        }
+        // We shouldn't be here otherwise; throw the exception, below.
+        #endif // CODA_OSS_DEBUG
     }
-    #endif
+    #endif // SIX_sicd_has_ximd
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_() for unseq=" + unseq);
 }
 void six::sicd::NearestNeighbors::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    // TODO: there could be more complicated logic here to determine which UNSEQ
-    // implementation to use.
     nearest_neighbors_(execution_policy::unseq, inputs, results);
 }
 void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    // TODO: there could be more complicated logic here to determine which UNSEQ
-    // implementation to use.
     nearest_neighbors_(execution_policy::par_unseq, inputs, results);
 }
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq

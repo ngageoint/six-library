@@ -33,21 +33,22 @@
  *
  */
 
-#include "Dbg.h"
+#include "sys/Dbg.h"
 
 // This is intended for development/testing purposes, so enable by default only for debug.
-#ifndef CODA_OSS_Ximd_ENABLED
-#define CODA_OSS_Ximd_ENABLED CODA_OSS_DEBUG
+#ifndef SIX_Ximd_ENABLED
+#define SIX_Ximd_ENABLED CODA_OSS_DEBUG
 #endif
 
-#if CODA_OSS_Ximd_ENABLED
+#if SIX_Ximd_ENABLED
 
 #include <array>
 #include <type_traits>
 #include <functional>
 #include <cmath>
+#include <memory>
 
-namespace sys
+namespace six
 {
 namespace ximd
 {
@@ -95,7 +96,7 @@ struct Ximd final
         return retval;
     }
     template <typename G>
-    explicit Ximd(G&& generator, nullptr_t) noexcept
+    explicit Ximd(G&& generator, std::nullptr_t) noexcept
     {
         *this = generate(generator);
     }

@@ -84,8 +84,13 @@ inline OutputIt Transform_par(InputIt first1, InputIt last1, OutputIt d_first, U
     Transform_par_settings settings = Transform_par_settings{})
 {
 #if CODA_OSS_mt_Algorithm_has_execution
-    CODA_OSS_mark_symbol_unused(settings);
-    return std::transform(std::execution::par, first1, last1, d_first, unary_op);
+    #if __GNUC__
+        // std::execution::par is dramatically slower w/GCC than using our own ... ???
+        return Transform_par_(first1, last1, d_first, unary_op, settings); // TODO: std::execution::par
+    #else
+        CODA_OSS_mark_symbol_unused(settings);
+        return std::transform(std::execution::par, first1, last1, d_first, unary_op);
+    #endif // __GNUC__
 #else
     return Transform_par_(first1, last1, d_first, unary_op, settings);
 #endif // CODA_OSS_mt_Algorithm_has_execution
