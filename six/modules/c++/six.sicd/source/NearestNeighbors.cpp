@@ -106,21 +106,11 @@ void six::sicd::NearestNeighbors::nearest_neighbors_par(std::span<const zfloat> 
 
 void six::sicd::NearestNeighbors::nearest_neighbors(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
-    // TODO: there could be more complicated logic here to decide between
-    // _seq, _par, _unseq, and _par_unseq
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-
-    // None of our SIMD implementations are dramatically slower when
-    // running unittests; that's mostly because there's lots of IO.  So that
-    // the more interesting code-path is tested, use UNSEQ in debugging.
-    #if CODA_OSS_DEBUG
-    return nearest_neighbors_unseq(inputs, results); // TODO:
-    #else
-    return nearest_neighbors_par(inputs, results);
-    #endif
+    return nearest_neighbors_par_unseq(inputs, results); // there might be additional logic here
 
     #else
-    return nearest_neighbors_par(inputs, results);
+    return nearest_neighbors_par(inputs, results);     // No SIMD support, use parallel
 
     #endif
 }
@@ -152,7 +142,7 @@ void six::sicd::NearestNeighbors::nearest_neighbors(execution_policy policy, std
     #if CODA_OSS_DEBUG
     throw std::logic_error("Unhandled execution_policy value.");
     #else
-    return nearest_neighbors(inputs, results); // no policy specified, "default policy"
+    return nearest_neighbors_seq(inputs, results); // "... fall back to sequential execution."
     #endif
 }
 
