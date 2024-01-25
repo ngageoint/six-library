@@ -188,7 +188,7 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
             #define SIX_sicd_has_VCL 1
             #endif
         #else
-        #define SIX_sicd_has_VCL 0
+            #define SIX_sicd_has_VCL 0
         #endif // __has_include
     #endif // C++17
 #endif

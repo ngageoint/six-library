@@ -123,7 +123,7 @@ namespace VCL_NAMESPACE {
     // Vec<8, int32_t> == Vec8i
     // https://github.com/vectorclass/manual/raw/master/vcl_manual.pdf
     template <size_t elements_per_vector, typename T>
-    using Vec = VECTORCLASS_NAMESPACE_details::Vec_N_T<elements_per_vector, T>::type;  // not for `bool`
+    using Vec = typename VECTORCLASS_NAMESPACE_details::Vec_N_T<elements_per_vector, T>::type;  // not for `bool`
 
     // Template wrapper, specify size for a fixed type; e.g., Vec_i<8> == Vec8i; not for `bool`.
     template<size_t elements_per_vector> using Vec_c = Vec<elements_per_vector, int8_t>;
