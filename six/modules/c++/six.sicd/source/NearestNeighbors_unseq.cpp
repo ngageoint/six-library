@@ -149,15 +149,15 @@ static inline ptrdiff_t ssize(const ximd<T>& v) noexcept
     return gsl::narrow<ptrdiff_t>(v.size());
 }
 
-template <typename TGenerator>
+template<typename TGenerator>
 static inline auto generate(TGenerator&& generator, ximd_intv)
 {
-    return ximd_intv::generate(generator);
+    return ximd_intv(generator, nullptr);
 }
-template <typename TGenerator>
+template<typename TGenerator>
 static inline auto generate(TGenerator&& generator, ximd_floatv)
 {
-    return ximd_floatv::generate(generator);
+    return ximd_floatv(generator, nullptr);
 }
 
 // Manage a SIMD complex as an array of two SIMDs
@@ -189,25 +189,10 @@ inline ptrdiff_t ssize(const ximd_zfloatv& z) noexcept
     return gsl::narrow<ptrdiff_t>(size(z));
 }
 
-template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, ximd_zfloatv)
-{
-    ximd_zfloatv retval;
-    real(retval) = generate(generate_real, ximd_floatv{});
-    imag(retval) = generate(generate_imag, ximd_floatv{});
-    return retval;
-}
-
 static inline void copy_from(std::span<const float> p, ximd_floatv& result)
 {
     assert(p.size() == result.size());
     result.copy_from(p.data());
-}
-static inline void copy_from(std::span<const zfloat> p, ximd_zfloatv& result)
-{
-    const auto generate_real = [&](size_t i) { return p[i].real(); };
-    const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = generate(generate_real, generate_imag, ximd_zfloatv{});
 }
 
 template<typename TTest, typename TResult>
@@ -260,15 +245,15 @@ static inline auto ssize(const simd<T>& v) noexcept
     return gsl::narrow<int>(v.size());
 }
 
-template <typename TGenerator>
+template<typename TGenerator>
 static inline auto generate(TGenerator&& generator, simd_intv)
 {
-    return simd_intv(generator);
+    return ximd_intv(generator);
 }
-template <typename TGenerator>
+template<typename TGenerator>
 static inline auto generate(TGenerator&& generator, simd_floatv)
 {
-    return simd_floatv(generator);
+    return ximd_floatv(generator);
 }
 
 // Manage a SIMD complex as an array of two SIMDs
@@ -300,28 +285,10 @@ inline ptrdiff_t ssize(const simd_zfloatv& z) noexcept
     return gsl::narrow<ptrdiff_t>(size(z));
 }
 
-template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, simd_zfloatv)
-{
-    simd_zfloatv retval;
-    for (size_t i = 0; i < size(retval); i++)
-    {
-        real(retval)[i] = generate_real(i);
-        imag(retval)[i] = generate_imag(i);
-    }
-    return retval;
-}
-
 static inline auto copy_from(std::span<const float> p, simd_floatv& result)
 {
     assert(p.size() == result.size());
     result.copy_from(p.data(), stdx::element_aligned);
-}
-static inline auto copy_from(std::span<const zfloat> p, simd_zfloatv& result)
-{
-    const auto generate_real = [&](size_t i) { return p[i].real(); };
-    const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = generate(generate_real, generate_imag, simd_zfloatv{});
 }
 
 template<typename TTest, typename TResult>
@@ -354,7 +321,51 @@ static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_i
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
 
 // There are slicker ways of doing this, but `std::enable_if` is complex.  This
-// is simple and easy to understand.  Simplify with concedpts in C++20?
+// is simple and easy to understand.  Simplify with concepts in C++20?
+
+template <typename FloatV, typename ZFloatV,
+    typename TGeneratorReal, typename TGeneratorImag>
+static inline auto generatez_(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, ZFloatV)
+{
+    ZFloatV retval;
+    real(retval) = generate(generate_real, FloatV{});
+    imag(retval) = generate(generate_imag, FloatV{});
+    return retval;
+}
+#if SIX_sicd_has_ximd
+template <typename TGeneratorReal, typename TGeneratorImag>
+inline auto generatez(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, ximd_zfloatv zfv)
+{
+    return generatez_<ximd_floatv>(generate_real, generate_imag, zfv);
+}
+#endif
+#if SIX_sicd_has_simd
+template <typename TGeneratorReal, typename TGeneratorImag>
+inline auto generatez(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, simd_zfloatv zfv)
+{
+    return generatez_<simd_floatv>(generate_real, generate_imag, zfv);
+}
+#endif
+
+template<typename ZFloatV>
+static inline void copy_from_(std::span<const zfloat> mem, ZFloatV& result)
+{
+    const auto generate_real = [&](size_t i) { return mem[i].real(); };
+    const auto generate_imag = [&](size_t i) { return mem[i].imag(); };
+    result = generatez(generate_real, generate_imag, ZFloatV{});
+}
+#if SIX_sicd_has_ximd
+inline void copy_from(std::span<const zfloat> mem, ximd_zfloatv& result)
+{
+    copy_from_(mem, result);
+}
+#endif
+#if SIX_sicd_has_simd
+inline void copy_from(std::span<const zfloat> mem, simd_zfloatv& result)
+{
+    copy_from_(mem, result);
+}
+#endif
 
 template<typename IntV, typename FloatV>
 static auto roundi_(const FloatV& v)  // match vcl::roundi()
@@ -413,7 +424,7 @@ static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_direc
         const auto i_ = zindex[i];
         return phase_directions[i_].imag();
     };
-    return generate(generate_real, generate_imag, ZFloatV{});
+    return generatez(generate_real, generate_imag, ZFloatV{});
 }
 #if SIX_sicd_has_ximd
 template<size_t N>
