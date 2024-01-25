@@ -36,6 +36,9 @@
     <ClInclude Include="coda_oss\include\coda_oss\optional.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\optional_.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
     <ClInclude Include="coda_oss\include\coda_oss\span.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
@@ -358,13 +361,13 @@
       <Filter>math.poly</Filter>
     </ClInclude>
     <ClInclude Include="polygon\include\polygon\DrawPolygon.h">
-      <Filter>polygon</Filter>
+      <Filter>str\polygon</Filter>
     </ClInclude>
     <ClInclude Include="polygon\include\polygon\Intersections.h">
-      <Filter>polygon</Filter>
+      <Filter>str\polygon</Filter>
     </ClInclude>
     <ClInclude Include="polygon\include\polygon\PolygonMask.h">
-      <Filter>polygon</Filter>
+      <Filter>str\polygon</Filter>
     </ClInclude>
     <ClInclude Include="config\include\config\Exports.h">
       <Filter>config</Filter>
@@ -948,13 +951,12 @@
     <ClInclude Include="str\include\str\W1252string.h">
       <Filter>str</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
-    <ClInclude Include="tiff\include\tiff\TiffUtils.h">
-      <Filter>tiff</Filter>
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan.h">
+      <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\mdspan.h" />
-    <ClInclude Include="coda_oss\include\coda_oss\mdspan_.h" />
-    <ClInclude Include="sys\include\sys\Ximd.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan_.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -1115,7 +1117,7 @@
       <Filter>math.linear</Filter>
     </ClCompile>
     <ClCompile Include="polygon\source\PolygonMask.cpp">
-      <Filter>polygon</Filter>
+      <Filter>str\polygon</Filter>
     </ClCompile>
     <ClCompile Include="cli\source\Argument.cpp">
       <Filter>cli</Filter>
@@ -1402,9 +1404,6 @@
     <ClCompile Include="unique\source\UUID.cpp">
       <Filter>unique</Filter>
     </ClCompile>
-    <ClCompile Include="tiff\source\TiffUtils.cpp">
-      <Filter>tiff</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="config">
@@ -1442,9 +1441,6 @@
     </Filter>
     <Filter Include="math.poly">
       <UniqueIdentifier>{15f9b62f-d17e-4d84-bc34-de6fd5fbcb33}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="polygon">
-      <UniqueIdentifier>{f2544ccb-0933-44c7-af39-cd986982af3d}</UniqueIdentifier>
     </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{9050a469-23a5-4da0-92b1-a07a8e52e9fc}</UniqueIdentifier>
@@ -1499,6 +1495,9 @@
     </Filter>
     <Filter Include="coda_oss">
       <UniqueIdentifier>{59f3d9a1-06d3-4779-aef2-cc55223c3017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="str\polygon">
+      <UniqueIdentifier>{f2544ccb-0933-44c7-af39-cd986982af3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
