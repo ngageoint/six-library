@@ -139,7 +139,7 @@ inline auto lookup(const vcl_intv& zindex, std::span<const float> magnitudes)
 #ifndef SIX_Ximd_ENABLED
 #define SIX_Ximd_ENABLED 1
 #endif
-#include "Ximd.h"
+#include "unseq_Ximd.h"
 
 template<typename T>
 using ximd = six::ximd::Ximd<T>;

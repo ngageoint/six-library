@@ -138,7 +138,7 @@
     <ClInclude Include="include\six\sicd\NearestNeighbors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\Ximd.h">
+    <ClInclude Include="source\unseq_Ximd.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
