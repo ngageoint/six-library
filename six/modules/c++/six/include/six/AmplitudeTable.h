@@ -204,21 +204,14 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 #endif
 
 #ifndef SIX_sicd_has_ximd
-    // This is a "hacked up" version of std::experimental::simd using std::valarray.
+    // This is a "hacked up" version of std::experimental::simd using std::array.
     // It's primarily for development and testing: VCL needs C++17 and
     // std::experimental::simd is G++11/C++20.
     #define SIX_sicd_has_ximd CODA_OSS_DEBUG
 #endif
-#ifndef SIX_sicd_has_valarray
-    // This is the "old way" of doing things.  Note that GCC implements
-    // much of this using expresson templates which means writing
-    // generic routines must be done carefully.  Turn this on by default
-    // so that "interesting" code is executed.
-    #define SIX_sicd_has_valarray 0 // TODO: finish implementing
-#endif
 
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    #if SIX_sicd_has_VCL || SIX_sicd_has_simd || SIX_sicd_has_valarray || SIX_sicd_has_ximd
+    #if SIX_sicd_has_VCL || SIX_sicd_has_simd || SIX_sicd_has_ximd
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
     #else
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0

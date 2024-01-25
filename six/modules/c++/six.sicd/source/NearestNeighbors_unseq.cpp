@@ -53,9 +53,9 @@ using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 #pragma warning(disable: 4244) // '...': conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4723) // potential divide by 0
 #endif
-#include "six/sicd/vectorclass/version2/vectorclass.h"
-#include "six/sicd/vectorclass/version2/vectormath_trig.h"
-#include "six/sicd/vectorclass/complex/complexvec1.h"
+#include "vectorclass/version2/vectorclass.h"
+#include "vectorclass/version2/vectormath_trig.h"
+#include "vectorclass/complex/complexvec1.h"
 #if _MSC_VER
 #pragma warning(pop)
 #endif
@@ -135,144 +135,20 @@ inline auto lookup(const vcl_intv& zindex, std::span<const float> magnitudes)
 
 #endif // SIX_sicd_has_VCL
 
-#if SIX_sicd_has_valarray
-#include <valarray>
-
-using valarray_intv = std::valarray<int>;
-using valarray_intv_mask = std::valarray<bool>;
-
-using valarray_floatv = std::valarray<float>;
-using valarray_floatv_mask = std::valarray<bool>;
-
-constexpr auto valarray_elements_per_iteration = 4; // valarray is not fixed size
-
-template<typename T>
-static inline auto ssize(const std::valarray<T>& v) noexcept
-{
-    return gsl::narrow<int>(v.size());
-}
-
-template <typename TValArray, typename G>
-static auto valarray_generate(G&& generator) noexcept
-{
-    TValArray retval(valarray_elements_per_iteration);
-    for (size_t i = 0; i < retval.size(); i++)
-    {
-        retval[i] = generator(i);
-    }
-    return retval;
-}
-template <typename TGenerator>
-static inline auto generate(TGenerator&& generator, valarray_intv)
-{
-    return valarray_generate<valarray_intv>(generator);
-}
-template <typename TGenerator>
-static inline auto generate(TGenerator&& generator, valarray_floatv)
-{
-    return valarray_generate<valarray_floatv>(generator);
-}
-
-// Manage a SIMD complex as an array of two SIMDs
-using valarray_zfloatv = std::array<valarray_floatv, 2>;
-inline auto& real(valarray_zfloatv& z) noexcept
-{
-    return z[0];
-}
-inline const auto& real(const valarray_zfloatv& z) noexcept
-{
-    return z[0];
-}
-inline auto& imag(valarray_zfloatv& z) noexcept
-{
-    return z[1];
-}
-inline const auto& imag(const valarray_zfloatv& z) noexcept
-{
-    return z[1];
-}
-inline size_t size(const valarray_zfloatv& z) noexcept
-{
-    auto retval = real(z).size();
-    assert(retval == imag(z).size());
-    return retval;
-}
-inline auto ssize(const valarray_zfloatv& z) noexcept
-{
-    return gsl::narrow<int>(size(z));
-}
-
-inline auto arg(const valarray_zfloatv& z)
-{
-    // https://en.cppreference.com/w/cpp/numeric/complex/arg
-    // > `std::atan2(std::imag(z), std::real(z))`
-    return std::atan2(imag(z), real(z));  // arg()
-}
-
-template <typename TGeneratorReal, typename TGeneratorImag>
-static inline auto generate(TGeneratorReal&& generate_real, TGeneratorImag&& generate_imag, valarray_zfloatv)
-{
-    valarray_zfloatv retval;
-    real(retval) = generate(generate_real, valarray_floatv{});
-    imag(retval) = generate(generate_imag, valarray_floatv{});
-    return retval;
-}
-
-static inline auto copy_from(std::span<const float> p, valarray_floatv& result)
-{
-    assert(p.size() == result.size());
-    result = valarray_floatv(p.data(), p.size());
-}
-static inline auto copy_from(std::span<const zfloat> p, valarray_zfloatv& result)
-{
-    const auto generate_real = [&](size_t i) { return p[i].real(); };
-    const auto generate_imag = [&](size_t i) { return p[i].imag(); };
-    result = generate(generate_real, generate_imag, valarray_zfloatv{});
-}
-
-template<typename TTest, typename TResult>
-static auto valarray_select_(const TTest& test, const TResult& t, const TResult& f)
-{
-    TResult retval;
-    for (size_t i = 0; i < test.size(); i++)
-    {
-        retval[i] = test[i] ? t[i] : f[i];
-    }
-    return retval;
-}
-static inline auto select(const valarray_floatv_mask& test, const  valarray_floatv& t, const  valarray_floatv& f)
-{
-    return valarray_select_(test, t, f);
-}
-static inline auto select(const valarray_intv_mask& test, const  valarray_intv& t, const  valarray_intv& f)
-{
-    return valarray_select_(test, t, f);
-}
-
-static auto if_add(const valarray_floatv_mask& m, const valarray_floatv& v, typename valarray_floatv::value_type c)
-{
-    const auto generate_add = [&](size_t i) {
-        return m[i] ? v[i] + c : v[i];
-    };
-    return generate(generate_add, valarray_floatv{});
-}
-
-#endif // SIX_sicd_has_valarray
-
 #if SIX_sicd_has_ximd
-#ifndef CODA_OSS_Ximd_ENABLE
-#define CODA_OSS_Ximd_ENABLE 1
+#ifndef SIX_Ximd_ENABLED
+#define SIX_Ximd_ENABLED 1
 #endif
-#include <sys/Ximd.h>
+#include "Ximd.h"
 
 template<typename T>
-using ximd = sys::ximd::Ximd<T>;
+using ximd = six::ximd::Ximd<T>;
 
 using ximd_intv = ximd<int>;
-using ximd_intv_mask = sys::ximd::ximd_mask;
+using ximd_intv_mask = six::ximd::ximd_mask;
 
 using ximd_floatv = ximd<float>;
-using ximd_floatv_mask = sys::ximd::ximd_mask;
+using ximd_floatv_mask = six::ximd::ximd_mask;
 
 constexpr auto ximd_elements_per_iteration = ximd_floatv::size();
 
@@ -562,13 +438,6 @@ static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_direc
     };
     return generate(generate_real, generate_imag, ZFloatV{});
 }
-#if SIX_sicd_has_valarray
-template<size_t N>
-static inline auto lookup(const valarray_intv& zindex, const std::array<zfloat, N>& phase_directions)
-{
-    return lookup_<valarray_zfloatv>(zindex, phase_directions);
-}
-#endif
 #if SIX_sicd_has_ximd
 template<size_t N>
 static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& phase_directions)
@@ -737,15 +606,6 @@ static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8
     const auto phase_direction_real = lookup(phase, converter.get_phase_directions().real);
     const auto phase_direction_imag = lookup(phase, converter.get_phase_directions().imag);
     return ::find_nearest<vcl_intv>(converter.magnitudes(), phase_direction_real, phase_direction_imag, v);
-}
-#endif
-
-#if SIX_sicd_has_valarray
-static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
-    const valarray_intv& phase, const  valarray_zfloatv& v)
-{
-    const auto phase_direction = lookup(phase, converter.get_phase_directions().value);
-    return ::find_nearest<valarray_intv>(converter.magnitudes(), real(phase_direction), imag(phase_direction), v);
 }
 #endif
 
@@ -977,9 +837,6 @@ static const std::string unseq_simd = "simd";
 #if SIX_sicd_has_VCL
 static const std::string unseq_vcl = "vcl";
 #endif
-#if SIX_sicd_has_valarray
-static const std::string unseq_valarray = "valarray";
-#endif
 #if SIX_sicd_has_ximd
 static const std::string unseq_ximd = "ximd";
 #endif
@@ -988,8 +845,6 @@ static std::string nearest_neighbors_unseq_ =
 unseq_simd;
 #elif SIX_sicd_has_VCL
 unseq_vcl;
-#elif SIX_sicd_has_valarray
-unseq_valarray;
 #elif SIX_sicd_has_ximd
 unseq_ximd;
 #else
@@ -1022,12 +877,6 @@ void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
     if (unseq == unseq_vcl)
     {
         return nearest_neighbors_T<vcl_zfloatv, vcl_elements_per_iteration>(policy, inputs, results);
-    }
-    #endif
-    #if SIX_sicd_has_valarray
-    if (unseq == unseq_valarray)
-    {
-        return nearest_neighbors_T<valarray_zfloatv, valarray_elements_per_iteration>(policy, inputs, results);
     }
     #endif
     #if SIX_sicd_has_ximd
