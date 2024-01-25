@@ -53,9 +53,9 @@ using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 #pragma warning(disable: 4244) // '...': conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4723) // potential divide by 0
 #endif
-#include "vectorclass/version2/vectorclass.h"
-#include "vectorclass/version2/vectormath_trig.h"
-#include "vectorclass/complex/complexvec1.h"
+#include "six/sicd/vectorclass/version2/vectorclass.h"
+#include "six/sicd/vectorclass/version2/vectormath_trig.h"
+#include "six/sicd/vectorclass/complex/complexvec1.h"
 #if _MSC_VER
 #pragma warning(pop)
 #endif
