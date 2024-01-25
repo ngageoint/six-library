@@ -771,24 +771,38 @@ void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
     }
     #endif
     #if SIX_sicd_has_ximd
+    // XIMD is a hack just for development, it shouldn't normally be enabled
+    // for a release build; only use it for debug.
     if (unseq == unseq_ximd)
     {
+        #if CODA_OSS_DEBUG
+        // The XIMD implementations are dramatically slower when running unittests;
+        // that's mostly because there's lots of IO. This is the  "more interesting" code path.
         return nearest_neighbors_T<ximd_zfloatv, ximd_elements_per_iteration>(policy, inputs, results);
+
+        #else
+        // Use the corresponding "regular" (not UNSEQ) policy, this is either "par" or "seq".
+        if (policy == execution_policy::par_unseq)
+        {
+            return nearest_neighbors_par(inputs, results);
+        }
+        if (policy == execution_policy::unseq)
+        {
+            return nearest_neighbors_seq(inputs, results);
+        }
+        // We shouldn't be here otherwise; throw the exception, below.
+        #endif // CODA_OSS_DEBUG
     }
-    #endif
+    #endif // SIX_sicd_has_ximd
 
     throw std::logic_error("Don't know how to implement nearest_neighbors_() for unseq=" + unseq);
 }
 void six::sicd::NearestNeighbors::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    // TODO: there could be more complicated logic here to determine which UNSEQ
-    // implementation to use.
     nearest_neighbors_(execution_policy::unseq, inputs, results);
 }
 void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
-    // TODO: there could be more complicated logic here to determine which UNSEQ
-    // implementation to use.
     nearest_neighbors_(execution_policy::par_unseq, inputs, results);
 }
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
