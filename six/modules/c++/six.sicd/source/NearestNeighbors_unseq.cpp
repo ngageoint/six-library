@@ -54,14 +54,15 @@ using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 #pragma warning(disable: 4723) // potential divide by 0
 #endif
 #include "six/sicd/vectorclass/version2/vectorclass.h"
+#include "six/sicd/vectorclass/version2/vector.h"
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
 #if _MSC_VER
 #pragma warning(pop)
 #endif
 
-using vcl_intv = vcl::Vec8i; 
-using vcl_floatv = vcl::Vec8f;
+using vcl_intv = vcl::Vec<8, int32_t>; 
+using vcl_floatv = vcl::Vec<8, float>;
 constexpr auto vcl_elements_per_iteration = vcl_floatv::size();
 
 inline int ssize(const vcl_intv& z) noexcept
