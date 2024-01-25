@@ -151,8 +151,9 @@ void six::sicd::NearestNeighbors::nearest_neighbors(execution_policy policy, std
     // > all standard execution policies can fall back to sequential execution.
     #if CODA_OSS_DEBUG
     throw std::logic_error("Unhandled execution_policy value.");
-    #endif
+    #else
     return nearest_neighbors(inputs, results); // no policy specified, "default policy"
+    #endif
 }
 
 AMP8I_PHS8I six::sicd::nearest_neighbor(const details::ComplexToAMP8IPHS8I& converter_, const zfloat& v)
