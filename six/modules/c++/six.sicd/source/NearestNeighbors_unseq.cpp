@@ -90,7 +90,13 @@ inline auto lookup(xisd_intv indexv, const std::array<zfloat, N>& phase_directio
 inline auto lookup(xisd_intv indexv, std::span<const float> magnitudes)
 {
     assert(magnitudes.size() == six::AmplitudeTableSize);
-    return magnitudes[indexv];
+
+    // The index may be out of range. This is expected because `i` might be "don't care."
+    if ((indexv >= 0) && (indexv < std::ssize(magnitudes)))
+    {
+        return magnitudes[indexv];
+    }
+    return NAN; // propogate "don't care"
 }
 
 static inline auto select(bool test, xisd_intv t, xisd_intv f)
@@ -820,8 +826,20 @@ std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
 void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
     std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
-    // TODO: there could be more complicated logic here to determine which UNSEQ
-    // implementation to use.
+    #if CODA_OSS_DEBUG && SIX_sicd_has_xisd
+    // If we're in UNSEQ code with a sequential execution policy, then use
+    // the generic UNSEQ code ... but with non-SIMD types.
+    //
+    // Note that `nearest_neighbors_T()` is expecting an UNSEQ policy.
+    if (policy == execution_policy::seq)
+    {
+        return nearest_neighbors_T<xisd_zfloatv, xisd_elements_per_iteration>(execution_policy::unseq, inputs, results);
+    }
+    if (policy == execution_policy::par)
+    {
+        return nearest_neighbors_T<xisd_zfloatv, xisd_elements_per_iteration>(execution_policy::par_unseq, inputs, results);
+    }
+    #endif // CODA_OSS_DEBUG && SIX_sicd_has_xisd
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = ::nearest_neighbors_unseq_;
