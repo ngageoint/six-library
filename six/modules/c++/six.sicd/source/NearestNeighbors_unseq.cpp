@@ -233,10 +233,6 @@ static auto ximd_select_(const TTest& test, const TResult& t, const TResult& f)
     }
     return retval;
 }
-static inline auto select(const ximd_floatv_mask& test, const  ximd_floatv& t, const  ximd_floatv& f)
-{
-    return ximd_select_(test, t, f);
-}
 static inline auto select(const ximd_intv_mask& test, const  ximd_intv& t, const  ximd_intv& f)
 {
     return ximd_select_(test, t, f);
@@ -291,13 +287,6 @@ static auto simd_select_(const TTest& test, const TResult& t, const TResult& f)
     where(test, retval) = t;
     where(!test, retval) = f;
     return retval;
-}
-template<typename TMask>
-static inline auto select(const TMask& test_, const  simd_floatv& t, const  simd_floatv& f)
-{
-    //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
-    const auto test = stdx::static_simd_cast<simd_floatv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
-    return simd_select_(test, t, f);
 }
 template<typename TMask>
 static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_intv& f)
