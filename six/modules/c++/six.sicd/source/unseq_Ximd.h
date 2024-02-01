@@ -53,7 +53,7 @@ namespace six
 namespace ximd
 {
 
-// Need a class for the "broadcast" constructor (not impelemented).
+// Need a class for the "broadcast" constructor.
 // Also helps to avoid overloading `std::array`.
 template <typename T, int N = 4>
 struct Ximd final

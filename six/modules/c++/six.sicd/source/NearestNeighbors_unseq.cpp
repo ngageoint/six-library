@@ -897,4 +897,12 @@ void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq(std::span<const zf
 {
     nearest_neighbors_(execution_policy::par_unseq, inputs, results);
 }
+
+#if SIX_sicd_has_xisd
+void six::sicd::NearestNeighbors::unseq_nearest_neighbors(execution_policy policy, std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
+{
+    nearest_neighbors_(policy, inputs, results);
+}
+#endif // SIX_sicd_has_xisd
+
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
