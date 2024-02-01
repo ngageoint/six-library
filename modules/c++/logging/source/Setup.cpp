@@ -35,7 +35,7 @@
 std::unique_ptr<logging::Logger>
 logging::setupLogger(const path& program_, 
                      const std::string& logLevel, 
-                     const path& logFile_,
+                     const path& logFile,
                      const std::string& logFormat,
                      size_t logCount,
                      size_t logBytes)
@@ -44,29 +44,25 @@ logging::setupLogger(const path& program_,
     std::unique_ptr<logging::Logger> log(new logging::Logger(program));
 
     // setup logging level
-    std::string lev = logLevel;
-    str::upper(lev);
+    auto lev = str::upper(logLevel);
     str::trim(lev);
-    logging::LogLevel level = (lev.empty()) ? logging::LogLevel::LOG_WARNING :
-                                              logging::LogLevel(lev);
+    const auto level = lev.empty() ? logging::LogLevel::LOG_WARNING : logging::LogLevel(lev);
 
     // setup logging formatter
     std::unique_ptr <logging::Formatter> formatter;
-    const auto logFile = logFile_.string();
-    const auto file = str::lower(logFile);
+    const auto file = str::lower(logFile.string());
     if (str::endsWith(file, ".xml"))
     {
-        formatter.reset(
-            new logging::XMLFormatter("", "<Log image=\"" + program + "\">"));
+        formatter = std::make_unique<logging::XMLFormatter>("", "<Log image=\"" + program + "\">");
     }
     else
     {
-        formatter.reset(new logging::StandardFormatter(logFormat));
+        formatter = std::make_unique<logging::StandardFormatter>(logFormat);
     }
     
     // setup logging handler
     std::unique_ptr<logging::Handler> logHandler;
-    if (file.empty() || file == "console")
+    if (file.empty() || (file == "console") || (file == "-"))
         logHandler.reset(new logging::StreamHandler());
     else
     {

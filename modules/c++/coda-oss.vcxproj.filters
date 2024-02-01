@@ -957,9 +957,6 @@
     <ClInclude Include="coda_oss\include\coda_oss\mdspan_.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="sys\include\sys\Ximd.h">
-      <Filter>sys</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -1445,9 +1442,6 @@
     <Filter Include="math.poly">
       <UniqueIdentifier>{15f9b62f-d17e-4d84-bc34-de6fd5fbcb33}</UniqueIdentifier>
     </Filter>
-    <Filter Include="polygon">
-      <UniqueIdentifier>{f2544ccb-0933-44c7-af39-cd986982af3d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{9050a469-23a5-4da0-92b1-a07a8e52e9fc}</UniqueIdentifier>
     </Filter>
@@ -1501,6 +1495,9 @@
     </Filter>
     <Filter Include="coda_oss">
       <UniqueIdentifier>{59f3d9a1-06d3-4779-aef2-cc55223c3017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="polygon">
+      <UniqueIdentifier>{f2544ccb-0933-44c7-af39-cd986982af3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
