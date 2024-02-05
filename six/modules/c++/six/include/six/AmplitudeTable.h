@@ -211,11 +211,11 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     //#define SIX_sicd_has_ximd 0
 #endif
 
-#ifndef SIX_sicd_has_xisd
+#ifndef SIX_sicd_has_sisd
     // This is just normal `int`s and `float`s (not even `std::array`s) made
     // to look like SIMD types.  Why? Generic code: the same templatized
     // code works everywhere.
-    #define SIX_sicd_has_xisd 1
+    #define SIX_sicd_has_sisd 1
 #endif
 
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
@@ -226,10 +226,10 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #endif // SIX_sicd_have_VCL || SIX_sicd_has_simd
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
-// Don't know yet whether XISD code actually make sense ... ease
+// Don't know yet whether SISD code actually make sense ... ease
 // development/testing and the eventual transition.
 #if !SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    #if SIX_sicd_has_xisd && CODA_OSS_DEBUG
+    #if SIX_sicd_has_sisd && CODA_OSS_DEBUG
         #undef SIX_sicd_ComplexToAMP8IPHS8I_unseq
         #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
     #endif
@@ -279,7 +279,7 @@ public:
     struct phase_directions final
     {
         std::array<zfloat, AmplitudeTableSize> value; // interleaved, std::complex<float>
-        #if SIX_sicd_has_VCL || SIX_sicd_has_xisd
+        #if SIX_sicd_has_VCL || SIX_sicd_has_sisd
         std::array<float, AmplitudeTableSize> real;
         std::array<float, AmplitudeTableSize> imag;
         #endif

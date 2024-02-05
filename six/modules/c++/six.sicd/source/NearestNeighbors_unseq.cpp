@@ -43,51 +43,51 @@
 using zfloat = six::zfloat;
 using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 
-#if SIX_sicd_has_xisd
+#if SIX_sicd_has_sisd
 
-using xisd_intv = int;
-using xisd_intv_mask = bool;
+using sisd_intv = int;
+using sisd_intv_mask = bool;
 
-using xisd_floatv = float;
-using xisd_floatv_mask = bool;
+using sisd_floatv = float;
+using sisd_floatv_mask = bool;
 
-constexpr auto xisd_elements_per_iteration = 1;
-inline size_t size(xisd_intv) noexcept { return xisd_elements_per_iteration; }
-inline ptrdiff_t ssize(xisd_intv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
-inline size_t size(xisd_floatv) noexcept { return xisd_elements_per_iteration; }
-inline ptrdiff_t ssize(xisd_floatv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
+constexpr auto sisd_elements_per_iteration = 1;
+inline size_t size(sisd_intv) noexcept { return sisd_elements_per_iteration; }
+inline ptrdiff_t ssize(sisd_intv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
+inline size_t size(sisd_floatv) noexcept { return sisd_elements_per_iteration; }
+inline ptrdiff_t ssize(sisd_floatv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
 
-using xisd_zfloatv = std::complex<float>;
-inline size_t size(xisd_zfloatv) noexcept { return xisd_elements_per_iteration; }
-inline ptrdiff_t ssize(xisd_zfloatv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
+using sisd_zfloatv = std::complex<float>;
+inline size_t size(sisd_zfloatv) noexcept { return sisd_elements_per_iteration; }
+inline ptrdiff_t ssize(sisd_zfloatv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
 
-inline auto if_add(bool f, xisd_floatv a, float b)
+inline auto if_add(bool f, sisd_floatv a, float b)
 {
     return f ? a + b : a;
 }
 
-inline void copy_from(std::span<const float> p, xisd_floatv& result)
+inline void copy_from(std::span<const float> p, sisd_floatv& result)
 {
     assert(p.size() == size(result));
     result = p[0];
 }
-inline void copy_from(std::span<const zfloat> p, xisd_zfloatv& result)
+inline void copy_from(std::span<const zfloat> p, sisd_zfloatv& result)
 {
     assert(p.size() == size(result));
     result = p[0];
 }
 
-static inline xisd_intv roundi(xisd_floatv v)  // match vcl::roundi()
+static inline sisd_intv roundi(sisd_floatv v)  // match vcl::roundi()
 {
-    return gsl::narrow_cast<xisd_intv>(std::round(v));
+    return gsl::narrow_cast<sisd_intv>(std::round(v));
 }
 
 template<size_t N>
-inline auto lookup(xisd_intv indexv, const std::array<zfloat, N>& phase_directions)
+inline auto lookup(sisd_intv indexv, const std::array<zfloat, N>& phase_directions)
 {
     return phase_directions[indexv];
 }
-inline auto lookup(xisd_intv indexv, std::span<const float> magnitudes)
+inline auto lookup(sisd_intv indexv, std::span<const float> magnitudes)
 {
     assert(magnitudes.size() == six::AmplitudeTableSize);
 
@@ -99,17 +99,17 @@ inline auto lookup(xisd_intv indexv, std::span<const float> magnitudes)
     return NAN; // propogate "don't care"
 }
 
-static inline auto select(bool test, xisd_intv t, xisd_intv f)
+static inline auto select(bool test, sisd_intv t, sisd_intv f)
 {
     return test ? t : f;
 }
 
-inline bool any_of(xisd_intv m)
+inline bool any_of(sisd_intv m)
 {
     return m != 0;
 }
 
-#endif // SIX_sicd_has_xisd
+#endif // SIX_sicd_has_sisd
 
 #if SIX_sicd_has_VCL
 
@@ -559,7 +559,7 @@ static auto find_nearest(std::span<const float> magnitudes,
     return nearest<IntV>(magnitudes, projection);
 }
 
-#if SIX_sicd_has_VCL || SIX_sicd_has_xisd
+#if SIX_sicd_has_VCL || SIX_sicd_has_sisd
 template<typename IntV, typename FloatV>
 static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
     const IntV& phase, const  FloatV& v)
@@ -692,8 +692,8 @@ inline void assign(size_t i, AMP8I_PHS8I& lhs, const AMP8I_PHS8I_unseq<IntV>& rh
     lhs.amplitude = gsl::narrow<uint8_t>(rhs.amplitude[i_]);
     lhs.phase = gsl::narrow<uint8_t>(rhs.phase[i_]);
 }
-#if SIX_sicd_has_xisd
-inline void assign(size_t, AMP8I_PHS8I& lhs, const AMP8I_PHS8I_unseq<xisd_intv>& rhs)
+#if SIX_sicd_has_sisd
+inline void assign(size_t, AMP8I_PHS8I& lhs, const AMP8I_PHS8I_unseq<sisd_intv>& rhs)
 {
     lhs.amplitude = gsl::narrow<uint8_t>(rhs.amplitude);
     lhs.phase = gsl::narrow<uint8_t>(rhs.phase);
@@ -799,8 +799,8 @@ static const std::string unseq_vcl = "vcl";
 #if SIX_sicd_has_ximd
 static const std::string unseq_ximd = "ximd";
 #endif
-#if SIX_sicd_has_xisd
-static const std::string unseq_xisd = "xisd";
+#if SIX_sicd_has_sisd
+static const std::string unseq_sisd = "sisd";
 #endif
 static std::string nearest_neighbors_unseq_ =
 #if SIX_sicd_has_simd
@@ -809,8 +809,8 @@ unseq_simd;
 unseq_vcl;
 #elif SIX_sicd_has_ximd
 unseq_ximd;
-#elif SIX_sicd_has_xisd
-unseq_xisd;
+#elif SIX_sicd_has_sisd
+unseq_sisd;
 #else
 #error "Don't know how to implement six_sicd_set_nearest_neighbors_unseq()"
 #endif
@@ -826,20 +826,20 @@ std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
 void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
     std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
-    #if CODA_OSS_DEBUG && SIX_sicd_has_xisd
+    #if CODA_OSS_DEBUG && SIX_sicd_has_sisd
     // If we're in UNSEQ code with a sequential execution policy, then use
     // the generic UNSEQ code ... but with non-SIMD types.
     //
     // Note that `nearest_neighbors_T()` is expecting an UNSEQ policy.
     if (policy == execution_policy::seq)
     {
-        return nearest_neighbors_T<xisd_zfloatv, xisd_elements_per_iteration>(execution_policy::unseq, inputs, results);
+        return nearest_neighbors_T<sisd_zfloatv, sisd_elements_per_iteration>(execution_policy::unseq, inputs, results);
     }
     if (policy == execution_policy::par)
     {
-        return nearest_neighbors_T<xisd_zfloatv, xisd_elements_per_iteration>(execution_policy::par_unseq, inputs, results);
+        return nearest_neighbors_T<sisd_zfloatv, sisd_elements_per_iteration>(execution_policy::par_unseq, inputs, results);
     }
-    #endif // CODA_OSS_DEBUG && SIX_sicd_has_xisd
+    #endif // CODA_OSS_DEBUG && SIX_sicd_has_sisd
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = ::nearest_neighbors_unseq_;
@@ -880,10 +880,10 @@ void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
     }
     #endif // SIX_sicd_has_ximd
 
-    #if SIX_sicd_has_xisd
-    if (unseq == unseq_xisd)
+    #if SIX_sicd_has_sisd
+    if (unseq == unseq_sisd)
     {
-        return nearest_neighbors_T<xisd_zfloatv, xisd_elements_per_iteration>(policy, inputs, results);
+        return nearest_neighbors_T<sisd_zfloatv, sisd_elements_per_iteration>(policy, inputs, results);
     }
     #endif
 
@@ -898,11 +898,11 @@ void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq(std::span<const zf
     nearest_neighbors_(execution_policy::par_unseq, inputs, results);
 }
 
-#if SIX_sicd_has_xisd
+#if SIX_sicd_has_sisd
 void six::sicd::NearestNeighbors::unseq_nearest_neighbors(execution_policy policy, std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
 {
     nearest_neighbors_(policy, inputs, results);
 }
-#endif // SIX_sicd_has_xisd
+#endif // SIX_sicd_has_sisd
 
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
