@@ -263,6 +263,22 @@ inline auto round(const Ximd<T>& v)
 {
     return Ximd<T>([&](size_t i) { return std::round(v[i]); }, nullptr);
 }
+template <typename T>
+inline auto lround(const Ximd<T>& v)
+{
+    return Ximd<int>([&](size_t i) { return std::lround(v[i]); }, nullptr);
+}
+
+template<typename T>
+static auto simd_select(const ximd_mask& test, const Ximd<T>& t, const Ximd<T>& f)
+{
+    Ximd<T> retval;
+    for (size_t i = 0; i < test.size(); i++)
+    {
+        retval[i] = test[i] ? t[i] : f[i];
+    }
+    return retval;
+}
 
 } // ximd
 } // sys

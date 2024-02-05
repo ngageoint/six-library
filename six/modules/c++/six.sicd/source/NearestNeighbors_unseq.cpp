@@ -99,7 +99,7 @@ inline auto lookup(sisd_intv indexv, std::span<const float> magnitudes)
     return NAN; // propogate "don't care"
 }
 
-static inline auto select(bool test, sisd_intv t, sisd_intv f)
+static inline auto simd_select(bool test, sisd_intv t, sisd_intv f)
 {
     return test ? t : f;
 }
@@ -230,7 +230,7 @@ static inline void copy_from(std::span<const float> p, ximd_floatv& result)
 }
 
 template<typename TTest, typename TResult>
-static auto ximd_select_(const TTest& test, const TResult& t, const TResult& f)
+static auto ximd_simd_select_(const TTest& test, const TResult& t, const TResult& f)
 {
     TResult retval;
     for (size_t i = 0; i < test.size(); i++)
@@ -239,9 +239,9 @@ static auto ximd_select_(const TTest& test, const TResult& t, const TResult& f)
     }
     return retval;
 }
-static inline auto select(const ximd_intv_mask& test, const  ximd_intv& t, const  ximd_intv& f)
+static inline auto simd_select(const ximd_intv_mask& test, const  ximd_intv& t, const  ximd_intv& f)
 {
-    return ximd_select_(test, t, f);
+    return ximd_simd_select_(test, t, f);
 }
 
 #endif // SIX_sicd_has_ximd
@@ -285,7 +285,7 @@ static inline void copy_from(std::span<const float> p, simd_floatv& result)
 }
 
 template<typename TTest, typename TResult>
-static auto simd_select_(const TTest& test, const TResult& t, const TResult& f)
+static auto simd_simd_select_(const TTest& test, const TResult& t, const TResult& f)
 {
     // https://en.cppreference.com/w/cpp/experimental/simd/where_expression
     // > ... All other elements are left unchanged.
@@ -295,11 +295,11 @@ static auto simd_select_(const TTest& test, const TResult& t, const TResult& f)
     return retval;
 }
 template<typename TMask>
-static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_intv& f)
+static inline auto simd_select(const TMask& test_, const  simd_intv& t, const  simd_intv& f)
 {
     //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
     const auto test = stdx::static_simd_cast<simd_intv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
-    return simd_select_(test, t, f);
+    return simd_simd_select_(test, t, f);
 }
 
 #endif // SIX_sicd_has_simd
@@ -512,9 +512,9 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
 
         const auto c = lookup(it, magnitudes); // magnituides[it]
         const auto test = c < v;
-        it = select(test, next, it); // ... ++it
-        first = select(test, it, first); // first = ...
-        count = select(test, advance, step); // `count -= step + 1` —<OR>— `count = step`
+        it = simd_select(test, next, it); // ... ++it
+        first = simd_select(test, it, first); // first = ...
+        count = simd_select(test, advance, step); // `count -= step + 1` —<OR>— `count = step`
     }
     return first;
 }
@@ -538,9 +538,9 @@ static auto nearest(std::span<const float> magnitudes, const FloatV& value)
 
     const IntV end = gsl::narrow<int>(magnitudes.size());
     const IntV zero = 0;
-    auto retval = select(it == 0, zero, // if (it == begin) return 0;
-        select(it == end, prev_it,  // it == end ? prev_it  : ...
-            select(v0 <= v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
+    auto retval = simd_select(it == 0, zero, // if (it == begin) return 0;
+        simd_select(it == end, prev_it,  // it == end ? prev_it  : ...
+            simd_select(v0 <= v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
         ));
     return retval;
 }
@@ -552,7 +552,7 @@ static auto find_nearest(std::span<const float> magnitudes,
 {
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
-    // the complex value onto the ray of candidate magnitudes at the selected phase.
+    // the complex value onto the ray of candidate magnitudes at the simd_selected phase.
     // i.e. dot product.
     const auto projection = (phase_direction_real * real(v)) + (phase_direction_imag * imag(v));
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
