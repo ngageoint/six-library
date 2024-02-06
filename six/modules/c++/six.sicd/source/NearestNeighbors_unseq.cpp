@@ -61,11 +61,6 @@ using sisd_zfloatv = std::complex<float>;
 inline size_t size(sisd_zfloatv) noexcept { return sisd_elements_per_iteration; }
 inline ptrdiff_t ssize(sisd_zfloatv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
 
-inline auto if_add(bool f, sisd_floatv a, float b)
-{
-    return f ? a + b : a;
-}
-
 inline void copy_from(std::span<const float> p, sisd_floatv& result)
 {
     assert(p.size() == size(result));
@@ -100,6 +95,10 @@ inline auto lookup(sisd_intv indexv, std::span<const float> magnitudes)
 }
 
 static inline auto simd_select(bool test, sisd_intv t, sisd_intv f)
+{
+    return test ? t : f;
+}
+static inline auto simd_select(bool test, sisd_floatv t, sisd_floatv f)
 {
     return test ? t : f;
 }
@@ -155,12 +154,6 @@ inline size_t size(const vcl_zfloatv& z) noexcept
 inline int ssize(const vcl_zfloatv& z) noexcept
 {
     return z.size();
-}
-
-template<typename T>
-inline auto if_add(const T& f, const vcl_floatv& a, float b)
-{
-    return vcl::if_add(f, a, b);
 }
 
 inline bool any_of(const vcl_intv& m)
@@ -243,6 +236,10 @@ static inline auto simd_select(const ximd_intv_mask& test, const  ximd_intv& t, 
 {
     return ximd_simd_select_(test, t, f);
 }
+static inline auto simd_select(const ximd_floatv_mask& test, float t, float f)
+{
+    return ximd_simd_select_(test, ximd_floatv{ t }, ximd_floatv{ f });
+}
 
 #endif // SIX_sicd_has_ximd
 
@@ -299,6 +296,13 @@ static inline auto simd_select(const TMask& test_, const  simd_intv& t, const  s
 {
     //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
     const auto test = stdx::static_simd_cast<simd_intv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
+    return simd_simd_select_(test, t, f);
+}
+template<typename TMask>
+static inline auto simd_select(const TMask& test_, const  simd_floatv& t, const  simd_floatv& f)
+{
+    //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
+    const auto test = stdx::static_simd_cast<simd_floatv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
     return simd_simd_select_(test, t, f);
 }
 
@@ -368,44 +372,20 @@ static inline void copy_from(std::span<const zfloat> mem, zfloatv<FloatV>& resul
 // is simple and easy to understand.  Simplify with concepts in C++20?
 
 template<typename IntV, typename FloatV>
-static auto roundi_(const FloatV& v)  // match vcl::roundi()
+static auto lround_(const FloatV& v)
 {
-    const auto rounded = round(v);
-    const auto generate_roundi = [&](size_t i)
-    { return static_cast<typename IntV::value_type>(rounded[i]); };
-    return generate(generate_roundi, IntV{});
+    return lround(v);
 }
 #if SIX_sicd_has_ximd
 static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
 {
-    return roundi_<ximd_intv>(v);
+    return lround_<ximd_intv>(v);
 }
 #endif
 #if SIX_sicd_has_simd
 static inline auto roundi(const simd_floatv& v)  // match vcl::roundi()
 {
-    return roundi_<simd_intv>(v);
-}
-#endif
-
-template<typename TFloatVMask, typename TFloatV>
-static auto if_add_(const TFloatVMask& m, const TFloatV& v, typename TFloatV::value_type c)
-{
-    const auto generate_add = [&](size_t i) {
-        return m[i] ? v[i] + c : v[i];
-    };
-    return generate(generate_add, TFloatV{});
-}
-#if SIX_sicd_has_ximd
-static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typename ximd_floatv::value_type c)
-{
-    return if_add_(m, v, c);
-}
-#endif
-#if SIX_sicd_has_simd
-static inline auto if_add(const simd_floatv_mask& m, const simd_floatv& v, typename simd_floatv::value_type c)
-{
-    return if_add_(m, v, c);
+    return lround_<simd_intv>(v);
 }
 #endif
 
@@ -489,7 +469,8 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
     auto phase = arg(v);
-    phase = if_add(phase < 0.0f, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
+    // if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
+    phase += simd_select(phase < 0.0f, std::numbers::pi_v<float> * 2.0f, 0.0f); // Wrap from [0, 2PI]
     return roundi(phase / phase_delta);
 }
 
