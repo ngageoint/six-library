@@ -107,6 +107,10 @@ inline bool any_of(sisd_intv m)
 {
     return m != 0;
 }
+inline bool all_of(sisd_intv m)
+{
+    return m != 0;
+}
 
 #endif // SIX_sicd_has_sisd
 
@@ -424,15 +428,16 @@ static inline auto lookup(const simd_intv& indexv, const std::array<zfloat, N>& 
 #endif
 
 template<typename FloatV, typename IntV>
-static auto lookup_(const IntV& indexv, std::span<const float> magnitudes)
+static auto lookup_(const IntV& indexv, std::span<const float> floats)
 {
     const auto lookup_f = [&](size_t i) {
-        const auto i_ = indexv[i];
+        auto i_ = indexv[i];
 
         // The index may be out of range. This is expected because `i` might be "don't care."
-        if ((i_ >= 0) && (i_ < std::ssize(magnitudes)))
+        if (i_ != -1)
         {
-            return magnitudes[i_];
+            i_ = static_cast<uint8_t>(i_);
+            return floats[i_];
         }
         return NAN; // propogate "don't care"
     };
@@ -468,9 +473,10 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
+    constexpr auto two_pi = std::numbers::pi_v<float> *2.0f;
+
     auto phase = arg(v);
-    // if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
-    phase += simd_select(phase < 0.0f, std::numbers::pi_v<float> * 2.0f, 0.0f); // Wrap from [0, 2PI]
+    phase += simd_select(phase < 0.0f, two_pi, 0.0f); // Wrap from [0, 2PI]
     return roundi(phase / phase_delta);
 }
 
@@ -478,24 +484,34 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
 template<typename IntV, typename FloatV>
 inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
 {
-    IntV first = 0;
-    const IntV last = gsl::narrow<int>(magnitudes.size());
+    assert(magnitudes.size() == six::AmplitudeTableSize);
+
+    IntV first = gsl::narrow<int>(std::distance(magnitudes.begin(), magnitudes.begin()));
+    const IntV last = gsl::narrow<int>(std::distance(magnitudes.begin(), magnitudes.end()));
 
     auto count = last - first;
     while (any_of(count > 0))
     {
         auto it = first;
         const auto step = count / 2;
-        it += step;
+        it += step; // std::advance(it, step);
+
+        //if (magnitudes[it] < value)
+        //{
+        //    first = ++it;
+        //    count -= step + 1;
+        //}
+        //else
+        //    count = step;
+        const auto c = lookup(it, magnitudes); // magnituides[it]
 
         auto next = it; ++next; // ... ++it;
         auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
-        const auto c = lookup(it, magnitudes); // magnituides[it]
-        const auto test = c < v;
-        it = simd_select(test, next, it); // ... ++it
-        first = simd_select(test, it, first); // first = ...
-        count = simd_select(test, advance, step); // `count -= step + 1` —<OR>— `count = step`
+        const auto test = (count > 0) && (c < v);
+        first = simd_select(test, ++it, first); // first = ++it;
+        auto count_ = count; count_ -= step + 1;  // count -= step + 1;
+        count = simd_select(test, count_, step); // `count -= step + 1` —<OR>— `count = step`
     }
     return first;
 }
@@ -512,13 +528,22 @@ static auto nearest(std::span<const float> magnitudes, const FloatV& value)
     assert(magnitudes.size() == six::AmplitudeTableSize);
 
     const auto it = ::lower_bound<IntV>(magnitudes, value);
+
+    const IntV zero = 0;
+    if (all_of(it == zero))
+    {
+        return zero;
+    }
+
     const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
+    const IntV end = gsl::narrow<int>(magnitudes.size());
+    if (all_of(it == end))
+    {
+        return prev_it;
+    }
 
     const auto v0 = value - lookup(prev_it, magnitudes); // value - *prev_it
     const auto v1 = lookup(it, magnitudes) - value; // *it - value
-
-    const IntV end = gsl::narrow<int>(magnitudes.size());
-    const IntV zero = 0;
     auto retval = simd_select(it == 0, zero, // if (it == begin) return 0;
         simd_select(it == end, prev_it,  // it == end ? prev_it  : ...
             simd_select(v0 <= v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);

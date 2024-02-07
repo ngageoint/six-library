@@ -253,6 +253,18 @@ inline bool any_of(const ximd_mask& m)
     return false;
 }
 
+inline bool all_of(const ximd_mask& m)
+{
+    for (size_t i = 0; i < m.size(); i++)
+    {
+        if (!m[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 template <typename T>
 inline auto atan2(const Ximd<T>& real, const Ximd<T>& imag)
 {
@@ -278,6 +290,11 @@ static auto simd_select(const ximd_mask& test, const Ximd<T>& t, const Ximd<T>& 
         retval[i] = test[i] ? t[i] : f[i];
     }
     return retval;
+}
+
+inline auto operator&&(const ximd_mask& lhs, const ximd_mask& rhs) noexcept
+{
+    return ximd_mask([&](size_t i) { return lhs[i] && rhs[i]; }, nullptr);
 }
 
 } // ximd
