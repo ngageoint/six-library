@@ -164,6 +164,22 @@ inline bool any_of(const vcl_intv& m)
 {
     return horizontal_or(m);
 }
+inline bool all_of(const vcl_intv& m)
+{
+    return horizontal_and(m);
+}
+
+
+template<typename TMask>
+static inline auto simd_select(const TMask& test, const  vcl_intv& t, const  vcl_intv& f)
+{
+    return select(test, t, f);
+}
+template<typename TMask>
+static inline auto simd_select(const TMask& test, float t, float f)
+{
+    return select(test, vcl_floatv{ t }, vcl_floatv{ f });
+}
 
 inline void copy_from(std::span<const float> p, vcl_floatv& result)
 {
@@ -508,7 +524,9 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
         auto next = it; ++next; // ... ++it;
         auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
-        const auto test = (count > 0) && (c < v);
+        const auto count_GT_zero = count > 0;
+        const decltype(count_GT_zero) c_LT_v = c < v; // masks need to be of the same type for &&
+        const auto test = count_GT_zero && c_LT_v;
         first = simd_select(test, ++it, first); // first = ++it;
         auto count_ = count; count_ -= step + 1;  // count -= step + 1;
         count = simd_select(test, count_, step); // `count -= step + 1` —<OR>— `count = step`
@@ -529,7 +547,7 @@ static auto nearest(std::span<const float> magnitudes, const FloatV& value)
 
     const auto it = ::lower_bound<IntV>(magnitudes, value);
 
-    const IntV zero = 0;
+    static const IntV zero = 0;
     if (all_of(it == zero))
     {
         return zero;
