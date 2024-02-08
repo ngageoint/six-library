@@ -125,19 +125,22 @@ inline bool all_of(sisd_intv m)
 #pragma warning(disable: 4723) // potential divide by 0
 #endif
 #include "six/sicd/vectorclass/version2/vectorclass.h"
-#include "six/sicd/vectorclass/version2/vector.h"
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
+#include "six/sicd/vectorclass/simd/simd.h"
 #if _MSC_VER
 #pragma warning(pop)
 #endif
 
 constexpr auto vcl_elements_per_iteration = 8;
-using vcl_intv = vcl::Vec<vcl_elements_per_iteration, int32_t>;
-using vcl_floatv = vcl::Vec<vcl_elements_per_iteration, float>;
+using vcl_intv = vcl::Vec8i;
+using vcl_floatv = vcl::Vec8f;
 
-template<size_t N, typename T>
-inline ptrdiff_t ssize(const vcl::Vec<N, T>& v) noexcept
+inline ptrdiff_t ssize(const vcl_intv& v) noexcept
+{
+    return v.size();
+}
+inline ptrdiff_t ssize(const vcl_floatv& v) noexcept
 {
     return v.size();
 }
@@ -556,8 +559,8 @@ static auto nearest(std::span<const float> magnitudes, const FloatV& value)
     */    
     const auto it = ::lower_bound<IntV>(magnitudes, value);
 
-    static const IntV begin = 0;
-    static const auto& zero = begin;
+    const IntV begin = 0;
+    const auto& zero = begin;
     if (all_of(it == begin))
     {
         return zero;
