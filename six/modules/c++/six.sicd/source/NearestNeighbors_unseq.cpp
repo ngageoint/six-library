@@ -508,9 +508,8 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
     auto count = last - first;
     while (any_of(count > 0))
     {
-        auto it = first;
         const auto step = count / 2;
-        it += step; // std::advance(it, step);
+        auto it = simd_select(count > 0, first + step, first); // std::advance(it, step);
 
         //if (magnitudes[it] < value)
         //{
@@ -520,9 +519,6 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
         //else
         //    count = step;
         const auto c = lookup(it, magnitudes); // magnituides[it]
-
-        auto next = it; ++next; // ... ++it;
-        auto advance = count; advance -= step + 1;  // ...  -= step + 1;
 
         const auto count_GT_zero = count > 0;
         const decltype(count_GT_zero) c_LT_v = c < v; // masks need to be of the same type for &&
@@ -542,31 +538,45 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
 template<typename IntV, typename FloatV>
 static auto nearest(std::span<const float> magnitudes, const FloatV& value)
 {
-    // see `::nearest()` in **NearestNeighbors.cpp**
     assert(magnitudes.size() == six::AmplitudeTableSize);
 
+    /*
+    const auto begin = magnitudes.begin();
+    const auto end = magnitudes.end();
+
+    const auto it = std::lower_bound(begin, end, value);
+    if (it == begin) return 0;
+
+    const auto prev_it = std::prev(it);
+    const auto nearest_it = it == end ? prev_it  :
+        (value - *prev_it <= *it - value ? prev_it : it);
+    const auto distance = std::distance(begin, nearest_it);
+    assert(distance <= std::numeric_limits<uint8_t>::max());
+    return gsl::narrow<uint8_t>(distance);
+    */    
     const auto it = ::lower_bound<IntV>(magnitudes, value);
 
-    static const IntV zero = 0;
-    if (all_of(it == zero))
+    static const IntV begin = 0;
+    static const auto& zero = begin;
+    if (all_of(it == begin))
     {
         return zero;
     }
 
-    const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
     const IntV end = gsl::narrow<int>(magnitudes.size());
     if (all_of(it == end))
     {
-        return prev_it;
+        return it - 1; // i.e., prev_it
     }
+    const auto prev_it = simd_select(it == begin, zero, it - 1); // const auto prev_it = std::prev(it);
 
     const auto v0 = value - lookup(prev_it, magnitudes); // value - *prev_it
     const auto v1 = lookup(it, magnitudes) - value; // *it - value
-    auto retval = simd_select(it == 0, zero, // if (it == begin) return 0;
+    auto nearest_it = simd_select(it == begin, zero, // if (it == begin) return 0;
         simd_select(it == end, prev_it,  // it == end ? prev_it  : ...
             simd_select(v0 <= v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
         ));
-    return retval;
+    return nearest_it;
 }
 
 template<typename IntV, typename FloatV, typename ZFloatV>
