@@ -361,13 +361,13 @@
       <Filter>math.poly</Filter>
     </ClInclude>
     <ClInclude Include="polygon\include\polygon\DrawPolygon.h">
-      <Filter>str\polygon</Filter>
+      <Filter>polygon</Filter>
     </ClInclude>
     <ClInclude Include="polygon\include\polygon\Intersections.h">
-      <Filter>str\polygon</Filter>
+      <Filter>polygon</Filter>
     </ClInclude>
     <ClInclude Include="polygon\include\polygon\PolygonMask.h">
-      <Filter>str\polygon</Filter>
+      <Filter>polygon</Filter>
     </ClInclude>
     <ClInclude Include="config\include\config\Exports.h">
       <Filter>config</Filter>
@@ -1117,7 +1117,7 @@
       <Filter>math.linear</Filter>
     </ClCompile>
     <ClCompile Include="polygon\source\PolygonMask.cpp">
-      <Filter>str\polygon</Filter>
+      <Filter>polygon</Filter>
     </ClCompile>
     <ClCompile Include="cli\source\Argument.cpp">
       <Filter>cli</Filter>
@@ -1496,7 +1496,7 @@
     <Filter Include="coda_oss">
       <UniqueIdentifier>{59f3d9a1-06d3-4779-aef2-cc55223c3017}</UniqueIdentifier>
     </Filter>
-    <Filter Include="str\polygon">
+    <Filter Include="polygon">
       <UniqueIdentifier>{f2544ccb-0933-44c7-af39-cd986982af3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

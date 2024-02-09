@@ -211,26 +211,30 @@ inline std::string upper(const std::string& s)
 
 // At this point, you might want to `lower()` and `upper()` for UTF-8 and/or
 // Windows-1252. That can be done, but ... our needs are mostly English (99.9%)
-// with a very occassional smattering of French (Canada).  We've gotten by this
+// with a very occassional smattering of (Canadian-) French.  We've gotten by this
 // long without being able to upper/lower 'ä' and 'Ä' and there's no current
 // requirement to do so.
 //
 // Furthermore, while Windows-1252 is easy as it's a single-byte encoding and
-// covers many european languages, the standard is UTF-8.
-// Upper/lower-casing in Unicode is quite a bit more complicated as there can be
+// covers many european languages, the standard is UTF-8.  Changing case
+// with Unicode is quite a bit more complicated as there can be
 // numerous rules for various languages.  For example, in German, the "old
 // rules" where that 'ß' was uppercased to "SS"; however, there is now a 'ẞ'.
 // And then there are semantics: in German, no word can begin with 'ß' (or 'ẞ')
 // making "ßanything" rather non-sensical.
 //
 // So for now (until there is a real use case), just "define these problems
-// away" by not implementing `w1252_lower()`, `utf8_upper()`, etc.
+// away" by not exposing `w1252_lower()`, `utf8_upper()`, etc.
 /*
+// With Windows-1252 encoding, we can convert between 'ä' and 'Ä'.
 CODA_OSS_API void w1252_lower(std::string& s);
 CODA_OSS_API void w1252_upper(std::string& s);
 CODA_OSS_API void lower(str::W1252string& s);
 CODA_OSS_API void upper(str::W1252string& s);
 
+// Hooking up UTF-8 for completeness and unit-testing.
+// ** THESE ROUTINES ARE SLOW **
+// Performance improvements can be made, but nobody needs such right now.
 CODA_OSS_API void utf8_lower(std::string& s);
 CODA_OSS_API void utf8_upper(std::string& s);
 CODA_OSS_API void lower(coda_oss::u8string& s);
@@ -243,6 +247,10 @@ CODA_OSS_API str::Windows1252_T to_w1252_upper(str::Windows1252_T);
 CODA_OSS_API str::Windows1252_T to_w1252_lower(str::Windows1252_T);
 
 /***********************************************************************************/
+
+// Using std::transform() with ::toupper() is considerably slower than a lookup-table
+CODA_OSS_API void ascii_lower(std::string& s);
+CODA_OSS_API void ascii_upper(std::string& s);
 
 /*!
  * Replaces any characters that are invalid in XML (&, <, >, ', ") with their

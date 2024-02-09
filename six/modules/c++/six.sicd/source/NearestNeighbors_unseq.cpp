@@ -43,6 +43,77 @@
 using zfloat = six::zfloat;
 using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 
+#if SIX_sicd_has_sisd
+
+using sisd_intv = int;
+using sisd_intv_mask = bool;
+
+using sisd_floatv = float;
+using sisd_floatv_mask = bool;
+
+constexpr auto sisd_elements_per_iteration = 1;
+inline size_t size(sisd_intv) noexcept { return sisd_elements_per_iteration; }
+inline ptrdiff_t ssize(sisd_intv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
+inline size_t size(sisd_floatv) noexcept { return sisd_elements_per_iteration; }
+inline ptrdiff_t ssize(sisd_floatv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
+
+using sisd_zfloatv = std::complex<float>;
+inline size_t size(sisd_zfloatv) noexcept { return sisd_elements_per_iteration; }
+inline ptrdiff_t ssize(sisd_zfloatv v) noexcept { return gsl::narrow<ptrdiff_t>(size(v)); }
+
+inline void copy_from(std::span<const float> p, sisd_floatv& result)
+{
+    assert(p.size() == size(result));
+    result = p[0];
+}
+inline void copy_from(std::span<const zfloat> p, sisd_zfloatv& result)
+{
+    assert(p.size() == size(result));
+    result = p[0];
+}
+
+static inline sisd_intv roundi(sisd_floatv v)  // match vcl::roundi()
+{
+    return gsl::narrow_cast<sisd_intv>(std::round(v));
+}
+
+template<size_t N>
+inline auto lookup(sisd_intv indexv, const std::array<zfloat, N>& phase_directions)
+{
+    return phase_directions[indexv];
+}
+inline auto lookup(sisd_intv indexv, std::span<const float> magnitudes)
+{
+    assert(magnitudes.size() == six::AmplitudeTableSize);
+
+    // The index may be out of range. This is expected because `i` might be "don't care."
+    if ((indexv >= 0) && (indexv < std::ssize(magnitudes)))
+    {
+        return magnitudes[indexv];
+    }
+    return NAN; // propogate "don't care"
+}
+
+static inline auto simd_select(bool test, sisd_intv t, sisd_intv f)
+{
+    return test ? t : f;
+}
+static inline auto simd_select(bool test, sisd_floatv t, sisd_floatv f)
+{
+    return test ? t : f;
+}
+
+inline bool any_of(sisd_intv m)
+{
+    return m != 0;
+}
+inline bool all_of(sisd_intv m)
+{
+    return m != 0;
+}
+
+#endif // SIX_sicd_has_sisd
+
 #if SIX_sicd_has_VCL
 
 #define VCL_NAMESPACE vcl
@@ -54,19 +125,22 @@ using AMP8I_PHS8I = six::AMP8I_PHS8I_t;
 #pragma warning(disable: 4723) // potential divide by 0
 #endif
 #include "six/sicd/vectorclass/version2/vectorclass.h"
-#include "six/sicd/vectorclass/version2/vector.h"
 #include "six/sicd/vectorclass/version2/vectormath_trig.h"
 #include "six/sicd/vectorclass/complex/complexvec1.h"
+#include "six/sicd/vectorclass/simd/simd.h"
 #if _MSC_VER
 #pragma warning(pop)
 #endif
 
 constexpr auto vcl_elements_per_iteration = 8;
-using vcl_intv = vcl::Vec<vcl_elements_per_iteration, int32_t>;
-using vcl_floatv = vcl::Vec<vcl_elements_per_iteration, float>;
+using vcl_intv = vcl::Vec8i;
+using vcl_floatv = vcl::Vec8f;
 
-template<size_t N, typename T>
-inline ptrdiff_t ssize(const vcl::Vec<N, T>& v) noexcept
+inline ptrdiff_t ssize(const vcl_intv& v) noexcept
+{
+    return v.size();
+}
+inline ptrdiff_t ssize(const vcl_floatv& v) noexcept
 {
     return v.size();
 }
@@ -89,15 +163,25 @@ inline int ssize(const vcl_zfloatv& z) noexcept
     return z.size();
 }
 
-template<typename T>
-inline auto if_add(const T& f, const vcl_floatv& a, float b)
-{
-    return vcl::if_add(f, a, b);
-}
-
 inline bool any_of(const vcl_intv& m)
 {
     return horizontal_or(m);
+}
+inline bool all_of(const vcl_intv& m)
+{
+    return horizontal_and(m);
+}
+
+
+template<typename TMask>
+static inline auto simd_select(const TMask& test, const  vcl_intv& t, const  vcl_intv& f)
+{
+    return select(test, t, f);
+}
+template<typename TMask>
+static inline auto simd_select(const TMask& test, float t, float f)
+{
+    return select(test, vcl_floatv{ t }, vcl_floatv{ f });
 }
 
 inline void copy_from(std::span<const float> p, vcl_floatv& result)
@@ -105,7 +189,7 @@ inline void copy_from(std::span<const float> p, vcl_floatv& result)
     assert(p.size() == result.size());
     result.load(p.data());
 }
-inline auto copy_from(std::span<const zfloat> p, vcl_zfloatv& result)
+inline void copy_from(std::span<const zfloat> p, vcl_zfloatv& result)
 {
     // https://en.cppreference.com/w/cpp/numeric/complex
     // > For any pointer to an element of an array of `std::complex<T>` named `p` and any valid array index `i`, ...
@@ -114,14 +198,14 @@ inline auto copy_from(std::span<const zfloat> p, vcl_zfloatv& result)
 }
 
 template<size_t N>
-inline auto lookup(const vcl_intv& zindex, const std::array<zfloat, N>& phase_directions)
+inline auto lookup(const vcl_intv& indexv, const std::array<zfloat, N>& phase_directions)
 {
-    return vcl::lookup<N>(zindex, phase_directions.data());
+    return vcl::lookup<N>(indexv, phase_directions.data());
 }
-inline auto lookup(const vcl_intv& zindex, std::span<const float> magnitudes)
+inline auto lookup(const vcl_intv& indexv, std::span<const float> magnitudes)
 {
     assert(magnitudes.size() == six::AmplitudeTableSize);
-    return vcl::lookup<six::AmplitudeTableSize>(zindex, magnitudes.data());
+    return vcl::lookup<six::AmplitudeTableSize>(indexv, magnitudes.data());
 }
 
 #endif // SIX_sicd_has_VCL
@@ -162,7 +246,7 @@ static inline void copy_from(std::span<const float> p, ximd_floatv& result)
 }
 
 template<typename TTest, typename TResult>
-static auto ximd_select_(const TTest& test, const TResult& t, const TResult& f)
+static auto ximd_simd_select_(const TTest& test, const TResult& t, const TResult& f)
 {
     TResult retval;
     for (size_t i = 0; i < test.size(); i++)
@@ -171,13 +255,13 @@ static auto ximd_select_(const TTest& test, const TResult& t, const TResult& f)
     }
     return retval;
 }
-static inline auto select(const ximd_floatv_mask& test, const  ximd_floatv& t, const  ximd_floatv& f)
+static inline auto simd_select(const ximd_intv_mask& test, const  ximd_intv& t, const  ximd_intv& f)
 {
-    return ximd_select_(test, t, f);
+    return ximd_simd_select_(test, t, f);
 }
-static inline auto select(const ximd_intv_mask& test, const  ximd_intv& t, const  ximd_intv& f)
+static inline auto simd_select(const ximd_floatv_mask& test, float t, float f)
 {
-    return ximd_select_(test, t, f);
+    return ximd_simd_select_(test, ximd_floatv{ t }, ximd_floatv{ f });
 }
 
 #endif // SIX_sicd_has_ximd
@@ -194,13 +278,10 @@ namespace stdx
     using namespace std::experimental::__proposed;
 }
 
-template<typename T>
-using simd = stdx::simd<T>;
-
-using simd_intv = simd<int>;
+using simd_intv = stdx::simd<int>;
 using simd_intv_mask = typename simd_intv::mask_type;
 
-using simd_floatv = simd<float>;
+using simd_floatv = stdx::rebind_simd<float, simd_intv>;
 using simd_floatv_mask = typename simd_floatv::mask_type;
 
 constexpr auto simd_elements_per_iteration = simd_floatv::size();
@@ -217,14 +298,14 @@ static inline auto generate(TGenerator&& generator, simd<T>)
     return simd<T>(generator);
 }
 
-static inline auto copy_from(std::span<const float> p, simd_floatv& result)
+static inline void copy_from(std::span<const float> p, simd_floatv& result)
 {
     assert(p.size() == result.size());
     result.copy_from(p.data(), stdx::element_aligned);
 }
 
 template<typename TTest, typename TResult>
-static auto simd_select_(const TTest& test, const TResult& t, const TResult& f)
+static auto simd_simd_select_(const TTest& test, const TResult& t, const TResult& f)
 {
     // https://en.cppreference.com/w/cpp/experimental/simd/where_expression
     // > ... All other elements are left unchanged.
@@ -234,18 +315,18 @@ static auto simd_select_(const TTest& test, const TResult& t, const TResult& f)
     return retval;
 }
 template<typename TMask>
-static inline auto select(const TMask& test_, const  simd_floatv& t, const  simd_floatv& f)
-{
-    //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
-    const auto test = stdx::static_simd_cast<simd_floatv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
-    return simd_select_(test, t, f);
-}
-template<typename TMask>
-static inline auto select(const TMask& test_, const  simd_intv& t, const  simd_intv& f)
+static inline auto simd_select(const TMask& test_, const  simd_intv& t, const  simd_intv& f)
 {
     //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
     const auto test = stdx::static_simd_cast<simd_intv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
-    return simd_select_(test, t, f);
+    return simd_simd_select_(test, t, f);
+}
+template<typename TMask>
+static inline auto simd_select(const TMask& test_, const  simd_floatv& t, const  simd_floatv& f)
+{
+    //const auto test = test_.__cvt(); // https://github.com/VcDevel/std-simd/issues/41
+    const auto test = stdx::static_simd_cast<simd_floatv_mask>(test_); // https://github.com/VcDevel/std-simd/issues/41
+    return simd_simd_select_(test, t, f);
 }
 
 #endif // SIX_sicd_has_simd
@@ -314,60 +395,36 @@ static inline void copy_from(std::span<const zfloat> mem, zfloatv<FloatV>& resul
 // is simple and easy to understand.  Simplify with concepts in C++20?
 
 template<typename IntV, typename FloatV>
-static auto roundi_(const FloatV& v)  // match vcl::roundi()
+static auto lround_(const FloatV& v)
 {
-    const auto rounded = round(v);
-    const auto generate_roundi = [&](size_t i)
-    { return static_cast<typename IntV::value_type>(rounded[i]); };
-    return generate(generate_roundi, IntV{});
+    return lround(v);
 }
 #if SIX_sicd_has_ximd
 static inline auto roundi(const ximd_floatv& v)  // match vcl::roundi()
 {
-    return roundi_<ximd_intv>(v);
+    return lround_<ximd_intv>(v);
 }
 #endif
 #if SIX_sicd_has_simd
 static inline auto roundi(const simd_floatv& v)  // match vcl::roundi()
 {
-    return roundi_<simd_intv>(v);
-}
-#endif
-
-template<typename TFloatVMask, typename TFloatV>
-static auto if_add_(const TFloatVMask& m, const TFloatV& v, typename TFloatV::value_type c)
-{
-    const auto generate_add = [&](size_t i) {
-        return m[i] ? v[i] + c : v[i];
-    };
-    return generate(generate_add, TFloatV{});
-}
-#if SIX_sicd_has_ximd
-static inline auto if_add(const ximd_floatv_mask& m, const ximd_floatv& v, typename ximd_floatv::value_type c)
-{
-    return if_add_(m, v, c);
-}
-#endif
-#if SIX_sicd_has_simd
-static inline auto if_add(const simd_floatv_mask& m, const simd_floatv& v, typename simd_floatv::value_type c)
-{
-    return if_add_(m, v, c);
+    return lround_<simd_intv>(v);
 }
 #endif
 
 template<typename ZFloatV, typename IntV, size_t N>
-static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_directions)
+static auto lookup_(const IntV& indexv, const std::array<zfloat, N>& phase_directions)
 {
     // It seems that the "generator" constuctor is called with SIMD instructions.
     // https://en.cppreference.com/w/cpp/experimental/simd/simd/simd
     // > The calls to `generator` are unsequenced with respect to each other.
 
     const auto generate_real = [&](size_t i) {
-        const auto i_ = zindex[i];
+        const auto i_ = indexv[i];
         return phase_directions[i_].real();
     };
     const auto generate_imag = [&](size_t i) {
-        const auto i_ = zindex[i];
+        const auto i_ = indexv[i];
         return phase_directions[i_].imag();
     };
     ZFloatV retval;
@@ -376,44 +433,45 @@ static auto lookup_(const IntV& zindex, const std::array<zfloat, N>& phase_direc
 }
 #if SIX_sicd_has_ximd
 template<size_t N>
-static inline auto lookup(const ximd_intv& zindex, const std::array<zfloat, N>& phase_directions)
+static inline auto lookup(const ximd_intv& indexv, const std::array<zfloat, N>& phase_directions)
 {
-    return lookup_<ximd_zfloatv>(zindex, phase_directions);
+    return lookup_<ximd_zfloatv>(indexv, phase_directions);
 }
 #endif
 #if SIX_sicd_has_simd
 template<size_t N>
-static inline auto lookup(const simd_intv& zindex, const std::array<zfloat, N>& phase_directions)
+static inline auto lookup(const simd_intv& indexv, const std::array<zfloat, N>& phase_directions)
 {
-    return lookup_<simd_zfloatv>(zindex, phase_directions);
+    return lookup_<simd_zfloatv>(indexv, phase_directions);
 }
 #endif
 
 template<typename FloatV, typename IntV>
-static auto lookup_(const IntV& zindex, std::span<const float> magnitudes)
+static auto lookup_(const IntV& indexv, std::span<const float> floats)
 {
     const auto lookup_f = [&](size_t i) {
-        const auto i_ = zindex[i];
+        auto i_ = indexv[i];
 
         // The index may be out of range. This is expected because `i` might be "don't care."
-        if ((i_ >= 0) && (i_ < std::ssize(magnitudes)))
+        if (i_ != -1)
         {
-            return magnitudes[i_];
+            i_ = static_cast<uint8_t>(i_);
+            return floats[i_];
         }
         return NAN; // propogate "don't care"
     };
     return generate(lookup_f, FloatV{});
 }
 #if SIX_sicd_has_ximd
-static inline auto lookup(const ximd_intv& zindex, std::span<const float> magnitudes)
+static inline auto lookup(const ximd_intv& indexv, std::span<const float> magnitudes)
 {
-    return lookup_<ximd_floatv>(zindex, magnitudes);
+    return lookup_<ximd_floatv>(indexv, magnitudes);
 }
 #endif
 #if SIX_sicd_has_simd
-static inline auto lookup(const simd_intv& zindex, std::span<const float> magnitudes)
+static inline auto lookup(const simd_intv& indexv, std::span<const float> magnitudes)
 {
-    return lookup_<simd_floatv>(zindex, magnitudes);
+    return lookup_<simd_floatv>(indexv, magnitudes);
 }
 #endif
 #endif // SIX_sicd_has_ximd || SIX_sicd_has_simd
@@ -434,8 +492,10 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
     // Phase is determined via arithmetic because it's equally spaced.
     // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
     // handles cases that are close to 2PI.
+    constexpr auto two_pi = std::numbers::pi_v<float> *2.0f;
+
     auto phase = arg(v);
-    phase = if_add(phase < 0.0f, phase, std::numbers::pi_v<float> * 2.0f); // Wrap from [0, 2PI]
+    phase += simd_select(phase < 0.0f, two_pi, 0.0f); // Wrap from [0, 2PI]
     return roundi(phase / phase_delta);
 }
 
@@ -443,24 +503,32 @@ static auto getPhase(const ZFloatV& v, float phase_delta)
 template<typename IntV, typename FloatV>
 inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
 {
-    IntV first = 0;
-    const IntV last = gsl::narrow<int>(magnitudes.size());
+    assert(magnitudes.size() == six::AmplitudeTableSize);
+
+    IntV first = gsl::narrow<int>(std::distance(magnitudes.begin(), magnitudes.begin()));
+    const IntV last = gsl::narrow<int>(std::distance(magnitudes.begin(), magnitudes.end()));
 
     auto count = last - first;
     while (any_of(count > 0))
     {
-        auto it = first;
         const auto step = count / 2;
-        it += step;
+        auto it = simd_select(count > 0, first + step, first); // std::advance(it, step);
 
-        auto next = it; ++next; // ... ++it;
-        auto advance = count; advance -= step + 1;  // ...  -= step + 1;
-
+        //if (magnitudes[it] < value)
+        //{
+        //    first = ++it;
+        //    count -= step + 1;
+        //}
+        //else
+        //    count = step;
         const auto c = lookup(it, magnitudes); // magnituides[it]
-        const auto test = c < v;
-        it = select(test, next, it); // ... ++it
-        first = select(test, it, first); // first = ...
-        count = select(test, advance, step); // `count -= step + 1` —<OR>— `count = step`
+
+        const auto count_GT_zero = count > 0;
+        const decltype(count_GT_zero) c_LT_v = c < v; // masks need to be of the same type for &&
+        const auto test = count_GT_zero && c_LT_v;
+        first = simd_select(test, ++it, first); // first = ++it;
+        auto count_ = count; count_ -= step + 1;  // count -= step + 1;
+        count = simd_select(test, count_, step); // `count -= step + 1` —<OR>— `count = step`
     }
     return first;
 }
@@ -473,22 +541,45 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
 template<typename IntV, typename FloatV>
 static auto nearest(std::span<const float> magnitudes, const FloatV& value)
 {
-    // see `::nearest()` in **NearestNeighbors.cpp**
     assert(magnitudes.size() == six::AmplitudeTableSize);
 
+    /*
+    const auto begin = magnitudes.begin();
+    const auto end = magnitudes.end();
+
+    const auto it = std::lower_bound(begin, end, value);
+    if (it == begin) return 0;
+
+    const auto prev_it = std::prev(it);
+    const auto nearest_it = it == end ? prev_it  :
+        (value - *prev_it <= *it - value ? prev_it : it);
+    const auto distance = std::distance(begin, nearest_it);
+    assert(distance <= std::numeric_limits<uint8_t>::max());
+    return gsl::narrow<uint8_t>(distance);
+    */    
     const auto it = ::lower_bound<IntV>(magnitudes, value);
-    const auto prev_it = it - 1; // const auto prev_it = std::prev(it);
+
+    const IntV begin = 0;
+    const auto& zero = begin;
+    if (all_of(it == begin))
+    {
+        return zero;
+    }
+
+    const IntV end = gsl::narrow<int>(magnitudes.size());
+    if (all_of(it == end))
+    {
+        return it - 1; // i.e., prev_it
+    }
+    const auto prev_it = simd_select(it == begin, zero, it - 1); // const auto prev_it = std::prev(it);
 
     const auto v0 = value - lookup(prev_it, magnitudes); // value - *prev_it
     const auto v1 = lookup(it, magnitudes) - value; // *it - value
-
-    const IntV end = gsl::narrow<int>(magnitudes.size());
-    const IntV zero = 0;
-    auto retval = select(it == 0, zero, // if (it == begin) return 0;
-        select(it == end, prev_it,  // it == end ? prev_it  : ...
-            select(v0 <= v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
+    auto nearest_it = simd_select(it == begin, zero, // if (it == begin) return 0;
+        simd_select(it == end, prev_it,  // it == end ? prev_it  : ...
+            simd_select(v0 <= v1, prev_it, it) //  (value - *prev_it <= *it - value ? prev_it : it);
         ));
-    return retval;
+    return nearest_it;
 }
 
 template<typename IntV, typename FloatV, typename ZFloatV>
@@ -498,20 +589,21 @@ static auto find_nearest(std::span<const float> magnitudes,
 {
     // We have to do a 1D nearest neighbor search for magnitude.
     // But it's not the magnitude of the input complex value - it's the projection of
-    // the complex value onto the ray of candidate magnitudes at the selected phase.
+    // the complex value onto the ray of candidate magnitudes at the simd_selected phase.
     // i.e. dot product.
     const auto projection = (phase_direction_real * real(v)) + (phase_direction_imag * imag(v));
     //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
     return nearest<IntV>(magnitudes, projection);
 }
 
-#if SIX_sicd_has_VCL
+#if SIX_sicd_has_VCL || SIX_sicd_has_sisd
+template<typename IntV, typename FloatV>
 static auto lookup_and_find_nearest(const six::sicd::details::ComplexToAMP8IPHS8I& converter,
-    const vcl_intv& phase, const  vcl_zfloatv& v)
+    const IntV& phase, const  FloatV& v)
 {
     const auto phase_direction_real = lookup(phase, converter.get_phase_directions().real);
     const auto phase_direction_imag = lookup(phase, converter.get_phase_directions().imag);
-    return ::find_nearest<vcl_intv>(converter.magnitudes(), phase_direction_real, phase_direction_imag, v);
+    return ::find_nearest<IntV>(converter.magnitudes(), phase_direction_real, phase_direction_imag, v);
 }
 #endif
 #if SIX_sicd_has_ximd || SIX_sicd_has_simd
@@ -630,6 +722,21 @@ auto cend(coda_oss::mdspan<T, TExtents> md)
 // ```
 // By returning our own class from `func()`, we can take control of the assignment operator.
 // (Unlike most other operators, `operator=()` *must* be a member-function.)
+template<typename IntV>
+inline void assign(size_t i, AMP8I_PHS8I& lhs, const AMP8I_PHS8I_unseq<IntV>& rhs)
+{
+    const auto i_ = gsl::narrow<int>(i);
+    lhs.amplitude = gsl::narrow<uint8_t>(rhs.amplitude[i_]);
+    lhs.phase = gsl::narrow<uint8_t>(rhs.phase[i_]);
+}
+#if SIX_sicd_has_sisd
+inline void assign(size_t, AMP8I_PHS8I& lhs, const AMP8I_PHS8I_unseq<sisd_intv>& rhs)
+{
+    lhs.amplitude = gsl::narrow<uint8_t>(rhs.amplitude);
+    lhs.phase = gsl::narrow<uint8_t>(rhs.phase);
+}
+#endif
+
 struct mdspan_iterator_value final
 {
     std::span<AMP8I_PHS8I> p_;
@@ -640,9 +747,7 @@ struct mdspan_iterator_value final
         //assert(p_.size() <= size(other.amplitude));
         for (size_t i = 0; i < p_.size(); i++)
         {
-	        const auto i_ = gsl::narrow<int>(i);
-            p_[i].amplitude = gsl::narrow<uint8_t>(other.amplitude[i_]);
-            p_[i].phase = gsl::narrow<uint8_t>(other.phase[i_]);
+            assign(i, p_[i], other);
         }
         return *this;
     }
@@ -731,6 +836,9 @@ static const std::string unseq_vcl = "vcl";
 #if SIX_sicd_has_ximd
 static const std::string unseq_ximd = "ximd";
 #endif
+#if SIX_sicd_has_sisd
+static const std::string unseq_sisd = "sisd";
+#endif
 static std::string nearest_neighbors_unseq_ =
 #if SIX_sicd_has_simd
 unseq_simd;
@@ -738,6 +846,8 @@ unseq_simd;
 unseq_vcl;
 #elif SIX_sicd_has_ximd
 unseq_ximd;
+#elif SIX_sicd_has_sisd
+unseq_sisd;
 #else
 #error "Don't know how to implement six_sicd_set_nearest_neighbors_unseq()"
 #endif
@@ -753,8 +863,20 @@ std::string SIX_SICD_API six_sicd_set_nearest_neighbors_unseq(std::string unseq)
 void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
     std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const
 {
-    // TODO: there could be more complicated logic here to determine which UNSEQ
-    // implementation to use.
+    #if CODA_OSS_DEBUG && SIX_sicd_has_sisd
+    // If we're in UNSEQ code with a sequential execution policy, then use
+    // the generic UNSEQ code ... but with non-SIMD types.
+    //
+    // Note that `nearest_neighbors_T()` is expecting an UNSEQ policy.
+    if (policy == execution_policy::seq)
+    {
+        return nearest_neighbors_T<sisd_zfloatv, sisd_elements_per_iteration>(execution_policy::unseq, inputs, results);
+    }
+    if (policy == execution_policy::par)
+    {
+        return nearest_neighbors_T<sisd_zfloatv, sisd_elements_per_iteration>(execution_policy::par_unseq, inputs, results);
+    }
+    #endif // CODA_OSS_DEBUG && SIX_sicd_has_sisd
 
     // This is very simple as it's only used for unit-testing
     const auto& unseq = ::nearest_neighbors_unseq_;
@@ -795,6 +917,13 @@ void six::sicd::NearestNeighbors::nearest_neighbors_(execution_policy policy,
     }
     #endif // SIX_sicd_has_ximd
 
+    #if SIX_sicd_has_sisd
+    if (unseq == unseq_sisd)
+    {
+        return nearest_neighbors_T<sisd_zfloatv, sisd_elements_per_iteration>(policy, inputs, results);
+    }
+    #endif
+
     throw std::logic_error("Don't know how to implement nearest_neighbors_() for unseq=" + unseq);
 }
 void six::sicd::NearestNeighbors::nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
@@ -805,4 +934,12 @@ void six::sicd::NearestNeighbors::nearest_neighbors_par_unseq(std::span<const zf
 {
     nearest_neighbors_(execution_policy::par_unseq, inputs, results);
 }
+
+#if SIX_sicd_has_sisd
+void six::sicd::NearestNeighbors::unseq_nearest_neighbors(execution_policy policy, std::span<const zfloat> inputs, std::span<AMP8I_PHS8I> results) const
+{
+    nearest_neighbors_(policy, inputs, results);
+}
+#endif // SIX_sicd_has_sisd
+
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq

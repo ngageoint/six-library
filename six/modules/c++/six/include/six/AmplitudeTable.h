@@ -208,6 +208,14 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     // It's primarily for development and testing: VCL needs C++17 and
     // std::experimental::simd is G++11/C++20.
     #define SIX_sicd_has_ximd CODA_OSS_DEBUG
+    //#define SIX_sicd_has_ximd 0
+#endif
+
+#ifndef SIX_sicd_has_sisd
+    // This is just normal `int`s and `float`s (not even `std::array`s) made
+    // to look like SIMD types.  Why? Generic code: the same templatized
+    // code works everywhere.
+    #define SIX_sicd_has_sisd 1
 #endif
 
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
@@ -217,6 +225,15 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
     #endif // SIX_sicd_have_VCL || SIX_sicd_has_simd
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
+
+// Don't know yet whether SISD code actually make sense ... ease
+// development/testing and the eventual transition.
+#if !SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    #if SIX_sicd_has_sisd && CODA_OSS_DEBUG
+        #undef SIX_sicd_ComplexToAMP8IPHS8I_unseq
+        #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
+    #endif
+#endif
 
 // We're still at C++14, so we don't have the types in <execution>
 // https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag
@@ -262,7 +279,7 @@ public:
     struct phase_directions final
     {
         std::array<zfloat, AmplitudeTableSize> value; // interleaved, std::complex<float>
-        #ifdef SIX_sicd_has_VCL
+        #if SIX_sicd_has_VCL || SIX_sicd_has_sisd
         std::array<float, AmplitudeTableSize> real;
         std::array<float, AmplitudeTableSize> imag;
         #endif

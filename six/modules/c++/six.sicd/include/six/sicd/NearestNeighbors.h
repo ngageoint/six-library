@@ -58,6 +58,16 @@ struct NearestNeighbors final
     void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
 
     #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    #if SIX_sicd_has_sisd
+    // This uses the UNSEQ code/logic with the specififed execution policy. The intent
+    // is to run the generic SIMD-enabled code with non-SIMD types.
+    //
+    // See https://mattkretz.github.io/2021/07/29/data-structure-vectorization.html
+    // "... if you’re careful about `if` statements, you can instantiate the template with either an arithmetic type or a [simd] type."
+    // and https://mattkretz.github.io/2019/07/25/making-the-conditional-operator-overloadable.html
+    void unseq_nearest_neighbors(execution_policy, std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
+    #endif // SIX_sicd_has_sisd
+
     void nearest_neighbors_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
     void nearest_neighbors_par_unseq(std::span<const zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
     #endif    

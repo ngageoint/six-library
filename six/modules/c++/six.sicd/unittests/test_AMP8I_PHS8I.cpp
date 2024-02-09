@@ -664,6 +664,12 @@ TEST_CASE(test_nearest_neighbor)
     test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
     #endif
 
+    #if SIX_sicd_has_sisd
+    six_sicd_set_nearest_neighbors_unseq("sisd");
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
+    #endif
+
     six_sicd_set_nearest_neighbors_unseq(default_unseq); // restore default
     #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 }

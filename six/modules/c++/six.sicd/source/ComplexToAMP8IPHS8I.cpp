@@ -156,7 +156,7 @@ six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::Amplitud
         phase_directions_.value[i] = { x, y };
 
         // Only need the parallel array when using the "vectorclass" library.
-        #ifdef SIX_sicd_has_VCL
+        #if SIX_sicd_has_VCL || SIX_sicd_has_sisd
         phase_directions_.real[i] = phase_directions_.value[i].real();
         phase_directions_.imag[i] = phase_directions_.value[i].imag();
         #endif
