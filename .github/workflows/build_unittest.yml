@@ -58,7 +58,7 @@ jobs:
         os: [windows-latest]
         platform: [x64]
         configuration: [Debug] # Debug turns on more compiler warnings
-        avx: [AVX2, AVX512F]
+        avx: [AVX512F]
     name: ${{ matrix.os }}-${{ matrix.avx }}-msbuild
     runs-on: ${{ matrix.os }}
 
@@ -132,7 +132,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         configuration: [Debug, Release]
-        avx: [AVX2, AVX512F]
+        avx: [AVX512F]
     name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
