@@ -55,27 +55,57 @@ namespace sys
  *  Also see https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
  *  "... For the x86-64 compiler, these extensions [ -msse2 ] are enabled by default."
 *   We're 64-bit only.
+* 
+* Well ... it turns out third parties want to compile this code in different
+* enviroments which we don't know about; SIMD support makes that
+* more difficult.
  */
+#ifdef CODA_OSS_DISABLE_SIMD
+    #ifdef CODA_OSS_ENABLE_SIMD
+        #error "CODA_OSS_ENABLE_SIMD already #define'd'"
+    #endif
+    #define CODA_OSS_ENABLE_SIMD 0
+#endif // CODA_OSS_DISABLE_SIMD
+
+#ifndef CODA_OSS_ENABLE_SIMD
+    #if __AVX512F__ || __AVX2__
+        #define CODA_OSS_ENABLE_SIMD 1
+    #elif _MSC_VER && _M_X64 /*MSVC for SSE2*/ 
+        #define CODA_OSS_ENABLE_SIMD 1
+    #elif __GNUC__ && __SSE2__
+        #define CODA_OSS_ENABLE_SIMD 1
+    #else
+        #define CODA_OSS_ENABLE_SIMD 0
+    #endif
+#endif
+
 enum class SIMDInstructionSet
 {
+    Disabled, // CODA_OSS_ENABLE_SIMD = 0
+    Unknown, // CODA_OSS_ENABLE_SIMD = 1, but can't determine
+
     SSE2, //  https://en.wikipedia.org/wiki/SSE2
     AVX2,  // https://en.wikipedia.org/wiki/Advanced_Vector_Extensions
     AVX512F, // https://en.wikipedia.org/wiki/AVX-512
 };
 
-constexpr auto getSIMDInstructionSet() { return SIMDInstructionSet::
-    // https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
-
-    #if __AVX512F__
-            AVX512F
-    #elif __AVX2__
-            AVX2
-    #elif _M_X64 /*MSVC*/ || __SSE2__ /*GCC*/
-            SSE2
+constexpr auto getSIMDInstructionSet() { 
+    #if !CODA_OSS_ENABLE_SIMD
+        return SIMDInstructionSet::Disabled;
     #else
-        #error "Can't determine SIMDInstructionSet'"
-    #endif
-; }
+        // https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+        #if __AVX512F__
+            return SIMDInstructionSet::AVX512F;
+        #elif __AVX2__
+            return SIMDInstructionSet::AVX2;
+        #elif _M_X64 /*MSVC*/ || __SSE2__ /*GCC*/
+            return SIMDInstructionSet::SSE2;
+        #else
+            #error "Can't determine SIMDInstructionSet'"
+            return SIMDInstructionSet::Unknown;
+        #endif
+    #endif // CODA_OSS_ENABLE_SIMD
+}
 
 /*!
  *  \class AbstractOS
