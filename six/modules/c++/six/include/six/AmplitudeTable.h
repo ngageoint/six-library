@@ -182,12 +182,13 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
         #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
             __has_include("six/sicd/vectorclass/version2/vectorclass.h")
             #if _MSC_VER
-                #define SIX_sicd_has_VCL !CODA_OSS_cpp20 // TODO: MSVC works with C++17, but not C++20 ... ?
+            // Compiler error: bug in MSVC or VCL?
+            #define SIX_sicd_has_VCL !CODA_OSS_cpp20 // TODO: enable for C++20
             #else
-                #define SIX_sicd_has_VCL 1
-            #endif // _MSC_VER
+            #define SIX_sicd_has_VCL 1
+            #endif
         #else
-        #define SIX_sicd_has_VCL 0
+            #define SIX_sicd_has_VCL 0
         #endif // __has_include
     #endif // C++17
 #endif
@@ -203,10 +204,18 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
 #endif
 
 #ifndef SIX_sicd_has_ximd
-    // This is a "hacked up" version of std::experimental::simd using std::valarray.
+    // This is a "hacked up" version of std::experimental::simd using std::array.
     // It's primarily for development and testing: VCL needs C++17 and
     // std::experimental::simd is G++11/C++20.
     #define SIX_sicd_has_ximd CODA_OSS_DEBUG
+    //#define SIX_sicd_has_ximd 0
+#endif
+
+#ifndef SIX_sicd_has_sisd
+    // This is just normal `int`s and `float`s (not even `std::array`s) made
+    // to look like SIMD types.  Why? Generic code: the same templatized
+    // code works everywhere.
+    #define SIX_sicd_has_sisd 1
 #endif
 
 #ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
@@ -217,12 +226,30 @@ struct SIX_SIX_API AMP8I_PHS8I_t final
     #endif // SIX_sicd_have_VCL || SIX_sicd_has_simd
 #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 
+// Don't know yet whether SISD code actually make sense ... ease
+// development/testing and the eventual transition.
+#if !SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    #if SIX_sicd_has_sisd && CODA_OSS_DEBUG
+        #undef SIX_sicd_ComplexToAMP8IPHS8I_unseq
+        #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
+    #endif
+#endif
+
+// We're still at C++14, so we don't have the types in <execution>
+// https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag
+// For now, our use is very limited; so don't try to
+// mimic C++17 (these should be types, not `enum` values).
+enum class execution_policy
+{
+    seq, par, par_unseq, unseq
+};
 
 struct AmplitudeTable; // forward
 namespace sicd
 {
 namespace details
 {
+
 /*!
  * \brief A utility that's used to convert complex values into 8-bit amplitude and phase values.
  * 
@@ -245,73 +272,32 @@ public:
     ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = delete; // implicitly deleted because of =delete for copy
     ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = delete; // implicitly deleted because of =delete for copy
 
-    /*!
-     * Get the nearest amplitude and phase value given a complex value
-     * @param v complex value to query with
-     * @return nearest amplitude and phase value
-     */
-    AMP8I_PHS8I_t nearest_neighbor_(const six::zfloat& v) const;
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_seq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
+    std::span<const float> magnitudes() const;
+    float phase_delta() const;
 
-    #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-
-    #if SIX_sicd_has_VCL
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_vcl(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-    #if SIX_sicd_has_simd
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_simd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-    #if SIX_sicd_has_ximd
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors_unseq_ximd(std::span<const six::zfloat> inputs, const six::AmplitudeTable*);
-    #endif
-    #endif
-    
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs, const six::AmplitudeTable*); // one of the above
-
-private:
-    struct Impl final
+    //! Unit vector rays that represent each direction that phase can point.
+    struct phase_directions final
     {
-        const ComplexToAMP8IPHS8I& converter;
-        Impl(const ComplexToAMP8IPHS8I& c) : converter(c) {}
-        ~Impl() = default;
-        Impl(const Impl&) = delete;
-        Impl& operator=(const Impl&) = delete;
-        Impl(Impl&&) = delete; // implicitly deleted because of =delete for copy
-        Impl& operator=(Impl&&) = delete; // implicitly deleted because of =delete for copy
-
-        void nearest_neighbors_seq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
-        template<typename ZFloatV, int elements_per_iteration>
-        void nearest_neighbors_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-        void nearest_neighbors_par_unseq(std::span<const six::zfloat> inputs, std::span<AMP8I_PHS8I_t> results) const;
-
-        template<typename ZFloatV>
-        void nearest_neighbors_unseq_T(std::span<const six::zfloat>, std::span<AMP8I_PHS8I_t>) const;
-
-        #endif 
-
-        //! The sorted set of possible magnitudes order from small to large.
-        std::array<float, AmplitudeTableSize> uncached_magnitudes;
-        std::span<const float> magnitudes;
-        uint8_t find_nearest(six::zfloat phase_direction, six::zfloat v) const;
-
-        //! The difference in phase angle between two UINT phase values.
-        float phase_delta;
-        uint8_t getPhase(six::zfloat) const;
-
-        //! Unit vector rays that represent each direction that phase can point.
-        std::array<six::zfloat, AmplitudeTableSize> phase_directions; // interleaved, std::complex<float>
-        #ifdef SIX_sicd_has_VCL
-        std::array<float, AmplitudeTableSize> phase_directions_real;
-        std::array<float, AmplitudeTableSize> phase_directions_imag;
+        std::array<zfloat, AmplitudeTableSize> value; // interleaved, std::complex<float>
+        #if SIX_sicd_has_VCL || SIX_sicd_has_sisd
+        std::array<float, AmplitudeTableSize> real;
+        std::array<float, AmplitudeTableSize> imag;
         #endif
     };
-public:
-    Impl impl;
+    const phase_directions& get_phase_directions() const;
+
+    uint8_t getPhase(six::zfloat v) const;
+
+private:
+    //! The sorted set of possible magnitudes order from small to large.
+    std::array<float, AmplitudeTableSize> uncached_magnitudes_;
+    std::span<const float> magnitudes_;
+
+    //! The difference in phase angle between two UINT phase values.
+    float phase_delta_;
+
+    //! Unit vector rays that represent each direction that phase can point.
+    phase_directions phase_directions_;
 };
 }
 }
@@ -417,7 +403,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
     }
 
 private:
-    mutable std::vector<six::zfloat> lookup;
+    mutable std::vector<zfloat> lookup;
     mutable std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pFromComplex;    
 };
 

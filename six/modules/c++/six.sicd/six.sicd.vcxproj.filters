@@ -135,6 +135,12 @@
     <ClInclude Include="include\six\sicd\Exports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\sicd\NearestNeighbors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\unseq_Ximd.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -248,7 +254,10 @@
     <ClCompile Include="source\DataParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\ComplexToAMP8IPHS8I_unseq.cpp">
+    <ClCompile Include="source\NearestNeighbors_unseq.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\NearestNeighbors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

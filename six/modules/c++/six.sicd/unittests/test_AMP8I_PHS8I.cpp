@@ -548,6 +548,12 @@ static std::vector<AMP8I_PHS8I_t> testing_fromComplex(std::span<const six::zfloa
     assert(imageData.amplitudeTable.get() == nullptr);
     return imageData.fromComplex(inputs);
 }
+static std::vector<AMP8I_PHS8I_t> testing_fromComplex(six::execution_policy policy, std::span<const six::zfloat> inputs)
+{
+    static const six::sicd::ImageData imageData;
+    assert(imageData.amplitudeTable.get() == nullptr);
+    return imageData.fromComplex(policy, inputs);
+}
 
 static void test_adjusted_values(const std::string& testName, const std::vector<six::zfloat>& values,
     const std::vector<AMP8I_PHS8I_t>& expected, six::zfloat delta)
@@ -566,7 +572,7 @@ static void test_adjusted_values(const std::string& testName, const std::vector<
     }
 }
 
-TEST_CASE(test_nearest_neighbor)
+static void test_nearest_neighbor_(const std::string& testName, const six::execution_policy* pPolicy = nullptr)
 {
     const std::vector<six::zfloat> values{
         {0.0, 0.0}, {1.0, 1.0}, {10.0, -10.0}, {-100.0, 100.0}, {-1000.0, -1000.0} };
@@ -578,7 +584,8 @@ TEST_CASE(test_nearest_neighbor)
         {static_cast<uint8_t>(141), static_cast<uint8_t>(96)},
         {static_cast<uint8_t>(255), static_cast<uint8_t>(160)} };
 
-    const auto actual = testing_fromComplex(sys::make_span(values));
+    const auto values_ = sys::make_span(values);
+    const auto actual = pPolicy ? testing_fromComplex(*pPolicy, values_) : testing_fromComplex(values_);
     for (size_t i = 0; i < expected.size(); i++)
     {
         TEST_ASSERT_EQ(expected[i].amplitude, actual[i].amplitude);
@@ -613,6 +620,58 @@ TEST_CASE(test_nearest_neighbor)
 
     other_expected[0].phase += 32;
     TEST_ASSERT_EQ(other_expected[0].phase, expected[0].phase);
+}
+static void test_nearest_neighbor_(const std::string& testName, six::execution_policy policy)
+{
+    test_nearest_neighbor_(testName, &policy);
+}
+TEST_CASE(test_nearest_neighbor)
+{
+    test_nearest_neighbor_(testName);
+    test_nearest_neighbor_(testName, six::execution_policy::seq);
+    test_nearest_neighbor_(testName, six::execution_policy::par);
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
+
+    #if SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    extern std::string six_sicd_set_nearest_neighbors_unseq(std::string unseq);
+    const auto default_unseq = six_sicd_set_nearest_neighbors_unseq("xyz");
+    try
+    {
+        test_nearest_neighbor_(testName, six::execution_policy::unseq);
+        TEST_FAIL;
+    }
+    catch (const std::logic_error&)
+    {
+        TEST_SUCCESS;
+    }
+
+    #if SIX_sicd_has_simd
+    six_sicd_set_nearest_neighbors_unseq("simd");
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
+    #endif
+
+    #if SIX_sicd_has_VCL
+    six_sicd_set_nearest_neighbors_unseq("vcl");
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
+    #endif
+
+    #if SIX_sicd_has_ximd
+    six_sicd_set_nearest_neighbors_unseq("ximd");
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
+    #endif
+
+    #if SIX_sicd_has_sisd
+    six_sicd_set_nearest_neighbors_unseq("sisd");
+    test_nearest_neighbor_(testName, six::execution_policy::unseq);
+    test_nearest_neighbor_(testName, six::execution_policy::par_unseq);
+    #endif
+
+    six_sicd_set_nearest_neighbors_unseq(default_unseq); // restore default
+    #endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
 }
 
 TEST_CASE(test_verify_phase_uint8_ordering)
