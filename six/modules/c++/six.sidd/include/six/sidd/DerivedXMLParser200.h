@@ -88,8 +88,7 @@ protected:
 
     virtual void parseCompressionFromXML(const xml::lite::Element* compressionElem,
                                          Compression& compression) const;
-    virtual XMLElem convertCompressionToXML(const Compression& compression,
-                                    XMLElem parent = nullptr) const;
+    XMLElem convertCompressionToXML(const Compression*, XMLElem parent = nullptr) const override;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = nullptr) const override;

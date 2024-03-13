@@ -222,7 +222,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->compression.get())
     {
-        convertCompressionToXML(*derived->compression, root);
+        convertCompressionToXML(derived->compression.get(), root);
     }
     // optional
     if (derived->digitalElevationData.get())
@@ -339,9 +339,7 @@ void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
     }
 }
 
-XMLElem DerivedXMLParser300::convertCompressionToXML(
-    const Compression& compression,
-    XMLElem pParent) const
+XMLElem DerivedXMLParser300::convertCompressionToXML(const Compression* compression, XMLElem pParent) const
 {
     assert(pParent != nullptr);
     auto& parent = *pParent;
@@ -350,12 +348,12 @@ XMLElem DerivedXMLParser300::convertCompressionToXML(
     auto& compressionElem = parser.newElement("Compression", parent);
     auto& j2kElem = parser.newElement("J2K", compressionElem);
     auto& originalElem = parser.newElement("Original", j2kElem);
-    convertJ2KToXML(parser, compression.original, originalElem);
+    convertJ2KToXML(parser, compression->original, originalElem);
 
-    if (compression.parsed.get())
+    if (compression->parsed.get())
     {
         auto& parsedElem = parser.newElement("Parsed", j2kElem);
-        convertJ2KToXML(parser, *compression.parsed, parsedElem);
+        convertJ2KToXML(parser, *(compression->parsed), parsedElem);
     }
     return &compressionElem;
 }

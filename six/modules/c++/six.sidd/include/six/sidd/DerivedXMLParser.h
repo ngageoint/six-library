@@ -194,8 +194,7 @@ protected:
                                                      XMLElem parent = nullptr) const = 0;
     XMLElem convertAnnotationToXML(const Annotation *a,
                                    XMLElem parent = nullptr) const;
-    XMLElem convertCompressionToXML(const Compression *c,
-                                    XMLElem parent = nullptr) const;
+    virtual XMLElem convertCompressionToXML(const Compression*, XMLElem = nullptr) const { return nullptr; }
     void    convertJ2KToXML(const J2KCompression* c, XMLElem& parent) const;
     XMLElem convertSFAGeometryToXML(const SFAGeometry *g,
                                     XMLElem parent = nullptr) const;

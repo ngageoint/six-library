@@ -76,8 +76,7 @@ private:
     std::unique_ptr<LUT> parseSingleLUT(const xml::lite::Element& elem, size_t size) const;
 
     void parseCompressionFromXML(const xml::lite::Element& compressionElem, Compression&) const;
-    virtual XMLElem convertCompressionToXML(const Compression& compression,
-        XMLElem parent = nullptr) const;
+    XMLElem convertCompressionToXML(const Compression*, XMLElem parent = nullptr) const override;
 
     void parseInteractiveProcessingFromXML(const xml::lite::Element& interactiveElem, InteractiveProcessing&) const;
     void parseLookupTableFromXML(const xml::lite::Element& lookupElem, LookupTable&) const;
