@@ -90,8 +90,6 @@ private:
     void parseJ2KCompression(const xml::lite::Element& j2kElem, J2KCompression& j2k) const;
     static void convertJ2KToXML(const DerivedXMLParser&,
         const J2KCompression&, xml::lite::Element& parent);
-    static void convertJ2KLayerInfoToXML(const DerivedXMLParser&,
-        const std::vector<J2KCompression::Layer>&, xml::lite::Element& parent);
 
     void parseGeoDataFromXML(const xml::lite::Element& elem, GeoDataBase&) const;
     void parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData&) const;

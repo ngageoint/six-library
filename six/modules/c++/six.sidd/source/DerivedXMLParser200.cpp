@@ -1509,12 +1509,7 @@ void DerivedXMLParser200::convertJ2KToXML(const DerivedXMLParser& parser,
     parser.createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
     parser.createInt("NumBands", j2k.numBands, parent);
 
-    convertJ2KLayerInfoToXML(parser, j2k.layerInfo, parent);
-}
-void DerivedXMLParser200::convertJ2KLayerInfoToXML(const DerivedXMLParser& parser,
-    const std::vector<J2KCompression::Layer>& layerInfo, xml::lite::Element& parent)
-{
-    const auto numLayers = layerInfo.size();
+    const auto numLayers = j2k.layerInfo.size();
     auto& layerInfoElem = parser.newElement("LayerInfo", parent);
     parser.setAttribute(layerInfoElem, "numLayers", numLayers);
 
@@ -1522,7 +1517,7 @@ void DerivedXMLParser200::convertJ2KLayerInfoToXML(const DerivedXMLParser& parse
     {
         auto& layerElem = parser.newElement("Layer", layerInfoElem);
         parser.setAttribute(layerElem, "index", ii + 1); // `positiveInteger` in SIDD 2.0; changed to `nonNegativeInteger` in SIDD 3.0
-        parser.createDouble("Bitrate", layerInfo[ii].bitRate, layerElem);
+        parser.createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
     }
 }
 
