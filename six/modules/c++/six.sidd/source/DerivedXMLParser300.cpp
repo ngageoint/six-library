@@ -222,7 +222,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->compression.get())
     {
-        convertCompressionToXML(derived->compression.get(), root);
+        DerivedXMLParser200::convertCompressionToXML(*this, *(derived->compression), *root);
     }
     // optional
     if (derived->digitalElevationData.get())
@@ -339,28 +339,10 @@ void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
     }
 }
 
-XMLElem DerivedXMLParser300::convertCompressionToXML(const Compression* compression, XMLElem pParent) const
+void DerivedXMLParser300::convertJ2KToXML(const J2KCompression& j2k, xml::lite::Element& parent) const
 {
-    assert(pParent != nullptr);
-    auto& parent = *pParent;
+    auto& parser = *this;
 
-    const auto& parser = *this;
-    auto& compressionElem = parser.newElement("Compression", parent);
-    auto& j2kElem = parser.newElement("J2K", compressionElem);
-    auto& originalElem = parser.newElement("Original", j2kElem);
-    convertJ2KToXML(parser, compression->original, originalElem);
-
-    if (compression->parsed.get())
-    {
-        auto& parsedElem = parser.newElement("Parsed", j2kElem);
-        convertJ2KToXML(parser, *(compression->parsed), parsedElem);
-    }
-    return &compressionElem;
-}
-
-void DerivedXMLParser300::convertJ2KToXML(const DerivedXMLParser& parser,
-    const J2KCompression& j2k, xml::lite::Element& parent)
-{
     parser.createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
     parser.createInt("NumBands", j2k.numBands, parent);
 
