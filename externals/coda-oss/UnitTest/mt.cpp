@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include <sys/ByteSwap.h>
+
 #include <mt/CriticalSection.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
@@ -11,6 +13,7 @@
 #include <mt/ThreadPoolException.h>
 #include <mt/GenerationThreadPool.h>
 #include <mt/ThreadedByteSwap.h>
+#include <mt/Algorithm.h>
 
 namespace mt
 {

@@ -30,6 +30,7 @@
 #include <std/span>
 #include <utility>
 #include <future>
+#include <std/mdspan>
 
 #include "logging/Logger.h"
 #include "types/Complex.h"
@@ -100,19 +101,21 @@ struct SIX_SICD_API ImageData
 
     bool validate(const GeoData& geoData, logging::Logger& log) const;
 
-    static void toComplex(const six::Amp8iPhs8iLookup_t& lookup, std::span<const AMP8I_PHS8I_t>, std::span<six::zfloat>);
+    static void toComplex(six::Amp8iPhs8iLookup_t lookup, std::span<const AMP8I_PHS8I_t>, std::span<six::zfloat>);
     std::vector<six::zfloat> toComplex(std::span<const AMP8I_PHS8I_t>) const;
+    
     std::vector<AMP8I_PHS8I_t> fromComplex(std::span<const six::zfloat>) const;
-    static std::vector<AMP8I_PHS8I_t> testing_fromComplex_(std::span<const six::zfloat>); // for unit-tests
+    std::vector<AMP8I_PHS8I_t> fromComplex(six::execution_policy, std::span<const six::zfloat>) const;
 
     /*!
      * Create a lookup table for converting from AMP8I_PHS8I to complex.
      * @param pAmplitudeTable Input amplitude table. May be nullptr if no amplitude table is defined.
      * @return reference to the output lookup table.
      */
-    static const six::Amp8iPhs8iLookup_t& getLookup(const six::AmplitudeTable* pAmplitudeTable);
+    static six::Amp8iPhs8iLookup_t getLookup(const six::AmplitudeTable* pAmplitudeTable);
 };
 
+// for unit-testing
 SIX_SICD_API const details::ComplexToAMP8IPHS8I& make_ComplexToAMP8IPHS8I(const six::AmplitudeTable*);
 SIX_SICD_API AMP8I_PHS8I_t nearest_neighbor(const details::ComplexToAMP8IPHS8I&, const six::zfloat& v);
 

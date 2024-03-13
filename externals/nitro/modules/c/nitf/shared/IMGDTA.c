@@ -27,7 +27,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription IMGDTA_description[] = {
     {NITF_BCS_N, 4, "VERNUM", "VERNUM" },
     {NITF_BCS_A, 32, "FILENAME", "FILENAME" },
     {NITF_BCS_A, 32, "PARENT_FNAME", "PARENT_FNAME" },
@@ -96,6 +96,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(IMGDTA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(IMGDTA)
 
 NITF_CXX_ENDGUARD

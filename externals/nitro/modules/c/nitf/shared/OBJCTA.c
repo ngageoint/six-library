@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription OBJCTA_description[] = {
     {NITF_BCS_N, 4, "VERNUM", "VERNUM" },
     {NITF_BCS_N, 3, "NUM_OBJ", "NUM_OBJ" },
     {NITF_BCS_A, 10, "OBJ_REF", "OBJ_REF" },
@@ -65,6 +65,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(OBJCTA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(OBJCTA)
 
 NITF_CXX_ENDGUARD

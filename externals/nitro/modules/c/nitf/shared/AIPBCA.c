@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription AIPBCA_description[] = {
     {NITF_BCS_N, 5, "Patch Width", "Patch_Width", },
     {NITF_BCS_A, 16, "Semi-major axis (x component)", "u_hat_x" },
     {NITF_BCS_A, 16, "Semi-major axis (y component)", "u_hat_y" },
@@ -78,6 +78,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(AIPBCA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(AIPBCA)
 
 NITF_CXX_ENDGUARD

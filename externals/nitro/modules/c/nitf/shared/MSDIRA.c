@@ -25,7 +25,7 @@
 NITF_CXX_GUARD
 
 // MIL-PRF-89034, Table 7 (page 46).
-static nitf_TREDescription description[] = {
+static nitf_TREDescription MSDIRA_description[] = {
     {NITF_BCS_A, 9, "Product ID", "PRODID" },
     {NITF_BCS_N, 2, "Product Volume", "PRODVOL" },
     {NITF_BCS_N, 2, "Product Total Volume", "PRODTOTVOLS" },
@@ -45,6 +45,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(MSDIRA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(MSDIRA)
 
 NITF_CXX_ENDGUARD
