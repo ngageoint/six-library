@@ -1484,14 +1484,12 @@ xml::lite::Element& DerivedXMLParser200::convertFilterToXML(const DerivedXMLPars
 
 XMLElem DerivedXMLParser200::convertCompressionToXML(
         const Compression& compression,
-        XMLElem parent) const
+        XMLElem pParent) const
 {
-    assert(parent != nullptr);
-    return &convertCompressionToXML(*this, compression, *parent);
-}
-xml::lite::Element& DerivedXMLParser200::convertCompressionToXML(const DerivedXMLParser& parser,
-    const Compression& compression, xml::lite::Element& parent)
-{
+    assert(pParent != nullptr);
+    auto& parent = *pParent;
+
+    const auto& parser = *this;
     auto& compressionElem = parser.newElement("Compression", parent);
     auto& j2kElem = parser.newElement("J2K", compressionElem);
     auto& originalElem = parser.newElement("Original", j2kElem);
@@ -1502,7 +1500,7 @@ xml::lite::Element& DerivedXMLParser200::convertCompressionToXML(const DerivedXM
         auto& parsedElem = parser.newElement("Parsed", j2kElem);
         convertJ2KToXML(parser, *compression.parsed, parsedElem);
     }
-    return compressionElem;
+    return &compressionElem;
 }
 
 void DerivedXMLParser200::convertJ2KToXML(const DerivedXMLParser& parser,
@@ -1511,15 +1509,20 @@ void DerivedXMLParser200::convertJ2KToXML(const DerivedXMLParser& parser,
     parser.createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
     parser.createInt("NumBands", j2k.numBands, parent);
 
-    const auto numLayers = j2k.layerInfo.size();
+    convertJ2KLayerInfoToXML(parser, j2k.layerInfo, parent);
+}
+void DerivedXMLParser200::convertJ2KLayerInfoToXML(const DerivedXMLParser& parser,
+    const std::vector<J2KCompression::Layer>& layerInfo, xml::lite::Element& parent)
+{
+    const auto numLayers = layerInfo.size();
     auto& layerInfoElem = parser.newElement("LayerInfo", parent);
     parser.setAttribute(layerInfoElem, "numLayers", numLayers);
 
     for (size_t ii = 0; ii < numLayers; ++ii)
     {
         auto& layerElem = parser.newElement("Layer", layerInfoElem);
-        parser.setAttribute(layerElem, "index", ii + 1);
-        parser.createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
+        parser.setAttribute(layerElem, "index", ii + 1); // `positiveInteger` in SIDD 2.0; changed to `nonNegativeInteger` in SIDD 3.0
+        parser.createDouble("Bitrate", layerInfo[ii].bitRate, layerElem);
     }
 }
 

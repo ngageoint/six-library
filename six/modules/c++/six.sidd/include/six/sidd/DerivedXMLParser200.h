@@ -52,9 +52,6 @@ struct DerivedXMLParser200 final : public DerivedXMLParser
     static ProjectionType getProjectionType(const xml::lite::Element& measurementElem);
     static std::unique_ptr<LUT> parseSingleLUT(const std::string& lutStr, size_t size);
 
-    static xml::lite::Element& convertCompressionToXML(const DerivedXMLParser&,
-        const Compression& compression, xml::lite::Element& parent);
-
     static xml::lite::Element& convertDigitalElevationDataToXML(const DerivedXMLParser&, 
         const DigitalElevationData&, xml::lite::Element& parent);
 
@@ -91,7 +88,6 @@ protected:
 
     virtual void parseCompressionFromXML(const xml::lite::Element* compressionElem,
                                          Compression& compression) const;
-
     virtual XMLElem convertCompressionToXML(const Compression& compression,
                                     XMLElem parent = nullptr) const;
 
@@ -143,6 +139,8 @@ private:
 
     static void convertJ2KToXML(const DerivedXMLParser&,
         const J2KCompression&, xml::lite::Element& parent);
+    static void convertJ2KLayerInfoToXML(const DerivedXMLParser&,
+        const std::vector<J2KCompression::Layer>&, xml::lite::Element& parent);
 
     void parseJ2KCompression(const xml::lite::Element* j2kElem,
                              J2KCompression& j2k) const;
