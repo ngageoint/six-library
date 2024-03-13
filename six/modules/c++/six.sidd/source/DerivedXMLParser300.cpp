@@ -335,6 +335,18 @@ void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
 
     for (size_t ii = 0; ii < layerElems.size(); ++ii)
     {
+        // In SIDD 3.0, the `index` attribute type changed from `positiveInteger` to `nonNegativeInteger`
+        // (matching C-style indexing).  Since we had a problem with this, use the opportunity to 
+        // validate the `index` value.
+        const auto& attributes = layerElems[ii]->getAttributes();
+        std::string strIndex;
+        if (attributes.getValue("index", strIndex))
+        {
+            // The schema says this is required, but we might not be validating.
+            const size_t index = std::stoi(strIndex);
+            assert(ii == index); // again, we might not be validating the XML
+        }
+
         parseDouble(getFirstAndOnly(layerElems[ii], "Bitrate"), j2k.layerInfo[ii].bitRate);
     }
 }
