@@ -25,6 +25,7 @@
 
 #include <sstream>
 #include <stdexcept>
+#include <tuple>
 
 #include <gsl/gsl.h>
 
@@ -344,6 +345,7 @@ void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
         {
             // The schema says this is required, but we might not be validating.
             const size_t index = std::stoi(strIndex);
+            std::ignore = index; // compiler warning
             assert(ii == index); // again, we might not be validating the XML
         }
 
