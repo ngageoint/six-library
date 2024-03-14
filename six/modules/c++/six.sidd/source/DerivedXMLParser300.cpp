@@ -25,6 +25,7 @@
 
 #include <sstream>
 #include <stdexcept>
+#include <tuple>
 
 #include <gsl/gsl.h>
 
@@ -222,7 +223,7 @@ xml::lite::Document* DerivedXMLParser300::toXML(const DerivedData* derived) cons
     // optional
     if (derived->compression.get())
     {
-        DerivedXMLParser200::convertCompressionToXML(*this, *derived->compression, *root);
+        DerivedXMLParser200::convertCompressionToXML(*this, *(derived->compression), *root);
     }
     // optional
     if (derived->digitalElevationData.get())
@@ -335,7 +336,39 @@ void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
 
     for (size_t ii = 0; ii < layerElems.size(); ++ii)
     {
+        // In SIDD 3.0, the `index` attribute type changed from `positiveInteger` to `nonNegativeInteger`
+        // (matching C-style indexing).  Since we had a problem with this, use the opportunity to 
+        // validate the `index` value.
+        const auto& attributes = layerElems[ii]->getAttributes();
+        std::string strIndex;
+        if (attributes.getValue("index", strIndex))
+        {
+            // The schema says this is required, but we might not be validating.
+            const size_t index = std::stoi(strIndex);
+            std::ignore = index; // compiler warning
+            assert(ii == index); // again, we might not be validating the XML
+        }
+
         parseDouble(getFirstAndOnly(layerElems[ii], "Bitrate"), j2k.layerInfo[ii].bitRate);
+    }
+}
+
+void DerivedXMLParser300::convertJ2KToXML(const J2KCompression& j2k, xml::lite::Element& parent) const
+{
+    auto& parser = *this;
+
+    parser.createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
+    parser.createInt("NumBands", j2k.numBands, parent);
+
+    const auto numLayers = j2k.layerInfo.size();
+    auto& layerInfoElem = parser.newElement("LayerInfo", parent);
+    parser.setAttribute(layerInfoElem, "numLayers", numLayers);
+
+    for (size_t ii = 0; ii < numLayers; ++ii)
+    {
+        auto& layerElem = parser.newElement("Layer", layerInfoElem);
+        parser.setAttribute(layerElem, "index", ii); // `ii + 1` in SIDD 2.0, `positiveInteger` is now `nonNegativeInteger`
+        parser.createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
     }
 }
 

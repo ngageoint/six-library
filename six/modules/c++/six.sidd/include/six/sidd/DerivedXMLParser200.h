@@ -92,9 +92,6 @@ protected:
     virtual void parseCompressionFromXML(const xml::lite::Element* compressionElem,
                                          Compression& compression) const;
 
-    virtual XMLElem convertCompressionToXML(const Compression& compression,
-                                    XMLElem parent = nullptr) const;
-
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = nullptr) const override;
 
@@ -141,8 +138,7 @@ private:
     static xml::lite::Element& convertFilterToXML(const DerivedXMLParser&,
         const std::string& name, const Filter&, xml::lite::Element& parent);
 
-    static void convertJ2KToXML(const DerivedXMLParser&,
-        const J2KCompression&, xml::lite::Element& parent);
+    void convertJ2KToXML(const J2KCompression&, xml::lite::Element&) const override;
 
     void parseJ2KCompression(const xml::lite::Element* j2kElem,
                              J2KCompression& j2k) const;
