@@ -19,11 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __TIFF_IMAGE_READER_H__
 #define __TIFF_IMAGE_READER_H__
 
 #include <import/io.h>
+#include <config/Exports.h>
 
 #include "tiff/IFDEntry.h"
 #include "tiff/IFD.h"
@@ -39,7 +40,7 @@ namespace tiff
  * Reads a TIFF image and parses out the IFD.  Contains functions for
  * getting data from the image and retrieving the TIFF IFD.
  *********************************************************************/
-class ImageReader
+class CODA_OSS_API ImageReader
 {
 public:
     /**

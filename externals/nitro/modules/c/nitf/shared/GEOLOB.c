@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription GEOLOB_description[] = {
     {NITF_BCS_N, 9, "Longitude density", "ARV" },
     {NITF_BCS_N, 9, "Latitude density", "BRV" },
     {NITF_BCS_N, 15, "Longitude of Reference Origin", "LSO" },
@@ -32,6 +32,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(GEOLOB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(GEOLOB)
 
 NITF_CXX_ENDGUARD

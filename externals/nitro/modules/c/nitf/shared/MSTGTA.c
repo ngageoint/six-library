@@ -24,7 +24,7 @@
 #include <import/nitf.h>
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription MSTGTA_description[] = {
     {NITF_BCS_A, 5, "TGT NUM", "TGTNUM" },
     {NITF_BCS_A, 12, "TGT ID", "TGTID" },
     {NITF_BCS_A, 15, "TGT BE", "TGTBE" },
@@ -41,6 +41,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(MSTGTA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(MSTGTA)
 
 NITF_CXX_ENDGUARD

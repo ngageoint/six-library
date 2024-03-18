@@ -19,17 +19,19 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SCENE_ELLIPSOID_MODEL_H__
 #define __SCENE_ELLIPSOID_MODEL_H__
 
 #include <std/optional>
 
 #include "scene/Types.h"
+#include "scene/Exports.h"
 
 namespace scene
 {
 
-struct EllipsoidModel
+struct SIX_SCENE_API EllipsoidModel
 {
     EllipsoidModel() = default;
 
@@ -150,7 +152,7 @@ protected:
     double polarRadius = 0.0;
 };
 
-class WGS84EllipsoidModel : public EllipsoidModel
+class SIX_SCENE_API WGS84EllipsoidModel : public EllipsoidModel
 {
 public:
     static const double EQUATORIAL_RADIUS_METERS;

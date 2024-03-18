@@ -159,6 +159,9 @@
     <ClInclude Include="include\six\XsElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\six\Exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

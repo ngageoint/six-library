@@ -32,6 +32,7 @@
 #include <stdexcept>
 #include <string>
 #include <cctype>
+#include <array>
 
 #include "gsl/gsl.h"
 
@@ -40,7 +41,7 @@
 
 namespace
 {
-char transformCheck(int c, int (*transform)(int))
+inline char transformCheck(int c, int (*transform)(int))
 {
     // Ensure the character can be represented
     // as an unsigned char or is 'EOF', as the
@@ -56,12 +57,12 @@ char transformCheck(int c, int (*transform)(int))
     }
 }
 
-char tolowerCheck(char c)
+inline char tolowerCheck(char c)
 {
     return transformCheck(c, tolower);
 }
 
-char toupperCheck(char c)
+inline char toupperCheck(char c)
 {
     return transformCheck(c, toupper);
 }
@@ -239,9 +240,8 @@ bool isAlphanumeric(const std::string& s)
 
 bool isAsciiPrintable(const std::string& s)
 {
-    for (const auto& ch : s)
+    for (const auto& c : s)
     {
-        char c = ch;
         if (c < 32 || c > 126)
             return false;
     }
@@ -290,24 +290,210 @@ std::vector<std::string> split(const std::string& s,
 
     return vec;
 }
-template <typename TChar, typename Fn>
-inline void transform(std::basic_string<TChar>& s, Fn f)
+
+// Calling ::toupper() can be slow as the CRT might check for locales.
+// Since we only have 256 values, a lookup table is very fast and doesn't
+// use much memory.
+static const auto& make_lookup(std::array<uint8_t, UINT8_MAX + 1>& result,
+                               char (*to)(char))
 {
-    (void) std::transform(s.begin(), s.end(), s.begin(), f);
+    // For each of 256 values, record the corresponding tolower/toupper value;
+    // this makes converting very fast as no checking or arithmetic must be done.
+    for (size_t i = 0; i <= 0xff; i++)
+    {
+        const auto ch = to(static_cast<char>(i));
+        result[i] = static_cast<uint8_t>(ch);
+    }
+    return result;
 }
-void lower(std::string& s)
+
+template<typename TChar>
+static void do_lookup(std::basic_string<TChar>& s, const std::array<uint8_t, UINT8_MAX + 1>& lookup)
 {
-    transform(s, tolowerCheck);
+    for (auto& ch : s)
+    {
+        const auto i = static_cast<uint8_t>(ch);
+        ch = static_cast<TChar>(lookup[i]);
+    }
 }
-void upper(std::string& s)
+
+void ascii_upper(std::string& s)
 {
-    transform(s, toupperCheck);
+    static std::array<uint8_t, UINT8_MAX + 1> lookup_;
+    static const auto& lookup = make_lookup(lookup_, toupperCheck);
+    do_lookup(s, lookup);
+}
+
+void ascii_lower(std::string& s)
+{
+    static std::array<uint8_t, UINT8_MAX + 1> lookup_;
+    static const auto& lookup = make_lookup(lookup_, tolowerCheck);
+    do_lookup(s, lookup);
+}
+
+inline char to_w1252_upper_(char ch)
+{
+    if ((ch >= 'a') && (ch <= 'z'))
+    {
+        return ch ^ 0x20;  // ('a' - 'A');
+    }
+
+    // See chart at: https://en.wikipedia.org/wiki/Windows-1252
+    const auto u8 = static_cast<uint8_t>(ch);
+
+    constexpr uint8_t s_with_caron = 0x9a /* š */;
+    constexpr uint8_t oe = 0x9c /* œ */;
+    constexpr uint8_t z_with_caron = 0x9e /* ž */;
+    if ((u8 == s_with_caron) || (u8 == oe) || (u8 == z_with_caron))
+    {
+        return ch ^ 0x10;    
+    }
+
+    constexpr uint8_t a_with_grave = 0xe0 /* à */;
+    constexpr uint8_t o_with_diaeresis = 0xf6 /* ö */;
+    if ((u8 >= a_with_grave) && (u8 <= o_with_diaeresis))
+    {
+        return ch ^ 0x20;
+    }
+    // U+00F7 ÷ DIVISION SIGN
+    constexpr uint8_t o_with_slash = 0xf8 /* ø */;
+    constexpr uint8_t small_thorn = 0xfe /* þ */;
+    if ((u8 >= o_with_slash) && (u8 <= small_thorn))
+    {
+        return ch ^ 0x20;
+    }
+
+    constexpr uint8_t y_with_diaeresis = 0xff /* ÿ */;
+    if (u8 == y_with_diaeresis)
+    {
+        constexpr uint8_t Y_with_diaeresis = 0x9f /* Ÿ */;
+        return Y_with_diaeresis;
+    }
+
+    return ch;
+}
+str::Windows1252_T to_w1252_upper(str::Windows1252_T ch)
+{
+    const auto retval = to_w1252_upper_(static_cast<char>(ch));
+    return static_cast<str::Windows1252_T>(retval);
+}
+
+inline char to_w1252_lower_(char ch)
+{
+    if ((ch >= 'A') && (ch <= 'Z'))
+    {
+        return ch | 0x20;
+    }
+
+    // See chart at: https://en.wikipedia.org/wiki/Windows-1252
+    const auto u8 = static_cast<uint8_t>(ch);
+
+    constexpr uint8_t S_with_caron = 0x8a /* Š */;
+    constexpr uint8_t OE = 0x8c /*Œ */;
+    constexpr uint8_t Z_with_caron = 0x8e /* Ž */;
+    if ((u8 == S_with_caron) || (u8 == OE) || (u8 == Z_with_caron))
+    {
+        return ch | 0x10;
+    }
+
+    constexpr uint8_t Y_with_diaeresis = 0x9f /* Ÿ */;
+    if (u8 == Y_with_diaeresis)
+    {
+        constexpr uint8_t y_with_diaeresis = 0xff /* ÿ */;
+        return y_with_diaeresis;
+    }
+
+    constexpr uint8_t A_with_grave = 0xc0 /* À */;
+    constexpr uint8_t O_with_diaeresis = 0xd6 /* Ö */;
+    if ((u8 >= A_with_grave) && (u8 <= O_with_diaeresis))
+    {
+        return ch | 0x20;
+    }
+    // U+00D7 × MULTIPLICATION SIGN 
+    constexpr uint8_t O_with_slash = 0xd8 /* Ø */;
+    constexpr uint8_t capital_thorn = 0xde /* Þ */;
+    if ((u8 >= O_with_slash) && (u8 <= capital_thorn))
+    {
+        return ch | 0x20;
+    }
+
+    return ch;
+}
+str::Windows1252_T to_w1252_lower(str::Windows1252_T ch)
+{
+    const auto retval = to_w1252_lower_(static_cast<char>(ch));
+    return static_cast<str::Windows1252_T>(retval);
+}
+
+static const auto& w1252_upper_lookup()
+{
+    static std::array<uint8_t, UINT8_MAX + 1> lookup_;
+    static const auto& lookup = make_lookup(lookup_, to_w1252_upper_);
+    return lookup;
+}
+void w1252_upper(std::string& w1252)
+{
+    do_lookup(w1252, w1252_upper_lookup());
+}
+void upper(str::W1252string& s)
+{
+    do_lookup(s, w1252_upper_lookup());
+}
+
+static const auto& w1252_lower_lookup()
+{
+    static std::array<uint8_t, UINT8_MAX + 1> lookup_;
+    static const auto& lookup = make_lookup(lookup_, to_w1252_lower_);
+    return lookup;
+}
+void w1252_lower(std::string& w1252)
+{
+    do_lookup(w1252, w1252_lower_lookup());
+}
+void lower(str::W1252string& s)
+{
+    do_lookup(s, w1252_lower_lookup());
+}
+
+// These routines are SLOW ... yes, they can be made faster
+// but nobody needs that right now.
+inline auto utf8_convert(str::W1252string& w1252, void (*convert)(str::W1252string&))
+{
+    convert(w1252); // upper() or lower() for Windows-1252
+    return to_u8string(w1252);
+}
+inline void utf8_convert(std::string& strUtf8, void (*convert)(str::W1252string&))
+{
+    auto w1252 = to_w1252string(str::str<coda_oss::u8string>(strUtf8));
+    const auto utf8 = utf8_convert(w1252, convert);
+    strUtf8 = str::str<std::string>(utf8);
+}
+void utf8_upper(std::string& strUtf8)
+{
+    utf8_convert(strUtf8, upper);
+}
+void utf8_lower(std::string& strUtf8)
+{
+    utf8_convert(strUtf8, lower);
+}
+
+inline void utf8_convert(coda_oss::u8string& s, void (*convert)(str::W1252string&))
+{
+    auto w1252 = to_w1252string(s);
+    s = utf8_convert(w1252, convert);
+}
+void lower(coda_oss::u8string& s)
+{
+    utf8_convert(s, lower);
+}
+void upper(coda_oss::u8string& s)
+{
+    utf8_convert(s, upper);
 }
 
 void escapeForXML(std::string& str)
 {
-    // & needs to be first or else it'll mess up the other characters that we
-    // replace
+    // & needs to be first or else it'll mess up the other characters that we replace
     replaceAll(str, "&", "&amp;");
     replaceAll(str, "<", "&lt;");
     replaceAll(str, ">", "&gt;");

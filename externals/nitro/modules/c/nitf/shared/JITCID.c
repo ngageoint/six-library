@@ -26,11 +26,11 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription JITCID_description[] = {
     {NITF_BCS_A, NITF_TRE_GOBBLE, "File Comment", "FILCMT" },
     {NITF_END, 0, NULL, NULL}
 };
-NITF_DECLARE_SINGLE_PLUGIN(JITCID, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(JITCID)
 
 
 NITF_CXX_ENDGUARD

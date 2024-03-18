@@ -33,6 +33,8 @@
 #include <stdexcept>
 #include <vector>
 
+#include "types/RowCol.h"
+
 #include "H5_.h"
 #include "SpanRC.h"
 
@@ -56,10 +58,10 @@ inline auto vv_load(const H5Easy::File& file, const std::string& dataset_name)
 template <typename T>
 inline HighFive::DataSet writeDataSet(H5Easy::File& file, const std::string& dataset_name, SpanRC<T> data /*, TODO ...*/)
 {
-    const std::vector<size_t> dims{data.dims().row, data.dims().col};
+    const std::vector<size_t> dims{data.extent(0), data.extent(1)};
     const HighFive::DataSpace dataspace{dims};
     auto retval = file.createDataSet<T>(dataset_name, dataspace);
-    retval.write_raw(data.data());
+    retval.write_raw(data.data_handle());
     return retval;
 }
 
@@ -87,7 +89,7 @@ inline SpanRC<T> readDataSet(const HighFive::DataSet& dataSet, std::vector<T>& r
     result.resize(dims.area());
     dataSet.read(result.data());
 
-    return SpanRC<T>(result.data(), dims);
+    return SpanRC<T>(result.data(), std::array<size_t, 2>{dims.row, dims.col});
 }
 
 template <typename T>

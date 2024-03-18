@@ -2297,13 +2297,13 @@ size_t CPHDXMLParser::parsePVPType(const xml::lite::Element& paramXML, PVPType& 
     {
         std::ostringstream ostr;
         ostr << "Specified size: " << size << " does not match default size: " << param.getSize();
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
     if (param.getFormat() != format)
     {
         std::ostringstream ostr;
         ostr << "Specified format: " << format << " does not match default format: " << param.getFormat();
-        throw except::Exception(Ctxt(ostr.str()));
+        throw except::Exception(Ctxt(ostr));
     }
     return offset;
 }

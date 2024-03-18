@@ -170,7 +170,7 @@ public:
 
             std::ostringstream oss;
             oss << "Socket setOptions failure: " << err.toString();
-            throw sys::SocketException(Ctxt(oss.str()));
+            throw sys::SocketException(Ctxt(oss));
         }
     }
 

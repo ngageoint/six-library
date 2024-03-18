@@ -45,6 +45,7 @@
 #include <cphd/PVP.h>
 #include <cphd/PVPBlock.h>
 #include <cphd/DataWriter.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -56,7 +57,7 @@ namespace cphd
  *  Used to write a CPHD file. You must be able to provide the
  *  appropriate metadata and vector based metadata.
  */
-struct CPHDWriter final
+struct SIX_CPHD_API CPHDWriter final
 {
     /*
      *  \func Constructor
@@ -280,7 +281,7 @@ struct CPHDWriter final
      *  \param channel For selecting channel of compressed signal block
      */
     template <typename T>
-    void writeCPHDData(DataWriter&,
+    SIX_CPHD_API void writeCPHDData(DataWriter&,
         const T* data,
         size_t numElements,
         size_t channel = 1);

@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     try
     {
 
-        XMLControlFactory::getInstance(). addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
         NITFReadControl* reader = new NITFReadControl();
         reader->load(inputFile);
 

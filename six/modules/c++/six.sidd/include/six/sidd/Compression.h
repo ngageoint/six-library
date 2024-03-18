@@ -15,13 +15,13 @@ struct J2KCompression
     {
         Layer();
 
-        double bitRate;
+        double bitRate = 0.0;
     };
 
     J2KCompression();
 
-    size_t numWaveletLevels;
-    size_t numBands;
+    size_t numWaveletLevels = 0;
+    size_t numBands = 0;
 
     std::vector<Layer> layerInfo;
 };

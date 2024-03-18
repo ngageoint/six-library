@@ -165,7 +165,7 @@ static bool endsWith(const std::string& s, const std::string& match) noexcept
     return sLen >= mLen;
 }
 
-std::string TRE::truncate(const std::string& value, size_t maxDigits) const 
+static std::string truncate(const std::string& value, size_t maxDigits)
 {
     const size_t decimalIndex = value.find('.');
     if (decimalIndex == std::string::npos)
@@ -183,6 +183,40 @@ std::string TRE::truncate(const std::string& value, size_t maxDigits) const
         return truncated;
     }
     return value;
+}
+static std::string truncate(const nitf_Field& field, const std::string& value)
+{
+    auto retval = truncate(value, field.length);
+
+    // From Field.h
+    if (field.type == NITF_BCS_A)
+    {
+        // is BCS-A data, it is space-filled, right-aligned.
+        while (retval.length() < field.length)
+        {
+            // copyAndFillSpaces() in Field.c "Spaces are added to the right" 
+            retval += " ";
+        }
+    }
+    else if (field.type == NITF_BCS_N)
+    {
+        const auto decimalIndex = retval.find('.');
+
+        // If it is BCS-N, we expect zero-filled, left-aligned.
+        while (retval.length() < field.length)
+        {
+            if (decimalIndex == std::string::npos)
+            {
+                retval = "0" + retval;
+            }
+            else
+            {
+                retval += "0";
+            }
+        }
+    }
+
+    return retval;
 }
 
 void TRE::setFieldValue(const std::string& key, const void* data, size_t dataLength, bool forceUpdate)
@@ -207,7 +241,7 @@ void TRE::setFieldValue(const nitf_Field& field, const std::string& key, const s
     else
     {
         // call truncate() first
-        const auto s = truncate(data, field.length);
+        const auto s = truncate(field, data);
         setFieldValue(key, s.c_str(), s.size(), forceUpdate);
     }
 }
@@ -219,7 +253,7 @@ nitf_Field& TRE::nitf_TRE_getField(const std::string& tag) const
     {
         std::ostringstream msg;
         msg << tag << " is not a recognized field for this TRE";
-        throw except::Exception(Ctxt(msg.str()));
+        throw except::Exception(Ctxt(msg));
     }
     return *field;
 }

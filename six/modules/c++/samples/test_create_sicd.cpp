@@ -120,7 +120,7 @@ int main(int argc, char** argv)
         //        XMLControlRegistry xmlRegistry;
         //        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
 
-        six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
 
         // Open a file with inputName
         io::FileInputStream inputFile(inputName);

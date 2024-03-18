@@ -64,6 +64,14 @@ typedef int (*NITF_PLUGIN_TRE_HANDLER_FUNCTION)
 
 typedef nitf_TREHandler* (*NITF_PLUGIN_TRE_HANDLER_FUNCTION)(nitf_Error * error);
 
+// These are TREs which are linked into NITF rather than loaded at run-time.
+typedef struct _nitf_TREPreloaded
+{
+    const char* name;
+    NITF_PLUGIN_INIT_FUNCTION init;
+    NITF_PLUGIN_TRE_HANDLER_FUNCTION handler;
+    int enabled; // most preloaded TREs are "not set" (disabled) by default
+} nitf_TREPreloaded;
 
 /*
   \brief NITF_PLUGIN_COMPRESSION_HANDLER_FUNCTION - Function pointer for

@@ -20,7 +20,7 @@
  *
  */
 
-
+#pragma once
 #ifndef __CPHD03_VECTOR_PARAMETERS_H__
 #define __CPHD03_VECTOR_PARAMETERS_H__
 
@@ -30,9 +30,11 @@
 #include <mem/ScopedCopyablePtr.h>
 #include <six/Init.h>
 
+#include "cphd03/Exports.h"
+
 namespace cphd03
 {
-struct FxParameters
+struct SIX_CPHD03_API FxParameters
 {
     FxParameters();
 
@@ -57,7 +59,7 @@ struct FxParameters
 
 std::ostream& operator<< (std::ostream& os, const FxParameters& d);
 
-struct TOAParameters
+struct SIX_CPHD03_API TOAParameters
 {
     TOAParameters();
 
@@ -78,7 +80,7 @@ struct TOAParameters
 
 std::ostream& operator<< (std::ostream& os, const TOAParameters& d);
 
-struct VectorParameters
+struct SIX_CPHD03_API VectorParameters final
 {
     VectorParameters();
 
@@ -126,7 +128,7 @@ struct VectorParameters
     mem::ScopedCopyablePtr<TOAParameters> toaParameters;
 };
 
-std::ostream& operator<< (std::ostream& os, const VectorParameters& d);
+SIX_CPHD03_API std::ostream& operator<< (std::ostream& os, const VectorParameters& d);
 }
 
 #endif

@@ -69,13 +69,13 @@ static nitf_TREDescription descrip_00115[] = {
 };
 
 /* Define the available descriptions and the default one */
-static nitf_TREDescriptionInfo descriptions[] = {
+static nitf_TREDescriptionInfo PATCHA_descriptions[] = {
     { "PATCHA_115", descrip_00115, 115 },
     { "PATCHA_74", descrip_00074, 74 },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
 
-static nitf_TREDescriptionSet descriptionSet = { 0, descriptions };
+static nitf_TREDescriptionSet PATCHADescriptionSet = { 0, PATCHA_descriptions };
 
 NITF_DECLARE_PLUGIN(PATCHA)
 

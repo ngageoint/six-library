@@ -48,15 +48,12 @@ std::ostream& operator<< (std::ostream& os, const ProductInfo& p)
             << "    Site                 : " << p.creationInfo[ii].site << "\n";
         for (size_t jj = 0; jj < p.creationInfo[ii].parameter.size(); ++jj)
         {
-            os << "    Parameter name       : "
-                    << p.creationInfo[ii].parameter[jj].getName() << "\n"
-                << "    Parameter value      : " << p.creationInfo[ii].parameter[jj].str() << "\n";
+            out(os, p.creationInfo[ii].parameter[jj]);
         }
     }
     for (size_t ii = 0; ii < p.parameter.size(); ++ii)
     {
-        os << "  Parameter name   : " << p.parameter[ii].getName() << "\n"
-            << "  Parameter value  : " << p.parameter[ii].str() << "\n";
+        out(os, p.parameter[ii]);
     }
     return os;
 }

@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_XMLParser_h_INCLUDED_
 #define SIX_six_XMLParser_h_INCLUDED_
-#pragma once
 
 #include <assert.h>
 
@@ -38,10 +38,11 @@
 #include <xml/lite/Element.h>
 #include <six/XmlLite.h>
 #include <six/Logger.h>
+#include <six/Exports.h>
 
 namespace six
 {
-struct XMLParser
+struct SIX_SIX_API XMLParser
 {
     XMLParser(const std::string& defaultURI, bool addClassAttributes,
         logging::Logger* log = nullptr, bool ownLog = false);

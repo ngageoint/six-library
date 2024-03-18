@@ -31,13 +31,17 @@
 #include <string>
 #include <memory>
 #include <array>
+#include <std/mdspan>
 
 #include <import/except.h>
+#include <coda_oss/CPlusPlus.h>
+#include <sys/Dbg.h>
 
 #include <nitf/LookupTable.hpp>
 #include <scene/sys_Conf.h>
 
 #include "six/Complex.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -50,7 +54,7 @@ namespace six
  *  (e.g., 2 for short) depending on the type that is being housed
  *
  */
-struct LUT
+struct SIX_SIX_API LUT
 {
     std::vector<unsigned char> table;
     size_t numEntries = 0;
@@ -156,18 +160,88 @@ struct LUT
  *  double precision amplitude value
  */
 
-// Store the computed `six::zfloat` for every possible 
-// amp/phs pair, a total of 256*256 values.
- //! Fixed size 256 element array of complex values.
-using phase_values_t = std::array<six::zfloat, UINT8_MAX + 1>;
-//! Fixed size 256 x 256 matrix of complex values.
-using Amp8iPhs8iLookup_t = std::array<phase_values_t, UINT8_MAX + 1>;
-
-// More descriptive than std::pair<uint8_t, uint8_t>
-struct AMP8I_PHS8I_t final
+ // Store the computed `six::zfloat` for every possible 
+ // amp/phs pair, a total of 256*256 values.
+static constexpr size_t AmplitudeTableSize = 256; // "This is a fixed size (256-element) LUT"
+using Amp8iPhs8iLookup_t = std::mdspan<const six::zfloat, std::dextents<size_t, 2>>;
+ 
+ // More descriptive than std::pair<uint8_t, uint8_t>
+struct SIX_SIX_API AMP8I_PHS8I_t final
 {
     uint8_t amplitude;
     uint8_t phase;
+};
+
+// Control a few details of the ComplexToAMP8IPHS8I implementation, especially "unseq" (i.e., SIMD).
+#ifndef SIX_sicd_has_VCL
+    // Do we have the "vectorclass" library? https://github.com/vectorclass/version2
+    #if !CODA_OSS_cpp17 // VCL needs C++17
+        #define SIX_sicd_has_VCL 0
+    #else
+        // __has_include is part of C++17
+        #if __has_include("../../../six.sicd/include/six/sicd/vectorclass/version2/vectorclass.h") || \
+            __has_include("six/sicd/vectorclass/version2/vectorclass.h")
+            #if _MSC_VER
+            // Compiler error: bug in MSVC or VCL?
+            #define SIX_sicd_has_VCL !CODA_OSS_cpp20 // TODO: enable for C++20
+            #else
+            #define SIX_sicd_has_VCL 1
+            #endif
+        #else
+            #define SIX_sicd_has_VCL 0
+        #endif // __has_include
+    #endif // C++17
+#endif
+
+#ifndef SIX_sicd_has_simd
+    // Do we have `std::experimental::simd? https://en.cppreference.com/w/cpp/experimental/simd
+    #if (__GNUC__ >= 11) && CODA_OSS_cpp20
+        // https://github.com/VcDevel/std-simd "... shipping with GCC since version 11."
+        #define SIX_sicd_has_simd 1
+    #else
+        #define SIX_sicd_has_simd 0
+    #endif // __GNUC__
+#endif
+
+#ifndef SIX_sicd_has_ximd
+    // This is a "hacked up" version of std::experimental::simd using std::array.
+    // It's primarily for development and testing: VCL needs C++17 and
+    // std::experimental::simd is G++11/C++20.
+    #define SIX_sicd_has_ximd CODA_OSS_DEBUG
+    //#define SIX_sicd_has_ximd 0
+#endif
+
+#ifndef SIX_sicd_has_sisd
+    // This is just normal `int`s and `float`s (not even `std::array`s) made
+    // to look like SIMD types.  Why? Generic code: the same templatized
+    // code works everywhere.
+    #define SIX_sicd_has_sisd 1
+#endif
+
+#ifndef SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    #if SIX_sicd_has_VCL || SIX_sicd_has_simd || SIX_sicd_has_ximd
+    #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
+    #else
+    #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 0
+    #endif // SIX_sicd_have_VCL || SIX_sicd_has_simd
+#endif // SIX_sicd_ComplexToAMP8IPHS8I_unseq
+
+// Don't know yet whether SISD code actually make sense ... ease
+// development/testing and the eventual transition.
+#if !SIX_sicd_ComplexToAMP8IPHS8I_unseq
+    #if SIX_sicd_has_sisd && CODA_OSS_DEBUG
+        #undef SIX_sicd_ComplexToAMP8IPHS8I_unseq
+        #define SIX_sicd_ComplexToAMP8IPHS8I_unseq 1
+    #endif
+#endif
+
+// We're still at C++14, so we don't have the types in <execution>
+// https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag
+// For now, our use is very limited; so don't try to
+// mimic C++17 (these should be types, not `enum` values).
+enum class execution_policy
+{
+    seq, par, par_unseq, unseq
 };
 
 struct AmplitudeTable; // forward
@@ -175,6 +249,7 @@ namespace sicd
 {
 namespace details
 {
+
 /*!
  * \brief A utility that's used to convert complex values into 8-bit amplitude and phase values.
  * 
@@ -189,7 +264,7 @@ class ComplexToAMP8IPHS8I final
     explicit ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable = nullptr);
 
 public:
-    static const ComplexToAMP8IPHS8I& make(const six::AmplitudeTable* pAmplitudeTable); // AmplitudeTable* = NULL is cached
+    static const ComplexToAMP8IPHS8I& make_(const six::AmplitudeTable* pAmplitudeTable); // AmplitudeTable* = NULL is cached
 
     ~ComplexToAMP8IPHS8I() = default;
     ComplexToAMP8IPHS8I(const ComplexToAMP8IPHS8I&) = delete;
@@ -197,36 +272,41 @@ public:
     ComplexToAMP8IPHS8I(ComplexToAMP8IPHS8I&&) = delete; // implicitly deleted because of =delete for copy
     ComplexToAMP8IPHS8I& operator=(ComplexToAMP8IPHS8I&&) = delete; // implicitly deleted because of =delete for copy
 
-    /*!
-     * Get the nearest amplitude and phase value given a complex value
-     * @param v complex value to query with
-     * @return nearest amplitude and phase value
-     */
-    AMP8I_PHS8I_t nearest_neighbor(const six::zfloat& v) const;
-    static std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs,  const six::AmplitudeTable*);
-
-private:
-    std::vector<AMP8I_PHS8I_t> nearest_neighbors(std::span<const six::zfloat> inputs) const;
-
-    //! The sorted set of possible magnitudes order from small to large.
-    std::vector<float> uncached_magnitudes; // Order is important! This must be ...
-    const std::vector<float>& magnitudes; // ... before this.
-
-    //! The difference in phase angle between two UINT phase values.
-    float phase_delta;
-    uint8_t getPhase(six::zfloat) const;
+    std::span<const float> magnitudes() const;
+    float phase_delta() const;
 
     //! Unit vector rays that represent each direction that phase can point.
-    std::array<six::zfloat, UINT8_MAX + 1> phase_directions;
+    struct phase_directions final
+    {
+        std::array<zfloat, AmplitudeTableSize> value; // interleaved, std::complex<float>
+        #if SIX_sicd_has_VCL || SIX_sicd_has_sisd
+        std::array<float, AmplitudeTableSize> real;
+        std::array<float, AmplitudeTableSize> imag;
+        #endif
+    };
+    const phase_directions& get_phase_directions() const;
+
+    uint8_t getPhase(six::zfloat v) const;
+
+private:
+    //! The sorted set of possible magnitudes order from small to large.
+    std::array<float, AmplitudeTableSize> uncached_magnitudes_;
+    std::span<const float> magnitudes_;
+
+    //! The difference in phase angle between two UINT phase values.
+    float phase_delta_;
+
+    //! Unit vector rays that represent each direction that phase can point.
+    phase_directions phase_directions_;
 };
 }
 }
 
-struct AmplitudeTable final : public LUT
+struct SIX_SIX_API AmplitudeTable final : public LUT
 {
     //!  Constructor.  Creates a 256-entry table
     AmplitudeTable(size_t elementSize) noexcept(false) :
-        LUT(UINT8_MAX + 1 /*i.e., 256*/, elementSize)
+        LUT(AmplitudeTableSize /*i.e., 256*/, elementSize)
     {
     }
     AmplitudeTable() noexcept(false) :  AmplitudeTable(sizeof(double)) 
@@ -234,7 +314,7 @@ struct AmplitudeTable final : public LUT
     }
     AmplitudeTable(const nitf::LookupTable& lookupTable) noexcept(false) : LUT(lookupTable)
     {
-        if (size() != 256)
+        if (size() != AmplitudeTableSize)
         {
             throw std::invalid_argument("lookupTable should have 256 elements.");
         }
@@ -248,6 +328,10 @@ struct AmplitudeTable final : public LUT
     size_t size() const noexcept
     {
         return numEntries;
+    }
+    static constexpr auto ssize() noexcept // signed size()
+    {
+        return gsl::narrow<ptrdiff_t>(AmplitudeTableSize);
     }
 
     bool operator==(const AmplitudeTable& rhs) const
@@ -299,13 +383,13 @@ struct AmplitudeTable final : public LUT
     // This is a "cache" mostly because this is a convenient place to store the data; it
     // doesn't take that long to generate the lookup table.  Note that existing code wants
     // to work with a `const AmplitudeTable &`, thus `mutable` ... <shrug>.
-    void cacheLookup_(std::unique_ptr<Amp8iPhs8iLookup_t>&& lookup) const
+    void cacheLookup_(std::vector<six::zfloat>&& lookup_) const
     {
-        pLookup = std::move(lookup);
+        lookup = std::move(lookup_);
     }
-    const Amp8iPhs8iLookup_t* getLookup() const
+    const std::vector<six::zfloat>* getLookup() const
     {
-        return pLookup.get();
+        return lookup.empty() ? nullptr : &lookup;
     }
 
     // Again, this is a convenient place to store the data as it depends on an AmplitudeTable instance.
@@ -319,7 +403,7 @@ struct AmplitudeTable final : public LUT
     }
 
 private:
-    mutable std::unique_ptr<Amp8iPhs8iLookup_t> pLookup; // to big for the stack
+    mutable std::vector<zfloat> lookup;
     mutable std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pFromComplex;    
 };
 

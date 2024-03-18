@@ -25,7 +25,7 @@
 NITF_CXX_GUARD
 
 // MIL-PRF-89034, Table 9 (page 48).
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PRADAA_description[] = {
     {NITF_BCS_A, 8, "DPPDB Absolute CE 90%", "PACE" },
     {NITF_BCS_A, 8, "DPPDB Absolute LE 90%", "PALE" },
     {NITF_BCS_A, 8, "DPPDB Support Data CE 90%", "PSDCE" },
@@ -35,6 +35,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PRADAA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PRADAA)
 
 NITF_CXX_ENDGUARD

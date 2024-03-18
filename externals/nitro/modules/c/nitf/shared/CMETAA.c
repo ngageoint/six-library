@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CMETAA_description[] = {
     {NITF_BCS_N, 2, "Number of Related TREs", "RELATED_TRES" },
     {NITF_BCS_A, 120, "Related TREs", "ADDITIONAL_TRES" },
     {NITF_BCS_A, 12, "Processor Version No.", "RD_PRC_NO" },
@@ -238,6 +238,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CMETAA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CMETAA)
 
 NITF_CXX_ENDGUARD

@@ -17,9 +17,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
         python-version: '3.7'
     - name: configure
@@ -37,7 +37,7 @@ jobs:
         cd out
         ctest -C ${{ matrix.configuration }} --output-on-failure
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1 # https://github.com/marketplace/actions/setup-msbuild
       with:
         msbuild-architecture: x64
     - name: msbuild
@@ -54,7 +54,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure CODA-OSS
       run: |
         mkdir externals\coda-oss\out
@@ -66,7 +66,7 @@ jobs:
         cmake --build . --config ${{ matrix.configuration }} -j
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1 # https://github.com/marketplace/actions/setup-msbuild
       with:
         msbuild-architecture: x64
     - name: msbuild
@@ -90,9 +90,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
         python-version: '3.7'
     - name: configure

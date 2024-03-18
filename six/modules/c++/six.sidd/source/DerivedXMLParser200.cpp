@@ -277,7 +277,7 @@ xml::lite::Document* DerivedXMLParser200::toXML(const DerivedData* derived) cons
     // optional
     if (derived->compression.get())
     {
-       convertCompressionToXML(*derived->compression, root);
+        convertCompressionToXML(*this, *(derived->compression), *root);
     }
     // optional
     if (derived->digitalElevationData.get())
@@ -1369,7 +1369,7 @@ xml::lite::Element& DerivedXMLParser200::convertKernelToXML(const DerivedXMLPars
             ostr << "Filter size is " << kernel.custom->size.row << " rows x "
                 << kernel.custom->size.col << " cols but have "
                 << kernel.custom->filterCoef.size() << " coefficients";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
 
         auto& filterCoef = parser.newElement("FilterCoefficients", customElem);
@@ -1422,7 +1422,7 @@ xml::lite::Element& DerivedXMLParser200::convertBankToXML(const DerivedXMLParser
             ostr << "Filter size is " << bank.custom->numPhasings << " x "
                 << bank.custom->numPoints << " but have "
                 << bank.custom->filterCoef.size() << " coefficients";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::Exception(Ctxt(ostr));
         }
 
         auto& filterCoef = parser.newElement("FilterCoefficients", customElem);
@@ -1482,32 +1482,26 @@ xml::lite::Element& DerivedXMLParser200::convertFilterToXML(const DerivedXMLPars
     return filterElem;
 }
 
-XMLElem DerivedXMLParser200::convertCompressionToXML(
-        const Compression& compression,
-        XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &convertCompressionToXML(*this, compression, *parent);
-}
 xml::lite::Element& DerivedXMLParser200::convertCompressionToXML(const DerivedXMLParser& parser,
     const Compression& compression, xml::lite::Element& parent)
 {
     auto& compressionElem = parser.newElement("Compression", parent);
     auto& j2kElem = parser.newElement("J2K", compressionElem);
     auto& originalElem = parser.newElement("Original", j2kElem);
-    convertJ2KToXML(parser, compression.original, originalElem);
+    parser.convertJ2KToXML(compression.original, originalElem);
 
     if (compression.parsed.get())
     {
         auto& parsedElem = parser.newElement("Parsed", j2kElem);
-        convertJ2KToXML(parser, *compression.parsed, parsedElem);
+        parser.convertJ2KToXML(*(compression.parsed), parsedElem);
     }
     return compressionElem;
 }
 
-void DerivedXMLParser200::convertJ2KToXML(const DerivedXMLParser& parser,
-    const J2KCompression& j2k, xml::lite::Element& parent)
+void DerivedXMLParser200::convertJ2KToXML(const J2KCompression& j2k, xml::lite::Element& parent) const
 {
+    auto& parser = *this;
+
     parser.createInt("NumWaveletLevels", j2k.numWaveletLevels, parent);
     parser.createInt("NumBands", j2k.numBands, parent);
 
@@ -1518,7 +1512,7 @@ void DerivedXMLParser200::convertJ2KToXML(const DerivedXMLParser& parser,
     for (size_t ii = 0; ii < numLayers; ++ii)
     {
         auto& layerElem = parser.newElement("Layer", layerInfoElem);
-        parser.setAttribute(layerElem, "index", ii + 1);
+        parser.setAttribute(layerElem, "index", ii + 1); // `positiveInteger` in SIDD 2.0; changed to `nonNegativeInteger` in SIDD 3.0
         parser.createDouble("Bitrate", j2k.layerInfo[ii].bitRate, layerElem);
     }
 }
@@ -1582,7 +1576,7 @@ xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const 
 
     if (exploitationFeatures.collections.empty())
     {
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
             "ExploitationFeatures must have at least [1] Collection, " \
             "only [%d] found", exploitationFeatures.collections.size())));
     }

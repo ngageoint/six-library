@@ -19,12 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_RADIOMETRIC_H__
 #define __SIX_RADIOMETRIC_H__
 
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -35,7 +37,7 @@ namespace six
  *
  *  Field and subfields added in 1.0.0
  */
-struct NoiseLevel
+struct SIX_SIX_API NoiseLevel
 {
     NoiseLevel();
 
@@ -79,7 +81,7 @@ struct NoiseLevel
  *  undefined, in which case they will not be written out.
  *
  */
-struct Radiometric
+struct SIX_SIX_API Radiometric
 {
 public:
 

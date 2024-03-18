@@ -109,15 +109,10 @@ public:
     void set(size_t i, const OneD<_T>& p)
     {
         if (i > orderX())
-            throw except::Exception(
-                Ctxt("Index [" + str::toString(i) +
-                "] is out of bounds for orderX [" +
-                str::toString(orderX()) + "]"));
+            throw except::Exception(Ctxt("Index [" + std::to_string(i) + "] is out of bounds for orderX [" + std::to_string(orderX()) + "]"));
         else if (p.order() != orderY())
             throw except::Exception(
-                Ctxt("OneD poly [" + str::toString(p.order()) +
-                "] is of the incorrect size for orderY [" +
-                str::toString(orderY()) + "]"));
+                    Ctxt("OneD poly [" + std::to_string(p.order()) + "] is of the incorrect size for orderY [" + std::to_string(orderY()) + "]"));
         else
             mCoef[i] = p;
     }

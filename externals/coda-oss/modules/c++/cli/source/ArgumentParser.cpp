@@ -579,7 +579,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
             case cli::SUB_OPTIONS:
             {
                 if (optionsStr.empty())
-                    parseError(str::Format("invalid sub option: [%s]", argVar.c_str()));
+                    parseError(str::Format("invalid sub option: [%s]", argVar));
 
                 auto v_ = std::make_unique<cli::Value>();
                 auto v = currentResults->hasValue(optionsStr) ? currentResults->getValue(optionsStr) : v_.get();
@@ -706,7 +706,7 @@ std::unique_ptr<cli::Results> cli::ArgumentParser::parse(const std::string& prog
             }
             if (!isValid)
             {
-                parseError(str::Format("invalid option for [%s]", argVar.c_str()));
+                parseError(str::Format("invalid option for [%s]", argVar));
             }
         }
     }

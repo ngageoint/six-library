@@ -89,7 +89,7 @@ j2k::Encoder::Encoder(Image& image, const CompressionParameters& compressionPara
 
             std::ostringstream os;
             os << "Failed to setup openjpeg encoder with openjpeg error: " << opjErrorMsg;
-            throw except::Exception(Ctxt(os.str()));
+            throw except::Exception(Ctxt(os));
         }
 
         throw except::Exception(Ctxt("Failed to setup openjpeg encoder."));

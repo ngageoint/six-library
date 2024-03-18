@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription ICHIPB_description[] = {
     {NITF_BCS_A, 2, "Non-linear transform flag", "XFRM_FLAG" },
     {NITF_BCS_A, 10, "Scale Factor Relative to RO", "SCALE_FACTOR" },
     {NITF_BCS_A, 2, "Anamorphic Correction Indicator", "ANAMRPH_CORR" },
@@ -99,6 +99,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(ICHIPB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(ICHIPB)
 
 NITF_CXX_ENDGUARD

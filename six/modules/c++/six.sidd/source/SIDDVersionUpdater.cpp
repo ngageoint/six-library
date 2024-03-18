@@ -175,8 +175,7 @@ void SIDDVersionUpdater::updateSingleIncrement()
                 emitWarning(msg.str());
 
                 msg.str("");
-                msg << "ExploitationFeatures.Product[" << ii
-                    << "].Polarization";
+                msg << "ExploitationFeatures.Product[" << ii << "].Polarization";
                 emitWarning(msg.str());
             }
         }

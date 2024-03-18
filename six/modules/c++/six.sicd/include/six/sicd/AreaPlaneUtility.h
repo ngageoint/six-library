@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_SICD_AREA_PLANE_UTILITY_H__
 #define __SIX_SICD_AREA_PLANE_UTILITY_H__
 
@@ -27,6 +28,7 @@
 #include <six/Types.h>
 #include <six/sicd/ComplexData.h>
 #include <six/sicd/RadarCollection.h>
+#include <six/sicd/Exports.h>
 
 #include <types/RgAz.h>
 #include <types/RowCol.h>
@@ -40,7 +42,7 @@ namespace sicd
  * \brief Provides functions to populate
  * ComplexData->RadarCollection->Area->Plane if unset
  */
-class AreaPlaneUtility
+class SIX_SICD_API AreaPlaneUtility
 {
 public:
     /*!

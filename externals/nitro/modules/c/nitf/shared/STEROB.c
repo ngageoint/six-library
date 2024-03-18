@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription STEROB_description[] = {
     {NITF_BCS_A, 60, "Standard ID", "ST_ID" },
     {NITF_BCS_A, 1, "N Mates", "N_MATES" },
     {NITF_BCS_A, 1, "Mate Instance", "MATE_INSTANCE" },
@@ -38,6 +38,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(STEROB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(STEROB)
 
 NITF_CXX_ENDGUARD

@@ -19,13 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_METADATA_BASE_H__
 #define __CPHD_METADATA_BASE_H__
 
 #include <ostream>
 #include <six/Init.h>
 #include <cphd/Enums.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -38,7 +39,7 @@ namespace cphd
  *  to interact with the signal block reader Wideband, currently in CPHD
  *
  */
-struct MetadataBase
+struct SIX_CPHD_API MetadataBase
 {
     //! Default constructor
     MetadataBase()

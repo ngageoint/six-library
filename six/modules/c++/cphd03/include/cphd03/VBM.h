@@ -31,6 +31,7 @@
 #include <cphd/Types.h>
 #include <cphd03/Data.h>
 #include <cphd03/VectorParameters.h>
+#include <cphd03/Exports.h>
 
 namespace cphd03
 {
@@ -42,7 +43,7 @@ namespace cphd03
 //  the cphd03::VectorParameters info (for the map of available VBM entries)
 //  and the VBP data itself
 
-struct VBM
+struct SIX_CPHD03_API VBM final
 {
     /*
      *  \func Constructor
@@ -327,7 +328,7 @@ private:
     // Then one VectorBasedParameter per vector.
     std::vector<std::vector<VectorBasedParameters> > mData;
 
-    friend std::ostream& operator<< (std::ostream& os, const VBM& d);
+    SIX_CPHD03_API friend std::ostream& operator<< (std::ostream& os, const VBM& d);
 };
 }
 

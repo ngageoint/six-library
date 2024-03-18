@@ -47,9 +47,9 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)modules\c\nrt\include;$(SolutionDir)modules\c\nitf\include;$(SolutionDir)modules\c\jpeg\include;$(SolutionDir)modules\c\j2k\include;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c;$(SolutionDir)modules\c++;$(SolutionDir)modules\c++\nitf\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -64,8 +64,8 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SupportJustMyCode>true</SupportJustMyCode>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +78,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)modules\c\nrt\include;$(SolutionDir)modules\c\nitf\include;$(SolutionDir)modules\c\jpeg\include;$(SolutionDir)modules\c\j2k\include;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c;$(SolutionDir)modules\c++;$(SolutionDir)modules\c++\nitf\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -113,6 +113,9 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\externals\coda-oss\modules\c++\coda-oss.vcxproj">
+      <Project>{9997e895-5161-4ddf-8f3f-099894cb2f21}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\nitf-c++.vcxproj">
       <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
     </ProjectReference>

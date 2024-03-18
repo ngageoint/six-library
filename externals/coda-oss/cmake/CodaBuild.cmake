@@ -128,8 +128,12 @@ macro(coda_initialize_build)
     option(BUILD_SHARED_LIBS "Build shared libraries instead of static." OFF)
     if(BUILD_SHARED_LIBS)
         set(CODA_LIBRARY_TYPE "shared")
+        add_definitions(-DCODA_OSS_LIBRARY_SHARED=1)
+        add_definitions(-UCODA_OSS_LIBRARY_STATIC)
     else()
         set(CODA_LIBRARY_TYPE "static")
+        add_definitions(-DCODA_OSS_LIBRARY_STATIC=1)
+        add_definitions(-UCODA_OSS_LIBRARY_SHARED)
     endif()
 
     option(CODA_BUILD_TESTS "build tests" ON)
@@ -141,6 +145,17 @@ macro(coda_initialize_build)
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
+
+    # Turn on AVX2 by default ... it's from 2013.
+    # Well, no :-( ... it seems to cause crashes w/older
+    # compilers on build servers. :-(
+    set(ENABLE_AVX2 false)
+    set(ENABLE_AVX512F false)
+    #if (NOT ENABLE_AVX512F)
+    #    if (NOT DISABLE_AVX2)
+    #        set(ENABLE_AVX2 true)
+    #    endif()
+    #endif()
 
     # MSVC-specific flags and options.
     if (MSVC)

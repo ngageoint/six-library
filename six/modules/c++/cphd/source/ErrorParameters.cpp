@@ -161,8 +161,7 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
         }
         for (const auto& parameter : e.monostatic->parameter)
         {
-            os << "    Parameter Name   : " << parameter.getName() << "\n"
-                << "    Parameter Value  : " << parameter.str() << "\n";
+            out(os, parameter);
         }
     }
     else if (e.bistatic.get())
@@ -177,8 +176,7 @@ std::ostream& operator<< (std::ostream& os, const ErrorParameters& e)
             << e.bistatic->rcvPlatform.radarSensor;
         for (const auto& parameter : e.bistatic->parameter)
         {
-            os << "    Parameter Name   : " << parameter.getName() << "\n"
-                << "    Parameter Value  : " << parameter.str() << "\n";
+            out(os, parameter);
         }
     }
     else

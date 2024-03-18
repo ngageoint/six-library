@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_XML_CONTROL_FACTORY_H__
 #define __SIX_XML_CONTROL_FACTORY_H__
 
@@ -34,6 +35,7 @@
 #include <scene/sys_Conf.h>
 
 #include "six/XMLControl.h"
+#include "six/Exports.h"
 
 namespace six
 {
@@ -91,7 +93,7 @@ template <typename T> struct XMLControlCreatorT : public XMLControlCreator
  *  identify which reader/writer to create, and one that uses a
  *  string (the same one that identifies the type in the container)
  */
-struct XMLControlRegistry
+struct SIX_SIX_API XMLControlRegistry
 {
     //!  Destructor
     virtual ~XMLControlRegistry();
@@ -179,25 +181,32 @@ private:
  */
 std::u8string toXMLString(const Data* data,
                         const XMLControlRegistry *xmlRegistry = nullptr);
-std::string toXMLString_(const Data* data,
+SIX_SIX_API std::string toXMLString_(const Data* data,
     const XMLControlRegistry* xmlRegistry = nullptr);
 
 /*!
  *  Additionally performs schema validation --
  *  This function must must receive a valid logger to print validation errors
  */
-std::u8string toValidXMLString(
+SIX_SIX_API std::u8string toValidXMLString(
         const Data* data,
         const std::vector<std::string>& schemaPaths,
         logging::Logger* log,
         const XMLControlRegistry *xmlRegistry = nullptr);
-std::u8string toValidXMLString(const Data&,
+SIX_SIX_API std::u8string toValidXMLString(const Data&,
     const std::vector<std::string>& schemaPaths, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
-std::u8string toValidXMLString(const Data&,
+SIX_SIX_API std::u8string toValidXMLString(const Data&,
     const std::vector<std::filesystem::path>*, logging::Logger*, const XMLControlRegistry* xmlRegistry = nullptr);
 
 //!  Singleton declaration of our XMLControlRegistry
-typedef mt::Singleton<XMLControlRegistry, true> XMLControlFactory;
+SIX_SIX_API XMLControlRegistry& getXMLControlFactory();
+namespace XMLControlFactory
+{
+  inline auto& getInstance()
+  {
+    return getXMLControlFactory();
+  }
+}
 
 }
 

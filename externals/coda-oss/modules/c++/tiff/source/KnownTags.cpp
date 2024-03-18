@@ -28,14 +28,6 @@
 #include "tiff/IFDEntry.h"
 #include <import/mt.h>
 
-const char tiff::KnownTags::IMAGE_WIDTH[]                   = "ImageWidth";
-const char tiff::KnownTags::IMAGE_LENGTH[]                  = "ImageLength";
-const char tiff::KnownTags::BITS_PER_SAMPLE[]               = "BitsPerSample";
-const char tiff::KnownTags::COMPRESSION[]                   = "Compression";
-const char tiff::KnownTags::SAMPLES_PER_PIXEL[]             = "SamplesPerPixel";
-const char tiff::KnownTags::PHOTOMETRIC_INTERPRETATION[]    = "PhotometricInterpretation";
-const char tiff::KnownTags::SAMPLE_FORMAT[]                 = "SampleFormat";
-
 tiff::KnownTags::KnownTags()
 {
     addEntry(254, tiff::Const::Type::LONG, "NewSubfileType");

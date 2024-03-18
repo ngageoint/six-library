@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription RSMPIA_description[] = {
     {NITF_BCS_A, 80, "Image Identifier", "IID" },
     {NITF_BCS_A, 40, "RSM Image Support Data Edition", "EDITION" },
 
@@ -67,6 +67,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(RSMPIA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(RSMPIA)
 
 NITF_CXX_ENDGUARD

@@ -504,6 +504,31 @@
 			<si:Coef exponent1="0" exponent2="0">0</si:Coef>
 		</si:GammaZeroSFPoly>
 	</Radiometric>
+	<Compression>
+		<J2K>
+			<Original>
+				<NumWaveletLevels>1</NumWaveletLevels>
+				<NumBands>2</NumBands>
+				<LayerInfo numLayers="1">
+					<Layer index="0">
+						<Bitrate>3.14</Bitrate>
+					</Layer>					
+				</LayerInfo>
+			</Original>
+			<Parsed>
+				<NumWaveletLevels>3</NumWaveletLevels>
+				<NumBands>4</NumBands>
+				<LayerInfo numLayers="2">
+					<Layer index="0">
+						<Bitrate>3.1415</Bitrate>
+					</Layer>
+					<Layer index="1">
+						<Bitrate>3.1415926</Bitrate>						
+					</Layer>
+				</LayerInfo>
+			</Parsed>
+		</J2K>
+	</Compression>
 	<DigitalElevationData>
 		<GeographicCoordinates>
 			<LongitudeDensity>1</LongitudeDensity>

@@ -11,9 +11,9 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install python dependencies
@@ -58,12 +58,12 @@ jobs:
         os: [windows-latest]
         platform: [x64]
         configuration: [Debug] # Debug turns on more compiler warnings
-        avx: [AVX2, AVX512F]
+        avx: [AVX512F]
     name: ${{ matrix.os }}-${{ matrix.avx }}-msbuild
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure
       run: |
         ls env:
@@ -76,7 +76,7 @@ jobs:
         cmake --build . --config ${{ matrix.configuration }} -j
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1 # https://github.com/marketplace/actions/setup-msbuild
       with:
         msbuild-architecture: x64
     - name: msbuild
@@ -98,9 +98,9 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install python dependencies
@@ -132,11 +132,11 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         configuration: [Debug, Release]
-        avx: [AVX2, AVX512F]
+        avx: [AVX512F]
     name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure
       run: |
         mkdir out && cd out
@@ -161,9 +161,9 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
         python-version: ${{ matrix.python-version }}
     - name: configure_with_swig

@@ -35,12 +35,13 @@
 #include "six/Utilities.h"
 #include "six/XMLControlFactory.h"
 #include "six/sicd/ComplexData.h"
+#include "six/sicd/Exports.h"
 
 namespace six
 {
 namespace sicd
 {
-class DataParser final
+class SIX_SICD_API DataParser final
 {
     six::DataParser mDataParser;
 

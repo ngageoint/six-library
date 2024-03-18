@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PRJPSB_description[] = {
     {NITF_BCS_A, 80, "Projection Name", "PRN" },
     {NITF_BCS_A, 2, "Projection Code", "PCO" },
     {NITF_BCS_N, 1, "Number of Projection Parameters", "NUM_PRJ" },
@@ -36,6 +36,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PRJPSB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PRJPSB)
 
 NITF_CXX_ENDGUARD

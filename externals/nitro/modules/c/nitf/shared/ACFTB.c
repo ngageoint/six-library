@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription ACFTB_description[] = {
     {NITF_BCS_A, 20, "Aircraft Mission ID", "AC_MSN_ID" },
     {NITF_BCS_A, 10, "Aircraft Tail Number", "AC_TAIL_NO" },
     {NITF_BCS_A, 12, "Acrft Takeoff Date/Time", "AC_TO" },
@@ -56,6 +56,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(ACFTB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(ACFTB)
 
 NITF_CXX_ENDGUARD

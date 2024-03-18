@@ -566,7 +566,7 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
 
     if (exploitationFeatures->collections.empty())
     {
-        throw except::Exception(Ctxt(FmtX(
+        throw except::Exception(Ctxt(str::Format(
             "ExploitationFeatures must have at least [1] Collection, " \
             "only [%d] found", exploitationFeatures->collections.size())));
     }

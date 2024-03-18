@@ -181,8 +181,6 @@ static bool equals(const std::vector<std::byte>& lhs, const std::vector<std::byt
 
 TEST_CASE(j2k_compress_tile)
 {
-    nitf::Test::setNitfPluginPath();
-
     const size_t numThreads = sys::OS().getNumCPUs() - 1;
 
     {
@@ -227,6 +225,8 @@ TEST_CASE(j2k_compress_tile)
 }
 
 TEST_MAIN(
+    nitf::Test::j2kSetNitfPluginPath();
+
     TEST_CHECK(j2k_compress_tile);
     )
 

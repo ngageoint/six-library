@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_TIMELINE_H__
 #define __SIX_TIMELINE_H__
 
@@ -26,6 +27,7 @@
 #include "six/Types.h"
 #include "six/Init.h"
 #include "six/Parameter.h"
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -38,7 +40,7 @@ namespace sicd
  *  Identifies a set of IPP parameters.  Minimum of 1 set of
  *  parameters are required for IPP
  */
-struct TimelineSet
+struct SIX_SICD_API TimelineSet
 {
     //!  Constructor
     TimelineSet();
@@ -75,7 +77,7 @@ struct TimelineSet
  *  Describes the interpulse period (IPP) parameters.  This section
  *  of SICD is optional, and contains one or more Sets (TimelineSet)
  */
-struct InterPulsePeriod
+struct SIX_SICD_API InterPulsePeriod
 {
     /*!
      *  Constructor.
@@ -109,7 +111,7 @@ struct InterPulsePeriod
  *  optional.
  *
  */
-struct Timeline
+struct SIX_SICD_API Timeline
 {
     //! Constructor
     Timeline();
