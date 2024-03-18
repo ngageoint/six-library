@@ -2,6 +2,14 @@
 
 # SIX [Release](https://github.com/ngageoint/six-library/releases) Notes
 
+## [Version 3.3.0](https://github.com/ngageoint/six-library/releases/tag/SIX-3.3.0); March 18, 2024
+* [coda-oss](https://github.com/mdaus/coda-oss) version [2024-03-18](https://github.com/mdaus/coda-oss/releases/tag/2024-03-18)
+* [nitro](https://github.com/mdaus/nitro) version [2.11.6](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.6)
+* Fix SIDD 3.0 validation with J2K compression; **this is a breaking change**.
+* Support for using SIDD code (only actually available with C++17).
+* Fix bug computing size of the CPHD scratch buffer.
+* Allow components to be built as shared-libraries (DLLs); disabled by default.
+
 ## [Version 3.2.5](https://github.com/ngageoint/six-library/releases/tag/SIX-3.2.5); October 23, 2023
 * [coda-oss](https://github.com/mdaus/coda-oss) version [2023-10-23](https://github.com/mdaus/coda-oss/releases/tag/2023-10-23)
 * [nitro](https://github.com/mdaus/nitro) version [2.11.5](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.5)
