@@ -1,5 +1,11 @@
 ﻿# NITRO (NITF i/o) Release Notes
 
+## [Version 2.11.6](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.6); March 18, 2024
+* [coda-oss](https://github.com/mdaus/coda-oss) release [2024-03-18](https://github.com/mdaus/coda-oss/releases/tag/2024-03-18)
+* TREs can now be statically ["pre-loaded"](https://github.com/mdaus/nitro/pull/601), no need to set NITF_PLUGIN_PATH.
+* Be sure TRE field padding is done properly.
+* Allow shared-libraries (DLLs) to be build; disabled by default.
+
 ## [Version 2.11.5](https://github.com/mdaus/nitro/releases/tag/NITRO-2.11.5); October 23, 2023
 * [coda-oss](https://github.com/mdaus/coda-oss) release [2023-10-23](https://github.com/mdaus/coda-oss/releases/tag/2023-10-23)
 * Fix some ASAN diagnostics, still more to do.

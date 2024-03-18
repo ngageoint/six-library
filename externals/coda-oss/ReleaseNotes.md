@@ -1,7 +1,13 @@
 ﻿# coda-oss Release Notes
 
-## [Release 202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+## [Release 2024-03-18](https://github.com/mdaus/coda-oss/releases/tag/2024-03-18)
 * Update to [HighFive 2.8.0](https://github.com/BlueBrain/HighFive/releases/tag/v2.8.0).
+* Use lookup tables for converting between character encodings and upper/lower-case.
+* [`sys::Transform(std::execution)`](https://en.cppreference.com/w/cpp/algorithm/execution_policy_tag_t) for C++14.
+* Infrastructure to support SIMD processing.
+* Simple/incomplete [`std::mdspan`](https://en.cppreference.com/w/cpp/container/mdspan) implementation.
+* Support for building as a shared library/DLL, disabled by default.
+* Create/destroy Xerces just once per process.
 
 ## [Release 2023-10-23](https://github.com/mdaus/coda-oss/releases/tag/2023-10-23)
 * Tweaked **.gitattributes**.
