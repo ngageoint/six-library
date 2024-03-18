@@ -273,9 +273,7 @@ void AbstractOS::appendEnv(const std::string& envVar, const std::vector<std::str
 static std::string getSpecialEnv_PID(const AbstractOS& os, const std::string& envVar)
 {
     assert((envVar == "$") || (envVar == "PID"));
-    #if _MSC_VER
-    UNREFERENCED_PARAMETER(envVar);
-    #endif
+    CODA_OSS_mark_symbol_unused(envVar);
     const auto pid = os.getProcessId();
     return std::to_string(pid);
 }
@@ -284,8 +282,8 @@ static std::string getSpecialEnv_USER(const AbstractOS& os, const std::string& e
 {
     // $USER on *nix, %USERNAME% on Windows; make it so either one always works
     assert((envVar == "USER") || (envVar == "USERNAME"));
+    CODA_OSS_mark_symbol_unused(envVar);
     #if _WIN32
-    UNREFERENCED_PARAMETER(envVar);
     return os.getEnv("USERNAME");
     #else
     return os.getEnv("USER");
@@ -297,8 +295,8 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
     // $HOME on *nix, %USERPROFILE% on Windows; make it so either one always works
     assert((envVar == "HOME") || (envVar == "USERPROFILE"));
 
+    CODA_OSS_mark_symbol_unused(envVar);
     #ifdef _WIN32
-    UNREFERENCED_PARAMETER(envVar);
     constexpr auto home = "USERPROFILE";
     #else  // assuming *nix
     // Is there a better way to support ~ on *nix than $HOME ?
@@ -323,9 +321,7 @@ static std::string getSpecialEnv_HOME(const AbstractOS& os, const std::string& e
 static std::string getSpecialEnv_Configuration(const AbstractOS&, const std::string& envVar)
 {
     assert(envVar == "Configuration");
-    #if _MSC_VER
-    UNREFERENCED_PARAMETER(envVar);
-    #endif
+    CODA_OSS_mark_symbol_unused(envVar);
     // in Visual Studio, by default this is usually "Debug" and "Release"
     return sys::debug_build() ? "Debug" : "Release";
 }
@@ -334,8 +330,8 @@ static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& 
     assert((envVar == "Platform") || (envVar == "HOSTTYPE"));
 
     // in Visual Studio, this is "Win32" (maybe "x86") or "x64"
+    CODA_OSS_mark_symbol_unused(envVar);
     #ifdef _WIN32
-        UNREFERENCED_PARAMETER(envVar);
         #ifdef _WIN64
         return "x64";
         #else
@@ -350,9 +346,7 @@ static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& 
 static std::string getSpecialEnv_PlatformToolset(const AbstractOS&, const std::string& envVar)
 {
     assert(envVar == "PlatformToolset");
-    #if _MSC_VER
-    UNREFERENCED_PARAMETER(envVar);
-    #endif
+    CODA_OSS_mark_symbol_unused(envVar);
 
 #ifdef _WIN32
 	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
@@ -386,9 +380,7 @@ static std::string getSpecialEnv_SECONDS(const AbstractOS&, const std::string& e
     // https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
     // "This variable expands to the number of seconds since the shell was started. ..."
     assert(envVar == "SECONDS");
-    #if _MSC_VER
-    UNREFERENCED_PARAMETER(envVar);
-    #endif
+    CODA_OSS_mark_symbol_unused(envVar);
     return getSpecialEnv_SECONDS_();
 }
 
