@@ -224,6 +224,11 @@ inline xml::lite::Element& createValue(const xml::lite::QName& name,
     const auto toString = [&](const T& v) { return toString_(name, v, parent); };
     return createValue(name, v, parent, addClassAttributes, type, attributeUri, toString);
 }
+template<typename T>
+xml::lite::Element& XmlLite::createValue(const xml::lite::QName& name, const T& v, xml::lite::Element& parent, const std::string& type) const
+{
+    return six::createValue(name, v, parent, mAddClassAttributes, type, getDefaultURI());
+}
 
 template<typename T>
 static xml::lite::Element* createOptionalValue(const xml::lite::QName& name,
@@ -239,7 +244,7 @@ static xml::lite::Element* createOptionalValue(const xml::lite::QName& name,
 
 xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, int32_t p, xml::lite::Element& parent) const
 {
-    return createValue(name, p, parent, mAddClassAttributes, "xs:int", getDefaultURI());
+    return createValue(name, p, parent, "xs:int");
 }
 xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
 {
@@ -255,7 +260,7 @@ xml::lite::Element& XmlLite::createInt_(const std::string& name, int32_t p, xml:
 // https://www.oreilly.com/library/view/xml-schema/0596002521/re80.html
 xml::lite::Element& XmlLite::createLong(const xml::lite::QName& name, int64_t p, xml::lite::Element& parent) const
 {
-    return createValue(name, p, parent, mAddClassAttributes, "xs:long", getDefaultURI());
+    return createValue(name, p, parent, "xs:long");
 }
 xml::lite::Element& XmlLite::createLong(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
 {
@@ -271,7 +276,7 @@ xml::lite::Element& XmlLite::createLong_(const std::string& name, int64_t p, xml
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, double p, xml::lite::Element& parent) const
 {
     p = value(p); // be sure this is initialized; throws if not
-    return createValue(name, p, parent, mAddClassAttributes, "xs:double", getDefaultURI());
+    return createValue(name, p, parent, "xs:double");
 }
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
@@ -311,7 +316,7 @@ xml::lite::Element* XmlLite::createBooleanType(const xml::lite::QName& name, Boo
     }
 
     const auto toString = [&](const BooleanType& v) { return six::toString(v); };
-    return &createValue(name, p, parent,
+    return &six::createValue(name, p, parent,
         mAddClassAttributes, "xs:boolean", getDefaultURI(),
         toString);
 }
@@ -335,8 +340,7 @@ xml::lite::Element* XmlLite::createOptional(const xml::lite::QName& name, const 
 
 xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
 {
-    return createValue(name, six::toString(p), parent,
-        mAddClassAttributes, "xs:dateTime", getDefaultURI());
+    return createValue(name, six::toString(p), parent, "xs:dateTime");
 }
 xml::lite::Element& XmlLite::createDateTime(const std::string& name, const DateTime& p, xml::lite::Element& parent) const
 {
@@ -346,7 +350,7 @@ xml::lite::Element& XmlLite::createDateTime(const std::string& name, const DateT
 xml::lite::Element& XmlLite::createDate(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const
 {
     const auto toString = [&](const DateTime& p) { return p.format("%Y-%m-%d"); };
-    return createValue(name, p, parent,
+    return six::createValue(name, p, parent,
         mAddClassAttributes, "xs:date", getDefaultURI(),
         toString);
 }

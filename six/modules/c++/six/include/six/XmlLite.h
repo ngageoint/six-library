@@ -316,6 +316,9 @@ private:
     const xml::lite::Uri mDefaultURI;
     const bool mAddClassAttributes;
 
+    template<typename T>
+    xml::lite::Element& createValue(const xml::lite::QName& name, const T& v, xml::lite::Element& parent, const std::string& type) const;
+
     Logger mLogger;
 };
 
