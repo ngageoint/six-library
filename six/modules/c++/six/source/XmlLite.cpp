@@ -241,6 +241,12 @@ static xml::lite::Element* createOptionalValue(const xml::lite::QName& name,
     }
     return nullptr;
 }
+template<typename T>
+xml::lite::Element* XmlLite::createOptionalValue(const xml::lite::QName& name,
+    const std::optional<T>& v, xml::lite::Element& parent, const std::string& type) const
+{
+    return six::createOptionalValue(name, v, parent, mAddClassAttributes, type, getDefaultURI());
+}
 
 xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, int32_t p, xml::lite::Element& parent) const
 {
@@ -301,7 +307,7 @@ xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, doubl
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const xml::lite::QName& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
-    return createOptionalValue(name, p, parent, mAddClassAttributes, "xs:double", getDefaultURI());
+    return createOptionalValue(name, p, parent, "xs:double");
 }
 xml::lite::Element* XmlLite::createOptionalDouble(const std::string& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
@@ -335,7 +341,7 @@ xml::lite::Element* XmlLite::createOptional(const xml::lite::QName& name, const 
 }
 xml::lite::Element* XmlLite::createOptional(const xml::lite::QName& name, const std::optional<std::u8string>& v, xml::lite::Element& parent) const
 {
-    return createOptionalValue(name, v, parent, mAddClassAttributes, "xs:string", getDefaultURI());
+    return createOptionalValue(name, v, parent, "xs:string");
 }
 
 xml::lite::Element& XmlLite::createDateTime(const xml::lite::QName& name, const DateTime& p, xml::lite::Element& parent) const

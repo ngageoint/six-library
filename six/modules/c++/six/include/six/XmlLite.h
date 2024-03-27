@@ -317,7 +317,10 @@ private:
     const bool mAddClassAttributes;
 
     template<typename T>
-    xml::lite::Element& createValue(const xml::lite::QName& name, const T& v, xml::lite::Element& parent, const std::string& type) const;
+    xml::lite::Element& createValue(const xml::lite::QName&, const T& v, xml::lite::Element&, const std::string& type) const;
+
+    template<typename T>
+    xml::lite::Element* createOptionalValue(const xml::lite::QName&, const std::optional<T>& v, xml::lite::Element&, const std::string& type) const;
 
     Logger mLogger;
 };
