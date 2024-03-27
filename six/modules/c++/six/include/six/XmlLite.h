@@ -312,6 +312,7 @@ private:
     xml::lite::Element& createString_(const std::string& name, const std::string& p, xml::lite::Element& parent) const;
     xml::lite::QName makeQName(const std::string& name) const;
 
+    void addClassAttributes(xml::lite::Element&, const std::string& type) const;
     const xml::lite::Uri mDefaultURI;
     const bool mAddClassAttributes;
 

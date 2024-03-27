@@ -115,6 +115,13 @@ static void addClassAttributes(xml::lite::Element& elem, const std::string& type
 {
     XmlLite::setAttribute(elem, xml::lite::QName(uri, "class"), type);
 }
+void XmlLite::addClassAttributes(xml::lite::Element& elem, const std::string& type) const
+{
+    if (mAddClassAttributes)
+    {
+        six::addClassAttributes(elem, type, getDefaultURI());
+    }
+}
 
 xml::lite::Element* XmlLite::newElement(const xml::lite::QName& name, const std::string& characterData, xml::lite::Element* parent)
 {
@@ -149,10 +156,7 @@ xml::lite::Element& XmlLite::newElement(const xml::lite::QName& name, const std:
 xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
 {
     auto& elem = newElement(name, p, parent);
-    if (mAddClassAttributes)
-    {
-        addClassAttributes(elem, "xs:string", getDefaultURI());
-    }
+    addClassAttributes(elem, "xs:string");
     return elem;
 }
 xml::lite::Element& XmlLite::createString(const std::string& name,
@@ -163,10 +167,7 @@ xml::lite::Element& XmlLite::createString(const std::string& name,
 xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const std::u8string& p, xml::lite::Element& parent) const
 {
     auto& elem = newElement(name, p, parent);
-    if (mAddClassAttributes)
-    {
-        addClassAttributes(elem, "xs:string", getDefaultURI());
-    }
+    addClassAttributes(elem, "xs:string");
     return elem;
 }
 
@@ -243,10 +244,7 @@ xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, int32_t p, 
 xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
 {
     auto& elem = newElement(name, p, parent);
-    if (mAddClassAttributes)
-    {
-        addClassAttributes(elem, "xs:int", getDefaultURI());
-    }
+    addClassAttributes(elem, "xs:int");
     return elem;
 }
 xml::lite::Element& XmlLite::createInt_(const std::string& name, int32_t p, xml::lite::Element& parent) const
@@ -262,10 +260,7 @@ xml::lite::Element& XmlLite::createLong(const xml::lite::QName& name, int64_t p,
 xml::lite::Element& XmlLite::createLong(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
 {
     auto& elem = newElement(name, p, parent);
-    if (mAddClassAttributes)
-    {
-        addClassAttributes(elem, "xs:long", getDefaultURI());
-    }
+    addClassAttributes(elem, "xs:long");
     return elem;
 }
 xml::lite::Element& XmlLite::createLong_(const std::string& name, int64_t p, xml::lite::Element& parent) const
