@@ -236,7 +236,7 @@ static xml::lite::Element* createOptionalValue(const xml::lite::QName& name,
     return nullptr;
 }
 
-xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name,int p, xml::lite::Element& parent) const
+xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, int32_t p, xml::lite::Element& parent) const
 {
     return createValue(name, p, parent, mAddClassAttributes, "xs:int", getDefaultURI());
 }
@@ -249,9 +249,28 @@ xml::lite::Element& XmlLite::createInt(const xml::lite::QName& name, const std::
     }
     return elem;
 }
-xml::lite::Element& XmlLite::createInt_(const std::string& name, int p, xml::lite::Element& parent) const
+xml::lite::Element& XmlLite::createInt_(const std::string& name, int32_t p, xml::lite::Element& parent) const
 {
     return createInt(makeQName(name), p, parent);
+}
+
+// https://www.oreilly.com/library/view/xml-schema/0596002521/re80.html
+xml::lite::Element& XmlLite::createLong(const xml::lite::QName& name, int64_t p, xml::lite::Element& parent) const
+{
+    return createValue(name, p, parent, mAddClassAttributes, "xs:long", getDefaultURI());
+}
+xml::lite::Element& XmlLite::createLong(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
+{
+    auto& elem = newElement(name, p, parent);
+    if (mAddClassAttributes)
+    {
+        addClassAttributes(elem, "xs:long", getDefaultURI());
+    }
+    return elem;
+}
+xml::lite::Element& XmlLite::createLong_(const std::string& name, int64_t p, xml::lite::Element& parent) const
+{
+    return createLong(makeQName(name), p, parent);
 }
 
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, double p, xml::lite::Element& parent) const

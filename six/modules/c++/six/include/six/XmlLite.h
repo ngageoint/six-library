@@ -25,6 +25,7 @@
 #define SIX_six_XmlLite_h_INCLUDED_
 
 #include <assert.h>
+#include <stdint.h>
 
 #include <std/string>
 #include <type_traits>
@@ -154,8 +155,15 @@ struct SIX_SIX_API XmlLite final
     {
         return createString(name, six_toString(t), parent);
     }
+
+    // See https://www.w3schools.com/xml/schema_dtypes_numeric.asp
+    // xs:int: 32-bits signed, xs:long: 64-bits signed, xs:integer: unbounded signed
+    // Also see https://stackoverflow.com/questions/15336872/xsd-what-is-the-difference-between-xsinteger-and-xsint
     xml::lite::Element& createInt(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const;
-    xml::lite::Element& createInt(const xml::lite::QName& name, int p, xml::lite::Element& parent) const;
+    xml::lite::Element& createInt(const xml::lite::QName& name, int32_t p, xml::lite::Element& parent) const;
+    xml::lite::Element& createLong(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const;
+    xml::lite::Element& createLong(const xml::lite::QName& name, int64_t p, xml::lite::Element& parent) const;
+
     xml::lite::Element& createDouble(const xml::lite::QName&, double p, xml::lite::Element& parent) const;
     xml::lite::Element& createDouble(const xml::lite::QName&, const std::optional<double>& p, xml::lite::Element& parent) const;
     xml::lite::Element* createOptionalDouble(const xml::lite::QName&, double p, xml::lite::Element& parent) const;
@@ -299,7 +307,8 @@ struct SIX_SIX_API XmlLite final
     static void setAttribute(xml::lite::Element&, const xml::lite::QName&, const std::string& v);
 
 private:
-    xml::lite::Element& createInt_(const std::string& name, int p, xml::lite::Element& parent) const;
+    xml::lite::Element& createInt_(const std::string& name, int32_t p, xml::lite::Element& parent) const;
+    xml::lite::Element& createLong_(const std::string& name, int64_t p, xml::lite::Element& parent) const;
     xml::lite::Element& createString_(const std::string& name, const std::string& p, xml::lite::Element& parent) const;
     xml::lite::QName makeQName(const std::string& name) const;
 
