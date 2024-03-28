@@ -41,6 +41,7 @@
 #include <six/Utilities.h>
 #include <six/Logger.h>
 #include <six/XsElement.h>
+#include <six/XsInteger.h>
 #include <six/Exports.h>
 
 namespace six

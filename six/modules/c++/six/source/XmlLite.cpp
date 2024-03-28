@@ -170,7 +170,6 @@ xml::lite::Element& XmlLite::createString(const xml::lite::QName& name, const st
     addClassAttributes(elem, "xs:string");
     return elem;
 }
-
 xml::lite::Element& XmlLite::createString_(const std::string& name,
         const std::string& p, xml::lite::Element& parent) const
 {

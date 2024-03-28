@@ -152,6 +152,7 @@
     <ClInclude Include="include\six\XmlLite.h" />
     <ClInclude Include="include\six\XMLParser.h" />
     <ClInclude Include="include\six\XsElement.h" />
+    <ClInclude Include="include\six\XsInteger.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

@@ -23,8 +23,14 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <limits>
+
 #include "TestCase.h"
 #include <six/Serialize.h>
+#include <six/XsInteger.h>
+
+#undef min
+#undef max
 
 template<typename T> T getRandomScalar()
 {
@@ -136,9 +142,41 @@ TEST_CASE(VectorSerialize)
     TEST_ASSERT_TRUE(testVector<double>(length, true));
 }
 
+TEST_CASE(TestXsInteger)
+{
+    const auto strMin = six::toInteger(std::numeric_limits<int64_t>::min());
+    const six::XsInteger strNegtiveOne("-1");
+    const six::XsInteger strZero("0");
+    const six::XsInteger strOne("1");
+    const auto strMaxI = six::toInteger(std::numeric_limits<int64_t>::max());
+    const auto strMaxUI = six::toInteger(std::numeric_limits<uint64_t>::max());
+
+    TEST_ASSERT_EQ(to_int64(strMin), std::numeric_limits<int64_t>::min());
+    TEST_ASSERT_EQ(to_int64(strNegtiveOne), -1);
+    TEST_ASSERT_EQ(to_int64(strZero), 0);
+    TEST_ASSERT_EQ(to_int64(strOne), 1);
+    TEST_ASSERT_EQ(to_int64(strMaxI), std::numeric_limits<int64_t>::max());
+    TEST_ASSERT_EQ(to_uint64(strMaxUI), std::numeric_limits<uint64_t>::max());
+
+    TEST_THROWS(to_int32(strMaxI));
+
+    TEST_THROWS(six::toPositiveInteger(to_int64(strNegtiveOne)));
+    TEST_THROWS(six::toPositiveInteger(to_int64(strZero)));
+    TEST_THROWS(six::toNonNegativeInteger(to_int64(strNegtiveOne)));
+    const auto nonNegative = six::toNonNegativeInteger(to_int64(strZero));
+    TEST_ASSERT_EQ(to_int64(nonNegative), 0);
+
+    TEST_THROWS(six::toNegativeInteger(to_int64(strOne)));
+    TEST_THROWS(six::toNegativeInteger(to_int64(strZero)));
+    TEST_THROWS(six::toNonPositiveInteger(to_int64(strOne)));
+    const auto nonPositive = six::toNonPositiveInteger(to_int64(strZero));
+    TEST_ASSERT_EQ(to_int64(nonPositive), 0);
+}
+
 TEST_MAIN(
     srand(static_cast<unsigned int>(time(NULL)));
     TEST_CHECK(ScalarSerialize);
     TEST_CHECK(VectorSerialize);
     TEST_CHECK(StringSerialize);
+    TEST_CHECK(TestXsInteger);
     )
