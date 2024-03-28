@@ -163,8 +163,14 @@ TEST_CASE(TestXsInteger)
     TEST_THROWS(six::toPositiveInteger(to_int64(strNegtiveOne)));
     TEST_THROWS(six::toPositiveInteger(to_int64(strZero)));
     TEST_THROWS(six::toNonNegativeInteger(to_int64(strNegtiveOne)));
-    const auto nonNegative = six::toNonNegativeInteger(to_int64(strZero));
+    auto nonNegative = six::toNonNegativeInteger(to_int64(strZero));
     TEST_ASSERT_EQ(to_int64(nonNegative), 0);
+
+    const six::XsPositiveInteger positive(strZero.str());
+    TEST_THROWS(to_int64(positive));
+    nonNegative = six::XsNonNegativeInteger(strNegtiveOne.str());
+    TEST_THROWS(to_int64(nonNegative));
+    TEST_THROWS(to_uint64(nonNegative));
 
     TEST_THROWS(six::toNegativeInteger(to_int64(strOne)));
     TEST_THROWS(six::toNegativeInteger(to_int64(strZero)));
