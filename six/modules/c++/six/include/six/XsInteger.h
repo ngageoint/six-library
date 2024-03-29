@@ -3,7 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- * (C) Copyright 2024, Maxar Technologies, Inc.
+ * © Copyright 2024, Maxar Technologies, Inc.
  *
  *  six-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -34,7 +34,6 @@
 
 #include <gsl/gsl.h>
 #include <config/compiler_extensions.h>
-#include <str/Manip.h>
 
 namespace six
 {
@@ -61,8 +60,7 @@ namespace details
         // in Unicode, but supporting those here is such an extreme corner case.)
         std::string value_; // store the value from XML so we can always round-trip
 
-        template<bool allowZero, bool allowPositive, bool allowNegative>
-        friend class XsInteger;
+        template<bool, bool, bool> friend class XsInteger;
 
     public:
         ~XsInteger() = default;
@@ -95,64 +93,6 @@ namespace details
     // 
     // Unlike *xs:int*/*xs:long*, none of the C++ "to" functions explicitly
     // state a size, so don't follow that naming convention.
-
-    // Pass the XsInteger so that the exception can use the actual value from the XML
-    template<bool allowZero, bool allowPositive, typename T, bool allowNegative=false>
-    inline void check_allowZero(T i, const XsInteger<allowZero, allowPositive, allowNegative>& v)
-    {
-        static_assert(std::is_integral<T>::value, "T must be an integer");
-        CODA_OSS_disable_warning_push
-        #if _MSC_VER
-        #pragma warning(disable: 4127) // conditional expression is constant
-        #endif // _MSC_VER
-        if (!allowZero && (i == 0))
-        {
-            throw std::invalid_argument("Must be not be zero: " + v.str());
-        }
-        CODA_OSS_disable_warning_pop
-    }
-    template<bool allowZero, bool allowPositive, typename T, bool allowNegative = false>
-    inline void check_allowPositive(T i, const XsInteger<allowZero, allowPositive, allowNegative>& v)
-    {
-        static_assert(std::is_integral<T>::value, "T must be an integer");
-        CODA_OSS_disable_warning_push
-        #if _MSC_VER
-        #pragma warning(disable: 4127) // conditional expression is constant
-        #endif // _MSC_VER
-        if (!allowPositive && (i > 0))
-        {
-            throw std::invalid_argument("Must be a negative (i.e., non-positive) integer: " + v.str());
-        }
-        CODA_OSS_disable_warning_pop
-    }
-    template<bool allowZero, bool allowPositive, bool allowNegative, typename T>
-    inline void check_allowNegative(T i, const XsInteger<allowZero, allowPositive, allowNegative>& v)
-    {
-        static_assert(std::is_integral<T>::value, "T must be an integer");
-
-        CODA_OSS_disable_warning_push
-        #if _MSC_VER
-        #pragma warning(disable: 4127) // conditional expression is constant
-        #endif // _MSC_VER
-        if (!allowNegative)
-        {
-            // This is dealing with XML, so it doesn't necessarily have to be ultra-fast.
-            // A tiny bit of overhead to reduce code duplication and ensure correctness
-            // would seem acceptable.
-            const auto strInteger = str::trim(v.str());
-            if (str::starts_with(strInteger, "-"))
-            {
-                throw std::invalid_argument("Must be a positive (i.e., non-negative) integer: " + v.str());
-            }
-
-            if (i < 0)
-            {
-                throw std::invalid_argument("Must be a positive (i.e., non-negative) integer: " + v.str());
-            }
-        }
-        CODA_OSS_disable_warning_pop
-    }
-
     template<bool allowZero, bool allowPositive, bool allowNegative>
     inline int64_t to_int64(const XsInteger<allowZero, allowPositive, allowNegative>& i)
     {
@@ -170,9 +110,28 @@ namespace details
         // This is dealing with XML, so it doesn't necessarily have to be ultra-fast.
         // A tiny bit of overhead to reduce code duplication and ensure correctness
         // would seem acceptable.
-        check_allowZero<allowZero, allowPositive>(retval, i);
-        check_allowPositive<allowZero, allowPositive>(retval, i);
-        check_allowNegative<allowZero, allowPositive, allowNegative>(retval, i);
+        CODA_OSS_disable_warning_push
+        #if _MSC_VER
+        #pragma warning(disable: 4127) // conditional expression is constant
+        #endif // _MSC_VER
+
+        if (!allowZero && (retval == 0))
+        {
+            throw std::invalid_argument("Must be not be zero: " + i.str());
+        }
+
+        if (!allowPositive && (retval > 0))
+        {
+            throw std::invalid_argument("Must be a negative (i.e., non-positive) integer: " + i.str());
+        }
+
+        if (!allowNegative && (retval < 0))
+        {
+            throw std::invalid_argument("Must be a positive (i.e., non-negative) integer: " + i.str());
+        }
+
+        CODA_OSS_disable_warning_pop
+
         return retval;
     }
     template<bool allowZero, bool allowPositive, bool allowNegative>
@@ -181,47 +140,12 @@ namespace details
         return gsl::narrow<int32_t>(to_int64(i)); // will throw if i > 32-bit value
     }
 
+    // Intentionally not supported; current thinking is that `unsigned` integers
+    // are **only** for bit-twiddling, not manipulating as numbers.
     template<bool allowZero, bool allowPositive=true, bool allowNegative=false>
-    inline uint64_t to_uint64(const XsInteger<allowZero, allowPositive, allowNegative>& i)
-    {
-        static_assert(sizeof(std::uintmax_t) == sizeof(uint64_t), "uintmax_t != uint64_t");
-        static_assert(sizeof(uint64_t) == sizeof(size_t), "uint64_t != size_t");
-        static_assert(allowPositive, "'allowPositive' must be `true` for `uint64_t`");
-        static_assert(!allowNegative || allowPositive, "'allowNegative' must be `false` for `uint64_t`"); //  toInteger(uint64_t v)
-
-        // https://en.cppreference.com/w/cpp/string/byte/strtoimax
-        constexpr int base = 10;
-        auto retval = std::strtoumax(i.c_str(), nullptr /*endptr*/, base);
-
-        CODA_OSS_disable_warning_push
-        #if _MSC_VER
-        #pragma warning(disable: 4127) // conditional expression is constant
-        #endif // _MSC_VER
-        if (!allowNegative)
-        {
-            constexpr auto int64_max = gsl::narrow<uint64_t>(std::numeric_limits<int64_t>::max());
-            if (retval <= int64_max)
-            {
-                // Value is < INT64_MAX, do a numeric (not string) check for negative values
-                const auto result64 = gsl::narrow<int64_t>(retval);
-                if (result64 < 0)
-                {
-                    throw std::invalid_argument("Must be a positive (i.e., non-negative) integer: " + i.str());
-                }
-            }
-        }
-        CODA_OSS_disable_warning_pop
-        
-        check_allowZero<allowZero, allowPositive>(retval, i);
-        check_allowPositive<allowZero, allowPositive>(retval, i);
-        check_allowNegative<allowZero, allowPositive, allowNegative>(retval, i);
-        return retval;
-    }
+    uint64_t to_uint64(const XsInteger<allowZero, allowPositive, allowNegative>&) = delete;
     template<bool allowZero, bool allowPositive, bool allowNegative>
-    inline auto to_uint32(const XsInteger<allowZero, allowPositive, allowNegative>& i)
-    {
-        return gsl::narrow<uint32_t>(to_uint64(i)); // will throw if i > 32-bit value
-    }
+    uint32_t to_uint32(const XsInteger<allowZero, allowPositive, allowNegative>&) = delete;
 }
 
 using XsInteger = details::XsInteger<true /*allowZero*/, true /*allowPositive*/, true /*allowNegative*/>;
@@ -235,12 +159,8 @@ inline auto toInteger(int64_t v)
     assert(to_int64(retval) == v);
     return retval;
 }
-inline auto toInteger(uint64_t v)
-{
-    XsInteger retval(std::to_string(v));
-    assert(to_uint64(retval) == v);
-    return retval;
-}
+uint64_t to_uint64(const XsInteger&) = delete;
+XsInteger toInteger(uint64_t) = delete;
 
 // These are largely for completeness and illustrative purposes.
 // 
@@ -252,10 +172,7 @@ inline auto to_int64(const XsNonNegativeInteger& v)
 {
     return details::to_int64(v);
 }
-inline auto to_uint64(const XsNonNegativeInteger& v)
-{
-    return details::to_uint64(v);
-}
+uint64_t to_uint64(const XsNonNegativeInteger&) = delete;
 inline auto toNonNegativeInteger(int64_t v)
 {
     if (v < 0) // allowZero=true, allowNegative=false
@@ -264,20 +181,14 @@ inline auto toNonNegativeInteger(int64_t v)
     }
     return XsNonNegativeInteger(toInteger(v));
 }
-inline auto toNonNegativeInteger(uint64_t v)
-{
-    return XsNonNegativeInteger(toInteger(v));
-}
+XsNonNegativeInteger toNonNegativeInteger(uint64_t) = delete;
 
 using XsPositiveInteger = details::XsInteger<false /*allowZero*/, true /*allowPositive*/, false /*allowNegative*/>;
 inline auto to_int64(const XsPositiveInteger& v)
 {
     return details::to_int64(v);
 }
-inline auto to_uint64(const XsPositiveInteger& v)
-{
-    return details::to_uint64(v);
-}
+uint64_t to_uint64(const XsPositiveInteger&) = delete;
 inline auto toPositiveInteger(int64_t v)
 {
     if (v <= 0) // allowZero=false, allowNegative=false
@@ -286,14 +197,7 @@ inline auto toPositiveInteger(int64_t v)
     }
     return XsPositiveInteger(toNonNegativeInteger(v));
 }
-inline auto toPositiveInteger(uint64_t v)
-{
-    if (v == 0) // all other values are unsigned, i.e., positive
-    {
-        throw std::invalid_argument("value must be > 0");
-    }
-    return XsPositiveInteger(toNonNegativeInteger(v));
-}
+XsPositiveInteger toPositiveInteger(uint64_t) = delete;
 
 using XsNonPositiveInteger = details::XsInteger<true /*allowZero*/, false /*allowPositive*/, true /*allowNegative*/>;
 inline auto to_int64(const XsNonPositiveInteger& v)
@@ -309,8 +213,8 @@ inline auto toNonPositiveInteger(int64_t v)
     return XsNonPositiveInteger(toInteger(v));
 }
 // Only one valid valid for `uint64_t`: 0; all others are positive, i.e., not non-positive
-//inline auto to_uint64(const XsNonPositiveInteger& v)
-//inline auto toNonPositiveInteger(uint64_t v)
+uint64_t to_uint64(const XsNonPositiveInteger&) = delete;
+XsNonPositiveInteger toNonPositiveInteger(uint64_t) = delete;
 
 using XsNegativeInteger = details::XsInteger<false /*allowZero*/, false /*allowPositive*/, true /*allowNegative*/>;
 inline auto to_int64(const XsNegativeInteger& v)
@@ -326,8 +230,7 @@ inline auto toNegativeInteger(int64_t v)
     return XsNegativeInteger(toInteger(v));
 }
 // All values for `uint64_t` are >=0
-//inline auto to_int64(const XsNegativeInteger& v)
-//inline auto toNegativeInteger(uint64_t v)
-
+uint64_t to_uint64(const XsNegativeInteger&) = delete;
+XsNegativeInteger toNegativeInteger(uint64_t) = delete;
 }
 

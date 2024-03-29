@@ -149,14 +149,12 @@ TEST_CASE(TestXsInteger)
     const six::XsInteger strZero("0");
     const six::XsInteger strOne("1");
     const auto strMaxI = six::toInteger(std::numeric_limits<int64_t>::max());
-    const auto strMaxUI = six::toInteger(std::numeric_limits<uint64_t>::max());
 
     TEST_ASSERT_EQ(to_int64(strMin), std::numeric_limits<int64_t>::min());
     TEST_ASSERT_EQ(to_int64(strNegtiveOne), -1);
     TEST_ASSERT_EQ(to_int64(strZero), 0);
     TEST_ASSERT_EQ(to_int64(strOne), 1);
     TEST_ASSERT_EQ(to_int64(strMaxI), std::numeric_limits<int64_t>::max());
-    TEST_ASSERT_EQ(to_uint64(strMaxUI), std::numeric_limits<uint64_t>::max());
 
     TEST_THROWS(to_int32(strMaxI));
 
@@ -170,7 +168,6 @@ TEST_CASE(TestXsInteger)
     TEST_THROWS(to_int64(positive));
     nonNegative = six::XsNonNegativeInteger(strNegtiveOne.str());
     TEST_THROWS(to_int64(nonNegative));
-    TEST_THROWS(to_uint64(nonNegative));
 
     TEST_THROWS(six::toNegativeInteger(to_int64(strOne)));
     TEST_THROWS(six::toNegativeInteger(to_int64(strZero)));
