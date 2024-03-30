@@ -69,8 +69,8 @@ namespace details
         XsInteger(XsInteger&&) = default;
         XsInteger& operator=(XsInteger&&) = default;
 
-        template<bool allowZero, bool allowPositive, bool allowNegative>
-        XsInteger(XsInteger<allowZero, allowPositive, allowNegative>&& other) : value_(std::move(other.value_)) {}
+        template<bool allowZero_, bool allowPositive_, bool allowNegative_>
+        XsInteger(XsInteger<allowZero_, allowPositive_, allowNegative_>&& other) : value_(std::move(other.value_)) {}
 
         XsInteger(std::string v) : value_(std::move(v)) {}
         XsInteger& operator=(std::string v)
