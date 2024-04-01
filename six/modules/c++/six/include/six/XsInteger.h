@@ -132,9 +132,17 @@ namespace details
     };
 
     template<bool allowZero, bool allowPositive, bool allowNegative>
+    inline auto to_int64(const XsInteger<allowZero, allowPositive, allowNegative>& i)
+    {
+        return i.to_int64();
+    }
+    template<bool allowZero, bool allowPositive, bool allowNegative>
+    uint64_t to_uint64(const XsInteger<allowZero, allowPositive, allowNegative>&) = delete;
+
+    template<bool allowZero, bool allowPositive, bool allowNegative>
     inline auto to_int32(const XsInteger<allowZero, allowPositive, allowNegative>& i)
     {
-        return gsl::narrow<int32_t>(i.to_int64()); // will throw if i > 32-bit value
+        return gsl::narrow<int32_t>(to_int64(i)); // will throw if i > 32-bit value
     }
     template<bool allowZero, bool allowPositive, bool allowNegative>
     uint32_t to_uint32(const XsInteger<allowZero, allowPositive, allowNegative>&) = delete;
