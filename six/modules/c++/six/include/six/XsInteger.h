@@ -60,8 +60,6 @@ namespace details
         // in Unicode, but supporting those here is such an extreme corner case.)
         std::string value_; // store the value from XML so we can always round-trip
 
-        template<bool, bool, bool> friend class XsInteger;
-
     public:
         ~XsInteger() = default;
         XsInteger(const XsInteger&) = default;
@@ -69,10 +67,7 @@ namespace details
         XsInteger(XsInteger&&) = default;
         XsInteger& operator=(XsInteger&&) = default;
 
-        template<bool allowZero_, bool allowPositive_, bool allowNegative_>
-        XsInteger(XsInteger<allowZero_, allowPositive_, allowNegative_>&& other) : value_(std::move(other.value_)) {}
-
-        XsInteger(std::string v) : value_(std::move(v)) {}
+        explicit XsInteger(std::string v) : value_(std::move(v)) {}
         XsInteger& operator=(std::string v)
         {
             value_ = std::move(v);
@@ -179,7 +174,7 @@ inline auto toNonNegativeInteger(int64_t v)
     {
         throw std::invalid_argument("value must be >= 0");
     }
-    return XsNonNegativeInteger(toInteger(v));
+    return XsNonNegativeInteger(toInteger(v).str());
 }
 XsNonNegativeInteger toNonNegativeInteger(uint64_t) = delete;
 
@@ -195,7 +190,7 @@ inline auto toPositiveInteger(int64_t v)
     {
         throw std::invalid_argument("value must be > 0");
     }
-    return XsPositiveInteger(toNonNegativeInteger(v));
+    return XsPositiveInteger(toNonNegativeInteger(v).str());
 }
 XsPositiveInteger toPositiveInteger(uint64_t) = delete;
 
@@ -210,7 +205,7 @@ inline auto toNonPositiveInteger(int64_t v)
     {
         throw std::invalid_argument("value must be <= 0");
     }
-    return XsNonPositiveInteger(toInteger(v));
+    return XsNonPositiveInteger(toInteger(v).str());
 }
 // Only one valid valid for `uint64_t`: 0; all others are positive, i.e., not non-positive
 uint64_t to_uint64(const XsNonPositiveInteger&) = delete;
@@ -227,7 +222,7 @@ inline auto toNegativeInteger(int64_t v)
     {
         throw std::invalid_argument("value must be < 0");
     }
-    return XsNegativeInteger(toInteger(v));
+    return XsNegativeInteger(toInteger(v).str());
 }
 // All values for `uint64_t` are >=0
 uint64_t to_uint64(const XsNegativeInteger&) = delete;
