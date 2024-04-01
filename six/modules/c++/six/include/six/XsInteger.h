@@ -78,9 +78,9 @@ namespace details
         {
             return value_;
         }
-        const char* c_str() const noexcept
+        std::string to_string() const // for consistency with to_int64()
         {
-            return value_.c_str();
+            return str();
         }
 
         // Making thesse member-functions for better disccoverability (IntelliSense, etc.)
@@ -88,7 +88,6 @@ namespace details
         // 
         // Unlike *xs:int*/*xs:long*, none of the C++ "to" functions explicitly
         // state a size, so don't follow that naming convention.
-        uint64_t to_uint64() const = delete;
         auto to_int64() const
         {
             static_assert(sizeof(std::intmax_t) == sizeof(int64_t), "intmax_t != int64_t");
@@ -100,7 +99,7 @@ namespace details
 
             // https://en.cppreference.com/w/cpp/string/byte/strtoimax
             constexpr int base = 10;
-            auto retval = std::strtoimax(c_str(), nullptr /*endptr*/, base);
+            auto retval = std::strtoimax(str().c_str(), nullptr /*endptr*/, base);
 
             // This is dealing with XML, so it doesn't necessarily have to be ultra-fast.
             // A tiny bit of overhead to reduce code duplication and ensure correctness
@@ -127,6 +126,9 @@ namespace details
 
             return retval;
         }
+        // Intentionally not supported; current thinking is that `unsigned` integers
+        // are **only** for bit-twiddling, not manipulating as numbers.
+        uint64_t to_uint64() const = delete;
     };
 
     template<bool allowZero, bool allowPositive, bool allowNegative>
@@ -134,11 +136,6 @@ namespace details
     {
         return gsl::narrow<int32_t>(i.to_int64()); // will throw if i > 32-bit value
     }
-
-    // Intentionally not supported; current thinking is that `unsigned` integers
-    // are **only** for bit-twiddling, not manipulating as numbers.
-    template<bool allowZero, bool allowPositive=true, bool allowNegative=false>
-    uint64_t to_uint64(const XsInteger<allowZero, allowPositive, allowNegative>&) = delete;
     template<bool allowZero, bool allowPositive, bool allowNegative>
     uint32_t to_uint32(const XsInteger<allowZero, allowPositive, allowNegative>&) = delete;
 }
