@@ -144,11 +144,11 @@ TEST_CASE(VectorSerialize)
 
 TEST_CASE(TestXsInteger)
 {
-    const auto strMin = six::toInteger(std::numeric_limits<int64_t>::min());
-    const six::XsInteger strNegtiveOne("-1");
-    const six::XsInteger strZero("0");
-    const six::XsInteger strOne("1");
-    const auto strMaxI = six::toInteger(std::numeric_limits<int64_t>::max());
+    const six::XsInteger strMin{ std::numeric_limits<int64_t>::min() };
+    const six::XsInteger strNegtiveOne{ -1 };
+    const six::XsInteger strZero;
+    const six::XsInteger strOne{ 1 };
+    const six::XsInteger strMaxI{ std::numeric_limits<int64_t>::max() };
 
     TEST_ASSERT_EQ(to_int64(strMin), std::numeric_limits<int64_t>::min());
     TEST_ASSERT_EQ(to_int64(strNegtiveOne), -1);
@@ -164,9 +164,9 @@ TEST_CASE(TestXsInteger)
     auto nonNegative = six::toNonNegativeInteger(to_int64(strZero));
     TEST_ASSERT_EQ(to_int64(nonNegative), 0);
 
-    const six::XsPositiveInteger positive(strZero.str());
+    const six::XsPositiveInteger positive(strZero.to_string());
     TEST_THROWS(to_int64(positive));
-    nonNegative = six::XsNonNegativeInteger(strNegtiveOne.str());
+    nonNegative = six::XsNonNegativeInteger(strNegtiveOne.to_string());
     TEST_THROWS(to_int64(nonNegative));
 
     TEST_THROWS(six::toNegativeInteger(to_int64(strOne)));

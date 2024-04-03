@@ -53,42 +53,25 @@ namespace details
     template<bool allowZero, bool allowPositive, bool allowNegative>
     class XsInteger final
     {
+        static const std::string& initial_value()
+        {
+            static_assert(allowPositive ? true : (allowNegative ? true : false), "`allowPositive` or `allowNegative` must be true");
+            static constexpr int64_t init = allowZero ? 0 : (allowPositive ? 1 : (allowNegative ? -1 : 1));
+
+            static const std::string retval = std::to_string(init);
+            return retval;
+        }
+
         // Since this is XML, it "should" be `std::u8string`, but that's too klunky
         // with existing code.  Furthermore, these are strings representing
         // integers, so the number of valid characters is extremly limited and
         // all part of ASCII.  (Well ... actually, there are whole bunch of "digits"
         // in Unicode, but supporting those here is such an extreme corner case.)
-        std::string value_; // store the value from XML so we can always round-trip
+        std::string value_ = initial_value(); // store the value from XML so we can always round-trip
 
-    public:
-        ~XsInteger() = default;
-        XsInteger(const XsInteger&) = default;
-        XsInteger& operator=(const XsInteger&) = default;
-        XsInteger(XsInteger&&) = default;
-        XsInteger& operator=(XsInteger&&) = default;
-
-        explicit XsInteger(std::string v) : value_(std::move(v)) {}
-        XsInteger& operator=(std::string v)
-        {
-            value_ = std::move(v);
-            return *this;
-        }
-
-        const std::string& str() const noexcept
-        {
-            return value_;
-        }
-        std::string to_string() const // for consistency with to_int64()
-        {
-            return str();
-        }
-
-        // Making thesse member-functions for better disccoverability (IntelliSense, etc.)
-        // Parse and convert for easy use in arithmetic, these might throw.
-        // 
         // Unlike *xs:int*/*xs:long*, none of the C++ "to" functions explicitly
         // state a size, so don't follow that naming convention.
-        auto to_int64() const
+        static auto to_int64(const std::string& s)
         {
             static_assert(sizeof(std::intmax_t) == sizeof(int64_t), "intmax_t != int64_t");
             static_assert(sizeof(int64_t) == sizeof(ptrdiff_t), "int64_t != ptrdiff_t");
@@ -99,7 +82,7 @@ namespace details
 
             // https://en.cppreference.com/w/cpp/string/byte/strtoimax
             constexpr int base = 10;
-            auto retval = std::strtoimax(str().c_str(), nullptr /*endptr*/, base);
+            auto retval = std::strtoimax(s.c_str(), nullptr /*endptr*/, base);
 
             // This is dealing with XML, so it doesn't necessarily have to be ultra-fast.
             // A tiny bit of overhead to reduce code duplication and ensure correctness
@@ -111,25 +94,81 @@ namespace details
 
             if (!allowZero && (retval == 0))
             {
-                throw std::logic_error("Must be not be zero: " + str());
+                throw std::logic_error("Must be not be zero: " + s);
             }
             if (!allowPositive && (retval > 0))
             {
-                throw std::logic_error("Must be a negative (i.e., non-positive) integer: " + str());
+                throw std::logic_error("Must be a negative (i.e., non-positive) integer: " + s);
             }
             if (!allowNegative && (retval < 0))
             {
-                throw std::logic_error("Must be a positive (i.e., non-negative) integer: " + str());
+                throw std::logic_error("Must be a positive (i.e., non-negative) integer: " + s);
             }
 
             CODA_OSS_disable_warning_pop
 
             return retval;
         }
+        static auto to_string(int64_t v)
+        {
+            // Be sure we can round-trip the value; to_int64() does validation.
+            const auto str_value = std::to_string(v);
+            const auto i64 = to_int64(str_value); // validation
+            assert(v == i64);
+            assert(str_value == std::to_string(i64));
+            return str_value;
+        }
+
+    public:
+        XsInteger() = default;
+        ~XsInteger() = default;
+        XsInteger(const XsInteger&) = default;
+        XsInteger& operator=(const XsInteger&) = default;
+        XsInteger(XsInteger&&) = default;
+        XsInteger& operator=(XsInteger&&) = default;
+
+        // The string may be larger than `int64_t`, so no validation.
+        explicit XsInteger(std::string v) : value_(std::move(v)) {}
+        XsInteger& operator=(std::string v)
+        {
+            value_ = std::move(v);
+            return *this;
+        }
+
+        explicit XsInteger(int64_t v) : value_(to_string(v)) {}
+        XsInteger& operator=(int64_t v)
+        {
+            value_ = to_string(v);
+            return *this;
+        }
+
+        const std::string& str_() const noexcept
+        {
+            return value_;
+        }
+
+        // Making thesse member-functions for better disccoverability (IntelliSense, etc.)
+        // Parse and convert for easy use in arithmetic, these might throw.
+
+        std::string to_string() const // for consistency with to_int64()
+        {
+            return to_string(to_int64()); // round-trip validation
+        }
+
+        auto to_int64() const
+        {
+            return to_int64(str_());
+        }
         // Intentionally not supported; current thinking is that `unsigned` integers
         // are **only** for bit-twiddling, not manipulating as numbers.
         uint64_t to_uint64() const = delete;
     };
+
+    template<bool allowZero, bool allowPositive, bool allowNegative>
+    inline auto to_string(const XsInteger<allowZero, allowPositive, allowNegative>& i)
+    {
+        return i.to_string();
+    }
 
     template<bool allowZero, bool allowPositive, bool allowNegative>
     inline auto to_int64(const XsInteger<allowZero, allowPositive, allowNegative>& i)
@@ -155,9 +194,7 @@ inline auto to_int64(const XsInteger& v)
 }
 inline auto toInteger(int64_t v)
 {
-    XsInteger retval(std::to_string(v));
-    assert(to_int64(retval) == v);
-    return retval;
+    return XsInteger{ v };
 }
 uint64_t to_uint64(const XsInteger&) = delete;
 XsInteger toInteger(uint64_t) = delete;
@@ -175,11 +212,7 @@ inline auto to_int64(const XsNonNegativeInteger& v)
 uint64_t to_uint64(const XsNonNegativeInteger&) = delete;
 inline auto toNonNegativeInteger(int64_t v)
 {
-    if (v < 0) // allowZero=true, allowNegative=false
-    {
-        throw std::invalid_argument("value must be >= 0");
-    }
-    return XsNonNegativeInteger(toInteger(v).str());
+    return XsNonNegativeInteger{ v };
 }
 XsNonNegativeInteger toNonNegativeInteger(uint64_t) = delete;
 
@@ -191,11 +224,7 @@ inline auto to_int64(const XsPositiveInteger& v)
 uint64_t to_uint64(const XsPositiveInteger&) = delete;
 inline auto toPositiveInteger(int64_t v)
 {
-    if (v <= 0) // allowZero=false, allowNegative=false
-    {
-        throw std::invalid_argument("value must be > 0");
-    }
-    return XsPositiveInteger(toNonNegativeInteger(v).str());
+    return XsPositiveInteger{ v };
 }
 XsPositiveInteger toPositiveInteger(uint64_t) = delete;
 
@@ -206,11 +235,7 @@ inline auto to_int64(const XsNonPositiveInteger& v)
 }
 inline auto toNonPositiveInteger(int64_t v)
 {
-    if (v > 0) // allowZero=true, allowNegative=false
-    {
-        throw std::invalid_argument("value must be <= 0");
-    }
-    return XsNonPositiveInteger(toInteger(v).str());
+    return XsNonPositiveInteger{ v };
 }
 // Only one valid valid for `uint64_t`: 0; all others are positive, i.e., not non-positive
 uint64_t to_uint64(const XsNonPositiveInteger&) = delete;
@@ -223,11 +248,7 @@ inline auto to_int64(const XsNegativeInteger& v)
 }
 inline auto toNegativeInteger(int64_t v)
 {
-    if (v >= 0) // allowZero=false, allowNegative=false
-    {
-        throw std::invalid_argument("value must be < 0");
-    }
-    return XsNegativeInteger(toInteger(v).str());
+    return XsNegativeInteger{ v };
 }
 // All values for `uint64_t` are >=0
 uint64_t to_uint64(const XsNegativeInteger&) = delete;
