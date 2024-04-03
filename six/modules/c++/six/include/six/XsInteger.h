@@ -31,6 +31,7 @@
 #include <stdexcept>
 #include <limits>
 #include <type_traits>
+#include <tuple>
 
 #include <gsl/gsl.h>
 #include <config/compiler_extensions.h>
@@ -114,6 +115,7 @@ namespace details
             // Be sure we can round-trip the value; to_int64() does validation.
             const auto str_value = std::to_string(v);
             const auto i64 = to_int64(str_value); // validation
+            std::ignore = i64; // compiler warning
             assert(v == i64);
             assert(str_value == std::to_string(i64));
             return str_value;

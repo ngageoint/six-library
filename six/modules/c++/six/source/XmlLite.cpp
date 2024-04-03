@@ -200,6 +200,11 @@ inline std::string toString_(const xml::lite::QName& name, const std::u8string& 
 {
     return toString(name, str::to_native(v), parent);
 }
+template<>
+inline std::string toString_(const xml::lite::QName& name, const XsInteger& v, const xml::lite::Element& parent)
+{
+    return toString(name, to_string(v), parent);
+}
 
 template<typename T, typename ToString>
 static xml::lite::Element& createValue(const xml::lite::QName& name,
@@ -276,6 +281,22 @@ xml::lite::Element& XmlLite::createLong(const xml::lite::QName& name, const std:
 xml::lite::Element& XmlLite::createLong_(const std::string& name, int64_t p, xml::lite::Element& parent) const
 {
     return createLong(makeQName(name), p, parent);
+}
+
+// https://www.oreilly.com/library/view/xml-schema/0596002521/re80.html
+xml::lite::Element& XmlLite::createInteger(const xml::lite::QName& name, const XsInteger& p, xml::lite::Element& parent) const
+{
+    return createValue(name, p, parent, "xs:integer"); // unbounded, not xs:int
+}
+xml::lite::Element& XmlLite::createInteger(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const
+{
+    auto& elem = newElement(name, p, parent);
+    addClassAttributes(elem, "xs:integer"); // unbounded, not xs:int
+    return elem;
+}
+xml::lite::Element& XmlLite::createInteger_(const std::string& name, const XsInteger& p, xml::lite::Element& parent) const
+{
+    return createInteger(makeQName(name), p, parent);
 }
 
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, double p, xml::lite::Element& parent) const

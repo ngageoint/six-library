@@ -164,6 +164,8 @@ struct SIX_SIX_API XmlLite final
     xml::lite::Element& createInt(const xml::lite::QName& name, int32_t p, xml::lite::Element& parent) const;
     xml::lite::Element& createLong(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const;
     xml::lite::Element& createLong(const xml::lite::QName& name, int64_t p, xml::lite::Element& parent) const;
+    xml::lite::Element& createInteger(const xml::lite::QName& name, const std::string& p, xml::lite::Element& parent) const;
+    xml::lite::Element& createInteger(const xml::lite::QName& name, const XsInteger& p, xml::lite::Element& parent) const;
 
     xml::lite::Element& createDouble(const xml::lite::QName&, double p, xml::lite::Element& parent) const;
     xml::lite::Element& createDouble(const xml::lite::QName&, const std::optional<double>& p, xml::lite::Element& parent) const;
@@ -310,6 +312,7 @@ struct SIX_SIX_API XmlLite final
 private:
     xml::lite::Element& createInt_(const std::string& name, int32_t p, xml::lite::Element& parent) const;
     xml::lite::Element& createLong_(const std::string& name, int64_t p, xml::lite::Element& parent) const;
+    xml::lite::Element& createInteger_(const std::string& name, const XsInteger& p, xml::lite::Element& parent) const;
     xml::lite::Element& createString_(const std::string& name, const std::string& p, xml::lite::Element& parent) const;
     xml::lite::QName makeQName(const std::string& name) const;
 
