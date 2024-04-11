@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PIAPRD_description[] = {
     {NITF_BCS_A, 64, "Access ID", "ACCESSID" },
     {NITF_BCS_A, 32, "FM Control Number", "FMCNTROL" },
     {NITF_BCS_A, 1, "Subjective Detail", "SUBDET" },
@@ -61,6 +61,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PIAPRD, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PIAPRD)
 
 NITF_CXX_ENDGUARD

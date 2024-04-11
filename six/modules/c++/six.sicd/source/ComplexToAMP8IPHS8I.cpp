@@ -28,21 +28,19 @@
 #include <memory>
 #include <std/numbers>
 #include <algorithm>
+#include <functional>
+#include <stdexcept>
 
-#include <coda_oss/CPlusPlus.h>
-#if CODA_OSS_cpp17
-    // <execution> is broken with the older version of GCC we're using
-    #if (__GNUC__ >= 10) || _MSC_VER
-    #include <execution>
-    #define SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution 1
-    #endif
-#endif
-
+#include <mt/Algorithm.h>
 #include <gsl/gsl.h>
 #include <math/Utilities.h>
 #include <units/Angles.h>
 
 #include "six/sicd/Utilities.h"
+#include "six/sicd/Exports.h"
+
+#undef min
+#undef max
 
 // https://github.com/ngageoint/six-library/pull/537#issuecomment-1026453353
 /*
@@ -65,14 +63,16 @@ The complex value `V` is projected onto the nearest `phase_direction` via the do
 The resulting green point is then what's used to find the nearest magnitude via binary search (`std::lower_bound`).
 */
 
-
 /*!
     * Get the phase of a complex value.
     * @param v complex value
     * @return phase between [0, 2PI]
     */
+
 inline auto GetPhase(std::complex<double> v)
 {
+    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
+    // handles cases that are close to 2PI.
     double phase = std::arg(v);
     if (phase < 0.0) phase += std::numbers::pi * 2.0; // Wrap from [0, 2PI]
     return phase;
@@ -80,30 +80,32 @@ inline auto GetPhase(std::complex<double> v)
 uint8_t six::sicd::details::ComplexToAMP8IPHS8I::getPhase(six::zfloat v) const
 {
     // Phase is determined via arithmetic because it's equally spaced.
-    // There's an intentional conversion to zero when we cast 256 -> uint8. That wrap around
-    // handles cases that are close to 2PI.
-    return gsl::narrow_cast<uint8_t>(std::round(GetPhase(v) / phase_delta));
+    const auto phase = GetPhase(v);
+    return gsl::narrow_cast<uint8_t>(std::round(phase / phase_delta_));
 }
 
 template<typename TToComplexFunc>
-static std::vector<float> make_magnitudes_(TToComplexFunc toComplex)
+static auto make_magnitudes_(TToComplexFunc toComplex)
 {
-    std::vector<float> retval;
-    retval.reserve(UINT8_MAX + 1);
+    std::vector<float> result;
+    result.reserve(six::AmplitudeTableSize);
     for (const auto amplitude : six::sicd::Utilities::iota_0_256())
     {
         // AmpPhase -> Complex
         const auto phase = amplitude;
         const auto complex = toComplex(amplitude, phase);
-        retval.push_back(std::abs(complex));
+        result.push_back(std::abs(complex));
     }
 
     // I don't know if we can guarantee that the amplitude table is non-decreasing.
     // Check to verify property at runtime.
-    if (!std::is_sorted(retval.begin(), retval.end()))
+    if (!std::is_sorted(result.begin(), result.end()))
     {
         throw std::runtime_error("magnitudes must be sorted");
     }
+
+    std::array<float, six::AmplitudeTableSize> retval;
+    std::copy(result.begin(), result.end(), retval.begin());
     return retval;
 }
 static inline auto make_magnitudes(const six::AmplitudeTable& amplitudeTable)
@@ -123,132 +125,60 @@ static inline auto make_magnitudes()
     return make_magnitudes_(toComplex);
 }
 
-static const std::vector<float>& get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
-    std::vector<float>& uncached_magnitudes)
+static std::span<const float> get_magnitudes(const six::AmplitudeTable* pAmplitudeTable,
+    std::array<float, six::AmplitudeTableSize>& uncached_magnitudes)
 {
     if (pAmplitudeTable == nullptr)
     {
         static const auto magnitudes = make_magnitudes(); // OK to cache, won't change
-        return magnitudes;
+        return sys::make_span(magnitudes);
     }
     
     uncached_magnitudes = make_magnitudes(*pAmplitudeTable);
-    return uncached_magnitudes;
+    return sys::make_const_span(uncached_magnitudes);
 }
 
+
 six::sicd::details::ComplexToAMP8IPHS8I::ComplexToAMP8IPHS8I(const six::AmplitudeTable *pAmplitudeTable)
-    : magnitudes(get_magnitudes(pAmplitudeTable, uncached_magnitudes))
 {
+    magnitudes_ = get_magnitudes(pAmplitudeTable, uncached_magnitudes_);
+
     const auto p0 = GetPhase(Utilities::toComplex(1, 0, pAmplitudeTable));
     const auto p1 = GetPhase(Utilities::toComplex(1, 1, pAmplitudeTable));
     assert(p0 == 0.0);
     assert(p1 > p0);
-    phase_delta = gsl::narrow_cast<float>(p1 - p0);
-    size_t i = 0;
-    for(const auto value : six::sicd::Utilities::iota_0_256())
+    phase_delta_ = gsl::narrow_cast<float>(p1 - p0);
+    for(size_t i = 0; i < six::AmplitudeTableSize; i++)
     {
-        const units::Radians<float> angle{ static_cast<float>(p0) + value * phase_delta };
+        const units::Radians<float> angle{ static_cast<float>(p0) + i * phase_delta_ };
         float y, x;
         SinCos(angle, y, x);
-        phase_directions[i] = { x, y };
-        i++;
+        phase_directions_.value[i] = { x, y };
+
+        // Only need the parallel array when using the "vectorclass" library.
+        #if SIX_sicd_has_VCL || SIX_sicd_has_sisd
+        phase_directions_.real[i] = phase_directions_.value[i].real();
+        phase_directions_.imag[i] = phase_directions_.value[i].imag();
+        #endif
     }
 }
 
-/*!
- * Find the nearest element given an iterator range.
- * @param value query value
- * @return index of nearest value within the iterator range.
- */
-static inline uint8_t nearest(const std::vector<float>& magnitudes, float value)
+std::span<const float> six::sicd::details::ComplexToAMP8IPHS8I::magnitudes() const
 {
-    const auto begin = magnitudes.begin();
-    const auto end = magnitudes.end();
-
-    const auto it = std::lower_bound(begin, end, value);
-    if (it == begin) return 0;
-
-    const auto prev_it = std::prev(it);
-    const auto nearest_it = it == end ? prev_it  :
-        (value - *prev_it <= *it - value ? prev_it : it);
-    const auto distance = std::distance(begin, nearest_it);
-    assert(distance <= std::numeric_limits<uint8_t>::max());
-    return gsl::narrow<uint8_t>(distance);
+    return magnitudes_;
 }
 
-six::AMP8I_PHS8I_t six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbor(const six::zfloat &v) const
+float six::sicd::details::ComplexToAMP8IPHS8I::phase_delta() const
 {
-    six::AMP8I_PHS8I_t retval;
-    retval.phase = getPhase(v);
-
-    // We have to do a 1D nearest neighbor search for magnitude.
-    // But it's not the magnitude of the input complex value - it's the projection of
-    // the complex value onto the ray of candidate magnitudes at the selected phase.
-    // i.e. dot product.
-    auto&& phase_direction = phase_directions[retval.phase];
-    const auto projection = phase_direction.real() * v.real() + phase_direction.imag() * v.imag();
-    //assert(std::abs(projection - std::abs(v)) < 1e-5); // TODO ???
-    retval.amplitude = nearest(magnitudes, projection);
-    return retval;
+    return phase_delta_;
 }
 
- // Yes, this is duplicated code :-(  1) hopefully it will go away someday "soon,"
- // that is, we'll be at C++17; 2) the cutoff/dimension values may be different.
- //
- // First of all, C++11's std::async() is now (in 2023) thought of as maybe a
- // bit "half baked," and perhaps shouldn't be emulated.  Then, C++17 added
- // parallel algorithms which might be a better way of satisfying our immediate
- // needs (below) ... although we're still at C++14.
-template <typename InputIt, typename OutputIt, typename TFunc>
-static inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-    typename std::iterator_traits<InputIt>::difference_type cutoff)
+const six::sicd::details::ComplexToAMP8IPHS8I::phase_directions& six::sicd::details::ComplexToAMP8IPHS8I::get_phase_directions() const
 {
-    // https://en.cppreference.com/w/cpp/thread/async
-    const auto len = std::distance(first1, last1);
-    if (len < cutoff)
-    {
-        return std::transform(first1, last1, d_first, f);
-    }
-
-    constexpr auto policy = std::launch::async;
-
-    const auto mid1 = first1 + len / 2;
-    const auto d_mid = d_first + len / 2;
-    auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff);
-    transform_async(first1, mid1, d_first, f, cutoff);
-    return handle.get();
-}
-template <typename TInputs, typename TResults, typename TFunc>
-static inline void transform(std::span<const TInputs> inputs, std::span<TResults> results, TFunc f)
-{
-#if SIX_six_sicd_ComplexToAMP8IPHS8I_has_execution
-    std::ignore = std::transform(std::execution::par_unseq, inputs.begin(), inputs.end(), results.begin(), f);
-#else
-    constexpr ptrdiff_t cutoff_ = 0; // too slow w/o multi-threading
-    // The value of "default_cutoff" was determined by testing; there is nothing special about it, feel free to change it.
-    constexpr auto dimension = 128 * 8;
-    constexpr auto default_cutoff = dimension * dimension;
-    const auto cutoff = cutoff_ == 0 ? default_cutoff : cutoff_;        
-    std::ignore = transform_async(inputs.begin(), inputs.end(), results.begin(), f, cutoff);
-#endif // CODA_OSS_cpp17
+    return phase_directions_;
 }
 
-std::vector<six::AMP8I_PHS8I_t> six::sicd::details::ComplexToAMP8IPHS8I::nearest_neighbors(
-    std::span<const zfloat> inputs, const six::AmplitudeTable* pAmplitudeTable)
-{
-    // make a structure to quickly find the nearest neighbor
-    const auto& converter = make(pAmplitudeTable);
-    const auto nearest_neighbor = [&converter](const auto& v)
-    {
-        return converter.nearest_neighbor(v);
-    };
-
-    std::vector<six::AMP8I_PHS8I_t> retval(inputs.size());
-    transform(sys::make_const_span(inputs), sys::make_span(retval), nearest_neighbor);
-    return retval;
-}
-
-const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make(const six::AmplitudeTable* pAmplitudeTable)
+const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8IPHS8I::make_(const six::AmplitudeTable* pAmplitudeTable)
 {
     if (pAmplitudeTable == nullptr)
     {
@@ -270,4 +200,8 @@ const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::details::ComplexToAMP8
         pAmplitudeTable->cacheFromComplex_(std::move(pTree));
         return *(pAmplitudeTable->getFromComplex());
     }
+}
+const six::sicd::details::ComplexToAMP8IPHS8I& six::sicd::make_ComplexToAMP8IPHS8I(const six::AmplitudeTable* pAmplitudeTable)
+{
+    return six::sicd::details::ComplexToAMP8IPHS8I::make_(pAmplitudeTable);
 }

@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PIAPEB_description[] = {
     {NITF_BCS_A, 28, "Last Name", "LASTNME" },
     {NITF_BCS_A, 28, "First Name", "FIRSTNME" },
     {NITF_BCS_A, 28, "Middle Name", "MIDNME" },
@@ -34,6 +34,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PIAPEB, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PIAPEB)
 
 NITF_CXX_ENDGUARD

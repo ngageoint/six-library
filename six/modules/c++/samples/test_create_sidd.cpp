@@ -209,11 +209,8 @@ int main(int argc, char** argv)
 
     try
     {
-        six::XMLControlFactory::getInstance().
-            addCreator<six::sicd::ComplexXMLControl>();
-
-        six::XMLControlFactory::getInstance().
-            addCreator<six::sidd::DerivedXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
+        six::getXMLControlFactory().addCreator<six::sidd::DerivedXMLControl>();
 
         // Get a Complex Data structure from an XML file
         six::Options options;
@@ -225,7 +222,7 @@ int main(int argc, char** argv)
 
         std::unique_ptr<logging::Logger> log (new logging::NullLogger());
         six::Data* complexData =
-            six::XMLControlFactory::getInstance().newXMLControl(
+            six::getXMLControlFactory().newXMLControl(
                 six::DataType::COMPLEX,
                 log.get())->fromXML(parser.getDocument(),
                                     std::vector<std::string>());

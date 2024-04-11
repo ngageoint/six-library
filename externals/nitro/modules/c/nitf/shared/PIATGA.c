@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription PIATGA_description[] = {
     {NITF_BCS_A, 15, "Target UTM", "TGTUTM" },
     {NITF_BCS_A, 15, "Target ID", "PIATGAID" },
     {NITF_BCS_A, 2, "Country Code", "PIACTRY" },
@@ -36,6 +36,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(PIATGA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(PIATGA)
 
 NITF_CXX_ENDGUARD

@@ -84,6 +84,7 @@ private:
     void parseBankFromXML(const xml::lite::Element* bankElem, Filter::Bank&) const;
     void parseFilterFromXML(const xml::lite::Element& filterELem, Filter& filter) const;
     void parseJ2KCompression(const xml::lite::Element& j2kElem, J2KCompression& j2k) const;
+    void convertJ2KToXML(const J2KCompression&, xml::lite::Element&) const override;
     void parseGeoDataFromXML(const xml::lite::Element& elem, GeoDataBase&) const;
     void parseDigitalElevationDataFromXML(const xml::lite::Element& elem, DigitalElevationData&) const;
     void parseProductGenerationOptionsFromXML(const xml::lite::Element& optionsElem, ProductGenerationOptions&) const;

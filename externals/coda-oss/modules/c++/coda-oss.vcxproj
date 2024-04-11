@@ -19,6 +19,8 @@
     <ClInclude Include="coda_oss\include\coda_oss\bit.h" />
     <ClInclude Include="coda_oss\include\coda_oss\CPlusPlus.h" />
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\mdspan_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\numbers.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
@@ -509,6 +511,7 @@
     <None Include="std\include\std\bit" />
     <None Include="std\include\std\cstddef" />
     <None Include="std\include\std\filesystem" />
+    <None Include="std\include\std\mdspan" />
     <None Include="std\include\std\memory" />
     <None Include="std\include\std\numbers" />
     <None Include="std\include\std\optional" />
@@ -566,7 +569,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1;CODA_OSS_EXPORTS;CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>cli\include;coda_oss\include;config\include;dbi\include;except\include;gsl\include;hdf5.lite\include;io\include;logging\include;math\include;math.linear\include;math.poly\include;mem\include;mt\include;net\include;net.ssl\include;plugin\include;polygon\include;re\include;sio.lite\include;std\include;str\include;sys\include;tiff\include;types\include;unique\include;units\include;xml.lite\include;zip\include;$(ProjectDir)include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -596,7 +599,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1;CODA_OSS_EXPORTS;CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>cli\include;coda_oss\include;config\include;dbi\include;except\include;gsl\include;hdf5.lite\include;io\include;logging\include;math\include;math.linear\include;math.poly\include;mem\include;mt\include;net\include;net.ssl\include;plugin\include;polygon\include;re\include;sio.lite\include;std\include;str\include;sys\include;tiff\include;types\include;unique\include;units\include;xml.lite\include;zip\include;$(ProjectDir)include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\$(ProjectName)\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -609,6 +612,7 @@
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <WarningLevel>Level3</WarningLevel>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>

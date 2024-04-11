@@ -58,7 +58,7 @@ static int mapped(nitf_TRE* tre, char idx[10][10], int depth, nitf_Error* error)
 
 }
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription RSMECA_description[] = {
     {NITF_BCS_A, 80, "Image Identifier", "IID" },
     {NITF_BCS_A, 40, "RSM Image Support Data Edition", "EDITION" },
     {NITF_BCS_A, 40, "Triangulation ID", "TID" },
@@ -210,6 +210,6 @@ static nitf_TREDescription description[] = {
 
 
 
-NITF_DECLARE_SINGLE_PLUGIN(RSMECA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(RSMECA)
 
 NITF_CXX_ENDGUARD

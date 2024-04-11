@@ -39,10 +39,11 @@
 // SIX 3.2.3	2023-Jun-05
 // SIX 3.2.4	2023-Aug-21
 // SIX 3.2.5	2023-Oct-23
+// SIX 3.3.0	2024-Mar-18
 
 #define SIX_VERSION_MAJOR	3
-#define SIX_VERSION_MINOR	2
-#define SIX_VERSION_PATCH	5 // a.k.a. "point," but that's too similar to "patch."
+#define SIX_VERSION_MINOR	3
+#define SIX_VERSION_PATCH	0 // a.k.a. "point," but that's too similar to "patch."
 //#define SIX_VERSION_BUILD	0 // a.k.a. "patch," but that's too similar to "point."
 //#define SIX_VERSION CODA_OSS_MAKE_VERSION_MMPB(SIX_VERSION_MAJOR, SIX_VERSION_MINOR, SIX_VERSION_PATCH, SIX_VERSION_BUILD)
 #define SIX_VERSION CODA_OSS_MAKE_VERSION_MMP(SIX_VERSION_MAJOR, SIX_VERSION_MINOR, SIX_VERSION_PATCH)

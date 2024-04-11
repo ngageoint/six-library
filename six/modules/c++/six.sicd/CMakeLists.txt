@@ -25,6 +25,8 @@ coda_add_module(
         source/Grid.cpp
         source/ImageData.cpp
         source/ImageFormation.cpp
+        source/NearestNeighbors.cpp
+        source/NearestNeighbors_unseq.cpp
         source/NITFReadComplexXMLControl.cpp
         source/PFA.cpp
         source/Position.cpp

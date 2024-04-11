@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription ASTORA_description[] = {
 
     {NITF_BCS_N, 6, "Number of rows in full image prod.", "IMG_TOTAL_ROWS" },
     {NITF_BCS_N, 6, "Number of columns in full image prod.",
@@ -174,6 +174,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(ASTORA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(ASTORA)
 
 NITF_CXX_ENDGUARD

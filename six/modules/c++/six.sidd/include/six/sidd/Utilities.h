@@ -33,12 +33,13 @@
 #include <six/Utilities.h>
 #include <six/sidd/DerivedData.h>
 #include <six/sidd/DerivedXMLControl.h>
+#include <six/sidd/Exports.h>
 
 namespace six
 {
 namespace sidd
 {
-class Utilities
+class SIX_SIDD_API Utilities
 {
 public:
     // TODO: This is only needed because getSceneGeometry() isn't implemented

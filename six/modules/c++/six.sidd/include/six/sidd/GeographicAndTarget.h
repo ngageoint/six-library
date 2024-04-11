@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_GEOGRAPHIC_AND_TARGET_H__
 #define __SIX_GEOGRAPHIC_AND_TARGET_H__
 
@@ -30,6 +31,8 @@
 #include <six/ParameterCollection.h>
 #include <six/GeoInfo.h>
 
+#include "six/sidd/Exports.h"
+
 namespace six
 {
 namespace sidd
@@ -40,7 +43,7 @@ namespace sidd
  *
  *  Provides target specific geographic information.
  */
-struct TargetInformation
+struct SIX_SIDD_API TargetInformation
 {
     //! SIDD Identifier set (min occurs one, max unbounded)
     ParameterCollection identifiers;
@@ -76,7 +79,7 @@ struct TargetInformation
  *  The GeographicInformation object gives specifics about the geo-region
  *
  */
-struct GeographicInformation
+struct SIX_SIDD_API GeographicInformation
 {
     //!  SIDD CountryCode Country code (1+)
     std::vector<std::string> countryCodes;
@@ -112,7 +115,7 @@ struct GeographicInformation
  *  This object contains the information associated with some geographic
  *  coverage
  */
-class GeographicCoverage
+class SIX_SIDD_API GeographicCoverage
 {
 public:
     //!  Constructor requires a RegionType to properly initialize
@@ -154,7 +157,7 @@ public:
  *  Note: Only used by SIDD 1.0
  *
  */
-class GeographicAndTarget
+class SIX_SIDD_API GeographicAndTarget
 {
 public:
     // This section is used for SIDD 1.0

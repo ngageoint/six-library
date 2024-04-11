@@ -53,11 +53,6 @@
 #include <math/Utilities.h>
 
 #include <nitf/coda-oss.hpp>
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
-#pragma comment(lib, "logging-c++")
 #pragma comment(lib, "ws2_32")
 
 #pragma warning(push)

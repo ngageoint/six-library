@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_DWELL_H__
 #define __CPHD_DWELL_H__
 
@@ -28,6 +28,7 @@
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
+#include <cphd/Exports.h>
 
 #include <mem/ScopedCopyablePtr.h>
 
@@ -39,7 +40,7 @@ namespace cphd
  *
  *  \brief Dwell Time Polynomial
  */
-struct DwellTime
+struct SIX_CPHD_API DwellTime
 {
     //! Constructor
     DwellTime();
@@ -66,7 +67,7 @@ struct DwellTime
  *
  *  \brief Center of Dwell Time Polynomial
  */
-struct COD
+struct SIX_CPHD_API COD
 {
     //! Constructor
     COD();
@@ -97,7 +98,7 @@ struct COD
  *  contained in the CPHD product
  *  See section 7.3
  */
-struct Dwell
+struct SIX_CPHD_API Dwell
 {
     //! Constructor
     Dwell();

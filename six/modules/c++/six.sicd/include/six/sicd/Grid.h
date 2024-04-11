@@ -19,9 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef SIX_six_sicd_Grid_h_INCLUDED_
 #define SIX_six_sicd_Grid_h_INCLUDED_
-#pragma once
 
 #include <logging/Logger.h>
 #include <mem/ScopedCopyablePtr.h>
@@ -36,6 +36,7 @@
 #include "six/sicd/ImageData.h"
 #include "six/sicd/RadarCollection.h"
 #include "six/sicd/RMA.h"
+#include "six/sicd/Exports.h"
 
 namespace six
 {
@@ -45,7 +46,7 @@ struct PFA;
 struct RgAzComp;
 struct SCPCOA;
 
-struct WeightType
+struct SIX_SICD_API WeightType
 {
     WeightType();
 
@@ -80,7 +81,7 @@ struct WeightType
  *  Parameters describing increasing row or column
  *  direction image coords
  */
-struct DirectionParameters
+struct SIX_SICD_API DirectionParameters
 {
     DirectionParameters();
     DirectionParameters* clone() const;
@@ -183,7 +184,7 @@ private:
  *  The block of parameters that describes the image sample grid
  *
  */
-struct Grid
+struct SIX_SICD_API Grid
 {
 
     //! TODO what to do with plane

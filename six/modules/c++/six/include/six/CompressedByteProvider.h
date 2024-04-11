@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __SIX_COMPRESSED_BYTE_PROVIDER_H__
 #define __SIX_COMPRESSED_BYTE_PROVIDER_H__
 
@@ -31,6 +31,7 @@
 #include <six/NITFWriteControl.h>
 #include <six/NITFSegmentInfo.h>
 #include <six/XMLControlFactory.h>
+#include <six/Exports.h>
 
 namespace six
 {
@@ -50,7 +51,7 @@ namespace six
  * rather than one contiguous block of memory in order to minimize the number of
  * copies.
  */
-class CompressedByteProvider : public nitf::CompressedByteProvider
+class SIX_SIX_API CompressedByteProvider : public nitf::CompressedByteProvider
 {
 protected:
     /*!

@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription BANDSA_description[] = {
     {NITF_BCS_A, 7, "ROW_SPACING", "ROW_SPACING" },
     {NITF_BCS_A, 1, "ROW_SPACING_UNITS", "ROW_SPACING_UNITS" },
     {NITF_BCS_A, 7, "COL_SPACING", "COL_SPACING" },
@@ -45,6 +45,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(BANDSA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(BANDSA)
 
 NITF_CXX_ENDGUARD

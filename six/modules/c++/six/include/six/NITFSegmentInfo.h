@@ -19,12 +19,14 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_NITF_SEGMENT_INFO_H__
 #define __SIX_NITF_SEGMENT_INFO_H__
 
 #include <algorithm>
 
 #include <six/Types.h>
+#include <six/Exports.h>
 
 namespace six
 {
@@ -34,7 +36,7 @@ namespace six
  *
  *  This class contains the per-segment information for an image.
  */
-struct NITFSegmentInfo
+struct SIX_SIX_API NITFSegmentInfo
 {
     //! First row in the image segment in real space
     size_t firstRow = 0;

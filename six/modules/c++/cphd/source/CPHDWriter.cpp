@@ -26,12 +26,14 @@
 #include <algorithm>
 
 #include <except/Exception.h>
+#include <sys/Path.h>
 
 #include <cphd/ByteSwap.h>
 #include <cphd/CPHDXMLControl.h>
 #include <cphd/FileHeader.h>
 #include <cphd/Utilities.h>
 #include <cphd/Wideband.h>
+#include <cphd/Exports.h>
 
 #undef min
 #undef max
@@ -61,13 +63,6 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
 {
 }
 
-static auto transform(const std::vector<std::string>& schemaPaths)
-{
-    std::vector<std::filesystem::path> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-        [](const std::string& s) { return s; });
-    return retval;
-}
 CPHDWriter::CPHDWriter(const Metadata& metadata,
                        std::shared_ptr<io::SeekableOutputStream> outStream,
                        const std::vector<std::string>& schemaPaths,
@@ -77,7 +72,7 @@ CPHDWriter::CPHDWriter(const Metadata& metadata,
     mElementSize(metadata.data.getNumBytesPerSample()),
     mScratchSpaceSize(scratchSpaceSize),
     mNumThreads(numThreads),
-    mSchemaPaths(transform(schemaPaths)),
+    mSchemaPaths(sys::convertPaths(schemaPaths)),
     mpSchemaPaths(&mSchemaPaths),
     mSharedStream(outStream),
     mStream(*mSharedStream),
@@ -382,19 +377,19 @@ void CPHDWriter::writeCPHDData(io::SeekableOutputStream& stream,
     writeCPHDData(*dataWriter, data, numElements, channel);
 }
 
-template void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
     const sys::ubyte* data, // For compressed data
     size_t numElements, size_t channel);
-template void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData(io::SeekableOutputStream&,
     const std::byte* data,
     size_t numElements, size_t channel);
-template void CPHDWriter::writeCPHDData<cphd::zint8_t>(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData<cphd::zint8_t>(io::SeekableOutputStream&,
     const cphd::zint8_t* data,
     size_t numElements, size_t channel);
-template void CPHDWriter::writeCPHDData<cphd::zint16_t>(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData<cphd::zint16_t>(io::SeekableOutputStream&,
     const cphd::zint16_t* data,
     size_t numElements, size_t channel);
-template void CPHDWriter::writeCPHDData<cphd::zfloat>(io::SeekableOutputStream&,
+template SIX_CPHD_API void CPHDWriter::writeCPHDData<cphd::zfloat>(io::SeekableOutputStream&,
     const cphd::zfloat* data,
     size_t numElements, size_t channel);
 }

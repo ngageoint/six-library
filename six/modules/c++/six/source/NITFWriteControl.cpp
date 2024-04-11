@@ -35,6 +35,7 @@
 #include <mem/ScopedArray.h>
 #include <gsl/gsl.h>
 #include <sys/Span.h>
+#include <sys/Path.h>
 
 #include <six/XMLControlFactory.h>
 #include <nitf/IOStreamWriter.hpp>
@@ -510,36 +511,29 @@ void NITFWriteControl::do_save_(const T& imageData, bool doByteSwap, bool enable
     }
 }
 
-static std::vector<std::string> convert_paths( const std::vector<std::filesystem::path>& schemaPaths)
-{
-    std::vector<std::string> retval;
-    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(retval),
-        [](const std::filesystem::path& p) { return p.string(); });
-    return retval;
-}
 void NITFWriteControl::save_image(std::span<const six::zfloat> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, convert_paths(schemaPaths));
+    do_save(imageData, outputFile, sys::convertPaths(schemaPaths));
 }
 void NITFWriteControl::save_image(std::span<const six::zint16_t> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, convert_paths(schemaPaths));
+    do_save(imageData, outputFile, sys::convertPaths(schemaPaths));
 }
 void NITFWriteControl::save_image(std::span<const uint8_t> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, convert_paths(schemaPaths));
+    do_save(imageData, outputFile, sys::convertPaths(schemaPaths));
 }
 void NITFWriteControl::save_image(std::span<const uint16_t> imageData,
     nitf::IOInterface& outputFile,
     const std::vector<std::filesystem::path>& schemaPaths)
 {
-    do_save(imageData, outputFile, convert_paths(schemaPaths));
+    do_save(imageData, outputFile, sys::convertPaths(schemaPaths));
 }
 
 void NITFWriteControl::save(const BufferList& list, const std::string& outputFile, const std::vector<std::string>& schemaPaths)

@@ -19,11 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __SIX_DERIVED_DATA_BUILDER_H__
 #define __SIX_DERIVED_DATA_BUILDER_H__
 
 #include "six/sidd/DerivedData.h"
+#include "six/sidd/Exports.h"
 
 namespace six
 {
@@ -40,7 +41,7 @@ namespace sidd
  *  DerivedData object as a prototype.
  *
  */
-class DerivedDataBuilder
+class SIX_SIDD_API DerivedDataBuilder
 {
 public:
     //!  Construct. Creates and owns a new DerivedData object

@@ -25,7 +25,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription CSCCGA_description[] = {
     {NITF_BCS_A, 18, "Source of Grid", "CCG_SOURCE" },
     {NITF_BCS_A, 6, "Image Segment Sensor to which CCG is registered", "REG_SENSOR" },
     {NITF_BCS_N, 7, "CCG Origin - Line", "ORIGIN_LINE" },
@@ -37,6 +37,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(CSCCGA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(CSCCGA)
 
 NITF_CXX_ENDGUARD

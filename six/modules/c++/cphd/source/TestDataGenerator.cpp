@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <cphd/TestDataGenerator.h>
 
 #include <iostream>
 #include <stdlib.h>

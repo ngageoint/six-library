@@ -41,6 +41,7 @@
 #include <cphd/SupportArray.h>
 #include <cphd/TxRcv.h>
 #include <cphd/Utilities.h>
+#include <cphd/Exports.h>
 
 namespace cphd
 {
@@ -56,7 +57,7 @@ namespace cphd
  *  This object contains all of the sub-blocks for CPHD.
  *
  */
-struct Metadata final : MetadataBase
+struct SIX_CPHD_API Metadata final : MetadataBase
 {
     //! Default constructor
     //! Initializes CPHD version to default version specified in FileHeader

@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#pragma once
 #ifndef __SIX_CONTAINER_H__
 #define __SIX_CONTAINER_H__
 
@@ -30,6 +31,7 @@
 #include <mem/ScopedCloneablePtr.h>
 #include <six/Legend.h>
 #include <six/Data.h>
+#include <six/Exports.h>
 
 namespace six
 {
@@ -47,7 +49,7 @@ namespace six
  *  Compiler-generated copy constructor and assignment operator are
  *  sufficient.
  */
-class Container
+class SIX_SIX_API Container
 {
 public:
     /*!

@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __CPHD_REFERENCE_GEOMETRY_H__
 #define __CPHD_REFERENCE_GEOMETRY_H__
 
@@ -27,6 +27,7 @@
 
 #include <cphd/Enums.h>
 #include <cphd/Types.h>
+#include <cphd/Exports.h>
 #include <mem/ScopedCopyablePtr.h>
 
 namespace cphd
@@ -38,7 +39,7 @@ namespace cphd
  *  \brief The SRP position for the reference vector of the
  *  reference channel
  */
-struct SRP
+struct SIX_CPHD_API SRP
 {
     //! Constructor
     SRP();
@@ -68,7 +69,7 @@ struct SRP
  *  \brief Base class for both Monostatic and
  *   Bistatic imaging types
  */
-struct ImagingType
+struct SIX_CPHD_API ImagingType
 {
     //! Constructor
     ImagingType();
@@ -121,7 +122,7 @@ struct ImagingType
  *   Single radar platform that is both the transmitter
  *   and the receiver
  */
-struct Monostatic : public ImagingType
+struct SIX_CPHD_API Monostatic : public ImagingType
 {
     //! Constructor
     Monostatic();
@@ -180,7 +181,7 @@ struct Monostatic : public ImagingType
  *  Pair of radar platforms, with a seperate transmitter
  *  and a passive receiver.
  */
-struct Bistatic : public ImagingType
+struct SIX_CPHD_API Bistatic : public ImagingType
 {
     /*!
      *  \struct PlatformParams
@@ -296,7 +297,7 @@ struct Bistatic : public ImagingType
  *
  *  \brief Parameters that describe the collection geometry
  */
-struct ReferenceGeometry
+struct SIX_CPHD_API ReferenceGeometry
 {
     //! Constructor
     ReferenceGeometry();
@@ -339,12 +340,12 @@ struct ReferenceGeometry
 };
 
 //! Ostream operators
-std::ostream& operator<< (std::ostream& os, const SRP& s);
-std::ostream& operator<< (std::ostream& os, const ImagingType& i);
-std::ostream& operator<< (std::ostream& os, const Monostatic& m);
-std::ostream& operator<< (std::ostream& os, const Bistatic::PlatformParams& p);
-std::ostream& operator<< (std::ostream& os, const Bistatic& b);
-std::ostream& operator<< (std::ostream& os, const ReferenceGeometry& r);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const SRP& s);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const ImagingType& i);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const Monostatic& m);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const Bistatic::PlatformParams& p);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const Bistatic& b);
+SIX_CPHD_API std::ostream& operator<< (std::ostream& os, const ReferenceGeometry& r);
 }
 
 #endif

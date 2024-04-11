@@ -184,9 +184,7 @@ TEST_CASE(sicd_French_xml)
 //    const auto schemaPaths = ::six::testing::getSchemaPaths();
 //
 //    // Use legacy APIs ... to test other XML processing path
-//    std::vector<std::string> schemaPaths_;
-//    std::transform(schemaPaths.begin(), schemaPaths.end(), std::back_inserter(schemaPaths_),
-//        [](const std::filesystem::path& p) { return p.string(); });
+//    const auto schemaPaths_ = sys::convertPaths(schemaPaths);
 //
 //    six::sicd::NITFReadComplexXMLControl reader;
 //    reader.setLogger();
@@ -376,7 +374,7 @@ static void read_nitf(const std::string& testName,
 static void buffer_list_save(const std::filesystem::path& outputName, const std::vector<six::zfloat>& image,
     std::unique_ptr<six::sicd::ComplexData>&& pComplexData)
 {
-    six::XMLControlFactory::getInstance().addCreator<six::sicd::ComplexXMLControl>();
+    six::getXMLControlFactory().addCreator<six::sicd::ComplexXMLControl>();
     six::NITFWriteControl writer(std::unique_ptr<six::Data>(std::move(pComplexData)));
 
     static const std::vector<std::string> schemaPaths;

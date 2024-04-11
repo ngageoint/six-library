@@ -24,7 +24,7 @@
 
 NITF_CXX_GUARD
 
-static nitf_TREDescription description[] = {
+static nitf_TREDescription EXOPTA_description[] = {
     {NITF_BCS_A, 3, "ANGLE TO NORTH", "ANGLETONORTH" },
     {NITF_BCS_A, 5, "MEAN GSD", "MEANGSD" },
     {NITF_BCS_A, 1, "Reserved 1", "RESERV01" },
@@ -46,6 +46,6 @@ static nitf_TREDescription description[] = {
     {NITF_END, 0, NULL, NULL}
 };
 
-NITF_DECLARE_SINGLE_PLUGIN(EXOPTA, description)
+NITF_DECLARE_SINGLE_PLUGIN_SIMPLE(EXOPTA)
 
 NITF_CXX_ENDGUARD
