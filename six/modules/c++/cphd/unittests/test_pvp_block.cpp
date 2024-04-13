@@ -159,6 +159,19 @@ TEST_CASE(testPvpOptional)
             pvpBlock.setFxN1(fxN1, channel, vector);
             const double fxN2 = cphd::getRandom();
             pvpBlock.setFxN2(fxN2, channel, vector);
+            
+            const cphd::PvpAntenna txAnt(
+                cphd::getRandomVector3(),
+                cphd::getRandomVector3(),
+                cphd::getRandomVector2());
+            pvpBlock.setTxAntenna(txAnt, channel, vector);
+                 
+            const cphd::PvpAntenna rcvAnt(
+                cphd::getRandomVector3(),
+                cphd::getRandomVector3(),
+                cphd::getRandomVector2()); 
+            pvpBlock.setRcvAntenna(rcvAnt, channel, vector);
+
             const double addedParam1 = cphd::getRandom();
             pvpBlock.setAddedPVP(addedParam1, channel, vector, "Param1");
             const std::string addedParam2 = "Parameter2";
@@ -169,6 +182,8 @@ TEST_CASE(testPvpOptional)
             TEST_ASSERT_EQ(ampSF, pvpBlock.getAmpSF(channel, vector));
             TEST_ASSERT_EQ(fxN1, pvpBlock.getFxN1(channel, vector));
             TEST_ASSERT_EQ(fxN2, pvpBlock.getFxN2(channel, vector));
+            TEST_ASSERT_EQ(txAnt, pvpBlock.getTxAntenna(channel, vector));
+            TEST_ASSERT_EQ(rcvAnt, pvpBlock.getRcvAntenna(channel, vector));
             TEST_ASSERT_EQ(addedParam1, pvpBlock.getAddedPVP<double>(channel, vector, "Param1"));
             TEST_ASSERT_EQ(addedParam2, pvpBlock.getAddedPVP<std::string>(channel, vector, "Param2"));
             TEST_ASSERT_EQ(addedParam3, pvpBlock.getAddedPVP<cphd::zint32_t >(channel, vector, "Param3"));

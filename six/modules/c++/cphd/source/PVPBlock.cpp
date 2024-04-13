@@ -66,6 +66,15 @@ template <typename T> inline void setData(const double* data_,
 }
 
 inline void setData(const std::byte* data_,
+                    cphd::Vector2& dest)
+{
+    const void* pData_ = data_;
+    auto data = static_cast<const double*>(pData_);
+    setData(&(data[0]), dest[0]);
+    setData(&(data[1]), dest[1]);
+}
+
+inline void setData(const std::byte* data_,
                     cphd::Vector3& dest)
 {
     const void* pData_ = data_;
@@ -90,6 +99,16 @@ template <typename T> inline void getData(std::byte* dest,
                     T* value, size_t size)
 {
     memcpy(dest, value, size);
+}
+
+inline void getData(std::byte* dest_,
+                    const cphd::Vector2& value)
+{
+    void* pDest_ = dest_;
+    auto dest = static_cast<double*>(pDest_);
+
+    getData(&(dest[0]), value[0]);
+    getData(&(dest[1]), value[1]);
 }
 
 inline void getData(std::byte* dest_,
@@ -455,7 +474,9 @@ PVPBlock::PVPBlock(const Pvp& p, const Data& d) :
     mToaE1Enabled(!six::Init::isUndefined<size_t>(p.toaE1.getOffset())),
     mToaE2Enabled(!six::Init::isUndefined<size_t>(p.toaE2.getOffset())),
     mTDIonoSRPEnabled(!six::Init::isUndefined<size_t>(p.tdIonoSRP.getOffset())),
-    mSignalEnabled(!six::Init::isUndefined<size_t>(p.signal.getOffset()))
+    mSignalEnabled(!six::Init::isUndefined<size_t>(p.signal.getOffset())),
+    mTxAntennaEnabled(has_value(p.txAntenna)),
+    mRcvAntennaEnabled(has_value(p.rcvAntenna))
 {
     mPvp = p;
     mNumBytesPerVector = d.getNumBytesPVPSet();
@@ -494,7 +515,9 @@ PVPBlock::PVPBlock(size_t numChannels,
     mToaE1Enabled(!six::Init::isUndefined<size_t>(p.toaE1.getOffset())),
     mToaE2Enabled(!six::Init::isUndefined<size_t>(p.toaE2.getOffset())),
     mTDIonoSRPEnabled(!six::Init::isUndefined<size_t>(p.tdIonoSRP.getOffset())),
-    mSignalEnabled(!six::Init::isUndefined<size_t>(p.signal.getOffset()))
+    mSignalEnabled(!six::Init::isUndefined<size_t>(p.signal.getOffset())),
+    mTxAntennaEnabled(has_value(p.txAntenna)),
+    mRcvAntennaEnabled(has_value(p.rcvAntenna))
 {
     mData.resize(numChannels);
     if(numChannels != numVectors.size())
@@ -841,6 +864,28 @@ std::int64_t PVPBlock::getSignal(size_t channel, size_t set) const
                     "Parameter was not set"));
 }
 
+PvpAntenna PVPBlock::getTxAntenna(size_t channel, size_t set) const
+{
+    verifyChannelVector(channel, set);
+    if (mData[channel][set].txAntenna.get())
+    {
+        return *mData[channel][set].txAntenna;
+    }
+    throw except::Exception(Ctxt(
+                    "Parameter was not set"));
+}
+
+PvpAntenna PVPBlock::getRcvAntenna(size_t channel, size_t set) const
+{
+    verifyChannelVector(channel, set);
+    if (mData[channel][set].rcvAntenna.get())
+    {
+        return *mData[channel][set].rcvAntenna;
+    }
+    throw except::Exception(Ctxt(
+                    "Parameter was not set"));
+}
+
 void PVPBlock::setTxTime(double value, size_t channel, size_t vector)
 {
     verifyChannelVector(channel, vector);
@@ -1021,6 +1066,30 @@ void PVPBlock::setSignal(std::int64_t value, size_t channel, size_t vector)
     if (hasSignal())
     {
         mData[channel][vector].signal.reset(new std::int64_t(value));
+        return;
+    }
+    throw except::Exception(Ctxt(
+                            "Parameter was not specified in XML"));
+}
+
+void PVPBlock::setTxAntenna(PvpAntenna value, size_t channel, size_t vector)
+{
+    verifyChannelVector(channel, vector);
+    if (hasTxAntenna())
+    {
+        mData[channel][vector].txAntenna.reset(new PvpAntenna(value));
+        return;
+    }
+    throw except::Exception(Ctxt(
+                            "Parameter was not specified in XML"));
+}
+
+void PVPBlock::setRcvAntenna(PvpAntenna value, size_t channel, size_t vector)
+{
+    verifyChannelVector(channel, vector);
+    if (hasRcvAntenna())
+    {
+        mData[channel][vector].rcvAntenna.reset(new PvpAntenna(value));
         return;
     }
     throw except::Exception(Ctxt(

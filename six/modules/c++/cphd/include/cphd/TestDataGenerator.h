@@ -47,6 +47,14 @@ namespace cphd
 SIX_CPHD_API double getRandom();
 
 /*
+ *  \func getRandomVector2
+ *  \brief generates vector2D type object with random values
+ *
+ *  \return Return vector2D object
+ */
+SIX_CPHD_API Vector2 getRandomVector2();
+
+/*
  *  \func getRandomVector3
  *  \brief generates vector3D type object with random values
  *

@@ -49,6 +49,8 @@ TEST_CASE(testAppend)
     pvp.append(pvp.ampSF);
     pvp.appendCustomParameter(8, "S8", "AddedParam1");
     pvp.append(pvp.signal);
+    pvp.appendTxAnt();
+    pvp.appendRcvAnt();
 
     TEST_ASSERT_TRUE(pvp.txTime.getOffset() == 0);
     TEST_ASSERT_TRUE(pvp.txPos.getOffset() == 1);
@@ -56,6 +58,8 @@ TEST_CASE(testAppend)
     TEST_ASSERT_TRUE(pvp.ampSF.getOffset() == 7);
     TEST_ASSERT_TRUE(pvp.addedPVP["AddedParam1"].getOffset() == 8);
     TEST_ASSERT_TRUE(pvp.signal.getOffset() == 16);
+    TEST_ASSERT_TRUE(value(pvp.txAntenna).getOffset() == 17);
+    TEST_ASSERT_TRUE(value(pvp.rcvAntenna).getOffset() == 25);
 }
 
 TEST_CASE(testAddedParamsEqualityOperatorTrue)
@@ -101,10 +105,26 @@ TEST_CASE(testAddedParamsEqualityOperatorFalse)
     TEST_ASSERT_TRUE((pvp1 != pvp3));
 }
 
+TEST_CASE(testTxAntennaFailure)
+{
+    cphd::Pvp pvp;
+    pvp.appendTxAnt();
+    TEST_EXCEPTION(pvp.appendTxAnt());
+}
+
+TEST_CASE(testRcvAntennaFailure)
+{
+    cphd::Pvp pvp;
+    pvp.appendRcvAnt();
+    TEST_EXCEPTION(pvp.appendRcvAnt());
+}
+
 TEST_MAIN(
         TEST_CHECK(testSimpleEqualityOperatorTrue);
         TEST_CHECK(testAppend);
         TEST_CHECK(testAddedParamsEqualityOperatorTrue);
         TEST_CHECK(testSimpleEqualityOperatorFalse);
         TEST_CHECK(testAddedParamsEqualityOperatorFalse);
+        TEST_CHECK(testTxAntennaFailure);
+        TEST_CHECK(testRcvAntennaFailure);
         )

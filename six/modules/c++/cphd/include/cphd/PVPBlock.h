@@ -86,6 +86,39 @@ struct AddedPVP<std::string>
     }
 };
 
+struct PvpAntenna
+{
+    Vector3 acx;
+    Vector3 acy;
+    Vector2 eb;
+    
+    PvpAntenna(
+        Vector3 acx,
+        Vector3 acy,
+        Vector2 eb):
+        acx(acx),
+        acy(acy),
+        eb(eb){};
+    
+    bool operator==(const PvpAntenna& other) const 
+    {
+        return (acx == other.acx) &&
+               (acy == other.acy) &&
+               (eb == other.eb); 
+    };
+    
+    bool operator!=(const PvpAntenna& other) const 
+    {
+        return !(*this == other); 
+    };
+};
+inline std::ostream& operator<<(std::ostream& os, const PvpAntenna& v)
+{
+    os << v.acx << "\n";
+    os << v.acy << "\n";
+    os << v.eb << "\n";
+    return os;
+}
 /*!
  *  \struct PVPBlock
  *
@@ -184,6 +217,8 @@ struct SIX_CPHD_API PVPBlock
     double getTOAE2(size_t channel, size_t set) const;
     double getTdIonoSRP(size_t channel, size_t set) const;
     std::int64_t getSignal(size_t channel, size_t set) const;
+    PvpAntenna getTxAntenna(size_t channel, size_t set) const;
+    PvpAntenna getRcvAntenna(size_t channel, size_t set) const;
 
     template<typename T>
     T getAddedPVP(size_t channel, size_t set, const std::string& name) const
@@ -223,6 +258,8 @@ struct SIX_CPHD_API PVPBlock
     void setTOAE2(double value, size_t channel, size_t set);
     void setTdIonoSRP(double value, size_t channel, size_t set);
     void setSignal(std::int64_t value, size_t channel, size_t set);
+    void setTxAntenna(PvpAntenna value, size_t channel, size_t set);
+    void setRcvAntenna(PvpAntenna value, size_t channel, size_t set);
 
     template<typename T>
     void setAddedPVP(T value, size_t channel, size_t set, const std::string& name)
@@ -311,6 +348,14 @@ struct SIX_CPHD_API PVPBlock
     bool hasSignal() const
     {
         return mSignalEnabled;
+    }
+    bool hasTxAntenna() const
+    {
+        return mTxAntennaEnabled;
+    }
+    bool hasRcvAntenna() const
+    {
+        return mRcvAntennaEnabled;
     }
 
     /*
@@ -416,7 +461,8 @@ protected:
                     ampSF == other.ampSF && fxN1 == other.fxN1 &&
                     fxN2 == other.fxN2 && toaE1 == other.toaE1 &&
                     toaE2 == other.toaE2 && tdIonoSRP == other.tdIonoSRP &&
-                    signal == other.signal && addedPVP == other.addedPVP;
+                    signal == other.signal && addedPVP == other.addedPVP &&
+                    txAntenna == other.txAntenna && rcvAntenna == other.rcvAntenna;
         }
         bool operator!=(const PVPSet& other) const
         {
@@ -450,6 +496,8 @@ protected:
         mem::ScopedCopyablePtr<double> toaE2;
         mem::ScopedCopyablePtr<double> tdIonoSRP;
         mem::ScopedCopyablePtr<std::int64_t> signal;
+        mem::ScopedCopyablePtr<PvpAntenna> txAntenna;
+        mem::ScopedCopyablePtr<PvpAntenna> rcvAntenna;
 
         //! (Optional) Additional parameters
         std::unordered_map<std::string,six::Parameter> addedPVP;
@@ -474,6 +522,8 @@ private:
     bool mToaE2Enabled;
     bool mTDIonoSRPEnabled;
     bool mSignalEnabled;
+    bool mTxAntennaEnabled;
+    bool mRcvAntennaEnabled;
 
     //! Ostream operator
     SIX_CPHD_API friend std::ostream& operator<< (std::ostream& os, const PVPBlock& p);

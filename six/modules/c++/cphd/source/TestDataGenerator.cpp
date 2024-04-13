@@ -44,6 +44,14 @@ double getRandom()
     return -1000.0  + r * 2000.0;
 }
 
+Vector2 getRandomVector2()
+{
+    Vector2 ret;
+    ret[0] = getRandom();
+    ret[1] = getRandom();
+    return ret;
+}
+
 Vector3 getRandomVector3()
 {
     Vector3 ret;
