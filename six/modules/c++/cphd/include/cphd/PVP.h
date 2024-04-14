@@ -629,18 +629,6 @@ struct SIX_CPHD_API Pvp final
      *   if format is invalid, or the receive antenna already has been set
      */
     void appendRcvAnt();
-    
-    /*
-     *  \func append
-     *
-     *  \brief Validate and append parameter to the next available block
-     *
-     *  \param[out] param The PVPType parameter that should be set
-     *
-     *  \throws except::Exception If param offset or size overlaps another parameter, or
-     *   if format is invalid
-     */
-    void append(six::XsElement_minOccurs0<TxAntenna>& ant);
 
     /*
      *  \func setParameter

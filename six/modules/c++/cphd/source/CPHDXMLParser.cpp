@@ -1096,7 +1096,6 @@ std::unique_ptr<Metadata> CPHDXMLParser::fromXML(const xml::lite::Document* doc)
 {
     const auto version = CPHDXMLControl::uriToVersion(xml::lite::Uri(getDefaultURI()));
     auto result = fromXML(*doc, version);
-    std::cerr<<result;
     return std::make_unique<Metadata>(std::move(result));
 }
 

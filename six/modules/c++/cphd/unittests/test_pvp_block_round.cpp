@@ -189,7 +189,7 @@ bool runTest(bool /*scale*/,
 
 TEST_CASE(testPVPBlockSimple)
 {
-    const types::RowCol<size_t> dims(1, 2);
+    const types::RowCol<size_t> dims(128, 256);
     const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     auto meta = cphd::setUpData(dims, writeData);
