@@ -270,7 +270,7 @@ TEST_CASE(testPVPBlockAdditional)
 }
 
 TEST_MAIN(
-        // TEST_CHECK(testPVPBlockSimple);
+        TEST_CHECK(testPVPBlockSimple);
         TEST_CHECK(testPVPBlockOptional);
-        // TEST_CHECK(testPVPBlockAdditional);
+        TEST_CHECK(testPVPBlockAdditional);
         )

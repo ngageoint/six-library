@@ -83,16 +83,6 @@ inline void setData(const std::byte* data_,
     setData(&(data[1]), dest[1]);
     setData(&(data[2]), dest[2]);
 }
-inline void setData(const std::byte* data_,
-                    cphd::PvpAntenna& dest)
-{
-    const void* pData_ = data_;
-    auto data = static_cast<const double*>(pData_);
-    setData(&data[0], dest.acx);
-    setData(&data[3], dest.acy);
-    setData(&data[6], dest.eb);
-}
-
 
 // Get data from data struct and put into data block
 template <typename T> inline void getData(std::byte* dest,
@@ -130,16 +120,6 @@ inline void getData(std::byte* dest_,
     getData(&(dest[0]), value[0]);
     getData(&(dest[1]), value[1]);
     getData(&(dest[2]), value[2]);
-}
-inline void getData(std::byte* dest_,
-                    const cphd::PvpAntenna& value)
-{
-    void* pDest_ = dest_;
-    auto dest = static_cast<std::byte*>(pDest_);
-
-    getData(dest, &value.acx);
-    getData(dest + sizeof(cphd::Vector3), &value.acy);
-    getData(dest + sizeof(cphd::Vector3), &value.eb);
 }
 }
 
@@ -224,12 +204,16 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
     if (pvpBlock.hasTxAntenna())
     {
         txAntenna.reset(new PvpAntenna());
-        ::setData(input + value(p.txAntenna).getOffset() * 8, *txAntenna);
+        ::setData(input + value(p.txAntenna).txACX.value().param.getByteOffset(), txAntenna->acx);
+        ::setData(input + value(p.txAntenna).txACY.value().param.getByteOffset(), txAntenna->acy);
+        ::setData(input + value(p.txAntenna).txEB.value().param.getByteOffset(), txAntenna->eb);
     }
     if (pvpBlock.hasRcvAntenna())
     {
         rcvAntenna.reset(new PvpAntenna());
-        ::setData(input + value(p.rcvAntenna).getOffset() * 8, *rcvAntenna);
+        ::setData(input + value(p.rcvAntenna).rcvACX.value().param.getByteOffset(), rcvAntenna->acx);
+        ::setData(input + value(p.rcvAntenna).rcvACY.value().param.getByteOffset(), rcvAntenna->acy);
+        ::setData(input + value(p.rcvAntenna).rcvEB.value().param.getByteOffset(), rcvAntenna->eb);
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
@@ -417,11 +401,15 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest_) const
     }
     if (txAntenna.get())
     {
-        ::getData(dest + value(p.txAntenna).getOffset() * 8, *txAntenna);
+        ::getData(dest + value(p.txAntenna).txACX.value().param.getByteOffset(), txAntenna->acx);
+        ::getData(dest + value(p.txAntenna).txACY.value().param.getByteOffset(), txAntenna->acy);
+        ::getData(dest + value(p.txAntenna).txEB.value().param.getByteOffset(), txAntenna->eb);
     }
     if (rcvAntenna.get())
     {
-        ::getData(dest + value(p.rcvAntenna).getOffset() * 8, *rcvAntenna);
+        ::getData(dest + value(p.rcvAntenna).rcvACX.value().param.getByteOffset(), rcvAntenna->acx);
+        ::getData(dest + value(p.rcvAntenna).rcvACY.value().param.getByteOffset(), rcvAntenna->acy);
+        ::getData(dest + value(p.rcvAntenna).rcvEB.value().param.getByteOffset(), rcvAntenna->eb);
     }
     if (addedPVP.size() != p.addedPVP.size())
     {
