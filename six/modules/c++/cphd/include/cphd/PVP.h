@@ -271,7 +271,7 @@ struct SIX_CPHD_API TxAntenna final
         return !((*this) == other);
     }
     
-    //! Given an offset, initialize all members respectively
+    //! Given an initial offset, setup each member relative to it
     void setOffset(const size_t offset)
     {
         txACX.value().param.setOffset(offset);      // 3 blocks
@@ -280,6 +280,7 @@ struct SIX_CPHD_API TxAntenna final
     }
     
     //! Get the offset to the first member
+    //! This assumes the fields are sequential, which isn't necessarily true 
     const size_t getOffset() const
     {
         return txACX.value().param.getOffset();
@@ -322,7 +323,7 @@ struct SIX_CPHD_API RcvAntenna final
         return !((*this) == other);
     }
     
-    //! Given an offset, initialize all members respectively
+    //! Given an initial offset, setup each member relative to it
     void setOffset(const size_t offset)
     {
         rcvACX.value().param.setOffset(offset);      // 3 blocks
@@ -331,6 +332,7 @@ struct SIX_CPHD_API RcvAntenna final
     }
     
     //! Get the offset to the first member
+    //! This assumes the fields are sequential, which isn't necessarily true 
     const size_t getOffset() const
     {
         return rcvACX.value().param.getOffset();
@@ -609,7 +611,7 @@ struct SIX_CPHD_API Pvp final
     void append(PVPType& param);
     
     /*
-     *  \func append
+     *  \func appendTxAnt
      *
      *  \brief Add transmit antenna block to PVP data
      *
@@ -619,7 +621,7 @@ struct SIX_CPHD_API Pvp final
     void appendTxAnt();
     
     /*
-     *  \func append
+     *  \func appendRcvAnt
      *
      *  \brief Add receive antenna block to PVP data
      *

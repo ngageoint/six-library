@@ -143,6 +143,8 @@ TEST_CASE(testPvpOptional)
     pvp.setCustomParameter(1, 30, "F8", "Param1");
     pvp.setCustomParameter(1, 31, "S10", "Param2");
     pvp.setCustomParameter(1, 32, "CI16", "Param3");
+    pvp.appendTxAnt();
+    pvp.appendRcvAnt();
     cphd::PVPBlock pvpBlock(NUM_CHANNELS,
                             std::vector<size_t>(NUM_CHANNELS, NUM_VECTORS),
                             pvp);

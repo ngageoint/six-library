@@ -285,11 +285,11 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
     }
     if (has_value(p.txAntenna))
     {
-        os << "  TxAntenna        : \n" << p.txAntenna << "\n";
+        os <<  p.txAntenna;
     }
     if (has_value(p.rcvAntenna))
     {
-        os << "  RcvAntenna        : \n" << p.rcvAntenna << "\n";
+        os <<  p.rcvAntenna;
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {

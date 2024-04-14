@@ -88,17 +88,24 @@ struct AddedPVP<std::string>
 
 struct PvpAntenna
 {
+    PvpAntenna() :
+        acx(Vector3()),
+        acy(Vector3()),
+        eb(Vector2()) {};
+    PvpAntenna(Vector3 acx, Vector3 acy, Vector2 eb):
+        acx(acx),
+        acy(acy),
+        eb(eb) {};
+    ~PvpAntenna() = default;
+    PvpAntenna(const PvpAntenna&) = default;
+    PvpAntenna& operator=(const PvpAntenna&) = default;
+    PvpAntenna(PvpAntenna&&) = default;
+    PvpAntenna& operator=(PvpAntenna&&) = default;
+    
     Vector3 acx;
     Vector3 acy;
     Vector2 eb;
     
-    PvpAntenna(
-        Vector3 acx,
-        Vector3 acy,
-        Vector2 eb):
-        acx(acx),
-        acy(acy),
-        eb(eb){};
     
     bool operator==(const PvpAntenna& other) const 
     {
@@ -119,6 +126,7 @@ inline std::ostream& operator<<(std::ostream& os, const PvpAntenna& v)
     os << v.eb << "\n";
     return os;
 }
+
 /*!
  *  \struct PVPBlock
  *

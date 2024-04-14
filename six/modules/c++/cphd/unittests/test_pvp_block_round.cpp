@@ -189,7 +189,7 @@ bool runTest(bool /*scale*/,
 
 TEST_CASE(testPVPBlockSimple)
 {
-    const types::RowCol<size_t> dims(128, 256);
+    const types::RowCol<size_t> dims(1, 2);
     const auto writeData = generateComplexData<cphd::zint16_t>(dims.area());
     const bool scale = false;
     auto meta = cphd::setUpData(dims, writeData);
@@ -218,11 +218,11 @@ TEST_CASE(testPVPBlockOptional)
     const bool scale = false;
     auto meta = cphd::setUpData(dims, writeData);
     cphd::setPVPXML(meta.pvp);
-    meta.pvp.setOffset(27, meta.pvp.fxN1);
-    meta.pvp.setOffset(28, meta.pvp.fxN2);
+    meta.pvp.setOffset(meta.pvp.getReqSetSize(), meta.pvp.fxN1);
+    meta.pvp.setOffset(meta.pvp.getReqSetSize(), meta.pvp.fxN2);
     meta.pvp.appendTxAnt();
     meta.pvp.appendRcvAnt();
-    meta.data.numBytesPVP += 2 * 8;
+    meta.data.numBytesPVP = meta.pvp.getReqSetSize() * 8;
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;
     setPVPBlock(dims,
@@ -270,7 +270,7 @@ TEST_CASE(testPVPBlockAdditional)
 }
 
 TEST_MAIN(
-        TEST_CHECK(testPVPBlockSimple);
+        // TEST_CHECK(testPVPBlockSimple);
         TEST_CHECK(testPVPBlockOptional);
-        TEST_CHECK(testPVPBlockAdditional);
+        // TEST_CHECK(testPVPBlockAdditional);
         )

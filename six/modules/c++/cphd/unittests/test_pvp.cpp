@@ -105,17 +105,12 @@ TEST_CASE(testAddedParamsEqualityOperatorFalse)
     TEST_ASSERT_TRUE((pvp1 != pvp3));
 }
 
-TEST_CASE(testTxAntennaFailure)
+TEST_CASE(testAntennaFailure)
 {
     cphd::Pvp pvp;
     pvp.appendTxAnt();
-    TEST_EXCEPTION(pvp.appendTxAnt());
-}
-
-TEST_CASE(testRcvAntennaFailure)
-{
-    cphd::Pvp pvp;
     pvp.appendRcvAnt();
+    TEST_EXCEPTION(pvp.appendTxAnt());
     TEST_EXCEPTION(pvp.appendRcvAnt());
 }
 
@@ -125,6 +120,5 @@ TEST_MAIN(
         TEST_CHECK(testAddedParamsEqualityOperatorTrue);
         TEST_CHECK(testSimpleEqualityOperatorFalse);
         TEST_CHECK(testAddedParamsEqualityOperatorFalse);
-        TEST_CHECK(testTxAntennaFailure);
-        TEST_CHECK(testRcvAntennaFailure);
+        TEST_CHECK(testAntennaFailure);
         )

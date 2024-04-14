@@ -83,6 +83,16 @@ inline void setData(const std::byte* data_,
     setData(&(data[1]), dest[1]);
     setData(&(data[2]), dest[2]);
 }
+inline void setData(const std::byte* data_,
+                    cphd::PvpAntenna& dest)
+{
+    const void* pData_ = data_;
+    auto data = static_cast<const double*>(pData_);
+    setData(&data[0], dest.acx);
+    setData(&data[3], dest.acy);
+    setData(&data[6], dest.eb);
+}
+
 
 // Get data from data struct and put into data block
 template <typename T> inline void getData(std::byte* dest,
@@ -121,11 +131,20 @@ inline void getData(std::byte* dest_,
     getData(&(dest[1]), value[1]);
     getData(&(dest[2]), value[2]);
 }
+inline void getData(std::byte* dest_,
+                    const cphd::PvpAntenna& value)
+{
+    void* pDest_ = dest_;
+    auto dest = static_cast<std::byte*>(pDest_);
+
+    getData(dest, &value.acx);
+    getData(dest + sizeof(cphd::Vector3), &value.acy);
+    getData(dest + sizeof(cphd::Vector3), &value.eb);
+}
 }
 
 namespace cphd
 {
-
 PVPBlock::PVPSet::PVPSet() :
     txTime(six::Init::undefined<double>()),
     txPos(six::Init::undefined<Vector3>()),
@@ -201,6 +220,16 @@ void PVPBlock::PVPSet::write(const PVPBlock& pvpBlock, const Pvp& p, const sys::
     {
         signal.reset(new std::int64_t());
         ::setData(input + p.signal.getByteOffset(), *signal);
+    }
+    if (pvpBlock.hasTxAntenna())
+    {
+        txAntenna.reset(new PvpAntenna());
+        ::setData(input + value(p.txAntenna).getOffset() * 8, *txAntenna);
+    }
+    if (pvpBlock.hasRcvAntenna())
+    {
+        rcvAntenna.reset(new PvpAntenna());
+        ::setData(input + value(p.rcvAntenna).getOffset() * 8, *rcvAntenna);
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
@@ -385,6 +414,14 @@ void PVPBlock::PVPSet::read(const Pvp& p, sys::ubyte* dest_) const
     if (signal.get())
     {
         ::getData(dest + p.signal.getByteOffset(), *signal);
+    }
+    if (txAntenna.get())
+    {
+        ::getData(dest + value(p.txAntenna).getOffset() * 8, *txAntenna);
+    }
+    if (rcvAntenna.get())
+    {
+        ::getData(dest + value(p.rcvAntenna).getOffset() * 8, *rcvAntenna);
     }
     if (addedPVP.size() != p.addedPVP.size())
     {
