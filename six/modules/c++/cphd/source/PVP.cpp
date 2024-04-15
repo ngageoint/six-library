@@ -112,6 +112,30 @@ void Pvp::append(PVPType& param)
     setOffset(currentOffset, param);
 }
 
+void Pvp::appendTxAnt()
+{
+    size_t currentOffset = mParamLocations.size();
+    if(has_value(txAntenna))
+    {
+        throw except::Exception(Ctxt("txAntenna already set"));
+    } 
+    validate(8, currentOffset);
+    txAntenna.value().emplace();
+    value(txAntenna).setOffset(currentOffset);
+}
+
+void Pvp::appendRcvAnt()
+{
+    size_t currentOffset = mParamLocations.size();
+    if(has_value(rcvAntenna))
+    {
+        throw except::Exception(Ctxt("rcvAntenna already set"));
+    } 
+    validate(8, currentOffset);
+    rcvAntenna.value().emplace();
+    value(rcvAntenna).setOffset(currentOffset);
+}
+
 // Assumes addedPVP is already correct size
 void Pvp::setCustomParameter(size_t size, size_t offset, const std::string& format, const std::string& name)
 {
@@ -174,6 +198,14 @@ size_t Pvp::getReqSetSize() const
     if(!six::Init::isUndefined<size_t>(signal.getOffset()))
     {
         res += signal.getSize();
+    }
+    if(has_value(txAntenna))
+    {
+        res += 8;
+    }
+    if(has_value(rcvAntenna))
+    {
+        res += 8;
     }
     for (auto it = addedPVP.begin(); it != addedPVP.end(); ++it)
     {
@@ -253,11 +285,11 @@ std::ostream& operator<< (std::ostream& os, const Pvp& p)
     }
     if (has_value(p.txAntenna))
     {
-        os << "  TxAntenna        : \n" << p.txAntenna << "\n";
+        os <<  p.txAntenna;
     }
     if (has_value(p.rcvAntenna))
     {
-        os << "  RcvAntenna        : \n" << p.rcvAntenna << "\n";
+        os <<  p.rcvAntenna;
     }
     for (auto it = p.addedPVP.begin(); it != p.addedPVP.end(); ++it)
     {
