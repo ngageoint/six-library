@@ -1460,20 +1460,20 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOc
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
-        o = TxAntenna{};
-        parse(*pXML, value(o).txACX);
-        parse(*pXML, value(o).txACY);
-        parse(*pXML, value(o).txEB);
+        o.value().emplace();
+        parse(getFirstAndOnly(*pXML, "TxACX"), value(o).txACX);
+        parse(getFirstAndOnly(*pXML, "TxACY"), value(o).txACY);
+        parse(getFirstAndOnly(*pXML, "TxEB"), value(o).txEB);
     }
 }
 void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<RcvAntenna>& o) const
 {
     if (const auto pXML = getOptional(parent, o.tag()))
     {
-        o = RcvAntenna{};
-        parse(*pXML, value(o).rcvACX);
-        parse(*pXML, value(o).rcvACY);
-        parse(*pXML, value(o).rcvEB);
+        o.value().emplace();
+        parse(getFirstAndOnly(*pXML, "RcvACX"), value(o).rcvACX);
+        parse(getFirstAndOnly(*pXML, "RcvACY"), value(o).rcvACY);
+        parse(getFirstAndOnly(*pXML, "RcvEB"), value(o).rcvEB);
     }
 }
 

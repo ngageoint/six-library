@@ -270,6 +270,21 @@ struct SIX_CPHD_API TxAntenna final
     {
         return !((*this) == other);
     }
+    
+    //! Given an initial offset, setup each member relative to it
+    void setOffset(const size_t offset)
+    {
+        txACX.value().param.setOffset(offset);      // 3 blocks
+        txACY.value().param.setOffset(offset + 3);  // 3 blocks
+        txEB.value().param.setOffset(offset + 6);  // 2 blocks
+    }
+    
+    //! Get the offset to the first member
+    //! This assumes the fields are sequential, which isn't necessarily true 
+    const size_t getOffset() const
+    {
+        return txACX.value().param.getOffset();
+    }
 
     //! TxACX PVP Structure
     six::XsElement<PerVectorParameterXYZ> txACX{ "TxACX" };
@@ -307,7 +322,22 @@ struct SIX_CPHD_API RcvAntenna final
     {
         return !((*this) == other);
     }
-
+    
+    //! Given an initial offset, setup each member relative to it
+    void setOffset(const size_t offset)
+    {
+        rcvACX.value().param.setOffset(offset);      // 3 blocks
+        rcvACY.value().param.setOffset(offset + 3);  // 3 blocks
+        rcvEB.value().param.setOffset(offset + 6);  // 2 blocks
+    }
+    
+    //! Get the offset to the first member
+    //! This assumes the fields are sequential, which isn't necessarily true 
+    const size_t getOffset() const
+    {
+        return rcvACX.value().param.getOffset();
+    }
+    
     //! RcvACX PVP Structure
     six::XsElement<PerVectorParameterXYZ> rcvACX{ "RcvACX" };
 
@@ -579,6 +609,26 @@ struct SIX_CPHD_API Pvp final
      *   if format is invalid
      */
     void append(PVPType& param);
+    
+    /*
+     *  \func appendTxAnt
+     *
+     *  \brief Add transmit antenna block to PVP data
+     *
+     *  \throws except::Exception If param offset or size overlaps another parameter, or
+     *   if format is invalid, or the transmit antenna already has been set
+     */
+    void appendTxAnt();
+    
+    /*
+     *  \func appendRcvAnt
+     *
+     *  \brief Add receive antenna block to PVP data
+     *
+     *  \throws except::Exception If param offset or size overlaps another parameter, or
+     *   if format is invalid, or the receive antenna already has been set
+     */
+    void appendRcvAnt();
 
     /*
      *  \func setParameter
