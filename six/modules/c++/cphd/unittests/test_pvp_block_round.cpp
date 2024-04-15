@@ -65,6 +65,8 @@ void setPVPBlock(const types::RowCol<size_t> dims,
                  bool isTOAE1,
                  bool isTOAE2,
                  bool isSignal,
+                 bool isTxAnt,
+                 bool isRcvAnt,
                  const std::vector<std::string>& addedParams)
 {
     const size_t numChannels = 1;
@@ -105,6 +107,22 @@ void setPVPBlock(const types::RowCol<size_t> dims,
             {
                 const double signal = cphd::getRandom();
                 pvpBlock.setTOAE2(signal, ii, jj);
+            }
+            if (isTxAnt)
+            {
+                const cphd::PvpAntenna antenna(
+                    cphd::getRandomVector3(),
+                    cphd::getRandomVector3(),
+                    cphd::getRandomVector2());
+                pvpBlock.setTxAntenna(antenna, ii, jj);
+            }
+            if (isRcvAnt)
+            {
+                const cphd::PvpAntenna antenna(
+                    cphd::getRandomVector3(),
+                    cphd::getRandomVector3(),
+                    cphd::getRandomVector2());
+                pvpBlock.setRcvAntenna(antenna, ii, jj);
             }
 
             for (size_t idx = 0; idx < addedParams.size(); ++idx)
@@ -186,6 +204,8 @@ TEST_CASE(testPVPBlockSimple)
                 false,
                 false,
                 false,
+                false,
+                false,
                 addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
@@ -198,9 +218,11 @@ TEST_CASE(testPVPBlockOptional)
     const bool scale = false;
     auto meta = cphd::setUpData(dims, writeData);
     cphd::setPVPXML(meta.pvp);
-    meta.pvp.setOffset(27, meta.pvp.fxN1);
-    meta.pvp.setOffset(28, meta.pvp.fxN2);
-    meta.data.numBytesPVP += 2 * 8;
+    meta.pvp.setOffset(meta.pvp.getReqSetSize(), meta.pvp.fxN1);
+    meta.pvp.setOffset(meta.pvp.getReqSetSize(), meta.pvp.fxN2);
+    meta.pvp.appendTxAnt();
+    meta.pvp.appendRcvAnt();
+    meta.data.numBytesPVP = meta.pvp.getReqSetSize() * 8;
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     std::vector<std::string> addedParams;
     setPVPBlock(dims,
@@ -211,6 +233,8 @@ TEST_CASE(testPVPBlockOptional)
                 false,
                 false,
                 false,
+                true,
+                true,
                 addedParams);
 
     TEST_ASSERT_TRUE(runTest(scale, writeData, meta, pvpBlock, dims));
@@ -232,6 +256,8 @@ TEST_CASE(testPVPBlockAdditional)
     addedParams.push_back("param2");
     setPVPBlock(dims,
                 pvpBlock,
+                false,
+                false,
                 false,
                 false,
                 false,
