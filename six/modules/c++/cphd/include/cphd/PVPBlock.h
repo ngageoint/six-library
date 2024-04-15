@@ -86,12 +86,9 @@ struct AddedPVP<std::string>
     }
 };
 
-struct PvpAntenna
+struct PvpAntenna final
 {
-    PvpAntenna() :
-        acx(Vector3()),
-        acy(Vector3()),
-        eb(Vector2()) {};
+    PvpAntenna() = default;
     PvpAntenna(Vector3 acx, Vector3 acy, Vector2 eb):
         acx(acx),
         acy(acy),

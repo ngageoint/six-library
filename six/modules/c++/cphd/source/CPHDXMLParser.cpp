@@ -1443,14 +1443,18 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* channelXML, Channel& chann
     }
 }
 
-void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement<PerVectorParameterXYZ>& v) const
+void CPHDXMLParser::parse(const xml::lite::Element& antennaXml, six::XsElement<PerVectorParameterXYZ>& v) const
 {
+    const auto& parent = getFirstAndOnly(antennaXml, v.tag());
+
     auto& param = value(v).param;
     const auto offset = parsePVPType(parent, param);
     setOffset(param, offset);
 }
-void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement<PerVectorParameterEB>& v) const
+void CPHDXMLParser::parse(const xml::lite::Element& antennaXml, six::XsElement<PerVectorParameterEB>& v) const
 {
+    const auto& parent = getFirstAndOnly(antennaXml, v.tag());
+
     auto& param = value(v).param;
     const auto offset = parsePVPType(parent, param);
     setOffset(param, offset);
@@ -1461,9 +1465,11 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOc
     if (const auto pXML = getOptional(parent, o.tag()))
     {
         o.value().emplace();
-        parse(getFirstAndOnly(*pXML, "TxACX"), value(o).txACX);
-        parse(getFirstAndOnly(*pXML, "TxACY"), value(o).txACY);
-        parse(getFirstAndOnly(*pXML, "TxEB"), value(o).txEB);
+        auto& antenna = value(o);
+
+        parse(*pXML, antenna.txACX);
+        parse(*pXML, antenna.txACY);
+        parse(*pXML, antenna.txEB);
     }
 }
 void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOccurs0<RcvAntenna>& o) const
@@ -1471,9 +1477,11 @@ void CPHDXMLParser::parse(const xml::lite::Element& parent, six::XsElement_minOc
     if (const auto pXML = getOptional(parent, o.tag()))
     {
         o.value().emplace();
-        parse(getFirstAndOnly(*pXML, "RcvACX"), value(o).rcvACX);
-        parse(getFirstAndOnly(*pXML, "RcvACY"), value(o).rcvACY);
-        parse(getFirstAndOnly(*pXML, "RcvEB"), value(o).rcvEB);
+        auto& antenna = value(o);
+
+        parse(*pXML, antenna.rcvACX);
+        parse(*pXML, antenna.rcvACY);
+        parse(*pXML, antenna.rcvEB);
     }
 }
 
