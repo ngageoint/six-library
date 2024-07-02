@@ -1030,7 +1030,7 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
         const six::DateTime timeP2 =
                 comparisonSIXModel.getReferenceDateAndTimeImpl();
         const double time =
-                1000.0 * (timeP1.getTimeInMillis() - timeP2.getTimeInMillis());
+                0.001 * (timeP1.getTimeInMillis() - timeP2.getTimeInMillis());
         std::vector<size_t> m(numGroups);
 
         for (size_t ii = 0; ii < numGroups; ++ii)
@@ -1119,13 +1119,13 @@ double SIXSensorModel::getCorrelationCoefficient(size_t cpGroupIndex,
     {
         const double coeff = errors.mPositionCorrCoefZero -
                 errors.mPositionDecorrRate * std::abs(deltaTime);
-        return std::min(1.0, std::max(-1.0, coeff));
+        return std::min(1.0, std::max(0.0, coeff));
     }
     case 1:
     {
         const double coeff = errors.mRangeCorrCoefZero -
                 errors.mRangeDecorrRate * std::abs(deltaTime);
-        return std::min(1.0, std::max(-1.0, coeff));
+        return std::min(1.0, std::max(0.0, coeff));
     }
     default:
         throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE,
