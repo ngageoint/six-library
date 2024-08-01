@@ -303,15 +303,15 @@ int64_t FileHeader::getPvpPadBytes() const
 std::ostream& operator<< (std::ostream& os, const FileHeader& fh)
 {
     os << "FileHeader::\n"
-       << "  mVersion               : " << to_string(fh.mVersion) << "\n"
-       << "  mXmlBlockSize          : " << fh.mXmlBlockSize << "\n"
-       << "  mXmlBlockByteOffset    : " << fh.mXmlBlockByteOffset << "\n"
-       << "  mSupportBlockSize      : " << fh.mSupportBlockSize << "\n"
-       << "  mSupportBlockSize      : " << fh.mSupportBlockByteOffset << "\n"
-       << "  mPvpBlockByteOffset    : " << fh.mPvpBlockSize << "\n"
-       << "  mPvpBlockByteOffset    : " << fh.mPvpBlockByteOffset << "\n"
-       << "  mSignalBlockSize       : " << fh.mSignalBlockSize << "\n"
-       << "  mSignalBlockByteOffset : " << fh.mSignalBlockByteOffset << "\n"
+       << "  mVersion                : " << to_string(fh.mVersion) << "\n"
+       << "  mXmlBlockSize           : " << fh.mXmlBlockSize << "\n"
+       << "  mXmlBlockByteOffset     : " << fh.mXmlBlockByteOffset << "\n"
+       << "  mSupportBlockSize       : " << fh.mSupportBlockSize << "\n"
+       << "  mSupportBlockSize       : " << fh.mSupportBlockByteOffset << "\n"
+       << "  mPvpBlockByteOffset     : " << fh.mPvpBlockSize << "\n"
+       << "  mPvpBlockByteOffset     : " << fh.mPvpBlockByteOffset << "\n"
+       << "  mSignalBlockSize        : " << fh.mSignalBlockSize << "\n"
+       << "  mSignalBlockByteOffset  : " << fh.mSignalBlockByteOffset << "\n"
        << "  mClassification: " << fh.mClassification << "\n"
        << "  mReleaseInfo   : " << fh.mReleaseInfo << "\n";
     return os;

@@ -33,13 +33,13 @@ SupportArrayParameter::SupportArrayParameter() :
     y0(six::Init::undefined<double>()),
     xSS(six::Init::undefined<double>()),
     ySS(six::Init::undefined<double>()),
-    identifier(six::Init::undefined<size_t>())
+    identifier(six::Init::undefined<std::string>())
 {
 }
 
 SupportArrayParameter::SupportArrayParameter(
         const std::string& format,
-        size_t id,
+        std::string id,
         double x0_in,
         double y0_in,
         double xSS_in,
@@ -83,14 +83,33 @@ AdditionalSupportArray::AdditionalSupportArray(
 
 static SupportArrayParameter getSupportArray(const std::vector<SupportArrayParameter>& params, const std::string& key)
 {
-    size_t keyNum = str::toType<size_t>(key);
-    if (params.size() <= keyNum)
+    std::vector<int> valid_keys;
+    for(size_t ii = 0; ii < params.size(); ++ii)
+    {
+        if (params[ii].getIdentifier()==key)
+        {
+            // found correct key. so add to valid_keys
+            valid_keys.push_back(ii);
+        }
+    }
+
+    if(!valid_keys.size())
     {
         std::ostringstream oss;
         oss << "SA_ID was not found " << (key);
         throw except::Exception(Ctxt(oss));
     }
-    return params[keyNum];
+    else if (valid_keys.size()>1)
+    {
+        std::ostringstream oss;
+        oss << "Found multiple support arrays with same SA_ID: " << (key);
+        throw except::Exception(Ctxt(oss));        
+    }
+    else
+    {
+        // if valid key is length 1, return that SupportArrayParameter
+        return params[valid_keys[0]];
+    }
 }
 
 SupportArrayParameter SupportArray::getIAZSupportArray(const std::string& key) const

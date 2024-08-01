@@ -202,9 +202,11 @@ struct SIX_CPHD_API CPHDWriter final
     void writeSupportData(io::OutputStream& stream,
         const T* data_, const std::string& id)
     {
-        const auto size = mMetadata.data.getSupportArrayById(id).size_bytes();
+        const auto &dataArray = mMetadata.data.getSupportArrayById(id);
+
+        const auto size = dataArray.size_bytes();
         const auto data = sys::make_span<const std::byte>(data_, size);
-        writeSupportDataImpl(stream, data, mMetadata.data.getSupportArrayById(id).bytesPerElement);
+        writeSupportDataImpl(stream, data, getSupportDataBytesPerSwap(dataArray));
     }
     template <typename T>
     void writeSupportData(const T* data, const std::string& id)
@@ -221,6 +223,7 @@ struct SIX_CPHD_API CPHDWriter final
      *  \param data A pointer to the start of the support array data block
      */
     sys::Off_T getSupportBlockByteOffset(const Data::SupportArray&) const;
+    size_t getSupportDataBytesPerSwap(const Data::SupportArray& dataArray) const;
     void writeSupportDataArray(io::SeekableOutputStream&, DataWriter&,
         std::span<const std::byte>, const Data::SupportArray&);
     void writeSupportDataArray(io::SeekableOutputStream&, std::span<const std::byte>, const Data::SupportArray&);

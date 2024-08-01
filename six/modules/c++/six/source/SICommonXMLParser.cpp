@@ -231,7 +231,7 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
     const size_t numLatLons = geoInfo.geometryLatLon.size();
     if (numLatLons == 1)
     {
-        createLatLon("Point", uri, geoInfo.geometryLatLon[0], geoInfoXML);
+        createLatLon("Point", uri, geoInfo.geometryLatLon[0], geoInfoXML, true);
     }
     else if (numLatLons >= 2)
     {
@@ -246,7 +246,8 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
                     numLatLons == 2 ? "Endpoint" : "Vertex",
                     uri,
                     geoInfo.geometryLatLon[ii],
-                    linePolyXML);
+                    linePolyXML,
+                    true);
 
             setAttribute(v, "index", ii + 1);
         }
@@ -516,11 +517,20 @@ XMLElem SICommonXMLParser::createLatLon(
         const std::string& name,
         const std::string& uri,
         const LatLon& value,
-        XMLElem parent) const
+        XMLElem parent,
+        bool singlePrecision) const
 {
     XMLElem e = newElement(name, uri, parent);
-    createDouble("Lat", getSICommonURI(), value.getLat(), e);
-    createDouble("Lon", getSICommonURI(), value.getLon(), e);
+    if (!singlePrecision)
+    {
+        createDouble("Lat", getSICommonURI(), value.getLat(), e);
+        createDouble("Lon", getSICommonURI(), value.getLon(), e);
+    }
+    else
+    {
+        createFloat("Lat", getSICommonURI(), value.getLat(), e);
+        createFloat("Lon", getSICommonURI(), value.getLon(), e);
+    }
     return e;
 }
 
@@ -912,8 +922,11 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
 
             createOptionalDouble("ClockFreqSF", getSICommonURI(),
                             radarSensor->clockFreqSF, radarSensorXML);
-            createOptionalDouble("TransmitFreqSF", getSICommonURI(),
-                            radarSensor->transmitFreqSF, radarSensorXML);
+            if(!Init::isUndefined(radarSensor->transmitFreqSF))
+            {
+                createOptionalDouble("TransmitFreqSF", getSICommonURI(),
+                    radarSensor->transmitFreqSF, radarSensorXML);
+            }
 
             addDecorrType("RangeBiasDecorr", getSICommonURI(),
                           radarSensor->rangeBiasDecorr, radarSensorXML);
@@ -1292,7 +1305,7 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
 
     const auto& classificationXML = getFirstAndOnly(*collectionInfoXML, "Classification");
     // For "new" XML processing (storing the encoding) we'll have a UTF-8 value.
-    // This is important as it could be French "NON CLASSIFIÉ / UNCLASSIFIED"
+    // This is important as it could be French "NON CLASSIFIï¿½ / UNCLASSIFIED"
     std::u8string classification_u8;
     if (parseString(classificationXML, classification_u8))
     {

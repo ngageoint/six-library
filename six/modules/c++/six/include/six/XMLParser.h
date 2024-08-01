@@ -86,6 +86,8 @@ struct SIX_SIX_API XMLParser
         return mXmlLite.createInt(name, p, parent);
     }
 
+    xml::lite::Element& createFloat(const std::string& name, float p, xml::lite::Element& parent) const;
+    XMLElem createFloat(const std::string& name, const std::string& uri, float p = 0, XMLElem parent = nullptr) const;
     xml::lite::Element& createDouble(const std::string& name, double p, xml::lite::Element& parent) const;
     XMLElem createDouble(const std::string& name,
         const std::string& uri, double p = 0, XMLElem parent = nullptr) const;
