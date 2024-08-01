@@ -83,7 +83,7 @@ unsigned long long str::strtoull(const char *str, char **endptr, int base)
 
 template<> CODA_OSS_API int str::getPrecision(const float&)
 {
-    return std::numeric_limits<float>::max_digits10;
+    return std::numeric_limits<float>::digits10;
 }
 template<> CODA_OSS_API int str::getPrecision(const double& )
 {
