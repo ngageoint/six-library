@@ -1765,7 +1765,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem arrayXML = getFirstAndOnly(antPatternXMLVec[ii], "Array");
         mCommon.parsePoly2D(getFirstAndOnly(arrayXML, "GainPoly"), antenna.antPattern[ii].array.gainPoly);
         mCommon.parsePoly2D(getFirstAndOnly(arrayXML, "PhasePoly"), antenna.antPattern[ii].array.phasePoly);
-        std::ignore = six::parse(parser(), *arrayXML, antenna.antPattern[ii].array.antGPId)
+        std::ignore = six::parse(parser(), *arrayXML, antenna.antPattern[ii].array.antGPId);
 
         // Parse Element
         XMLElem elementXML = getFirstAndOnly(antPatternXMLVec[ii], "Element");
