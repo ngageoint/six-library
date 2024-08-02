@@ -925,7 +925,7 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
             if(!Init::isUndefined(radarSensor->transmitFreqSF))
             {
                 createOptionalDouble("TransmitFreqSF", getSICommonURI(),
-                    radarSensor->transmitFreqSF, radarSensorXML);
+                                radarSensor->transmitFreqSF, radarSensorXML);
             }
 
             addDecorrType("RangeBiasDecorr", getSICommonURI(),

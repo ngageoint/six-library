@@ -95,12 +95,14 @@ static SupportArrayParameter getSupportArray(const std::vector<SupportArrayParam
 
     if(!valid_keys.size())
     {
+        // if no matching key found, throw an exception
         std::ostringstream oss;
         oss << "SA_ID was not found " << (key);
         throw except::Exception(Ctxt(oss.str()));
     }
     else if (valid_keys.size()>1)
     {
+        // if find repeated key, throw an exception
         std::ostringstream oss;
         oss << "Found multiple support arrays with same SA_ID: " << (key);
         throw except::Exception(Ctxt(oss.str()));        
