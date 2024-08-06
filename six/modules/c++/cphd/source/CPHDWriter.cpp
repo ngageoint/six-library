@@ -162,13 +162,85 @@ sys::Off_T CPHDWriter::getSupportBlockByteOffset(const Data::SupportArray& dataA
     const auto supportBlockByteOffset = mHeader.getSupportBlockByteOffset();
     return supportBlockByteOffset + dataArray.arrayByteOffset;
 }
+size_t CPHDWriter::getSupportDataBytesPerSwap(const Data::SupportArray& dataArray) const
+{
+    const auto &id = dataArray.identifier;
 
+    std::string elemFmt;
+    const auto &sas = *mMetadata.supportArray;
+    // Unfortunately, need to search each vector/map of support arrays
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < sas.iazArray.size(); ++ii)
+        {
+            if (sas.iazArray[ii].getIdentifier() == id)
+            {
+                // found correct id, so get element format
+                elemFmt = sas.iazArray[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < sas.antGainPhase.size(); ++ii)
+        {
+            if (sas.antGainPhase[ii].getIdentifier() == id)
+            {
+                // found correct id, so get element format
+                elemFmt = sas.antGainPhase[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < sas.dwellTimeArray.size(); ++ii)
+        {
+            if (sas.dwellTimeArray[ii].getIdentifier() == id)
+            {
+                // found correct id, so get element format
+                elemFmt = sas.dwellTimeArray[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        if (sas.addedSupportArray.count(id) > 0)
+            {
+                // found correct id, so get element format
+                elemFmt = sas.addedSupportArray.find(id)->second.elementFormat;
+            }
+    }
+
+    if(elemFmt.empty())
+    {
+        std::ostringstream oss;
+        oss << "SA_ID was not found" << (id);
+        throw except::Exception(Ctxt(oss.str()));
+    }
+
+    //Assuming homogeneous component types
+    //TODO: Test for validity of this assumption?
+    auto eqLoc = elemFmt.find("=");
+    auto numPerElement = str::split(elemFmt, ";").size();
+    if (elemFmt[eqLoc + 1] == 'C')
+    {
+        //Byteswap complex components individually too
+        numPerElement *= 2;
+    }
+    return dataArray.bytesPerElement / numPerElement;
+}
 void CPHDWriter::writeSupportDataArray(io::SeekableOutputStream& stream, DataWriter& dataWriter,
     std::span<const std::byte> data, const Data::SupportArray& dataArray)
 {
     // Move inputstream head to offset of particular support array
     stream.seek(getSupportBlockByteOffset(dataArray), io::SeekableOutputStream::START);
-    dataWriter(make_span(data, dataArray), dataArray.bytesPerElement);
+    dataWriter(make_span(data, dataArray), getSupportDataBytesPerSwap(dataArray));
 }
 void CPHDWriter::writeSupportDataArray(io::SeekableOutputStream& stream,
     std::span<const std::byte> data, const Data::SupportArray& dataArray)

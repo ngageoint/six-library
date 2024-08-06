@@ -893,7 +893,7 @@ TEST_CASE(testOptional)
 
     const cphd::SupportArray& supportArray = *(metadata->supportArray);
     TEST_ASSERT_EQ(supportArray.iazArray.size(), static_cast<size_t>(1));
-    TEST_ASSERT_EQ(supportArray.iazArray[0].getIdentifier(), static_cast<size_t>(1));
+    TEST_ASSERT_EQ(supportArray.iazArray[0].getIdentifier(), static_cast<std::string>("1"));
     TEST_ASSERT_EQ(supportArray.iazArray[0].elementFormat, "IAZ=F4;");
     TEST_ASSERT_EQ(supportArray.iazArray[0].x0, 0.0);
     TEST_ASSERT_EQ(supportArray.iazArray[0].y0, 0.0);
@@ -901,7 +901,7 @@ TEST_CASE(testOptional)
     TEST_ASSERT_EQ(supportArray.iazArray[0].ySS, 5.0);
 
     TEST_ASSERT_EQ(supportArray.antGainPhase.size(), static_cast<size_t>(1));
-    TEST_ASSERT_EQ(supportArray.antGainPhase[0].getIdentifier(), static_cast<size_t>(2));
+    TEST_ASSERT_EQ(supportArray.antGainPhase[0].getIdentifier(), static_cast<std::string>("2"));
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].elementFormat, "Gain=F4;Phase=F4;");
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].x0, 0.0);
     TEST_ASSERT_EQ(supportArray.antGainPhase[0].y0, 0.0);

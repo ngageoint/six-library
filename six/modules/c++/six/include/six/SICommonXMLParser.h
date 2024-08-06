@@ -93,7 +93,7 @@ struct SIX_SIX_API SICommonXMLParser : public XMLParser
     XMLElem createLatLon(const std::string& name, const LatLon& value,
             XMLElem parent = nullptr) const;
     XMLElem createLatLon(const std::string& name, const std::string& uri,
-            const LatLon& value, XMLElem parent = nullptr) const;
+            const LatLon& value, XMLElem parent = nullptr, bool singlePrecision = false) const;
     XMLElem createLatLonAlt(const std::string& name, const LatLonAlt& value,
             XMLElem parent = nullptr) const;
 
