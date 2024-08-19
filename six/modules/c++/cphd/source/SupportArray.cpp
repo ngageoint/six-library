@@ -39,7 +39,7 @@ SupportArrayParameter::SupportArrayParameter() :
 
 SupportArrayParameter::SupportArrayParameter(
         const std::string& format,
-        std::string id,
+        const std::string& id,
         double x0_in,
         double y0_in,
         double xSS_in,

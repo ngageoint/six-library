@@ -65,7 +65,7 @@ struct SupportArrayParameter
      *  \param ySS_in Col coordinate (Y) sample spacing
      */
     SupportArrayParameter(
-        const std::string& format, std::string id,
+        const std::string& format, const std::string& id,
         double x0_in, double y0_in,
         double xSS_in, double ySS_in);
 
@@ -83,7 +83,7 @@ struct SupportArrayParameter
     }
 
     //! Set unique identifier
-    void setIdentifier(std::string identifierIn)
+    void setIdentifier(const std::string& identifierIn)
     {
         identifier = identifierIn;
     }
