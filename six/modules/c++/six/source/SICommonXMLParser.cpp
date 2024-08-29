@@ -231,7 +231,7 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
     const size_t numLatLons = geoInfo.geometryLatLon.size();
     if (numLatLons == 1)
     {
-        createLatLon("Point", uri, geoInfo.geometryLatLon[0], geoInfoXML, true);
+        createLatLon("Point", uri, geoInfo.geometryLatLon[0], geoInfoXML);
     }
     else if (numLatLons >= 2)
     {
@@ -246,8 +246,7 @@ XMLElem SICommonXMLParser::convertGeoInfoToXML(const GeoInfo& geoInfo,
                     numLatLons == 2 ? "Endpoint" : "Vertex",
                     uri,
                     geoInfo.geometryLatLon[ii],
-                    linePolyXML,
-                    true);
+                    linePolyXML);
 
             setAttribute(v, "index", ii + 1);
         }
@@ -517,20 +516,12 @@ XMLElem SICommonXMLParser::createLatLon(
         const std::string& name,
         const std::string& uri,
         const LatLon& value,
-        XMLElem parent,
-        bool singlePrecision) const
+        XMLElem parent) const
 {
     XMLElem e = newElement(name, uri, parent);
-    if (!singlePrecision)
-    {
-        createDouble("Lat", getSICommonURI(), value.getLat(), e);
-        createDouble("Lon", getSICommonURI(), value.getLon(), e);
-    }
-    else
-    {
-        createFloat("Lat", getSICommonURI(), value.getLat(), e);
-        createFloat("Lon", getSICommonURI(), value.getLon(), e);
-    }
+    createDouble("Lat", getSICommonURI(), value.getLat(), e);
+    createDouble("Lon", getSICommonURI(), value.getLon(), e);
+
     return e;
 }
 

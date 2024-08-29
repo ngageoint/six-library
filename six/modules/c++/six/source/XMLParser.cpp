@@ -105,15 +105,6 @@ XMLElem XMLParser::createDouble(const std::string& name, const std::string& uri,
     assert(parent != nullptr);
     return &mXmlLite.createDouble(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
 }
-XMLElem XMLParser::createFloat(const std::string& name, const std::string& uri, float p, XMLElem parent) const
-{
-    assert(parent != nullptr);
-    return &mXmlLite.createFloat(xml::lite::QName(xml::lite::Uri(uri), name), p, *parent);
-}
-xml::lite::Element& XMLParser::createFloat(const std::string& name, float p, xml::lite::Element& parent) const
-{
-    return mXmlLite.createFloat(name, p, parent);
-}
 xml::lite::Element& XMLParser::createDouble(const std::string& name, double p, xml::lite::Element& parent) const
 {
     return mXmlLite.createDouble(name, p, parent);

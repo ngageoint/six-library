@@ -1288,7 +1288,7 @@ xml::lite::Element& DerivedXMLParser200::convertInteractiveProcessingToXML(const
     {
         auto& paramElem = parser.newElement("DRAParameters", adjustElem);
         parser.createDouble("Pmin", adjust.draParameters->pMin, paramElem);
-        parser.createFloat("Pmax", static_cast<float>(adjust.draParameters->pMax), paramElem);
+        parser.createDouble("Pmax", adjust.draParameters->pMax, paramElem);
         parser.createDouble("EminModifier", adjust.draParameters->eMinModifier, paramElem);
         parser.createDouble("EmaxModifier", adjust.draParameters->eMinModifier, paramElem);
     }
@@ -1380,8 +1380,7 @@ xml::lite::Element& DerivedXMLParser200::convertKernelToXML(const DerivedXMLPars
         {
             for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
             {
-                //Anti-aliasing filter coefficients should be single precision
-                auto& coefElem = parser.createFloat("Coef", static_cast<float>(kernel.custom->filterCoef[static_cast<size_t>(idx)]), filterCoef);
+                auto& coefElem = parser.createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)], filterCoef);
                 setAttribute(coefElem, "row", static_cast<size_t>(row));
                 setAttribute(coefElem, "col", static_cast<size_t>(col));
             }

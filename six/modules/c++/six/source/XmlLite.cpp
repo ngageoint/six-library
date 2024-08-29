@@ -253,13 +253,6 @@ xml::lite::Element& XmlLite::createInt_(const std::string& name, int p, xml::lit
 {
     return createInt(makeQName(name), p, parent);
 }
-
-xml::lite::Element& XmlLite::createFloat(const xml::lite::QName& name, float p, xml::lite::Element& parent) const
-{
-    p = value(p); // be sure this is initialized; throws if not
-    return createValue(name, p, parent, mAddClassAttributes, "xs:double", getDefaultURI());
-}
-
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, double p, xml::lite::Element& parent) const
 {
     p = value(p); // be sure this is initialized; throws if not
@@ -268,10 +261,6 @@ xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, double p
 xml::lite::Element& XmlLite::createDouble(const xml::lite::QName& name, const std::optional<double>& p, xml::lite::Element& parent) const
 {
     return createDouble(name, p.value(), parent);
-}
-xml::lite::Element& XmlLite::createFloat(const std::string& name, float p, xml::lite::Element& parent) const
-{
-    return createFloat(makeQName(name), p, parent);
 }
 xml::lite::Element& XmlLite::createDouble(const std::string& name, double p, xml::lite::Element& parent) const
 {

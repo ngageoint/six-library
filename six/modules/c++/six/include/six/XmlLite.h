@@ -158,7 +158,6 @@ struct SIX_SIX_API XmlLite final
     xml::lite::Element& createInt(const xml::lite::QName& name, int p, xml::lite::Element& parent) const;
     xml::lite::Element& createDouble(const xml::lite::QName&, double p, xml::lite::Element& parent) const;
     xml::lite::Element& createDouble(const xml::lite::QName&, const std::optional<double>& p, xml::lite::Element& parent) const;
-    xml::lite::Element& createFloat(const xml::lite::QName&, float p, xml::lite::Element& parent) const;
     xml::lite::Element* createOptionalDouble(const xml::lite::QName&, double p, xml::lite::Element& parent) const;
     xml::lite::Element* createOptionalDouble(const xml::lite::QName&, const std::optional<double>& p, xml::lite::Element& parent) const;
     xml::lite::Element* createBooleanType(const xml::lite::QName&, BooleanType b, xml::lite::Element& parent) const;
@@ -200,7 +199,6 @@ struct SIX_SIX_API XmlLite final
     }
     xml::lite::Element& createDouble(const std::string& name, double p, xml::lite::Element& parent ) const;
     xml::lite::Element& createDouble(const std::string& name, const std::optional<double>& p, xml::lite::Element& parent) const;
-    xml::lite::Element& createFloat(const std::string& name, float p, xml::lite::Element& parent ) const;
     xml::lite::Element* createOptionalDouble(const std::string& name, double p, xml::lite::Element& parent) const;
     xml::lite::Element* createOptionalDouble(const std::string& name, const std::optional<double>& p, xml::lite::Element& parent) const;
     xml::lite::Element* createBooleanType(const std::string& name, BooleanType b, xml::lite::Element&parent ) const;
