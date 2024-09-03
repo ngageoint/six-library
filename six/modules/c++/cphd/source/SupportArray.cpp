@@ -140,6 +140,78 @@ AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string& key
     return addedSupportArray.find(key)->second;
 }
 
+size_t SupportArray::getSupportDataBytesPerSwap(const std::string& key,
+                                                size_t bytesPerElement) const
+{
+    std::string elemFmt;
+    // Unfortunately, need to search each vector/map of support arrays
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < iazArray.size(); ++ii)
+        {
+            if (iazArray[ii].getIdentifier() == key)
+            {
+                // found correct id, so get element format
+                elemFmt = iazArray[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < antGainPhase.size(); ++ii)
+        {
+            if (antGainPhase[ii].getIdentifier() == key)
+            {
+                // found correct id, so get element format
+                elemFmt = antGainPhase[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < dwellTimeArray.size(); ++ii)
+        {
+            if (dwellTimeArray[ii].getIdentifier() == key)
+            {
+                // found correct id, so get element format
+                elemFmt = dwellTimeArray[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        if (addedSupportArray.count(key) > 0)
+            {
+                // found correct id, so get element format
+                elemFmt = addedSupportArray.find(key)->second.elementFormat;
+            }
+    }
+
+    if(elemFmt.empty())
+    {
+        std::ostringstream oss;
+        oss << "SA_ID was not found" << (key);
+        throw except::Exception(Ctxt(oss.str()));
+    }
+
+    //Assuming homogeneous component types
+    //TODO: Test for validity of this assumption?
+    auto eqLoc = elemFmt.find("=");
+    auto numSwapsPerElement = str::split(elemFmt, ";").size();
+    if (elemFmt[eqLoc + 1] == 'C')
+    {
+        //Byteswap complex components individually too
+        numSwapsPerElement *= 2;
+    }
+    return bytesPerElement / numSwapsPerElement;
+}
+
 std::ostream& operator<< (std::ostream& os, const SupportArrayParameter& s)
 {
     if (!six::Init::isUndefined(s.getIdentifier()))

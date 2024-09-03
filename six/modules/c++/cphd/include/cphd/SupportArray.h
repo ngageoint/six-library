@@ -229,6 +229,9 @@ struct SupportArray final
     //! Get AGP support array by unique id
     AdditionalSupportArray getAddedSupportArray(const std::string& key) const;
 
+    //!Get bytes per swap for suppor array data by unique id
+    size_t getSupportDataBytesPerSwap(const std::string& key, size_t bytesPerElement) const;
+
     //! Vector of IAZ type arrays
     std::vector<SupportArrayParameter> iazArray;
 
