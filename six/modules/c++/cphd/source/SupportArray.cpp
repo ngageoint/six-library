@@ -83,35 +83,32 @@ AdditionalSupportArray::AdditionalSupportArray(
 
 static SupportArrayParameter getSupportArray(const std::vector<SupportArrayParameter>& params, const std::string& key)
 {
-    std::vector<int> valid_keys;
+    std::vector<int> validKeys;
     for(size_t ii = 0; ii < params.size(); ++ii)
     {
         if (params[ii].getIdentifier()==key)
         {
-            // found correct key. so add to valid_keys
-            valid_keys.push_back(ii);
+            // found correct key. so add to validKeys
+            validKeys.push_back(ii);
         }
     }
 
-    if(!valid_keys.size())
+    if(validKeys.empty())
     {
         // if no matching key found, throw an exception
         std::ostringstream oss;
         oss << "SA_ID was not found " << (key);
         throw except::Exception(Ctxt(oss.str()));
     }
-    else if (valid_keys.size()>1)
+    if (validKeys.size()>1)
     {
         // if find repeated key, throw an exception
         std::ostringstream oss;
         oss << "Found multiple support arrays with same SA_ID: " << (key);
         throw except::Exception(Ctxt(oss.str()));        
     }
-    else
-    {
-        // if valid key is length 1, return that SupportArrayParameter
-        return params[valid_keys[0]];
-    }
+
+    return params[validKeys[0]];
 }
 
 SupportArrayParameter SupportArray::getIAZSupportArray(const std::string& key) const

@@ -137,7 +137,7 @@ struct SIX_SIX_API RadarSensor
      * (Optional) Transmit frequency scale factor
      *  standard deviation.
      */
-    double transmitFreqSF = Init::undefined<double>(); // From Bill: "No mention of the TransmitFreqSF in volume 3 ... would still recommend setting to 0."
+    double transmitFreqSF = Init::undefined<double>(); // Set to undefined so that it skips population instead of setting to 0
 
     /*!
      *  (Optional) Range bias decorrelated rate

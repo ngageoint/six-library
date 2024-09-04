@@ -322,15 +322,11 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
         createString("Identifier", data.channels[ii].identifier, channelXML);
         createInt("NumVectors", data.channels[ii].numVectors, channelXML);
         createInt("NumSamples", data.channels[ii].numSamples, channelXML);
-#if 0
-        createInt("SignalArrayByteOffset", data.channels[ii].signalArrayByteOffset, channelXML);
-        createInt("PVPArrayByteOffset", data.channels[ii].pvpArrayByteOffset, channelXML);
-#else
         std::string lTmpStr1 = std::to_string(data.channels[ii].signalArrayByteOffset);
         std::string lTmpStr2 = std::to_string(data.channels[ii].pvpArrayByteOffset);
         createString("SignalArrayByteOffset", lTmpStr1, channelXML);
         createString("PVPArrayByteOffset", lTmpStr2, channelXML);
-#endif
+        
         if(!six::Init::isUndefined(data.channels[ii].compressedSignalSize))
         {
             createInt("CompressedSignalSize", data.channels[ii].compressedSignalSize, channelXML);
