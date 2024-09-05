@@ -521,6 +521,7 @@ XMLElem SICommonXMLParser::createLatLon(
     XMLElem e = newElement(name, uri, parent);
     createDouble("Lat", getSICommonURI(), value.getLat(), e);
     createDouble("Lon", getSICommonURI(), value.getLon(), e);
+
     return e;
 }
 
@@ -912,8 +913,11 @@ XMLElem SICommonXMLParser::convertErrorStatisticsToXML(
 
             createOptionalDouble("ClockFreqSF", getSICommonURI(),
                             radarSensor->clockFreqSF, radarSensorXML);
-            createOptionalDouble("TransmitFreqSF", getSICommonURI(),
-                            radarSensor->transmitFreqSF, radarSensorXML);
+            if(!Init::isUndefined(radarSensor->transmitFreqSF))
+            {
+                createOptionalDouble("TransmitFreqSF", getSICommonURI(),
+                                radarSensor->transmitFreqSF, radarSensorXML);
+            }
 
             addDecorrType("RangeBiasDecorr", getSICommonURI(),
                           radarSensor->rangeBiasDecorr, radarSensorXML);
@@ -1292,7 +1296,7 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
 
     const auto& classificationXML = getFirstAndOnly(*collectionInfoXML, "Classification");
     // For "new" XML processing (storing the encoding) we'll have a UTF-8 value.
-    // This is important as it could be French "NON CLASSIFIÉ / UNCLASSIFIED"
+    // This is important as it could be French "NON CLASSIFIï¿½ / UNCLASSIFIED"
     std::u8string classification_u8;
     if (parseString(classificationXML, classification_u8))
     {

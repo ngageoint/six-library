@@ -36,6 +36,7 @@
 #include <mem/ScopedArray.h>
 #include <mem/BufferView.h>
 
+#include <cphd/SupportArray.h>
 #include <cphd/Data.h>
 #include <cphd/Utilities.h>
 #include <cphd/Exports.h>
@@ -59,11 +60,13 @@ struct SIX_CPHD_API SupportBlock final
      *  \brief Constructor initializes book keeping information
      *
      *  \param pathname Input CPHD pathname to initialize a file input stream
+     *  \param supportArray SupportArray section for cphd::Metadata
      *  \param data Data section from CPHD
      *  \param startSupport CPHD header keyword "SUPPORT_BLOCK_BYTE_OFFSET"
      *  \param sizeSupport CPHD header keyword "SUPPORT_BLOCK_SIZE"
      */
     SupportBlock(const std::string& pathname,
+                 const mem::ScopedCopyablePtr<cphd::SupportArray> supportArray,
                  const cphd::Data& data,
                  int64_t startSupport,
                  int64_t sizeSupport);
@@ -74,16 +77,20 @@ struct SIX_CPHD_API SupportBlock final
      *  \brief Constructor initializes book keeping information
      *
      *  \param inStream Input stream to an already opened CPHD file
+     *  \param supportArray SupportArray section for cphd::Metadata
      *  \param data Data section from CPHD
      *  \param startSupport CPHD header keyword "SUPPORT_BLOCK_BYTE_OFFSET"
      *  \param sizeSupport CPHD header keyword "SUPPORT_BLOCK_SIZE"
      */
     SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
+                 const mem::ScopedCopyablePtr<cphd::SupportArray> supportArray,
                  const cphd::Data& data,
                  int64_t startSupport,
                  int64_t sizeSupport);
     SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
-        const cphd::Data& data, const FileHeader&);
+                 const mem::ScopedCopyablePtr<cphd::SupportArray> supportArray,
+                 const cphd::Data& data, 
+                 const FileHeader&);
 
     // Noncopyable
     SupportBlock(const SupportBlock&) = delete;
@@ -154,6 +161,7 @@ struct SIX_CPHD_API SupportBlock final
 
 private:
     const std::shared_ptr<io::SeekableInputStream> mInStream;
+    const mem::ScopedCopyablePtr<cphd::SupportArray> mSupportArray;
     cphd::Data mData;
     const int64_t mSupportOffset;       // offset in bytes to start of SupportBlock
     const size_t mSupportSize;             // total size in bytes of SupportBlock

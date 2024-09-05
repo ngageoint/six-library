@@ -65,7 +65,7 @@ struct SupportArrayParameter
      *  \param ySS_in Col coordinate (Y) sample spacing
      */
     SupportArrayParameter(
-        const std::string& format, size_t id,
+        const std::string& format, const std::string& id,
         double x0_in, double y0_in,
         double xSS_in, double ySS_in);
 
@@ -83,13 +83,13 @@ struct SupportArrayParameter
     }
 
     //! Set unique identifier
-    void setIdentifier(size_t identifierIn)
+    void setIdentifier(const std::string& identifierIn)
     {
         identifier = identifierIn;
     }
 
     //! Get unique identifier
-    inline size_t getIdentifier() const
+    inline std::string getIdentifier() const
     {
         return identifier;
     }
@@ -112,7 +112,7 @@ struct SupportArrayParameter
 protected:
     void initializeParams();
 private:
-    size_t identifier;
+    std::string identifier;
 };
 
 /*!
@@ -228,6 +228,9 @@ struct SupportArray final
 
     //! Get AGP support array by unique id
     AdditionalSupportArray getAddedSupportArray(const std::string& key) const;
+
+    //!Get bytes per swap for suppor array data by unique id
+    size_t getSupportDataBytesPerSwap(const std::string& key, size_t bytesPerElement) const;
 
     //! Vector of IAZ type arrays
     std::vector<SupportArrayParameter> iazArray;

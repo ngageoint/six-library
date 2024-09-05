@@ -79,13 +79,15 @@ std::unique_ptr<xml::lite::Document> CPHDXMLParser::toXML(
     toXML(metadata.data, root);
     toXML(metadata.channel, root);
     toXML(metadata.pvp, root);
-    toXML(metadata.dwell, root);
-    toXML(metadata.referenceGeometry, root);
 
     if (metadata.supportArray.get())
     {
         toXML(*(metadata.supportArray), root);
     }
+
+    toXML(metadata.dwell, root);
+    toXML(metadata.referenceGeometry, root);
+
     if (metadata.antenna.get())
     {
         toXML(*(metadata.antenna), root);
@@ -320,8 +322,11 @@ XMLElem CPHDXMLParser::toXML(const Data& data, XMLElem parent)
         createString("Identifier", data.channels[ii].identifier, channelXML);
         createInt("NumVectors", data.channels[ii].numVectors, channelXML);
         createInt("NumSamples", data.channels[ii].numSamples, channelXML);
-        createInt("SignalArrayByteOffset", data.channels[ii].signalArrayByteOffset, channelXML);
-        createInt("PVPArrayByteOffset", data.channels[ii].pvpArrayByteOffset, channelXML);
+        std::string lTmpStr1 = std::to_string(data.channels[ii].signalArrayByteOffset);
+        std::string lTmpStr2 = std::to_string(data.channels[ii].pvpArrayByteOffset);
+        createString("SignalArrayByteOffset", lTmpStr1, channelXML);
+        createString("PVPArrayByteOffset", lTmpStr2, channelXML);
+        
         if(!six::Init::isUndefined(data.channels[ii].compressedSignalSize))
         {
             createInt("CompressedSignalSize", data.channels[ii].compressedSignalSize, channelXML);
@@ -581,13 +586,12 @@ void CPHDXMLParser::createSupportArray(const std::vector<SupportArrayParameter>&
     for (auto&& param : supportArray)
     {
         XMLElem pXML = newElement(tag, &parent);
-        createInt("Identifier", param.getIdentifier(), pXML);
+        createString("Identifier", param.getIdentifier(), pXML);
         createString("ElementFormat", param.elementFormat, pXML);
         createDouble("X0", param.x0, pXML);
         createDouble("Y0", param.y0, pXML);
         createDouble("XSS", param.xSS, pXML);
         createDouble("YSS", param.ySS, pXML);
-
     }
 }
 
@@ -1757,6 +1761,7 @@ void CPHDXMLParser::fromXML(const xml::lite::Element* antennaXML, Antenna& anten
         XMLElem arrayXML = getFirstAndOnly(antPatternXMLVec[ii], "Array");
         mCommon.parsePoly2D(getFirstAndOnly(arrayXML, "GainPoly"), antenna.antPattern[ii].array.gainPoly);
         mCommon.parsePoly2D(getFirstAndOnly(arrayXML, "PhasePoly"), antenna.antPattern[ii].array.phasePoly);
+        std::ignore = six::parse(parser(), *arrayXML, antenna.antPattern[ii].array.antGPId);
 
         // Parse Element
         XMLElem elementXML = getFirstAndOnly(antPatternXMLVec[ii], "Element");
@@ -2413,8 +2418,8 @@ void CPHDXMLParser::parseSupportArrayParameter(const xml::lite::Element* paramXM
 {
     if(!additionalFlag)
     {
-        size_t identifierVal;
-        parseUInt(getFirstAndOnly(paramXML, "Identifier"), identifierVal);
+        std::string identifierVal;
+        parseString(getFirstAndOnly(paramXML, "Identifier"), identifierVal);
         param.setIdentifier(identifierVal);
     }
     parseString(getFirstAndOnly(paramXML, "ElementFormat"), param.elementFormat);

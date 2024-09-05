@@ -71,7 +71,10 @@ cphd::CPHDReader::CPHDReader(std::shared_ptr<io::SeekableInputStream> inStream,
     : mFileHeader(cphd::FileHeader::read(*inStream)),
     mMetadata(fromXML(*inStream, schemaPaths_, logger, mFileHeader))
 {
-    mSupportBlock = std::make_unique<SupportBlock>(inStream, mMetadata.data, mFileHeader);
+    mSupportBlock = std::make_unique<SupportBlock>(inStream, 
+                                                   mMetadata.supportArray,
+                                                   mMetadata.data, 
+                                                   mFileHeader);
 
     // Load the PVPBlock into memory
     mPVPBlock = PVPBlock(mMetadata);

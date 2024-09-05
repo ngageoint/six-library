@@ -1380,8 +1380,7 @@ xml::lite::Element& DerivedXMLParser200::convertKernelToXML(const DerivedXMLPars
         {
             for (ptrdiff_t col = 0; col < kernel.custom->size.col; ++col, ++idx)
             {
-                auto& coefElem = parser.createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)],
-                    filterCoef);
+                auto& coefElem = parser.createDouble("Coef", kernel.custom->filterCoef[static_cast<size_t>(idx)], filterCoef);
                 setAttribute(coefElem, "row", static_cast<size_t>(row));
                 setAttribute(coefElem, "col", static_cast<size_t>(col));
             }

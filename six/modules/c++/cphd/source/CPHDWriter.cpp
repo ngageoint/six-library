@@ -162,13 +162,24 @@ sys::Off_T CPHDWriter::getSupportBlockByteOffset(const Data::SupportArray& dataA
     const auto supportBlockByteOffset = mHeader.getSupportBlockByteOffset();
     return supportBlockByteOffset + dataArray.arrayByteOffset;
 }
+size_t CPHDWriter::getSupportDataBytesPerSwap(const Data::SupportArray& dataArray) const
+{
+    if(mMetadata.supportArray.get() == nullptr)
+    {
+        std::ostringstream oss;
+        oss << "mMetadata.supportArray was not populated";
+        throw except::Exception(Ctxt(oss.str()));
+    }
 
+    return mMetadata.supportArray->getSupportDataBytesPerSwap(dataArray.identifier,
+                                                              dataArray.bytesPerElement);
+}
 void CPHDWriter::writeSupportDataArray(io::SeekableOutputStream& stream, DataWriter& dataWriter,
     std::span<const std::byte> data, const Data::SupportArray& dataArray)
 {
     // Move inputstream head to offset of particular support array
     stream.seek(getSupportBlockByteOffset(dataArray), io::SeekableOutputStream::START);
-    dataWriter(make_span(data, dataArray), dataArray.bytesPerElement);
+    dataWriter(make_span(data, dataArray), getSupportDataBytesPerSwap(dataArray));
 }
 void CPHDWriter::writeSupportDataArray(io::SeekableOutputStream& stream,
     std::span<const std::byte> data, const Data::SupportArray& dataArray)

@@ -43,7 +43,6 @@
 #include <cphd/TestDataGenerator.h>
 #include <TestCase.h>
 
-static constexpr size_t NUM_SUPPORT = 3;
 static constexpr size_t NUM_ROWS = 3;
 static constexpr size_t NUM_COLS = 4;
 
@@ -60,11 +59,52 @@ std::vector<T> generateSupportData(size_t length)
 }
 
 template <typename T>
-void setSupport(cphd::Data& d)
+void setSupport(cphd::Metadata& md)
 {
-    d.setSupportArray("1.0", NUM_ROWS, NUM_COLS, sizeof(T), 0);
-    d.setSupportArray("2.0", NUM_ROWS, NUM_COLS, sizeof(T), NUM_ROWS*NUM_COLS*sizeof(T));
-    d.setSupportArray("AddedSupport", NUM_ROWS, NUM_COLS, sizeof(T), 2*NUM_ROWS*NUM_COLS*sizeof(T));
+    std::string tStr, ctStr;
+    const size_t sizeofT = sizeof(T);
+    switch (sizeofT)
+    {
+        case 4:
+            tStr = "I4;";
+            ctStr = "CI8;";
+            break;
+        case 8:
+            tStr = "F8;";
+            ctStr = "CF16;";
+            break;
+    }
+
+    std::string id;
+    md.supportArray.reset(new cphd::SupportArray());
+
+    id = "IAZ";
+    md.data.setSupportArray(id, NUM_ROWS, NUM_COLS, sizeof(T), 0);
+    md.supportArray->iazArray.push_back(
+            cphd::SupportArrayParameter("IAZ="+tStr,
+                                        id, 0.0, 0.0, 5.0, 5.0));
+
+    id = "AGP";
+    md.data.setSupportArray(id, NUM_ROWS, NUM_COLS, 2*sizeof(T), 
+                            NUM_ROWS*NUM_COLS*sizeof(T));
+    md.supportArray->antGainPhase.push_back(
+            cphd::SupportArrayParameter("Gain="+tStr+"Phase="+tStr,
+                                        id, 0.0, 0.0, 5.0, 5.0));
+
+    id = "DTA";
+    md.data.setSupportArray(id, NUM_ROWS, NUM_COLS, 2*sizeof(T), 
+                            3*NUM_ROWS*NUM_COLS*sizeof(T));
+    md.supportArray->dwellTimeArray.push_back(
+            cphd::SupportArrayParameter("COD="+tStr+"DT="+tStr,
+                                        id, 0.0, 0.0, 5.0, 5.0));
+
+    id = "AddedSupport";
+    md.data.setSupportArray(id, NUM_ROWS, NUM_COLS, 3*2*sizeof(T), 
+                            5*NUM_ROWS*NUM_COLS*sizeof(T));
+    md.supportArray->addedSupportArray[id] = cphd::AdditionalSupportArray(
+            "f000="+ctStr+"f001="+ctStr+"f002="+ctStr,
+            id, 0.0, 0.0, 5.0, 5.0,
+            "XUnits", "YUnits", "ZUnits");
 }
 
 template<typename T>
@@ -133,12 +173,12 @@ bool runTest(const std::vector<T>& writeData)
     io::TempFile tempfile;
     const size_t numThreads = 1;
     auto meta = cphd::setUpData(types::RowCol<size_t>(128,256), std::vector<cphd::zfloat >());
-    setSupport<T>(meta.data);
+    setSupport<T>(meta);
     cphd::setPVPXML(meta.pvp);
     cphd::PVPBlock pvpBlock(meta.pvp, meta.data);
     writeSupportData(tempfile.pathname(), numThreads, writeData, meta, pvpBlock);
     const std::vector<std::byte> readData =
-            checkSupportData(tempfile.pathname(), NUM_SUPPORT*NUM_ROWS*NUM_COLS*sizeof(T), numThreads);
+            checkSupportData(tempfile.pathname(), 11*NUM_ROWS*NUM_COLS*sizeof(T), numThreads);
 
     return compareVectors(readData, writeData.data(), writeData.size());
 }
@@ -147,7 +187,7 @@ TEST_CASE(testSupportsInt)
 {
     const types::RowCol<size_t> dims(NUM_ROWS, NUM_COLS);
     const std::vector<int> writeData =
-            generateSupportData<int>(NUM_SUPPORT*dims.area());
+            generateSupportData<int>(11*dims.area());
     TEST_ASSERT_TRUE(runTest(writeData));
 }
 
@@ -155,7 +195,7 @@ TEST_CASE(testSupportsDouble)
 {
     const types::RowCol<size_t> dims(NUM_ROWS, NUM_COLS);
     const std::vector<double> writeData =
-            generateSupportData<double>(NUM_SUPPORT*dims.area());
+            generateSupportData<double>(11*dims.area());
     TEST_ASSERT_TRUE(runTest(writeData));
 }
 

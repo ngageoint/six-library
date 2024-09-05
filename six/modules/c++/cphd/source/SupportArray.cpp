@@ -33,13 +33,13 @@ SupportArrayParameter::SupportArrayParameter() :
     y0(six::Init::undefined<double>()),
     xSS(six::Init::undefined<double>()),
     ySS(six::Init::undefined<double>()),
-    identifier(six::Init::undefined<size_t>())
+    identifier(six::Init::undefined<std::string>())
 {
 }
 
 SupportArrayParameter::SupportArrayParameter(
         const std::string& format,
-        size_t id,
+        const std::string& id,
         double x0_in,
         double y0_in,
         double xSS_in,
@@ -83,14 +83,32 @@ AdditionalSupportArray::AdditionalSupportArray(
 
 static SupportArrayParameter getSupportArray(const std::vector<SupportArrayParameter>& params, const std::string& key)
 {
-    size_t keyNum = str::toType<size_t>(key);
-    if (params.size() <= keyNum)
+    std::vector<int> validKeys;
+    for(size_t ii = 0; ii < params.size(); ++ii)
     {
+        if (params[ii].getIdentifier()==key)
+        {
+            // found correct key. so add to validKeys
+            validKeys.push_back(ii);
+        }
+    }
+
+    if(validKeys.empty())
+    {
+        // if no matching key found, throw an exception
         std::ostringstream oss;
         oss << "SA_ID was not found " << (key);
-        throw except::Exception(Ctxt(oss));
+        throw except::Exception(Ctxt(oss.str()));
     }
-    return params[keyNum];
+    if (validKeys.size()>1)
+    {
+        // if find repeated key, throw an exception
+        std::ostringstream oss;
+        oss << "Found multiple support arrays with same SA_ID: " << (key);
+        throw except::Exception(Ctxt(oss.str()));        
+    }
+
+    return params[validKeys[0]];
 }
 
 SupportArrayParameter SupportArray::getIAZSupportArray(const std::string& key) const
@@ -117,6 +135,78 @@ AdditionalSupportArray SupportArray::getAddedSupportArray(const std::string& key
         throw except::Exception(Ctxt(oss));
     }
     return addedSupportArray.find(key)->second;
+}
+
+size_t SupportArray::getSupportDataBytesPerSwap(const std::string& key,
+                                                size_t bytesPerElement) const
+{
+    std::string elemFmt;
+    // Unfortunately, need to search each vector/map of support arrays
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < iazArray.size(); ++ii)
+        {
+            if (iazArray[ii].getIdentifier() == key)
+            {
+                // found correct id, so get element format
+                elemFmt = iazArray[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < antGainPhase.size(); ++ii)
+        {
+            if (antGainPhase[ii].getIdentifier() == key)
+            {
+                // found correct id, so get element format
+                elemFmt = antGainPhase[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        for(size_t ii = 0; ii < dwellTimeArray.size(); ++ii)
+        {
+            if (dwellTimeArray[ii].getIdentifier() == key)
+            {
+                // found correct id, so get element format
+                elemFmt = dwellTimeArray[ii].elementFormat;
+                break;
+            }
+        }
+    }
+
+    if(elemFmt.empty())
+    {
+        if (addedSupportArray.count(key) > 0)
+            {
+                // found correct id, so get element format
+                elemFmt = addedSupportArray.find(key)->second.elementFormat;
+            }
+    }
+
+    if(elemFmt.empty())
+    {
+        std::ostringstream oss;
+        oss << "SA_ID was not found" << (key);
+        throw except::Exception(Ctxt(oss.str()));
+    }
+
+    //Assuming homogeneous component types
+    //TODO: Test for validity of this assumption?
+    auto eqLoc = elemFmt.find("=");
+    auto numSwapsPerElement = str::split(elemFmt, ";").size();
+    if (elemFmt[eqLoc + 1] == 'C')
+    {
+        //Byteswap complex components individually too
+        numSwapsPerElement *= 2;
+    }
+    return bytesPerElement / numSwapsPerElement;
 }
 
 std::ostream& operator<< (std::ostream& os, const SupportArrayParameter& s)

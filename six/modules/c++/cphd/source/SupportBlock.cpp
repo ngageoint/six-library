@@ -39,17 +39,24 @@
 namespace cphd
 {
 SupportBlock::SupportBlock(const std::string& pathname,
+                           const mem::ScopedCopyablePtr<cphd::SupportArray> supportArray,
                            const cphd::Data& data,
                            int64_t startSupport,
                            int64_t sizeSupport) :
-    SupportBlock(std::make_shared<io::FileInputStream>(pathname), data, startSupport, sizeSupport)
+    SupportBlock(std::make_shared<io::FileInputStream>(pathname), 
+                 supportArray,
+                 data, 
+                 startSupport, 
+                 sizeSupport)
 {
 }
 SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
+                           const mem::ScopedCopyablePtr<cphd::SupportArray> supportArray,
                            const cphd::Data& data,
                            int64_t startSupport,
                            int64_t sizeSupport) :
     mInStream(inStream),
+    mSupportArray(supportArray),
     mData(data),
     mSupportOffset(startSupport),
     mSupportSize(sizeSupport)
@@ -62,9 +69,14 @@ SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
     }
 }
 SupportBlock::SupportBlock(std::shared_ptr<io::SeekableInputStream> inStream,
-    const cphd::Data& data, const cphd::FileHeader& fileHeader):
-    SupportBlock(inStream, data,
-        fileHeader.getSupportBlockByteOffset(), fileHeader.getSupportBlockSize())
+                           const mem::ScopedCopyablePtr<cphd::SupportArray> supportArray,
+                           const cphd::Data& data, 
+                           const cphd::FileHeader& fileHeader):
+    SupportBlock(inStream, 
+                 supportArray,
+                 data,
+                 fileHeader.getSupportBlockByteOffset(), 
+                 fileHeader.getSupportBlockSize())
 {
 }
 
@@ -105,11 +117,18 @@ void SupportBlock::read(const std::string& id, size_t numThreads, std::span<std:
     size_t bytes = mData.getSupportArrayById(id).size_bytes();
     mInStream->read(dataPtr, bytes);
 
-    if ((std::endian::native == std::endian::little) && mData.getElementSize(id) > 1)
+    const size_t elemSize = mData.getElementSize(id);
+    if ((std::endian::native == std::endian::little) && elemSize > 1)
     {
-        cphd::byteSwap(dataPtr, mData.getElementSize(id),
-                       mData.getSupportArrayById(id).size(),
-                       numThreads);
+        if (mSupportArray.get() == nullptr)
+        {
+            std::ostringstream ostr;
+            ostr << "mSupportArray was not populated";
+            throw except::Exception(Ctxt(ostr.str()));
+        }
+
+        const size_t bytesPerSwap = mSupportArray->getSupportDataBytesPerSwap(id, elemSize);
+        cphd::byteSwap(dataPtr, bytesPerSwap, bytes / bytesPerSwap, numThreads);
     }
 }
 
