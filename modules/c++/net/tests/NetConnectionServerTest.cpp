@@ -74,9 +74,9 @@ int main(int argc, char **argv)
     try
     {
         if (argc < 2)
-            throw Exception(FmtX("Usage: %s <port> (-mt|-st|-tp)", argv[0]));
+            throw Exception(str::Format("Usage: %s <port> (-mt|-st|-tp)", argv[0]));
 
-        net::AllocStrategy* strategy = NULL;
+        net::AllocStrategy* strategy = nullptr;
 
         if (argc == 3)
         {

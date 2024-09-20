@@ -134,9 +134,8 @@ PolygonMask::PolygonMask(const std::vector<types::RowCol<double> >& points,
                 // happen.
                 std::ostringstream ostr;
                 ostr << "Requires a convex polygon but these points produced "
-                     << intersectionsVec.size() << " intersections for row "
-                     << row;
-                throw except::Exception(Ctxt(ostr.str()));
+                     << intersectionsVec.size() << " intersections for row " << row;
+                throw except::Exception(Ctxt(ostr));
             }
         }
 

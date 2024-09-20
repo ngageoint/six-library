@@ -80,10 +80,10 @@ TEST_CASE(testByteStream)
 
     stream.seek(2, io::Seekable::END);
     TEST_ASSERT_EQ(stream.tell(), 18);
-    TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(20));
+    TEST_ASSERT_EQ(std::ssize(stream), 20);
 
     stream.write("abcdef");
-    TEST_ASSERT_EQ(stream.getSize(), static_cast<size_t>(24));
+    TEST_ASSERT_EQ(std::ssize(stream), 24);
 
      const std::string test("test");
     {
@@ -259,8 +259,8 @@ TEST_CASE(testRotate)
 
         for(size_t i = 0; i < maxFiles - 1; ++i)
         {
-            std::string fname = outFile + "." + str::toString(i + 1);
-            std::string next = outFile + "." + str::toString(i + 2);
+            std::string fname = outFile + "." + std::to_string(i + 1);
+            std::string next = outFile + "." + std::to_string(i + 2);
 
             TEST_ASSERT(os.isFile(fname));
             TEST_ASSERT_FALSE(os.isFile(next));

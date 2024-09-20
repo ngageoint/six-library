@@ -30,8 +30,8 @@
 
 dbi::OracleConnection::OracleConnection()
 {
-    mEnvHandle = NULL;
-    mErrorHandle = NULL;
+    mEnvHandle = nullptr;
+    mErrorHandle = nullptr;
     (void) OCIInitialize((ub4) OCI_DEFAULT, (dvoid *)0,
                          (dvoid * (*)(dvoid *, size_t)) 0,
                          (dvoid * (*)(dvoid *, dvoid *, size_t))0,
@@ -80,7 +80,7 @@ const std::string dbi::OracleConnection::getLastErrorMessage()
     char errbuf[100];
     memset(errbuf, 0, 100);
     int errcode;
-    OCIErrorGet((dvoid *)mErrorHandle, (ub4) 1, (text *) NULL, &errcode,
+    OCIErrorGet((dvoid *)mErrorHandle, (ub4) 1, (text *) nullptr, &errcode,
                 (OraText*)errbuf, (ub4) sizeof(errbuf), OCI_HTYPE_ERROR);
     if (strlen(errbuf) > 0)
         return std::string(errbuf);
@@ -117,8 +117,8 @@ dbi::pResultSet dbi::OracleConnection::query(const std::string& q)
         OCIStmtPrepare(countHandle, mErrorHandle, (const OraText*)countq.c_str(),
                        (ub4)countq.length(), (ub4) OCI_NTV_SYNTAX, (ub4) OCI_DEFAULT);
         OCIStmtExecute(mContextHandle, countHandle, mErrorHandle, (ub4)val, (ub4)0,
-                       (CONST OCISnapshot *) NULL, (OCISnapshot *) NULL, OCI_DEFAULT);
-        OCIDefine * defineHandle = NULL;
+                       (CONST OCISnapshot *) nullptr, (OCISnapshot *) nullptr, OCI_DEFAULT);
+        OCIDefine * defineHandle = nullptr;
         OCIDefineByPos(countHandle, &defineHandle, mErrorHandle, 1,
                        &rowCount, sizeof(rowCount), SQLT_UIN, 0, 0, 0, OCI_DEFAULT);
         OCIStmtFetch(countHandle, mErrorHandle, 1, OCI_FETCH_NEXT, OCI_DEFAULT);
@@ -126,7 +126,7 @@ dbi::pResultSet dbi::OracleConnection::query(const std::string& q)
 
     /* Execute the SQL statment */
     OCIStmtExecute(mContextHandle, sqlHandle, mErrorHandle, (ub4) val, (ub4) 0,
-                   (CONST OCISnapshot *) NULL, (OCISnapshot *) NULL, OCI_DEFAULT);
+                   (CONST OCISnapshot *) nullptr, (OCISnapshot *) nullptr, OCI_DEFAULT);
 
     return dbi::pResultSet(new dbi::OracleResultSet(sqlHandle, mErrorHandle, rowCount));
 }
@@ -150,7 +150,7 @@ dbi::Row dbi::OracleResultSet::fetchRow()
     dbi::Row row;
     ub4 count = 0;
     sword result = OCIAttrGet(mSQLHandle, OCI_HTYPE_STMT,
-                              &count, NULL, OCI_ATTR_PARAM_COUNT, mErrorHandle);
+                              &count, nullptr, OCI_ATTR_PARAM_COUNT, mErrorHandle);
     Column * fields = new Column[count];
     if (result == OCI_SUCCESS)
     {
@@ -160,9 +160,9 @@ dbi::Row dbi::OracleResultSet::fetchRow()
             fields[i].type = 0;
             fields[i].extType = SQLT_STR;
             fields[i].fieldSize = 0;
-            fields[i].value = NULL;
+            fields[i].value = nullptr;
 
-            OCIParam* param_handle = NULL;
+            OCIParam* param_handle = nullptr;
             ub4       name_len = 0;
 
             result = OCIParamGet(mSQLHandle, OCI_HTYPE_STMT,
@@ -180,14 +180,14 @@ dbi::Row dbi::OracleResultSet::fetchRow()
             if (result == OCI_SUCCESS)
             {
                 result = OCIAttrGet(param_handle, OCI_DTYPE_PARAM,
-                                    &fields[i].type, NULL, OCI_ATTR_DATA_TYPE,
+                                    &fields[i].type, nullptr, OCI_ATTR_DATA_TYPE,
                                     mErrorHandle);
             }
 
             if (result == OCI_SUCCESS)
             {
                 result = OCIAttrGet(param_handle, OCI_DTYPE_PARAM,
-                                    &fields[i].fieldSize, NULL, OCI_ATTR_DATA_SIZE,
+                                    &fields[i].fieldSize, nullptr, OCI_ATTR_DATA_SIZE,
                                     mErrorHandle);
             }
 
@@ -210,7 +210,7 @@ dbi::Row dbi::OracleResultSet::fetchRow()
                 int indp = -1; // This means that NULL values will not cause an error
                 fields[i].value = new char[fields[i].fieldSize];
                 memset(fields[i].value, '\0', fields[i].fieldSize);
-                OCIDefine* defineHandle = NULL;
+                OCIDefine* defineHandle = nullptr;
                 result = OCIDefineByPos(mSQLHandle, &defineHandle, mErrorHandle, i + 1,
                                         fields[i].value, fieldSize, fields[i].extType,
                                         &indp, 0, 0, OCI_DEFAULT);
@@ -229,8 +229,8 @@ dbi::Row dbi::OracleResultSet::fetchRow()
                     ub4 bufferSize = 9;
 
                     OCIDateToText(mErrorHandle, (const OCIDate*)fields[i].value,
-                                  NULL, 0,
-                                  NULL, 0, &bufferSize, (text*)buffer);
+                                  nullptr, 0,
+                                  nullptr, 0, &bufferSize, (text*)buffer);
                     memset(fields[i].value, '\0', sizeof(OCIDate));
                     strncpy(fields[i].value, buffer, bufferSize);
                 }

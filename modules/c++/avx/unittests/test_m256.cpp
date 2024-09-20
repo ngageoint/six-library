@@ -25,7 +25,9 @@
 #include <std/cstddef>
 
 #include <sys/Conf.h>
+#include <sys/AbstractOS.h>
 #include <avx/extractf.h>
+#include <config/compiler_extensions.h>
 
 TEST_CASE(extractf)
 {
@@ -49,8 +51,64 @@ TEST_CASE(extractf)
   */
     TEST_SUCCESS;
 }
+
+TEST_CASE(test_getSIMDInstructionSet)
+{
+    // This is the reverse of getSIMDInstructionSet(): it uses the macros to generate a value.
+    constexpr auto simdInstructionSet = sys::getSIMDInstructionSet();
+    #if CODA_OSS_ENABLE_SIMD
+        #if __AVX512F__
+        static_assert(simdInstructionSet == sys::SIMDInstructionSet::AVX512F, "getSIMDInstructionSet()");
+        #elif __AVX2__
+        static_assert(simdInstructionSet == sys::SIMDInstructionSet::AVX2, "getSIMDInstructionSet()");
+        #else
+        static_assert(simdInstructionSet == sys::SIMDInstructionSet::SSE2, "getSIMDInstructionSet()");
+        #endif
+    #else
+        static_assert(simdInstructionSet == sys::SIMDInstructionSet::Disabled, "getSIMDInstructionSet()");
+    #endif // CODA_OSS_ENABLE_SIMD
     
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable: 4127) // conditional expression is constant
+    #endif
+
+    switch (sys::getSIMDInstructionSet()) // run-time value (well, not really, but it could be)
+    {
+    case sys::SIMDInstructionSet::SSE2:
+    {
+        TEST_ASSERT(simdInstructionSet == sys::SIMDInstructionSet::SSE2);
+        break;
+    }
+    case sys::SIMDInstructionSet::AVX2:
+    {
+        TEST_ASSERT(simdInstructionSet == sys::SIMDInstructionSet::AVX2);
+        break;
+    }
+    case sys::SIMDInstructionSet::AVX512F:
+    {
+        TEST_ASSERT(simdInstructionSet == sys::SIMDInstructionSet::AVX512F);
+        break;
+    }
+    case sys::SIMDInstructionSet::Disabled:
+    {
+        TEST_ASSERT(simdInstructionSet == sys::SIMDInstructionSet::Disabled);
+        break;
+    }
+    case sys::SIMDInstructionSet::Unknown:
+    {
+        TEST_ASSERT(simdInstructionSet == sys::SIMDInstructionSet::Unknown);
+        break;
+    }
+    default:
+    {
+        TEST_FAIL;
+    }
+    }
+    CODA_OSS_disable_warning_pop
+}
 
 TEST_MAIN(
     TEST_CHECK(extractf);
+    TEST_CHECK(test_getSIMDInstructionSet);
 )

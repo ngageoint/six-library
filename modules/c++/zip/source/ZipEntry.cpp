@@ -29,7 +29,7 @@ const static char* sZipFileMadeByStr[] = {
         "OpenVMS", "UNIX", "VM/CMS", "Atari ST", "OS/2 H.P.F.S.", "Macintosh",
         "Z-System", "CP/M", "Windows NTFS", "MVS (OS/390 - Z/OS)", "VSE",
         "Acorn Risc", "VFAT", "alternative MVS", "BeOS", "Tandem", "OS/400",
-        "OS/X (Darwin)", NULL };
+        "OS/X (Darwin)", nullptr };
 
 namespace zip
 {
@@ -50,7 +50,7 @@ void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen, sys::ubyte* in,
     int zerr = inflateInit2(&zstream, -MAX_WBITS);
     if (zerr != Z_OK)
     {
-        throw except::IOException(Ctxt(FmtX("inflateInit2 failed [%d]", zerr)));
+        throw except::IOException(Ctxt(str::Format("inflateInit2 failed [%d]", zerr)));
     }
 
     // decompress
@@ -58,7 +58,7 @@ void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen, sys::ubyte* in,
 
     if (zerr != Z_STREAM_END)
     {
-        throw except::IOException(Ctxt(FmtX(
+        throw except::IOException(Ctxt(str::Format(
                 "inflate failed [%d]: wanted: %d, got: %lu", zerr,
                 Z_STREAM_END, zstream.total_out)));
     }
@@ -69,7 +69,7 @@ const char* ZipEntry::getVersionMadeByString() const
 {
 
     if (mVersionMadeBy >= 20)
-        return NULL;
+        return nullptr;
 
     return sZipFileMadeByStr[mVersionMadeBy];
 }
@@ -97,7 +97,7 @@ std::ostream& operator<<(std::ostream& os, const zip::ZipEntry& ze)
 {
     const char* madeBy = ze.getVersionMadeByString();
     std::string asStr = "Unknown";
-    if (madeBy != NULL)
+    if (madeBy != nullptr)
     {
         asStr = madeBy;
     }

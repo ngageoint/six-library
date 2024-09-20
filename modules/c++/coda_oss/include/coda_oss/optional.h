@@ -18,17 +18,37 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
+#pragma once
 #ifndef CODA_OSS_coda_oss_optional_h_INCLUDED_
 #define CODA_OSS_coda_oss_optional_h_INCLUDED_
-#pragma once
 
-#include "coda_oss/namespace_.h"
+#include "coda_oss/CPlusPlus.h"
+
+// always compile; it's in a details namespace
 #include "coda_oss/optional_.h"
+
+// This logic needs to be here rather than <std/optional> so that `coda_oss::optional` will
+// be the same as `std::optional`.
+#ifndef CODA_OSS_HAVE_std_optional_
+    #define CODA_OSS_HAVE_std_optional_ 0  // assume no <optional>
+#endif
+#if CODA_OSS_cpp17 // C++17 for `__has_include()`
+    #if __has_include(<optional>) // __cpp_lib_optional not until C++20
+        #include <optional>
+        #undef CODA_OSS_HAVE_std_optional_
+        #define CODA_OSS_HAVE_std_optional_ 1  // provided by the implementation, probably C++17
+    #endif
+#endif // CODA_OSS_cpp17
 
 namespace coda_oss
 {
-    using details::optional;
-    using details::make_optional;
+    #if CODA_OSS_HAVE_std_optional_
+        using std::optional;
+        using std::make_optional;
+    #else
+        using details::optional;
+        using details::make_optional;
+    #endif 
 }
 
 #endif  // CODA_OSS_coda_oss_optional_h_INCLUDED_

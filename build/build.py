@@ -852,7 +852,7 @@ def configureCompilerOptions(self):
         config['cxx']['optz_fast']      = '-O2'
         config['cxx']['optz_faster']   = '-O3'
         config['cxx']['optz_fastest']   = config['cxx']['optz_faster']
-        config['cxx']['optz_fastest-possible']   = config['cxx']['optz_fastest'] # TODO: -march=native ?
+        config['cxx']['optz_fastest-possible']   = config['cxx']['optz_fastest']
 
         #self.env.append_value('LINKFLAGS', '-fPIC -dynamiclib'.split())
         self.env.append_value('LINKFLAGS', '-fPIC'.split())
@@ -907,10 +907,11 @@ def configureCompilerOptions(self):
             # https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options
             # "Using -march=native enables all instruction subsets supported by the local machine ..."
             config['cxx']['optz_faster']      = '-O3' # no -march=native
-            config['cxx']['optz_fastest']   =  config['cxx']['optz_faster'] # TODO: add -march=native ?
+            # Haswell is from 2013 ... 10 years ago: https://en.wikipedia.org/wiki/Haswell_%28microarchitecture%29
+            config['cxx']['optz_fastest']   =  [ config['cxx']['optz_faster'], '-march=haswell' ]
             # This "should" be part of fastest, but that could cause unexpected floating point differences.
             # The "fastest-possible" option is new; see comments above.
-            config['cxx']['optz_fastest-possible']   =  [ config['cxx']['optz_fastest'], '-march=native' ]
+            config['cxx']['optz_fastest-possible']   =  [ config['cxx']['optz_faster'], '-march=native' ]  # -march=native instead of haswell
 
             self.env.append_value('CXXFLAGS', '-fPIC'.split())
             if not Options.options.enablecpp17:
@@ -956,10 +957,11 @@ def configureCompilerOptions(self):
             # https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options
             # "Using -march=native enables all instruction subsets supported by the local machine ..."
             config['cc']['optz_faster']      = '-O3' # no -march=native
-            config['cc']['optz_fastest']   =  config['cc']['optz_faster'] # TODO: add -march=native ?
+            # Haswell is from 2013 ... 10 years ago: https://en.wikipedia.org/wiki/Haswell_%28microarchitecture%29
+            config['cc']['optz_fastest']   =  [ config['cc']['optz_faster'], '-march=haswell' ]
             # This "should" be part of fastest, but that could cause unexpected floating point differences.
             # The "fastest-possible" option is new; see comments above.
-            config['cc']['optz_fastest-possible']   =  [ config['cc']['optz_fastest'], '-march=native' ]
+            config['cc']['optz_fastest-possible']   =  [ config['cc']['optz_faster'], '-march=native' ] # -march=native instead of haswell
 
             self.env.append_value('CFLAGS', '-fPIC'.split())
             # "gnu99" enables POSIX and BSD
@@ -1021,8 +1023,8 @@ def configureCompilerOptions(self):
         config['cxx'].update(vars)
         config['cc'].update(vars)
 
-        defines = '_FILE_OFFSET_BITS=64 ' \
-                  '_LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
+        defines = '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE' \
+                  'WIN32 _USE_MATH_DEFINES NOMINMAX _CRT_SECURE_NO_WARNINGS WIN32_LEAN_AND_MEAN'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
 
         #If building with cpp17 add flags/defines to enable auto_ptr

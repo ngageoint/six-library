@@ -21,10 +21,12 @@
  */
 
 
-#ifndef __SYS_OS_H__
-#define __SYS_OS_H__
+#pragma once
+#ifndef CODA_OSS_sys_OS_h_INCLUDED_
+#define CODA_OSS_sys_OS_h_INCLUDED_
 
 #include "sys/AbstractOS.h"
+#include "sys/Conf.h"
 
 #ifdef _WIN32
 #  include "sys/OSWin32.h"
@@ -47,19 +49,34 @@ typedef DirectoryUnix Directory;
 // and also squelches compiler-warnings about unused local functions.
 namespace sys
 {
-	enum class PlatformType
-	{
-		Windows,
-		Linux,
-		//MacOS
-	};
+enum class PlatformType
+{
+    Windows,
+    Linux,
+    // MacOS
+};
 
-	#ifdef _WIN32
-	constexpr auto Platform = PlatformType::Windows;
-	#else
-    constexpr auto Platform = PlatformType::Linux;
-	#endif
-}
-
+#if defined(_WIN32)
+constexpr auto Platform = PlatformType::Windows;
+#elif defined(CODA_OSS_POSIX2008_SOURCE)
+constexpr auto Platform = PlatformType::Linux;
+#else
+#error "Unknown platform."
 #endif
 
+template <PlatformType>
+inline std::string platformName();
+template <>
+inline std::string platformName<PlatformType::Windows>()
+{
+    return "Windows";
+}
+template <>
+inline std::string platformName<PlatformType::Linux>()
+{
+    return "linux-gnu";
+}
+
+}
+
+#endif  // CODA_OSS_sys_OS_h_INCLUDED_

@@ -20,19 +20,25 @@
  *
  */
 
-#ifndef __CLI_RESULTS_H__
-#define __CLI_RESULTS_H__
+#pragma once
+#ifndef CODA_OSS_cli_Results_h_INCLUDED_
+#define CODA_OSS_cli_Results_h_INCLUDED_
 
 #include <map>
+#include <memory>
+#include <utility>
+#include <stdexcept>
+
+#include "sys/Conf.h"
+
 #include "cli/Value.h"
 
 namespace cli
 {
 
-class Results
+class Results final
 {
-protected:
-    typedef std::map<std::string, cli::Value*> ValueStorage_T;
+    typedef std::map<std::string, std::unique_ptr<cli::Value>> ValueStorage_T;
     typedef ValueStorage_T::iterator ValueIter_T;
     typedef ValueStorage_T::const_iterator ConstValueIter_T;
     typedef std::map<std::string, cli::Results*> ResultsStorage_T;
@@ -40,13 +46,15 @@ protected:
     typedef ResultsStorage_T::const_iterator ConstResultsIter_T;
 
 public:
-    Results()
-    {
-    }
+    Results() = default;
     ~Results()
     {
         destroy();
     }
+    Results(const Results&) = delete;
+    Results& operator=(const Results&) = delete;
+    Results(Results&&) = default;
+    Results& operator=(Results&&) = default;
 
     bool hasValue(const std::string& key) const
     {
@@ -58,20 +66,30 @@ public:
         return mResults.find(key) != mResults.end();
     }
 
-    cli::Value* operator[](const std::string& key) const
+    const cli::Value* operator[](const std::string& key) const
     {
         return getValue(key);
     }
 
-    cli::Value* getValue(const std::string& key) const
+    const cli::Value* getValue(const std::string& key) const
     {
-        ConstValueIter_T p = mValues.find(key);
+        auto const p = mValues.find(key);
         if (p == mValues.end())
         {
             const std::string errorMessage = "No argument named " + key;
             throw except::NoSuchKeyException(Ctxt(errorMessage));
         }
-        return p->second;
+        return p->second.get();
+    }
+    cli::Value* getValue(const std::string& key)
+    {
+        auto const p = mValues.find(key);
+        if (p == mValues.end())
+        {
+            const std::string errorMessage = "No argument named " + key;
+            throw except::NoSuchKeyException(Ctxt(errorMessage));
+        }
+        return p->second.get();
     }
 
     template<typename T>
@@ -96,15 +114,22 @@ public:
         return p->second;
     }
 
-    void put(const std::string& key, cli::Value *value)
+    void put(const std::string& key, std::unique_ptr<cli::Value> value)
     {
-        if (hasValue(key))
+        if (hasValue(key) && (getValue(key) == value.get()))
         {
-            cli::Value* existing = getValue(key);
-            if (existing != value)
-                delete getValue(key);
+            return;
         }
-        mValues[key] = value;
+        mValues[key] = std::move(value);
+    }
+    void put(const std::string& key, cli::Value* value)
+    {
+        cli::Value* pExistingValue = hasValue(key) ? getValue(key) : nullptr;
+        if ((pExistingValue == nullptr) || (pExistingValue != value))
+        {
+            // Either 1) we didn't already have a value or 2) the existing value is different
+            put(key, std::unique_ptr<cli::Value>(value));
+        }
     }
 
     void put(const std::string& key, cli::Results *args)
@@ -118,30 +143,25 @@ public:
         mResults[key] = args;
     }
 
-    typedef ValueStorage_T::iterator iterator;
-    typedef ValueStorage_T::const_iterator const_iterator;
+    auto begin() { return mValues.begin(); }
+    auto begin() const { return mValues.begin(); }
+    auto end() { return mValues.end(); }
+    auto end() const { return mValues.end(); }
 
-    iterator begin() { return mValues.begin(); }
-    const_iterator begin() const { return mValues.begin(); }
-    iterator end() { return mValues.end(); }
-    const_iterator end() const { return mValues.end(); }
-
-protected:
+private:
     ValueStorage_T mValues;
     ResultsStorage_T mResults;
 
     void destroy()
     {
-        for (ValueIter_T it = mValues.begin(), end = mValues.end(); it != end; ++it)
-            delete it->second;
+        mValues.clear();
         for (ResultsIter_T it = mResults.begin(), end = mResults.end(); it
                 != end; ++it)
             delete it->second;
-        mValues.clear();
         mResults.clear();
     }
 };
 
 }
 
-#endif
+#endif  // CODA_OSS_cli_Results_h_INCLUDED_

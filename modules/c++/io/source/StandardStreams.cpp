@@ -27,13 +27,13 @@ _STDOUT_DEFINE_MUTEX_SEMICOLON_
 void io::StandardOutStream::write(const void* buffer, sys::Size_T len)
 {
     _STDSTREAM_BEGIN_CS_SEMICOLON_
-    std::cout.write((const char*)buffer, len);
+    std::cout.write(static_cast<const char*>(buffer), len);
     _STDSTREAM_END_CS_SEMICOLON_
     //int returnVal = fwrite(b, len, len, stdout);
     if (!std::cout.good())
         throw except::IOException(
             Ctxt(
-                FmtX("std::cout stream is bad after requested write: (%d)",
+                str::Format("std::cout stream is bad after requested write: (%d)",
                      len)) );
 }
 
@@ -47,13 +47,13 @@ void io::StandardOutStream::flush()
 void io::StandardErrStream::write(const void* buffer, sys::Size_T len)
 {
     _STDSTREAM_BEGIN_CS_SEMICOLON_
-    std::cerr.write((const char*)buffer, len);
+    std::cerr.write(static_cast<const char*>(buffer), len);
     //int returnVal = fwrite(b, len, len, stderr);
     _STDSTREAM_END_CS_SEMICOLON_
     if (!std::cerr.good())
         throw except::IOException(
             Ctxt(
-                FmtX("std::cerr stream is bad after requested write: (%d)",
+                str::Format("std::cerr stream is bad after requested write: (%d)",
                      len) ) );
 }
 

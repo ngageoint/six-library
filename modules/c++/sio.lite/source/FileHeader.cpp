@@ -65,7 +65,7 @@ long sio::lite::FileHeader::getLength() const
 {
     size_t length = SIO_HEADER_LENGTH;
 
-    if (userData.size() > 0)
+    if (!userData.empty())
         length += 4; //num fields int
     for (sio::lite::UserDataDictionary::ConstIterator it = userData.begin();
         it != userData.end(); ++it)
@@ -158,7 +158,7 @@ void sio::lite::FileHeader::to(size_t numBands, io::OutputStream& os)
 
 void sio::lite::FileHeader::writeUserData(io::OutputStream& os)
 {
-    const auto numFields = static_cast<int32_t>(userData.size());
+    const auto numFields = gsl::narrow<int32_t>(userData.size());
     os.write((const sys::byte*)&numFields, 4);
 
     for(sio::lite::UserDataDictionary::Iterator it = userData.begin();
@@ -171,7 +171,7 @@ void sio::lite::FileHeader::writeUserData(io::OutputStream& os)
         os.write((const sys::byte*)key.c_str(), keySize);
 
         std::vector<sys::byte>& uData = it->second;
-        const auto udSize =  static_cast<int32_t>(uData.size());
+        const auto udSize =  gsl::narrow<int32_t>(uData.size());
         os.write((const sys::byte*)&udSize, 4);
 
         //Do we need to check for endian-ness and possibly byteswap???
@@ -204,6 +204,7 @@ void sio::lite::FileHeader::addUserData(const std::string& field,
 void sio::lite::FileHeader::addUserData(const std::string& field, int data)
 {
     std::vector<sys::byte> vec;
+    vec.reserve(sizeof(int));
     char* cData = (char*)&data;
     for (int i = 0, size = sizeof(int); i < size; ++i)
         vec.push_back((sys::byte)cData[i]);

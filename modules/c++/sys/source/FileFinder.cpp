@@ -56,12 +56,8 @@ bool sys::FragmentPredicate::operator()(const std::string& entry) const
 {
     if (mIgnoreCase)
     {
-        std::string base = entry;
-        str::lower(base);
-
-        std::string match = mFragment;
-        str::lower(match);
-
+        const auto base = str::lower(entry);
+        const auto match = str::lower(mFragment);
         return str::contains(base, match);
     }
     else
@@ -80,13 +76,10 @@ bool sys::ExtensionPredicate::operator()(const std::string& filename) const
     if (!sys::FileOnlyPredicate::operator()(filename))
         return false;
 
-    std::string ext = sys::Path::splitExt(filename).second;
+    const std::string ext = sys::Path::splitExt(filename).second;
     if (mIgnoreCase)
     {
-        std::string matchExt = mExt;
-        str::lower(matchExt);
-        str::lower(ext);
-        return ext == matchExt;
+        return str::eq(ext, mExt);
     }
     else
         return ext == mExt;
@@ -102,7 +95,7 @@ sys::NotPredicate::~NotPredicate()
     if (mPredicate.second && mPredicate.first)
     {
         FilePredicate* tmp = mPredicate.first;
-        mPredicate.first = NULL;
+        mPredicate.first = nullptr;
         delete tmp;
     }
 }
@@ -125,7 +118,7 @@ sys::LogicalPredicate::~LogicalPredicate()
         if (p.first && p.second)
         {
             sys::FilePredicate* tmp = p.first;
-            p.first = NULL;
+            p.first = nullptr;
             delete tmp;
         }
     }
@@ -208,6 +201,17 @@ std::vector<std::string> sys::FileFinder::search(
     return files;
 }
 
+static fs::path parent_path(const fs::path& p)
+{
+    // If the parent_path() is the same, we've reached to root.
+    const auto retval = p.parent_path();
+    if (retval.empty() || (retval == p))
+    {
+        throw std::runtime_error("At root of filesystem: " + p.string());
+    }
+    return retval;
+}
+
 static fs::path findFirst(const sys::FilePredicate& pred, const fs::path& startingDirectory)
 {
     auto dir = startingDirectory;
@@ -228,7 +232,8 @@ static fs::path findFirst(const sys::FilePredicate& pred, const fs::path& starti
         {
             throw std::logic_error("Won't traverse above .git directory at: " + dir.string());
         }
-        dir = dir.parent_path();
+
+        dir = parent_path(dir);
     }
 }
 fs::path sys::findFirstFile(const fs::path& startingDirectory, const fs::path& filename)
@@ -265,7 +270,7 @@ fs::path sys::findFirstDirectory(const fs::path& startingDirectory, const fs::pa
 fs::path sys::test::findRootDirectory(const fs::path& p, const std::string& rootName,
         std::function<bool(const fs::path&)> isRoot)
 {
-    const auto isRootDirectory = [&](const fs::path& p) { return is_directory(p) && isRoot(p); };
+    const auto isRootDirectory = [&](const fs::path& v) { return is_directory(v) && isRoot(v); };
 
     // Does the given path look good?
     if (isRootDirectory(p))
@@ -297,7 +302,7 @@ fs::path sys::test::findRootDirectory(const fs::path& p, const std::string& root
     // Once we're at a .git directory, we have to go down, not up ... or fail.
     if (!is_directory(p / ".git"))
     {
-        return findRootDirectory(p.parent_path(), rootName, isRoot);
+        return findRootDirectory(parent_path(p), rootName, isRoot);
     }
     
     // TODO: since we're in the "FileFinder" module, maybe try a bit harder to find "rootName"?
@@ -316,7 +321,7 @@ static inline std::string Platform()
 
 static fs::path findCMakeRoot(const fs::path& path, const fs::path& dir)
 {
-   	static const auto platform_and_configuration = ::Platform() + "-" + ::Configuration(); // "x64-Debug"
+    static const auto platform_and_configuration = ::Platform() + "-" + ::Configuration(); // "x64-Debug"
     const auto pred = [&](const fs::path& p)
     {
         if (p.filename() == platform_and_configuration)
@@ -338,7 +343,7 @@ static fs::path findCMakeRoot(const fs::path& path, const fs::path& dir)
 
         return false;
     };
-	return sys::test::findRootDirectory(path, "", pred);
+    return sys::test::findRootDirectory(path, "", pred);
 }
 
 fs::path findCMake_Root(const fs::path& path,
@@ -404,13 +409,8 @@ static fs::path find_dotGITDirectory_(const fs::path& p, const fs::path& initial
     {
         return p;
     }
-
-    auto parent = p.parent_path();
-    if (parent.empty())
-    {
-        throw std::invalid_argument("Can't find .git/ anywhere in: " + initial.string());    
-    }
-    return find_dotGITDirectory_(parent, initial);
+    
+    return find_dotGITDirectory_(parent_path(p), initial);
 }
 fs::path sys::test::find_dotGITDirectory(const fs::path& p)
 {

@@ -104,9 +104,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
         {
             bc = *bp++;
             if (bc != fc)
-                throw except::Exception(Ctxt(
-                        "Value does not match format (" + str::toString(fc) +
-                        "):  " + str::toString(bc)));
+                throw except::Exception(Ctxt("Value does not match format (" + str::toString(fc) + "):  " + str::toString(bc)));
             continue;
         }
 
@@ -171,15 +169,13 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
                 // Full name.
                 len = DAY[i].size();
                 std::string day(bp, len);
-                str::lower(day);
-                if (day == DAY[i])
+                if (str::eq(day, DAY[i]))
                     break;
 
                 // Abbreviated name.
                 len = AB_DAY[i].size();
                 day = std::string(bp, len);
-                str::lower(day);
-                if (day == AB_DAY[i])
+                if (str::eq(day, AB_DAY[i]))
                     break;
             }
 
@@ -204,15 +200,13 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
                 // Full name.
                 len = MONTH[i].size();
                 std::string month(bp, len);
-                str::lower(month);
-                if (month == MONTH[i])
+                if (str::eq(month, MONTH[i]))
                     break;
 
                 // Abbreviated name.
                 len = AB_MONTH[i].size();
                 month = std::string(bp, len);
-                str::lower(month);
-                if (month == AB_MONTH[i])
+                if (str::eq(month, AB_MONTH[i]))
                     break;
             }
 
@@ -316,7 +310,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
         case 'Y':              // The year.
             i = TM_YEAR_BASE;
             if (!(conv_num(bp, i, 0, 9999)))
-                throw except::Exception(Ctxt("Invalid year: " + str::toString(i)));
+                throw except::Exception(Ctxt("Invalid year: " + std::to_string(i)));
             tm.tm_year = i - TM_YEAR_BASE;
             break;
 
@@ -349,7 +343,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
     }
 
     // LINTED functional specification
-    return ((char *) bp);
+    return const_cast<char*>(bp);
 }
 }
 
@@ -371,14 +365,14 @@ void sys::DateTime::fromMillis(const tm& t)
     mHour = t.tm_hour;
     mMinute = t.tm_min;
 
-    const size_t timeInSeconds = (size_t)(mTimeInMillis / 1000);
-    const double timediff = ((double)mTimeInMillis / 1000.0) - timeInSeconds;
+    const auto timeInSeconds = gsl::narrow_cast<size_t>(mTimeInMillis / 1000);
+    const auto timediff = (gsl::narrow_cast<double>(mTimeInMillis) / 1000.0) - gsl::narrow_cast<double>(timeInSeconds);
     mSecond = t.tm_sec + timediff;
 }
 
 double sys::DateTime::toMillis(tm t) const
 {
-    time_t timeInSeconds = mktime(&t);
+    const auto timeInSeconds = gsl::narrow_cast<double>(mktime(&t));
     double timediff = mSecond - t.tm_sec;
     return (timeInSeconds + timediff) * 1000.0;
 }
@@ -394,7 +388,7 @@ static double getNowInMillis()
     return (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
 #elif CODA_OSS_POSIX_SOURCE
     struct timeval now;
-    gettimeofday(&now,NULL);
+    gettimeofday(&now,nullptr);
     return (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
 #elif _WIN32
     // Getting time twice may be inefficient but is quicker
@@ -404,9 +398,9 @@ static double getNowInMillis()
     // does not need millisecond accuracy
     SYSTEMTIME now;
     GetLocalTime(&now);
-    return (double)time(NULL) * 1000 + now.wMilliseconds;
+    return (double)time(nullptr) * 1000 + now.wMilliseconds;
 #else
-    return (double)time(NULL) * 1000;
+    return (double)time(nullptr) * 1000;
 #endif
 }
 void sys::DateTime::setNow()
@@ -469,9 +463,7 @@ std::string sys::DateTime::dayOfWeekToStringAbbr(int dayOfWeek)
 
 int sys::DateTime::monthToValue(const std::string& month)
 {
-    std::string m = month;
-    str::lower(m);
-
+    const auto m = str::lower(month);
     if (str::startsWith(m, "jan"))
         return 1;
     else if (str::startsWith(m, "feb"))
@@ -503,9 +495,7 @@ int sys::DateTime::monthToValue(const std::string& month)
 
 int sys::DateTime::dayOfWeekToValue(const std::string& dayOfWeek)
 {
-    std::string d = dayOfWeek;
-    str::lower(d);
-
+    const auto d = str::lower(dayOfWeek);
     if (str::startsWith(d, "sun"))
         return 1;
     else if (str::startsWith(d, "mon"))
@@ -634,7 +624,7 @@ void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
 #if CODA_OSS_POSIX_SOURCE
-    if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    if (::localtime_r(&numSecondsSinceEpoch, &t) == nullptr)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("localtime_r() failed (" +
@@ -664,7 +654,7 @@ void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
 #if CODA_OSS_POSIX_SOURCE
-    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    if (::gmtime_r(&numSecondsSinceEpoch, &t) == nullptr)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("gmtime_r() failed (" +

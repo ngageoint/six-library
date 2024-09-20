@@ -49,10 +49,14 @@ static std::string gz_to_txt(const std::filesystem::path& gz_path)
 
 TEST_CASE(gzip)
 {
-    const auto inputPath = find_unittest_file("text.txt");
+    static const auto inputPath = find_unittest_file("text.txt");
 
-    const std::filesystem::path argv0 = sys::OS().getSpecialEnv("0");
-    auto outputPath = argv0.parent_path() / txt_to_gz(inputPath);
+    const std::filesystem::path outputName_(txt_to_gz(inputPath));
+    const auto outputName = "TEST_" + outputName_.stem().string() + "_TMP" + outputName_.extension().string(); // see .gitignore
+    const auto outputDir = inputPath.parent_path();
+    const auto origOutputPath = outputDir / outputName;
+    auto outputPath = origOutputPath;
+
     {
         io::FileInputStream input(inputPath.string());
         zip::GZipOutputStream output(outputPath.string());
@@ -67,7 +71,7 @@ TEST_CASE(gzip)
     TEST_ASSERT_EQ(32, buffer.size());
     {
         zip::GZipInputStream input(outputPath.string());
-        outputPath = argv0.parent_path() / gz_to_txt(outputPath);
+        outputPath = outputDir / gz_to_txt(outputPath);
         io::FileOutputStream output(outputPath.string());
         while (input.streamTo(output, 8192)) ;
 
@@ -77,15 +81,19 @@ TEST_CASE(gzip)
         const auto str = io::readFileContents(outputPath.string());
         TEST_ASSERT_EQ("Hello World!", str);
     }
+
+    remove(origOutputPath);
+    remove(outputPath);
 }
 
 TEST_CASE(gunzip)
 {
-    const auto inputPath = find_unittest_file("test.gz");
+    static const auto inputPath = find_unittest_file("test.gz");
 
-    const std::filesystem::path argv0 = sys::OS().getSpecialEnv("0");
-    const auto outputPath = argv0.parent_path() / gz_to_txt(inputPath);
-        
+    const std::filesystem::path outputName_(gz_to_txt(inputPath));
+    const auto outputName = "TEST_" + outputName_.stem().string() + "_TMP" + outputName_.extension().string(); // see .gitignore
+    const auto outputPath = inputPath.parent_path() / outputName;
+                
     zip::GZipInputStream input(inputPath.string());
     io::FileOutputStream output(outputPath.string());
     while ( input.streamTo(output, 8192) );
@@ -95,6 +103,8 @@ TEST_CASE(gunzip)
 
     const auto str = io::readFileContents(outputPath.string());
     TEST_ASSERT_EQ("Hello World!", str);
+    
+    remove(outputPath);
 }
 
 TEST_MAIN(

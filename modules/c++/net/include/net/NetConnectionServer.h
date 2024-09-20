@@ -56,9 +56,12 @@ public:
     NetConnectionServer();
 
     //! Destructor.
-    virtual ~NetConnectionServer() 
-    {
-    }
+    virtual ~NetConnectionServer() = default;
+
+    NetConnectionServer(const NetConnectionServer&) = delete;
+    NetConnectionServer& operator=(const NetConnectionServer&) = delete;
+    NetConnectionServer(NetConnectionServer&&) = default;
+    NetConnectionServer& operator=(NetConnectionServer&&) = default;
 
     /*!
      *  Create a server on the port, with a backlog queue given in the

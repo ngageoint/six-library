@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
- 
+ #pragma once
 #ifndef __TYPES_ROW_COL_H__
 #define __TYPES_ROW_COL_H__
 
@@ -28,6 +28,7 @@
 #include <cstdlib>
 #include <utility>
 #include <limits>
+#include <array>
 
 #include "gsl/gsl.h"
 
@@ -50,9 +51,8 @@ namespace types
 template<typename T> class RowCol
 {
     template <typename U, typename Other_T>
-    static U cast(const Other_T& t) 
+    static U cast(const Other_T& t) noexcept
     {
-        //return static_cast<T>(t);
         return gsl::narrow_cast<U>(t);
     }
 
@@ -78,6 +78,11 @@ public:
     {
         row = p.first;
         col = p.second;
+    }
+    explicit RowCol(const std::array<T, 2>& a) noexcept
+    {
+        row = a[0];
+        col = a[1];
     }
 
     template<typename Other_T> RowCol& operator=(const RowCol<Other_T>& p) noexcept

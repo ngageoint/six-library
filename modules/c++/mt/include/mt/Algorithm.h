@@ -20,51 +20,80 @@
  *
  */
 
-#ifndef CODA_OSS_mt_Algorithm_h_INCLUDED_
-#define CODA_OSS_mt_Algorithm_h_INCLUDED_
 #pragma once
 
 #include <algorithm>
 #include <iterator>
 #include <future>
 
+#include "config/compiler_extensions.h"
+#include "coda_oss/CPlusPlus.h"
+#if CODA_OSS_cpp17
+	// <execution> is broken with the older version of GCC we're using
+	#if (__GNUC__ >= 10) || _MSC_VER
+	#include <execution>
+	#define CODA_OSS_mt_Algorithm_has_execution 1
+	#endif
+#endif
+
 namespace mt
 {
-namespace details
+// "Roll our own" `std::transform(execution::par)` using std::async()
+// https://en.cppreference.com/w/cpp/algorithm/transform
+
+// Our own `Transform_par_()` is built on `std::async()`; for that we need to control
+// a couple of settings.
+struct Transform_par_settings final
 {
-    template <typename InputIt, typename OutputIt, typename TFunc>
-    inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-        typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
+    Transform_par_settings() = default;
+
+    Transform_par_settings(ptrdiff_t cutoff) : cutoff_(cutoff) { }
+    Transform_par_settings(std::launch policy) : policy_(policy) { }
+    Transform_par_settings(ptrdiff_t cutoff, std::launch policy) : cutoff_(cutoff), policy_(policy) { }
+    Transform_par_settings(std::launch policy, ptrdiff_t cutoff) : Transform_par_settings(cutoff, policy) { }
+
+    // The value of "default_cutoff" was determined by testing; there is nothing
+    // special about it, feel free to change it.
+    static constexpr ptrdiff_t dimension = 128 * 8;
+    static constexpr ptrdiff_t default_cutoff = dimension * dimension;
+    ptrdiff_t cutoff_ =  default_cutoff;
+
+    // https://en.cppreference.com/w/cpp/thread/launch
+    std::launch policy_ = std::launch::async; // "the task is executed on a different thread, potentially by creating and launching it first"
+};
+
+template <typename InputIt, typename OutputIt, typename UnaryOperation>
+inline OutputIt Transform_par_(InputIt first1, InputIt last1, OutputIt d_first, UnaryOperation unary_op,
+    const Transform_par_settings& settings)
+{
+    // https://en.cppreference.com/w/cpp/thread/async
+    const auto len = std::distance(first1, last1);
+    if (len < settings.cutoff_)
     {
-        // https://en.cppreference.com/w/cpp/thread/async
-        const auto len = std::distance(first1, last1);
-        if (len < cutoff)
-        {
-            return std::transform(first1, last1, d_first, f);
-        }
-
-        const auto mid1 = first1 + len / 2;
-        const auto d_mid = d_first + len / 2;
-        auto handle = std::async(policy, transform_async<InputIt, OutputIt, TFunc>, mid1, last1, d_mid, f, cutoff, policy);
-        details::transform_async(first1, mid1, d_first, f, cutoff, policy);
-        return handle.get();
+        return std::transform(first1, last1, d_first, unary_op);
     }
+    
+    const auto mid1 = first1 + len / 2;
+    const auto d_mid = d_first + len / 2;
+    auto handle = std::async(settings.policy_, Transform_par_<InputIt, OutputIt, UnaryOperation>, mid1, last1, d_mid, unary_op, settings);
+    Transform_par_(first1, mid1, d_first, unary_op, settings);
+    return handle.get();
 }
-template <typename InputIt, typename OutputIt, typename TFunc>
-inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-    typename std::iterator_traits<InputIt>::difference_type cutoff, std::launch policy)
+template <typename InputIt, typename OutputIt, typename UnaryOperation>
+inline OutputIt Transform_par(InputIt first1, InputIt last1, OutputIt d_first, UnaryOperation unary_op,
+    Transform_par_settings settings = Transform_par_settings{})
 {
-    // details::... eliminates the overload
-    return details::transform_async(first1, last1, d_first, f, cutoff, policy);
-}
-template <typename InputIt, typename OutputIt, typename TFunc>
-inline OutputIt transform_async(const InputIt first1, const InputIt last1, OutputIt d_first, TFunc f,
-    typename std::iterator_traits<InputIt>::difference_type cutoff)
-{
-    const std::launch policy = std::launch::deferred | std::launch::async;
-    return transform_async(first1, last1, d_first, f, cutoff, policy);
+#if CODA_OSS_mt_Algorithm_has_execution
+    #if __GNUC__
+        // std::execution::par is dramatically slower w/GCC than using our own ... ???
+        return Transform_par_(first1, last1, d_first, unary_op, settings); // TODO: std::execution::par
+    #else
+        CODA_OSS_mark_symbol_unused(settings);
+        return std::transform(std::execution::par, first1, last1, d_first, unary_op);
+    #endif // __GNUC__
+#else
+    return Transform_par_(first1, last1, d_first, unary_op, settings);
+#endif // CODA_OSS_mt_Algorithm_has_execution
 }
 
 }
-#endif // CODA_OSS_mt_Algorithm_h_INCLUDED_
-

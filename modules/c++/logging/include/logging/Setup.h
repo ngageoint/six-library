@@ -20,23 +20,21 @@
  *
  */
  
+#pragma once
 #ifndef CODA_OSS_logging_Setup_h_INCLUDED_
 #define CODA_OSS_logging_Setup_h_INCLUDED_
 
 #include <memory>
 #include <string>
 
-#include "sys/filesystem.h"
 #include "mem/SharedPtr.h"
 #include "logging/Logger.h"
-
-#include "sys/CPlusPlus.h"
-#if CODA_OSS_cpp17
-#include <std/filesystem>
-#endif
+#include "sys/filesystem.h"
+#include "config/Exports.h"
 
 namespace logging
 {
+using path = coda_oss::filesystem::path; // still used in SWIG bindings
 
 /*!
  *  \fn setupLogger
@@ -52,12 +50,7 @@ namespace logging
  *  \param logCount - number of rotating logs to keep (default: 0 no rotation)
  *  \param logBytes - number of bytes per rotating log (default: 0 no rotation)
  */
-#if CODA_OSS_cpp17
-using path = std::filesystem::path;
-#else
-using path = coda_oss::filesystem::path;
-#endif
-std::unique_ptr<logging::Logger> setupLogger(
+CODA_OSS_API std::unique_ptr<logging::Logger> setupLogger(
     const path& program, 
     const std::string& logLevel = "warning", 
     const path& logFile = "console",

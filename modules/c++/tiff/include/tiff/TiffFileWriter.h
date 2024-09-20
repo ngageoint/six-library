@@ -19,13 +19,16 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __TIFF_FILE_WRITER_H__
 #define __TIFF_FILE_WRITER_H__
 
 #include <string>
 #include <vector>
+
 #include <import/io.h>
+#include <config/Exports.h>
+
 #include "tiff/Header.h"
 #include "tiff/ImageWriter.h"
 
@@ -41,7 +44,7 @@ namespace tiff
  * to the same file.  Contains function for manipulating each 
  * sub-image and for writing data.
  *********************************************************************/
-struct FileWriter
+struct CODA_OSS_API FileWriter
 {
     //! Constructor
     FileWriter() :
@@ -191,7 +194,7 @@ template<typename T> void writeTIFF(const T* image, size_t rows, size_t cols,
             et = ::tiff::Const::SampleFormatType::UNSIGNED_INT;
             break;
         default:
-            throw except::Exception(Ctxt(FmtX("Unexpected es: %d", es)));
+            throw except::Exception(Ctxt(str::Format("Unexpected es: %d", es)));
         }
     }
     unsigned short alpha(0);

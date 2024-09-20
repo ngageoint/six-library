@@ -19,9 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+#pragma once
 #ifndef __IO_SERIALIZABLE_H__
 #define __IO_SERIALIZABLE_H__
+
+#include "config/Exports.h"
 
 #include "io/InputStream.h"
 #include "io/OutputStream.h"
@@ -46,10 +48,10 @@ namespace io
  *  This object has a known derived type SOAPMessage, which is concretely
  *  defined to handle SOAP objects
  */
-struct Serializable
+struct CODA_OSS_API Serializable
 {
     Serializable() = default;
-    virtual ~Serializable() = default;
+    virtual ~Serializable() noexcept(false) {}
 
     /*!
      * Transfer this object into a byte stream

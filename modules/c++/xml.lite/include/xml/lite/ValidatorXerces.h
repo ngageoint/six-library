@@ -20,30 +20,22 @@
  *
  */
 
+#pragma once
 #ifndef CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
-
-#include <xml/lite/xml_lite_config.h>
-
-#ifdef USE_XERCES
 
 #include <memory>
 #include <vector>
 #include <coda_oss/string.h>
 
+#include "config/Exports.h"
+
+#include <xml/lite/xml_lite_config.h>
+#ifdef USE_XERCES
+#include "xerces_.h"
+
 #include <xml/lite/UtilitiesXerces.h>
 #include <xml/lite/ValidatorInterface.h>
-
-#include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xercesc/parsers/DOMLSParserImpl.hpp>
-#include <xercesc/framework/XMLGrammarPool.hpp>
-#include <xercesc/framework/XMLGrammarPoolImpl.hpp>
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/dom/impl/DOMLSInputImpl.hpp>
-
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/util/XMLString.hpp>
 
 namespace xml
 {
@@ -97,12 +89,8 @@ private:
  *
  * This class is the Xercesc schema validator
  */
-class ValidatorXerces : public ValidatorInterface
+struct CODA_OSS_API ValidatorXerces : public ValidatorInterface
 {
-    XercesContext mCtxt;    //! this must be the first member listed
-
-public:
-
     /*! 
      *  Constructor
      *  \param schemaPaths  Vector of both paths and singular schemas
@@ -112,10 +100,10 @@ public:
      *                      input
      */
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
-                    logging::Logger* log,
+                    logging::Logger* log = nullptr,
                     bool recursive = true);
-    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&, // fs::path -> mLegacyStringConversion = false
-                    logging::Logger* log,
+    ValidatorXerces(const std::vector<coda_oss::filesystem::path>&,
+                    logging::Logger* log = nullptr,
                     bool recursive = true);
 
     ValidatorXerces(const ValidatorXerces&) = delete;
@@ -137,7 +125,12 @@ public:
     bool validate(const coda_oss::u8string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
     bool validate(const str::W1252string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
 
+    // Search each directory for XSD files
+    static std::vector<coda_oss::filesystem::path> loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
+
 private:
+    XercesContext mCtxt;
+
     bool validate_(const coda_oss::u8string& xml, 
                    const std::string& xmlID,
                    std::vector<ValidationInfo>& errors) const;
