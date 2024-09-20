@@ -1,4 +1,0 @@
-@PACKAGE_INIT@
-
-# import the zlib targets
-include("${CMAKE_CURRENT_LIST_DIR}/coda-oss_zlibTargets.cmake")

@@ -1,4 +1,0 @@
-@PACKAGE_INIT@
-
-# import the xerces-c targets
-include("${CMAKE_CURRENT_LIST_DIR}/coda-oss_xerces-cTargets.cmake")
