@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>NITF Browser</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <% import os %>
+    
+    <% jqueryFile = 'jquery-1.3.2.min.js' %>
+    %if os.path.exists('static/%s' % jqueryFile):
+        <script type="text/javascript" src="static/jquery-1.3.2.min.js"></script>
+    %else:
+        <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/${jqueryFile}"></script>
+    %endif
+    
+    <link rel="stylesheet" type="text/css" href="static/nitroweb.css"/>
+    
+    <script type="text/javascript">
+    
+        $(document).ready(function()
+        {
+            $('.file-title').click(function(e){
+            
+                var fileDiv = $(this).parents('.file');
+                var fileData = fileDiv.find('.file-data');
+                if (fileData.size() == 0)
+                {
+                    var d = $(this).parents('.dir').find('.dir-title').text();
+                    var fname = $(this).text();
+                    var params = {'dir':d, 'fname':fname};
+                    
+                    var loopHeader = function(header, div){
+                        for (var i = 0; i < header.length; ++i)
+                        {
+                            var field = header[i];
+                            var rowClass = i % 2 == 0 ? "even" : "odd";
+                            //do this to escape the data
+                            var val = $('<div/>').text(field[2]).html();
+                            div.append('<tr class="' + rowClass + '"><th>' + field[0] +
+                                '</th><td>' + val + '</td></tr>');
+                        }
+                    };
+                    
+                    var runIt = function(){
+                        jQuery.ajax({
+                            'url'       : "/file?jsonp=?",
+                            'data'      : params,
+                            'dataType'  : 'json',
+                            'success'   : function(data){
+                                fileDiv.find('.loading').remove();
+                                var tableDiv = $('<div class="file-data"><table></table></div>').appendTo(fileDiv).find('table:first');
+                                var header = data['header'];
+                                tableDiv.append('<tr class="title"><td colspan="2">File Header</td></tr>');
+                                loopHeader(header, tableDiv);
+                                
+                                for (var num = 0; data['images'] && num < data['images'].length; ++num)
+                                {
+                                    var image = data['images'][num];
+                                    header = image['header'];
+                                    tableDiv.append('<tr class="title"><td colspan="2">Image Subheader #' + (num + 1) + '</td></tr>');
+                                    loopHeader(header, tableDiv);
+                                }
+                                for (var num = 0; data['graphics'] && num < data['graphics'].length; ++num)
+                                {
+                                    var graphic = data['graphics'][num];
+                                    header = graphic['header'];
+                                    tableDiv.append('<tr class="title"><td colspan="2">Graphic Subheader #' + (num + 1) + '</td></tr>');
+                                    loopHeader(header, tableDiv);
+                                }
+                                for (var num = 0; data['texts'] && num < data['texts'].length; ++num)
+                                {
+                                    var text = data['texts'][num];
+                                    header = text['header'];
+                                    tableDiv.append('<tr class="title"><td colspan="2">Text Subheader #' + (num + 1) + '</td></tr>');
+                                    loopHeader(header, tableDiv);
+                                }
+                                for (var num = 0; data['des'] && num < data['des'].length; ++num)
+                                {
+                                    var des = data['des'][num];
+                                    header = des['header'];
+                                    tableDiv.append('<tr class="title"><td colspan="2">DES Subheader #' + (num + 1) + '</td></tr>');
+                                    loopHeader(header, tableDiv);
+                                }
+                            }
+                        });
+                    };
+                    fileDiv.find('.loading').remove().end().append('<div class="loading"><img src="/static/loading.gif" alt="Loading"/></div>');
+                    runIt();
+                }
+                else
+                {
+                    fileData.toggle();
+                }
+                return false;
+            }).hover(function (){
+                $(this).addClass("hover");
+            },function () {
+                $(this).removeClass("hover");
+            });
+            
+            $('#showall').click(function(e){
+                $('.file-title').click();
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="page-container">
+    <div id="header">
+        <table><tr><td width="10%"><img style="width: 188px; height: 36px;" src="/static/NITRO.png" alt="NITRO"/></td>
+        <td>NITF Browser</td></tr></table>
+    </div>
+    <div id="content">
+        <table width="100%"><tr valign="top">
+        <td width="20%">
+        <div class="content">
+        <div class="header">Directories</div>
+        %for (d, names) in files:
+            <div class="dir-link"><a href="#${d or '.'}">${d or '.'}</a></div>
+        %endfor
+        ##<div class="dir-link"><a id="showall" href="#">Show All</a></div>
+        </div>
+        </td><td>
+        <div class="content">
+        %for (d, names) in files:
+        <div class="dir">
+            <div class="dir-title header" id="${d or '.'}">${d or '.'}</div>
+            %for i, name in enumerate(names):
+            <% titleClass = i % 2 == 0 and "even" or "odd" %>
+            <div class="file">
+                <div class="file-title ${titleClass}"><a href="#" rel="${i}">${name}</a></div>
+            </div>
+            %endfor
+        </div>
+        %endfor
+        </div>
+        </div>
+        </td></tr></table>
+    </div>
+    <div id="footer">
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+image: continuumio/anaconda3:5.0.1
+
+before_script:
+  - python -V                                   # Print out python version for debugging
+  - echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
+  - sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
+  - apt-get -o Acquire::Check-Valid-Until=false update
+  - apt-get install -y build-essential
+  - pip install cython Deprecated==1.1
+
+run:
+  tags:
+  - docker
+  script:
+  - python waf configure --prefix=install --enable-debugging
+  - python waf build
+  - python waf install
+  - (cd modules/python/cython; python setup.py bdist_wheel)
+  artifacts:
+    paths:
+    - install/*
+    - modules/python/cython/dist/*.whl

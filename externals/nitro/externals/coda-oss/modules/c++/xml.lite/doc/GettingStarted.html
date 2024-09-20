@@ -1,0 +1,416 @@
+<html>
+<head>
+<title>Getting Started With XML and xml.lite</title>
+</head>
+<body>
+<h1 align=center>Getting Started With XML and xml.lite</h1>
+<hr></hr>
+
+<h2>Abstract</h2>
+
+<p>
+This article teaches you how to use the XML utilities provided in
+<b>xml.lite</b> and offers insight into choosing the right implementations 
+for you.  It assumes that you have little experience using XML, but you
+are familiar with the basics of it (on paper), and it guides you from there.
+</p>
+
+<h2>Seeing XML for the First Time</h2>
+
+<p>
+Realistically, you may never have seen XML, or you may not be very familiar
+with XML documents.  This article focuses on the toolkit API for using
+XML, not on the structure of XML.  If you need a quick briefing on what XML
+is and how its used, consult any or all of the links below:
+
+  ...
+</p>
+
+<h3>DOM vs. SAX</h3>
+
+<p>Frequent XML users will be familiar with the difference between DOM and
+SAX parser, and may wish to move on.  <b>xml.lite</b> provides nearly the 
+entire SAX2 (namespace enabled) specification, and the <i>important</i> 
+basic DOM structures.  As we explore the differences, you will
+come to have an understanding of which type of parsing is right for you.</p>
+
+<p>
+As implied by the name, <b>xml.lite</b> subscribes to the notion that
+programming XML should be as trivial as possible.  The implementation follows
+that of PyXML with its "sax driver" approach, as well as the perl and php
+implementations.  In other words, we build a simple DOM tree using an
+underlying SAX parser (we call it a driver).  SAX is an Acronym for Simple
+API for XML.  What it really means, though, is "event-driven" parser.  SAX
+is based on the notion of callbacks, and every time that it picks up some
+data from an XML document, it calls up some functions.  Briefly, these
+functions are associated with:
+  <ol>
+    <li>Beginning tags and attributes</li>
+    <li>Ending tag</li>
+    <li>Character data</li>
+    <li>Namespace mappings</li>
+    <li>DTD handlers</li>
+    <li>Comments</li>
+  </ol>
+
+Note that in the current implementations, DTDs are not supported by 
+xml.lite's sax driver.  This will be updated soon, however, we strongly
+favor XMLSchemas instead of DTDs which are nearing deprecation.
+SAX is much faster and leaner that DOM for loading, but content must
+be handled by the user.  In other words, a developer must inherit the
+SAX ContentHandler class and describe what to do with the inputs.  This
+works well on simple XML structures but it is tedious for complex ones.
+For almost all uses, I recommend the DOM model instead.
+</p>
+
+<p>DOM is an acronynm for Document Object Model.  What this means is that
+it builds an image of the document as a tree in memory.  This can lead to
+a much larger memory footprint, which may make it undesirable for larger
+programs with strict memory constraints (the author has found that, in
+practice, this is rarely the case).</p>
+
+</body>
+
+
+
+
+
+<h2>Your first XML processing</h2>
+
+The code snippet below simply reads an XML document into a tree, and prints 
+the tree to the command line:
+
+
+
+<pre>
+   io::StandardOutStream out;
+   xml::lite::MinidomParser p;
+   p.parse( io::FileInputStream( "myfile.xml" );
+   xml::lite::Element* root = p->getDocument()->getRootElement();   
+   root->print(out);
+</pre>
+
+
+We could even use a URL, which often contain XML.  For instance, if you
+have an xhtml document, point your parse() method at it instead:
+
+<pre>
+   p.parse( net::http::URLInputStream( "http://sei1.erim-int.com/blah/index.xhtml" );
+</pre>
+
+<h2>Manipulating Elements</h2>
+Now say that we want to print our element information, but only if
+the tag is named &lt;print&gt;.
+
+e.g.,
+
+<pre>
+&lt;ex&gt;
+  &lt;print&gt;Hello World.&lt;/print&gt;
+  &lt;code&gt;
+  &lt;c&gt;printf("Hello World.\n");&lt;/c&gt;
+  &lt;perl&gt;print "Hello World.\n";&lt;/perl&gt;
+  &lt;php&gt;echo "Hello World.\n";&lt;/php&gt;
+  &lt;java&gt;System.out.println("Hello World.");&lt;/java&gt;
+  &lt;/code&gt;
+  &lt;print&gt;Goodbye Cruel World.&lt;/print&gt;
+&lt;/ex&gt;
+</pre>
+
+We can easily print only that information, very simply:
+
+<pre>
+xml::lite::MinidomParser p;
+p.parse( file );
+xml::lite::Element* root = p->getDocument()->getRootElement();
+std::vector&lt;Element*&gt; elements;
+// This will return two elements
+root->getElementsByTagName( "print", elements);
+for (int i = 0; i < elements.size(); i++)
+{
+   cout << elements[i].getCharacterData() << endl;
+}
+
+</pre>
+
+This will print:
+
+<pre>
+Hello World.
+Goodbye Cruel World.
+</pre>
+
+Now let's say that we want to get the code section, determine if
+there is a language that the user requested, and print the 
+program code for Hello World from it.
+
+<ol>
+   <li>User starts our program with the input language</li>
+   <li>We search for that language in the above file</li>
+   <ul>
+   <li>If it does not exist, we report that we couldnt find it</li>
+   <li>If it does, we retrieve it and print the code for it to standard out</li>
+   </ul>
+</ol>
+
+
+<pre>
+
+
+#include &lt;import/except.h&gt;
+#include &lt;import/sys.h&gt;
+#include &lt;import/io.h&gt;
+#include &lt;import/xml/lite.h&gt;
+using namespace except;
+using namespace sys;
+using namespace io;
+using namespace xml::lite;
+
+using namespace std;
+
+int main(int argc, char **argv)
+{
+  try
+  {
+     if (argc != 2)
+     {
+         die_printf("Usage: hello_world <language>\n");
+     }
+     MinidomParser p;
+     p.parse("langdb.xml");
+
+     Element* root = p.getDocument()->getRootElement();
+     if (! root->hasElement("code")
+        __raise__(NoSuchKeyException( "code" );
+     
+     std::vector&lt;Element*&gt; e;
+     
+     root->getElementsByTagName( "code", e);
+     
+     // We will only read the first element named code under 'ex'
+     if (! e[0]->hasElement( argv[1] ); // The language doesnt exist
+         cout &lt;&lt; "No such language in the database.  Sorry..." &lt;&lt; endl;
+
+     else 
+     {
+         Element* theLanguage = e[0]->getElementsByTagName( argv[1] );
+	 cout <<	 theLanguage->getCharacterData() << endl;
+
+     } 
+
+  }
+  catch (Error& e)
+  {
+     cerr &lt;&lt; "Caught error: " &lt;&lt; e.getMessage() &lt;&lt; endl;
+  }
+  catch (Exception& x)
+  {
+     cerr &lt;&lt; "Caught exception: " &lt;&lt; x.getMessage() &lt;&lt; endl;
+  }
+  catch (...)
+  {
+     cerr &lt;&lt; "Caught unnamed exception" &lt;&lt; endl;
+  }
+  return 0;
+}
+</pre>
+
+<h2>Trimming hedges</h2>
+
+
+Say I have grow disillusioned with my disillusionment, and I wish to 
+remove my "Cruel World" statement.
+
+I could change it like so:
+
+<pre>
+   root->getElementsByTagName("print", e);
+   // Remember that e[1] contains the second print, and e[0] is hello world
+   e[1]->setCharacterData("Goodbye World");
+</pre>
+
+That will change the value within the tree.  Simple enough; but what if I
+think its not only obnoxious, but its distracting the above program's functionality.  After all, I dont have any code example, and it wouldnt be any
+different from the 'hello world' code anyway.  
+
+
+
+<h3>Tangent: Who owns what</h3>
+If you are using a MinidomParser, you must understand that <i>IT</i>
+owns the tree elements, not you.  This differs from auto_ptr based systems,
+etc.  This prevents multiple copies from being explicitly created.  When
+you use an accessor and retrieve node, you must not delete it using delete.
+Use the tree's remove() method to drop nodes.
+
+<p>Ok, Let's just get rid of it:
+
+
+<pre>
+   // Lets remove it and all sub-components from the tree.
+   Document* doc =   p.getDocument();
+   Element* root =   doc->getRootElement();
+   ...
+   doc->remove(e[1]);
+   
+   // Can't use e[1] anymore, it is null
+   
+   // I can now prove its gone from the tree
+   root->print();
+
+</pre>
+
+<h2>What is an XMLSchema?</h2>
+
+<p>A schema is a way of organizing and validating data in XML.
+It is very complicated and very irritating, but the service
+that it provides is absolutely necessary.</p>
+
+<p>The general idea with XMLSchema is that you use an XML document to
+'validate' another XML document.  You then use a special meta-document
+for that meta-document, developed by the W3C committee to create your
+meta-document, or schema.  Sounds confusing?  It is, but the good news
+is that most of you wont need to worry about schemas for now.  Just know
+that they are out there.  However, if you want to know more, check out the 
+<a href="http://www.w3.org/XML/Schema.html">XML Schema documentation</a>
+for more information</p>
+
+
+
+<h2>Tags, Namespaces and QNames</h2>
+
+<p>When SAX came out, there were no namespaces in XML.  This made everything
+really simple.  Everyone knew that you couldnt name two tags the same thing,
+and, though cumbersome, folks accepted that.  XML soon become a standard
+for processing data, which meant that large chunks of data had to be transferred
+around.  Obviously, when referencing (including) other documents all over 
+an already large XML document, the chances of naming conflicts grow substantially.  The XML gods became worried, and made a recommendation for <a href="http://www.w3.org/TR/REC-xml-names/">namespaces in XML document</a>.  In the beginning,
+nobody supported namespaces, and, well, nobody used them either.
+
+<p>When XMLSchema (see xs documentation), 
+and later SOAP (see xml.soap documentation) came out, developers started
+scrambling to support namespaces, and interfaces once noted for their simplicity (ok, DOM never was simple, but remember that for SAX, simple is in the name),
+became much uglier.  Briefly, the way that namespaces are handled in XML is
+as follows:
+   <ol>
+     <li>Tags come in two parts, the local name and the prefix.
+     This is called a <i>QName</i></li>
+     <li>Each QName has an associated uri that is a real document
+     describing the types declared in that QName</li>
+     <li>QNames go out of scope when the tag bearing the uri declaration
+     is popped off of the stack.</li>  
+   </ol>
+</p>
+
+<p>Simply put, here is the anatomy of a tag:
+
+<pre>
+&lt;<i>prefix</i>:<b>localName</b>&gt;
+</pre>
+where prefix was mapped to a real live uri in such a manner:
+
+<pre>
+&lt;sometag xmlns:prefix="uri"&gt;
+</pre>
+
+and uri is a site containg a declaration of the type of localName,
+using XMLSchema.  The good news is, once again, you probably wont need
+this for basic XML processing for quite some time (unless you are
+using XML/SOAP).
+
+<h2>What About Attributes?</h2>
+
+<p>Attributes are key-value pairs that are allowed to follow a tag.
+They appear immediately following the tag, and they are stored as
+essentially a list.  Attributes also may have namespaces from or until
+the tag which declares that namespace goes out of scope.  This is
+frustrating for many programmers, who will likely choose to forget namespaces
+altogether, but for substantial applications, this support is necessary.
+For better or for worse, I chose to implement
+the SAX2 API here, instead of a more C++-tuned approach (with maybe an Attributes object implemented as an STL vector instead. The internal storage, for the record, is currently a std::vector&lt; xml::lite::AttributeNode &gt;.
+This is a more consistant approach with other languages and the SAX spec, and 
+therefore I chose it over some slicker counterpart.
+</p>
+
+
+<pre>
+   // xml::lite::Element* e = some node;
+   xml::lite::Attributes attrs;
+   e->getAttributes( attrs );
+   for (int i = 0; i &lt; attrs.getLength(); i++)
+   {
+       cout &lt;&lt; "Key: " &lt;&lt; attrs.getLocalName( i ) &lt;&lt; endl;;
+       cout &lt;&lt; "Value: " &lt;&lt; attrs.getValue( i ) &lt;&lt; endl;;
+   } 
+
+</pre>
+
+
+<h2>Using SAX: Simple Example</h2>
+Let's say that all I want to do is print this document in color coding.
+Maybe I have a syntax highlighting screen API like curses, or maybe the
+result goes to a editor:
+
+<pre>
+
+class SmartPrint : public xml::lite::ContentHandler
+{
+public:
+  SmartPrint(MyXMLDisplay* display) : mDisplay(display) {}
+  ~SmartPrint() {}
+  
+  void startElement( const std::string& uri, 
+                     const std::string& localName,
+                     const std::string& qname,
+                     const xml::lite::Attributes& attr )
+  {
+      mDisplay->beginTagInColor( qname, attr );
+      crossRef( uri );      
+  }
+  void endElement( const std::string& uri, 
+                   const std::string& localName,
+                   const std::string& qname )
+  {
+      mDisplay->endTagInColor( qname );
+      
+  }
+
+  void characters( const char* data, int length)
+  {
+      mDisplay->charDataInColor( data, length );
+  } 
+private:
+  MyXMLDisplay* mDisplay;
+  ...
+};
+
+</pre>
+
+To bind this code to our SAX reader, we can set the content handler:
+
+<pre>
+
+// Probably X for Unix and Win32 for Windows, but could be console
+MyXMLDisplay* display = MyXMLDisplayFactory::createDisplay();
+
+XMLReader reader;
+
+reader.setContentHandler( new SmartPrint( display ) );
+
+// This shows the code in the display area
+reader.parse( document );
+
+</pre>
+
+<h2>SAX is Complicated but Powerful</h2>
+
+<p>Because xml.lite's SAX2 interface is very similar to the
+original, you may refer to the <a href="http://www.saxproject.org/">SAX2 specification</a>for more
+details on how to implement SAX code.  The code should be similar
+or identical across systems, libraries, and even languages.  Actually, the
+same is true for DOM, both were designed for a common API.  SAX is actually
+a Java specification, but it was so popular that it has a binding in
+many languages now.
+
+</html>
+
+

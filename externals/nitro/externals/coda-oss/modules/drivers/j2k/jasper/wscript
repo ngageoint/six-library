@@ -1,0 +1,138 @@
+import os, sys
+from os.path import join, exists
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
+
+SOURCE          = 'jasper-1.900.1-mod'
+
+options = lambda x : None
+
+def configure(conf):
+
+    j2kLayer = Options.options.j2k_layer
+
+    if j2kLayer == 'jasper' :
+        # NOTE: JasPer will compile in 64-bit mode, but it internally uses
+        #       32-bit integers for some offsets.  To prevent confusion/badness,
+        #       just don't allow it for a 64-bit build.
+        if conf.env['IS64BIT'] :
+            conf.msg('JPEG2000 library', 'jasper not available on 64-bit architectures', color='YELLOW')
+            return
+        
+        # callback function to check for all #defines used by the jasper module
+        def jas_callback(conf):
+            # check functionality
+            conf.check_cc(header_name="sys/types.h", define_name='HAVE_SYS_TYPES_H')
+            conf.check_cc(type_name='uchar', header_name='sys/types.h', mandatory=False)
+            conf.check_cc(type_name='ushort', header_name='sys/types.h', mandatory=False)
+            conf.check_cc(type_name='longlong', header_name='sys/types.h', mandatory=False)
+            conf.check_cc(type_name='ulonglong', header_name='sys/types.h', mandatory=False)
+            
+            conf.define('PACKAGE', 'jasper')
+            conf.define('PACKAGE_NAME', 'jasper')
+            conf.define('JAS_VERSION', '1.900.1')
+            conf.define('PACKAGE_STRING', 'jasper 1.900.1')
+            conf.define('PACKAGE_VERSION', '1.900.1')
+            conf.define('PACKAGE_TARNAME', 'jasper')
+            conf.define('VERSION', '1.900.1')
+
+        # check for the source tarball
+        # TODO: I believe this file has some local mods and is not exactly
+        #       the vanilla tarball - need to confirm
+        if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
+            conf.fatal('Missing JasPer tarfile')
+
+        # setup env
+        conf.env['MAKE_JASPER'] = True
+        conf.env['MAKE_J2K']    = True
+        conf.env['HAVE_J2K']    = True
+        conf.msg('Building local lib', j2kLayer)
+        untarFile(path=conf.path, fname=SOURCE + '.tar')
+        
+        jasperNode = bld.path.make_node(join(SOURCE, 'include', 'jasper'))
+        writeConfig(conf, jas_callback, 'jas',  infile=None, outfile='jas_config.h',
+                    path=jasperNode, feature='makeHeader')
+        
+def build(bld):
+    env = bld.get_env()
+
+    # check it again just in case
+    if 'MAKE_JASPER' in env :        
+        jasperDefs = []
+        if Options.platform.startswith('win'):
+            jasperDefs.append('JAS_WIN_MSVC_BUILD')
+
+        includes = 'bmp include jp2 jpc jpg mif pgx pnm ras'.split()
+        sources = (
+            'bmp/bmp_cod.c',
+            'bmp/bmp_dec.c',
+            'bmp/bmp_enc.c',
+            'base/jas_cm.c',
+            'base/jas_debug.c',
+            'base/jas_getopt.c',
+            'base/jas_icc.c',
+            'base/jas_iccdata.c',
+            'base/jas_image.c',
+            'base/jas_init.c',
+            'base/jas_malloc.c',
+            'base/jas_seq.c',
+            'base/jas_stream.c',
+            'base/jas_string.c',
+            'base/jas_tmr.c',
+            'base/jas_tvp.c',
+            'base/jas_version.c',
+            'jp2/jp2_cod.c',
+            'jp2/jp2_dec.c',
+            'jp2/jp2_enc.c',
+            'jpc/jpc_bs.c',
+            'jpc/jpc_cs.c',
+            'jpc/jpc_dec.c',
+            'jpc/jpc_enc.c',
+            'jpc/jpc_math.c',
+            'jpc/jpc_mct.c',
+            'jpc/jpc_mqcod.c',
+            'jpc/jpc_mqdec.c',
+            'jpc/jpc_mqenc.c',
+            'jpc/jpc_qmfb.c',
+            'jpc/jpc_t1cod.c',
+            'jpc/jpc_t1dec.c',
+            'jpc/jpc_t1enc.c',
+            'jpc/jpc_t2cod.c',
+            'jpc/jpc_t2dec.c',
+            'jpc/jpc_t2enc.c',
+            'jpc/jpc_tagtree.c',
+            'jpc/jpc_tsfb.c',
+            'jpc/jpc_util.c',
+            'jpg/jpg_dummy.c',
+            'jpg/jpg_val.c',
+            'mif/mif_cod.c',
+            'pgx/pgx_cod.c',
+            'pgx/pgx_dec.c',
+            'pgx/pgx_enc.c',
+            'pnm/pnm_cod.c',
+            'pnm/pnm_dec.c',
+            'pnm/pnm_enc.c',
+            'ras/ras_cod.c',
+            'ras/ras_dec.c',
+            'ras/ras_enc.c',
+        )
+
+        jasper = bld(features='c cstlib add_targets', includes=includes,
+                     source=sources,
+                     target='jasper',
+                     name='J2K',
+                     export_includes='include',
+                     defines=env['DEFINES'] + jasperDefs,
+                     targets_to_add='config_h',
+                     env=env.derive(),
+                     path=bld.path.make_node(SOURCE))
+
+        # install lib
+        if env['install_libs']:
+            jasper.install_path = env['install_libdir']
+        
+        # TODO: install headers
+
+def distclean(context):
+    pass

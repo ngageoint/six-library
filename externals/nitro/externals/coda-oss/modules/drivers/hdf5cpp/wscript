@@ -1,0 +1,9 @@
+NAME            = 'hdf5cpp'
+VERSION         = '1.14.2'
+MODULE_DEPS     = 'hdf5'
+USELIB_LOCAL    = 'hdf5-c'
+
+distclean = options = configure = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
