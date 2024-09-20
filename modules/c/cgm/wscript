@@ -1,0 +1,36 @@
+import os
+from waflib import Options
+
+NAME            = 'cgm'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+MODULE_DEPS     = 'nitf nrt'
+LANG            = 'c'
+DEFINES         = 'NITF_MODULE_EXPORTS'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    modArgs = globals()
+    modArgs['VERSION'] = bld.env['VERSION']
+    env = bld.module(**modArgs)
+
+    #run doxygen
+    if 'DOXYGEN' in env and Options.is_install:
+        bld(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
+        try:
+            htmlDocs = bld.path.find_dir('doc/html')
+            for f in htmlDocs.find_iter():
+                relpath = f.path_from(htmlDocs)
+                bld.install_files('${PREFIX}/share/doc/nitf-cgm/c/%s' % relpath, f.abspath())
+        except:{}
+
+    # Convenience target
+    # We do this mainly so that from the top-level wscript we can choose what to build
+    if not Options.options.libs_only:
+        tests = bld.path.ant_glob(os.path.join('tests', '*.c'))
+        test_targets = []
+        for test in tests:
+            test_targets.append(os.path.splitext(str(test))[0])
+    
+        bld(features='add_targets', target='cgm-c-tests',
+            targets_to_add=test_targets)

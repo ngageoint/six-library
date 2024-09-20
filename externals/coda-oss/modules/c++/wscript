@@ -1,0 +1,22 @@
+import os
+
+
+def options(opt):
+    opt.recurse()
+
+
+def configure(conf):
+    conf.env.append_value('INCLUDES_UNITTEST',
+                          os.path.join(conf.path.abspath(), 'include'))
+    conf.recurse()
+
+
+def build(bld):
+    bld.recurse()
+    testHeader = bld.path.make_node('include/TestCase.h')
+    bld.install_files(dest=bld.env['install_includedir'],
+                      files=testHeader)
+
+
+def distclean(context):
+    context.recurse()
