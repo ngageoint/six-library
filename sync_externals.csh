@@ -21,7 +21,9 @@ git remote add -m main -f nitro_remote git@github.com:mdaus/nitro.git
 git subtree pull --prefix externals/coda-oss coda-oss_remote main --squash
 
 git subtree pull --prefix externals/nitro nitro_remote main --squash
-git rm -rf externals/nitro/externals
+# git is smart, so we only have to do this once and then future subtree pulls will never
+# pull these in
+# git rm -rf externals/nitro/externals
 
 # If when you do this command you git a merge conflict because a file that has been removed here has been updated in CODA-OSS, you just need to do a 'git rm <pathname>' to resolve the merge conflict.  Then a 'git commit'.
 # TODO: Make this script smart enough to do this.
