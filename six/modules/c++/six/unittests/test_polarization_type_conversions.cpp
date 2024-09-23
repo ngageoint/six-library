@@ -97,7 +97,7 @@ TEST_CASE(ToType)
     test_toType<six::PolarizationType>(testName, 12);
 
     test_toType_<six::PolarizationSequenceType>(testName, "X", six::PolarizationSequenceType::X);  // SICD 1.3
-    test_toType_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE); 
+    test_toType_<six::PolarizationSequenceType>(testName, "SEQUENCE", six::PolarizationSequenceType::SEQUENCE);
     test_toType<six::PolarizationSequenceType>(testName, 13);
 }
 
