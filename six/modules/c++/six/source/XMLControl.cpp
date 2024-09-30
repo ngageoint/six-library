@@ -196,6 +196,67 @@ static void validate_(const xml::lite::Element& rootElement,
     // Process schema paths one at a time.  This will reduce the "noise" from XML validation failures
     // and could also make instantiating an xml::lite::ValidatorXerces faster.
     std::vector<xml::lite::ValidationInfo> all_errors;
+
+    // deduplicate the schema list
+    auto comp = [](const coda_oss::filesystem::path& x, const coda_oss::filesystem::path& y) {
+        return x.string() < y.string();
+    };
+    std::set<coda_oss::filesystem::path, decltype(comp)> uniq(foundSchemas.begin(), foundSchemas.end(), comp);
+    std::vector<coda_oss::filesystem::path> uniq_schemas(uniq.begin(), uniq.end());
+
+    // std::cout << spec << std::endl;
+    // std::cout << version << std::endl;
+
+    // Remove schema paths whose filename component do not match the spec or version
+    auto spec_version_filter = [spec, version](const coda_oss::filesystem::path& x) {
+        auto x2 = x.filename().string();
+        return x2.find(spec) == std::string::npos ||
+            x2.find(version) == std::string::npos;
+    };
+    typename decltype(uniq_schemas)::iterator inapplicable_schemas =
+        std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), spec_version_filter);
+
+    uniq_schemas.erase(inapplicable_schemas, uniq_schemas.end());
+
+    // detect SIDD with us:gov:ic:ism:201609 and pick the correct schema
+    if (spec == "SIDD")
+    {
+        const std::string needle("201609");
+        decltype(strPrettyXml) needle8(str::u8FromNative(needle));
+
+        typename decltype(uniq_schemas)::iterator hitlist;
+        if (strPrettyXml.find(needle8) != std::string::npos) {
+            // Doc is 201609, remove competing schemas
+            hitlist = std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), [needle](coda_oss::filesystem::path &x)
+            {
+                return x.string().find(needle) == std::string::npos;
+            });
+        } else {
+            // Doc is *not* 201609, remove any refs to 201609
+            hitlist = std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), [needle](coda_oss::filesystem::path &x)
+            {
+                return x.string().find(needle) != std::string::npos;
+            });
+        }
+
+        uniq_schemas.erase(hitlist, uniq_schemas.end());
+    }
+
+    const xml::lite::ValidatorXerces validator(uniq_schemas, &log);
+
+    // validate against any specified schemas
+    std::vector<xml::lite::ValidationInfo> errors;
+    validator.validate(strPrettyXml, uri.value, errors);
+
+    // Looks like we validated; be sure there aren't any errors
+    if (errors.empty())
+    {
+        return; // success!
+    }
+
+    // This schema path failed; save away my errors in case none of them work
+    all_errors.insert(all_errors.end(), errors.begin(), errors.end());
+/*
     for (auto&& foundSchema : foundSchemas)
     {
         const std::vector<coda_oss::filesystem::path> foundSchemas_{ { foundSchema } };
@@ -214,9 +275,9 @@ static void validate_(const xml::lite::Element& rootElement,
         // This schema path failed; save away my errors in case none of them work
         all_errors.insert(all_errors.end(), errors.begin(), errors.end());
     }
-
+*/
     // log any error found and throw
-    log_any_errors_and_throw(all_errors, foundSchemas, log);
+    log_any_errors_and_throw(all_errors, uniq_schemas, log);
 }
 
 static void validate_(const xml::lite::Document& doc,
