@@ -200,10 +200,8 @@ TEST_CASE(test_read_sidd300_v13_xml)
 
 TEST_CASE(test_read_pathological00_xml)
 {
-    // test_read_sidd_xml(testName, "pathological00.xml");
-
     const auto schemaPaths = getSchemaPaths();
-    test_read_sidd_xml(testName, "pathological00.xml", &schemaPaths);
+    TEST_SPECIFIC_EXCEPTION(test_read_sidd_xml(testName, "pathological00.xml", &schemaPaths), six::DESValidationException);
 }
 
 TEST_MAIN(
