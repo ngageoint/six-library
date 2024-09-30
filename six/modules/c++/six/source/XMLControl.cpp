@@ -182,6 +182,7 @@ static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
 static void validate_(const xml::lite::Element& rootElement,
+    const std::string& spec, const std::string& version,
     const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
 {
     xml::lite::Uri uri;
@@ -219,6 +220,7 @@ static void validate_(const xml::lite::Element& rootElement,
 }
 
 static void validate_(const xml::lite::Document& doc,
+    const std::string& spec, const std::string& version,
     const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
 {
     auto rootElement = doc.getRootElement();
@@ -228,7 +230,7 @@ static void validate_(const xml::lite::Document& doc,
     }
 
     // validate against any specified schemas
-    validate_(*rootElement, foundSchemas, log);
+    validate_(*rootElement, spec, version, foundSchemas, log);
 }
 
 static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::string>&, logging::Logger*);
@@ -245,7 +247,13 @@ void XMLControl::validate(const xml::lite::Document* doc,
 
     // validate against any specified schemas
     const auto foundSchemas = findValidSchemaPaths(schemaPaths, log); // If the paths we have don't exist, throw
-    validate_(*doc, foundSchemas, *log);
+
+    // guarantees conditional below will succeed
+    std::string version = getVersionFromURI(doc);
+    const auto uri = doc->getRootElement()->getUri();
+    const std::string spec(str::startsWith(uri, "urn:SICD:") ? "SICD" : "SIDD");
+
+    validate_(*doc, spec, version, foundSchemas, *log);
 }
 void XMLControl::validate(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths,
@@ -256,7 +264,13 @@ void XMLControl::validate(const xml::lite::Document& doc,
 
     // validate against any specified schemas
     const auto foundSchemas = findValidSchemaPaths(pSchemaPaths, log);
-    validate_(doc, foundSchemas, *log);
+
+    // guarantees conditional below will succeed
+    std::string version = getVersionFromURI(doc);
+    const auto uri = doc.getRootElement()->getUri();
+    const std::string spec(str::startsWith(uri, "urn:SICD:") ? "SICD" : "SIDD");
+
+    validate_(doc, spec, version, foundSchemas, *log);
 }
 
 static auto findValidSchemas(const std::vector<std::filesystem::path>& paths_)
