@@ -190,6 +190,7 @@ class SIX_SIX_API XMLControl
     static std::string getDefaultURI(const Data& data);
 
     static std::string getVersionFromURI(const xml::lite::Document* doc);
+    static std::string getVersionFromURI(const xml::lite::Document& doc);
 
     static void getVersionFromURI(const xml::lite::Document* doc,
                                   std::vector<std::string>& version);
