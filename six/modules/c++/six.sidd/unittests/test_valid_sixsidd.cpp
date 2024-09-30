@@ -198,6 +198,14 @@ TEST_CASE(test_read_sidd300_v13_xml)
     test_read_sidd_xml(testName, "sidd300_ISM-v13.xml");
 }
 
+TEST_CASE(test_read_pathological00_xml)
+{
+    // test_read_sidd_xml(testName, "pathological00.xml");
+
+    const auto schemaPaths = getSchemaPaths();
+    test_read_sidd_xml(testName, "pathological00.xml", &schemaPaths);
+}
+
 TEST_MAIN(
     TEST_CHECK(test_createFakeDerivedData);
     TEST_CHECK(test_createFakeDerivedData_validate);
@@ -205,4 +213,5 @@ TEST_MAIN(
     TEST_CHECK(test_read_sidd200_xml);
     TEST_CHECK(test_read_sidd300_xml);
     TEST_CHECK(test_read_sidd300_v13_xml);
+    TEST_CHECK(test_read_pathological00_xml);
     )
