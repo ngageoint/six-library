@@ -200,9 +200,6 @@ static void validate_(const xml::lite::Element& rootElement,
     std::set<coda_oss::filesystem::path, decltype(comp)> uniq(foundSchemas.begin(), foundSchemas.end(), comp);
     std::vector<coda_oss::filesystem::path> uniq_schemas(uniq.begin(), uniq.end());
 
-    // std::cout << spec << std::endl;
-    // std::cout << version << std::endl;
-
     // Remove schema paths whose filename component do not match the spec or version
     auto spec_version_filter = [spec, version](const coda_oss::filesystem::path& x) {
         auto x2 = x.filename().string();
