@@ -256,26 +256,7 @@ static void validate_(const xml::lite::Element& rootElement,
 
     // This schema path failed; save away my errors in case none of them work
     all_errors.insert(all_errors.end(), errors.begin(), errors.end());
-/*
-    for (auto&& foundSchema : foundSchemas)
-    {
-        const std::vector<coda_oss::filesystem::path> foundSchemas_{ { foundSchema } };
-        const xml::lite::ValidatorXerces validator(foundSchemas_, &log);
 
-        // validate against any specified schemas
-        std::vector<xml::lite::ValidationInfo> errors;
-        validator.validate(strPrettyXml, uri.value, errors);
-
-        // Looks like we validated; be sure there aren't any errors
-        if (errors.empty())
-        {
-            return; // success!
-        }
-
-        // This schema path failed; save away my errors in case none of them work
-        all_errors.insert(all_errors.end(), errors.begin(), errors.end());
-    }
-*/
     // log any error found and throw
     log_any_errors_and_throw(all_errors, uniq_schemas, log);
 }
