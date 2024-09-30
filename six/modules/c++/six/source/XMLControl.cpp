@@ -193,10 +193,6 @@ static void validate_(const xml::lite::Element& rootElement,
     rootElement.prettyPrint(xmlStream);
     const auto strPrettyXml = xmlStream.stream().str();
 
-    // Process schema paths one at a time.  This will reduce the "noise" from XML validation failures
-    // and could also make instantiating an xml::lite::ValidatorXerces faster.
-    std::vector<xml::lite::ValidationInfo> all_errors;
-
     // deduplicate the schema list
     auto comp = [](const coda_oss::filesystem::path& x, const coda_oss::filesystem::path& y) {
         return x.string() < y.string();
@@ -254,11 +250,8 @@ static void validate_(const xml::lite::Element& rootElement,
         return; // success!
     }
 
-    // This schema path failed; save away my errors in case none of them work
-    all_errors.insert(all_errors.end(), errors.begin(), errors.end());
-
     // log any error found and throw
-    log_any_errors_and_throw(all_errors, uniq_schemas, log);
+    log_any_errors_and_throw(errors, uniq_schemas, log);
 }
 
 static void validate_(const xml::lite::Document& doc,
