@@ -221,18 +221,16 @@ static void validate_(const xml::lite::Element& rootElement,
         decltype(strPrettyXml) needle8(str::u8FromNative(needle));
 
         typename decltype(uniq_schemas)::iterator hitlist;
+        auto has_needle = [needle](coda_oss::filesystem::path &x) {
+            return x.string().find(needle) != std::string::npos;
+        };
         if (strPrettyXml.find(needle8) != std::string::npos) {
             // Doc is 201609, remove competing schemas
-            hitlist = std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), [needle](coda_oss::filesystem::path &x)
-            {
-                return x.string().find(needle) == std::string::npos;
-            });
+            auto not_has_needle = std::not1(std::function<bool(coda_oss::filesystem::path &x)>(has_needle));
+            hitlist = std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), not_has_needle);
         } else {
             // Doc is *not* 201609, remove any refs to 201609
-            hitlist = std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), [needle](coda_oss::filesystem::path &x)
-            {
-                return x.string().find(needle) != std::string::npos;
-            });
+            hitlist = std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), has_needle);
         }
 
         uniq_schemas.erase(hitlist, uniq_schemas.end());
