@@ -313,7 +313,12 @@ std::string XMLControl::getDefaultURI(const Data& data)
 std::string XMLControl::getVersionFromURI(const xml::lite::Document* doc)
 {
     assert(doc != nullptr);
-    const auto uri = doc->getRootElement()->getUri();
+    return getVersionFromURI(*doc);
+}
+
+std::string XMLControl::getVersionFromURI(const xml::lite::Document& doc)
+{
+    const auto uri = doc.getRootElement()->getUri();
     if (!(str::startsWith(uri, "urn:SICD:") ||
           str::startsWith(uri, "urn:SIDD:")))
     {
