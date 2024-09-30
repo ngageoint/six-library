@@ -243,13 +243,10 @@ static void validate_(const xml::lite::Element& rootElement,
     validator.validate(strPrettyXml, uri.value, errors);
 
     // Looks like we validated; be sure there aren't any errors
-    if (errors.empty())
+    if (! errors.empty())
     {
-        return; // success!
+        log_any_errors_and_throw(errors, uniq_schemas, log);
     }
-
-    // log any error found and throw
-    log_any_errors_and_throw(errors, uniq_schemas, log);
 }
 
 static void validate_(const xml::lite::Document& doc,
