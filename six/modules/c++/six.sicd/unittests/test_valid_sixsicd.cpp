@@ -149,9 +149,11 @@ TEST_CASE(test_read_sicd130_xml)
 struct Profiler
 {
     Profiler(const char* envVar,
-        const std::string& testName) :
+        const std::string& testName,
+        std::ostream &stream) :
       mEnvVar(envVar),
-      mTestName(testName)
+      mTestName(testName),
+      mStream(stream)
     {
         watch.start();
     }
@@ -161,17 +163,18 @@ struct Profiler
         auto elapsed = watch.stop();
         if (OS.isEnvSet(mEnvVar))
         {
-            std::cerr << mTestName << ": " << elapsed << "ms" << std::endl;
+            mStream << mTestName << ": " << elapsed << "ms" << std::endl;
         }
     }
 
     const std::string mEnvVar;
     const std::string& mTestName;
+    std::ostream& mStream;
     sys::OS OS;
     sys::RealTimeStopWatch watch;
 };
 
-#define PROFILE() Profiler profiler("SIX_PROFILE_PARSING", testName);
+#define PROFILE() Profiler profiler("SIX_PROFILE_PARSING", testName, std::cerr);
 
 TEST_CASE(test_read_sicd040_bad_xml)
 {
