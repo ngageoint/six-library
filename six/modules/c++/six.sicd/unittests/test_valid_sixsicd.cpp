@@ -146,8 +146,36 @@ TEST_CASE(test_read_sicd130_xml)
     test_read_sicd_xml(testName, "sicd130.xml");
 }
 
+struct Profiler
+{
+    Profiler(const char* envVar,
+        const std::string& testName) :
+      mEnvVar(envVar),
+      mTestName(testName)
+    {
+        watch.start();
+    }
+
+    ~Profiler()
+    {
+        auto elapsed = watch.stop();
+        if (OS.isEnvSet(mEnvVar))
+        {
+            std::cerr << mTestName << ": " << elapsed << "ms" << std::endl;
+        }
+    }
+
+    const std::string mEnvVar;
+    const std::string& mTestName;
+    sys::OS OS;
+    sys::RealTimeStopWatch watch;
+};
+
+#define PROFILE() Profiler profiler("SIX_PROFILE_PARSING", testName);
+
 TEST_CASE(test_read_sicd040_bad_xml)
 {
+    PROFILE();
     TEST_SPECIFIC_EXCEPTION(
             test_read_sicd_xml(testName, "sicd040-bad.xml"),
             six::DESValidationException);
@@ -155,6 +183,7 @@ TEST_CASE(test_read_sicd040_bad_xml)
 
 TEST_CASE(test_read_sicd041_bad_xml)
 {
+    PROFILE();
     TEST_SPECIFIC_EXCEPTION(
             test_read_sicd_xml(testName, "sicd041-bad.xml"),
             six::DESValidationException);
@@ -162,6 +191,7 @@ TEST_CASE(test_read_sicd041_bad_xml)
 
 TEST_CASE(test_read_sicd050_bad_xml)
 {
+    PROFILE();
     TEST_SPECIFIC_EXCEPTION(
             test_read_sicd_xml(testName, "sicd050-bad.xml"),
             six::DESValidationException);
@@ -169,6 +199,7 @@ TEST_CASE(test_read_sicd050_bad_xml)
 
 TEST_CASE(test_read_sicd100_bad_xml)
 {
+    PROFILE();
     TEST_SPECIFIC_EXCEPTION(
             test_read_sicd_xml(testName, "sicd100-bad.xml"),
             six::DESValidationException);
@@ -176,6 +207,7 @@ TEST_CASE(test_read_sicd100_bad_xml)
 
 TEST_CASE(test_read_sicd101_bad_xml)
 {
+    PROFILE();
     TEST_SPECIFIC_EXCEPTION(
             test_read_sicd_xml(testName, "sicd101-bad.xml"),
             six::DESValidationException);
@@ -183,6 +215,7 @@ TEST_CASE(test_read_sicd101_bad_xml)
 
 TEST_CASE(test_read_sicd110_bad_xml)
 {
+    PROFILE();
     TEST_SPECIFIC_EXCEPTION(
             test_read_sicd_xml(testName, "sicd110-bad.xml"),
             six::DESValidationException);
@@ -190,6 +223,7 @@ TEST_CASE(test_read_sicd110_bad_xml)
 
 TEST_CASE(test_read_sicd120_bad_xml)
 {
+    PROFILE();
     TEST_SPECIFIC_EXCEPTION(
             test_read_sicd_xml(testName, "sicd120-bad.xml"),
             six::DESValidationException);
@@ -197,6 +231,7 @@ TEST_CASE(test_read_sicd120_bad_xml)
 
 TEST_CASE(test_read_sicd121_bad_xml)
 {
+    PROFILE();
     TEST_SPECIFIC_EXCEPTION(
             test_read_sicd_xml(testName, "sicd121-bad.xml"),
             six::DESValidationException);
