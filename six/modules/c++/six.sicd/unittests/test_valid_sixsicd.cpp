@@ -146,8 +146,72 @@ TEST_CASE(test_read_sicd130_xml)
     test_read_sicd_xml(testName, "sicd130.xml");
 }
 
+TEST_CASE(test_read_sicd040_bad_xml)
+{
+    TEST_SPECIFIC_EXCEPTION(
+            test_read_sicd_xml(testName, "sicd040-bad.xml"),
+            six::DESValidationException);
+}
+
+TEST_CASE(test_read_sicd041_bad_xml)
+{
+    TEST_SPECIFIC_EXCEPTION(
+            test_read_sicd_xml(testName, "sicd041-bad.xml"),
+            six::DESValidationException);
+}
+
+TEST_CASE(test_read_sicd050_bad_xml)
+{
+    TEST_SPECIFIC_EXCEPTION(
+            test_read_sicd_xml(testName, "sicd050-bad.xml"),
+            six::DESValidationException);
+}
+
+TEST_CASE(test_read_sicd100_bad_xml)
+{
+    TEST_SPECIFIC_EXCEPTION(
+            test_read_sicd_xml(testName, "sicd100-bad.xml"),
+            six::DESValidationException);
+}
+
+TEST_CASE(test_read_sicd101_bad_xml)
+{
+    TEST_SPECIFIC_EXCEPTION(
+            test_read_sicd_xml(testName, "sicd101-bad.xml"),
+            six::DESValidationException);
+}
+
+TEST_CASE(test_read_sicd110_bad_xml)
+{
+    TEST_SPECIFIC_EXCEPTION(
+            test_read_sicd_xml(testName, "sicd110-bad.xml"),
+            six::DESValidationException);
+}
+
+TEST_CASE(test_read_sicd120_bad_xml)
+{
+    TEST_SPECIFIC_EXCEPTION(
+            test_read_sicd_xml(testName, "sicd120-bad.xml"),
+            six::DESValidationException);
+}
+
+TEST_CASE(test_read_sicd121_bad_xml)
+{
+    TEST_SPECIFIC_EXCEPTION(
+            test_read_sicd_xml(testName, "sicd121-bad.xml"),
+            six::DESValidationException);
+}
+
 TEST_MAIN(
     TEST_CHECK(test_createFakeComplexData);
     TEST_CHECK(test_read_sicd110_xml);
     TEST_CHECK(test_read_sicd130_xml);
+    TEST_CHECK(test_read_sicd040_bad_xml);
+    TEST_CHECK(test_read_sicd041_bad_xml);
+    TEST_CHECK(test_read_sicd050_bad_xml);
+    TEST_CHECK(test_read_sicd100_bad_xml);
+    TEST_CHECK(test_read_sicd101_bad_xml);
+    TEST_CHECK(test_read_sicd110_bad_xml);
+    TEST_CHECK(test_read_sicd120_bad_xml);
+    TEST_CHECK(test_read_sicd121_bad_xml);
     )
