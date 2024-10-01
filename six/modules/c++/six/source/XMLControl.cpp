@@ -185,6 +185,11 @@ static void validate_(const xml::lite::Element& rootElement,
     const std::string& spec, const std::string& version,
     const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
 {
+    if (foundSchemas.size() < 1)
+    {
+        return; // can't validate without a schema
+    }
+
     xml::lite::Uri uri;
     rootElement.getUri(uri);
 
