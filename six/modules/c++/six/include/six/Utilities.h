@@ -399,6 +399,64 @@ namespace testing
         sys::RealTimeStopWatch mStopWatch;
     };
 
+    template <typename TFunc>
+    struct SIX_SIX_API EnvProfiler
+    {
+        EnvProfiler(const char* envVar,
+            const std::string& testName,
+            std::ostream &stream)
+            : mEnvVar(envVar),
+            mTestName(testName),
+            mStream(stream)
+        {
+            sys::OS os;
+            mEnabled = os.isEnvSet(mEnvVar);
+            mNumIters = mEnabled
+                ? str::toType<int>(os.getEnv(mEnvVar))
+                : 1;
+        }
+
+        void operator()(TFunc f)
+        {
+            if (mEnabled)
+            {
+                double mean(0.0);
+                double mn(std::numeric_limits<double>::infinity());
+                double mx(-std::numeric_limits<double>::infinity());
+                for (int i = 0; i < mNumIters; ++i)
+                {
+                    sys::RealTimeStopWatch sw;
+                    sw.start();
+
+                    f();
+
+                    auto elapsed = sw.stop();
+
+                    mean += elapsed;
+                    mn = std::min(elapsed, mn);
+                    mx = std::max(elapsed, mx);
+                }
+
+                mean /= mNumIters;
+                mStream << mTestName << ":(mean/min/max)ms: "
+                        << mean << "/" << mn << "/" << mx << std::endl;
+            }
+            else
+            {
+                f();
+            }
+        }
+
+        ~EnvProfiler() = default;
+
+        const std::string mEnvVar;
+        const std::string& mTestName;
+        std::ostream& mStream;
+        int mNumIters;
+        int mEnabled;
+    };
+
+
 }
 }
 
