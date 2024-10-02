@@ -146,6 +146,8 @@ TEST_CASE(test_read_sicd130_xml)
     test_read_sicd_xml(testName, "sicd130.xml");
 }
 
+// Set SIX_PROFILE_PARSING=N to when running the
+// test to profile the tests by re-running N-times
 #define PROFILE(X) six::testing::EnvProfiler<std::function<void(void)>>("SIX_PROFILE_PARSING", testName, std::cerr)([&](){X;});
 
 TEST_CASE(test_read_sicd040_bad_xml)
