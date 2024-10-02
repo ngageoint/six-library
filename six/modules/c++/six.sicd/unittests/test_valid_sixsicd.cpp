@@ -146,35 +146,7 @@ TEST_CASE(test_read_sicd130_xml)
     test_read_sicd_xml(testName, "sicd130.xml");
 }
 
-struct Profiler
-{
-    Profiler(const char* envVar,
-        const std::string& testName,
-        std::ostream &stream) :
-      mEnvVar(envVar),
-      mTestName(testName),
-      mStream(stream)
-    {
-        watch.start();
-    }
-
-    ~Profiler()
-    {
-        auto elapsed = watch.stop();
-        if (OS.isEnvSet(mEnvVar))
-        {
-            mStream << mTestName << ": " << elapsed << "ms" << std::endl;
-        }
-    }
-
-    const std::string mEnvVar;
-    const std::string& mTestName;
-    std::ostream& mStream;
-    sys::OS OS;
-    sys::RealTimeStopWatch watch;
-};
-
-#define PROFILE() Profiler profiler("SIX_PROFILE_PARSING", testName, std::cerr);
+#define PROFILE() six::testing::Profiler profiler("SIX_PROFILE_PARSING", testName, std::cerr);
 
 TEST_CASE(test_read_sicd040_bad_xml)
 {
