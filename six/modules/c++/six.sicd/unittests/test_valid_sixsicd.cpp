@@ -146,79 +146,75 @@ TEST_CASE(test_read_sicd130_xml)
     test_read_sicd_xml(testName, "sicd130.xml");
 }
 
-// Set SIX_PROFILE_PARSING=N to when running the
-// test to profile the tests by re-running N-times
-#define PROFILE(X) six::testing::EnvProfiler<std::function<void(void)>>("SIX_PROFILE_PARSING", testName, std::cerr)([&](){X;});
+// Set SIX_PROFILE_PARSING=N when running the test to profile the tests by re-running N-times
+#define PROFILE(X) six::testing::EnvProfiler("SIX_PROFILE_PARSING", testName, std::cerr)([&](){X;});
+
+// Set SIX_PROFILE_STACKSIZE=1 when running to log the size of the stacktrace
+#define SSPROFILE(X, Y) TEST_SPECIFIC_EXCEPTION( \
+        six::testing::StackTraceSizeEnvProfiler<Y>( \
+            "SIX_PROFILE_STACKSIZE", testName, std::cerr)([&](){X;}), Y)
 
 TEST_CASE(test_read_sicd040_bad_xml)
 {
     PROFILE(
-        TEST_SPECIFIC_EXCEPTION(
-                test_read_sicd_xml(testName, "sicd040-bad.xml"),
-                six::DESValidationException);
+        SSPROFILE(test_read_sicd_xml(testName, "sicd040-bad.xml"),
+                  six::DESValidationException)
     );
 }
 
 TEST_CASE(test_read_sicd041_bad_xml)
 {
     PROFILE(
-        TEST_SPECIFIC_EXCEPTION(
-                test_read_sicd_xml(testName, "sicd041-bad.xml"),
-                six::DESValidationException);
+        SSPROFILE(test_read_sicd_xml(testName, "sicd041-bad.xml"),
+                  six::DESValidationException)
     );
 }
 
 TEST_CASE(test_read_sicd050_bad_xml)
 {
     PROFILE(
-        TEST_SPECIFIC_EXCEPTION(
-                test_read_sicd_xml(testName, "sicd050-bad.xml"),
-                six::DESValidationException);
+        SSPROFILE(test_read_sicd_xml(testName, "sicd050-bad.xml"),
+                  six::DESValidationException);
     );
 }
 
 TEST_CASE(test_read_sicd100_bad_xml)
 {
     PROFILE(
-        TEST_SPECIFIC_EXCEPTION(
-                test_read_sicd_xml(testName, "sicd100-bad.xml"),
-                six::DESValidationException);
+        SSPROFILE(test_read_sicd_xml(testName, "sicd100-bad.xml"),
+                  six::DESValidationException);
     );
 }
 
 TEST_CASE(test_read_sicd101_bad_xml)
 {
     PROFILE(
-        TEST_SPECIFIC_EXCEPTION(
-                test_read_sicd_xml(testName, "sicd101-bad.xml"),
-                six::DESValidationException);
+        SSPROFILE(test_read_sicd_xml(testName, "sicd101-bad.xml"),
+                  six::DESValidationException);
     );
 }
 
 TEST_CASE(test_read_sicd110_bad_xml)
 {
     PROFILE(
-        TEST_SPECIFIC_EXCEPTION(
-                test_read_sicd_xml(testName, "sicd110-bad.xml"),
-                six::DESValidationException);
+        SSPROFILE(test_read_sicd_xml(testName, "sicd110-bad.xml"),
+                  six::DESValidationException);
     );
 }
 
 TEST_CASE(test_read_sicd120_bad_xml)
 {
     PROFILE(
-        TEST_SPECIFIC_EXCEPTION(
-                test_read_sicd_xml(testName, "sicd120-bad.xml"),
-                six::DESValidationException);
+        SSPROFILE(test_read_sicd_xml(testName, "sicd120-bad.xml"),
+                  six::DESValidationException);
     );
 }
 
 TEST_CASE(test_read_sicd121_bad_xml)
 {
     PROFILE(
-        TEST_SPECIFIC_EXCEPTION(
-                test_read_sicd_xml(testName, "sicd121-bad.xml"),
-                six::DESValidationException);
+        SSPROFILE(test_read_sicd_xml(testName, "sicd121-bad.xml"),
+                  six::DESValidationException);
     );
 }
 
