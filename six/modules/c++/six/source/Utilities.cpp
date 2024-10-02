@@ -925,23 +925,6 @@ std::filesystem::path six::testing::getSampleXmlPath(const std::filesystem::path
     return getModuleFile(modulePath, filename);
 }
 
-six::testing::Profiler::Profiler(const char* envVar, const std::string& testName, std::ostream &stream)
-    : mEnvVar(envVar),
-    mTestName(testName),
-    mStream(stream)
-{
-    mStopWatch.start();
-}
-
-six::testing::Profiler::~Profiler()
-{
-    auto elapsed = mStopWatch.stop();
-    if (mOs.isEnvSet(mEnvVar))
-    {
-        mStream << mTestName << ": " << elapsed << "ms" << std::endl;
-    }
-}
-
 six::DataParser::DataParser(const std::vector<std::filesystem::path>* pSchemaPaths, logging::Logger* pLog)
     : mpSchemaPaths(pSchemaPaths),
     mLog(pLog == nullptr ? mNullLogger : *pLog)

@@ -383,22 +383,6 @@ namespace testing
     SIX_SIX_API std::filesystem::path getModuleFile(const std::filesystem::path& modulePath, const  std::filesystem::path& filename);
     SIX_SIX_API std::filesystem::path getSampleXmlPath(const std::filesystem::path& module /*"six.sicd"*/, const  std::filesystem::path& filename);
 
-    struct SIX_SIX_API Profiler
-    {
-        Profiler(const char* envVar,
-            const std::string& testName,
-            std::ostream &stream);
-
-        ~Profiler();
-
-        const std::string mEnvVar;
-        const std::string& mTestName;
-        std::ostream& mStream;
-
-        sys::OS mOs;
-        sys::RealTimeStopWatch mStopWatch;
-    };
-
     template <typename TFunc>
     struct SIX_SIX_API EnvProfiler
     {
