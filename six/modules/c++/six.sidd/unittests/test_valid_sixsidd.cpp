@@ -198,36 +198,39 @@ TEST_CASE(test_read_sidd300_v13_xml)
     test_read_sidd_xml(testName, "sidd300_ISM-v13.xml");
 }
 
+// Set SIX_PROFILE_PARSING=N when running the test to profile the tests by re-running N-times
+#define PROFILE(X) six::testing::EnvProfiler("SIX_PROFILE_PARSING", testName, std::cerr)([&](){X;});
+
+// Set SIX_PROFILE_STACKSIZE=1 when running to log the size of the stacktrace
+#define SSPROFILE(X, Y) TEST_SPECIFIC_EXCEPTION( \
+        six::testing::StackTraceSizeEnvProfiler<Y>( \
+            "SIX_PROFILE_STACKSIZE", testName, std::cerr)([&](){X;}), Y)
+
+#define TEST_BAD_XML(X) PROFILE(SSPROFILE(X, six::DESValidationException));
+
+
 TEST_CASE(test_read_sidd100_bad_xml)
 {
     const auto schemaPaths = getSchemaPaths();
-    TEST_SPECIFIC_EXCEPTION(
-            test_read_sidd_xml(testName, "sidd100-bad.xml", &schemaPaths),
-            six::DESValidationException);
+    TEST_BAD_XML(test_read_sidd_xml(testName, "sidd100-bad.xml", &schemaPaths));
 }
 
 TEST_CASE(test_read_sidd200_bad_xml)
 {
     const auto schemaPaths = getSchemaPaths();
-    TEST_SPECIFIC_EXCEPTION(
-            test_read_sidd_xml(testName, "sidd200-bad.xml", &schemaPaths),
-            six::DESValidationException);
+    TEST_BAD_XML(test_read_sidd_xml(testName, "sidd200-bad.xml", &schemaPaths));
 }
 
 TEST_CASE(test_read_sidd300_bad_xml)
 {
     const auto schemaPaths = getSchemaPaths();
-    TEST_SPECIFIC_EXCEPTION(
-            test_read_sidd_xml(testName, "sidd300-bad.xml", &schemaPaths),
-            six::DESValidationException);
+    TEST_BAD_XML(test_read_sidd_xml(testName, "sidd300-bad.xml", &schemaPaths));
 }
 
 TEST_CASE(test_read_sidd300_v13_bad_xml)
 {
     const auto schemaPaths = getSchemaPaths();
-    TEST_SPECIFIC_EXCEPTION(
-        test_read_sidd_xml(testName, "sidd300_ISM-v13-bad.xml", &schemaPaths),
-        six::DESValidationException);
+    TEST_BAD_XML(test_read_sidd_xml(testName, "sidd300_ISM-v13-bad.xml", &schemaPaths));
 }
 
 TEST_MAIN(
