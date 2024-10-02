@@ -154,68 +154,46 @@ TEST_CASE(test_read_sicd130_xml)
         six::testing::StackTraceSizeEnvProfiler<Y>( \
             "SIX_PROFILE_STACKSIZE", testName, std::cerr)([&](){X;}), Y)
 
+#define TEST_BAD_XML(X) PROFILE(SSPROFILE(X, six::DESValidationException));
+
 TEST_CASE(test_read_sicd040_bad_xml)
 {
-    PROFILE(
-        SSPROFILE(test_read_sicd_xml(testName, "sicd040-bad.xml"),
-                  six::DESValidationException)
-    );
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd040-bad.xml"));
 }
 
 TEST_CASE(test_read_sicd041_bad_xml)
 {
-    PROFILE(
-        SSPROFILE(test_read_sicd_xml(testName, "sicd041-bad.xml"),
-                  six::DESValidationException)
-    );
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd041-bad.xml"));
 }
 
 TEST_CASE(test_read_sicd050_bad_xml)
 {
-    PROFILE(
-        SSPROFILE(test_read_sicd_xml(testName, "sicd050-bad.xml"),
-                  six::DESValidationException);
-    );
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd050-bad.xml"));
 }
 
 TEST_CASE(test_read_sicd100_bad_xml)
 {
-    PROFILE(
-        SSPROFILE(test_read_sicd_xml(testName, "sicd100-bad.xml"),
-                  six::DESValidationException);
-    );
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd100-bad.xml"));
 }
 
 TEST_CASE(test_read_sicd101_bad_xml)
 {
-    PROFILE(
-        SSPROFILE(test_read_sicd_xml(testName, "sicd101-bad.xml"),
-                  six::DESValidationException);
-    );
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd101-bad.xml"));
 }
 
 TEST_CASE(test_read_sicd110_bad_xml)
 {
-    PROFILE(
-        SSPROFILE(test_read_sicd_xml(testName, "sicd110-bad.xml"),
-                  six::DESValidationException);
-    );
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd110-bad.xml"));
 }
 
 TEST_CASE(test_read_sicd120_bad_xml)
 {
-    PROFILE(
-        SSPROFILE(test_read_sicd_xml(testName, "sicd120-bad.xml"),
-                  six::DESValidationException);
-    );
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd120-bad.xml"));
 }
 
 TEST_CASE(test_read_sicd121_bad_xml)
 {
-    PROFILE(
-        SSPROFILE(test_read_sicd_xml(testName, "sicd121-bad.xml"),
-                  six::DESValidationException);
-    );
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd121-bad.xml"));
 }
 
 TEST_MAIN(
