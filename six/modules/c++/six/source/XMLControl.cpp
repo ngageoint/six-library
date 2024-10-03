@@ -233,14 +233,14 @@ static void validate_(
         decltype(strPrettyXml) needle8(str::u8FromNative(needle));
 
         typename decltype(uniq_schemas)::iterator hitlist;
-        auto has_needle = [needle](coda_oss::filesystem::path& x) {
+        auto has_needle = [needle](const coda_oss::filesystem::path& x) {
             return x.string().find(needle) != std::string::npos;
         };
         if (strPrettyXml.find(needle8) != std::string::npos)
         {
             // Doc is 201609, remove competing schemas
             auto not_has_needle = std::not1(
-                    std::function<bool(coda_oss::filesystem::path & x)>(
+                    std::function<bool(const coda_oss::filesystem::path& x)>(
                             has_needle));
             hitlist = std::remove_if(uniq_schemas.begin(),
                                      uniq_schemas.end(),
