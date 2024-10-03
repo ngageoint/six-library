@@ -181,13 +181,16 @@ static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
-static void validate_(const xml::lite::Element& rootElement,
-    const std::string& spec, const std::string& version,
-    const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
+static void validate_(
+        const xml::lite::Element& rootElement,
+        const std::string& spec,
+        const std::string& version,
+        const std::vector<coda_oss::filesystem::path>& foundSchemas,
+        logging::Logger& log)
 {
     if (foundSchemas.size() < 1)
     {
-        return; // can't validate without a schema
+        return;  // can't validate without a schema
     }
 
     xml::lite::Uri uri;
@@ -199,20 +202,27 @@ static void validate_(const xml::lite::Element& rootElement,
     const auto strPrettyXml = xmlStream.stream().str();
 
     // deduplicate the schema list
-    auto comp = [](const coda_oss::filesystem::path& x, const coda_oss::filesystem::path& y) {
+    auto comp = [](const coda_oss::filesystem::path& x,
+                   const coda_oss::filesystem::path& y) {
         return x.string() < y.string();
     };
-    std::set<coda_oss::filesystem::path, decltype(comp)> uniq(foundSchemas.begin(), foundSchemas.end(), comp);
-    std::vector<coda_oss::filesystem::path> uniq_schemas(uniq.begin(), uniq.end());
+    std::set<coda_oss::filesystem::path, decltype(comp)> uniq(
+            foundSchemas.begin(), foundSchemas.end(), comp);
+    std::vector<coda_oss::filesystem::path> uniq_schemas(uniq.begin(),
+                                                         uniq.end());
 
-    // Remove schema paths whose filename component do not match the spec or version
-    auto spec_version_filter = [spec, version](const coda_oss::filesystem::path& x) {
+    // Remove schema paths whose filename component do not match the spec or
+    // version
+    auto spec_version_filter = [spec,
+                                version](const coda_oss::filesystem::path& x) {
         auto x2 = x.filename().string();
         return x2.find(spec) == std::string::npos ||
-            x2.find(version) == std::string::npos;
+                x2.find(version) == std::string::npos;
     };
     typename decltype(uniq_schemas)::iterator inapplicable_schemas =
-        std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), spec_version_filter);
+            std::remove_if(uniq_schemas.begin(),
+                           uniq_schemas.end(),
+                           spec_version_filter);
 
     uniq_schemas.erase(inapplicable_schemas, uniq_schemas.end());
 
@@ -223,16 +233,25 @@ static void validate_(const xml::lite::Element& rootElement,
         decltype(strPrettyXml) needle8(str::u8FromNative(needle));
 
         typename decltype(uniq_schemas)::iterator hitlist;
-        auto has_needle = [needle](coda_oss::filesystem::path &x) {
+        auto has_needle = [needle](coda_oss::filesystem::path& x) {
             return x.string().find(needle) != std::string::npos;
         };
-        if (strPrettyXml.find(needle8) != std::string::npos) {
+        if (strPrettyXml.find(needle8) != std::string::npos)
+        {
             // Doc is 201609, remove competing schemas
-            auto not_has_needle = std::not1(std::function<bool(coda_oss::filesystem::path &x)>(has_needle));
-            hitlist = std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), not_has_needle);
-        } else {
+            auto not_has_needle = std::not1(
+                    std::function<bool(coda_oss::filesystem::path & x)>(
+                            has_needle));
+            hitlist = std::remove_if(uniq_schemas.begin(),
+                                     uniq_schemas.end(),
+                                     not_has_needle);
+        }
+        else
+        {
             // Doc is *not* 201609, remove any refs to 201609
-            hitlist = std::remove_if(uniq_schemas.begin(), uniq_schemas.end(), has_needle);
+            hitlist = std::remove_if(uniq_schemas.begin(),
+                                     uniq_schemas.end(),
+                                     has_needle);
         }
 
         uniq_schemas.erase(hitlist, uniq_schemas.end());
@@ -245,7 +264,7 @@ static void validate_(const xml::lite::Element& rootElement,
     validator.validate(strPrettyXml, uri.value, errors);
 
     // Looks like we validated; be sure there aren't any errors
-    if (! errors.empty())
+    if (!errors.empty())
     {
         log_any_errors_and_throw(errors, uniq_schemas, log);
     }
@@ -278,7 +297,8 @@ void XMLControl::validate(const xml::lite::Document* doc,
     assert(log != nullptr);
 
     // validate against any specified schemas
-    const auto foundSchemas = findValidSchemaPaths(schemaPaths, log); // If the paths we have don't exist, throw
+    const auto foundSchemas = findValidSchemaPaths(
+            schemaPaths, log);  // If the paths we have don't exist, throw
 
     // guarantees conditional below will succeed
     std::string version = getVersionFromURI(doc);
@@ -287,6 +307,7 @@ void XMLControl::validate(const xml::lite::Document* doc,
 
     validate_(*doc, spec, version, foundSchemas, *log);
 }
+
 void XMLControl::validate(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log)
