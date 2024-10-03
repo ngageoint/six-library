@@ -389,17 +389,13 @@ namespace testing
     struct SIX_SIX_API BaseEnvProfiler
     {
         BaseEnvProfiler(const char* envVar,
-            const std::string& testName,
-            std::ostream &stream)
-            : mEnvVar(envVar),
-            mTestName(testName),
-            mStream(stream)
+                        const std::string& testName,
+                        std::ostream& stream) :
+            mEnvVar(envVar), mTestName(testName), mStream(stream)
         {
             sys::OS os;
             mEnabled = os.isEnvSet(mEnvVar);
-            mNumIters = mEnabled
-                ? str::toType<int>(os.getEnv(mEnvVar))
-                : 1;
+            mNumIters = mEnabled ? str::toType<int>(os.getEnv(mEnvVar)) : 1;
         }
         ~BaseEnvProfiler() = default;
 
@@ -427,9 +423,11 @@ namespace testing
     struct SIX_SIX_API EnvProfiler : BaseEnvProfiler<EnvProfiler>
     {
         EnvProfiler(const char* envVar,
-            const std::string& testName,
-            std::ostream &stream) : BaseEnvProfiler(envVar, testName, stream)
-        {}
+                    const std::string& testName,
+                    std::ostream& stream) :
+            BaseEnvProfiler(envVar, testName, stream)
+        {
+        }
         ~EnvProfiler() = default;
 
         template <typename TFunc>
@@ -453,20 +451,25 @@ namespace testing
             }
 
             mean /= mNumIters;
-            mStream << mTestName << " runtime (mean/min/max)ms: "
-                    << mean << "/" << mn << "/" << mx << std::endl;
+            mStream << mTestName << " runtime (mean/min/max)ms: " << mean << "/"
+                    << mn << "/" << mx << std::endl;
         }
     };
 
     /// @brief Toggle profiling of exception sizes based on env var
     /// @tparam TExcept
     template <typename TExcept>
-    struct SIX_SIX_API StackTraceSizeEnvProfiler : BaseEnvProfiler<StackTraceSizeEnvProfiler<TExcept>>
+    struct SIX_SIX_API StackTraceSizeEnvProfiler
+        : BaseEnvProfiler<StackTraceSizeEnvProfiler<TExcept>>
     {
         StackTraceSizeEnvProfiler(const char* envVar,
-            const std::string& testName,
-            std::ostream &stream) : BaseEnvProfiler<StackTraceSizeEnvProfiler<TExcept>>(envVar, testName, stream)
-        {}
+                                  const std::string& testName,
+                                  std::ostream& stream) :
+            BaseEnvProfiler<StackTraceSizeEnvProfiler<TExcept>>(envVar,
+                                                                testName,
+                                                                stream)
+        {
+        }
         ~StackTraceSizeEnvProfiler() = default;
 
         template <typename TFunc>
@@ -479,7 +482,9 @@ namespace testing
             catch (const TExcept& ex)
             {
                 // log size of the exception message
-                this->mStream << this->mTestName << ": exception size (bytes): " << strlen(ex.what()) << std::endl;
+                this->mStream << this->mTestName
+                              << ": exception size (bytes): " << strlen(ex.what())
+                              << std::endl;
 
                 throw;
             }
