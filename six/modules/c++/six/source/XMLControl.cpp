@@ -257,6 +257,9 @@ static void validate_(
         uniq_schemas.erase(hitlist, uniq_schemas.end());
     }
 
+    log.info(Ctxt(FmtX("Document matches schema(s): {%s}",
+                       str::join(uniq_schemas, ","))));
+
     const xml::lite::ValidatorXerces validator(uniq_schemas, &log);
 
     // validate against any specified schemas
