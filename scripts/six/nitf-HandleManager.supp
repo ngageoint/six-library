@@ -1,0 +1,7 @@
+{
+   nitf::HandleManager_known_leak: suppress documented memory leak in nitf/HandlerManager.hpp:122
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:_Znwm
+   fun:make_unique<nitf::HandleManager>
+}
