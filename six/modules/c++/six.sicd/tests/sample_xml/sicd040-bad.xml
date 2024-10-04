@@ -1,0 +1,1297 @@
+<?xml version="1.0"?>
+<SICD xmlns="urn:SICD:0.4.0">
+  <fake_tag/>
+  <CollectionInfo>
+    <CollectorName class="xs:string">TSX-1</CollectorName>
+    <CoreName class="xs:string">C21_N93_D_SL_spot_072_R_2008-01-27T05:17:46.760537Z</CoreName>
+    <CollectType class="xs:string">MONOSTATIC</CollectType>
+    <RadarMode>
+      <ModeType class="xs:string">DYNAMIC STRIPMAP</ModeType>
+      <ModeID class="xs:string">SL</ModeID>
+    </RadarMode>
+    <Classification class="xs:string">UNCLASSIFIED</Classification>
+  </CollectionInfo>
+  <ImageCreation>
+    <DateTime class="xs:dateTime">2008-01-28T14:54:46.000000Z</DateTime>
+    <Profile class="xs:string">Prototype</Profile>
+  </ImageCreation>
+  <ImageData>
+    <PixelType class="xs:string">RE16I_IM16I</PixelType>
+    <NumRows class="xs:int">5</NumRows>
+    <NumCols class="xs:int">5</NumCols>
+    <FirstRow class="xs:int">100</FirstRow>
+    <FirstCol class="xs:int">100</FirstCol>
+    <FullImage>
+      <NumRows class="xs:int">9504</NumRows>
+      <NumCols class="xs:int">8330</NumCols>
+    </FullImage>
+    <SCPPixel>
+      <Row class="xs:int">4839</Row>
+      <Col class="xs:int">4299</Col>
+    </SCPPixel>
+  </ImageData>
+  <GeoData>
+    <EarthModel class="xs:string">WGS_84</EarthModel>
+    <SCP>
+      <ECF>
+        <X class="xs:double">4.191860331112470E06</X>
+        <Y class="xs:double">9.016414035350683E05</Y>
+        <Z class="xs:double">4.706688748498361E06</Z>
+      </ECF>
+      <LLH>
+        <Lat class="xs:double">4.785840035803692E01</Lat>
+        <Lon class="xs:double">1.213899391613695E01</Lon>
+        <HAE class="xs:double">4.880295281264820E02</HAE>
+      </LLH>
+    </SCP>
+    <ImageCorners>
+      <ICP index="1:FRFC">
+        <Lat class="xs:double">4.789810839214282E01</Lat>
+        <Lon class="xs:double">1.222765721977077E01</Lon>
+      </ICP>
+      <ICP index="2:FRLC">
+        <Lat class="xs:double">4.789806289085421E01</Lat>
+        <Lon class="xs:double">1.222764692948162E01</Lon>
+      </ICP>
+      <ICP index="3:LRLC">
+        <Lat class="xs:double">4.789806972979798E01</Lat>
+        <Lon class="xs:double">1.222758101011451E01</Lon>
+      </ICP>
+      <ICP index="4:LRFC">
+        <Lat class="xs:double">4.789811523108673E01</Lat>
+        <Lon class="xs:double">1.222759130034758E01</Lon>
+      </ICP>
+    </ImageCorners>
+  </GeoData>
+  <Grid>
+    <ImagePlane class="xs:string">SLANT</ImagePlane>
+    <Type class="xs:string">RGZERO</Type>
+    <TimeCOAPoly order1="2" order2="2">
+      <Coef class="xs:double" exponent1="0" exponent2="0">1.978794889212633E00</Coef>
+      <Coef class="xs:double" exponent1="0" exponent2="1">2.626962861230997E-04</Coef>
+      <Coef class="xs:double" exponent1="0" exponent2="2">6.131681355197419E-16</Coef>
+      <Coef class="xs:double" exponent1="1" exponent2="0">-8.953947963421265E-09</Coef>
+      <Coef class="xs:double" exponent1="1" exponent2="1">-9.825215436096418E-13</Coef>
+      <Coef class="xs:double" exponent1="1" exponent2="2">-9.621627844218110E-24</Coef>
+      <Coef class="xs:double" exponent1="2" exponent2="0">3.350056876670029E-17</Coef>
+      <Coef class="xs:double" exponent1="2" exponent2="1">3.674343486691870E-21</Coef>
+      <Coef class="xs:double" exponent1="2" exponent2="2">-3.950885079742213E-28</Coef>
+    </TimeCOAPoly>
+    <Row>
+      <UVectECF>
+        <X class="xs:double">-3.749303942812739E-01</X>
+        <Y class="xs:double">-8.220060859048532E-01</Y>
+        <Z class="xs:double">-4.286411018316738E-01</Z>
+      </UVectECF>
+      <SS class="xs:double">9.094034154201429E-01</SS>
+      <ImpRespWid class="xs:double">1.168655293258210E00</ImpRespWid>
+      <Sgn class="xs:int">-1</Sgn>
+      <ImpRespBW class="xs:double">1.000692285594456E00</ImpRespBW>
+      <KCtr class="xs:double">6.437787037324334E01</KCtr>
+      <DeltaK1 class="xs:double">-5.003461427972281E-01</DeltaK1>
+      <DeltaK2 class="xs:double">5.003461427972281E-01</DeltaK2>
+      <DeltaKCOAPoly order1="0" order2="0">
+        <Coef class="xs:double" exponent1="0" exponent2="0">0.000000000000000E00</Coef>
+      </DeltaKCOAPoly>
+      <WgtType class="xs:string">HAMMING</WgtType>
+      <WgtFunct size="512">
+        <Wgt class="xs:double" index="1">2.000000476837158E-01</Wgt>
+        <Wgt class="xs:double" index="2">2.000302849437328E-01</Wgt>
+        <Wgt class="xs:double" index="3">2.001209921523241E-01</Wgt>
+        <Wgt class="xs:double" index="4">2.002721555958016E-01</Wgt>
+        <Wgt class="xs:double" index="5">2.004837524203222E-01</Wgt>
+        <Wgt class="xs:double" index="6">2.007557506353431E-01</Wgt>
+        <Wgt class="xs:double" index="7">2.010881091184579E-01</Wgt>
+        <Wgt class="xs:double" index="8">2.014807776216143E-01</Wgt>
+        <Wgt class="xs:double" index="9">2.019336967787107E-01</Wgt>
+        <Wgt class="xs:double" index="10">2.024467981145713E-01</Wgt>
+        <Wgt class="xs:double" index="11">2.030200040552991E-01</Wgt>
+        <Wgt class="xs:double" index="12">2.036532279400034E-01</Wgt>
+        <Wgt class="xs:double" index="13">2.043463740339024E-01</Wgt>
+        <Wgt class="xs:double" index="14">2.050993375427963E-01</Wgt>
+        <Wgt class="xs:double" index="15">2.059120046289115E-01</Wgt>
+        <Wgt class="xs:double" index="16">2.067842524281106E-01</Wgt>
+        <Wgt class="xs:double" index="17">2.077159490684682E-01</Wgt>
+        <Wgt class="xs:double" index="18">2.087069536902081E-01</Wgt>
+        <Wgt class="xs:double" index="19">2.097571164669994E-01</Wgt>
+        <Wgt class="xs:double" index="20">2.108662786286076E-01</Wgt>
+        <Wgt class="xs:double" index="21">2.120342724848996E-01</Wgt>
+        <Wgt class="xs:double" index="22">2.132609214511951E-01</Wgt>
+        <Wgt class="xs:double" index="23">2.145460400749643E-01</Wgt>
+        <Wgt class="xs:double" index="24">2.158894340638657E-01</Wgt>
+        <Wgt class="xs:double" index="25">2.172909003151206E-01</Wgt>
+        <Wgt class="xs:double" index="26">2.187502269462189E-01</Wgt>
+        <Wgt class="xs:double" index="27">2.202671933269537E-01</Wgt>
+        <Wgt class="xs:double" index="28">2.218415701127768E-01</Wgt>
+        <Wgt class="xs:double" index="29">2.234731192794728E-01</Wgt>
+        <Wgt class="xs:double" index="30">2.251615941591452E-01</Wgt>
+        <Wgt class="xs:double" index="31">2.269067394775087E-01</Wgt>
+        <Wgt class="xs:double" index="32">2.287082913924840E-01</Wgt>
+        <Wgt class="xs:double" index="33">2.305659775340864E-01</Wgt>
+        <Wgt class="xs:double" index="34">2.324795170456045E-01</Wgt>
+        <Wgt class="xs:double" index="35">2.344486206260625E-01</Wgt>
+        <Wgt class="xs:double" index="36">2.364729905739577E-01</Wgt>
+        <Wgt class="xs:double" index="37">2.385523208322695E-01</Wgt>
+        <Wgt class="xs:double" index="38">2.406862970347307E-01</Wgt>
+        <Wgt class="xs:double" index="39">2.428745965533555E-01</Wgt>
+        <Wgt class="xs:double" index="40">2.451168885472166E-01</Wgt>
+        <Wgt class="xs:double" index="41">2.474128340124635E-01</Wgt>
+        <Wgt class="xs:double" index="42">2.497620858335753E-01</Wgt>
+        <Wgt class="xs:double" index="43">2.521642888358402E-01</Wgt>
+        <Wgt class="xs:double" index="44">2.546190798390525E-01</Wgt>
+        <Wgt class="xs:double" index="45">2.571260877124209E-01</Wgt>
+        <Wgt class="xs:double" index="46">2.596849334306779E-01</Wgt>
+        <Wgt class="xs:double" index="47">2.622952301313841E-01</Wgt>
+        <Wgt class="xs:double" index="48">2.649565831734156E-01</Wgt>
+        <Wgt class="xs:double" index="49">2.676685901966288E-01</Wgt>
+        <Wgt class="xs:double" index="50">2.704308411826915E-01</Wgt>
+        <Wgt class="xs:double" index="51">2.732429185170723E-01</Wgt>
+        <Wgt class="xs:double" index="52">2.761043970521783E-01</Wgt>
+        <Wgt class="xs:double" index="53">2.790148441716310E-01</Wgt>
+        <Wgt class="xs:double" index="54">2.819738198556728E-01</Wgt>
+        <Wgt class="xs:double" index="55">2.849808767476912E-01</Wgt>
+        <Wgt class="xs:double" index="56">2.880355602218536E-01</Wgt>
+        <Wgt class="xs:double" index="57">2.911374084518398E-01</Wgt>
+        <Wgt class="xs:double" index="58">2.942859524806648E-01</Wgt>
+        <Wgt class="xs:double" index="59">2.974807162915776E-01</Wgt>
+        <Wgt class="xs:double" index="60">3.007212168800295E-01</Wgt>
+        <Wgt class="xs:double" index="61">3.040069643266967E-01</Wgt>
+        <Wgt class="xs:double" index="62">3.073374618715501E-01</Wgt>
+        <Wgt class="xs:double" index="63">3.107122059889586E-01</Wgt>
+        <Wgt class="xs:double" index="64">3.141306864638149E-01</Wgt>
+        <Wgt class="xs:double" index="65">3.175923864686731E-01</Wgt>
+        <Wgt class="xs:double" index="66">3.210967826418865E-01</Wgt>
+        <Wgt class="xs:double" index="67">3.246433451667319E-01</Wgt>
+        <Wgt class="xs:double" index="68">3.282315378515113E-01</Wgt>
+        <Wgt class="xs:double" index="69">3.318608182106163E-01</Wgt>
+        <Wgt class="xs:double" index="70">3.355306375465447E-01</Wgt>
+        <Wgt class="xs:double" index="71">3.392404410328561E-01</Wgt>
+        <Wgt class="xs:double" index="72">3.429896677980540E-01</Wgt>
+        <Wgt class="xs:double" index="73">3.467777510103817E-01</Wgt>
+        <Wgt class="xs:double" index="74">3.506041179635198E-01</Wgt>
+        <Wgt class="xs:double" index="75">3.544681901631713E-01</Wgt>
+        <Wgt class="xs:double" index="76">3.583693834145225E-01</Wgt>
+        <Wgt class="xs:double" index="77">3.623071079105645E-01</Wgt>
+        <Wgt class="xs:double" index="78">3.662807683212646E-01</Wgt>
+        <Wgt class="xs:double" index="79">3.702897638835715E-01</Wgt>
+        <Wgt class="xs:double" index="80">3.743334884922431E-01</Wgt>
+        <Wgt class="xs:double" index="81">3.784113307914809E-01</Wgt>
+        <Wgt class="xs:double" index="82">3.825226742673584E-01</Wgt>
+        <Wgt class="xs:double" index="83">3.866668973410302E-01</Wgt>
+        <Wgt class="xs:double" index="84">3.908433734627057E-01</Wgt>
+        <Wgt class="xs:double" index="85">3.950514712063749E-01</Wgt>
+        <Wgt class="xs:double" index="86">3.992905543652718E-01</Wgt>
+        <Wgt class="xs:double" index="87">4.035599820480595E-01</Wgt>
+        <Wgt class="xs:double" index="88">4.078591087757248E-01</Wgt>
+        <Wgt class="xs:double" index="89">4.121872845791653E-01</Wgt>
+        <Wgt class="xs:double" index="90">4.165438550974564E-01</Wgt>
+        <Wgt class="xs:double" index="91">4.209281616767808E-01</Wgt>
+        <Wgt class="xs:double" index="92">4.253395414700090E-01</Wgt>
+        <Wgt class="xs:double" index="93">4.297773275369120E-01</Wgt>
+        <Wgt class="xs:double" index="94">4.342408489449938E-01</Wgt>
+        <Wgt class="xs:double" index="95">4.387294308709272E-01</Wgt>
+        <Wgt class="xs:double" index="96">4.432423947025775E-01</Wgt>
+        <Wgt class="xs:double" index="97">4.477790581416001E-01</Wgt>
+        <Wgt class="xs:double" index="98">4.523387353065942E-01</Wgt>
+        <Wgt class="xs:double" index="99">4.569207368367982E-01</Wgt>
+        <Wgt class="xs:double" index="100">4.615243699963129E-01</Wgt>
+        <Wgt class="xs:double" index="101">4.661489387788320E-01</Wgt>
+        <Wgt class="xs:double" index="102">4.707937440128703E-01</Wgt>
+        <Wgt class="xs:double" index="103">4.754580834674682E-01</Wgt>
+        <Wgt class="xs:double" index="104">4.801412519583589E-01</Wgt>
+        <Wgt class="xs:double" index="105">4.848425414545836E-01</Wgt>
+        <Wgt class="xs:double" index="106">4.895612411855352E-01</Wgt>
+        <Wgt class="xs:double" index="107">4.942966377484177E-01</Wgt>
+        <Wgt class="xs:double" index="108">4.990480152161027E-01</Wgt>
+        <Wgt class="xs:double" index="109">5.038146552453676E-01</Wgt>
+        <Wgt class="xs:double" index="110">5.085958371854998E-01</Wgt>
+        <Wgt class="xs:double" index="111">5.133908381872486E-01</Wgt>
+        <Wgt class="xs:double" index="112">5.181989333121103E-01</Wgt>
+        <Wgt class="xs:double" index="113">5.230193956419292E-01</Wgt>
+        <Wgt class="xs:double" index="114">5.278514963887976E-01</Wgt>
+        <Wgt class="xs:double" index="115">5.326945050052384E-01</Wgt>
+        <Wgt class="xs:double" index="116">5.375476892946540E-01</Wgt>
+        <Wgt class="xs:double" index="117">5.424103155220241E-01</Wgt>
+        <Wgt class="xs:double" index="118">5.472816485248371E-01</Wgt>
+        <Wgt class="xs:double" index="119">5.521609518242359E-01</Wgt>
+        <Wgt class="xs:double" index="120">5.570474877363635E-01</Wgt>
+        <Wgt class="xs:double" index="121">5.619405174838913E-01</Wgt>
+        <Wgt class="xs:double" index="122">5.668393013077114E-01</Wgt>
+        <Wgt class="xs:double" index="123">5.717430985787785E-01</Wgt>
+        <Wgt class="xs:double" index="124">5.766511679100823E-01</Wgt>
+        <Wgt class="xs:double" index="125">5.815627672687361E-01</Wgt>
+        <Wgt class="xs:double" index="126">5.864771540881611E-01</Wgt>
+        <Wgt class="xs:double" index="127">5.913935853803527E-01</Wgt>
+        <Wgt class="xs:double" index="128">5.963113178482097E-01</Wgt>
+        <Wgt class="xs:double" index="129">6.012296079979111E-01</Wgt>
+        <Wgt class="xs:double" index="130">6.061477122513224E-01</Wgt>
+        <Wgt class="xs:double" index="131">6.110648870584134E-01</Wgt>
+        <Wgt class="xs:double" index="132">6.159803890096742E-01</Wgt>
+        <Wgt class="xs:double" index="133">6.208934749485072E-01</Wgt>
+        <Wgt class="xs:double" index="134">6.258034020835831E-01</Wgt>
+        <Wgt class="xs:double" index="135">6.307094281011404E-01</Wgt>
+        <Wgt class="xs:double" index="136">6.356108112772132E-01</Wgt>
+        <Wgt class="xs:double" index="137">6.405068105897697E-01</Wgt>
+        <Wgt class="xs:double" index="138">6.453966858307444E-01</Wgt>
+        <Wgt class="xs:double" index="139">6.502796977179476E-01</Wgt>
+        <Wgt class="xs:double" index="140">6.551551080068350E-01</Wgt>
+        <Wgt class="xs:double" index="141">6.600221796021195E-01</Wgt>
+        <Wgt class="xs:double" index="142">6.648801766692106E-01</Wgt>
+        <Wgt class="xs:double" index="143">6.697283647454623E-01</Wgt>
+        <Wgt class="xs:double" index="144">6.745660108512131E-01</Wgt>
+        <Wgt class="xs:double" index="145">6.793923836006039E-01</Wgt>
+        <Wgt class="xs:double" index="146">6.842067533121524E-01</Wgt>
+        <Wgt class="xs:double" index="147">6.890083921190712E-01</Wgt>
+        <Wgt class="xs:double" index="148">6.937965740793115E-01</Wgt>
+        <Wgt class="xs:double" index="149">6.985705752853153E-01</Wgt>
+        <Wgt class="xs:double" index="150">7.033296739734608E-01</Wgt>
+        <Wgt class="xs:double" index="151">7.080731506331825E-01</Wgt>
+        <Wgt class="xs:double" index="152">7.128002881157524E-01</Wgt>
+        <Wgt class="xs:double" index="153">7.175103717427015E-01</Wgt>
+        <Wgt class="xs:double" index="154">7.222026894138709E-01</Wgt>
+        <Wgt class="xs:double" index="155">7.268765317150706E-01</Wgt>
+        <Wgt class="xs:double" index="156">7.315311920253340E-01</Wgt>
+        <Wgt class="xs:double" index="157">7.361659666237486E-01</Wgt>
+        <Wgt class="xs:double" index="158">7.407801547958492E-01</Wgt>
+        <Wgt class="xs:double" index="159">7.453730589395571E-01</Wgt>
+        <Wgt class="xs:double" index="160">7.499439846706462E-01</Wgt>
+        <Wgt class="xs:double" index="161">7.544922409277262E-01</Wgt>
+        <Wgt class="xs:double" index="162">7.590171400767209E-01</Wgt>
+        <Wgt class="xs:double" index="163">7.635179980148290E-01</Wgt>
+        <Wgt class="xs:double" index="164">7.679941342739507E-01</Wgt>
+        <Wgt class="xs:double" index="165">7.724448721235666E-01</Wgt>
+        <Wgt class="xs:double" index="166">7.768695386730478E-01</Wgt>
+        <Wgt class="xs:double" index="167">7.812674649733903E-01</Wgt>
+        <Wgt class="xs:double" index="168">7.856379861183485E-01</Wgt>
+        <Wgt class="xs:double" index="169">7.899804413449620E-01</Wgt>
+        <Wgt class="xs:double" index="170">7.942941741334526E-01</Wgt>
+        <Wgt class="xs:double" index="171">7.985785323064816E-01</Wgt>
+        <Wgt class="xs:double" index="172">8.028328681277499E-01</Wgt>
+        <Wgt class="xs:double" index="173">8.070565383999272E-01</Wgt>
+        <Wgt class="xs:double" index="174">8.112489045618939E-01</Wgt>
+        <Wgt class="xs:double" index="175">8.154093327852839E-01</Wgt>
+        <Wgt class="xs:double" index="176">8.195371940703097E-01</Wgt>
+        <Wgt class="xs:double" index="177">8.236318643408592E-01</Wgt>
+        <Wgt class="xs:double" index="178">8.276927245388472E-01</Wgt>
+        <Wgt class="xs:double" index="179">8.317191607178087E-01</Wgt>
+        <Wgt class="xs:double" index="180">8.357105641357188E-01</Wgt>
+        <Wgt class="xs:double" index="181">8.396663313470267E-01</Wgt>
+        <Wgt class="xs:double" index="182">8.435858642938882E-01</Wgt>
+        <Wgt class="xs:double" index="183">8.474685703965836E-01</Wgt>
+        <Wgt class="xs:double" index="184">8.513138626431078E-01</Wgt>
+        <Wgt class="xs:double" index="185">8.551211596779189E-01</Wgt>
+        <Wgt class="xs:double" index="186">8.588898858898304E-01</Wgt>
+        <Wgt class="xs:double" index="187">8.626194714990365E-01</Wgt>
+        <Wgt class="xs:double" index="188">8.663093526432544E-01</Wgt>
+        <Wgt class="xs:double" index="189">8.699589714629726E-01</Wgt>
+        <Wgt class="xs:double" index="190">8.735677761857925E-01</Wgt>
+        <Wgt class="xs:double" index="191">8.771352212098478E-01</Wgt>
+        <Wgt class="xs:double" index="192">8.806607671862920E-01</Wgt>
+        <Wgt class="xs:double" index="193">8.841438811008420E-01</Wgt>
+        <Wgt class="xs:double" index="194">8.875840363543606E-01</Wgt>
+        <Wgt class="xs:double" index="195">8.909807128424720E-01</Wgt>
+        <Wgt class="xs:double" index="196">8.943333970341953E-01</Wgt>
+        <Wgt class="xs:double" index="197">8.976415820495817E-01</Wgt>
+        <Wgt class="xs:double" index="198">9.009047677363489E-01</Wgt>
+        <Wgt class="xs:double" index="199">9.041224607454972E-01</Wgt>
+        <Wgt class="xs:double" index="200">9.072941746058966E-01</Wgt>
+        <Wgt class="xs:double" index="201">9.104194297978350E-01</Wgt>
+        <Wgt class="xs:double" index="202">9.134977538255149E-01</Wgt>
+        <Wgt class="xs:double" index="203">9.165286812884885E-01</Wgt>
+        <Wgt class="xs:double" index="204">9.195117539520196E-01</Wgt>
+        <Wgt class="xs:double" index="205">9.224465208163621E-01</Wgt>
+        <Wgt class="xs:double" index="206">9.253325381849462E-01</Wgt>
+        <Wgt class="xs:double" index="207">9.281693697314575E-01</Wgt>
+        <Wgt class="xs:double" index="208">9.309565865658053E-01</Wgt>
+        <Wgt class="xs:double" index="209">9.336937672989636E-01</Wgt>
+        <Wgt class="xs:double" index="210">9.363804981066800E-01</Wgt>
+        <Wgt class="xs:double" index="211">9.390163727920401E-01</Wgt>
+        <Wgt class="xs:double" index="212">9.416009928468791E-01</Wgt>
+        <Wgt class="xs:double" index="213">9.441339675120305E-01</Wgt>
+        <Wgt class="xs:double" index="214">9.466149138364036E-01</Wgt>
+        <Wgt class="xs:double" index="215">9.490434567348804E-01</Wgt>
+        <Wgt class="xs:double" index="216">9.514192290450241E-01</Wgt>
+        <Wgt class="xs:double" index="217">9.537418715825872E-01</Wgt>
+        <Wgt class="xs:double" index="218">9.560110331958176E-01</Wgt>
+        <Wgt class="xs:double" index="219">9.582263708185459E-01</Wgt>
+        <Wgt class="xs:double" index="220">9.603875495220537E-01</Wgt>
+        <Wgt class="xs:double" index="221">9.624942425657097E-01</Wgt>
+        <Wgt class="xs:double" index="222">9.645461314463679E-01</Wgt>
+        <Wgt class="xs:double" index="223">9.665429059465220E-01</Wgt>
+        <Wgt class="xs:double" index="224">9.684842641812049E-01</Wgt>
+        <Wgt class="xs:double" index="225">9.703699126436309E-01</Wgt>
+        <Wgt class="xs:double" index="226">9.721995662495684E-01</Wgt>
+        <Wgt class="xs:double" index="227">9.739729483804418E-01</Wgt>
+        <Wgt class="xs:double" index="228">9.756897909251523E-01</Wgt>
+        <Wgt class="xs:double" index="229">9.773498343206122E-01</Wgt>
+        <Wgt class="xs:double" index="230">9.789528275909876E-01</Wgt>
+        <Wgt class="xs:double" index="231">9.804985283856422E-01</Wgt>
+        <Wgt class="xs:double" index="232">9.819867030157783E-01</Wgt>
+        <Wgt class="xs:double" index="233">9.834171264897660E-01</Wgt>
+        <Wgt class="xs:double" index="234">9.847895825471600E-01</Wgt>
+        <Wgt class="xs:double" index="235">9.861038636913944E-01</Wgt>
+        <Wgt class="xs:double" index="236">9.873597712211539E-01</Wgt>
+        <Wgt class="xs:double" index="237">9.885571152604147E-01</Wgt>
+        <Wgt class="xs:double" index="238">9.896957147871507E-01</Wgt>
+        <Wgt class="xs:double" index="239">9.907753976607019E-01</Wgt>
+        <Wgt class="xs:double" index="240">9.917960006477995E-01</Wgt>
+        <Wgt class="xs:double" index="241">9.927573694472451E-01</Wgt>
+        <Wgt class="xs:double" index="242">9.936593587132381E-01</Wgt>
+        <Wgt class="xs:double" index="243">9.945018320773504E-01</Wgt>
+        <Wgt class="xs:double" index="244">9.952846621691438E-01</Wgt>
+        <Wgt class="xs:double" index="245">9.960077306354259E-01</Wgt>
+        <Wgt class="xs:double" index="246">9.966709281581441E-01</Wgt>
+        <Wgt class="xs:double" index="247">9.972741544709129E-01</Wgt>
+        <Wgt class="xs:double" index="248">9.978173183741723E-01</Wgt>
+        <Wgt class="xs:double" index="249">9.983003377489766E-01</Wgt>
+        <Wgt class="xs:double" index="250">9.987231395694094E-01</Wgt>
+        <Wgt class="xs:double" index="251">9.990856599136239E-01</Wgt>
+        <Wgt class="xs:double" index="252">9.993878439735072E-01</Wgt>
+        <Wgt class="xs:double" index="253">9.996296460629668E-01</Wgt>
+        <Wgt class="xs:double" index="254">9.998110296248371E-01</Wgt>
+        <Wgt class="xs:double" index="255">9.999319672364071E-01</Wgt>
+        <Wgt class="xs:double" index="256">9.999924406135654E-01</Wgt>
+        <Wgt class="xs:double" index="257">9.999924406135654E-01</Wgt>
+        <Wgt class="xs:double" index="258">9.999319672364071E-01</Wgt>
+        <Wgt class="xs:double" index="259">9.998110296248371E-01</Wgt>
+        <Wgt class="xs:double" index="260">9.996296460629668E-01</Wgt>
+        <Wgt class="xs:double" index="261">9.993878439735072E-01</Wgt>
+        <Wgt class="xs:double" index="262">9.990856599136239E-01</Wgt>
+        <Wgt class="xs:double" index="263">9.987231395694094E-01</Wgt>
+        <Wgt class="xs:double" index="264">9.983003377489766E-01</Wgt>
+        <Wgt class="xs:double" index="265">9.978173183741723E-01</Wgt>
+        <Wgt class="xs:double" index="266">9.972741544709129E-01</Wgt>
+        <Wgt class="xs:double" index="267">9.966709281581441E-01</Wgt>
+        <Wgt class="xs:double" index="268">9.960077306354259E-01</Wgt>
+        <Wgt class="xs:double" index="269">9.952846621691438E-01</Wgt>
+        <Wgt class="xs:double" index="270">9.945018320773504E-01</Wgt>
+        <Wgt class="xs:double" index="271">9.936593587132381E-01</Wgt>
+        <Wgt class="xs:double" index="272">9.927573694472451E-01</Wgt>
+        <Wgt class="xs:double" index="273">9.917960006477995E-01</Wgt>
+        <Wgt class="xs:double" index="274">9.907753976607019E-01</Wgt>
+        <Wgt class="xs:double" index="275">9.896957147871507E-01</Wgt>
+        <Wgt class="xs:double" index="276">9.885571152604147E-01</Wgt>
+        <Wgt class="xs:double" index="277">9.873597712211539E-01</Wgt>
+        <Wgt class="xs:double" index="278">9.861038636913944E-01</Wgt>
+        <Wgt class="xs:double" index="279">9.847895825471600E-01</Wgt>
+        <Wgt class="xs:double" index="280">9.834171264897660E-01</Wgt>
+        <Wgt class="xs:double" index="281">9.819867030157783E-01</Wgt>
+        <Wgt class="xs:double" index="282">9.804985283856422E-01</Wgt>
+        <Wgt class="xs:double" index="283">9.789528275909876E-01</Wgt>
+        <Wgt class="xs:double" index="284">9.773498343206122E-01</Wgt>
+        <Wgt class="xs:double" index="285">9.756897909251523E-01</Wgt>
+        <Wgt class="xs:double" index="286">9.739729483804418E-01</Wgt>
+        <Wgt class="xs:double" index="287">9.721995662495684E-01</Wgt>
+        <Wgt class="xs:double" index="288">9.703699126436309E-01</Wgt>
+        <Wgt class="xs:double" index="289">9.684842641812049E-01</Wgt>
+        <Wgt class="xs:double" index="290">9.665429059465220E-01</Wgt>
+        <Wgt class="xs:double" index="291">9.645461314463679E-01</Wgt>
+        <Wgt class="xs:double" index="292">9.624942425657097E-01</Wgt>
+        <Wgt class="xs:double" index="293">9.603875495220537E-01</Wgt>
+        <Wgt class="xs:double" index="294">9.582263708185459E-01</Wgt>
+        <Wgt class="xs:double" index="295">9.560110331958176E-01</Wgt>
+        <Wgt class="xs:double" index="296">9.537418715825872E-01</Wgt>
+        <Wgt class="xs:double" index="297">9.514192290450241E-01</Wgt>
+        <Wgt class="xs:double" index="298">9.490434567348804E-01</Wgt>
+        <Wgt class="xs:double" index="299">9.466149138364036E-01</Wgt>
+        <Wgt class="xs:double" index="300">9.441339675120305E-01</Wgt>
+        <Wgt class="xs:double" index="301">9.416009928468791E-01</Wgt>
+        <Wgt class="xs:double" index="302">9.390163727920401E-01</Wgt>
+        <Wgt class="xs:double" index="303">9.363804981066800E-01</Wgt>
+        <Wgt class="xs:double" index="304">9.336937672989636E-01</Wgt>
+        <Wgt class="xs:double" index="305">9.309565865658053E-01</Wgt>
+        <Wgt class="xs:double" index="306">9.281693697314575E-01</Wgt>
+        <Wgt class="xs:double" index="307">9.253325381849462E-01</Wgt>
+        <Wgt class="xs:double" index="308">9.224465208163621E-01</Wgt>
+        <Wgt class="xs:double" index="309">9.195117539520196E-01</Wgt>
+        <Wgt class="xs:double" index="310">9.165286812884885E-01</Wgt>
+        <Wgt class="xs:double" index="311">9.134977538255149E-01</Wgt>
+        <Wgt class="xs:double" index="312">9.104194297978350E-01</Wgt>
+        <Wgt class="xs:double" index="313">9.072941746058966E-01</Wgt>
+        <Wgt class="xs:double" index="314">9.041224607454972E-01</Wgt>
+        <Wgt class="xs:double" index="315">9.009047677363489E-01</Wgt>
+        <Wgt class="xs:double" index="316">8.976415820495817E-01</Wgt>
+        <Wgt class="xs:double" index="317">8.943333970341953E-01</Wgt>
+        <Wgt class="xs:double" index="318">8.909807128424720E-01</Wgt>
+        <Wgt class="xs:double" index="319">8.875840363543606E-01</Wgt>
+        <Wgt class="xs:double" index="320">8.841438811008420E-01</Wgt>
+        <Wgt class="xs:double" index="321">8.806607671862920E-01</Wgt>
+        <Wgt class="xs:double" index="322">8.771352212098478E-01</Wgt>
+        <Wgt class="xs:double" index="323">8.735677761857925E-01</Wgt>
+        <Wgt class="xs:double" index="324">8.699589714629726E-01</Wgt>
+        <Wgt class="xs:double" index="325">8.663093526432544E-01</Wgt>
+        <Wgt class="xs:double" index="326">8.626194714990365E-01</Wgt>
+        <Wgt class="xs:double" index="327">8.588898858898304E-01</Wgt>
+        <Wgt class="xs:double" index="328">8.551211596779189E-01</Wgt>
+        <Wgt class="xs:double" index="329">8.513138626431078E-01</Wgt>
+        <Wgt class="xs:double" index="330">8.474685703965836E-01</Wgt>
+        <Wgt class="xs:double" index="331">8.435858642938882E-01</Wgt>
+        <Wgt class="xs:double" index="332">8.396663313470267E-01</Wgt>
+        <Wgt class="xs:double" index="333">8.357105641357188E-01</Wgt>
+        <Wgt class="xs:double" index="334">8.317191607178087E-01</Wgt>
+        <Wgt class="xs:double" index="335">8.276927245388472E-01</Wgt>
+        <Wgt class="xs:double" index="336">8.236318643408592E-01</Wgt>
+        <Wgt class="xs:double" index="337">8.195371940703097E-01</Wgt>
+        <Wgt class="xs:double" index="338">8.154093327852839E-01</Wgt>
+        <Wgt class="xs:double" index="339">8.112489045618939E-01</Wgt>
+        <Wgt class="xs:double" index="340">8.070565383999272E-01</Wgt>
+        <Wgt class="xs:double" index="341">8.028328681277499E-01</Wgt>
+        <Wgt class="xs:double" index="342">7.985785323064816E-01</Wgt>
+        <Wgt class="xs:double" index="343">7.942941741334526E-01</Wgt>
+        <Wgt class="xs:double" index="344">7.899804413449620E-01</Wgt>
+        <Wgt class="xs:double" index="345">7.856379861183485E-01</Wgt>
+        <Wgt class="xs:double" index="346">7.812674649733903E-01</Wgt>
+        <Wgt class="xs:double" index="347">7.768695386730478E-01</Wgt>
+        <Wgt class="xs:double" index="348">7.724448721235666E-01</Wgt>
+        <Wgt class="xs:double" index="349">7.679941342739507E-01</Wgt>
+        <Wgt class="xs:double" index="350">7.635179980148290E-01</Wgt>
+        <Wgt class="xs:double" index="351">7.590171400767209E-01</Wgt>
+        <Wgt class="xs:double" index="352">7.544922409277262E-01</Wgt>
+        <Wgt class="xs:double" index="353">7.499439846706462E-01</Wgt>
+        <Wgt class="xs:double" index="354">7.453730589395571E-01</Wgt>
+        <Wgt class="xs:double" index="355">7.407801547958492E-01</Wgt>
+        <Wgt class="xs:double" index="356">7.361659666237486E-01</Wgt>
+        <Wgt class="xs:double" index="357">7.315311920253340E-01</Wgt>
+        <Wgt class="xs:double" index="358">7.268765317150706E-01</Wgt>
+        <Wgt class="xs:double" index="359">7.222026894138709E-01</Wgt>
+        <Wgt class="xs:double" index="360">7.175103717427015E-01</Wgt>
+        <Wgt class="xs:double" index="361">7.128002881157524E-01</Wgt>
+        <Wgt class="xs:double" index="362">7.080731506331825E-01</Wgt>
+        <Wgt class="xs:double" index="363">7.033296739734608E-01</Wgt>
+        <Wgt class="xs:double" index="364">6.985705752853153E-01</Wgt>
+        <Wgt class="xs:double" index="365">6.937965740793115E-01</Wgt>
+        <Wgt class="xs:double" index="366">6.890083921190712E-01</Wgt>
+        <Wgt class="xs:double" index="367">6.842067533121524E-01</Wgt>
+        <Wgt class="xs:double" index="368">6.793923836006039E-01</Wgt>
+        <Wgt class="xs:double" index="369">6.745660108512131E-01</Wgt>
+        <Wgt class="xs:double" index="370">6.697283647454623E-01</Wgt>
+        <Wgt class="xs:double" index="371">6.648801766692106E-01</Wgt>
+        <Wgt class="xs:double" index="372">6.600221796021195E-01</Wgt>
+        <Wgt class="xs:double" index="373">6.551551080068350E-01</Wgt>
+        <Wgt class="xs:double" index="374">6.502796977179476E-01</Wgt>
+        <Wgt class="xs:double" index="375">6.453966858307444E-01</Wgt>
+        <Wgt class="xs:double" index="376">6.405068105897697E-01</Wgt>
+        <Wgt class="xs:double" index="377">6.356108112772132E-01</Wgt>
+        <Wgt class="xs:double" index="378">6.307094281011404E-01</Wgt>
+        <Wgt class="xs:double" index="379">6.258034020835831E-01</Wgt>
+        <Wgt class="xs:double" index="380">6.208934749485072E-01</Wgt>
+        <Wgt class="xs:double" index="381">6.159803890096742E-01</Wgt>
+        <Wgt class="xs:double" index="382">6.110648870584134E-01</Wgt>
+        <Wgt class="xs:double" index="383">6.061477122513224E-01</Wgt>
+        <Wgt class="xs:double" index="384">6.012296079979111E-01</Wgt>
+        <Wgt class="xs:double" index="385">5.963113178482097E-01</Wgt>
+        <Wgt class="xs:double" index="386">5.913935853803527E-01</Wgt>
+        <Wgt class="xs:double" index="387">5.864771540881611E-01</Wgt>
+        <Wgt class="xs:double" index="388">5.815627672687361E-01</Wgt>
+        <Wgt class="xs:double" index="389">5.766511679100823E-01</Wgt>
+        <Wgt class="xs:double" index="390">5.717430985787785E-01</Wgt>
+        <Wgt class="xs:double" index="391">5.668393013077114E-01</Wgt>
+        <Wgt class="xs:double" index="392">5.619405174838913E-01</Wgt>
+        <Wgt class="xs:double" index="393">5.570474877363635E-01</Wgt>
+        <Wgt class="xs:double" index="394">5.521609518242359E-01</Wgt>
+        <Wgt class="xs:double" index="395">5.472816485248371E-01</Wgt>
+        <Wgt class="xs:double" index="396">5.424103155220241E-01</Wgt>
+        <Wgt class="xs:double" index="397">5.375476892946540E-01</Wgt>
+        <Wgt class="xs:double" index="398">5.326945050052384E-01</Wgt>
+        <Wgt class="xs:double" index="399">5.278514963887976E-01</Wgt>
+        <Wgt class="xs:double" index="400">5.230193956419292E-01</Wgt>
+        <Wgt class="xs:double" index="401">5.181989333121103E-01</Wgt>
+        <Wgt class="xs:double" index="402">5.133908381872486E-01</Wgt>
+        <Wgt class="xs:double" index="403">5.085958371854998E-01</Wgt>
+        <Wgt class="xs:double" index="404">5.038146552453676E-01</Wgt>
+        <Wgt class="xs:double" index="405">4.990480152161027E-01</Wgt>
+        <Wgt class="xs:double" index="406">4.942966377484177E-01</Wgt>
+        <Wgt class="xs:double" index="407">4.895612411855352E-01</Wgt>
+        <Wgt class="xs:double" index="408">4.848425414545836E-01</Wgt>
+        <Wgt class="xs:double" index="409">4.801412519583589E-01</Wgt>
+        <Wgt class="xs:double" index="410">4.754580834674682E-01</Wgt>
+        <Wgt class="xs:double" index="411">4.707937440128703E-01</Wgt>
+        <Wgt class="xs:double" index="412">4.661489387788320E-01</Wgt>
+        <Wgt class="xs:double" index="413">4.615243699963129E-01</Wgt>
+        <Wgt class="xs:double" index="414">4.569207368367982E-01</Wgt>
+        <Wgt class="xs:double" index="415">4.523387353065942E-01</Wgt>
+        <Wgt class="xs:double" index="416">4.477790581416001E-01</Wgt>
+        <Wgt class="xs:double" index="417">4.432423947025775E-01</Wgt>
+        <Wgt class="xs:double" index="418">4.387294308709272E-01</Wgt>
+        <Wgt class="xs:double" index="419">4.342408489449938E-01</Wgt>
+        <Wgt class="xs:double" index="420">4.297773275369120E-01</Wgt>
+        <Wgt class="xs:double" index="421">4.253395414700090E-01</Wgt>
+        <Wgt class="xs:double" index="422">4.209281616767808E-01</Wgt>
+        <Wgt class="xs:double" index="423">4.165438550974564E-01</Wgt>
+        <Wgt class="xs:double" index="424">4.121872845791653E-01</Wgt>
+        <Wgt class="xs:double" index="425">4.078591087757248E-01</Wgt>
+        <Wgt class="xs:double" index="426">4.035599820480595E-01</Wgt>
+        <Wgt class="xs:double" index="427">3.992905543652718E-01</Wgt>
+        <Wgt class="xs:double" index="428">3.950514712063749E-01</Wgt>
+        <Wgt class="xs:double" index="429">3.908433734627057E-01</Wgt>
+        <Wgt class="xs:double" index="430">3.866668973410302E-01</Wgt>
+        <Wgt class="xs:double" index="431">3.825226742673584E-01</Wgt>
+        <Wgt class="xs:double" index="432">3.784113307914809E-01</Wgt>
+        <Wgt class="xs:double" index="433">3.743334884922431E-01</Wgt>
+        <Wgt class="xs:double" index="434">3.702897638835715E-01</Wgt>
+        <Wgt class="xs:double" index="435">3.662807683212646E-01</Wgt>
+        <Wgt class="xs:double" index="436">3.623071079105645E-01</Wgt>
+        <Wgt class="xs:double" index="437">3.583693834145225E-01</Wgt>
+        <Wgt class="xs:double" index="438">3.544681901631713E-01</Wgt>
+        <Wgt class="xs:double" index="439">3.506041179635198E-01</Wgt>
+        <Wgt class="xs:double" index="440">3.467777510103817E-01</Wgt>
+        <Wgt class="xs:double" index="441">3.429896677980540E-01</Wgt>
+        <Wgt class="xs:double" index="442">3.392404410328561E-01</Wgt>
+        <Wgt class="xs:double" index="443">3.355306375465447E-01</Wgt>
+        <Wgt class="xs:double" index="444">3.318608182106163E-01</Wgt>
+        <Wgt class="xs:double" index="445">3.282315378515113E-01</Wgt>
+        <Wgt class="xs:double" index="446">3.246433451667319E-01</Wgt>
+        <Wgt class="xs:double" index="447">3.210967826418865E-01</Wgt>
+        <Wgt class="xs:double" index="448">3.175923864686731E-01</Wgt>
+        <Wgt class="xs:double" index="449">3.141306864638149E-01</Wgt>
+        <Wgt class="xs:double" index="450">3.107122059889586E-01</Wgt>
+        <Wgt class="xs:double" index="451">3.073374618715501E-01</Wgt>
+        <Wgt class="xs:double" index="452">3.040069643266967E-01</Wgt>
+        <Wgt class="xs:double" index="453">3.007212168800295E-01</Wgt>
+        <Wgt class="xs:double" index="454">2.974807162915776E-01</Wgt>
+        <Wgt class="xs:double" index="455">2.942859524806648E-01</Wgt>
+        <Wgt class="xs:double" index="456">2.911374084518398E-01</Wgt>
+        <Wgt class="xs:double" index="457">2.880355602218536E-01</Wgt>
+        <Wgt class="xs:double" index="458">2.849808767476912E-01</Wgt>
+        <Wgt class="xs:double" index="459">2.819738198556728E-01</Wgt>
+        <Wgt class="xs:double" index="460">2.790148441716310E-01</Wgt>
+        <Wgt class="xs:double" index="461">2.761043970521783E-01</Wgt>
+        <Wgt class="xs:double" index="462">2.732429185170723E-01</Wgt>
+        <Wgt class="xs:double" index="463">2.704308411826915E-01</Wgt>
+        <Wgt class="xs:double" index="464">2.676685901966288E-01</Wgt>
+        <Wgt class="xs:double" index="465">2.649565831734156E-01</Wgt>
+        <Wgt class="xs:double" index="466">2.622952301313841E-01</Wgt>
+        <Wgt class="xs:double" index="467">2.596849334306779E-01</Wgt>
+        <Wgt class="xs:double" index="468">2.571260877124209E-01</Wgt>
+        <Wgt class="xs:double" index="469">2.546190798390525E-01</Wgt>
+        <Wgt class="xs:double" index="470">2.521642888358402E-01</Wgt>
+        <Wgt class="xs:double" index="471">2.497620858335753E-01</Wgt>
+        <Wgt class="xs:double" index="472">2.474128340124635E-01</Wgt>
+        <Wgt class="xs:double" index="473">2.451168885472166E-01</Wgt>
+        <Wgt class="xs:double" index="474">2.428745965533555E-01</Wgt>
+        <Wgt class="xs:double" index="475">2.406862970347307E-01</Wgt>
+        <Wgt class="xs:double" index="476">2.385523208322695E-01</Wgt>
+        <Wgt class="xs:double" index="477">2.364729905739577E-01</Wgt>
+        <Wgt class="xs:double" index="478">2.344486206260625E-01</Wgt>
+        <Wgt class="xs:double" index="479">2.324795170456045E-01</Wgt>
+        <Wgt class="xs:double" index="480">2.305659775340864E-01</Wgt>
+        <Wgt class="xs:double" index="481">2.287082913924840E-01</Wgt>
+        <Wgt class="xs:double" index="482">2.269067394775087E-01</Wgt>
+        <Wgt class="xs:double" index="483">2.251615941591452E-01</Wgt>
+        <Wgt class="xs:double" index="484">2.234731192794728E-01</Wgt>
+        <Wgt class="xs:double" index="485">2.218415701127768E-01</Wgt>
+        <Wgt class="xs:double" index="486">2.202671933269537E-01</Wgt>
+        <Wgt class="xs:double" index="487">2.187502269462189E-01</Wgt>
+        <Wgt class="xs:double" index="488">2.172909003151206E-01</Wgt>
+        <Wgt class="xs:double" index="489">2.158894340638657E-01</Wgt>
+        <Wgt class="xs:double" index="490">2.145460400749643E-01</Wgt>
+        <Wgt class="xs:double" index="491">2.132609214511951E-01</Wgt>
+        <Wgt class="xs:double" index="492">2.120342724848996E-01</Wgt>
+        <Wgt class="xs:double" index="493">2.108662786286076E-01</Wgt>
+        <Wgt class="xs:double" index="494">2.097571164669994E-01</Wgt>
+        <Wgt class="xs:double" index="495">2.087069536902081E-01</Wgt>
+        <Wgt class="xs:double" index="496">2.077159490684682E-01</Wgt>
+        <Wgt class="xs:double" index="497">2.067842524281106E-01</Wgt>
+        <Wgt class="xs:double" index="498">2.059120046289115E-01</Wgt>
+        <Wgt class="xs:double" index="499">2.050993375427963E-01</Wgt>
+        <Wgt class="xs:double" index="500">2.043463740339024E-01</Wgt>
+        <Wgt class="xs:double" index="501">2.036532279400034E-01</Wgt>
+        <Wgt class="xs:double" index="502">2.030200040552991E-01</Wgt>
+        <Wgt class="xs:double" index="503">2.024467981145713E-01</Wgt>
+        <Wgt class="xs:double" index="504">2.019336967787107E-01</Wgt>
+        <Wgt class="xs:double" index="505">2.014807776216143E-01</Wgt>
+        <Wgt class="xs:double" index="506">2.010881091184579E-01</Wgt>
+        <Wgt class="xs:double" index="507">2.007557506353431E-01</Wgt>
+        <Wgt class="xs:double" index="508">2.004837524203222E-01</Wgt>
+        <Wgt class="xs:double" index="509">2.002721555958016E-01</Wgt>
+        <Wgt class="xs:double" index="510">2.001209921523241E-01</Wgt>
+        <Wgt class="xs:double" index="511">2.000302849437328E-01</Wgt>
+        <Wgt class="xs:double" index="512">2.000000476837158E-01</Wgt>
+      </WgtFunct>
+    </Row>
+    <Col>
+      <UVectECF>
+        <X class="xs:double">7.471615423154929E-01</X>
+        <Y class="xs:double">5.777028296431175E-03</Y>
+        <Z class="xs:double">-6.646173753587820E-01</Z>
+      </UVectECF>
+      <SS class="xs:double">1.279314517974854E00</SS>
+      <ImpRespWid class="xs:double">1.661747878952145E00</ImpRespWid>
+      <Sgn class="xs:int">-1</Sgn>
+      <ImpRespBW class="xs:double">7.037555764596798E-01</ImpRespBW>
+      <KCtr class="xs:double">0.000000000000000E00</KCtr>
+      <DeltaK1 class="xs:double">-3.908343046020432E-01</DeltaK1>
+      <DeltaK2 class="xs:double">3.908343046020432E-01</DeltaK2>
+      <DeltaKCOAPoly order1="2" order2="2">
+        <Coef class="xs:double" exponent1="0" exponent2="0">-1.698739114060377E-02</Coef>
+        <Coef class="xs:double" exponent1="0" exponent2="1">-8.210259382327485E-05</Coef>
+        <Coef class="xs:double" exponent1="0" exponent2="2">-4.175196504749792E-16</Coef>
+        <Coef class="xs:double" exponent1="1" exponent2="0">6.096985553940277E-09</Coef>
+        <Coef class="xs:double" exponent1="1" exponent2="1">6.690255160405476E-13</Coef>
+        <Coef class="xs:double" exponent1="1" exponent2="2">6.523243026206749E-24</Coef>
+        <Coef class="xs:double" exponent1="2" exponent2="0">-2.280307821159576E-17</Coef>
+        <Coef class="xs:double" exponent1="2" exponent2="1">-2.502140816576197E-21</Coef>
+        <Coef class="xs:double" exponent1="2" exponent2="2">-1.809576253936911E-29</Coef>
+      </DeltaKCOAPoly>
+      <WgtType class="xs:string">HAMMING</WgtType>
+      <WgtFunct size="512">
+        <Wgt class="xs:double" index="1">2.000000476837158E-01</Wgt>
+        <Wgt class="xs:double" index="2">2.000302849437328E-01</Wgt>
+        <Wgt class="xs:double" index="3">2.001209921523241E-01</Wgt>
+        <Wgt class="xs:double" index="4">2.002721555958016E-01</Wgt>
+        <Wgt class="xs:double" index="5">2.004837524203222E-01</Wgt>
+        <Wgt class="xs:double" index="6">2.007557506353431E-01</Wgt>
+        <Wgt class="xs:double" index="7">2.010881091184579E-01</Wgt>
+        <Wgt class="xs:double" index="8">2.014807776216143E-01</Wgt>
+        <Wgt class="xs:double" index="9">2.019336967787107E-01</Wgt>
+        <Wgt class="xs:double" index="10">2.024467981145713E-01</Wgt>
+        <Wgt class="xs:double" index="11">2.030200040552991E-01</Wgt>
+        <Wgt class="xs:double" index="12">2.036532279400034E-01</Wgt>
+        <Wgt class="xs:double" index="13">2.043463740339024E-01</Wgt>
+        <Wgt class="xs:double" index="14">2.050993375427963E-01</Wgt>
+        <Wgt class="xs:double" index="15">2.059120046289115E-01</Wgt>
+        <Wgt class="xs:double" index="16">2.067842524281106E-01</Wgt>
+        <Wgt class="xs:double" index="17">2.077159490684682E-01</Wgt>
+        <Wgt class="xs:double" index="18">2.087069536902081E-01</Wgt>
+        <Wgt class="xs:double" index="19">2.097571164669994E-01</Wgt>
+        <Wgt class="xs:double" index="20">2.108662786286076E-01</Wgt>
+        <Wgt class="xs:double" index="21">2.120342724848996E-01</Wgt>
+        <Wgt class="xs:double" index="22">2.132609214511951E-01</Wgt>
+        <Wgt class="xs:double" index="23">2.145460400749643E-01</Wgt>
+        <Wgt class="xs:double" index="24">2.158894340638657E-01</Wgt>
+        <Wgt class="xs:double" index="25">2.172909003151206E-01</Wgt>
+        <Wgt class="xs:double" index="26">2.187502269462189E-01</Wgt>
+        <Wgt class="xs:double" index="27">2.202671933269537E-01</Wgt>
+        <Wgt class="xs:double" index="28">2.218415701127768E-01</Wgt>
+        <Wgt class="xs:double" index="29">2.234731192794728E-01</Wgt>
+        <Wgt class="xs:double" index="30">2.251615941591452E-01</Wgt>
+        <Wgt class="xs:double" index="31">2.269067394775087E-01</Wgt>
+        <Wgt class="xs:double" index="32">2.287082913924840E-01</Wgt>
+        <Wgt class="xs:double" index="33">2.305659775340864E-01</Wgt>
+        <Wgt class="xs:double" index="34">2.324795170456045E-01</Wgt>
+        <Wgt class="xs:double" index="35">2.344486206260625E-01</Wgt>
+        <Wgt class="xs:double" index="36">2.364729905739577E-01</Wgt>
+        <Wgt class="xs:double" index="37">2.385523208322695E-01</Wgt>
+        <Wgt class="xs:double" index="38">2.406862970347307E-01</Wgt>
+        <Wgt class="xs:double" index="39">2.428745965533555E-01</Wgt>
+        <Wgt class="xs:double" index="40">2.451168885472166E-01</Wgt>
+        <Wgt class="xs:double" index="41">2.474128340124635E-01</Wgt>
+        <Wgt class="xs:double" index="42">2.497620858335753E-01</Wgt>
+        <Wgt class="xs:double" index="43">2.521642888358402E-01</Wgt>
+        <Wgt class="xs:double" index="44">2.546190798390525E-01</Wgt>
+        <Wgt class="xs:double" index="45">2.571260877124209E-01</Wgt>
+        <Wgt class="xs:double" index="46">2.596849334306779E-01</Wgt>
+        <Wgt class="xs:double" index="47">2.622952301313841E-01</Wgt>
+        <Wgt class="xs:double" index="48">2.649565831734156E-01</Wgt>
+        <Wgt class="xs:double" index="49">2.676685901966288E-01</Wgt>
+        <Wgt class="xs:double" index="50">2.704308411826915E-01</Wgt>
+        <Wgt class="xs:double" index="51">2.732429185170723E-01</Wgt>
+        <Wgt class="xs:double" index="52">2.761043970521783E-01</Wgt>
+        <Wgt class="xs:double" index="53">2.790148441716310E-01</Wgt>
+        <Wgt class="xs:double" index="54">2.819738198556728E-01</Wgt>
+        <Wgt class="xs:double" index="55">2.849808767476912E-01</Wgt>
+        <Wgt class="xs:double" index="56">2.880355602218536E-01</Wgt>
+        <Wgt class="xs:double" index="57">2.911374084518398E-01</Wgt>
+        <Wgt class="xs:double" index="58">2.942859524806648E-01</Wgt>
+        <Wgt class="xs:double" index="59">2.974807162915776E-01</Wgt>
+        <Wgt class="xs:double" index="60">3.007212168800295E-01</Wgt>
+        <Wgt class="xs:double" index="61">3.040069643266967E-01</Wgt>
+        <Wgt class="xs:double" index="62">3.073374618715501E-01</Wgt>
+        <Wgt class="xs:double" index="63">3.107122059889586E-01</Wgt>
+        <Wgt class="xs:double" index="64">3.141306864638149E-01</Wgt>
+        <Wgt class="xs:double" index="65">3.175923864686731E-01</Wgt>
+        <Wgt class="xs:double" index="66">3.210967826418865E-01</Wgt>
+        <Wgt class="xs:double" index="67">3.246433451667319E-01</Wgt>
+        <Wgt class="xs:double" index="68">3.282315378515113E-01</Wgt>
+        <Wgt class="xs:double" index="69">3.318608182106163E-01</Wgt>
+        <Wgt class="xs:double" index="70">3.355306375465447E-01</Wgt>
+        <Wgt class="xs:double" index="71">3.392404410328561E-01</Wgt>
+        <Wgt class="xs:double" index="72">3.429896677980540E-01</Wgt>
+        <Wgt class="xs:double" index="73">3.467777510103817E-01</Wgt>
+        <Wgt class="xs:double" index="74">3.506041179635198E-01</Wgt>
+        <Wgt class="xs:double" index="75">3.544681901631713E-01</Wgt>
+        <Wgt class="xs:double" index="76">3.583693834145225E-01</Wgt>
+        <Wgt class="xs:double" index="77">3.623071079105645E-01</Wgt>
+        <Wgt class="xs:double" index="78">3.662807683212646E-01</Wgt>
+        <Wgt class="xs:double" index="79">3.702897638835715E-01</Wgt>
+        <Wgt class="xs:double" index="80">3.743334884922431E-01</Wgt>
+        <Wgt class="xs:double" index="81">3.784113307914809E-01</Wgt>
+        <Wgt class="xs:double" index="82">3.825226742673584E-01</Wgt>
+        <Wgt class="xs:double" index="83">3.866668973410302E-01</Wgt>
+        <Wgt class="xs:double" index="84">3.908433734627057E-01</Wgt>
+        <Wgt class="xs:double" index="85">3.950514712063749E-01</Wgt>
+        <Wgt class="xs:double" index="86">3.992905543652718E-01</Wgt>
+        <Wgt class="xs:double" index="87">4.035599820480595E-01</Wgt>
+        <Wgt class="xs:double" index="88">4.078591087757248E-01</Wgt>
+        <Wgt class="xs:double" index="89">4.121872845791653E-01</Wgt>
+        <Wgt class="xs:double" index="90">4.165438550974564E-01</Wgt>
+        <Wgt class="xs:double" index="91">4.209281616767808E-01</Wgt>
+        <Wgt class="xs:double" index="92">4.253395414700090E-01</Wgt>
+        <Wgt class="xs:double" index="93">4.297773275369120E-01</Wgt>
+        <Wgt class="xs:double" index="94">4.342408489449938E-01</Wgt>
+        <Wgt class="xs:double" index="95">4.387294308709272E-01</Wgt>
+        <Wgt class="xs:double" index="96">4.432423947025775E-01</Wgt>
+        <Wgt class="xs:double" index="97">4.477790581416001E-01</Wgt>
+        <Wgt class="xs:double" index="98">4.523387353065942E-01</Wgt>
+        <Wgt class="xs:double" index="99">4.569207368367982E-01</Wgt>
+        <Wgt class="xs:double" index="100">4.615243699963129E-01</Wgt>
+        <Wgt class="xs:double" index="101">4.661489387788320E-01</Wgt>
+        <Wgt class="xs:double" index="102">4.707937440128703E-01</Wgt>
+        <Wgt class="xs:double" index="103">4.754580834674682E-01</Wgt>
+        <Wgt class="xs:double" index="104">4.801412519583589E-01</Wgt>
+        <Wgt class="xs:double" index="105">4.848425414545836E-01</Wgt>
+        <Wgt class="xs:double" index="106">4.895612411855352E-01</Wgt>
+        <Wgt class="xs:double" index="107">4.942966377484177E-01</Wgt>
+        <Wgt class="xs:double" index="108">4.990480152161027E-01</Wgt>
+        <Wgt class="xs:double" index="109">5.038146552453676E-01</Wgt>
+        <Wgt class="xs:double" index="110">5.085958371854998E-01</Wgt>
+        <Wgt class="xs:double" index="111">5.133908381872486E-01</Wgt>
+        <Wgt class="xs:double" index="112">5.181989333121103E-01</Wgt>
+        <Wgt class="xs:double" index="113">5.230193956419292E-01</Wgt>
+        <Wgt class="xs:double" index="114">5.278514963887976E-01</Wgt>
+        <Wgt class="xs:double" index="115">5.326945050052384E-01</Wgt>
+        <Wgt class="xs:double" index="116">5.375476892946540E-01</Wgt>
+        <Wgt class="xs:double" index="117">5.424103155220241E-01</Wgt>
+        <Wgt class="xs:double" index="118">5.472816485248371E-01</Wgt>
+        <Wgt class="xs:double" index="119">5.521609518242359E-01</Wgt>
+        <Wgt class="xs:double" index="120">5.570474877363635E-01</Wgt>
+        <Wgt class="xs:double" index="121">5.619405174838913E-01</Wgt>
+        <Wgt class="xs:double" index="122">5.668393013077114E-01</Wgt>
+        <Wgt class="xs:double" index="123">5.717430985787785E-01</Wgt>
+        <Wgt class="xs:double" index="124">5.766511679100823E-01</Wgt>
+        <Wgt class="xs:double" index="125">5.815627672687361E-01</Wgt>
+        <Wgt class="xs:double" index="126">5.864771540881611E-01</Wgt>
+        <Wgt class="xs:double" index="127">5.913935853803527E-01</Wgt>
+        <Wgt class="xs:double" index="128">5.963113178482097E-01</Wgt>
+        <Wgt class="xs:double" index="129">6.012296079979111E-01</Wgt>
+        <Wgt class="xs:double" index="130">6.061477122513224E-01</Wgt>
+        <Wgt class="xs:double" index="131">6.110648870584134E-01</Wgt>
+        <Wgt class="xs:double" index="132">6.159803890096742E-01</Wgt>
+        <Wgt class="xs:double" index="133">6.208934749485072E-01</Wgt>
+        <Wgt class="xs:double" index="134">6.258034020835831E-01</Wgt>
+        <Wgt class="xs:double" index="135">6.307094281011404E-01</Wgt>
+        <Wgt class="xs:double" index="136">6.356108112772132E-01</Wgt>
+        <Wgt class="xs:double" index="137">6.405068105897697E-01</Wgt>
+        <Wgt class="xs:double" index="138">6.453966858307444E-01</Wgt>
+        <Wgt class="xs:double" index="139">6.502796977179476E-01</Wgt>
+        <Wgt class="xs:double" index="140">6.551551080068350E-01</Wgt>
+        <Wgt class="xs:double" index="141">6.600221796021195E-01</Wgt>
+        <Wgt class="xs:double" index="142">6.648801766692106E-01</Wgt>
+        <Wgt class="xs:double" index="143">6.697283647454623E-01</Wgt>
+        <Wgt class="xs:double" index="144">6.745660108512131E-01</Wgt>
+        <Wgt class="xs:double" index="145">6.793923836006039E-01</Wgt>
+        <Wgt class="xs:double" index="146">6.842067533121524E-01</Wgt>
+        <Wgt class="xs:double" index="147">6.890083921190712E-01</Wgt>
+        <Wgt class="xs:double" index="148">6.937965740793115E-01</Wgt>
+        <Wgt class="xs:double" index="149">6.985705752853153E-01</Wgt>
+        <Wgt class="xs:double" index="150">7.033296739734608E-01</Wgt>
+        <Wgt class="xs:double" index="151">7.080731506331825E-01</Wgt>
+        <Wgt class="xs:double" index="152">7.128002881157524E-01</Wgt>
+        <Wgt class="xs:double" index="153">7.175103717427015E-01</Wgt>
+        <Wgt class="xs:double" index="154">7.222026894138709E-01</Wgt>
+        <Wgt class="xs:double" index="155">7.268765317150706E-01</Wgt>
+        <Wgt class="xs:double" index="156">7.315311920253340E-01</Wgt>
+        <Wgt class="xs:double" index="157">7.361659666237486E-01</Wgt>
+        <Wgt class="xs:double" index="158">7.407801547958492E-01</Wgt>
+        <Wgt class="xs:double" index="159">7.453730589395571E-01</Wgt>
+        <Wgt class="xs:double" index="160">7.499439846706462E-01</Wgt>
+        <Wgt class="xs:double" index="161">7.544922409277262E-01</Wgt>
+        <Wgt class="xs:double" index="162">7.590171400767209E-01</Wgt>
+        <Wgt class="xs:double" index="163">7.635179980148290E-01</Wgt>
+        <Wgt class="xs:double" index="164">7.679941342739507E-01</Wgt>
+        <Wgt class="xs:double" index="165">7.724448721235666E-01</Wgt>
+        <Wgt class="xs:double" index="166">7.768695386730478E-01</Wgt>
+        <Wgt class="xs:double" index="167">7.812674649733903E-01</Wgt>
+        <Wgt class="xs:double" index="168">7.856379861183485E-01</Wgt>
+        <Wgt class="xs:double" index="169">7.899804413449620E-01</Wgt>
+        <Wgt class="xs:double" index="170">7.942941741334526E-01</Wgt>
+        <Wgt class="xs:double" index="171">7.985785323064816E-01</Wgt>
+        <Wgt class="xs:double" index="172">8.028328681277499E-01</Wgt>
+        <Wgt class="xs:double" index="173">8.070565383999272E-01</Wgt>
+        <Wgt class="xs:double" index="174">8.112489045618939E-01</Wgt>
+        <Wgt class="xs:double" index="175">8.154093327852839E-01</Wgt>
+        <Wgt class="xs:double" index="176">8.195371940703097E-01</Wgt>
+        <Wgt class="xs:double" index="177">8.236318643408592E-01</Wgt>
+        <Wgt class="xs:double" index="178">8.276927245388472E-01</Wgt>
+        <Wgt class="xs:double" index="179">8.317191607178087E-01</Wgt>
+        <Wgt class="xs:double" index="180">8.357105641357188E-01</Wgt>
+        <Wgt class="xs:double" index="181">8.396663313470267E-01</Wgt>
+        <Wgt class="xs:double" index="182">8.435858642938882E-01</Wgt>
+        <Wgt class="xs:double" index="183">8.474685703965836E-01</Wgt>
+        <Wgt class="xs:double" index="184">8.513138626431078E-01</Wgt>
+        <Wgt class="xs:double" index="185">8.551211596779189E-01</Wgt>
+        <Wgt class="xs:double" index="186">8.588898858898304E-01</Wgt>
+        <Wgt class="xs:double" index="187">8.626194714990365E-01</Wgt>
+        <Wgt class="xs:double" index="188">8.663093526432544E-01</Wgt>
+        <Wgt class="xs:double" index="189">8.699589714629726E-01</Wgt>
+        <Wgt class="xs:double" index="190">8.735677761857925E-01</Wgt>
+        <Wgt class="xs:double" index="191">8.771352212098478E-01</Wgt>
+        <Wgt class="xs:double" index="192">8.806607671862920E-01</Wgt>
+        <Wgt class="xs:double" index="193">8.841438811008420E-01</Wgt>
+        <Wgt class="xs:double" index="194">8.875840363543606E-01</Wgt>
+        <Wgt class="xs:double" index="195">8.909807128424720E-01</Wgt>
+        <Wgt class="xs:double" index="196">8.943333970341953E-01</Wgt>
+        <Wgt class="xs:double" index="197">8.976415820495817E-01</Wgt>
+        <Wgt class="xs:double" index="198">9.009047677363489E-01</Wgt>
+        <Wgt class="xs:double" index="199">9.041224607454972E-01</Wgt>
+        <Wgt class="xs:double" index="200">9.072941746058966E-01</Wgt>
+        <Wgt class="xs:double" index="201">9.104194297978350E-01</Wgt>
+        <Wgt class="xs:double" index="202">9.134977538255149E-01</Wgt>
+        <Wgt class="xs:double" index="203">9.165286812884885E-01</Wgt>
+        <Wgt class="xs:double" index="204">9.195117539520196E-01</Wgt>
+        <Wgt class="xs:double" index="205">9.224465208163621E-01</Wgt>
+        <Wgt class="xs:double" index="206">9.253325381849462E-01</Wgt>
+        <Wgt class="xs:double" index="207">9.281693697314575E-01</Wgt>
+        <Wgt class="xs:double" index="208">9.309565865658053E-01</Wgt>
+        <Wgt class="xs:double" index="209">9.336937672989636E-01</Wgt>
+        <Wgt class="xs:double" index="210">9.363804981066800E-01</Wgt>
+        <Wgt class="xs:double" index="211">9.390163727920401E-01</Wgt>
+        <Wgt class="xs:double" index="212">9.416009928468791E-01</Wgt>
+        <Wgt class="xs:double" index="213">9.441339675120305E-01</Wgt>
+        <Wgt class="xs:double" index="214">9.466149138364036E-01</Wgt>
+        <Wgt class="xs:double" index="215">9.490434567348804E-01</Wgt>
+        <Wgt class="xs:double" index="216">9.514192290450241E-01</Wgt>
+        <Wgt class="xs:double" index="217">9.537418715825872E-01</Wgt>
+        <Wgt class="xs:double" index="218">9.560110331958176E-01</Wgt>
+        <Wgt class="xs:double" index="219">9.582263708185459E-01</Wgt>
+        <Wgt class="xs:double" index="220">9.603875495220537E-01</Wgt>
+        <Wgt class="xs:double" index="221">9.624942425657097E-01</Wgt>
+        <Wgt class="xs:double" index="222">9.645461314463679E-01</Wgt>
+        <Wgt class="xs:double" index="223">9.665429059465220E-01</Wgt>
+        <Wgt class="xs:double" index="224">9.684842641812049E-01</Wgt>
+        <Wgt class="xs:double" index="225">9.703699126436309E-01</Wgt>
+        <Wgt class="xs:double" index="226">9.721995662495684E-01</Wgt>
+        <Wgt class="xs:double" index="227">9.739729483804418E-01</Wgt>
+        <Wgt class="xs:double" index="228">9.756897909251523E-01</Wgt>
+        <Wgt class="xs:double" index="229">9.773498343206122E-01</Wgt>
+        <Wgt class="xs:double" index="230">9.789528275909876E-01</Wgt>
+        <Wgt class="xs:double" index="231">9.804985283856422E-01</Wgt>
+        <Wgt class="xs:double" index="232">9.819867030157783E-01</Wgt>
+        <Wgt class="xs:double" index="233">9.834171264897660E-01</Wgt>
+        <Wgt class="xs:double" index="234">9.847895825471600E-01</Wgt>
+        <Wgt class="xs:double" index="235">9.861038636913944E-01</Wgt>
+        <Wgt class="xs:double" index="236">9.873597712211539E-01</Wgt>
+        <Wgt class="xs:double" index="237">9.885571152604147E-01</Wgt>
+        <Wgt class="xs:double" index="238">9.896957147871507E-01</Wgt>
+        <Wgt class="xs:double" index="239">9.907753976607019E-01</Wgt>
+        <Wgt class="xs:double" index="240">9.917960006477995E-01</Wgt>
+        <Wgt class="xs:double" index="241">9.927573694472451E-01</Wgt>
+        <Wgt class="xs:double" index="242">9.936593587132381E-01</Wgt>
+        <Wgt class="xs:double" index="243">9.945018320773504E-01</Wgt>
+        <Wgt class="xs:double" index="244">9.952846621691438E-01</Wgt>
+        <Wgt class="xs:double" index="245">9.960077306354259E-01</Wgt>
+        <Wgt class="xs:double" index="246">9.966709281581441E-01</Wgt>
+        <Wgt class="xs:double" index="247">9.972741544709129E-01</Wgt>
+        <Wgt class="xs:double" index="248">9.978173183741723E-01</Wgt>
+        <Wgt class="xs:double" index="249">9.983003377489766E-01</Wgt>
+        <Wgt class="xs:double" index="250">9.987231395694094E-01</Wgt>
+        <Wgt class="xs:double" index="251">9.990856599136239E-01</Wgt>
+        <Wgt class="xs:double" index="252">9.993878439735072E-01</Wgt>
+        <Wgt class="xs:double" index="253">9.996296460629668E-01</Wgt>
+        <Wgt class="xs:double" index="254">9.998110296248371E-01</Wgt>
+        <Wgt class="xs:double" index="255">9.999319672364071E-01</Wgt>
+        <Wgt class="xs:double" index="256">9.999924406135654E-01</Wgt>
+        <Wgt class="xs:double" index="257">9.999924406135654E-01</Wgt>
+        <Wgt class="xs:double" index="258">9.999319672364071E-01</Wgt>
+        <Wgt class="xs:double" index="259">9.998110296248371E-01</Wgt>
+        <Wgt class="xs:double" index="260">9.996296460629668E-01</Wgt>
+        <Wgt class="xs:double" index="261">9.993878439735072E-01</Wgt>
+        <Wgt class="xs:double" index="262">9.990856599136239E-01</Wgt>
+        <Wgt class="xs:double" index="263">9.987231395694094E-01</Wgt>
+        <Wgt class="xs:double" index="264">9.983003377489766E-01</Wgt>
+        <Wgt class="xs:double" index="265">9.978173183741723E-01</Wgt>
+        <Wgt class="xs:double" index="266">9.972741544709129E-01</Wgt>
+        <Wgt class="xs:double" index="267">9.966709281581441E-01</Wgt>
+        <Wgt class="xs:double" index="268">9.960077306354259E-01</Wgt>
+        <Wgt class="xs:double" index="269">9.952846621691438E-01</Wgt>
+        <Wgt class="xs:double" index="270">9.945018320773504E-01</Wgt>
+        <Wgt class="xs:double" index="271">9.936593587132381E-01</Wgt>
+        <Wgt class="xs:double" index="272">9.927573694472451E-01</Wgt>
+        <Wgt class="xs:double" index="273">9.917960006477995E-01</Wgt>
+        <Wgt class="xs:double" index="274">9.907753976607019E-01</Wgt>
+        <Wgt class="xs:double" index="275">9.896957147871507E-01</Wgt>
+        <Wgt class="xs:double" index="276">9.885571152604147E-01</Wgt>
+        <Wgt class="xs:double" index="277">9.873597712211539E-01</Wgt>
+        <Wgt class="xs:double" index="278">9.861038636913944E-01</Wgt>
+        <Wgt class="xs:double" index="279">9.847895825471600E-01</Wgt>
+        <Wgt class="xs:double" index="280">9.834171264897660E-01</Wgt>
+        <Wgt class="xs:double" index="281">9.819867030157783E-01</Wgt>
+        <Wgt class="xs:double" index="282">9.804985283856422E-01</Wgt>
+        <Wgt class="xs:double" index="283">9.789528275909876E-01</Wgt>
+        <Wgt class="xs:double" index="284">9.773498343206122E-01</Wgt>
+        <Wgt class="xs:double" index="285">9.756897909251523E-01</Wgt>
+        <Wgt class="xs:double" index="286">9.739729483804418E-01</Wgt>
+        <Wgt class="xs:double" index="287">9.721995662495684E-01</Wgt>
+        <Wgt class="xs:double" index="288">9.703699126436309E-01</Wgt>
+        <Wgt class="xs:double" index="289">9.684842641812049E-01</Wgt>
+        <Wgt class="xs:double" index="290">9.665429059465220E-01</Wgt>
+        <Wgt class="xs:double" index="291">9.645461314463679E-01</Wgt>
+        <Wgt class="xs:double" index="292">9.624942425657097E-01</Wgt>
+        <Wgt class="xs:double" index="293">9.603875495220537E-01</Wgt>
+        <Wgt class="xs:double" index="294">9.582263708185459E-01</Wgt>
+        <Wgt class="xs:double" index="295">9.560110331958176E-01</Wgt>
+        <Wgt class="xs:double" index="296">9.537418715825872E-01</Wgt>
+        <Wgt class="xs:double" index="297">9.514192290450241E-01</Wgt>
+        <Wgt class="xs:double" index="298">9.490434567348804E-01</Wgt>
+        <Wgt class="xs:double" index="299">9.466149138364036E-01</Wgt>
+        <Wgt class="xs:double" index="300">9.441339675120305E-01</Wgt>
+        <Wgt class="xs:double" index="301">9.416009928468791E-01</Wgt>
+        <Wgt class="xs:double" index="302">9.390163727920401E-01</Wgt>
+        <Wgt class="xs:double" index="303">9.363804981066800E-01</Wgt>
+        <Wgt class="xs:double" index="304">9.336937672989636E-01</Wgt>
+        <Wgt class="xs:double" index="305">9.309565865658053E-01</Wgt>
+        <Wgt class="xs:double" index="306">9.281693697314575E-01</Wgt>
+        <Wgt class="xs:double" index="307">9.253325381849462E-01</Wgt>
+        <Wgt class="xs:double" index="308">9.224465208163621E-01</Wgt>
+        <Wgt class="xs:double" index="309">9.195117539520196E-01</Wgt>
+        <Wgt class="xs:double" index="310">9.165286812884885E-01</Wgt>
+        <Wgt class="xs:double" index="311">9.134977538255149E-01</Wgt>
+        <Wgt class="xs:double" index="312">9.104194297978350E-01</Wgt>
+        <Wgt class="xs:double" index="313">9.072941746058966E-01</Wgt>
+        <Wgt class="xs:double" index="314">9.041224607454972E-01</Wgt>
+        <Wgt class="xs:double" index="315">9.009047677363489E-01</Wgt>
+        <Wgt class="xs:double" index="316">8.976415820495817E-01</Wgt>
+        <Wgt class="xs:double" index="317">8.943333970341953E-01</Wgt>
+        <Wgt class="xs:double" index="318">8.909807128424720E-01</Wgt>
+        <Wgt class="xs:double" index="319">8.875840363543606E-01</Wgt>
+        <Wgt class="xs:double" index="320">8.841438811008420E-01</Wgt>
+        <Wgt class="xs:double" index="321">8.806607671862920E-01</Wgt>
+        <Wgt class="xs:double" index="322">8.771352212098478E-01</Wgt>
+        <Wgt class="xs:double" index="323">8.735677761857925E-01</Wgt>
+        <Wgt class="xs:double" index="324">8.699589714629726E-01</Wgt>
+        <Wgt class="xs:double" index="325">8.663093526432544E-01</Wgt>
+        <Wgt class="xs:double" index="326">8.626194714990365E-01</Wgt>
+        <Wgt class="xs:double" index="327">8.588898858898304E-01</Wgt>
+        <Wgt class="xs:double" index="328">8.551211596779189E-01</Wgt>
+        <Wgt class="xs:double" index="329">8.513138626431078E-01</Wgt>
+        <Wgt class="xs:double" index="330">8.474685703965836E-01</Wgt>
+        <Wgt class="xs:double" index="331">8.435858642938882E-01</Wgt>
+        <Wgt class="xs:double" index="332">8.396663313470267E-01</Wgt>
+        <Wgt class="xs:double" index="333">8.357105641357188E-01</Wgt>
+        <Wgt class="xs:double" index="334">8.317191607178087E-01</Wgt>
+        <Wgt class="xs:double" index="335">8.276927245388472E-01</Wgt>
+        <Wgt class="xs:double" index="336">8.236318643408592E-01</Wgt>
+        <Wgt class="xs:double" index="337">8.195371940703097E-01</Wgt>
+        <Wgt class="xs:double" index="338">8.154093327852839E-01</Wgt>
+        <Wgt class="xs:double" index="339">8.112489045618939E-01</Wgt>
+        <Wgt class="xs:double" index="340">8.070565383999272E-01</Wgt>
+        <Wgt class="xs:double" index="341">8.028328681277499E-01</Wgt>
+        <Wgt class="xs:double" index="342">7.985785323064816E-01</Wgt>
+        <Wgt class="xs:double" index="343">7.942941741334526E-01</Wgt>
+        <Wgt class="xs:double" index="344">7.899804413449620E-01</Wgt>
+        <Wgt class="xs:double" index="345">7.856379861183485E-01</Wgt>
+        <Wgt class="xs:double" index="346">7.812674649733903E-01</Wgt>
+        <Wgt class="xs:double" index="347">7.768695386730478E-01</Wgt>
+        <Wgt class="xs:double" index="348">7.724448721235666E-01</Wgt>
+        <Wgt class="xs:double" index="349">7.679941342739507E-01</Wgt>
+        <Wgt class="xs:double" index="350">7.635179980148290E-01</Wgt>
+        <Wgt class="xs:double" index="351">7.590171400767209E-01</Wgt>
+        <Wgt class="xs:double" index="352">7.544922409277262E-01</Wgt>
+        <Wgt class="xs:double" index="353">7.499439846706462E-01</Wgt>
+        <Wgt class="xs:double" index="354">7.453730589395571E-01</Wgt>
+        <Wgt class="xs:double" index="355">7.407801547958492E-01</Wgt>
+        <Wgt class="xs:double" index="356">7.361659666237486E-01</Wgt>
+        <Wgt class="xs:double" index="357">7.315311920253340E-01</Wgt>
+        <Wgt class="xs:double" index="358">7.268765317150706E-01</Wgt>
+        <Wgt class="xs:double" index="359">7.222026894138709E-01</Wgt>
+        <Wgt class="xs:double" index="360">7.175103717427015E-01</Wgt>
+        <Wgt class="xs:double" index="361">7.128002881157524E-01</Wgt>
+        <Wgt class="xs:double" index="362">7.080731506331825E-01</Wgt>
+        <Wgt class="xs:double" index="363">7.033296739734608E-01</Wgt>
+        <Wgt class="xs:double" index="364">6.985705752853153E-01</Wgt>
+        <Wgt class="xs:double" index="365">6.937965740793115E-01</Wgt>
+        <Wgt class="xs:double" index="366">6.890083921190712E-01</Wgt>
+        <Wgt class="xs:double" index="367">6.842067533121524E-01</Wgt>
+        <Wgt class="xs:double" index="368">6.793923836006039E-01</Wgt>
+        <Wgt class="xs:double" index="369">6.745660108512131E-01</Wgt>
+        <Wgt class="xs:double" index="370">6.697283647454623E-01</Wgt>
+        <Wgt class="xs:double" index="371">6.648801766692106E-01</Wgt>
+        <Wgt class="xs:double" index="372">6.600221796021195E-01</Wgt>
+        <Wgt class="xs:double" index="373">6.551551080068350E-01</Wgt>
+        <Wgt class="xs:double" index="374">6.502796977179476E-01</Wgt>
+        <Wgt class="xs:double" index="375">6.453966858307444E-01</Wgt>
+        <Wgt class="xs:double" index="376">6.405068105897697E-01</Wgt>
+        <Wgt class="xs:double" index="377">6.356108112772132E-01</Wgt>
+        <Wgt class="xs:double" index="378">6.307094281011404E-01</Wgt>
+        <Wgt class="xs:double" index="379">6.258034020835831E-01</Wgt>
+        <Wgt class="xs:double" index="380">6.208934749485072E-01</Wgt>
+        <Wgt class="xs:double" index="381">6.159803890096742E-01</Wgt>
+        <Wgt class="xs:double" index="382">6.110648870584134E-01</Wgt>
+        <Wgt class="xs:double" index="383">6.061477122513224E-01</Wgt>
+        <Wgt class="xs:double" index="384">6.012296079979111E-01</Wgt>
+        <Wgt class="xs:double" index="385">5.963113178482097E-01</Wgt>
+        <Wgt class="xs:double" index="386">5.913935853803527E-01</Wgt>
+        <Wgt class="xs:double" index="387">5.864771540881611E-01</Wgt>
+        <Wgt class="xs:double" index="388">5.815627672687361E-01</Wgt>
+        <Wgt class="xs:double" index="389">5.766511679100823E-01</Wgt>
+        <Wgt class="xs:double" index="390">5.717430985787785E-01</Wgt>
+        <Wgt class="xs:double" index="391">5.668393013077114E-01</Wgt>
+        <Wgt class="xs:double" index="392">5.619405174838913E-01</Wgt>
+        <Wgt class="xs:double" index="393">5.570474877363635E-01</Wgt>
+        <Wgt class="xs:double" index="394">5.521609518242359E-01</Wgt>
+        <Wgt class="xs:double" index="395">5.472816485248371E-01</Wgt>
+        <Wgt class="xs:double" index="396">5.424103155220241E-01</Wgt>
+        <Wgt class="xs:double" index="397">5.375476892946540E-01</Wgt>
+        <Wgt class="xs:double" index="398">5.326945050052384E-01</Wgt>
+        <Wgt class="xs:double" index="399">5.278514963887976E-01</Wgt>
+        <Wgt class="xs:double" index="400">5.230193956419292E-01</Wgt>
+        <Wgt class="xs:double" index="401">5.181989333121103E-01</Wgt>
+        <Wgt class="xs:double" index="402">5.133908381872486E-01</Wgt>
+        <Wgt class="xs:double" index="403">5.085958371854998E-01</Wgt>
+        <Wgt class="xs:double" index="404">5.038146552453676E-01</Wgt>
+        <Wgt class="xs:double" index="405">4.990480152161027E-01</Wgt>
+        <Wgt class="xs:double" index="406">4.942966377484177E-01</Wgt>
+        <Wgt class="xs:double" index="407">4.895612411855352E-01</Wgt>
+        <Wgt class="xs:double" index="408">4.848425414545836E-01</Wgt>
+        <Wgt class="xs:double" index="409">4.801412519583589E-01</Wgt>
+        <Wgt class="xs:double" index="410">4.754580834674682E-01</Wgt>
+        <Wgt class="xs:double" index="411">4.707937440128703E-01</Wgt>
+        <Wgt class="xs:double" index="412">4.661489387788320E-01</Wgt>
+        <Wgt class="xs:double" index="413">4.615243699963129E-01</Wgt>
+        <Wgt class="xs:double" index="414">4.569207368367982E-01</Wgt>
+        <Wgt class="xs:double" index="415">4.523387353065942E-01</Wgt>
+        <Wgt class="xs:double" index="416">4.477790581416001E-01</Wgt>
+        <Wgt class="xs:double" index="417">4.432423947025775E-01</Wgt>
+        <Wgt class="xs:double" index="418">4.387294308709272E-01</Wgt>
+        <Wgt class="xs:double" index="419">4.342408489449938E-01</Wgt>
+        <Wgt class="xs:double" index="420">4.297773275369120E-01</Wgt>
+        <Wgt class="xs:double" index="421">4.253395414700090E-01</Wgt>
+        <Wgt class="xs:double" index="422">4.209281616767808E-01</Wgt>
+        <Wgt class="xs:double" index="423">4.165438550974564E-01</Wgt>
+        <Wgt class="xs:double" index="424">4.121872845791653E-01</Wgt>
+        <Wgt class="xs:double" index="425">4.078591087757248E-01</Wgt>
+        <Wgt class="xs:double" index="426">4.035599820480595E-01</Wgt>
+        <Wgt class="xs:double" index="427">3.992905543652718E-01</Wgt>
+        <Wgt class="xs:double" index="428">3.950514712063749E-01</Wgt>
+        <Wgt class="xs:double" index="429">3.908433734627057E-01</Wgt>
+        <Wgt class="xs:double" index="430">3.866668973410302E-01</Wgt>
+        <Wgt class="xs:double" index="431">3.825226742673584E-01</Wgt>
+        <Wgt class="xs:double" index="432">3.784113307914809E-01</Wgt>
+        <Wgt class="xs:double" index="433">3.743334884922431E-01</Wgt>
+        <Wgt class="xs:double" index="434">3.702897638835715E-01</Wgt>
+        <Wgt class="xs:double" index="435">3.662807683212646E-01</Wgt>
+        <Wgt class="xs:double" index="436">3.623071079105645E-01</Wgt>
+        <Wgt class="xs:double" index="437">3.583693834145225E-01</Wgt>
+        <Wgt class="xs:double" index="438">3.544681901631713E-01</Wgt>
+        <Wgt class="xs:double" index="439">3.506041179635198E-01</Wgt>
+        <Wgt class="xs:double" index="440">3.467777510103817E-01</Wgt>
+        <Wgt class="xs:double" index="441">3.429896677980540E-01</Wgt>
+        <Wgt class="xs:double" index="442">3.392404410328561E-01</Wgt>
+        <Wgt class="xs:double" index="443">3.355306375465447E-01</Wgt>
+        <Wgt class="xs:double" index="444">3.318608182106163E-01</Wgt>
+        <Wgt class="xs:double" index="445">3.282315378515113E-01</Wgt>
+        <Wgt class="xs:double" index="446">3.246433451667319E-01</Wgt>
+        <Wgt class="xs:double" index="447">3.210967826418865E-01</Wgt>
+        <Wgt class="xs:double" index="448">3.175923864686731E-01</Wgt>
+        <Wgt class="xs:double" index="449">3.141306864638149E-01</Wgt>
+        <Wgt class="xs:double" index="450">3.107122059889586E-01</Wgt>
+        <Wgt class="xs:double" index="451">3.073374618715501E-01</Wgt>
+        <Wgt class="xs:double" index="452">3.040069643266967E-01</Wgt>
+        <Wgt class="xs:double" index="453">3.007212168800295E-01</Wgt>
+        <Wgt class="xs:double" index="454">2.974807162915776E-01</Wgt>
+        <Wgt class="xs:double" index="455">2.942859524806648E-01</Wgt>
+        <Wgt class="xs:double" index="456">2.911374084518398E-01</Wgt>
+        <Wgt class="xs:double" index="457">2.880355602218536E-01</Wgt>
+        <Wgt class="xs:double" index="458">2.849808767476912E-01</Wgt>
+        <Wgt class="xs:double" index="459">2.819738198556728E-01</Wgt>
+        <Wgt class="xs:double" index="460">2.790148441716310E-01</Wgt>
+        <Wgt class="xs:double" index="461">2.761043970521783E-01</Wgt>
+        <Wgt class="xs:double" index="462">2.732429185170723E-01</Wgt>
+        <Wgt class="xs:double" index="463">2.704308411826915E-01</Wgt>
+        <Wgt class="xs:double" index="464">2.676685901966288E-01</Wgt>
+        <Wgt class="xs:double" index="465">2.649565831734156E-01</Wgt>
+        <Wgt class="xs:double" index="466">2.622952301313841E-01</Wgt>
+        <Wgt class="xs:double" index="467">2.596849334306779E-01</Wgt>
+        <Wgt class="xs:double" index="468">2.571260877124209E-01</Wgt>
+        <Wgt class="xs:double" index="469">2.546190798390525E-01</Wgt>
+        <Wgt class="xs:double" index="470">2.521642888358402E-01</Wgt>
+        <Wgt class="xs:double" index="471">2.497620858335753E-01</Wgt>
+        <Wgt class="xs:double" index="472">2.474128340124635E-01</Wgt>
+        <Wgt class="xs:double" index="473">2.451168885472166E-01</Wgt>
+        <Wgt class="xs:double" index="474">2.428745965533555E-01</Wgt>
+        <Wgt class="xs:double" index="475">2.406862970347307E-01</Wgt>
+        <Wgt class="xs:double" index="476">2.385523208322695E-01</Wgt>
+        <Wgt class="xs:double" index="477">2.364729905739577E-01</Wgt>
+        <Wgt class="xs:double" index="478">2.344486206260625E-01</Wgt>
+        <Wgt class="xs:double" index="479">2.324795170456045E-01</Wgt>
+        <Wgt class="xs:double" index="480">2.305659775340864E-01</Wgt>
+        <Wgt class="xs:double" index="481">2.287082913924840E-01</Wgt>
+        <Wgt class="xs:double" index="482">2.269067394775087E-01</Wgt>
+        <Wgt class="xs:double" index="483">2.251615941591452E-01</Wgt>
+        <Wgt class="xs:double" index="484">2.234731192794728E-01</Wgt>
+        <Wgt class="xs:double" index="485">2.218415701127768E-01</Wgt>
+        <Wgt class="xs:double" index="486">2.202671933269537E-01</Wgt>
+        <Wgt class="xs:double" index="487">2.187502269462189E-01</Wgt>
+        <Wgt class="xs:double" index="488">2.172909003151206E-01</Wgt>
+        <Wgt class="xs:double" index="489">2.158894340638657E-01</Wgt>
+        <Wgt class="xs:double" index="490">2.145460400749643E-01</Wgt>
+        <Wgt class="xs:double" index="491">2.132609214511951E-01</Wgt>
+        <Wgt class="xs:double" index="492">2.120342724848996E-01</Wgt>
+        <Wgt class="xs:double" index="493">2.108662786286076E-01</Wgt>
+        <Wgt class="xs:double" index="494">2.097571164669994E-01</Wgt>
+        <Wgt class="xs:double" index="495">2.087069536902081E-01</Wgt>
+        <Wgt class="xs:double" index="496">2.077159490684682E-01</Wgt>
+        <Wgt class="xs:double" index="497">2.067842524281106E-01</Wgt>
+        <Wgt class="xs:double" index="498">2.059120046289115E-01</Wgt>
+        <Wgt class="xs:double" index="499">2.050993375427963E-01</Wgt>
+        <Wgt class="xs:double" index="500">2.043463740339024E-01</Wgt>
+        <Wgt class="xs:double" index="501">2.036532279400034E-01</Wgt>
+        <Wgt class="xs:double" index="502">2.030200040552991E-01</Wgt>
+        <Wgt class="xs:double" index="503">2.024467981145713E-01</Wgt>
+        <Wgt class="xs:double" index="504">2.019336967787107E-01</Wgt>
+        <Wgt class="xs:double" index="505">2.014807776216143E-01</Wgt>
+        <Wgt class="xs:double" index="506">2.010881091184579E-01</Wgt>
+        <Wgt class="xs:double" index="507">2.007557506353431E-01</Wgt>
+        <Wgt class="xs:double" index="508">2.004837524203222E-01</Wgt>
+        <Wgt class="xs:double" index="509">2.002721555958016E-01</Wgt>
+        <Wgt class="xs:double" index="510">2.001209921523241E-01</Wgt>
+        <Wgt class="xs:double" index="511">2.000302849437328E-01</Wgt>
+        <Wgt class="xs:double" index="512">2.000000476837158E-01</Wgt>
+      </WgtFunct>
+    </Col>
+  </Grid>
+  <Timeline>
+    <CollectStart class="xs:dateTime">2008-01-27T05:17:45.588000Z</CollectStart>
+    <CollectDuration class="xs:double">3.864829000000000E00</CollectDuration>
+    <IPP size="1">
+      <Set index="1">
+        <TStart class="xs:double">0.000000000000000E00</TStart>
+        <TEnd class="xs:double">3.864829000000000E00</TEnd>
+        <IPPStart class="xs:int">0</IPPStart>
+        <IPPEnd class="xs:int">14681</IPPEnd>
+        <IPPPoly order1="1">
+          <Coef class="xs:double" exponent1="0">0.000000000000000E00</Coef>
+          <Coef class="xs:double" exponent1="1">3.798607853982301E03</Coef>
+        </IPPPoly>
+      </Set>
+    </IPP>
+  </Timeline>
+  <Position>
+    <ARPPoly>
+      <X order1="5">
+        <Coef class="xs:double" exponent1="0">4.453030084213504E06</Coef>
+        <Coef class="xs:double" exponent1="1">5.751533224176324E03</Coef>
+        <Coef class="xs:double" exponent1="2">-2.701460186278990E00</Coef>
+        <Coef class="xs:double" exponent1="3">-1.232314334502686E-03</Coef>
+        <Coef class="xs:double" exponent1="4">2.767977579632777E-07</Coef>
+        <Coef class="xs:double" exponent1="5">8.573555430347218E-11</Coef>
+      </X>
+      <Y order1="5">
+        <Coef class="xs:double" exponent1="0">1.498761460380943E06</Coef>
+        <Coef class="xs:double" exponent1="1">4.958488150457533E01</Coef>
+        <Coef class="xs:double" exponent1="2">-1.329901152397693E00</Coef>
+        <Coef class="xs:double" exponent1="3">1.203537682078138E-04</Coef>
+        <Coef class="xs:double" exponent1="4">1.797597475279295E-07</Coef>
+        <Coef class="xs:double" exponent1="5">-1.805353252780213E-11</Coef>
+      </Y>
+      <Z order1="5">
+        <Coef class="xs:double" exponent1="0">5.028076193124518E06</Coef>
+        <Coef class="xs:double" exponent1="1">-5.094706679283640E03</Coef>
+        <Coef class="xs:double" exponent1="2">-3.076367686373969E00</Coef>
+        <Coef class="xs:double" exponent1="3">1.035836350032695E-03</Coef>
+        <Coef class="xs:double" exponent1="4">3.164089926425110E-07</Coef>
+        <Coef class="xs:double" exponent1="5">-6.048720512751894E-11</Coef>
+      </Z>
+    </ARPPoly>
+  </Position>
+  <RadarCollection>
+    <TxFrequency>
+      <Min class="xs:double">9.575000000000000E09</Min>
+      <Max class="xs:double">9.725000000000000E09</Max>
+    </TxFrequency>
+    <TxPolarization class="xs:string">H</TxPolarization>
+    <Waveform size="1">
+      <WFParameters index="1">
+        <TxPulseLength class="xs:double">5.183547826892217E-05</TxPulseLength>
+        <TxRFBandwidth class="xs:double">1.500000000000000E08</TxRFBandwidth>
+        <TxFreqStart class="xs:double">9.575000000000000E09</TxFreqStart>
+        <TxFMRate class="xs:double">2.893770926966293E12</TxFMRate>
+        <RcvDemodType class="xs:string">CHIRP</RcvDemodType>
+        <RcvWindowLength class="xs:double">1.094951675792963E-04</RcvWindowLength>
+        <ADCSampleRate class="xs:double">1.648291920000000E08</ADCSampleRate>
+        <RcvFMRate class="xs:double">0.000000000000000E00</RcvFMRate>
+      </WFParameters>
+    </Waveform>
+    <RcvChannels size="1">
+      <ChanParameters index="1">
+        <TxRcvPolarization class="xs:string">H:H</TxRcvPolarization>
+      </ChanParameters>
+    </RcvChannels>
+  </RadarCollection>
+  <ImageFormation>
+    <RcvChanProc>
+      <NumChanProc class="xs:int">1</NumChanProc>
+      <PRFScaleFactor class="xs:double">1.000000000000000E00</PRFScaleFactor>
+      <ChanIndex class="xs:int">1</ChanIndex>
+    </RcvChanProc>
+    <TxRcvPolarizationProc class="xs:string">H:H</TxRcvPolarizationProc>
+    <ImageFormAlgo class="xs:string">RMA</ImageFormAlgo>
+    <TStartProc class="xs:double">0.000000000000000E00</TStartProc>
+    <TEndProc class="xs:double">3.864829000000000E00</TEndProc>
+    <TxFrequencyProc>
+      <MinProc class="xs:double">9.575000000000000E09</MinProc>
+      <MaxProc class="xs:double">9.725000000000000E09</MaxProc>
+    </TxFrequencyProc>
+    <STBeamComp class="xs:string">SV</STBeamComp>
+    <ImageBeamComp class="xs:string">NO</ImageBeamComp>
+    <AzAutofocus class="xs:string">NO</AzAutofocus>
+    <RgAutofocus class="xs:string">NO</RgAutofocus>
+  </ImageFormation>
+  <SCPCOA>
+    <SCPTime class="xs:double">1.978794889212633E00</SCPTime>
+    <ARPPos>
+      <X class="xs:double">4.464400601302211E06</X>
+      <Y class="xs:double">1.498854372226527E06</Y>
+      <Z class="xs:double">5.017982775701074E06</Z>
+    </ARPPos>
+    <ARPVel>
+      <X class="xs:double">5.740827485683599E03</X>
+      <Y class="xs:double">4.432309764961589E01</Y>
+      <Z class="xs:double">-5.106869502938895E03</Z>
+    </ARPVel>
+    <ARPAcc>
+      <X class="xs:double">-5.417538337065467E00</X>
+      <Y class="xs:double">-2.658364928594254E00</Y>
+      <Z class="xs:double">-6.140422268784738E00</Z>
+    </ARPAcc>
+    <SideOfTrack class="xs:string">R</SideOfTrack>
+    <SlantRange class="xs:double">7.265297655433301E05</SlantRange>
+    <GroundRange class="xs:double">4.932683179209292E05</GroundRange>
+    <DopplerConeAng class="xs:double">9.001374323548251E01</DopplerConeAng>
+    <GrazeAng class="xs:double">4.282425590831252E01</GrazeAng>
+    <IncidenceAng class="xs:double">4.717574409168748E01</IncidenceAng>
+    <TwistAng class="xs:double">1.618550968677545E-01</TwistAng>
+    <SlopeAng class="xs:double">4.282450257715610E01</SlopeAng>
+  </SCPCOA>
+  <RMA>
+    <RMAlgoType class="xs:string">OMEGA_K</RMAlgoType>
+    <ImageType class="xs:string">INCA</ImageType>
+    <INCA>
+      <TimeCAPoly order1="1">
+        <Coef class="xs:double" exponent1="0">1.954027443465525E00</Coef>
+        <Coef class="xs:double" exponent1="1">1.421215617195412E-04</Coef>
+      </TimeCAPoly>
+      <R_CA_SCP class="xs:double">7.265297427195406E05</R_CA_SCP>
+      <FreqZero class="xs:double">9.650000000000000E09</FreqZero>
+      <DRateSFPoly order1="4">
+        <Coef class="xs:double" exponent1="0">9.157320868504847E-01</Coef>
+        <Coef class="xs:double" exponent1="1">-3.532437517714102E-08</Coef>
+        <Coef class="xs:double" exponent1="2">3.625716232913313E-13</Coef>
+        <Coef class="xs:double" exponent1="3">2.953824195070095E-18</Coef>
+        <Coef class="xs:double" exponent1="4">-6.012488258835277E-38</Coef>
+      </DRateSFPoly>
+      <DopCentroidPoly order1="2" order2="2">
+        <Coef class="xs:double" exponent1="0" exponent2="0">-1.195271916173158E02</Coef>
+        <Coef class="xs:double" exponent1="0" exponent2="1">-5.776927359220403E-01</Coef>
+        <Coef class="xs:double" exponent1="0" exponent2="2">-2.937764301372519E-12</Coef>
+        <Coef class="xs:double" exponent1="1" exponent2="0">4.289979282645305E-05</Coef>
+        <Coef class="xs:double" exponent1="1" exponent2="1">4.707417424533966E-09</Coef>
+        <Coef class="xs:double" exponent1="1" exponent2="2">4.589903845188205E-20</Coef>
+        <Coef class="xs:double" exponent1="2" exponent2="0">-1.604477036116078E-13</Coef>
+        <Coef class="xs:double" exponent1="2" exponent2="1">-1.760563834440445E-17</Coef>
+        <Coef class="xs:double" exponent1="2" exponent2="2">-1.273259477339462E-25</Coef>
+      </DopCentroidPoly>
+      <DopCentroidCOA class="xs:boolean">true</DopCentroidCOA>
+    </INCA>
+  </RMA>
+</SICD>

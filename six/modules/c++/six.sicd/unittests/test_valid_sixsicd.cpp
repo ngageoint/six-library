@@ -146,8 +146,70 @@ TEST_CASE(test_read_sicd130_xml)
     test_read_sicd_xml(testName, "sicd130.xml");
 }
 
-TEST_MAIN(
-    TEST_CHECK(test_createFakeComplexData);
-    TEST_CHECK(test_read_sicd110_xml);
-    TEST_CHECK(test_read_sicd130_xml);
-    )
+// Set SIX_PROFILE_PARSING=N when running the test to profile the tests by
+// re-running N-times
+#define PROFILE(X)                                                         \
+    six::testing::EnvProfiler("SIX_PROFILE_PARSING", testName, std::cerr)( \
+            [&]() { X; });
+
+// Set SIX_PROFILE_STACKSIZE=1 when running to log the size of the stacktrace
+#define SSPROFILE(X, Y)                                                 \
+    TEST_SPECIFIC_EXCEPTION(six::testing::StackTraceSizeEnvProfiler<Y>( \
+                                    "SIX_PROFILE_STACKSIZE",            \
+                                    testName,                           \
+                                    std::cerr)([&]() { X; }),           \
+                            Y)
+
+#define TEST_BAD_XML(X) PROFILE(SSPROFILE(X, six::DESValidationException));
+
+TEST_CASE(test_read_sicd040_bad_xml)
+{
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd040-bad.xml"));
+}
+
+TEST_CASE(test_read_sicd041_bad_xml)
+{
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd041-bad.xml"));
+}
+
+TEST_CASE(test_read_sicd050_bad_xml)
+{
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd050-bad.xml"));
+}
+
+TEST_CASE(test_read_sicd100_bad_xml)
+{
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd100-bad.xml"));
+}
+
+TEST_CASE(test_read_sicd101_bad_xml)
+{
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd101-bad.xml"));
+}
+
+TEST_CASE(test_read_sicd110_bad_xml)
+{
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd110-bad.xml"));
+}
+
+TEST_CASE(test_read_sicd120_bad_xml)
+{
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd120-bad.xml"));
+}
+
+TEST_CASE(test_read_sicd121_bad_xml)
+{
+    TEST_BAD_XML(test_read_sicd_xml(testName, "sicd121-bad.xml"));
+}
+
+TEST_MAIN(TEST_CHECK(test_createFakeComplexData);
+          TEST_CHECK(test_read_sicd110_xml);
+          TEST_CHECK(test_read_sicd130_xml);
+          TEST_CHECK(test_read_sicd040_bad_xml);
+          TEST_CHECK(test_read_sicd041_bad_xml);
+          TEST_CHECK(test_read_sicd050_bad_xml);
+          TEST_CHECK(test_read_sicd100_bad_xml);
+          TEST_CHECK(test_read_sicd101_bad_xml);
+          TEST_CHECK(test_read_sicd110_bad_xml);
+          TEST_CHECK(test_read_sicd120_bad_xml);
+          TEST_CHECK(test_read_sicd121_bad_xml);)

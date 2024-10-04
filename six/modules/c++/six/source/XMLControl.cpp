@@ -181,9 +181,18 @@ static void log_any_errors_and_throw(const std::vector<xml::lite::ValidationInfo
 
 //  NOTE: Errors are treated as detriments to valid processing
 //        and fail accordingly
-static void validate_(const xml::lite::Element& rootElement,
-    const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
+static void validate_(
+        const xml::lite::Element& rootElement,
+        const std::string& spec,
+        const std::string& version,
+        const std::vector<coda_oss::filesystem::path>& foundSchemas,
+        logging::Logger& log)
 {
+    if (foundSchemas.size() < 1)
+    {
+        return;  // can't validate without a schema
+    }
+
     xml::lite::Uri uri;
     rootElement.getUri(uri);
 
@@ -192,33 +201,80 @@ static void validate_(const xml::lite::Element& rootElement,
     rootElement.prettyPrint(xmlStream);
     const auto strPrettyXml = xmlStream.stream().str();
 
-    // Process schema paths one at a time.  This will reduce the "noise" from XML validation failures
-    // and could also make instantiating an xml::lite::ValidatorXerces faster.
-    std::vector<xml::lite::ValidationInfo> all_errors;
-    for (auto&& foundSchema : foundSchemas)
+    // deduplicate the schema list
+    auto comp = [](const coda_oss::filesystem::path& x,
+                   const coda_oss::filesystem::path& y) {
+        return x.string() < y.string();
+    };
+    std::set<coda_oss::filesystem::path, decltype(comp)> uniq(
+            foundSchemas.begin(), foundSchemas.end(), comp);
+    std::vector<coda_oss::filesystem::path> uniq_schemas(uniq.begin(),
+                                                         uniq.end());
+
+    // Remove schema paths whose filename component do not match the spec or
+    // version
+    auto spec_version_filter = [spec,
+                                version](const coda_oss::filesystem::path& x) {
+        auto x2 = x.filename().string();
+        return x2.find(spec) == std::string::npos ||
+                x2.find(version) == std::string::npos;
+    };
+    typename decltype(uniq_schemas)::iterator inapplicable_schemas =
+            std::remove_if(uniq_schemas.begin(),
+                           uniq_schemas.end(),
+                           spec_version_filter);
+
+    uniq_schemas.erase(inapplicable_schemas, uniq_schemas.end());
+
+    // detect SIDD with us:gov:ic:ism:201609 and pick the correct schema
+    if (spec == "SIDD")
     {
-        const std::vector<coda_oss::filesystem::path> foundSchemas_{ { foundSchema } };
-        const xml::lite::ValidatorXerces validator(foundSchemas_, &log);
+        const std::string needle("201609");
+        decltype(strPrettyXml) needle8(str::u8FromNative(needle));
 
-        // validate against any specified schemas
-        std::vector<xml::lite::ValidationInfo> errors;
-        validator.validate(strPrettyXml, uri.value, errors);
-
-        // Looks like we validated; be sure there aren't any errors
-        if (errors.empty())
+        typename decltype(uniq_schemas)::iterator hitlist;
+        auto has_needle = [needle](const coda_oss::filesystem::path& x) {
+            return x.string().find(needle) != std::string::npos;
+        };
+        if (strPrettyXml.find(needle8) != std::string::npos)
         {
-            return; // success!
+            // Doc is 201609, remove competing schemas
+            auto not_has_needle = std::not1(
+                    std::function<bool(const coda_oss::filesystem::path& x)>(
+                            has_needle));
+            hitlist = std::remove_if(uniq_schemas.begin(),
+                                     uniq_schemas.end(),
+                                     not_has_needle);
+        }
+        else
+        {
+            // Doc is *not* 201609, remove any refs to 201609
+            hitlist = std::remove_if(uniq_schemas.begin(),
+                                     uniq_schemas.end(),
+                                     has_needle);
         }
 
-        // This schema path failed; save away my errors in case none of them work
-        all_errors.insert(all_errors.end(), errors.begin(), errors.end());
+        uniq_schemas.erase(hitlist, uniq_schemas.end());
     }
 
-    // log any error found and throw
-    log_any_errors_and_throw(all_errors, foundSchemas, log);
+    log.info(Ctxt(FmtX("Document matches schema(s): {%s}",
+                       str::join(uniq_schemas, ","))));
+
+    const xml::lite::ValidatorXerces validator(uniq_schemas, &log);
+
+    // validate against any specified schemas
+    std::vector<xml::lite::ValidationInfo> errors;
+    validator.validate(strPrettyXml, uri.value, errors);
+
+    // Looks like we validated; be sure there aren't any errors
+    if (!errors.empty())
+    {
+        log_any_errors_and_throw(errors, uniq_schemas, log);
+    }
 }
 
 static void validate_(const xml::lite::Document& doc,
+    const std::string& spec, const std::string& version,
     const std::vector<coda_oss::filesystem::path>& foundSchemas, logging::Logger& log)
 {
     auto rootElement = doc.getRootElement();
@@ -228,7 +284,7 @@ static void validate_(const xml::lite::Document& doc,
     }
 
     // validate against any specified schemas
-    validate_(*rootElement, foundSchemas, log);
+    validate_(*rootElement, spec, version, foundSchemas, log);
 }
 
 static std::vector<coda_oss::filesystem::path> findValidSchemaPaths(const std::vector<std::string>&, logging::Logger*);
@@ -244,9 +300,17 @@ void XMLControl::validate(const xml::lite::Document* doc,
     assert(log != nullptr);
 
     // validate against any specified schemas
-    const auto foundSchemas = findValidSchemaPaths(schemaPaths, log); // If the paths we have don't exist, throw
-    validate_(*doc, foundSchemas, *log);
+    const auto foundSchemas = findValidSchemaPaths(
+            schemaPaths, log);  // If the paths we have don't exist, throw
+
+    // guarantees conditional below will succeed
+    std::string version = getVersionFromURI(doc);
+    const auto uri = doc->getRootElement()->getUri();
+    const std::string spec(str::startsWith(uri, "urn:SICD:") ? "SICD" : "SIDD");
+
+    validate_(*doc, spec, version, foundSchemas, *log);
 }
+
 void XMLControl::validate(const xml::lite::Document& doc,
     const std::vector<std::filesystem::path>* pSchemaPaths,
     logging::Logger* log)
@@ -256,7 +320,13 @@ void XMLControl::validate(const xml::lite::Document& doc,
 
     // validate against any specified schemas
     const auto foundSchemas = findValidSchemaPaths(pSchemaPaths, log);
-    validate_(doc, foundSchemas, *log);
+
+    // guarantees conditional below will succeed
+    std::string version = getVersionFromURI(doc);
+    const auto uri = doc.getRootElement()->getUri();
+    const std::string spec(str::startsWith(uri, "urn:SICD:") ? "SICD" : "SIDD");
+
+    validate_(doc, spec, version, foundSchemas, *log);
 }
 
 static auto findValidSchemas(const std::vector<std::filesystem::path>& paths_)
@@ -313,7 +383,12 @@ std::string XMLControl::getDefaultURI(const Data& data)
 std::string XMLControl::getVersionFromURI(const xml::lite::Document* doc)
 {
     assert(doc != nullptr);
-    const auto uri = doc->getRootElement()->getUri();
+    return getVersionFromURI(*doc);
+}
+
+std::string XMLControl::getVersionFromURI(const xml::lite::Document& doc)
+{
+    const auto uri = doc.getRootElement()->getUri();
     if (!(str::startsWith(uri, "urn:SICD:") ||
           str::startsWith(uri, "urn:SIDD:")))
     {

@@ -382,8 +382,116 @@ namespace testing
     SIX_SIX_API std::vector<std::filesystem::path> getSchemaPaths();
     SIX_SIX_API std::filesystem::path getModuleFile(const std::filesystem::path& modulePath, const  std::filesystem::path& filename);
     SIX_SIX_API std::filesystem::path getSampleXmlPath(const std::filesystem::path& module /*"six.sicd"*/, const  std::filesystem::path& filename);
-}
 
+    /// @brief CRTP Base class to allow toggling profiling code based on ENV vars
+    /// @tparam DerivedProfiler
+    template <typename DerivedProfiler>
+    struct SIX_SIX_API BaseEnvProfiler
+    {
+        BaseEnvProfiler(const char* envVar,
+                        const std::string& testName,
+                        std::ostream& stream) :
+            mEnvVar(envVar), mTestName(testName), mStream(stream)
+        {
+            sys::OS os;
+            mEnabled = os.isEnvSet(mEnvVar);
+            mNumIters = mEnabled ? str::toType<int>(os.getEnv(mEnvVar)) : 1;
+        }
+        ~BaseEnvProfiler() = default;
+
+        template <typename TFunc>
+        void operator()(TFunc f)
+        {
+            if (mEnabled)
+            {
+                static_cast<DerivedProfiler*>(this)->opImpl(f);
+            }
+            else
+            {
+                f();
+            }
+        }
+
+        const std::string mEnvVar;
+        const std::string& mTestName;
+        std::ostream& mStream;
+        int mNumIters;
+        int mEnabled;
+    };
+
+    /// @brief Toggle runtime profiling based on env var
+    struct SIX_SIX_API EnvProfiler : BaseEnvProfiler<EnvProfiler>
+    {
+        EnvProfiler(const char* envVar,
+                    const std::string& testName,
+                    std::ostream& stream) :
+            BaseEnvProfiler(envVar, testName, stream)
+        {
+        }
+        ~EnvProfiler() = default;
+
+        template <typename TFunc>
+        void opImpl(TFunc f)
+        {
+            double mean(0.0);
+            double mn(std::numeric_limits<double>::infinity());
+            double mx(-std::numeric_limits<double>::infinity());
+            for (int i = 0; i < mNumIters; ++i)
+            {
+                sys::RealTimeStopWatch sw;
+                sw.start();
+
+                f();
+
+                auto elapsed = sw.stop();
+
+                mean += elapsed;
+                mn = std::min(elapsed, mn);
+                mx = std::max(elapsed, mx);
+            }
+
+            mean /= mNumIters;
+            mStream << mTestName << " runtime (mean/min/max)ms: " << mean << "/"
+                    << mn << "/" << mx << std::endl;
+        }
+    };
+
+    /// @brief Toggle profiling of exception sizes based on env var
+    /// @tparam TExcept
+    template <typename TExcept>
+    struct SIX_SIX_API StackTraceSizeEnvProfiler
+        : BaseEnvProfiler<StackTraceSizeEnvProfiler<TExcept>>
+    {
+        StackTraceSizeEnvProfiler(const char* envVar,
+                                  const std::string& testName,
+                                  std::ostream& stream) :
+            BaseEnvProfiler<StackTraceSizeEnvProfiler<TExcept>>(envVar,
+                                                                testName,
+                                                                stream)
+        {
+        }
+        ~StackTraceSizeEnvProfiler() = default;
+
+        template <typename TFunc>
+        void opImpl(TFunc f)
+        {
+            try
+            {
+                f();
+            }
+            catch (const TExcept& ex)
+            {
+                // log size of the exception message
+                this->mStream << this->mTestName
+                              << ": exception size (bytes): " << strlen(ex.what())
+                              << std::endl;
+
+                throw;
+            }
+        }
+    };
+
+}
 }
 
 #endif // SIX_six_Utilities_h_INCLUDED_
