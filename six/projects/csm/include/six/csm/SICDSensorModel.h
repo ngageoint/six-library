@@ -171,6 +171,11 @@ public: // RasterGM methods
 protected:
     virtual six::DateTime getReferenceDateAndTimeImpl() const;
 
+    virtual std::string getXmlString() const
+    {
+        return mXmlString;
+    }
+
 private:
     virtual types::RowCol<double> toPixel(const types::RowCol<double>& pos) const;
 
@@ -184,10 +189,12 @@ private:
 
     virtual types::RowCol<double> getSampleSpacing() const;
 
-    void reinitialize();
+    void reinitialize(SIXSensorModelState& modelState);
 
 private:
     std::unique_ptr<six::sicd::ComplexData> mData;
+
+    std::string mXmlString;
 };
 }
 }

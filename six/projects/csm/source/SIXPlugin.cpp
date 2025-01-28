@@ -38,8 +38,8 @@ namespace six
 namespace CSM
 {
 const char SIXPlugin::PLUGIN_NAME[] = "SIX";
-const char SIXPlugin::MANUFACTURER[] = "Maxar";
-const char SIXPlugin::RELEASE_DATE[] = "20190916";
+const char SIXPlugin::MANUFACTURER[] = "Arka";
+const char SIXPlugin::RELEASE_DATE[] = "20250301";
 const size_t SIXPlugin::SICD_MODEL_INDEX;
 const size_t SIXPlugin::SIDD_MODEL_INDEX;
 

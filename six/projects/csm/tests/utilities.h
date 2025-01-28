@@ -62,8 +62,8 @@ inline std::string toString(const nitf::DESubheader& subheader)
          << subheader.getTypeID().toString()
          << subheader.getVersion().toString()
          << subheader.getSecurityClass().toString()
-         << toString(subheader.getSecurityGroup())
-         << std::setw(4) << std::setfill('0') << subheaderFieldsLen;
+         << toString(subheader.getSecurityGroup()) << std::setw(4)
+         << std::setfill('0') << subheaderFieldsLen;
 
     // This tacks on XML_DATA_CONTENT when applicable
     if (subheaderFieldsLen > 0)
