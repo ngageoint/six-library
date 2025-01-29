@@ -1,6 +1,6 @@
 MODULE_DEPS        = 'six.sicd six.sidd sys str std coda-oss gsl except'
 PLUGIN             = 'CSM'
-PLUGIN_VERSION     = '115'
+PLUGIN_VERSION     = '120'
 REMOVEPLUGINPREFIX = True
 
 import sys, os, re
@@ -45,7 +45,7 @@ def configure(conf):
         else:
             raise Errors.WafError('Unsupported platform %s' % sys.platform)
 
-        pluginVersion = '115'
+        pluginVersion = '120'
         if Options.options.csm_version == '3.0.4':
             csmVersion = '304'
         else:
