@@ -1,0 +1,5 @@
+add_subdirectory("c")
+add_subdirectory("c++")
+if (BUILD_PYTHON_MODULES)
+    add_subdirectory("python")
+endif()

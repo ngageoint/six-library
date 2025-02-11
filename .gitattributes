@@ -1,0 +1,6 @@
+# prevent git from changing line endings for conan recipes and CMake files,
+# since they are hashed to produce a conan recipe revision ID
+conanfile.py text eol=lf
+CMakeLists.txt text eol=lf
+*.cmake text eol=lf
+*.in text eol=lf

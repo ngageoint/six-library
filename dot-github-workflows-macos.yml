@@ -1,0 +1,25 @@
+name: Mac
+
+on: [push]
+  
+  
+jobs:
+  build-mac:
+    runs-on: [macos-latest]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github ..
+    - name: make
+      run: |
+        cd build
+        cmake --build . -j
+        cmake --build . --target install
+    - name: test
+      run: |
+        cd build
+        ctest

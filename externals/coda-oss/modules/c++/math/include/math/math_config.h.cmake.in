@@ -1,0 +1,7 @@
+#ifndef _@tgt_munged_name@_CONFIG_H_
+#define _@tgt_munged_name@_CONFIG_H_
+
+#cmakedefine HAVE_ISNAN @HAVE_ISNAN@
+#cmakedefine HAVE_STD_ISNAN @HAVE_STD_ISNAN@
+
+#endif /* _@tgt_munged_name@_CONFIG_H_ */
