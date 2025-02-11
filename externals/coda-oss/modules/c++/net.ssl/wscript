@@ -1,0 +1,122 @@
+NAME            = 'net.ssl'
+MAINTAINER      = 'jmrandol@users.sourceforge.net'
+VERSION         = '1.0'
+MODULE_DEPS     = 'net'
+USELIB          = 'SSL'
+
+from waflib import Options
+from build import writeConfig
+import sys, re
+
+distclean = lambda p: None
+
+def options(opt):
+    opt.add_option('--with-ssl-home', action='store', dest='ssl_home',
+                   help='Specify the OpenSSL home directory')
+
+def configure(conf):
+    uselib = None
+    include_path = None
+    lib_path = None
+
+    class NetSSLCallback:
+        def __init__(self):
+            self.uselib = None
+            self.includes = None
+            self.libpath = None
+
+        def __call__(self, conf):
+            sslHome = Options.options.ssl_home
+            sslLib = 'ssl'
+            sslUselib = 'SSL'
+            sslHeader = 'openssl/ssl.h'
+            sslFunction = 'SSL_library_init'
+            sslDef = 'USE_OPENSSL'
+            sslOldDef = 'OPENSSL_0_9_8'
+            sslFragment098 = '''
+                #include "openssl/ssl.h"
+                int main()
+                {
+                    SSL_library_init();
+                    SSL_load_error_strings();
+
+                    SSL_METHOD *method = SSLv23_client_method();
+                    SSL_CTX* ctx = SSL_CTX_new(method);
+                    return 0;
+                }
+                '''
+            sslFragment100 = '''
+                #include "openssl/ssl.h"
+                int main()
+                {
+                    SSL_library_init();
+                    SSL_load_error_strings();
+
+                    const SSL_METHOD *method = SSLv23_client_method();
+                    SSL_CTX* ctx = SSL_CTX_new(method);
+                    return 0;
+                }
+                '''
+
+            if sslHome:
+                if conf.check(lib=sslLib, uselib_store=sslUselib,
+                              header_name=sslHeader,
+                              function_name=sslFunction,
+                              fragment=sslFragment098,
+                              libpath=os.path.join(sslHome, 'lib'),
+                              includes=os.path.join(sslHome, 'include'),
+                              msg='Checking for version 0.9.8 of ssl library',
+                              okmsg=sslHome,
+                              define_name=sslOldDef,
+                              mandatory=False):
+                    conf.define(sslOldDef, True)
+                else:
+                    conf.check(lib=sslLib, uselib_store=sslUselib,
+                               header_name=sslHeader,
+                               function_name=sslFunction,
+                               fragment=sslFragment100,
+                               libpath=os.path.join(sslHome, 'lib'),
+                               includes=os.path.join(sslHome, 'include'),
+                               msg='Checking for version 1.0.0 of ssl library',
+                               okmsg=sslHome,
+                               mandatory=True)
+                conf.define(sslDef, True)
+            elif conf.check(lib=sslLib, uselib_store=sslUselib,
+                            header_name=sslHeader,
+                            function_name=sslFunction,
+                            fragment=sslFragment098,
+                            msg='Checking for version 0.9.8 of ssl library',
+                            mandatory=False):
+                conf.define(sslDef, True)
+                conf.define(sslOldDef, True)
+            elif conf.check(lib=sslLib, uselib_store=sslUselib,
+                            header_name=sslHeader,
+                            function_name=sslFunction,
+                            fragment=sslFragment100,
+                            msg='Checking for version 1.0.0 of ssl library',
+                            mandatory=False):
+                conf.define(sslDef, True)
+
+            # Update library information
+            if 'LIB_SSL' in conf.env:
+                self.uselib = conf.env['LIB_SSL']
+                self.uselib += ['crypto']
+            if 'LIBPATH_SSL' in conf.env:
+                self.libpath = conf.env['LIBPATH_SSL']
+            if 'INCLUDES_SSL' in conf.env:
+                self.includes = conf.env['INCLUDES_SSL']
+
+        def updateConf(self, conf):
+            if self.uselib:
+                conf.env['LIB_SSL'] = self.uselib
+            if self.libpath:
+                conf.env['LIBPATH_SSL'] = self.libpath
+            if self.includes:
+                conf.env['INCLUDES_SSL'] = self.includes
+
+    netSSLCallback = NetSSLCallback()
+    writeConfig(conf, netSSLCallback, NAME)
+    netSSLCallback.updateConf(conf)
+
+def build(bld):
+    bld.module(**globals())

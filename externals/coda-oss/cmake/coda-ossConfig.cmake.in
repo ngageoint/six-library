@@ -1,0 +1,30 @@
+@PACKAGE_INIT@
+
+# import system library and utility dependencies
+include(CodaFindSystemDependencies)
+coda_find_system_dependencies()
+
+# import dependencies' targets from their packages
+include(CMakeFindDependencyMacro)
+if (@ENABLE_J2K@)
+    find_dependency(coda-oss_openjpeg)
+endif()
+if (@ENABLE_JPEG@)
+    find_dependency(coda-oss_jpeg)
+endif()
+if (@ENABLE_PCRE@)
+    find_dependency(coda-oss_pcre2)
+endif()
+if (@ENABLE_XML@)
+    find_dependency(coda-oss_xerces-c)
+endif()
+if (@ENABLE_ZIP@)
+    find_dependency(coda-oss_zlib)
+endif()
+
+# import the coda-oss targets
+include("${CMAKE_CURRENT_LIST_DIR}/coda-ossTargets.cmake")
+
+# additional configuration needed by downstream projects
+set(CODA-OSS_JARS_DIR @PACKAGE_JARS_DIR@ CACHE INTERNAL "path to CODA-OSS jars")
+set(CODA-OSS_SWIG_INCLUDE_DIR @PACKAGE_SWIG_INCLUDE_DIR@ CACHE INTERNAL "path to CODA-OSS SWIG includes")

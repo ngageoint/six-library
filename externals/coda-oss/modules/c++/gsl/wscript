@@ -1,0 +1,8 @@
+NAME            = 'gsl'
+VERSION         = '1.0'
+MODULE_DEPS     = 'config'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())

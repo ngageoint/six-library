@@ -1,0 +1,6 @@
+#ifndef _@tgt_munged_name@_CONFIG_H_
+#define _@tgt_munged_name@_CONFIG_H_
+
+#cmakedefine @USE_OPENSSL@
+
+#endif /* _@tgt_munged_name@_CONFIG_H_ */
