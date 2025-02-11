@@ -1,0 +1,209 @@
+import os
+import sys
+from os.path import join, exists
+from waflib import Options
+from build import untarFile
+from build import writeConfig
+
+SOURCE = 'openjpeg-2.3.1_mod'
+
+
+def options(opt):
+    opt.add_option('--with-openjpeg-home', action='store', dest='j2k_home',
+                   help='Specify a precompiled OpenJ2K library to link with')
+
+
+def configure(conf):
+    j2kLayer = Options.options.j2k_layer
+    j2kHome = Options.options.j2k_home
+
+    # This must be understood with relation to the following files:
+    # modules/drivers/j2k/wscript  (Referred to as 'J2K wscript')
+    # modules/drivers/j2k/jasper/wscript (Referred to as 'Jasper wscript')
+    # And in the NITRO repo
+    # modules/c/j2k/wscript        (Referred to as 'J2K wrapper wscript')
+    #
+    # The J2K wscript uses MAKE_J2K to determine whether to build a J2K library
+    # This will be false if the user has a pre-built J2K library to use.
+    # (i.e. j2kHome is set)
+    #
+    # The J2K wrapper wscript uses MAKE_OPENJPEG to determine -which- J2K lib
+    # to link to. If MAKE_OPENJPEG is set, it will link to openjpeg.
+    # If MAKE_JASPER is set, it will link to jasper. This wsciprt and the Jasper
+    # wscript also use this as a sanity check when building. I.e., if
+    # build() is called in this wscript, but HAVE_OPENJPEG is not set, nothing
+    # will happen.
+    if j2kLayer == 'openjpeg':
+        conf.env['MAKE_OPENJPEG'] = True
+        conf.env['HAVE_J2K'] = True
+        conf.env['MAKE_J2K'] = not j2kHome
+
+        if j2kHome:
+            conf.check(lib='openjp2 pthread', header_name='openjpeg.h',
+                       uselib_store='J2K',
+                       libpath=os.path.join(j2kHome, 'lib'),
+                       includes=os.path.join(j2kHome, 'include'),
+                       function_name='opj_start_compress',
+                       msg='Check for for openjpeg',
+                       okmsg=j2kHome,
+                       mandatory=True)
+
+        else:
+            # callback function to check for #defines used by the openjpg module
+            def opj_callback(conf):
+                # check functionality
+                conf.check_cc(header_name='stdint.h',
+                              define_name='OPJ_HAVE_STDINT_H',
+                              mandatory=False)
+
+                conf.define('OPJ_VERSION_MAJOR', '2', quote=False)
+                conf.define('OPJ_VERSION_MINOR', '3', quote=False)
+                conf.define('OPJ_VERSION_BUILD', '0', quote=False)
+
+            # check for the source tarball
+            if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
+                conf.fatal('Missing OpenJPEG tarfile')
+
+            # untar and setup env
+            conf.msg('Building local lib', j2kLayer)
+            untarFile(path=conf.path, fname=SOURCE + '.tar')
+
+            # make opj_config.h
+            openjpegNode = conf.path.make_node(
+                join(SOURCE, 'src', 'lib', 'openjp2'))
+
+            writeConfig(conf, opj_callback, 'opj', infile=None,
+                        outfile='opj_config.h', path=openjpegNode,
+                        feature='makeHeader')
+
+            # callback function to check for #defines used by the openjpg module
+            def opj_private_callback(conf):
+
+                # check functionality
+                if conf.check_cc(function_name='fseeko', header_name='stdio.h',
+                                 define_name='OPJ_HAVE_FSEEKO', mandatory=False):
+                    conf.define('OPJ_HAVE_FSEEKO', '', quote=False)
+
+                if conf.check_cc(header_name='sys/stat.h', mandatory=False):
+                    conf.define('HAVE_SYS_STAT_H', '', quote=False)
+                if conf.check_cc(header_name='sys/types.h', mandatory=False):
+                    conf.define('HAVE_SYS_TYPES_H', '', quote=False)
+                if conf.check_cc(header_name='memory.h', mandatory=False):
+                    conf.define('HAVE_MEMORY_H', '', quote=False)
+
+                conf.check_cc(header_name='inttypes.h',
+                              define_name='OPJ_HAVE_INTTYPES_H',
+                              mandatory=False)
+
+                if conf.check_cc(header_name='unistd.h', mandatory=False):
+                    conf.define('HAVE_UNISTD_H', '', quote=False)
+
+                if conf.check_cc(header_name='fcntl.h', mandatory=False):
+                    conf.define('HAVE_FCNTL_H', '', quote=False)
+
+                if conf.check_cc(function_name='mmap', header_name='sys/mman.h',
+                                 mandatory=False):
+                    conf.define('HAVE_MMAP', '', quote=False)
+
+                if conf.check_cc(header_name='stdbool.h', mandatory=False):
+                    conf.define('HAVE_STDBOOL_H', '', quote=False)
+
+                if conf.check_cc(header_name='malloc.h',
+                                 define_name='OPJ_HAVE_MALLOC_H', mandatory=False):
+                    conf.define('OPJ_HAVE_MALLOC_H', '', quote=False)
+
+                if conf.check_cc(function_name='memalign', header_name='malloc.h',
+                                 define_name='OPJ_HAVE_MEMALIGN', mandatory=False):
+                    conf.define('OPJ_HAVE_MEMALIGN', '', quote=False)
+
+                if conf.check_cc(function_name='_aligned_malloc',
+                                 header_name='malloc.h',
+                                 define_name='OPJ_HAVE__ALIGNED_MALLOC',
+                                 mandatory=False):
+                    conf.define('OPJ_HAVE__ALIGNED_MALLOC', '', quote=False)
+
+                if conf.check_cc(function_name='aligned_alloc',
+                                 header_name='malloc.h',
+                                 define_name='OPJ_HAVE_ALIGNED_ALLOC',
+                                 mandatory=False):
+                    conf.define('OPJ_HAVE_ALIGNED_ALLOC', '', quote=False)
+
+                if conf.check_cc(function_name='posix_memalign',
+                                 header_name='stdlib.h',
+                                 define_name='OPJ_HAVE_POSIX_MEMALIGN',
+                                 mandatory=False):
+                    conf.define('OPJ_HAVE_POSIX_MEMALIGN', '', quote=False)
+
+                if '_LARGEFILE_SOURCE' in conf.env['DEFINES']:
+                    conf.define('_LARGEFILE_SOURCE', ' ', quote=False)
+                if '_LARGE_FILES' in conf.env['DEFINES']:
+                    conf.define('_LARGE_FILES', ' ', quote=False)
+                if '_FILE_OFFSET_BITS=64' in conf.env['DEFINES']:
+                    conf.define('_FILE_OFFSET_BITS', '64', quote=False)
+
+                if '_POSIX_C_SOURCE' not in conf.env['DEFINES']:
+                    if 'OPJ_HAVE_FSEEKO=' in conf.env['DEFINES'] or \
+                       'OPJ_HAVE_POSIX_MEMALIGN=' in conf.env['DEFINES']:
+                        conf.define('_POSIX_C_SOURCE', '200112L', quote=False)
+
+                conf.define('OPJ_PACKAGE_VERSION', '"2.3.1"', quote=False)
+                if sys.byteorder != 'little':
+                    conf.define('OPJ_BIG_ENDIAN', ' ', quote=False)
+
+            # make opj_config_private.h
+            writeConfig(conf, opj_private_callback, 'opj_private', infile=None,
+                        outfile='opj_config_private.h', path=openjpegNode,
+                        feature='makeHeader')
+
+
+def build(bld):
+    env = bld.get_env()
+
+    # check it again just in case
+    if 'MAKE_OPENJPEG' in env:
+        # this node is a mandatory build -- others are optional
+        openjpegDir = join(SOURCE, 'src', 'lib', 'openjp2')
+        openjpegNode = bld.path.make_node(openjpegDir)
+        env['OPENJPEG_INCLUDE'] = openjpegNode
+
+        # build the lib
+        sources = ['bio.c', 'cio.c', 'dwt.c', 'event.c', 'image.c', 'invert.c',
+                   'j2k.c', 'jp2.c', 'mct.c', 'mqc.c', 'openjpeg.c',
+                   'opj_clock.c', 'opj_malloc.c', 'pi.c', 'sparse_array.c',
+                   't1.c', 't2.c', 'tcd.c', 'thread.c', 'tgt.c',
+                   'function_list.c']
+
+        libType = env['LIB_TYPE'] or 'stlib'
+        openjpeg = bld(features='c c%s ' % libType,
+                       includes=['.'], export_includes=['.'],
+                       source=sources, target='openjpeg', name='J2K',
+                       path=openjpegNode, env=env.derive())
+        if libType == 'stlib':
+            openjpeg.defines = 'OPJ_STATIC'
+            openjpeg.export_defines = 'OPJ_STATIC'
+
+        # install lib
+        if env['install_libs']:
+            openjpeg.install_path = env['install_libdir']
+
+        # install headers
+        if env['install_headers']:
+            openjpeg.features += 'add_targets'
+            openjpeg.targets_to_add = [bld(features='install_tgt',
+                    files='openjpeg.h opj_config.h opj_stdint.h opj_config_private.h'.split(),
+                    dir=openjpegNode, install_path=env['install_includedir'],
+                    name='J2K_INCLUDES_INSTALL')]
+
+def distclean(context):
+
+    # remove the untarred directories
+    import shutil
+
+    dirs = filter(lambda x: exists(join(context.path.abspath(), x)),
+                  [SOURCE])
+
+    for d in dirs:
+        try:
+            shutil.rmtree(join(context.path.abspath(), d), ignore_errors=True)
+        except:{}
+

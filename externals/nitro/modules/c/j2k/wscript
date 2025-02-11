@@ -1,0 +1,64 @@
+from build import getDriverIncludes
+
+
+options = configure = distclean = lambda x: None
+
+
+def build(bld):
+    env = bld.get_env()
+    if 'HAVE_J2K' in env:
+        bld.recurse(['shared'])
+
+        if 'MAKE_OPENJPEG' in env:
+            j2kLayer = 'openjpeg'
+        elif 'MAKE_JASPER' in env:
+            j2kLayer = 'jasper'
+        else:
+            bld.fatal('Not a supported j2k type')
+
+        j2kSources = ('source/Container.c',
+                      'source/Component.c',
+                      'source/Defines.c',
+                      'source/JasPerImpl.c',
+                      'source/OpenJPEGImpl.c',
+                      'source/j2k_Reader.c',
+                      'source/SimpleComponentImpl.c',
+                      'source/SimpleContainerImpl.c',
+                      'source/j2k_Writer.c')
+
+        j2kInclude = getDriverIncludes(bld, 'j2k')
+        j2kIncludes = ['include', j2kInclude, env['OPENJPEG_INCLUDE']]
+
+        # build the j2k library
+        lib = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib',
+                  includes=j2kIncludes,
+                  target='j2k-c', name='j2k-c',
+                  source=j2kSources,
+                  defines='J2K_MODULE_EXPORTS',
+                  export_includes=j2kIncludes,
+                  env=env.derive(), path=bld.path,
+                  use='nitf-c J2K ' + j2kLayer)
+
+        # install j2k lib
+        if env['install_libs']:
+            lib.install_path = env['install_libdir']
+
+        # j2k-only tests
+        j2k_only_tests = ['test_j2k_header', 'test_j2k_read_tile',
+                          'test_j2k_read_region', 'test_j2k_create']
+
+        for t in j2k_only_tests:
+            bld.program_helper(dir='tests', source='%s.c' % t,
+                               use='j2k-c J2K ' + j2kLayer,
+                               name=t, target=t, lang='c', env=env.derive())
+
+        # j2k/nitf tests
+        j2k_nitf_tests = ['test_j2k_nitf']
+        for t in j2k_nitf_tests:
+            bld.program_helper(dir='tests', source='%s.c' % t,
+                               use='nitf-c j2k-c J2K', uselib=j2kLayer,
+                               name=t, target=t, lang='c', env=env.derive())
+
+        bld(features='add_targets', target='j2k-tests',
+            targets_to_add=j2k_only_tests + j2k_nitf_tests)
+
