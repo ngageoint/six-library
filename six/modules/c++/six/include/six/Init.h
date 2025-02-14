@@ -144,7 +144,11 @@ namespace details
 {
     inline void throw_undefined_value()
     {
+    #if CODA_OSS_cpp17
+        throw std::bad_optional_access();
+    #else
         coda_oss::details::throw_bad_optional_access();
+    #endif
     }
 }
 
