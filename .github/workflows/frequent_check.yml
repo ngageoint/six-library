@@ -1,6 +1,10 @@
 name: Build, unittest
 
-on: [push]
+on:
+  push:
+  pull_request:
+    branches:
+      - main
 
 
 jobs:
@@ -9,21 +13,23 @@ jobs:
       matrix:
         os: [windows-latest]
         platform: [x64]
+        python-version: ['3.7']
         configuration: [Release]
-    name: ${{ matrix.os }}-CMake
+    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
-
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
-        python-version: '3.7'
+        python-version: ${{ matrix.python-version }}
     - name: configure
       run: |
         mkdir out
         cd out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DPYTHON_VERSION="3.7"
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DPYTHON_VERSION="${{ matrix.python-version }}"
     - name: make
       run: |
         cd out
@@ -52,13 +58,15 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure CODA-OSS
       run: |
         mkdir externals\coda-oss\out
         cd externals\coda-oss\out
         cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
-    - name: make CODA-OSS
+    - name: build CODA-OSS
       run: |
         cd externals\coda-oss\out
         cmake --build . --config ${{ matrix.configuration }} -j
@@ -84,22 +92,24 @@ jobs:
   build-linux-cmake:
     strategy:
       matrix:
-        os: [ubuntu-latest]
-    name: ${{ matrix.os }}-CMake
+        os: [ubuntu-22.04]
+        python-version: ['3.7']
+    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
-
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
-        python-version: '3.7'
+        python-version: ${{ matrix.python-version }}
     - name: configure
       run: |
         mkdir target
         cd target
-        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7 ..
-    - name: make
+        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} ..
+    - name: build
       run: |
         cd target
         cmake --build . -j 8
