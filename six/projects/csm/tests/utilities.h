@@ -58,10 +58,10 @@ inline std::string toString(const nitf::DESubheader& subheader)
     const uint32_t subheaderFieldsLen(subheader.getSubheaderFieldsLength());
 
     std::ostringstream ostr;
-    ostr << subheader.filePartType()
-         << subheader.typeID()
-         << subheader.version()
-         << subheader.securityClass()
+    ostr << subheader.getFilePartType().toString()
+         << subheader.getTypeID().toString()
+         << subheader.getVersion().toString()
+         << subheader.getSecurityClass().toString()
          << toString(subheader.getSecurityGroup())
          << std::setw(4) << std::setfill('0') << subheaderFieldsLen;
 
