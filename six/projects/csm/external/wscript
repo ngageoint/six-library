@@ -44,6 +44,16 @@ def build(bld):
             path=bld.path.find_dir(csmDir),
             install_path=bld.env['install_libdir'])
 
+        # CSMAPI-static is to be used only for building a statically-linked
+        # executable for unit testing the SIX CSM plugin
+        bld(features = 'cxx cstlib',
+            target='CSMAPI-static', name='CSMAPI-static',
+            includes='.',
+            export_includes='.',
+            source=bld.path.find_dir(csmDir).ant_glob('*.cpp'),
+            path=bld.path.find_dir(csmDir),
+            install_path=bld.env['install_libdir'])
+
         # NOTE: With this approach, our vts binary will be dependent on the
         #       CSMAPI shared library.  If we wanted to eliminate the
         #       dependency, we could recompile in the CSM source code that we
@@ -60,7 +70,7 @@ def build(bld):
 def distclean(context):
     # remove the unzipped directory
     dirs = filter(lambda x: os.path.exists(os.path.join(context.path.abspath(), x)),
-                  ['csm-master'])
+                  ['csm-3.1.0'])
     for d in dirs:
         try:
             shutil.rmtree(os.path.join(context.path.abspath(), d), ignore_errors=True)

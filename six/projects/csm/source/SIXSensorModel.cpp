@@ -1032,15 +1032,31 @@ void SIXSensorModel::setSchemaDir(const std::string& dataDir)
     else
     {
         const auto schemaDir = fs::path(dataDir) / "schema" / "six";
-        if (!fs::exists(schemaDir))
+        if (fs::exists(schemaDir))
         {
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Schema directory '" + schemaDir.string() + "' does not exist",
-                    "SIXSensorModel::setSchemaDir");
+            mSchemaDirs.resize(1);
+            mSchemaDirs[0] = schemaDir.string();
+            return;
         }
 
-        mSchemaDirs.resize(1);
-        mSchemaDirs[0] = schemaDir.string();
+        // We will also allow pointing directly to a schema directory for a
+        // particular module (SICD or SIDD) to allow the CSM plugin unit tests
+        // to function properly.
+        const auto schemaFile1 =
+                fs::path(dataDir) / "SICD_schema_V0.5.0_2011_01_12.xsd";
+        const auto schemaFile2 =
+                fs::path(dataDir) / "SIDD_schema_V2.0.0_2020_06_02.xsd";
+        if (fs::exists(schemaFile1) || fs::exists(schemaFile2))
+        {
+            mSchemaDirs.resize(1);
+            mSchemaDirs[0] = dataDir;
+            return;
+        }
+
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                         "Schema directory '" + schemaDir.string() +
+                                 "' does not exist",
+                         "SIXSensorModel::setSchemaDir");
     }
 }
 

@@ -39,6 +39,8 @@ namespace six
 {
 namespace CSM
 {
+// The VERSION field should be kept in sync with that in SICDSensorModel.  The
+// SICD version is used to determine the filename for cmake builds.
 const csm::Version SIDDSensorModel::VERSION(1, 2, 0);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 

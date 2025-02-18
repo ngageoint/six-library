@@ -7,7 +7,7 @@ NGA is working to standardize Synthetic Aperture RADAR (SAR) systems in use thro
 ### Origin
 
 The SIX (Sensor Independent XML) library was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration
-with [Maxar](http://maxar.com) (formerly Radiant Solutions and MDA). The government has "unlimited rights" and is releasing
+with [Arka](http://arka.org) (formerly Maxar, Radiant Solutions, and MDA). The government has "unlimited rights" and is releasing
 this software to increase the impact of government investments by providing developers with the opportunity to take things
 in new directions. The software use, modification, and distribution rights are stipulated within the LGPL 3.0 license.
 
@@ -17,7 +17,7 @@ is the official reference implementation library for the
 [SIDD](https://github.com/ngageoint/six-library/wiki/Sensor-Independent-Derived-Data-(SIDD)-Standard) format. The library
 also provides a [sensor model implementation](https://github.com/ngageoint/six-library/wiki) of many equations in the
 SICD and SIDD document.  This sensor model implementation provides the foundations for the SICD and SIDD
-[CSM](https://github.com/sminster/csm) (Community Sensor Model) implementation.
+[CSM](https://github.com/ngageoint/csm) (Community Sensor Model) implementation.
 
 It is available as open-source software under the Lesser GNU Public License (LGPL). This license is commonly used in the
 open-source community, and allows applications that are not open source to make use of the library without penalty. As with
@@ -26,13 +26,14 @@ other open source projects, the library is available as-is, with no warranty.
 See the [manual](https://github.com/ngageoint/six-library/blob/master/docs/six-manual.pdf) for detailed information including
 build instructions and API documentation.
 
-A preliminary CMake build system is available on Linux and Windows. See [coda-oss CMake README.md](externals/coda-oss/cmake/README.md)
+A CMake build system is available on Linux and Windows. See [coda-oss CMake README.md](externals/coda-oss/cmake/README.md)
 and [nitro README.md](externals/nitro/README.md) for information on how to build using CMake. The same configuration options
 may be passed to SIX.
 
 The latest version of the library is available at https://github.com/ngageoint/six-library.git.
 
 ### Releases
+
 The master is considered stable, but official [releases](https://github.com/ngageoint/six-library/releases) also occur as
 major features are added.
 
@@ -44,5 +45,3 @@ Software source code previously released under an open source license and then m
 "joint work" (see 17 USC 101); it is partially copyrighted, partially public domain, and as a whole is protected by the
 copyrights of the non-government authors and must be released according to the terms of the original open source license.
 
-### Contact
-February 2022, Dan <dot> Smith <at> maxar <dot> <see><oh><em>
