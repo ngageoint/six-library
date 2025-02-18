@@ -51,6 +51,17 @@ class SIXPlugin: public csm::Plugin
 {
 public:
     /**
+     * This method only exists to create a public interface to SIXPlugin because
+     * no objects can be constructed and therefore no methods can be called on
+     * this class.  If statically linking SIXPlugin into a program, this method
+     * may need to be called so that the linker does not discard SIXPlugin.
+     */
+    static void _publicInterface()
+    {
+        (void)mPlugin.getPluginName();
+    }
+
+    /**
      * Get plugin name.
      *
      * \return The name of the plugin
