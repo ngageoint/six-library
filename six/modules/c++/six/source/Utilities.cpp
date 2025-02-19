@@ -841,7 +841,8 @@ void six::getErrors(const ErrorStatistics* errorStats,
             auto&& Ycol = unmodeled.Ycol;
             auto&& XrowYcol = unmodeled.XrowYcol;
 
-            // From Bill: Here is the mapping from the UnmodeledError to the 2x2 covariance matrix:
+            // From Bill: Here is the mapping from the UnmodeledError to the 2x2
+            // covariance matrix:
             //    [0][0] = Xrow; [1][1] = Ycol;
             //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
             unmodeledErrorCovar(0, 0) = math::square(Xrow);
@@ -938,8 +939,10 @@ std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(::io::InputStrea
     return six_parseData<std::unique_ptr<Data>>(xmlReg, xmlParser, dataType, mpSchemaPaths, mLog);
 }
 
-std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(const std::filesystem::path& pathname,
-    const XMLControlRegistry& xmlReg, DataType dataType) const
+std::unique_ptr<six::Data> six::DataParser::DataParser::fromXML(
+        const std::filesystem::path& pathname,
+        const XMLControlRegistry& xmlReg,
+        DataType dataType) const
 {
     io::FileInputStream inStream(pathname.string());
     return fromXML(inStream, xmlReg, dataType);

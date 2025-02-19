@@ -400,10 +400,9 @@ csm::ImageCoord SICDSensorModel::getImageStart() const
                            mData->imageData->firstCol);
 }
 
-std::vector<double>
-SICDSensorModel::getSIXUnmodeledError() const
+const six::ErrorStatistics* SICDSensorModel::getErrorStatisticsBlock() const
 {
-    return SIXSensorModel::getSIXUnmodeledError_(mData->errorStatistics.get());
+    return mData->errorStatistics.get();
 }
 
 void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)

@@ -419,39 +419,6 @@ SIXSensorModel::computeGroundPartials(const csm::EcefCoord& groundPt) const
     }
 }
 
-std::vector<double> SIXSensorModel::getUnmodeledError(
-        const csm::ImageCoord& imagePt ) const
-{
-    try
-    {
-        auto sixUnmodeledError = getSIXUnmodeledError();
-        if (!sixUnmodeledError.empty())
-        {
-            return sixUnmodeledError;
-        }
-
-        types::RowCol<double> pixelPt = fromPixel(imagePt);
-        const math::linear::MatrixMxN<2, 2, double> unmodeledError =
-                mProjection->getUnmodeledErrorCovariance( pixelPt );
-
-        // Get in the right units
-        const types::RowCol<double> ss = getSampleSpacing();
-
-        std::vector<double> unmodeledErrorVec(4);
-        unmodeledErrorVec[0] = unmodeledError[0][0] / (ss.row * ss.row);
-        unmodeledErrorVec[1] = unmodeledError[0][1] / (ss.row * ss.col);
-        unmodeledErrorVec[2] = unmodeledError[1][0] / (ss.row * ss.col);
-        unmodeledErrorVec[3] = unmodeledError[1][1] / (ss.col * ss.col);
-        return unmodeledErrorVec;
-    }
-    catch (const except::Exception& ex)
-    {
-        throw csm::Error(csm::Error::UNKNOWN_ERROR,
-                           ex.getMessage(),
-                           "SIXSensorModel::getUnmodeledError");
-    }
-}
-
 csm::RasterGM::SensorPartials SIXSensorModel::computeSensorPartials(
         int index,
         const csm::EcefCoord& groundPt,
@@ -656,11 +623,79 @@ const csm::CorrelationModel& SIXSensorModel::getCorrelationModel() const
 }
 
 std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
-    const csm::ImageCoord&,
-    const csm::ImageCoord&) const
+        const csm::ImageCoord& pt1, const csm::ImageCoord& pt2) const
 {
-    auto sixUnmodeledError = getSIXUnmodeledError();
-    return !sixUnmodeledError.empty() ? sixUnmodeledError : std::vector<double>(4, 0.0);
+    // returns line and sample covariance in pixels squared
+    try
+    {
+        types::RowCol<double> pixelPt1 = fromPixel(pt1);
+        const math::linear::MatrixMxN<2, 2, double> unmodeledError1 =
+                mProjection->getUnmodeledErrorCovariance(pixelPt1);
+
+        types::RowCol<double> pixelPt2 = fromPixel(pt2);
+        const math::linear::MatrixMxN<2, 2, double> unmodeledError2 =
+                mProjection->getUnmodeledErrorCovariance(pixelPt2);
+
+        // Get in the right units
+        const types::RowCol<double> ss = getSampleSpacing();
+
+        std::vector<double> unmodeledErrorVec(4);
+        unmodeledErrorVec[0] =
+                ::sqrt(unmodeledError1[0][0] * unmodeledError2[0][0]) /
+                (ss.row * ss.row);
+        unmodeledErrorVec[1] =
+                ::sqrt(unmodeledError1[0][1] * unmodeledError2[0][1]) /
+                (ss.row * ss.col);
+        unmodeledErrorVec[2] =
+                ::sqrt(unmodeledError1[1][0] * unmodeledError2[1][0]) /
+                (ss.row * ss.col);
+        unmodeledErrorVec[3] =
+                ::sqrt(unmodeledError1[1][1] * unmodeledError2[1][1]) /
+                (ss.col * ss.col);
+
+        const six::ErrorStatistics* errorStatistics = getErrorStatisticsBlock();
+        if (errorStatistics)
+        {
+            types::RowCol<double> diff{std::abs(pixelPt1.row - pixelPt2.row),
+                                       std::abs(pixelPt1.col - pixelPt2.col)};
+            if (has_value(errorStatistics->unmodeled))
+            {
+                auto& unmodeled = value(errorStatistics->unmodeled);
+                if (has_value(unmodeled.unmodeledDecorr))
+                {
+                    double zeroRow =
+                            value(value(unmodeled.unmodeledDecorr).Xrow)
+                                    .corrCoefZero;
+                    double rateRow =
+                            value(value(unmodeled.unmodeledDecorr).Xrow)
+                                    .decorrRate;
+                    double coeffRow = std::min(
+                            1.0, std::max(0.0, zeroRow - rateRow * diff.row));
+                    double zeroCol =
+                            value(value(unmodeled.unmodeledDecorr).Ycol)
+                                    .corrCoefZero;
+                    double rateCol =
+                            value(value(unmodeled.unmodeledDecorr).Ycol)
+                                    .decorrRate;
+                    double coeffCol = std::min(
+                            1.0, std::max(0.0, zeroCol - rateCol * diff.col));
+
+                    unmodeledErrorVec[0] *= coeffRow;
+                    unmodeledErrorVec[1] *= ::sqrt(coeffRow * coeffCol);
+                    unmodeledErrorVec[2] *= ::sqrt(coeffRow * coeffCol);
+                    unmodeledErrorVec[3] *= coeffCol;
+                }
+            }
+        }
+
+        return unmodeledErrorVec;
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                         ex.getMessage(),
+                         "SIXSensorModel::getUnmodeledCrossCovariance");
+    }
 }
 
 void SIXSensorModel::setReferencePoint(const csm::EcefCoord& )
@@ -1224,32 +1259,6 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
     }
 
     return NITFReadControl::getDataType(desid, desshl, desshsi, desid);
-}
-
-std::vector<double> SIXSensorModel::getSIXUnmodeledError_(const six::ErrorStatistics* pErrorStatistics)
-{
-    if (pErrorStatistics != nullptr)
-    {
-        if (has_value(pErrorStatistics->unmodeled))
-        {
-            const auto& unmodeled = value(pErrorStatistics->unmodeled);
-
-            auto&& Xrow = unmodeled.Xrow;
-            auto&& Ycol = unmodeled.Ycol;
-            auto&& XrowYcol = unmodeled.XrowYcol;
-
-            // From Bill: Here is the mapping from the UnmodeledError to the 2x2
-            // covariance matrix:
-            //    [0][0] = Xrow; [1][1] = Ycol;
-            //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
-            const auto line_variance = Xrow;
-            const auto sample_variance = Ycol;
-            const auto linesample_covariance = XrowYcol * line_variance * sample_variance;
-            const auto sampleline_covariance = linesample_covariance;
-            return { line_variance, linesample_covariance, sampleline_covariance, sample_variance };
-        }
-    }
-    return {};
 }
 
 void SIXSensorModel::reinitialize(SIXSensorModelState& state)

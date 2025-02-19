@@ -222,22 +222,6 @@ public: // GeometricModel methods
     computeGroundPartials(const csm::EcefCoord& groundPt) const;
 
     /**
-     * This method returns the 2x2 line and sample covariance (in pixels
-     * squared) at the given imagePt for any model error not accounted for
-     * by the model parameters.
-     *
-     * \param imagePt Currently ignored
-     *
-     * \return A vector of four elements:
-     * [0] = line variance
-     * [1] = line/sample covariance
-     * [2] = sample/line covariance
-     * [3] = sample variance
-     */
-    virtual std::vector<double>
-    getUnmodeledError(const csm::ImageCoord& imagePt) const;
-
-    /**
      * This method returns the partial derivatives of line and sample
      * in pixels per the applicable model parameter units), respectively,
      * with respect to the model parameter given by index at the given
@@ -682,9 +666,7 @@ protected:
     void reinitialize(SIXSensorModelState& state);
 
 protected:
-    virtual std::vector<double> getSIXUnmodeledError() const = 0;
-    // utility routine to avoid duplicating code.
-    static std::vector<double> getSIXUnmodeledError_(const six::ErrorStatistics*);
+    virtual const six::ErrorStatistics* getErrorStatisticsBlock() const = 0;
 
     const scene::ECEFToLLATransform mECEFToLLA;
     const csm::NoCorrelationModel mCorrelationModel;
