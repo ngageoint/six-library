@@ -253,10 +253,44 @@ TEST_CASE(testAdjParamsState)
     for (int i = 0; i < 7; i++)
         TEST_ASSERT_EQ(model->getParameterValue(i), 11 * i);
 
+    for (int i = 0; i < 7; i++)
+        for (int j = 0; j < 7; j++)
+            model->setParameterCovariance(i, j, i*2.3 + j*0.11);
+    for (int i = 0; i < 7; i++)
+        for (int j = 0; j < 7; j++)
+            TEST_ASSERT_EQ(model->getParameterCovariance(i, j), i*2.3 + j*0.11);
+
+    for (int i = 0; i < 7; i++)
+        model->setParameterType(i, csm::param::REAL);
+    for (int i = 0; i < 7; i++)
+        TEST_ASSERT_EQ(model->getParameterType(i), csm::param::REAL);
+
+    for (int i = 0; i < 7; i++)
+        model->setParameterType(i, csm::param::FIXED);
+    for (int i = 0; i < 7; i++)
+        TEST_ASSERT_EQ(model->getParameterType(i), csm::param::FIXED);
+
+    for (int i = 0; i < 7; i++)
+        model->setParameterType(i, csm::param::FICTITIOUS);
+    for (int i = 0; i < 7; i++)
+        TEST_ASSERT_EQ(model->getParameterType(i), csm::param::FICTITIOUS);
+
+    for (int i = 0; i < 7; i++)
+        model->setParameterType(i, csm::param::NONE);
+    for (int i = 0; i < 7; i++)
+        TEST_ASSERT_EQ(model->getParameterType(i), csm::param::NONE);
+
+    // round-trip the model through the state string
     std::unique_ptr<csm::RasterGM> model2(reinterpret_cast<csm::RasterGM*>(
             plugin.constructModelFromState(model->getModelState())));
+
     for (int i = 0; i < 7; i++)
         TEST_ASSERT_EQ(model2->getParameterValue(i), 11 * i);
+    for (int i = 0; i < 7; i++)
+        for (int j = 0; j < 7; j++)
+            TEST_ASSERT_EQ(model2->getParameterCovariance(i, j), i*2.3 + j*0.11);
+    for (int i = 0; i < 7; i++)
+        TEST_ASSERT_EQ(model2->getParameterType(i), csm::param::NONE);
 }
 
 // Test imageToGround projections using modified adjustable parameters

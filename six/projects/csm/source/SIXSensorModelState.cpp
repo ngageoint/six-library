@@ -27,8 +27,8 @@ namespace
 const std::string ADJ_PARAMS_TAG = "ADJ_PARAMS:";
 const std::string IID_TAG = "IID:";
 const std::string COV_TAG = "COV:";
-const std::string NONE_TAG = "NONE:";
 
+const std::string NONE_TAG = "NONE:";
 const std::string FICTITIOUS_TAG = "FICTITIOUS:";
 const std::string REAL_TAG = "REAL:";
 const std::string FIXED_TAG = "FIXED:";
@@ -192,7 +192,7 @@ std::string SIXSensorModelState::toString() const
             adj_params += "FIXED:";
             break;
         }
-        adj_params += FmtX("%.10g,", mAdjustableValues[paramIdx]);
+        adj_params += FmtX("%.18g,", mAdjustableValues[paramIdx]);
     }
 
     std::string cov;
@@ -201,7 +201,7 @@ std::string SIXSensorModelState::toString() const
         for (size_t idx2 = 0; idx2 < scene::AdjustableParams::NUM_PARAMS;
              idx2++)
         {
-            cov += FmtX("%.10g,", mSensorCovariance(idx1, idx2));
+            cov += FmtX("%.18g,", mSensorCovariance(idx1, idx2));
         }
     }
 
