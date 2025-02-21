@@ -46,10 +46,15 @@ def build(bld):
 
         # CSMAPI-static is to be used only for building a statically-linked
         # executable for unit testing the SIX CSM plugin
-        bld(features = 'cxx cstlib',
+        #
+        # Define CSM_LIBRARY so the symbols are not marked as being imported from a
+        # shared library/dll.  Fixes Windows link problems where they are expected
+        # to be defined externally.
+        bld(features = 'cxx cxxstlib',
             target='CSMAPI-static', name='CSMAPI-static',
             includes='.',
             export_includes='.',
+            defines='CSM_LIBRARY',
             source=bld.path.find_dir(csmDir).ant_glob('*.cpp'),
             path=bld.path.find_dir(csmDir),
             install_path=bld.env['install_libdir'])

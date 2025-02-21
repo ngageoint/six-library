@@ -68,13 +68,14 @@ def build(bld):
 
         # SIX_CSM-static is to be used only for building a statically-linked
         # executable for unit testing the SIX CSM plugin
-        bld.program(features='cxxstlib',
-                    use='CSMAPI-static scene-c++ six.sicd-c++ six.sidd-c++',
-                    source=bld.path.find_dir('source').ant_glob('*.cpp'),
-                    includes='include',
-                    export_includes='include',
-                    name='SIX_CSM-static',
-                    target='SIX_CSM-static')
+        bld(features='cxx cxxstlib',
+            use='CSMAPI-static scene-c++ six.sicd-c++ six.sidd-c++',
+            source=bld.path.find_dir('source').ant_glob('*.cpp'),
+            includes='include',
+            export_includes='include',
+            defines='CSM_LIBRARY',
+            name='SIX_CSM-static',
+            target='SIX_CSM-static')
 
         bld.program_helper(module_deps='six.sicd',
                                source='tests/test_sicd_csm.cpp',

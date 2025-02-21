@@ -175,7 +175,7 @@ private:
         std::vector<std::filesystem::path> schemaPaths{sicdRootSchemaDir,
                                                        siddRootSchemaDir};
 
-        mSchemaPath = sicdRootSchemaDir;
+        mSchemaPath = sicdRootSchemaDir.string();
 
         csm::Plugin::setDataDirectory(mSchemaPath);
 
@@ -259,7 +259,7 @@ TEST_CASE(testFromFilenameISD)
     const auto sicd = harness.find("cropped_sicd_120.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd(sicd);
+    csm::Isd isd(sicd.string());
 
     TEST_ASSERT(plugin.canModelBeConstructedFromISD(isd, "SICD_SENSOR_MODEL"));
 
@@ -284,10 +284,12 @@ TEST_CASE(testFromNitf21ISD)
 
     reader.setXMLControlRegistry(&xmlRegistry);
 
-    reader.load(sicd, std::vector<std::string>(1, harness.schemaPath()));
+    reader.load(sicd.string(),
+                std::vector<std::string>(1, harness.schemaPath()));
     complexData = six::sicd::Utilities::getComplexData(reader);
 
-    auto isd = constructIsd(sicd, reader, complexData.get(), xmlRegistry);
+    auto isd =
+            constructIsd(sicd.string(), reader, complexData.get(), xmlRegistry);
 
     TEST_ASSERT(plugin.canModelBeConstructedFromISD(*isd, "SICD_SENSOR_MODEL"));
 
@@ -303,7 +305,7 @@ TEST_CASE(testFromState)
     const auto sicd = harness.find("cropped_sicd_120.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd);
+    csm::Isd isd = csm::Isd(sicd.string());
 
     TEST_ASSERT(plugin.canISDBeConvertedToModelState(isd, "SICD_SENSOR_MODEL"));
     std::string state = plugin.convertISDToModelState(isd, "SICD_SENSOR_MODEL");
@@ -414,7 +416,6 @@ void addUnmodeled(six::sicd::ComplexData& complexData, bool includeDecorr)
 TEST_CASE(testErrorStatistics1)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const csm::Plugin& plugin = harness.plugin();
 
     auto complexData = harness.fakeComplexData("1.3.0");
 
@@ -426,7 +427,6 @@ TEST_CASE(testErrorStatistics1)
                        (i < 3) ? 10.0 : 0.1);
 
     complexData->errorStatistics.reset(new six::ErrorStatistics());
-    auto& errorStatistics = complexData->errorStatistics;
 
 #if 0
     addCompositeSCP(*complexData);
@@ -461,7 +461,6 @@ TEST_CASE(testErrorStatistics1)
 TEST_CASE(testErrorStatistics2)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const csm::Plugin& plugin = harness.plugin();
 
     auto complexData = harness.fakeComplexData("1.3.0");
 
@@ -495,7 +494,7 @@ TEST_CASE(testModelState)
     const auto sicd = harness.find("cropped_sicd_120.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd);
+    csm::Isd isd = csm::Isd(sicd.string());
 
     TEST_ASSERT(plugin.canISDBeConvertedToModelState(isd, "SICD_SENSOR_MODEL"));
     std::string state = plugin.convertISDToModelState(isd, "SICD_SENSOR_MODEL");
@@ -524,7 +523,7 @@ TEST_CASE(testAdjParamsState)
     const auto sicd = harness.find("cropped_sicd_120.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd);
+    csm::Isd isd = csm::Isd(sicd.string());
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
             plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
@@ -584,7 +583,7 @@ TEST_CASE(testAdjParams1)
     const auto sicd = harness.find("cropped_sicd_120.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd);
+    csm::Isd isd = csm::Isd(sicd.string());
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
             plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
@@ -626,7 +625,7 @@ TEST_CASE(testAdjParams2)
     const auto sicd = harness.find("cropped_sicd_120.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd);
+    csm::Isd isd = csm::Isd(sicd.string());
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
             plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
@@ -662,7 +661,7 @@ TEST_CASE(testImageIdentifier)
     const auto sicd = harness.find("cropped_sicd_120.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd);
+    csm::Isd isd = csm::Isd(sicd.string());
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
             plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
@@ -675,17 +674,13 @@ TEST_CASE(testImageIdentifier)
     TEST_ASSERT_EQ(model2->getImageIdentifier(), "test identifier");
 }
 
-int main(int argc, char* argv[])
-{
-    TEST_CHECK(testPluginParams);
-    TEST_CHECK(testFromFilenameISD);
-    TEST_CHECK(testFromNitf21ISD);
-    TEST_CHECK(testFromState);
-    TEST_CHECK(testErrorStatistics1);
-    TEST_CHECK(testErrorStatistics2);
-    TEST_CHECK(testModelState);
-    TEST_CHECK(testAdjParamsState);
-    TEST_CHECK(testAdjParams1);
-    TEST_CHECK(testAdjParams2);
-    TEST_CHECK(testImageIdentifier);
-}
+TEST_MAIN(TEST_CHECK(testPluginParams); TEST_CHECK(testFromFilenameISD);
+          TEST_CHECK(testFromNitf21ISD);
+          TEST_CHECK(testFromState);
+          TEST_CHECK(testErrorStatistics1);
+          TEST_CHECK(testErrorStatistics2);
+          TEST_CHECK(testModelState);
+          TEST_CHECK(testAdjParamsState);
+          TEST_CHECK(testAdjParams1);
+          TEST_CHECK(testAdjParams2);
+          TEST_CHECK(testImageIdentifier);)

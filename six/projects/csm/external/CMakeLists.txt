@@ -1,3 +1,13 @@
+if (MSVC)
+    # This is not our code, so we are not going to change it to eliminate these problems
+    add_compile_options(/wd4251) # class '...' needs to have dll-interface to be used by clients of class '...'
+    add_compile_options(/wd4275) # non dll-interface class '...' used as base for dll-interface class '...'
+    add_compile_options(/wd4267) # conversion from '...' to '...'
+    add_compile_options(/wd4996) # '...': This function or variable may be unsafe
+    add_compile_options(/wd4244) # 'return': conversion from '...' to '...'
+    add_compile_options(/wd4005) # '...': macro redefinition
+endif()
+
 set(TARGET_NAME CSMAPI)
 string(TOLOWER ${TARGET_NAME} target_name_lc)
 
@@ -28,5 +38,11 @@ add_library(${TARGET_NAME}-static ${SOURCES})
 target_include_directories(${TARGET_NAME}-static INTERFACE
     $<BUILD_INTERFACE:${SOURCE_DIR}>
     $<INSTALL_INTERFACE:>)
+if (MSVC)
+    # Define CSM_LIBRARY so the symbols are not marked as being imported from a
+    # shared library/dll.  Fixes Windows link problems where they are expected
+    # to be defined externally.
+    target_compile_options(${TARGET_NAME}-static PUBLIC /DCSM_LIBRARY)
+endif()
 install(TARGETS ${TARGET_NAME}-static EXPORT ${CODA_EXPORT_SET_NAME})
 

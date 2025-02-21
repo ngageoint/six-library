@@ -1,3 +1,12 @@
+if (MSVC)
+    # We are including headers from an external library (CSMAPI) and we can't change it to fix these problems
+    add_compile_options(/wd4251) # class '...' needs to have dll-interface to be used by clients of class '...'
+    add_compile_options(/wd4275) # non dll-interface class '...' used as base for dll-interface class '...'
+    add_compile_options(/wd4267) # conversion from '...' to '...'
+    add_compile_options(/wd4996) # '...': This function or variable may be unsafe
+    add_compile_options(/wd4244) # 'return': conversion from '...' to '...'
+endif()
+
 add_subdirectory(external)
 
 set(MODULE_NAME csm-plugin)
