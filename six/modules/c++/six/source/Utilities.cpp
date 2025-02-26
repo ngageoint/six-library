@@ -843,7 +843,7 @@ void six::getErrors(const ErrorStatistics* errorStats,
 
             // From Bill: Here is the mapping from the UnmodeledError to the 2x2
             // covariance matrix:
-            //    [0][0] = Xrow; [1][1] = Ycol;
+            //    [0][0] = Xrow*Xrow; [1][1] = Ycol*Ycol;
             //    [1][0] = [0][1] = XrowYcol * Xrow * Ycol
             unmodeledErrorCovar(0, 0) = math::square(Xrow);
             unmodeledErrorCovar(1, 1) = math::square(Ycol);

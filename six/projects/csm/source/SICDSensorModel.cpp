@@ -407,7 +407,7 @@ const six::ErrorStatistics* SICDSensorModel::getErrorStatisticsBlock() const
 
 void SICDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
 {
-    size_t idx = sensorModelState.find(' ');
+    const size_t idx = sensorModelState.find(' ');
     if (idx == std::string::npos)
     {
         throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,

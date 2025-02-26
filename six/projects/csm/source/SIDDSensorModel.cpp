@@ -404,7 +404,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
                            "SIDDSensorModel::replaceModelStateImpl");
     }
 
-    std::string stateString = sensorModelState.substr(idx + 1);
+    const std::string stateString = sensorModelState.substr(idx + 1);
 
     SIXSensorModelState modelState(stateString, mXmlString);
 

@@ -239,6 +239,8 @@ TEST_CASE(testPluginParams)
 
 void testCommon(std::string& testName, csm::RasterGM& model)
 {
+    // TODO: add checks for getValidImageRange() if we can identify what the
+    // return should look like
     /*std::pair<csm::ImageCoord, csm::ImageCoord> vir =
             model->getValidImageRange();*/
 
@@ -249,6 +251,7 @@ void testCommon(std::string& testName, csm::RasterGM& model)
     TEST_ASSERT_EQ(size.line, 5);
     TEST_ASSERT_EQ(size.line, 5);
 
+    // TODO: add more testing using other csm model methods
     /*csm::EcefCoord refpt = model->getReferencePoint();
     csm::ImageCoord ic = model->groundToImage(refpt);*/
 }
@@ -428,14 +431,10 @@ TEST_CASE(testErrorStatistics1)
 
     complexData->errorStatistics.reset(new six::ErrorStatistics());
 
-#if 0
-    addCompositeSCP(*complexData);
-#endif
-
-#if 1
+    // TODO: this test should be augmented with the many possible permutations
+    // of optional metadata available in the ErrorStatistics block
+    //addCompositeSCP(*complexData);
     addComponents(*complexData, six::FrameType::RIC_ECF, false);
-#endif
-
     addUnmodeled(*complexData, true);
 
     model = harness.modelFromComplex(complexData);
