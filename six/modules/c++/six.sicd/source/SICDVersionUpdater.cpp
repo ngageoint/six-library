@@ -179,7 +179,7 @@ void SICDVersionUpdater::updateSingleIncrement()
 
         if (mData.scpcoa)
         {
-            const auto *sceneGeometry = Utilities::getSceneGeometry(&mData);
+            std::unique_ptr<scene::SceneGeometry> sceneGeometry(Utilities::getSceneGeometry(&mData));
             mData.scpcoa->azimAngle = sceneGeometry->getAzimuthAngle();
             mData.scpcoa->layoverAngle = sceneGeometry->getETPLayoverAngle();
         }
