@@ -23,7 +23,11 @@ set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${target_name_lc}_SOURCE_DIR}")
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp")
 set(CODA_EXPORT_SET_NAME "${CMAKE_PROJECT_NAME}Targets")
 
-add_library(${TARGET_NAME} INTERFACE)
+if (MSVC)
+    add_library(${TARGET_NAME} SHARED ${SOURCES})
+else()
+    add_library(${TARGET_NAME} INTERFACE)
+endif()
 target_include_directories(${TARGET_NAME} INTERFACE
     $<BUILD_INTERFACE:${SOURCE_DIR}>
     $<INSTALL_INTERFACE:>)
