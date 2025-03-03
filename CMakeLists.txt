@@ -30,7 +30,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
              "${CMAKE_CURRENT_SOURCE_DIR}/externals/${CODA_OSS_DIR}/cmake")
         include(CodaBuild)
         coda_initialize_build()
-        add_subdirectory("externals")
+        add_subdirectory("externals" EXCLUDE_FROM_ALL)
     endif()
 endif()
 
