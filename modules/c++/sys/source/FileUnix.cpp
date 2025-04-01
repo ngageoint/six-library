@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -63,6 +63,56 @@ void sys::File::readInto(void* buffer, Size_T size)
     {
         bytesRead = ::read(mHandle, bufferPtr + totalBytesRead, size
                 - totalBytesRead);
+
+        switch (bytesRead)
+        {
+        case -1: /* Some type of error occured */
+            switch (errno)
+            {
+            case EINTR:
+            case EAGAIN: /* A non-fatal error occured, keep trying */
+                break;
+
+            default: /* We failed */
+                throw sys::SystemException("While reading from file");
+            }
+            break;
+
+        case 0: /* EOF (unexpected) */
+            throw sys::SystemException(Ctxt("Unexpected end of file"));
+
+        default: /* We made progress */
+            totalBytesRead += bytesRead;
+
+        } /* End of switch */
+
+        /* Check for success */
+        if (totalBytesRead == size)
+        {
+            return;
+        }
+    }
+    throw sys::SystemException(Ctxt("Unknown read state"));
+}
+
+void sys::File::readAtInto(sys::Off_T offset, void* buffer, size_t size)
+{
+    SSize_T bytesRead = 0;
+    Size_T totalBytesRead = 0;
+    int i;
+
+    sys::byte* bufferPtr = static_cast<sys::byte*>(buffer);
+
+    /* make sure the user actually wants data */
+    if (size == 0)
+        return;
+
+    for (i = 1; i <= _SYS_MAX_READ_ATTEMPTS; i++)
+    {
+        bytesRead = ::pread(mHandle,
+                            bufferPtr + totalBytesRead,
+                            size - totalBytesRead,
+                            offset + totalBytesRead);
 
         switch (bytesRead)
         {

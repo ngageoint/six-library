@@ -1271,7 +1271,7 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
-    env['install_pydir'] = Options.options.pydir if Options.options.pydir else '${PYTHONDIR}'
+    env['install_pydir'] = Options.options.pydir if Options.options.pydir else join(Options.options.prefix, 'lib/python/site-packages')
 
     # Swig memory leak output
     if Options.options.swig_silent_leak:

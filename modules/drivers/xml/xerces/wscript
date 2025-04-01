@@ -106,8 +106,6 @@ def configure(conf):
                 conf.check_cc(function_name='ftime', header_name="sys/timeb.h", mandatory=False)
                 conf.check_cc(function_name='getaddrinfo', header_name="netdb.h", mandatory=False)
 
-                conf.check_cc(lib="nsl", mandatory=False, uselib_store='NSL')
-
                 conf.check_cc(header_name="unistd.h", mandatory=False)
                 conf.check_cc(header_name="sys/time.h", mandatory=False)
                 conf.check_cc(header_name="limits.h", mandatory=False)

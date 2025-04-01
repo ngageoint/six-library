@@ -124,6 +124,11 @@ public:
         return mCoef.empty();
     }
 
+    inline std::vector<_T>& coeffs()
+    {
+        return mCoef;
+    }
+
     inline const std::vector<_T>& coeffs() const
     {
         return mCoef;

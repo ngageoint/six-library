@@ -23,6 +23,8 @@
 #ifndef __MATH_POLY_FIXED_1D_H__
 #define __MATH_POLY_FIXED_1D_H__
 
+#include <array>
+
 #include <import/except.h>
 #include <import/sys.h>
 #include <math/poly/OneD.h>
@@ -51,7 +53,7 @@ namespace poly
 template <size_t _Order, typename _T=double> class Fixed1D
 {
 protected:
-    _T mCoef[_Order+1];
+    std::array<_T, _Order+1> mCoef;
 public:
 
    /*!
@@ -63,7 +65,7 @@ public:
         // Initialize coefficents;
         for (size_t i = 0; i < _Order+1; i++)
         {
-            mCoef[i] = 0;
+            mCoef[i] = _T{};
         }
     }
 
@@ -81,6 +83,41 @@ public:
         }
     }
 
+    /*!
+    * Construct from C array
+    */
+    Fixed1D(const _T* coeffs, const size_t nCoeff)
+    {
+        size_t sizeC = std::min<size_t>(nCoeff, _Order);
+        for (size_t i = 0; i <= sizeC; i++)
+        {
+            mCoef[i] = coeffs[i];
+        }
+    }
+
+    /*!
+    * Construct from std::array
+    */
+    template<size_t O> Fixed1D(const std::array<_T, O>& coeffs)
+    {
+        size_t sizeC = std::min<size_t>(O, _Order);
+        for (size_t i = 0; i <= sizeC; i++)
+        {
+            mCoef[i] = coeffs[i];
+        }
+    }
+
+    /*!
+    * Construct from std::vector
+    */
+    Fixed1D(const std::vector<_T>& coeffs)
+    {
+        size_t sizeC = std::min<size_t>(coeffs.size()-1, _Order);
+        for (size_t i = 0; i <= sizeC; i++)
+        {
+            mCoef[i] = coeffs[i];
+        }
+    }
     /*!
      *  Unlike the non-fixed size poly, this constructor
      *  will truncate higher orders.  This allows us to do something like
@@ -138,7 +175,7 @@ public:
      */
     _T operator() (double at) const
     {
-        double rv(0);
+        _T rv{};
         double atPower = 1;
 
         for (size_t i = 0; i <= _Order; i++)
@@ -155,7 +192,7 @@ public:
      */
     _T integrate(double start, double end) const
     {
-        _T rv(0);
+        _T rv{};
         double div;
         double newCoef;
         double endAtPower = end;
@@ -169,7 +206,6 @@ public:
             rv -= newCoef * startAtPower;
             endAtPower *= end;
             startAtPower *= start;
-
         }
         return rv;
     }
@@ -214,6 +250,15 @@ public:
 
         return mCoef[i];
 
+    }
+    inline const std::array<_T, _Order+1>& coeffs() const
+    {
+        return mCoef;
+    }
+
+    inline std::array<_T, _Order+1>& coeffs()
+    {
+        return mCoef;
     }
 
 

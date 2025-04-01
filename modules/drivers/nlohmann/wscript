@@ -1,0 +1,22 @@
+NAME = 'nlohmann'
+VERSION = '1.0'
+MODULE_DEPS = ''
+TEST_DEPS = ''
+
+from waflib import Options, Utils, Context
+
+configure = distclean = lambda p: None
+
+def options(opt):
+    opt.add_option(
+        '--enable-nlohmann', 
+        action='store_true', 
+        default=False, 
+        help='Turn on nlohmann JSON library')
+    
+def configure(conf):
+    conf.env['HAVE_NLOHMANN'] = Options.options.enable_nlohmann
+    
+def build(bld):
+    if bld.env['HAVE_NLOHMANN']:
+        bld.module(**globals())

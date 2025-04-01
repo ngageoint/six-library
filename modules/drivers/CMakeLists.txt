@@ -78,3 +78,8 @@ if (CODA_ENABLE_HDF5 OR CODA_HDF5_HOME)
     add_subdirectory("hdf5")
     add_subdirectory("highfive")
 endif()
+
+option(ENABLE_NLOHMANN "enable nlohmann" ON)
+if(ENABLE_NLOHMANN)
+    add_subdirectory(nlohmann)
+endif()

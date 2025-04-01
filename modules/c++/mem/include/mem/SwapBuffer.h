@@ -47,7 +47,7 @@ namespace mem
  *        returned from the get* methods, which would segfault when 
  *        the ScopedAlignedArrays go out of scope.
  */
-struct SwapBuffer final
+struct SwapBuffer
 {
     /*!
      *  Allocate the buffers to the size needed --
@@ -120,7 +120,7 @@ struct SwapBuffer final
     }
 
     //! Swap the buffers
-    void swap() 
+    virtual void swap()
     {
         std::swap(mValid, mScratch);
     }

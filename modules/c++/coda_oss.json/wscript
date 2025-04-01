@@ -1,0 +1,13 @@
+NAME            = 'coda_oss.json'
+VERSION         = '1.0'
+MODULE_DEPS     = 'math.linear math.poly types mem nlohmann'
+
+options = distclean = lambda p: None
+from waflib import Options
+
+def configure(conf):
+    conf.env['HAVE_NLOHMANN'] = Options.options.enable_nlohmann
+    
+def build(bld):
+    if bld.env['HAVE_NLOHMANN']:
+        bld.module(**globals())
