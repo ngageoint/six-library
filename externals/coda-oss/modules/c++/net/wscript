@@ -4,7 +4,7 @@ NAME            = 'net'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.0'
 MODULE_DEPS     = 'logging re mt io mem'
-USELIB          = 'NSL SOCKET'
+USELIB          = 'SOCKET'
 USE             = 'CURL'
 TEST_FILTER     = 'AckMulticastSender.cpp ' \
                   'AckMulticastSubscriber.cpp ' \

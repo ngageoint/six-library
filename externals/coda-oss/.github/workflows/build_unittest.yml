@@ -1,6 +1,11 @@
 name: build_unittest
 
-on: [push]
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
 
 jobs:
   build-cmake-windows:
@@ -11,6 +16,8 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
@@ -63,6 +70,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure
       run: |
@@ -93,11 +102,13 @@ jobs:
   build-linux-cmake-default:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-22.04]
         python-version: ['3.7']
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
@@ -130,12 +141,14 @@ jobs:
   build-linux-cmake:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-22.04]
         configuration: [Debug, Release]
         avx: [AVX512F]
     name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure
       run: |
@@ -155,19 +168,21 @@ jobs:
   build-waf:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-2019]
+        os: [windows-2019, ubuntu-22.04]
         python-version: ['3.7']
         debugging: ['--enable-debugging', '']
     name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
     runs-on: ${{ matrix.os }}
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
         python-version: ${{ matrix.python-version }}
     - name: configure_with_swig
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: ${{ matrix.os == 'ubuntu-22.04' }}
       run: |
         pip install numpy
         mkdir install${{ matrix.os }}Waf-Github

@@ -44,6 +44,9 @@
 
 namespace io
 {
+constexpr size_t defaultNumThreads = 1;
+constexpr size_t defaultChunkSize = 32L * 1024L * 1024L;
+constexpr size_t defaultMinChunksForThreading = 4;
 
 /*!
  *  \class FileInputStreamOS
@@ -57,6 +60,10 @@ struct CODA_OSS_API FileInputStreamOS : public SeekableInputStream
 {
 protected:
     sys::File mFile;
+    size_t mMaxReadThreads;
+    size_t mParallelChunkSize;
+    size_t mMinChunksForThreading;
+
 public:
 
     FileInputStreamOS() = default;
@@ -66,7 +73,10 @@ public:
      *  \param inputFile The file name
      *  \param mode The mode to open the file in
      */
-    FileInputStreamOS(const std::string& inputFile)
+    FileInputStreamOS(const std::string& inputFile) :
+        mMaxReadThreads(defaultNumThreads),
+        mParallelChunkSize(defaultChunkSize),
+        mMinChunksForThreading(defaultMinChunksForThreading)
     {
         // Let this SystemException slide for now
         mFile.create(inputFile,
@@ -78,7 +88,10 @@ public:
     FileInputStreamOS(const char* inputFile) : // "file.txt" could be either std::string or std::filesystem::path
         FileInputStreamOS(std::string(inputFile))  {  }
 
-    FileInputStreamOS(const sys::File& inputFile)
+    FileInputStreamOS(const sys::File& inputFile) :
+        mMaxReadThreads(defaultNumThreads),
+        mParallelChunkSize(defaultChunkSize),
+        mMinChunksForThreading(defaultMinChunksForThreading)
     {
         mFile = inputFile;
     }
@@ -163,6 +176,67 @@ public:
     void close()
     {
         mFile.close();
+    }
+
+    /*!
+     *  Set the limit of the number of parallel read threads.  Upon
+     *  construction, value is set to 1 read thread.  This sets a limit which is
+     *  considered for every read() call on the object.  Parallel reading is
+     *  only enabled if the read is at least
+     *  getParallelChunkSize()*setMinimumChunkCount() bytes, and if
+     *  getMaxReadThreads() is larger than 1.
+     *  \param maxReadThreads Maximum number of parallel read threads
+     */
+    void setMaxReadThreads(size_t maxReadThreads)
+    {
+        mMaxReadThreads = maxReadThreads;
+    }
+
+    /*!
+     *  Get the limit of the number of parallel read threads.
+     *  \return Maximum number of parallel read threads
+     */
+    size_t getMaxReadThreads() const
+    {
+        return mMaxReadThreads;
+    }
+
+    /*!
+     *  Set the chunked read size when doing parallel reads.
+     *  \param chunkSize Chunk size, in bytes
+     */
+    void setParallelChunkSize(size_t chunkSize)
+    {
+        mParallelChunkSize = chunkSize;
+    }
+
+    /*!
+     *  Get the chunked read size for parallel reads
+     *  \return Chunk size, in bytes
+     */
+    size_t getParallelChunkSize() const
+    {
+        return mParallelChunkSize;
+    }
+
+    /*!
+     *  Set the minimum number of chunks (of size getParallelChunkSize() bytes)
+     *  for enabling parallel reading
+     *  \param minChunks Minimum chunk count
+     */
+    void setMinimumChunkCount(size_t minChunks)
+    {
+        mMinChunksForThreading = minChunks;
+    }
+
+    /*!
+     *  Get the minimum number of chunks (of size getParallelChunkSize() bytes)
+     *  for enabling parallel reading
+     *  \return Minimum chunk count
+     */
+    size_t getMinimumChunkCount() const
+    {
+        return mMinChunksForThreading;
     }
 
 protected:

@@ -80,3 +80,6 @@ add_subdirectory("hdf5.lite")
 add_subdirectory("gsl")
 add_subdirectory("std")
 
+if(ENABLE_NLOHMANN)
+    add_subdirectory("coda_oss.json")
+endif()

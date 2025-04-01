@@ -485,7 +485,7 @@ bool OneD<_T>::equalImpl(const Vector_T& p) const
         }
     }
 
-    _T defaultValue(0.0);
+    _T defaultValue{};
 
     // Cover case where one polynomial has more
     // coefficients than the other
