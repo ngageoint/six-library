@@ -1,0 +1,13 @@
+NAME            = 'six.json'
+VERSION         = '1.0'
+MODULE_DEPS     = 'scene six six.sicd cphd03 cphd coda_oss.json nlohmann'
+
+options = distclean = lambda p: None
+from waflib import Options
+
+def configure(conf):
+    conf.env['HAVE_NLOHMANN'] = Options.options.enable_nlohmann
+    
+def build(bld):
+    if bld.env['HAVE_NLOHMANN']:
+        bld.module(**globals())

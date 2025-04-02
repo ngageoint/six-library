@@ -32,3 +32,7 @@ add_subdirectory(cphd)
 add_subdirectory(cphd03)
 add_subdirectory(six.convert)
 add_subdirectory(samples)
+
+if(ENABLE_NLOHMANN)
+    add_subdirectory(six.json)
+endif()

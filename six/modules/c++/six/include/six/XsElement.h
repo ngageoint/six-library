@@ -55,6 +55,7 @@ public:
     explicit XsElement(const std::string& lName) : XsElement(xml::lite::QName(lName)) { }
     XsElement(const xml::lite::QName& name, const value_type& value) : name_(name), value_(value) { }
     XsElement(const std::string& lName, const value_type& value) : XsElement(xml::lite::QName(lName), value) { }
+    XsElement() = default;
     ~XsElement() = default;
     XsElement(const XsElement&) = default;
     XsElement& operator=(const XsElement&) = default;
@@ -62,6 +63,10 @@ public:
     XsElement& operator=(XsElement&&) = default;
 
     const auto& name() const
+    {
+        return name_;
+    }
+    auto& name()
     {
         return name_;
     }
