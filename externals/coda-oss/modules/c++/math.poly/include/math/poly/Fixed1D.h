@@ -404,6 +404,16 @@ public:
         return copy;
     }
 
+    bool operator == (const Fixed1D<_Order, _T>& other) const 
+    {
+        return (mCoef == other.coeffs());
+    }
+
+    bool operator != (const Fixed1D<_Order, _T>& other) const 
+    {
+        return !(*this == other);
+    }
+
     /*!
      * Returns a scaled polynomial such that
      * P'(x) = P(x * scale)

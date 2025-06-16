@@ -61,7 +61,7 @@ public:
     T col{};
 
     // Try to protect us from the unfortunate and probably
-    // unintended case where row gets set and col doesn't, especially
+    // unintendet case where row gets set and col doesnt, especially
     // when doing scalar operations that might otherwise create
     // ambiguities
     RowCol() {}  // = default; // error w/ICC and "const" member data
