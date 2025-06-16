@@ -1,7 +1,0 @@
-distclean = options = configure = lambda p: None
-
-def build(bld):
-  bld.swigModule(name = 'scene', 
-          use = 'scene-c++ math.linear-python math.poly-python types-python except-python',
-          package = 'pysix'
-          )
