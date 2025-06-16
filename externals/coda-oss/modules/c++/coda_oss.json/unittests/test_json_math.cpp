@@ -115,6 +115,32 @@ TEST_CASE(TestPolyXYZ)
     TEST_ASSERT(serialized == expected);
     TEST_ASSERT(startVal == deserialized);
 }
+TEST_CASE(TestPolyFixed1D)
+{
+    using Fixed1D = math::poly::Fixed1D<3, int>;
+    std::vector<int> coeffs{0, 1, 2, 3};
+    Fixed1D startVal(coeffs);
+    json serialized = startVal;
+    json expected = coeffs;
+    Fixed1D deserialized = serialized.template get<Fixed1D>();
+    TEST_ASSERT(serialized == expected);
+    TEST_ASSERT(startVal == deserialized);
+}
+TEST_CASE(TestPolyFixed2D)
+{
+    using Fixed1D = math::poly::Fixed1D<2, double>;
+    using Fixed2D = math::poly::Fixed2D<1, 2, double>;
+    std::vector<double> c0 = {0.1, 0.2, 0.3};
+    std::vector<double> c1 = {-0.3, -0.2, -0.1};
+    Fixed1D p0(c0);
+    Fixed1D p1(c1);
+    Fixed2D startVal({p0, p1});
+    json serialized = startVal;
+    json expected = std::vector<std::vector<double>>{c0, c1};
+    auto deserialized = serialized.template get<Fixed2D>();
+    TEST_ASSERT(serialized == expected);
+    TEST_ASSERT(startVal == deserialized);
+}
 
 
 TEST_MAIN(

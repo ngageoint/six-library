@@ -5,9 +5,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(coda-oss)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CXX_STANDARD_REQUIRED true)
-
 if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     # build and package with conan
     include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
@@ -18,6 +15,10 @@ endif()
 
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
+
+    # Allow other project to set different standard. 
+    set(CMAKE_CXX_STANDARD 14)
+    set(CXX_STANDARD_REQUIRED true)
 
     # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
     # we'll dial-back warnings as necessary.

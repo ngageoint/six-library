@@ -153,17 +153,17 @@ jobs:
     - name: configure
       run: |
         mkdir out && cd out
-        cmake .. -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON
+        cmake .. -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON -DCMAKE_INSTALL_PREFIX=${{ matrix.configuration }}
     - name: build
       run: |
         cd out
         # "-j" spawns too many processes causing GCC to crash
-        cmake --build . --config ${{ matrix.configuration }} -j 12
+        cmake --build . -j 12
     - name: test
     # should run w/o install
       run: |
         cd out
-        ctest -C ${{ matrix.configuration }} --output-on-failure
+        ctest --output-on-failure
 
   build-waf:
     strategy:

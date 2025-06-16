@@ -56,8 +56,6 @@ public:
         }
     }
 
-
-
     Fixed2D(const TwoD<_T>& coeff)
     {
 
@@ -68,10 +66,15 @@ public:
         }
     }
 
+    Fixed2D(const std::array<Fixed1D<_OrderY, _T>, _OrderX + 1>& coeff)
+    {
+        mCoef = coeff;
+    }
+
     Fixed2D<_OrderX, _OrderY, _T>& operator=(const TwoD<_T>& coeff)
     {
 
-        size_t sizeC = std::min<unsigned int>(coeff.orderX(), _OrderX);
+        size_t sizeC = std::min<size_t>(coeff.orderX(), _OrderX);
         for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
@@ -313,6 +316,16 @@ public:
             copy[i] /= cv;
         }
         return copy;
+    }
+
+    bool operator == (const Fixed2D<_OrderX, _OrderY, _T>& other) const 
+    {
+        return (mCoef == other.coeffs());
+    }
+
+    bool operator != (const Fixed2D<_OrderX, _OrderY, _T>& other) const 
+    {
+        return !(*this == other);
     }
 
     /*!

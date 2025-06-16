@@ -108,7 +108,7 @@ namespace math
             std::vector<std::vector<T>> coeffs(poly.orderX() + 1);
             for (size_t ix = 0; ix <= poly.orderX(); ix++)
             {
-                coeffs[ix] = poly.coeffs()[ix].coeffs();
+                coeffs[ix] = poly[ix].coeffs();
             }
             j = coeffs;
         }
@@ -120,6 +120,33 @@ namespace math
                 poly = TwoD<T>();
                 return;
             }
+            poly = TwoD<T>(j.template get<std::vector<OneD<T>>>());
+        }
+
+        template<typename BasicJsonType, size_t O, typename T>
+        void to_json(BasicJsonType& j, const Fixed1D<O, T>& poly)
+        {
+            j = poly.coeffs();
+        }
+        template<typename BasicJsonType, size_t O, typename T>
+        void from_json(const BasicJsonType& j, Fixed1D<O, T>& poly)
+        {
+            poly.coeffs() = j.template get<std::array<T, O + 1>>();
+        }
+
+        template<typename BasicJsonType, size_t OX, size_t OY, typename T>
+        void to_json(BasicJsonType& j, const Fixed2D<OX, OY, T>& poly)
+        {
+            std::array<std::array<T, OY + 1>, OX + 1> coeffs;
+            for (size_t ix = 0; ix <= poly.orderX(); ix++)
+            {
+                coeffs[ix] = poly[ix].coeffs();
+            }
+            j = coeffs;
+        }
+        template<typename BasicJsonType, size_t OX, size_t OY, typename T>
+        void from_json(const BasicJsonType& j, Fixed2D<OX, OY, T>& poly)
+        {
             poly = TwoD<T>(j.template get<std::vector<OneD<T>>>());
         }
     } // namespace poly
