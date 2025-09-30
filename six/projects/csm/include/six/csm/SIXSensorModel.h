@@ -628,9 +628,9 @@ protected:
     virtual void setSchemaDir(const std::string& schemaDir);
 
     virtual csm::ImageCoord groundToImageImpl(const csm::EcefCoord& groundPt,
-                                      double desiredPrecision,
-                                      double* achievedPrecision,
-                                      csm::WarningList* warnings) const;
+                                              double desiredPrecision,
+                                              double* achievedPrecision,
+                                              csm::WarningList* warnings) const;
 
     static
     scene::Vector3 toVector3(const csm::EcefCoord& pt)

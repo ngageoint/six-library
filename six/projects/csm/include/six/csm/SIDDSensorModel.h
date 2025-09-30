@@ -69,9 +69,8 @@ public:
     SIDDSensorModel(const std::string& sensorModelState,
                     const std::string& dataDir);
 
-    static
-    bool containsDerivedDES(const csm::Nitf21Isd& isd,
-                            bool rigorousProjectionModel);
+    static bool containsDerivedDES(const csm::Nitf21Isd& isd,
+                                   bool rigorousProjectionModel);
 
 public: // Model methods
     /*

@@ -22,17 +22,17 @@
 
 #define SIX_CSM_LIBRARY
 
+#include <six/ErrorStatistics.h>
+#include <six/NITFReadControl.h>
+#include <six/csm/SICDSensorModel.h>
+#include <six/csm/SIDDPolySensorModel.h>
+#include <six/csm/SIDDSensorModel.h>
+#include <six/csm/SIXPlugin.h>
+#include <str/Manip.h>
+
 #include <memory>
 
-#include <six/csm/SIXPlugin.h>
-#include <six/csm/SICDSensorModel.h>
-#include <six/csm/SIDDSensorModel.h>
-#include <six/csm/SIDDPolySensorModel.h>
 #include "Error.h"
-
-#include <str/Manip.h>
-#include <six/NITFReadControl.h>
-#include <six/ErrorStatistics.h>
 
 namespace six
 {

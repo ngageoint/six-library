@@ -23,15 +23,15 @@
 #ifndef __SIX_CSM_SIDD_POLY_SENSOR_MODEL_H__
 #define __SIX_CSM_SIDD_POLY_SENSOR_MODEL_H__
 
+#include <scene/ProjectionModel.h>
+#include <scene/SceneGeometry.h>
+#include <six/csm/SIDDSensorModel.h>
+#include <six/sidd/DerivedData.h>
+
 #include <memory>
 #include <vector>
 
 #include "NitfIsd.h"
-
-#include <six/csm/SIDDSensorModel.h>
-#include <scene/SceneGeometry.h>
-#include <six/sidd/DerivedData.h>
-#include <scene/ProjectionModel.h>
 
 namespace six
 {
@@ -70,7 +70,7 @@ public:
     SIDDPolySensorModel(const std::string& sensorModelState,
                         const std::string& dataDir);
 
-public: // Model methods
+public:  // Model methods
     /*
      * Returns the version of the sensor model
      *
@@ -93,13 +93,12 @@ public: // Model methods
      */
     std::string getPedigree() const override;
 
-public: // RasterGM methods
-
+public:  // RasterGM methods
     csm::EcefCoord imageToGround(const csm::ImageCoord& imagePt,
-            double height,
-            double desiredPrecision,
-            double* achievedPrecision,
-            csm::WarningList* warnings) const override;
+                                 double height,
+                                 double desiredPrecision,
+                                 double* achievedPrecision,
+                                 csm::WarningList* warnings) const override;
 
     csm::EcefCoordCovar imageToGround(
             const csm::ImageCoordCovar& imagePt,
@@ -110,9 +109,9 @@ public: // RasterGM methods
             csm::WarningList* warnings) const override;
 
     csm::ImageCoord groundToImage(const csm::EcefCoord& groundPt,
-            double desiredPrecision,
-            double* achievedPrecision,
-            csm::WarningList* warnings) const override;
+                                  double desiredPrecision,
+                                  double* achievedPrecision,
+                                  csm::WarningList* warnings) const override;
 
     csm::ImageCoordCovar groundToImage(
             const csm::EcefCoordCovar& groundPt,
@@ -120,9 +119,10 @@ public: // RasterGM methods
             double* achievedPrecision,
             csm::WarningList* warnings) const override;
 
-    std::pair<csm::ImageCoord, csm::ImageCoord> getValidImageRange() const override;
+    std::pair<csm::ImageCoord, csm::ImageCoord> getValidImageRange()
+            const override;
 
-    std::pair<double,double> getValidHeightRange() const override;
+    std::pair<double, double> getValidHeightRange() const override;
 
 private:
     void reinitialize(SIXSensorModelState& modelState) override;

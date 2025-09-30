@@ -721,9 +721,10 @@ csm::ImageCoord SIXSensorModel::groundToImageImpl(
 
     Vector3 groundPlaneNormal(sceneGroundPt);
     groundPlaneNormal.normalize();
-    scene::Vector3 diff = sceneGroundPt - mProjection->imageToScene(imagePt,
-                                         sceneGroundPt,
-                                         groundPlaneNormal);
+    scene::Vector3 diff = sceneGroundPt -
+            mProjection->imageToScene(imagePt,
+                                      sceneGroundPt,
+                                      groundPlaneNormal);
     double dist = diff.norm();
 
     if (achievedPrecision)
@@ -733,18 +734,17 @@ csm::ImageCoord SIXSensorModel::groundToImageImpl(
     if (dist > desiredPrecision && warnings)
     {
         warnings->push_back(csm::Warning(csm::Warning::PRECISION_NOT_MET,
-            "Requested precision not met",
-            "SIXSensorModel::groundToImageImpl"));
+                                         "Requested precision not met",
+                                         "SIXSensorModel::groundToImageImpl"));
     }
 
     return toImageCoord(pixelPt);
 }
 
-csm::ImageCoord SIXSensorModel::groundToImage(
-        const csm::EcefCoord& groundPt,
-        double desiredPrecision,
-        double* achievedPrecision,
-        csm::WarningList* warnings) const
+csm::ImageCoord SIXSensorModel::groundToImage(const csm::EcefCoord& groundPt,
+                                              double desiredPrecision,
+                                              double* achievedPrecision,
+                                              csm::WarningList* warnings) const
 {
     try
     {
@@ -817,19 +817,18 @@ csm::ImageCoordCovar SIXSensorModel::groundToImage(
     }
 }
 
-csm::EcefCoord SIXSensorModel::imageToGround(
-        const csm::ImageCoord& imagePt,
-        double height,
-        double desiredPrecision,
-        double* achievedPrecision,
-        csm::WarningList* warnings) const
+csm::EcefCoord SIXSensorModel::imageToGround(const csm::ImageCoord& imagePt,
+                                             double height,
+                                             double desiredPrecision,
+                                             double* achievedPrecision,
+                                             csm::WarningList* warnings) const
 {
     try
     {
         const types::RowCol<double> imagePtMeters = fromPixel(imagePt);
 
         const scene::Vector3 groundPt =
-                mProjection->imageToScene(imagePtMeters, height);//, scene::AdjustableParams(), 0.001, 10);
+                mProjection->imageToScene(imagePtMeters, height);
 
         const scene::ECEFToLLATransform ecefToLatLon;
         const LatLonAlt groundPtLatLon = ecefToLatLon.transform(groundPt);
@@ -842,8 +841,8 @@ csm::EcefCoord SIXSensorModel::imageToGround(
         if (achievedError > desiredPrecision && warnings)
         {
             warnings->push_back(csm::Warning(csm::Warning::PRECISION_NOT_MET,
-                "Requested precision not met",
-                "SIXSensorModel::imageToGround"));
+                                             "Requested precision not met",
+                                             "SIXSensorModel::imageToGround"));
         }
 
         return toEcefCoord(groundPt);

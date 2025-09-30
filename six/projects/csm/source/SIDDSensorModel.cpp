@@ -87,8 +87,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Isd& isd)
         //       version of vts, it threw an exception.  Did older versions of
         //       vts not use the /GR flag (they've since reported it worked
         //       fine when our plugin used dynamic_cast)?
-        initializeFromNitfISD((const csm::Nitf21Isd&)isd,
-                          imageIndex);
+        initializeFromNitfISD((const csm::Nitf21Isd&)isd, imageIndex);
     }
     else if (format == "FILENAME")
     {
@@ -101,7 +100,6 @@ void SIDDSensorModel::initializeFromISD(const csm::Isd& isd)
                            "Unsupported ISD format " + format,
                            "SIDDSensorModel::constructModelFromISD");
     }
-
 }
 
 SIDDSensorModel::SIDDSensorModel(const std::string& sensorModelState,
@@ -242,8 +240,8 @@ void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
     catch (const except::Exception& ex)
     {
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                           ex.getMessage(),
-                           "SIDDSensorModel::initializeFromNitfISD");
+                         ex.getMessage(),
+                         "SIDDSensorModel::initializeFromNitfISD");
     }
 }
 
@@ -271,7 +269,9 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd,
                 if (root->getLocalName() == "SIDD")
                 {
                     std::vector<xml::lite::Element*> children;
-                    root->getElementsByTagName("PolynomialProjection", children, true);
+                    root->getElementsByTagName("PolynomialProjection",
+                                               children,
+                                               true);
                     if (children.size())
                     {
                         return !rigorousProjectionModel;
