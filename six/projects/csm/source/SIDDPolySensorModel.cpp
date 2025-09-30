@@ -1,0 +1,261 @@
+/* =========================================================================
+* This file is part of the CSM SICD Plugin
+* =========================================================================
+*
+* (C) Copyright 2004 - 2025, Arka Group, L.P.
+*
+* The CSM SICD Plugin is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation; either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this program; if not,
+* see <http://www.gnu.org/licenses/>.
+*
+*/
+#include <six/csm/SIDDPolySensorModel.h>
+
+#include <assert.h>
+
+#include "Error.h"
+#include <io/StringStream.h>
+#include <six/sidd/Utilities.h>
+#include <six/XmlLite.h>
+
+namespace
+{
+class NullProjectionModel : public scene::ProjectionModel
+{
+public:
+    NullProjectionModel() :
+        ProjectionModel(scene::Vector3(),
+                        scene::Vector3(),
+                        math::poly::OneD<scene::Vector3>{{scene::Vector3{}}},
+                        {},
+                        +1)
+    {
+    }
+
+    virtual types::RowCol<double>
+        computeImageCoordinates(const scene::Vector3& imagePlanePoint) const
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                "Function not implemented",
+                "NullProjectionModel::computeImageCoordinates");
+    }
+
+    virtual scene::Vector3
+    imageGridToECEF(const types::RowCol<double> gridPt) const
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                "Function not implemented",
+                "NullProjectionModel::computeImageCoordinates");
+    }
+
+    virtual void computeContour(const scene::Vector3& arpCOA,
+                                const scene::Vector3& velCOA,
+                                double timeCOA,
+                                const types::RowCol<double>& imageGridPoint,
+                                double* r,
+                                double* rDot) const
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                "Function not implemented",
+                "NullProjectionModel::computeImageCoordinates");
+    }
+};
+}
+
+namespace six
+{
+namespace CSM
+{
+// The VERSION field should be kept in sync with that in SICDSensorModel.  The
+// SICD version is used to determine the filename for cmake builds.
+const csm::Version SIDDPolySensorModel::VERSION(1, 2, 0);
+const char SIDDPolySensorModel::NAME[] = "SIDD_POLY_SENSOR_MODEL";
+
+SIDDPolySensorModel::SIDDPolySensorModel(const csm::Isd& isd,
+                                 const std::string& dataDir)
+{
+    setSchemaDir(dataDir);
+    initializeFromISD(isd);
+}
+
+SIDDPolySensorModel::SIDDPolySensorModel(const std::string& sensorModelState,
+                                 const std::string& dataDir)
+{
+    setSchemaDir(dataDir);
+    replaceModelStateImpl(sensorModelState);
+}
+
+csm::Version SIDDPolySensorModel::getVersion() const
+{
+    return VERSION;
+}
+
+std::string SIDDPolySensorModel::getModelName() const
+{
+    return NAME;
+}
+
+std::string SIDDPolySensorModel::getPedigree() const
+{
+    return (mData->getSource() + "_" + NAME + "_SAR");
+}
+
+csm::EcefCoord SIDDPolySensorModel::imageToGround(
+        const csm::ImageCoord& imagePt,
+        double height,
+        double desiredPrecision,
+        double* achievedPrecision,
+        csm::WarningList* ) const
+{
+    try
+    {
+        scene::LatLonAlt lla;
+        lla.setLat(mPolyProj->rowColToLat(imagePt.line, imagePt.samp));
+        lla.setLon(mPolyProj->rowColToLon(imagePt.line, imagePt.samp));
+        if (mPolyProj->rowColToAlt.orderX())
+        {
+            lla.setAlt(mPolyProj->rowColToAlt(imagePt.line, imagePt.samp));
+        }
+        else
+        {
+            lla.setAlt(mECEFToLLA.transform(mGeometry->getReferencePosition()).getAlt());
+        }
+
+        lla.setAlt(lla.getAlt() + height);
+        //lla.setAlt(height);
+        const scene::Vector3 groundPt = mLLAToECEF.transform(lla);
+
+        if (achievedPrecision)
+        {
+            *achievedPrecision = desiredPrecision;
+        }
+
+        return toEcefCoord(groundPt);
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDPolySensorModel::imageToGround");
+    }
+}
+
+csm::EcefCoordCovar
+SIDDPolySensorModel::imageToGround(
+        const csm::ImageCoordCovar& imagePt,
+        double height,
+        double heightVariance,
+        double desiredPrecision,
+        double* achievedPrecision,
+        csm::WarningList* warnings) const
+{
+    try
+    {
+        csm::ImageCoord imagePtNoCovar(imagePt.line, imagePt.samp);
+        csm::EcefCoord groundPtNoCovar = imageToGround(
+            imagePtNoCovar, height, desiredPrecision, achievedPrecision, warnings);
+        csm::EcefCoordCovar groundPt(
+            groundPtNoCovar.x, groundPtNoCovar.y, groundPtNoCovar.z);
+        return groundPt;
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDPolySensorModel::imageToGround");
+    }
+}
+
+csm::ImageCoord
+SIDDPolySensorModel::groundToImage(
+        const csm::EcefCoord& groundPt,
+        double desiredPrecision,
+        double* achievedPrecision,
+        csm::WarningList* ) const
+{
+    try
+    {
+        scene::LatLonAlt lla = mECEFToLLA.transform(toVector3(groundPt));
+        csm::ImageCoord ic;
+        ic.line = mPolyProj->latLonToRow(lla.getLat(), lla.getLon());
+        ic.samp = mPolyProj->latLonToCol(lla.getLat(), lla.getLon());
+
+        return ic;
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDPolySensorModel::groundToImage");
+    }
+}
+
+csm::ImageCoordCovar
+SIDDPolySensorModel::groundToImage(
+        const csm::EcefCoordCovar& groundPt,
+        double desiredPrecision,
+        double* achievedPrecision,
+        csm::WarningList* warnings) const
+{
+    try
+    {
+        csm::EcefCoord groundPtNoCovar(groundPt.x, groundPt.y, groundPt.z);
+        csm::ImageCoord imagePtNoCovar = groundToImage(
+            groundPtNoCovar, desiredPrecision, achievedPrecision, warnings);
+        csm::ImageCoordCovar imagePt(imagePtNoCovar.line, imagePtNoCovar.samp);
+        return imagePt;
+    }
+    catch (const except::Exception& ex)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           ex.getMessage(),
+                           "SIDDPolySensorModel::groundToImage");
+    }
+}
+
+void SIDDPolySensorModel::reinitialize(SIXSensorModelState& modelState)
+{
+    mGeometry = six::sidd::Utilities::getSceneGeometry(mData.get());
+
+    if (mData->measurement->projection->projectionType !=
+            six::ProjectionType::POLYNOMIAL)
+    {
+        throw csm::Error(csm::Error::UNKNOWN_ERROR,
+                           "Image projection type is not Polynomial",
+                           "SIDDPolySensorModel::reinitialize");
+    }
+    mPolyProj = dynamic_cast<six::sidd::PolynomialProjection*>(
+                    mData->measurement->projection.get());
+
+    if (!modelState.getDatasetName().empty())
+    {
+        mData->setName(modelState.getDatasetName());
+    }
+
+    mProjection.reset(new NullProjectionModel());
+
+    // Force sensor covariance override, and force values to 0, so adjustable
+    // parameters get disabled and the user can't see or change them
+    modelState.setOverrideSensorCovariance(true);
+    for (size_t idx1 = 0; idx1 < scene::AdjustableParams::NUM_PARAMS; idx1++)
+    {
+        for (size_t idx2 = 0; idx2 < scene::AdjustableParams::NUM_PARAMS;
+             idx2++)
+        {
+            modelState.setSensorCovariance(idx1, idx2, 0.0);
+        }
+    }
+    SIXSensorModel::reinitialize(modelState);
+}
+}
+}

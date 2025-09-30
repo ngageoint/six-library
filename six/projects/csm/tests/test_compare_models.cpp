@@ -1,0 +1,545 @@
+/* =========================================================================
+ * This file is part of six-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ *
+ * six-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+#include <iostream>
+#include <sstream>
+
+#include <std/filesystem>
+
+#include <nitf/coda-oss.hpp>
+#include <sys/DLL.h>
+#include <except/Exception.h>
+#include <six/Utilities.h>
+#include <six/sidd/DerivedXMLControl.h>
+#include <six/sidd/Utilities.h>
+#include <scene/ECEFToLLATransform.h>
+
+// CSM includes
+#include <RasterGM.h>
+#include <Plugin.h>
+#include <NitfIsd.h>
+
+#include "utilities.h"
+
+namespace fs = std::filesystem;
+
+namespace
+{
+
+class Test
+{
+public:
+    Test(const std::string& siddPathname1,
+         const std::string& siddPathname2,
+         const std::string& confDir,
+         const csm::Plugin& plugin) :
+        mSiddPathname1(siddPathname1),
+        mSiddPathname2(siddPathname2),
+        mPlugin(plugin)
+    {
+        // Read in the SIDD XML
+        mXmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
+        const auto schemaDir =  (fs::path(confDir) / "schema" / "six").string();
+
+        mReader1.setXMLControlRegistry(&mXmlRegistry);
+        mReader1.load(mSiddPathname1, std::vector<std::string>(1, schemaDir));
+        auto container1(mReader1.getContainer());
+        mDerivedData1.reset(reinterpret_cast<six::sidd::DerivedData*>(
+                container1->getData(0)->clone()));
+
+        mReader2.setXMLControlRegistry(&mXmlRegistry);
+        mReader2.load(mSiddPathname2, std::vector<std::string>(1, schemaDir));
+        auto container2(mReader2.getContainer());
+        mDerivedData2.reset(reinterpret_cast<six::sidd::DerivedData*>(
+                container2->getData(0)->clone()));
+    }
+
+    bool testFileISD()
+    {
+        return testISD(csm::Isd(mSiddPathname1), csm::Isd(mSiddPathname2));
+    }
+
+    bool testNitfISD()
+    {
+        std::unique_ptr<csm::Nitf21Isd> nitfIsd1 = constructIsd(mSiddPathname1,
+                mReader1, mDerivedData1.get(), mXmlRegistry);
+        std::unique_ptr<csm::Nitf21Isd> nitfIsd2 = constructIsd(mSiddPathname2,
+                mReader2, mDerivedData2.get(), mXmlRegistry);
+        return testISD(*nitfIsd1, *nitfIsd2);
+    }
+
+private:
+    scene::Vector3 imageToGround(const csm::RasterGM& model,
+            const six::RowColDouble& scpPixel, double height, double offset)
+    {
+        csm::ImageCoord imagePt(scpPixel.row + offset, scpPixel.col + offset);
+        csm::EcefCoord groundPt = model.imageToGround(
+                imagePt,
+                height,
+                0);
+        scene::Vector3 returnedGroundPoint;
+
+        returnedGroundPoint[0] = groundPt.x;
+        returnedGroundPoint[1] = groundPt.y;
+        returnedGroundPoint[2] = groundPt.z;
+        return returnedGroundPoint;
+    }
+
+    six::RowColDouble groundToImage(const csm::RasterGM& model,
+            const six::Vector3& scp, double offset)
+    {
+        csm::EcefCoord groundCoord(scp[0], scp[1], scp[2]);
+        csm::ImageCoord imageCoord = model.groundToImage(groundCoord, 0);
+        return six::RowColDouble(imageCoord.line - offset,
+                imageCoord.samp - offset);
+    }
+
+    bool testISD(const csm::Isd& isd1, const csm::Isd& isd2)
+    {
+        bool testPassed = true;
+
+        std::unique_ptr<csm::RasterGM> model1;
+        std::unique_ptr<csm::RasterGM> model2;
+
+        // Construct the model
+        std::cout << std::endl << "Constructing model for " << mSiddPathname1 << std::endl;
+        for (size_t modelIdx = 0; modelIdx < mPlugin.getNumModels(); modelIdx++)
+        {
+            std::string modelName = mPlugin.getModelName(modelIdx);
+            std::cout << "Model: " << modelName;
+            if (mPlugin.canModelBeConstructedFromISD(isd1, modelName))
+            {
+                std::cout << " possibly constructible: ";
+                try
+                {
+                    model1.reset(reinterpret_cast<csm::RasterGM*>(
+                            mPlugin.constructModelFromISD(isd1, modelName)));
+                    std::cout << "success" << std::endl;
+                }
+                catch (const csm::Error& ex)
+                {
+                    std::cout << "failed" << std::endl;
+                    std::cout << ex.what() << std::endl;
+                }
+            }
+            else
+            {
+                std::cout << " not constructible" << std::endl;
+            }
+        }
+
+        std::cout << std::endl << "Constructing model for " << mSiddPathname2 << std::endl;
+        for (size_t modelIdx = 0; modelIdx < mPlugin.getNumModels(); modelIdx++)
+        {
+            std::string modelName = mPlugin.getModelName(modelIdx);
+            std::cout << "Model: " << modelName;
+            if (mPlugin.canModelBeConstructedFromISD(isd2, modelName))
+            {
+                std::cout << " possibly constructible: ";
+                try
+                {
+                    model2.reset(reinterpret_cast<csm::RasterGM*>(
+                            mPlugin.constructModelFromISD(isd2, modelName)));
+                    std::cout << "success" << std::endl;
+                }
+                catch (const csm::Error& ex)
+                {
+                    std::cout << "failed" << std::endl;
+                    std::cout << ex.what() << std::endl;
+                }
+            }
+            else
+            {
+                std::cout << " not constructible" << std::endl;
+            }
+        }
+
+        if (!model1 || !model2)
+        {
+            throw except::Exception(Ctxt("Failed to construct both models"));
+        }
+
+        std::cout << std::endl;
+
+        if (model1->getCollectionIdentifier() != model2->getCollectionIdentifier())
+        {
+            std::cerr << "getCollectionIdentifier() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        if (model1->getImageIdentifier() != model2->getImageIdentifier())
+        {
+            std::cerr << "getImageIdentifier() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        if (model1->getSensorIdentifier() != model2->getSensorIdentifier())
+        {
+            std::cerr << "getSensorIdentifier() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        if (model1->getSensorMode() != model2->getSensorMode())
+        {
+            std::cerr << "getSensorMode() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        if (model1->getSensorType() != model2->getSensorType())
+        {
+            std::cerr << "getSensorType() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        auto pedigree1 = model1->getPedigree();
+        auto pedigree2 = model2->getPedigree();
+        if (pedigree1 != pedigree2)
+        {
+            std::cerr << "getPedigree() returned different values" << std::endl;
+            std::cerr << "    " << pedigree1 << std::endl;
+            std::cerr << "    " << pedigree2 << std::endl;
+            testPassed = false;
+        }
+
+        if (model1->getPlatformIdentifier() != model2->getPlatformIdentifier())
+        {
+            std::cerr << "getPlatformIdentifier() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        if (model1->getReferenceDateAndTime() != model2->getReferenceDateAndTime())
+        {
+            std::cerr << "getReferenceDateAndTime() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        if (model1->getTrajectoryIdentifier() != model2->getTrajectoryIdentifier())
+        {
+            std::cerr << "getTrajectoryIdentifier() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        csm::EcefCoord refPt1 = model1->getReferencePoint();
+        csm::EcefCoord refPt2 = model2->getReferencePoint();
+        if (refPt1.x != refPt2.x || refPt1.y != refPt2.y || refPt1.z != refPt2.z)
+        {
+            std::cerr << "getReferencePoint() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        auto illumDir1 = model1->getIlluminationDirection(refPt1);
+        auto illumDir2 = model2->getIlluminationDirection(refPt1);
+        if (illumDir1.x != illumDir2.x || illumDir1.y != illumDir2.y || illumDir1.z != illumDir2.z)
+        {
+            std::cerr << "getIlluminationDirection() returned different values:" << std::endl;
+            std::cerr << "    " << illumDir1.x << " " << illumDir1.y << " " << illumDir1.z << std::endl;
+            std::cerr << "    " << illumDir2.x << " " << illumDir2.y << " " << illumDir2.z << std::endl;
+            testPassed = false;
+        }
+
+        auto imageSize1 = model1->getImageSize();
+        auto imageSize2 = model2->getImageSize();
+        if (imageSize1.line != imageSize2.line || imageSize1.samp != imageSize2.samp)
+        {
+            std::cerr << "getImageSize() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        auto imageStart1 = model1->getImageStart();
+        auto imageStart2 = model2->getImageStart();
+        if (imageStart1.line != imageStart2.line || imageStart1.samp != imageStart2.samp)
+        {
+            std::cerr << "getImageStart() returned different values" << std::endl;
+            testPassed = false;
+        }
+
+        try
+        {
+            double imageTime1 = model1->getImageTime(imageStart1);
+            double imageTime2 = model2->getImageTime(imageStart1);
+            if (imageTime1 != imageTime2)
+            {
+                std::cerr << "getImageTime() returned different values" << std::endl;
+                testPassed = false;
+            }
+        }
+        catch (const csm::Error& ex)
+        {
+            std::cerr << "getImageTime() threw exception:" << std::endl;
+            std::cerr << "    " << ex.what() << std::endl;
+            testPassed = false;
+        }
+
+        double numParams1 = model1->getNumParameters();
+        double numParams2 = model2->getNumParameters();
+        if (numParams1 != numParams2)
+        {
+            std::cerr << "getNumParameters() returned different values:" << std::endl;
+            std::cerr << "    " << numParams1 << std::endl;
+            std::cerr << "    " << numParams2 << std::endl;
+            testPassed = false;
+        }
+
+        try
+        {
+            auto sensorPosition1 = model1->getSensorPosition(0.0);
+            auto sensorPosition2 = model2->getSensorPosition(0.0);
+            if (sensorPosition1.x != sensorPosition2.x ||
+                sensorPosition1.y != sensorPosition2.y ||
+                sensorPosition1.z != sensorPosition2.z)
+            {
+                std::cerr << "getSensorPosition() returned different values" << std::endl;
+                std::cerr << "    " << sensorPosition1.x << " " << sensorPosition1.y << " " << sensorPosition1.z << std::endl;
+                std::cerr << "    " << sensorPosition2.x << " " << sensorPosition2.y << " " << sensorPosition2.z << std::endl;
+                testPassed = false;
+            }
+        }
+        catch (const csm::Error& ex)
+        {
+            std::cerr << "getSensorPosition() threw exception:" << std::endl;
+            std::cerr << "    " << ex.what() << std::endl;
+            testPassed = false;
+        }
+
+        try
+        {
+            auto sensorVelocity1 = model1->getSensorVelocity(0.0);
+            auto sensorVelocity2 = model2->getSensorVelocity(0.0);
+            if (sensorVelocity1.x != sensorVelocity2.x ||
+                sensorVelocity1.y != sensorVelocity2.y ||
+                sensorVelocity1.z != sensorVelocity2.z)
+            {
+                std::cerr << "getSensorVelocity() returned different values" << std::endl;
+                std::cerr << "    " << sensorVelocity1.x << " " << sensorVelocity1.y << " " << sensorVelocity1.z << std::endl;
+                std::cerr << "    " << sensorVelocity2.x << " " << sensorVelocity2.y << " " << sensorVelocity2.z << std::endl;
+                testPassed = false;
+            }
+        }
+        catch (const csm::Error& ex)
+        {
+            std::cerr << "getSensorVelocity() threw exception:" << std::endl;
+            std::cerr << "    " << ex.what() << std::endl;
+            testPassed = false;
+        }
+
+        csm::ImageCoord imPt1 = model1->groundToImage(refPt1);
+        csm::ImageCoord imPt2 = model2->groundToImage(refPt1);
+        if (imPt1.line != imPt2.line || imPt1.samp != imPt2.samp)
+        {
+            std::cerr << "groundToImage() returned different values" << std::endl;
+            std::cerr << "    " << imPt1.line << " " << imPt1.samp << std::endl;
+            std::cerr << "    " << imPt2.line << " " << imPt2.samp << std::endl;
+            testPassed = false;
+        }
+
+        csm::EcefCoord gndPt1 = model1->imageToGround(imPt1, 0.0);
+        csm::EcefCoord gndPt2 = model2->imageToGround(imPt1, 0.0);
+        if (gndPt1.x != gndPt2.x || gndPt1.y != gndPt2.y || gndPt1.z != gndPt2.z)
+        {
+            std::cerr << "imageToGround() returned different values" << std::endl;
+            std::cerr << "    " << gndPt1.x << " " << gndPt1.y << " " << gndPt1.z << std::endl;
+            std::cerr << "    " << gndPt2.x << " " << gndPt2.y << " " << gndPt2.z << std::endl;
+            testPassed = false;
+        }
+
+#if 0
+        six::RowColDouble scpPixel = mDerivedData->measurement->projection->
+                referencePoint.rowCol;
+        six::Vector3 scp = mDerivedData->measurement->projection->
+                referencePoint.ecef;
+
+        // Get height from SCP for conversion
+        scene::ECEFToLLATransform transformer;
+        six::LatLonAlt lla = transformer.transform(scp);
+        const double height = lla.getAlt();
+
+        // The offsets past the first should result in a number farther off
+        // than the others
+        std::vector<double> offsets(4);
+        std::vector<double> imageDifferences(offsets.size());
+        std::vector<double> groundDifferences(offsets.size());
+        offsets[0] = 0;
+        offsets[1] = .5;
+        offsets[2] = -.5;
+        offsets[3] = 1;
+        const double pixelTolerance = 0;
+        const double groundTolerance = .001;
+
+        for (size_t ii = 0; ii < offsets.size(); ++ii)
+        {
+            // Find difference between converted and given scpPixel
+            six::RowColDouble convertedImagePoint =
+                    groundToImage(*model, scp, offsets[ii]);
+            six::RowColDouble imagePointDifference = absoluteDifference(
+                    convertedImagePoint, scpPixel);
+
+            // Find difference between converted and given SCP
+            scene::Vector3 convertedGroundPoint =
+                    imageToGround(*model, scpPixel, height, offsets[ii]);
+            scene::Vector3 groundPointDifference = absoluteDifference(
+                    convertedGroundPoint, scp);
+
+            // Just need to check that the greatest difference is
+            // under our tolerance
+            imageDifferences[ii] = std::max(imagePointDifference.row,
+                    imagePointDifference.col);
+
+            groundDifferences[ii] = std::max(groundPointDifference[0],
+                    std::max(groundPointDifference[1],
+                            groundPointDifference[2]));
+        }
+
+        double leastGroundDifference = *std::min_element(
+                groundDifferences.begin(), groundDifferences.end());
+        double leastImageDifference = *std::min_element(
+                imageDifferences.begin(), imageDifferences.end());
+
+        if (leastImageDifference != imageDifferences[0])
+        {
+            std::cerr << "There was an offset better than " <<
+                    offsets[0] << "\n";
+            testPassed = false;
+        }
+
+        if (leastGroundDifference != groundDifferences[0])
+        {
+            std::cerr << "There was an offset better than " <<
+                    offsets[0] << "\n";
+            testPassed = false;
+        }
+
+        if (leastGroundDifference > groundTolerance)
+        {
+            std::cerr << "Converted ground point > " << groundTolerance <<
+                    " away from SCP\n";
+            testPassed = false;
+        }
+
+        if (leastImageDifference > pixelTolerance)
+        {
+            std::cerr << "Converted image point > " << pixelTolerance <<
+                    " away from scpPixel\n";
+            testPassed = false;
+        }
+#endif
+        return testPassed;
+    }
+
+private:
+    const std::string mSiddPathname1;
+    const std::string mSiddPathname2;
+    const csm::Plugin& mPlugin;
+
+    six::XMLControlRegistry mXmlRegistry;
+    six::NITFReadControl mReader1;
+    six::NITFReadControl mReader2;
+    std::unique_ptr<six::sidd::DerivedData> mDerivedData1;
+    std::unique_ptr<six::sidd::DerivedData> mDerivedData2;
+};
+
+}
+
+int main(int argc, char** argv)
+{
+    try
+    {
+        // Parse the command line
+        if (argc != 3)
+        {
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
+                      << " <measurable SIDD pathname> <polynomial fit gridded display SIDD pathname>\n\n";
+            return 1;
+        }
+        sys::OS os;
+
+        // Go up two levels from current dir
+        const std::string installPathname =
+                sys::Path::splitPath(sys::Path::splitPath(
+                        os.getCurrentExecutable()).first).first;
+
+        const std::string dllPathname = findDllPathname(installPathname);
+        const std::string confDir =
+                sys::Path::joinPaths(installPathname, "conf");
+        if (!os.exists(confDir))
+        {
+            throw except::Exception(Ctxt("Unable to find conf dir."));
+        }
+
+        const std::string measSiddPathname(argv[1]);
+        const std::string pfgdSiddPathname(argv[2]);
+
+        // Load the SIX CSM DLL
+        // Quite frankly I don't know by what magic csm::Plugin::getList() finds
+        // it - some global is getting set automatically when the DLL is just
+        // opened that it's finding
+        sys::DLL dll(dllPathname);
+        csm::Plugin::setDataDirectory(confDir);
+
+        // Make sure we found it
+        csm::PluginList pluginList = csm::Plugin::getList();
+
+        if (pluginList.size() != 1)
+        {
+            throw except::Exception(Ctxt("Expected 1 plugin but found " +
+                    str::toString(pluginList.size())));
+        }
+
+        const csm::Plugin& plugin = **pluginList.begin();
+
+        if (plugin.getPluginName() != "SIX")
+        {
+            throw except::Exception(Ctxt(
+                    "Unexpected plugin name '" + plugin.getPluginName() + "'"));
+        }
+
+        Test test(measSiddPathname, pfgdSiddPathname, confDir, plugin);
+
+        std::cout << "*********************" << std::endl;
+        std::cout << "Testing from File ISD" << std::endl;
+        std::cout << "*********************" << std::endl;
+        bool testPassed1 = test.testFileISD();
+
+        std::cout << std::endl << std::endl;
+        std::cout << "*********************" << std::endl;
+        std::cout << "Testing from NITF ISD" << std::endl;
+        std::cout << "*********************" << std::endl;
+        bool testPassed2 = test.testNitfISD();
+
+        return (testPassed1 && testPassed2) ? 0 : 1;
+    }
+
+    // TODO: At least on Windows we don't ever seem to actually get exceptions
+    //       that make it out of the plugin
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << ex.toString() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown exception\n";
+    }
+
+    return 1;
+}

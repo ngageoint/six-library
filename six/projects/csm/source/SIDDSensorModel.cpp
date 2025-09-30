@@ -44,11 +44,20 @@ namespace CSM
 const csm::Version SIDDSensorModel::VERSION(1, 2, 0);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
+SIDDSensorModel::SIDDSensorModel()
+{
+    // protected version for use by SIDDPolySensorModel
+}
+
 SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
                                  const std::string& dataDir)
 {
     setSchemaDir(dataDir);
+    initializeFromISD(isd);
+}
 
+void SIDDSensorModel::initializeFromISD(const csm::Isd& isd)
+{
     // Support multi-segment SIDDs
     // In this case, the ISD should tell us which image it wants to use if it's
     // not the first one
@@ -78,7 +87,7 @@ SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
         //       version of vts, it threw an exception.  Did older versions of
         //       vts not use the /GR flag (they've since reported it worked
         //       fine when our plugin used dynamic_cast)?
-        initializeFromISD((const csm::Nitf21Isd&)isd,
+        initializeFromNitfISD((const csm::Nitf21Isd&)isd,
                           imageIndex);
     }
     else if (format == "FILENAME")
@@ -155,8 +164,8 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
     }
 }
 
-void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
-                                        size_t imageIndex)
+void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
+                                            size_t imageIndex)
 {
     try
     {
@@ -234,11 +243,12 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
     {
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.getMessage(),
-                           "SIDDSensorModel::initializeFromISD");
+                           "SIDDSensorModel::initializeFromNitfISD");
     }
 }
 
-bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
+bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd,
+                                         bool rigorousProjectionModel)
 {
     six::MinidomParser domParser;
 
@@ -257,9 +267,16 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
                 domParser.clear();
                 domParser.parse(stream);
 
-                if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
+                auto* root = getDocument(domParser).getRootElement();
+                if (root->getLocalName() == "SIDD")
                 {
-                    return true;
+                    std::vector<xml::lite::Element*> children;
+                    root->getElementsByTagName("PolynomialProjection", children, true);
+                    if (children.size())
+                    {
+                        return !rigorousProjectionModel;
+                    }
+                    return rigorousProjectionModel;
                 }
             }
             catch(const except::Exception& )
@@ -459,10 +476,7 @@ const six::ErrorStatistics* SIDDSensorModel::getErrorStatisticsBlock() const
 
 void SIDDSensorModel::reinitialize(SIXSensorModelState& modelState)
 {
-    // This goofiness is for Sun Studio 11 which can't figure out an auto_ptr
-    // assignment here
-    mGeometry.reset(
-            six::sidd::Utilities::getSceneGeometry(mData.get()).release());
+    mGeometry = six::sidd::Utilities::getSceneGeometry(mData.get());
 
     mProjection = six::sidd::Utilities::getProjectionModel(mData.get());
 

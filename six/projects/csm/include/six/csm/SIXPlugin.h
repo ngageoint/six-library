@@ -238,6 +238,7 @@ private:
 
     static const size_t SICD_MODEL_INDEX = 0;
     static const size_t SIDD_MODEL_INDEX = 1;
+    static const size_t SIDD_POLY_MODEL_INDEX = 2;
 };
 }
 }
