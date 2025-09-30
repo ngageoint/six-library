@@ -112,6 +112,21 @@ private:
                 imageCoord.samp - offset);
     }
 
+    void displayWarnings(const std::string& function, int modelNum, csm::WarningList& warnings)
+    {
+        if (warnings.size())
+        {
+            std::cerr << function << " returned warnings for model " << modelNum << ":" << std::endl;
+            for (auto it = warnings.begin(); it != warnings.end(); it++)
+            {
+                std::cerr << "    id=" << it->getWarning() <<
+                             " in function " << it->getFunction() <<
+                             ": " << it->getMessage() << std::endl;
+            }
+            warnings.clear();
+        }
+    }
+
     bool testISD(const csm::Isd& isd1, const csm::Isd& isd2)
     {
         bool testPassed = true;
@@ -119,19 +134,22 @@ private:
         std::unique_ptr<csm::RasterGM> model1;
         std::unique_ptr<csm::RasterGM> model2;
 
+        csm::WarningList warnings;
+
         // Construct the model
         std::cout << std::endl << "Constructing model for " << mSiddPathname1 << std::endl;
         for (size_t modelIdx = 0; modelIdx < mPlugin.getNumModels(); modelIdx++)
         {
             std::string modelName = mPlugin.getModelName(modelIdx);
             std::cout << "Model: " << modelName;
-            if (mPlugin.canModelBeConstructedFromISD(isd1, modelName))
+            if (mPlugin.canModelBeConstructedFromISD(isd1, modelName, &warnings))
             {
                 std::cout << " possibly constructible: ";
+                displayWarnings("canModelBeConstructedFromISD()", 1, warnings);
                 try
                 {
                     model1.reset(reinterpret_cast<csm::RasterGM*>(
-                            mPlugin.constructModelFromISD(isd1, modelName)));
+                            mPlugin.constructModelFromISD(isd1, modelName, &warnings)));
                     std::cout << "success" << std::endl;
                 }
                 catch (const csm::Error& ex)
@@ -139,10 +157,12 @@ private:
                     std::cout << "failed" << std::endl;
                     std::cout << ex.what() << std::endl;
                 }
+                displayWarnings("constructModelFromISD()", 1, warnings);
             }
             else
             {
                 std::cout << " not constructible" << std::endl;
+                displayWarnings("canModelBeConstructedFromISD()", 1, warnings);
             }
         }
 
@@ -151,13 +171,14 @@ private:
         {
             std::string modelName = mPlugin.getModelName(modelIdx);
             std::cout << "Model: " << modelName;
-            if (mPlugin.canModelBeConstructedFromISD(isd2, modelName))
+            if (mPlugin.canModelBeConstructedFromISD(isd2, modelName, &warnings))
             {
                 std::cout << " possibly constructible: ";
+                displayWarnings("canModelBeConstructedFromISD()", 2, warnings);
                 try
                 {
                     model2.reset(reinterpret_cast<csm::RasterGM*>(
-                            mPlugin.constructModelFromISD(isd2, modelName)));
+                            mPlugin.constructModelFromISD(isd2, modelName, &warnings)));
                     std::cout << "success" << std::endl;
                 }
                 catch (const csm::Error& ex)
@@ -165,10 +186,12 @@ private:
                     std::cout << "failed" << std::endl;
                     std::cout << ex.what() << std::endl;
                 }
+                displayWarnings("constructModelFromISD()", 2, warnings);
             }
             else
             {
                 std::cout << " not constructible" << std::endl;
+                displayWarnings("canModelBeConstructedFromISD()", 2, warnings);
             }
         }
 
@@ -255,6 +278,29 @@ private:
             testPassed = false;
         }
 
+        auto imageRange1 = model1->getValidImageRange();
+        auto imageRange2 = model2->getValidImageRange();
+        if (imageRange1.first.line != imageRange2.first.line || imageRange1.first.samp != imageRange2.first.samp ||
+            imageRange1.second.line != imageRange2.second.line || imageRange1.second.samp != imageRange2.second.samp)
+        {
+            std::cerr << "getValidImageRange() returned different values:" << std::endl;
+            std::cerr << "    " << imageRange1.first.line << " " << imageRange1.first.samp <<
+                         " " << imageRange1.second.line << " " << imageRange1.second.samp << std::endl;
+            std::cerr << "    " << imageRange2.first.line << " " << imageRange2.first.samp <<
+                         " " << imageRange2.second.line << " " << imageRange2.second.samp << std::endl;
+            testPassed = false;
+        }
+
+        auto heightRange1 = model1->getValidHeightRange();
+        auto heightRange2 = model2->getValidHeightRange();
+        if (heightRange1.first != heightRange2.first || heightRange1.second != heightRange2.second)
+        {
+            std::cerr << "getValidHeightRange() returned different values:" << std::endl;
+            std::cerr << "    " << heightRange1.first << " " << heightRange1.second << std::endl;
+            std::cerr << "    " << heightRange2.first << " " << heightRange2.second << std::endl;
+            testPassed = false;
+        }
+
         auto imageSize1 = model1->getImageSize();
         auto imageSize2 = model2->getImageSize();
         if (imageSize1.line != imageSize2.line || imageSize1.samp != imageSize2.samp)
@@ -306,7 +352,7 @@ private:
                 sensorPosition1.y != sensorPosition2.y ||
                 sensorPosition1.z != sensorPosition2.z)
             {
-                std::cerr << "getSensorPosition() returned different values" << std::endl;
+                std::cerr << "getSensorPosition(double time) returned different values" << std::endl;
                 std::cerr << "    " << sensorPosition1.x << " " << sensorPosition1.y << " " << sensorPosition1.z << std::endl;
                 std::cerr << "    " << sensorPosition2.x << " " << sensorPosition2.y << " " << sensorPosition2.z << std::endl;
                 testPassed = false;
@@ -314,7 +360,7 @@ private:
         }
         catch (const csm::Error& ex)
         {
-            std::cerr << "getSensorPosition() threw exception:" << std::endl;
+            std::cerr << "getSensorPosition(double time) threw exception:" << std::endl;
             std::cerr << "    " << ex.what() << std::endl;
             testPassed = false;
         }
@@ -327,7 +373,7 @@ private:
                 sensorVelocity1.y != sensorVelocity2.y ||
                 sensorVelocity1.z != sensorVelocity2.z)
             {
-                std::cerr << "getSensorVelocity() returned different values" << std::endl;
+                std::cerr << "getSensorVelocity(double time) returned different values" << std::endl;
                 std::cerr << "    " << sensorVelocity1.x << " " << sensorVelocity1.y << " " << sensorVelocity1.z << std::endl;
                 std::cerr << "    " << sensorVelocity2.x << " " << sensorVelocity2.y << " " << sensorVelocity2.z << std::endl;
                 testPassed = false;
@@ -335,28 +381,77 @@ private:
         }
         catch (const csm::Error& ex)
         {
-            std::cerr << "getSensorVelocity() threw exception:" << std::endl;
+            std::cerr << "getSensorVelocity(double time) threw exception:" << std::endl;
             std::cerr << "    " << ex.what() << std::endl;
             testPassed = false;
         }
 
-        csm::ImageCoord imPt1 = model1->groundToImage(refPt1);
-        csm::ImageCoord imPt2 = model2->groundToImage(refPt1);
-        if (imPt1.line != imPt2.line || imPt1.samp != imPt2.samp)
+        double desiredPrecision = 0.1;
+        double achievedPrecision1, achievedPrecision2;
+        csm::ImageCoord imPt1 = model1->groundToImage(refPt1, desiredPrecision, &achievedPrecision1, &warnings);
+        displayWarnings("groundToImage()", 1, warnings);
+        csm::ImageCoord imPt2 = model2->groundToImage(refPt1, desiredPrecision, &achievedPrecision2, &warnings);
+        displayWarnings("groundToImage()", 2, warnings);
+        if (imPt1.line != imPt2.line || imPt1.samp != imPt2.samp || achievedPrecision1 != achievedPrecision2)
         {
             std::cerr << "groundToImage() returned different values" << std::endl;
-            std::cerr << "    " << imPt1.line << " " << imPt1.samp << std::endl;
-            std::cerr << "    " << imPt2.line << " " << imPt2.samp << std::endl;
+            std::cerr << "    " << imPt1.line << " " << imPt1.samp << "  " << achievedPrecision1 << std::endl;
+            std::cerr << "    " << imPt2.line << " " << imPt2.samp << "  " << achievedPrecision2 << std::endl;
             testPassed = false;
         }
 
-        csm::EcefCoord gndPt1 = model1->imageToGround(imPt1, 0.0);
-        csm::EcefCoord gndPt2 = model2->imageToGround(imPt1, 0.0);
-        if (gndPt1.x != gndPt2.x || gndPt1.y != gndPt2.y || gndPt1.z != gndPt2.z)
+        csm::EcefCoord gndPt1 = model1->imageToGround(imPt1, 0.0, desiredPrecision, &achievedPrecision1, &warnings);
+        displayWarnings("imageToGround()", 1, warnings);
+        csm::EcefCoord gndPt2 = model2->imageToGround(imPt1, 0.0, desiredPrecision, &achievedPrecision2, &warnings);
+        displayWarnings("imageToGround()", 2, warnings);
+        if (gndPt1.x != gndPt2.x || gndPt1.y != gndPt2.y || gndPt1.z != gndPt2.z ||
+            achievedPrecision1 != achievedPrecision2)
         {
             std::cerr << "imageToGround() returned different values" << std::endl;
-            std::cerr << "    " << gndPt1.x << " " << gndPt1.y << " " << gndPt1.z << std::endl;
-            std::cerr << "    " << gndPt2.x << " " << gndPt2.y << " " << gndPt2.z << std::endl;
+            std::cerr << "    " << gndPt1.x << " " << gndPt1.y << " " << gndPt1.z << "  " << achievedPrecision1 << std::endl;
+            std::cerr << "    " << gndPt2.x << " " << gndPt2.y << " " << gndPt2.z << "  " << achievedPrecision2 << std::endl;
+            testPassed = false;
+        }
+
+        try
+        {
+            auto sensorPosition1 = model1->getSensorPosition(imPt1);
+            auto sensorPosition2 = model2->getSensorPosition(imPt1);
+            if (sensorPosition1.x != sensorPosition2.x ||
+                sensorPosition1.y != sensorPosition2.y ||
+                sensorPosition1.z != sensorPosition2.z)
+            {
+                std::cerr << "getSensorPosition(ImageCoord imagePt) returned different values" << std::endl;
+                std::cerr << "    " << sensorPosition1.x << " " << sensorPosition1.y << " " << sensorPosition1.z << std::endl;
+                std::cerr << "    " << sensorPosition2.x << " " << sensorPosition2.y << " " << sensorPosition2.z << std::endl;
+                testPassed = false;
+            }
+        }
+        catch (const csm::Error& ex)
+        {
+            std::cerr << "getSensorPosition(ImageCoord imagePt) threw exception:" << std::endl;
+            std::cerr << "    " << ex.what() << std::endl;
+            testPassed = false;
+        }
+
+        try
+        {
+            auto sensorVelocity1 = model1->getSensorVelocity(imPt1);
+            auto sensorVelocity2 = model2->getSensorVelocity(imPt2);
+            if (sensorVelocity1.x != sensorVelocity2.x ||
+                sensorVelocity1.y != sensorVelocity2.y ||
+                sensorVelocity1.z != sensorVelocity2.z)
+            {
+                std::cerr << "getSensorVelocity(ImageCoord imagePt) returned different values" << std::endl;
+                std::cerr << "    " << sensorVelocity1.x << " " << sensorVelocity1.y << " " << sensorVelocity1.z << std::endl;
+                std::cerr << "    " << sensorVelocity2.x << " " << sensorVelocity2.y << " " << sensorVelocity2.z << std::endl;
+                testPassed = false;
+            }
+        }
+        catch (const csm::Error& ex)
+        {
+            std::cerr << "getSensorVelocity(ImageCoord imagePt) threw exception:" << std::endl;
+            std::cerr << "    " << ex.what() << std::endl;
             testPassed = false;
         }
 

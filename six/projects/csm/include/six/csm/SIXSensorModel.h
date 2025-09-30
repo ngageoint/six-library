@@ -629,7 +629,8 @@ protected:
 
     virtual csm::ImageCoord groundToImageImpl(const csm::EcefCoord& groundPt,
                                       double desiredPrecision,
-                                      double* achievedPrecision) const;
+                                      double* achievedPrecision,
+                                      csm::WarningList* warnings) const;
 
     static
     scene::Vector3 toVector3(const csm::EcefCoord& pt)

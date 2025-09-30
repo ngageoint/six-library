@@ -33,19 +33,19 @@ namespace
 class NullProjectionModel : public scene::ProjectionModel
 {
 public:
-    NullProjectionModel() :
+    NullProjectionModel(const six::sidd::DerivedData* data) :
         ProjectionModel(scene::Vector3(),
-                        scene::Vector3(),
-                        math::poly::OneD<scene::Vector3>{{scene::Vector3{}}},
+                        data->measurement->projection.get()->referencePoint.ecef,
+                        data->measurement->arpPoly,
                         {},
-                        +1)
+                        six::sidd::Utilities::getSideOfTrack(data))
     {
     }
 
     virtual types::RowCol<double>
         computeImageCoordinates(const scene::Vector3& imagePlanePoint) const
     {
-        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                 "Function not implemented",
                 "NullProjectionModel::computeImageCoordinates");
     }
@@ -53,7 +53,7 @@ public:
     virtual scene::Vector3
     imageGridToECEF(const types::RowCol<double> gridPt) const
     {
-        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                 "Function not implemented",
                 "NullProjectionModel::computeImageCoordinates");
     }
@@ -65,7 +65,7 @@ public:
                                 double* r,
                                 double* rDot) const
     {
-        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+        throw csm::Error(csm::Error::UNSUPPORTED_FUNCTION,
                 "Function not implemented",
                 "NullProjectionModel::computeImageCoordinates");
     }
@@ -115,10 +115,22 @@ csm::EcefCoord SIDDPolySensorModel::imageToGround(
         double height,
         double desiredPrecision,
         double* achievedPrecision,
-        csm::WarningList* ) const
+        csm::WarningList* warnings) const
 {
     try
     {
+        std::pair<csm::ImageCoord, csm::ImageCoord> validRange = getValidImageRange();
+        if (imagePt.line < validRange.first.line || imagePt.line > validRange.second.line ||
+            imagePt.samp < validRange.first.samp || imagePt.samp > validRange.second.samp)
+        {
+            if (warnings)
+            {
+                warnings->push_back(csm::Warning(csm::Warning::IMAGE_COORD_OUT_OF_BOUNDS,
+                    "Image coordinate is out of bounds and may not be valid",
+                    "SIDDPolySensorModel::imageToGround"));
+            }
+        }
+
         scene::LatLonAlt lla;
         lla.setLat(mPolyProj->rowColToLat(imagePt.line, imagePt.samp));
         lla.setLon(mPolyProj->rowColToLon(imagePt.line, imagePt.samp));
@@ -131,13 +143,19 @@ csm::EcefCoord SIDDPolySensorModel::imageToGround(
             lla.setAlt(mECEFToLLA.transform(mGeometry->getReferencePosition()).getAlt());
         }
 
-        lla.setAlt(lla.getAlt() + height);
-        //lla.setAlt(height);
+        if (lla.getAlt() != height && warnings)
+        {
+            warnings->push_back(csm::Warning(csm::Warning::NO_INTERSECTION,
+                "Specified height does not match model height",
+                "SIDDPolySensorModel::imageToGround"));
+        }
+
         const scene::Vector3 groundPt = mLLAToECEF.transform(lla);
 
         if (achievedPrecision)
         {
-            *achievedPrecision = desiredPrecision;
+            // Return 0 for non-iterative result
+            *achievedPrecision = 0;
         }
 
         return toEcefCoord(groundPt);
@@ -181,7 +199,7 @@ SIDDPolySensorModel::groundToImage(
         const csm::EcefCoord& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        csm::WarningList* ) const
+        csm::WarningList* warnings) const
 {
     try
     {
@@ -189,6 +207,24 @@ SIDDPolySensorModel::groundToImage(
         csm::ImageCoord ic;
         ic.line = mPolyProj->latLonToRow(lla.getLat(), lla.getLon());
         ic.samp = mPolyProj->latLonToCol(lla.getLat(), lla.getLon());
+
+        if (achievedPrecision)
+        {
+            // Return 0 for non-iterative result
+            *achievedPrecision = 0;
+        }
+
+        std::pair<csm::ImageCoord, csm::ImageCoord> validRange = getValidImageRange();
+        if (ic.line < validRange.first.line || ic.line > validRange.second.line ||
+            ic.samp < validRange.first.samp || ic.samp > validRange.second.samp)
+        {
+            if (warnings)
+            {
+                warnings->push_back(csm::Warning(csm::Warning::IMAGE_COORD_OUT_OF_BOUNDS,
+                    "Calculated image coordinate is out of bounds and may not be valid",
+                    "SIDDPolySensorModel::groundToImage"));
+            }
+        }
 
         return ic;
     }
@@ -223,6 +259,49 @@ SIDDPolySensorModel::groundToImage(
     }
 }
 
+std::pair<csm::ImageCoord, csm::ImageCoord>
+SIDDPolySensorModel::getValidImageRange() const
+{
+    // We do not know how the polynomial fit might break down outside of it, so
+    // indicate that the model is valid only over the exact image array.
+    return std::pair<csm::ImageCoord, csm::ImageCoord>(
+            getImageStart(),
+            {getImageStart().line + getImageSize().line, getImageStart().samp + getImageSize().samp});
+}
+
+std::pair<double,double> SIDDPolySensorModel::getValidHeightRange() const
+{
+    if (mPolyProj->rowColToAlt.orderX())
+    {
+        constexpr size_t numPts = 21;
+        double l0 = getImageStart().line;
+        double nl = getImageSize().line;
+        double s0 = getImageStart().samp;
+        double ns = getImageSize().samp;
+
+        double minAlt = mPolyProj->rowColToAlt(l0, s0);
+        double maxAlt = minAlt;
+        for (size_t li = 0; li < numPts; li++)
+        {
+            double line = l0 + li / (numPts - 1) * nl;
+            for (size_t si = 0; si < numPts; si++)
+            {
+                double samp = s0 + si / (numPts - 1) * ns;
+                double alt = mPolyProj->rowColToAlt(line, samp);
+                minAlt = std::min(minAlt, alt);
+                maxAlt = std::max(maxAlt, alt);
+            }
+        }
+        return std::pair<double, double>(minAlt, maxAlt);
+    }
+    else
+    {
+        double scpAlt = mECEFToLLA.transform(mGeometry->getReferencePosition()).getAlt();
+        return std::pair<double, double>(scpAlt, scpAlt);
+    }
+}
+
+
 void SIDDPolySensorModel::reinitialize(SIXSensorModelState& modelState)
 {
     mGeometry = six::sidd::Utilities::getSceneGeometry(mData.get());
@@ -242,7 +321,7 @@ void SIDDPolySensorModel::reinitialize(SIXSensorModelState& modelState)
         mData->setName(modelState.getDatasetName());
     }
 
-    mProjection.reset(new NullProjectionModel());
+    mProjection.reset(new NullProjectionModel(mData.get()));
 
     // Force sensor covariance override, and force values to 0, so adjustable
     // parameters get disabled and the user can't see or change them

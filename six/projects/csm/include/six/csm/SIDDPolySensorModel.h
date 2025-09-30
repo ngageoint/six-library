@@ -76,14 +76,14 @@ public: // Model methods
      *
      * \return The version of the sensor model
      */
-    virtual csm::Version getVersion() const;
+    csm::Version getVersion() const override;
 
     /**
      * Returns a string indicating the name of the sensor model.
      *
      * \return Name of the sensor model
      */
-    virtual std::string getModelName() const;
+    std::string getModelName() const override;
 
     /**
      * Returns a character string that identifies the sensor, the model type,
@@ -91,7 +91,7 @@ public: // Model methods
      *
      * \return String that contains the pedigree information
      */
-    virtual std::string getPedigree() const;
+    std::string getPedigree() const override;
 
 public: // RasterGM methods
 
@@ -119,6 +119,10 @@ public: // RasterGM methods
             double desiredPrecision,
             double* achievedPrecision,
             csm::WarningList* warnings) const override;
+
+    std::pair<csm::ImageCoord, csm::ImageCoord> getValidImageRange() const override;
+
+    std::pair<double,double> getValidHeightRange() const override;
 
 private:
     void reinitialize(SIXSensorModelState& modelState) override;
