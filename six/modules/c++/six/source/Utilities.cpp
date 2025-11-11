@@ -771,6 +771,10 @@ void six::getErrors(const ErrorStatistics* errorStats,
                 }
 
                 rangeBias = value(radarSensor.rangeBias);
+                if (has_value(radarSensor.clockFreqSF))
+                {
+                    errors.mClkSF = math::square(value(radarSensor.clockFreqSF));
+                }
             }
 
             if (components->posVelError)

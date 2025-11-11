@@ -690,6 +690,27 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     math::linear::MatrixMxN<3, 3> ionMat3D(0.0);
     ionMat3D.addInPlace(ionMat, 0, 0);
 
+    // Clock Error
+    const types::RowCol<double> estRC = 
+            sceneToImage(scenePoint);
+    double estRCOA;
+    double estRdotCOA;
+    computeContour(rARP, vARP, timeCOA,
+                   estRC,
+                   &estRCOA,
+                   &estRdotCOA);
+    double dca0 = -estRdotCOA/vARP.norm();
+    double cotDca0 = 1.0 / std::tan(dca0);
+    double cRGSF = -estRCOA;
+    double cAZSF = mLookDir*estRCOA*cotDca0;
+    math::linear::MatrixMxN<3, 3> clkMat3D(0.0);
+    clkMat3D(0, 0) = cRGSF*cRGSF*mErrors.mClkSF;
+    clkMat3D(0, 1) = cRGSF*cAZSF*mErrors.mClkSF;
+    clkMat3D(1, 0) = cRGSF*cAZSF*mErrors.mClkSF;
+    clkMat3D(1, 1) = cAZSF*cAZSF*mErrors.mClkSF;
+
+    // Converting Tropo, Iono, and Clock Errors from
+    // Range & Azimuth Errors to RIC Errors
     math::linear::MatrixMxN<3, 3> raToEcef;
     raToEcef.col(0, range.matrix());
     raToEcef.col(1, azimuth.matrix());
@@ -701,7 +722,8 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
 
     const math::linear::MatrixMxN<3, 3> totalMat =
             raToRic * tropMat3D * raToRic.transpose() +
-            raToRic * ionMat3D * raToRic.transpose();
+            raToRic * ionMat3D * raToRic.transpose() +
+            raToRic * clkMat3D * raToRic.transpose();
 
     math::linear::MatrixMxN<7, 7> errorCovar(mErrors.mSensorErrorCovar);
     errorCovar.addInPlace(totalMat, 0, 0);

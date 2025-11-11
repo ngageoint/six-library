@@ -45,6 +45,7 @@ struct SIX_SCENE_API Errors
     double mPositionDecorrRate = 0.0;
     double mRangeCorrCoefZero = 0.0;
     double mRangeDecorrRate = 0.0;
+    double mClkSF = 0.0;
 };
 }
 
