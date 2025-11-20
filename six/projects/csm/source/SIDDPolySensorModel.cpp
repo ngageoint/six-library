@@ -139,7 +139,7 @@ csm::EcefCoord SIDDPolySensorModel::imageToGround(
         scene::LatLonAlt lla;
         lla.setLat(mPolyProj->rowColToLat(imagePt.line, imagePt.samp));
         lla.setLon(mPolyProj->rowColToLon(imagePt.line, imagePt.samp));
-        if (mPolyProj->rowColToAlt.orderX())
+        if (!mPolyProj->rowColToAlt.empty())
         {
             lla.setAlt(mPolyProj->rowColToAlt(imagePt.line, imagePt.samp));
         }
@@ -286,7 +286,7 @@ SIDDPolySensorModel::getValidImageRange() const
 
 std::pair<double, double> SIDDPolySensorModel::getValidHeightRange() const
 {
-    if (mPolyProj->rowColToAlt.orderX())
+    if (!mPolyProj->rowColToAlt.empty())
     {
         constexpr size_t numPts = 21;
         double l0 = getImageStart().line;
