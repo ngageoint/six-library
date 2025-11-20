@@ -146,8 +146,8 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         if (container->getDataType() != six::DataType::DERIVED)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                               "Not a SIDD.  Did not find a SIDD DES.",
-                               "SIDDSensorModel::initializeFromFile");
+                             "Not a SIDD.  Did not find a SIDD DES.",
+                             "SIDDSensorModel::initializeFromFile");
         }
 
         const nitf::List images = reader.getRecord().getImages();
@@ -167,17 +167,21 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         if (!found)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                               "Requested IMAGE_INDEX " + std::to_string(imageIndex) +
-                               " but only have " + std::to_string(index) + " image subheaders",
-                               "SIDDSensorModel::initializeFromFile");
+                             "Requested IMAGE_INDEX " +
+                                     std::to_string(imageIndex) +
+                                     " but only have " + std::to_string(index) +
+                                     " image subheaders",
+                             "SIDDSensorModel::initializeFromFile");
         }
         size_t desIndex = extractDesIndexFromIID1(iid1);
 
         size_t numSIDD = 0;
         for (size_t idx = 0; idx < container->size(); idx++)
         {
-            // The SIDD DESs appear first so stop counting if we encounter a non-SIDD DES
-            if (container->getData(desIndex)->getDataType() != six::DataType::DERIVED)
+            // The SIDD DESs appear first so stop counting if we encounter a
+            // non-SIDD DES
+            if (container->getData(desIndex)->getDataType() !=
+                six::DataType::DERIVED)
             {
                 break;
             }
@@ -186,9 +190,10 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         if (numSIDD < desIndex + 1)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Found " + std::to_string(numSIDD) +
-                    " SIDD DES segments but need DES index " + std::to_string(desIndex),
-                    "SIDDSensorModel::initializeFromFile");
+                             "Found " + std::to_string(numSIDD) +
+                                     " SIDD DES segments but need DES index " +
+                                     std::to_string(desIndex),
+                             "SIDDSensorModel::initializeFromFile");
         }
 
         six::Data* const data = container->getData(desIndex);
@@ -224,18 +229,22 @@ void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
         if (imageIndex >= imageList.size())
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                               "Requested IMAGE_INDEX " + std::to_string(imageIndex) +
-                               " but only have " + std::to_string(imageList.size()) + " image subheaders",
-                               "SIDDSensorModel::initializeFromNitfISD");
+                             "Requested IMAGE_INDEX " +
+                                     std::to_string(imageIndex) +
+                                     " but only have " +
+                                     std::to_string(imageList.size()) +
+                                     " image subheaders",
+                             "SIDDSensorModel::initializeFromNitfISD");
         }
         const std::string& subheaderText = imageList.at(imageIndex).subHeader();
         if (subheaderText.size() < 12)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                               "Image subheader text is too short",
-                               "SIDDSensorModel::initializeFromNitfISD");
+                             "Image subheader text is too short",
+                             "SIDDSensorModel::initializeFromNitfISD");
         }
-        std::string iid1 = str::trim(imageList.at(imageIndex).subHeader().substr(2, 10));
+        std::string iid1 =
+                str::trim(imageList.at(imageIndex).subHeader().substr(2, 10));
         size_t desIndex = extractDesIndexFromIID1(iid1);
 
         size_t numSIDD = 0;
@@ -280,9 +289,10 @@ void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
         if (siddXML == nullptr)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                    "Found " + std::to_string(numSIDD) +
-                    " SIDD DES segments but need DES index " + std::to_string(desIndex),
-                    "SIDDSensorModel::initializeFromNitfISD");
+                             "Found " + std::to_string(numSIDD) +
+                                     " SIDD DES segments but need DES index " +
+                                     std::to_string(desIndex),
+                             "SIDDSensorModel::initializeFromNitfISD");
         }
 
         // get xml as string for sensor model state
@@ -313,18 +323,21 @@ void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
 
 size_t SIDDSensorModel::extractDesIndexFromIID1(const std::string& iid1)
 {
-    if (!str::startsWith(iid1, "SIDD") || iid1.size() != 10 || !str::isNumeric(iid1.substr(4,3)))
+    if (!str::startsWith(iid1, "SIDD") || iid1.size() != 10 ||
+        !str::isNumeric(iid1.substr(4, 3)))
     {
-        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                            "Image segment header IID1 field is incorrectly formatted",
-                            "SIDDSensorModel::extractDesIndexFromIID1");
+        throw csm::Error(
+                csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                "Image segment header IID1 field is incorrectly formatted",
+                "SIDDSensorModel::extractDesIndexFromIID1");
     }
-    size_t oneBasedIndex = str::toType<size_t>(iid1.substr(4,3));
+    size_t oneBasedIndex = str::toType<size_t>(iid1.substr(4, 3));
     if (oneBasedIndex == 0)
     {
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                            "Image segment header IID1 field must indicate a DES index greater than 0",
-                            "SIDDSensorModel::extractDesIndexFromIID1");
+                         "Image segment header IID1 field must indicate a DES "
+                         "index greater than 0",
+                         "SIDDSensorModel::extractDesIndexFromIID1");
     }
 
     size_t desIndex = oneBasedIndex - 1;

@@ -694,24 +694,21 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     const types::RowCol<double> estRC = sceneToImage(scenePoint);
     double estRCOA;
     double estRdotCOA;
-    computeContour(rARP, vARP, timeCOA,
-                   estRC,
-                   &estRCOA,
-                   &estRdotCOA);
+    computeContour(rARP, vARP, timeCOA, estRC, &estRCOA, &estRdotCOA);
     double cRGSF = -estRCOA;
     double cAZSF = 0;
     if (estRdotCOA != 0)
     {
-        double cosDca0 = -estRdotCOA/vARP.norm();
-        double sinDca0 = sqrt(1 - cosDca0*cosDca0);
+        double cosDca0 = -estRdotCOA / vARP.norm();
+        double sinDca0 = sqrt(1 - cosDca0 * cosDca0);
         double cotDca0 = cosDca0 / sinDca0;
-        cAZSF = mLookDir*estRCOA*cotDca0;
+        cAZSF = mLookDir * estRCOA * cotDca0;
     }
     math::linear::MatrixMxN<3, 3> clkMat3D(0.0);
-    clkMat3D(0, 0) = cRGSF*cRGSF*mErrors.mClkSF;
-    clkMat3D(0, 1) = cRGSF*cAZSF*mErrors.mClkSF;
-    clkMat3D(1, 0) = cRGSF*cAZSF*mErrors.mClkSF;
-    clkMat3D(1, 1) = cAZSF*cAZSF*mErrors.mClkSF;
+    clkMat3D(0, 0) = cRGSF * cRGSF * mErrors.mClkSF;
+    clkMat3D(0, 1) = cRGSF * cAZSF * mErrors.mClkSF;
+    clkMat3D(1, 0) = cRGSF * cAZSF * mErrors.mClkSF;
+    clkMat3D(1, 1) = cAZSF * cAZSF * mErrors.mClkSF;
 
     // Converting Tropo, Iono, and Clock Errors from
     // Range & Azimuth Errors to RIC Errors

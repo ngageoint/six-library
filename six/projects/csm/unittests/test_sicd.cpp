@@ -294,8 +294,7 @@ TEST_CASE(testFromNitf21ISD)
                 std::vector<std::string>(1, harness.schemaPath()));
     complexData = six::sicd::Utilities::getComplexData(reader);
 
-    auto isd =
-            constructIsd(sicd.string(), reader, xmlRegistry);
+    auto isd = constructIsd(sicd.string(), reader, xmlRegistry);
 
     TEST_ASSERT(plugin.canModelBeConstructedFromISD(*isd, "SICD_SENSOR_MODEL"));
 
@@ -676,8 +675,7 @@ TEST_CASE(testImageIdentifier)
     TEST_ASSERT_EQ(model2->getImageIdentifier(), "test identifier");
 }
 
-TEST_MAIN(TEST_CHECK(testPluginParams);
-          TEST_CHECK(testFromFilenameISD);
+TEST_MAIN(TEST_CHECK(testPluginParams); TEST_CHECK(testFromFilenameISD);
           TEST_CHECK(testFromNitf21ISD);
           TEST_CHECK(testFromState);
           TEST_CHECK(testErrorStatistics1);

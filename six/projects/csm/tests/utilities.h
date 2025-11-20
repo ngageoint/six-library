@@ -120,7 +120,8 @@ inline std::string findDllPathname(const std::string& installPathname)
  *
  * \return A Nitf21ISD object
  */
-inline std::unique_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
+inline std::unique_ptr<csm::Nitf21Isd> constructIsd(
+        const std::string& pathname,
         const six::NITFReadControl& loadedReadControl,
         const six::XMLControlRegistry& registry)
 {
@@ -138,7 +139,8 @@ inline std::unique_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
         des.setSubHeader(toString(dataSegment.getSubheader()));
 
         // The DES's data is just the XML string
-        const auto xml = six::toXMLString(loadedReadControl.getContainer()->getData(desIndex), &registry);
+        const auto xml = six::toXMLString(
+                loadedReadControl.getContainer()->getData(desIndex), &registry);
         des.setData(str::to_native(xml));
 
         nitfIsd->addFileDes(des);
@@ -149,11 +151,12 @@ inline std::unique_ptr<csm::Nitf21Isd> constructIsd(const std::string& pathname,
     for (nitf::ImageSegment imageSegment : imageSegments)
     {
         csm::Image image;
-        // Plugins only use the IID1 field so no need to reconstruct entire subheader
+        // Plugins only use the IID1 field so no need to reconstruct entire
+        // subheader
         image.setSubHeader(
-            imageSegment.getSubheader().getFilePartType().toString() +
-            imageSegment.getSubheader().getImageId().toString() +
-            imageSegment.getSubheader().getImageDateAndTime().toString());
+                imageSegment.getSubheader().getFilePartType().toString() +
+                imageSegment.getSubheader().getImageId().toString() +
+                imageSegment.getSubheader().getImageDateAndTime().toString());
         nitfIsd->addImage(image);
     }
 

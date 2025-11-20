@@ -74,10 +74,10 @@ public:
 
     bool testNitfISD()
     {
-        std::unique_ptr<csm::Nitf21Isd> nitfIsd1 = constructIsd(
-                mSiddPathname1, mReader1, mXmlRegistry);
-        std::unique_ptr<csm::Nitf21Isd> nitfIsd2 = constructIsd(
-                mSiddPathname2, mReader2, mXmlRegistry);
+        std::unique_ptr<csm::Nitf21Isd> nitfIsd1 =
+                constructIsd(mSiddPathname1, mReader1, mXmlRegistry);
+        std::unique_ptr<csm::Nitf21Isd> nitfIsd2 =
+                constructIsd(mSiddPathname2, mReader2, mXmlRegistry);
         return testISD(*nitfIsd1, *nitfIsd2);
     }
 
@@ -344,10 +344,10 @@ private:
         {
             std::cerr << "getImageSize() returned different values"
                       << std::endl;
-            std::cerr << "    " << imageSize1.line << " "
-                      << imageSize1.samp << std::endl;
-            std::cerr << "    " << imageSize1.line << " "
-                      << imageSize1.samp << std::endl;
+            std::cerr << "    " << imageSize1.line << " " << imageSize1.samp
+                      << std::endl;
+            std::cerr << "    " << imageSize1.line << " " << imageSize1.samp
+                      << std::endl;
             testPassed = false;
         }
 

@@ -66,17 +66,20 @@ public:
         return sys::test::findGITModuleFile("croppedNitfs", "SIDD", filename);
     }
 
-    std::string fakeSiddXmlData(std::string siddVersion, std::string productName)
+    std::string fakeSiddXmlData(std::string siddVersion,
+                                std::string productName)
     {
         // Fake sidd metadata that still should work through projection.  Note
         // that this data may not be internally consistent but it is fine for
         // limited testing purposes.
 
-        std::string siddOpen =
-                R"(<SIDD xmlns="urn:SIDD:)" + siddVersion + R"(" xmlns:si="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism:13">)";
+        std::string siddOpen = R"(<SIDD xmlns="urn:SIDD:)" + siddVersion +
+                R"(" xmlns:si="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism:13">)";
         std::string productCreation =
                 R"(<ProductCreation><ProcessorInformation><Application>application</Application><ProcessingDateTime>2024-01-01T00:00:00.000000Z</ProcessingDateTime><Site>site</Site></ProcessorInformation><Classification ism:DESVersion="13" ism:ISMCATCESVersion="1" ism:resourceElement="true" ism:createDate="2024-01-01" ism:compliesWith="USGov" ism:classification="U" ism:ownerProducer="USA"/>)"
-                R"(<ProductName>)" + productName + R"(</ProductName><ProductClass>Detected Image</ProductClass></ProductCreation>)";
+                R"(<ProductName>)" +
+                productName +
+                R"(</ProductName><ProductClass>Detected Image</ProductClass></ProductCreation>)";
         std::string display =
                 R"(<Display><PixelType>MONO8I</PixelType><NumBands>1</NumBands>)"
                 R"(<NonInteractiveProcessing band="1"><ProductGenerationOptions><DataRemapping><LUTName>PEDF</LUTName><Predefined><DatabaseName>PEDF</DatabaseName></Predefined></DataRemapping></ProductGenerationOptions><RRDS><DownsamplingMethod>MAX PIXEL</DownsamplingMethod></RRDS></NonInteractiveProcessing>)"
@@ -109,9 +112,10 @@ public:
                 R"(<Vertex index="3"><si:Row>1000</si:Row><si:Col>1000</si:Col></Vertex>)"
                 R"(<Vertex index="4"><si:Row>1000</si:Row><si:Col>0</si:Col></Vertex>)"
                 R"(</ValidData></Measurement>)";
-        std::string exploitationFeatures =
-                R"(<ExploitationFeatures>)"
-                R"(<Collection identifier=")" + productName + R"(">)"
+        std::string exploitationFeatures = R"(<ExploitationFeatures>)"
+                                           R"(<Collection identifier=")" +
+                productName +
+                R"(">)"
                 R"(<Information><SensorName>sensor name</SensorName><RadarMode><si:ModeType>SPOTLIGHT</si:ModeType></RadarMode><CollectionDateTime>2016-01-01T00:00:00.000000Z</CollectionDateTime><CollectionDuration>20</CollectionDuration>)"
                 R"(<Polarization><TxPolarization>H</TxPolarization><RcvPolarization>H</RcvPolarization></Polarization>)"
                 R"(</Information>)"
@@ -122,10 +126,10 @@ public:
                 R"(<Polarization><TxPolarizationProc>H</TxPolarizationProc><RcvPolarizationProc>H</RcvPolarizationProc></Polarization><North>90</North>)"
                 R"(</Product>)"
                 R"(</ExploitationFeatures>)";
-        std::string siddClose =
-                R"(</SIDD>)";
+        std::string siddClose = R"(</SIDD>)";
 
-        return siddOpen + productCreation + display + geoData + measurement + exploitationFeatures + siddClose;
+        return siddOpen + productCreation + display + geoData + measurement +
+                exploitationFeatures + siddClose;
     }
 
     std::unique_ptr<six::sidd::DerivedData> fakeDerivedData(
@@ -296,10 +300,10 @@ TEST_CASE(testIID1FormatCheck)
     plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL");
 
     std::vector<std::string> invalidIID1s = {
-        "IM          ",
-        "IMSIDD      ",
-        "IMSIDD001   ",
-        "IMSIDD000001",
+            "IM          ",
+            "IMSIDD      ",
+            "IMSIDD001   ",
+            "IMSIDD000001",
     };
 
     for (std::string invalidIID1 : invalidIID1s)
@@ -307,7 +311,9 @@ TEST_CASE(testIID1FormatCheck)
         isd = csm::Nitf21Isd();
         isd.addImage(csm::Image(invalidIID1, {}));
         isd.addFileDes(des);
-        TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL"), csm::Error);
+        TEST_SPECIFIC_EXCEPTION(
+                plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL"),
+                csm::Error);
     }
 }
 
@@ -316,9 +322,9 @@ TEST_CASE(testImageIndexMapping)
     TestHarness& harness = TestHarness::getInstance();
     const csm::Plugin& plugin = harness.plugin();
 
-    //auto derivedData = harness.fakeDerivedData("3.0.0");
-    //auto standardIsd = harness.isdFromDerived(derivedData);
-    //csm::Des des = standardIsd.fileDess().at(0);
+    // auto derivedData = harness.fakeDerivedData("3.0.0");
+    // auto standardIsd = harness.isdFromDerived(derivedData);
+    // csm::Des des = standardIsd.fileDess().at(0);
     csm::Des des1(harness.desHdr(), harness.fakeSiddXmlData("3.0.0", "iid1"));
     csm::Des des2(harness.desHdr(), harness.fakeSiddXmlData("3.0.0", "iid2"));
 
@@ -332,11 +338,15 @@ TEST_CASE(testImageIndexMapping)
 
     isd.clearAllParams();
     isd.addParam("IMAGE_INDEX", "1");
-    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL"), csm::Error);
+    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd,
+                                                         "SIDD_SENSOR_MODEL"),
+                            csm::Error);
 
     isd.clearAllParams();
     isd.addParam("IMAGE_INDEX", "text");
-    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL"), csm::Error);
+    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd,
+                                                         "SIDD_SENSOR_MODEL"),
+                            csm::Error);
 
     // 2 images, 2 DES's
     isd = csm::Nitf21Isd();
@@ -345,15 +355,22 @@ TEST_CASE(testImageIndexMapping)
     isd.addFileDes(des1);
     isd.addFileDes(des2);
 
-    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")->getImageIdentifier(), "iid1");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid1");
 
     isd.addParam("IMAGE_INDEX", "1");
-    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")->getImageIdentifier(), "iid2");
-    //TODO: test image id or something else to prove we're looking at the correct DES
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid2");
+    // TODO: test image id or something else to prove we're looking at the
+    // correct DES
 
     isd.clearAllParams();
     isd.addParam("IMAGE_INDEX", "2");
-    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL"), csm::Error);
+    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd,
+                                                         "SIDD_SENSOR_MODEL"),
+                            csm::Error);
 
     // 5 images, 2 DES's
     isd = csm::Nitf21Isd();
@@ -365,26 +382,38 @@ TEST_CASE(testImageIndexMapping)
     isd.addFileDes(des1);
     isd.addFileDes(des2);
 
-    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")->getImageIdentifier(), "iid1");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid1");
 
     isd.addParam("IMAGE_INDEX", "1");
-    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")->getImageIdentifier(), "iid1");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid1");
 
     isd.clearAllParams();
     isd.addParam("IMAGE_INDEX", "2");
-    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")->getImageIdentifier(), "iid2");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid2");
 
     isd.clearAllParams();
     isd.addParam("IMAGE_INDEX", "3");
-    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")->getImageIdentifier(), "iid2");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid2");
 
     isd.clearAllParams();
     isd.addParam("IMAGE_INDEX", "4");
-    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")->getImageIdentifier(), "iid2");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid2");
 
     isd.clearAllParams();
     isd.addParam("IMAGE_INDEX", "5");
-    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL"), csm::Error);
+    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd,
+                                                         "SIDD_SENSOR_MODEL"),
+                            csm::Error);
 }
 
 void testCommon(std::string& testName, csm::RasterGM& model)
@@ -439,10 +468,10 @@ TEST_CASE(testFromNitf21ISD)
 
     reader.load(sidd.string(),
                 std::vector<std::string>(1, harness.schemaPath()));
-    derivedData.reset(static_cast<six::sidd::DerivedData*>(reader.getContainer()->getData(0)->clone()));
+    derivedData.reset(static_cast<six::sidd::DerivedData*>(
+            reader.getContainer()->getData(0)->clone()));
 
-    auto isd =
-            constructIsd(sidd.string(), reader, xmlRegistry);
+    auto isd = constructIsd(sidd.string(), reader, xmlRegistry);
 
     TEST_ASSERT(plugin.canModelBeConstructedFromISD(*isd, "SIDD_SENSOR_MODEL"));
 
@@ -583,7 +612,7 @@ TEST_CASE(testErrorStatistics1)
 
     // TODO: this test should be augmented with the many possible permutations
     // of optional metadata available in the ErrorStatistics block
-    //addCompositeSCP(*derivedData);
+    // addCompositeSCP(*derivedData);
     addComponents(*derivedData, six::FrameType::RIC_ECF, false);
     addUnmodeled(*derivedData, true);
 
@@ -823,8 +852,7 @@ TEST_CASE(testImageIdentifier)
     TEST_ASSERT_EQ(model2->getImageIdentifier(), "test identifier");
 }
 
-TEST_MAIN(TEST_CHECK(testPluginParams);
-          TEST_CHECK(testIID1FormatCheck);
+TEST_MAIN(TEST_CHECK(testPluginParams); TEST_CHECK(testIID1FormatCheck);
           TEST_CHECK(testImageIndexMapping);
           TEST_CHECK(testFromFilenameISD);
           TEST_CHECK(testFromNitf21ISD);
