@@ -61,14 +61,10 @@ public:
         mReader1.setXMLControlRegistry(&mXmlRegistry);
         mReader1.load(mSiddPathname1, std::vector<std::string>(1, schemaDir));
         auto container1(mReader1.getContainer());
-        mDerivedData1.reset(reinterpret_cast<six::sidd::DerivedData*>(
-                container1->getData(0)->clone()));
 
         mReader2.setXMLControlRegistry(&mXmlRegistry);
         mReader2.load(mSiddPathname2, std::vector<std::string>(1, schemaDir));
         auto container2(mReader2.getContainer());
-        mDerivedData2.reset(reinterpret_cast<six::sidd::DerivedData*>(
-                container2->getData(0)->clone()));
     }
 
     bool testFileISD()
@@ -79,9 +75,9 @@ public:
     bool testNitfISD()
     {
         std::unique_ptr<csm::Nitf21Isd> nitfIsd1 = constructIsd(
-                mSiddPathname1, mReader1, mDerivedData1.get(), mXmlRegistry);
+                mSiddPathname1, mReader1, mXmlRegistry);
         std::unique_ptr<csm::Nitf21Isd> nitfIsd2 = constructIsd(
-                mSiddPathname2, mReader2, mDerivedData2.get(), mXmlRegistry);
+                mSiddPathname2, mReader2, mXmlRegistry);
         return testISD(*nitfIsd1, *nitfIsd2);
     }
 
@@ -348,6 +344,10 @@ private:
         {
             std::cerr << "getImageSize() returned different values"
                       << std::endl;
+            std::cerr << "    " << imageSize1.line << " "
+                      << imageSize1.samp << std::endl;
+            std::cerr << "    " << imageSize1.line << " "
+                      << imageSize1.samp << std::endl;
             testPassed = false;
         }
 
@@ -637,8 +637,6 @@ private:
     six::XMLControlRegistry mXmlRegistry;
     six::NITFReadControl mReader1;
     six::NITFReadControl mReader2;
-    std::unique_ptr<six::sidd::DerivedData> mDerivedData1;
-    std::unique_ptr<six::sidd::DerivedData> mDerivedData2;
 };
 
 }

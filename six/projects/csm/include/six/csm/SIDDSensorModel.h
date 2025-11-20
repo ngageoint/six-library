@@ -194,6 +194,8 @@ private:
 
     virtual types::RowCol<double> getSampleSpacing() const;
 
+    size_t extractDesIndexFromIID1(const std::string& iid1);
+
 protected:
     std::unique_ptr<six::sidd::DerivedData> mData;
 

@@ -73,7 +73,7 @@ public:
     bool testNitfISD()
     {
         std::unique_ptr<csm::Nitf21Isd> nitfIsd = constructIsd(mSiddPathname,
-                mReader, mDerivedData.get(), mXmlRegistry);
+                mReader, mXmlRegistry);
         return testISD(*nitfIsd);
     }
 
