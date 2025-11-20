@@ -691,18 +691,22 @@ math::linear::MatrixMxN<7, 7> ProjectionModel::getErrorCovariance(
     ionMat3D.addInPlace(ionMat, 0, 0);
 
     // Clock Error
-    const types::RowCol<double> estRC = 
-            sceneToImage(scenePoint);
+    const types::RowCol<double> estRC = sceneToImage(scenePoint);
     double estRCOA;
     double estRdotCOA;
     computeContour(rARP, vARP, timeCOA,
                    estRC,
                    &estRCOA,
                    &estRdotCOA);
-    double dca0 = -estRdotCOA/vARP.norm();
-    double cotDca0 = 1.0 / std::tan(dca0);
     double cRGSF = -estRCOA;
-    double cAZSF = mLookDir*estRCOA*cotDca0;
+    double cAZSF = 0;
+    if (estRdotCOA != 0)
+    {
+        double cosDca0 = -estRdotCOA/vARP.norm();
+        double sinDca0 = sqrt(1 - cosDca0*cosDca0);
+        double cotDca0 = cosDca0 / sinDca0;
+        cAZSF = mLookDir*estRCOA*cotDca0;
+    }
     math::linear::MatrixMxN<3, 3> clkMat3D(0.0);
     clkMat3D(0, 0) = cRGSF*cRGSF*mErrors.mClkSF;
     clkMat3D(0, 1) = cRGSF*cAZSF*mErrors.mClkSF;
