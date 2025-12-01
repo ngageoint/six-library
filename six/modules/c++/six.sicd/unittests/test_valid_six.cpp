@@ -280,6 +280,7 @@ static std::vector<std::byte> readFromNITF(const std::filesystem::path& inputPat
 
 TEST_CASE(test_readFromNITF_sicd_50x50)
 {
+    (void)(testName);
     auto inputPathname = six::testing::getNitfPath("sicd_50x50.nitf");
     auto buffer = readFromNITF(inputPathname);
 }
@@ -297,6 +298,7 @@ static std::vector<six::zfloat> readSicd(const std::filesystem::path& inputPathn
 }
 TEST_CASE(test_read_sicd_50x50)
 {
+    (void)(testName);
     auto inputPathname = six::testing::getNitfPath("sicd_50x50.nitf");
     auto widebandData = readSicd(inputPathname);
 }

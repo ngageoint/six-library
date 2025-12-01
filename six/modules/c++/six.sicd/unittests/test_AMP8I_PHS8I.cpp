@@ -330,6 +330,7 @@ static std::vector<std::byte> readFromNITF(const std::filesystem::path& inputPat
 
 TEST_CASE(test_readFromNITF_8_bit_Amp_Phs_Examples)
 {
+    (void)(testName);
     auto subdir = std::filesystem::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     auto filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     auto inputPathname = six::testing::getNitroPath(filename);
@@ -354,6 +355,7 @@ static std::vector<six::zfloat> readSicd(const std::filesystem::path& inputPathn
 }
 TEST_CASE(test_read_sicd_8_bit_Amp_Phs_Examples)
 {
+    (void)(testName);
     auto subdir = std::filesystem::path("8_bit_Amp_Phs_Examples") / "No_amplitude_table";
     auto filename = subdir / "sicd_example_1_PFA_AMP8I_PHS8I_VV_no_amplitude_table_SICD.nitf";
     auto inputPathname = six::testing::getNitroPath(filename);
