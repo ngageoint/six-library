@@ -1176,6 +1176,7 @@ TEST_CASE(testVersions)
 
 TEST_CASE(testReadXML)
 {
+    (void)(testName);
     const auto map = cphd::CPHDXMLControl::getVersionUriMap();
     for (auto pair : map)
     {

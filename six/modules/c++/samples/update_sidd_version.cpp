@@ -36,7 +36,6 @@
 namespace
 {
 void readSidd(const std::string& pathname,
-              std::vector<std::string> schemaPaths,
               std::unique_ptr<six::sidd::DerivedData>& derivedData,
               std::vector<std::byte>& widebandData)
 {
@@ -129,7 +128,7 @@ int main(int argc, char** argv)
 
         std::unique_ptr<six::sidd::DerivedData> derivedData;
         std::vector<std::byte> widebandData;
-        readSidd(pathname, schemaPaths, derivedData, widebandData);
+        readSidd(pathname, derivedData, widebandData);
 
         logging::DefaultLogger log("SIDD Update");
         six::sidd::SIDDVersionUpdater(*derivedData, version, log).update();

@@ -116,6 +116,7 @@ void setVectorParameters(size_t channel,
 
 TEST_CASE(testPvpRequired)
 {
+    (void)(testName);
     call_srand();
     cphd::Pvp pvp;
     cphd::setPVPXML(pvp);

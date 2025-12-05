@@ -253,6 +253,13 @@ void XMLParser::parseString(const xml::lite::Element* element, std::string& valu
     assert(element != nullptr);
     parseString(*element, value);
 }
+bool XMLParser::parseString(const xml::lite::Element* element,
+                            std::u8string& value) const
+{
+    assert(element != nullptr);
+    parseString(*element, value);
+    return !value.empty();
+}
 bool XMLParser::parseString(const xml::lite::Element& element, std::u8string& value) const
 {
     element.getCharacterData(value);

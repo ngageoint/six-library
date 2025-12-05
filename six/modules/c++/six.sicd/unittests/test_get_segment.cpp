@@ -61,6 +61,7 @@ TEST_CASE(testThrowIfMissingSegment)
 
 TEST_CASE(testHandlesNullPointers)
 {
+    (void)(testName);
     six::sicd::AreaPlane areaPlane;
     areaPlane.segmentList.resize(3);
     areaPlane.segmentList[2].reset(new six::sicd::Segment());

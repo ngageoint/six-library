@@ -12,7 +12,9 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
        add_compile_options(/WX) # warnings as errors
        add_compile_options(/MP) # multi-processor build
     elseif (UNIX)
-       add_compile_options(-Werror) # warnings as errors
+       # warnings as errors
+       # (except c++20 compat)
+       add_compile_options(-Werror -Wno-error=c++20-compat -Wno-error=format-truncation)
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
