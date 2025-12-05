@@ -1294,7 +1294,7 @@ void SICommonXMLParser::parseCollectionInformationFromXML(
         parseString(element, collInfo->radarModeID);
     }
 
-    const auto& classificationXML = getFirstAndOnly(*collectionInfoXML, "Classification");
+    const XMLElem classificationXML = getFirstAndOnly(collectionInfoXML, "Classification");
     // For "new" XML processing (storing the encoding) we'll have a UTF-8 value.
     // This is important as it could be French "NON CLASSIFI� / UNCLASSIFIED"
     std::u8string classification_u8;
