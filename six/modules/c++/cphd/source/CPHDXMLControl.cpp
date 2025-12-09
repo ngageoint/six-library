@@ -136,6 +136,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString
     io::U8StringStream stringStream;
     stringStream.write(xmlString);
     six::MinidomParser parser;
+    parser.preserveCharacterData(true);
     parser.parse(stringStream);
     auto result = fromXML(parser.getDocument(), schemaPaths);
     return std::make_unique<Metadata>(std::move(result));
