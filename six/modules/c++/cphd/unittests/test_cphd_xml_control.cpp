@@ -46,6 +46,9 @@ static std::string testCPHDXMLBody()
 "        <ReleaseInfo>Release</ReleaseInfo>\n"
 "        <CountryCode>US,GB,AZ</CountryCode>\n"
 "        <Parameter name=\"param1\">val</Parameter>\n"
+"        <Parameter name=\"ThreeSpaceParam\">   </Parameter>\n"
+"        <Parameter name=\"TrailingSpaceParam\">val </Parameter>\n"
+"        <Parameter name=\"LeadingSpaceParam\"> val</Parameter>\n"
 "    </CollectionID>\n"
 "    <Global>\n"
 "        <DomainType>FX</DomainType>\n"
@@ -923,6 +926,10 @@ void runTest(const std::string& testName, cphd::Version version)
 
     TEST_ASSERT_EQ(metadata->collectionID.parameters[0].getName(), "param1");
     TEST_ASSERT_EQ(metadata->collectionID.parameters[0].str(), "val");
+
+    TEST_ASSERT_EQ(metadata->collectionID.parameters.findParameter("ThreeSpaceParam").str(), "   ");
+    TEST_ASSERT_EQ(metadata->collectionID.parameters.findParameter("TrailingSpaceParam").str(), "val ");
+    TEST_ASSERT_EQ(metadata->collectionID.parameters.findParameter("LeadingSpaceParam").str(), " val");
 
     // Global
     const cphd::Global& global = metadata->global;
