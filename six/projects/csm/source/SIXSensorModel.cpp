@@ -643,8 +643,10 @@ std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
         math::linear::Matrix2D<double> covarP2(unmodeledError2);
 
         math::linear::Matrix2D<double> crossCovar;
-        math::linear::Matrix2D<double> ssScaling(2, 2, {1. / ss.row, 0., 0., 1. / ss.col});
-        crossCovar = ssScaling * matrixSqrt(covarP1) * matrixSqrt(covarP2) * ssScaling;
+        math::linear::Matrix2D<double> ssScaling(
+                2, 2, {1. / ss.row, 0., 0., 1. / ss.col});
+        crossCovar = ssScaling * matrixSqrt(covarP1) * matrixSqrt(covarP2) *
+                ssScaling;
 
         std::vector<double> unmodeledErrorVec(4);
         unmodeledErrorVec[0] = crossCovar[0][0];
@@ -675,20 +677,20 @@ std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
             if (has_value(unmodeled.unmodeledDecorr))
             {
                 zeroRow = value(value(unmodeled.unmodeledDecorr).Xrow)
-                                .corrCoefZero;
-                rateRow = value(value(unmodeled.unmodeledDecorr).Xrow)
-                                .decorrRate;
+                                  .corrCoefZero;
+                rateRow =
+                        value(value(unmodeled.unmodeledDecorr).Xrow).decorrRate;
                 zeroCol = value(value(unmodeled.unmodeledDecorr).Ycol)
-                                .corrCoefZero;
-                rateCol = value(value(unmodeled.unmodeledDecorr).Ycol)
-                                .decorrRate;
+                                  .corrCoefZero;
+                rateCol =
+                        value(value(unmodeled.unmodeledDecorr).Ycol).decorrRate;
             }
         }
 
-        double coeffRow = std::min(
-                1.0, std::max(0.0, zeroRow - rateRow * diff.row));
-        double coeffCol = std::min(
-                1.0, std::max(0.0, zeroCol - rateCol * diff.col));
+        double coeffRow =
+                std::min(1.0, std::max(0.0, zeroRow - rateRow * diff.row));
+        double coeffCol =
+                std::min(1.0, std::max(0.0, zeroCol - rateCol * diff.col));
         unmodeledErrorVec[0] *= coeffRow;
         unmodeledErrorVec[1] *= ::sqrt(coeffRow * coeffCol);
         unmodeledErrorVec[2] *= ::sqrt(coeffRow * coeffCol);
@@ -1136,7 +1138,8 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
         const SIXSensorModel& comparisonSIXModel =
                 (const SIXSensorModel&)comparisonModel;
 
-        //const bool selfCovar = getImageIdentifier() == comparisonModel.getImageIdentifier();
+        // const bool selfCovar = getImageIdentifier() ==
+        // comparisonModel.getImageIdentifier();
         const bool selfCovar = (this == &comparisonSIXModel);
         if (selfCovar)
         {
@@ -1144,8 +1147,8 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
             {
                 for (size_t kk = 0; kk < paramSetP1.size(); kk++)
                 {
-                    returnVal[paramSetP2.size() * paramSetP1[jj] + paramSetP2[kk]] =
-                            getParameterCovariance(jj, kk);
+                    returnVal[paramSetP2.size() * paramSetP1[jj] +
+                              paramSetP2[kk]] = getParameterCovariance(jj, kk);
                 }
             }
             return returnVal;
