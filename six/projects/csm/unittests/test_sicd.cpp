@@ -456,7 +456,7 @@ TEST_CASE(testErrorStatistics1)
     /*for (size_t i = 0; i < cue.size(); i++)
         std::cout << "cue: " << cue[i] << std::endl;*/
     for (size_t i = 0; i < cue.size(); i++)
-        TEST_ASSERT_LESSER(cue[i], ue[i]);
+        TEST_ASSERT_LESSER(std::abs(cue[i]), std::abs(ue[i]));
 }
 
 TEST_CASE(testErrorStatistics2)
