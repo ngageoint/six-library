@@ -1127,12 +1127,24 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
 
     if (comparisonModel.getPlatformIdentifier() == getPlatformIdentifier())
     {
-        // NOTE: Used dynamic_cast here previously but using it with IAI's
-        //       version of vts, it threw an exception.  Did older versions of
-        //       vts not use the /GR flag (they've since reported it worked
-        //       fine when our plugin used dynamic_cast)?
         const SIXSensorModel& comparisonSIXModel =
                 (const SIXSensorModel&)comparisonModel;
+
+        //const bool selfCovar = getImageIdentifier() == comparisonModel.getImageIdentifier();
+        const bool selfCovar = (this == &comparisonSIXModel);
+        if (selfCovar)
+        {
+            for (size_t jj = 0; jj < paramSetP1.size(); jj++)
+            {
+                for (size_t kk = 0; kk < paramSetP1.size(); kk++)
+                {
+                    returnVal[paramSetP2.size() * paramSetP1[jj] + paramSetP2[kk]] =
+                            getParameterCovariance(jj, kk);
+                }
+            }
+            return returnVal;
+        }
+
         const size_t numGroups = getNumCorrelationParameterGroups();
         const six::DateTime timeP1 = getReferenceDateAndTimeImpl();
         const six::DateTime timeP2 =
@@ -1175,16 +1187,8 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
                 }
             }
             math::linear::Matrix2D<double> crossCovar;
-            if (getImageIdentifier() == comparisonModel.getImageIdentifier())
-            {
-                crossCovar = covarP1;
-            }
-            else
-            {
-                crossCovar =
-                        matrixSqrt(covarP1) * matrixSqrt(covarP2);
-                crossCovar.scale(corrCoeff);
-            }
+            crossCovar = matrixSqrt(covarP1) * matrixSqrt(covarP2);
+            crossCovar.scale(corrCoeff);
 
             jjP = 0;
             kkP = 0;
