@@ -639,54 +639,60 @@ std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
         // Get in the right units
         const types::RowCol<double> ss = getSampleSpacing();
 
+        math::linear::Matrix2D<double> covarP1(unmodeledError1);
+        math::linear::Matrix2D<double> covarP2(unmodeledError2);
+
+        math::linear::Matrix2D<double> crossCovar;
+        math::linear::Matrix2D<double> ssScaling(2, 2, {1. / ss.row, 0., 0., 1. / ss.col});
+        crossCovar = ssScaling * matrixSqrt(covarP1) * matrixSqrt(covarP2) * ssScaling;
+
         std::vector<double> unmodeledErrorVec(4);
-        unmodeledErrorVec[0] =
-                ::sqrt(unmodeledError1[0][0] * unmodeledError2[0][0]) /
-                (ss.row * ss.row);
-        unmodeledErrorVec[1] =
-                ::sqrt(unmodeledError1[0][1] * unmodeledError2[0][1]) /
-                (ss.row * ss.col);
-        unmodeledErrorVec[2] =
-                ::sqrt(unmodeledError1[1][0] * unmodeledError2[1][0]) /
-                (ss.row * ss.col);
-        unmodeledErrorVec[3] =
-                ::sqrt(unmodeledError1[1][1] * unmodeledError2[1][1]) /
-                (ss.col * ss.col);
+        unmodeledErrorVec[0] = crossCovar[0][0];
+        unmodeledErrorVec[1] = crossCovar[0][1];
+        unmodeledErrorVec[2] = crossCovar[1][0];
+        unmodeledErrorVec[3] = crossCovar[1][1];
+
+        types::RowCol<double> diff{std::abs(pixelPt1.row - pixelPt2.row),
+                                   std::abs(pixelPt1.col - pixelPt2.col)};
+
+        // If optional unmodeled decorrelation block is not present, assume full
+        // correlation of the covariance matrix for a point with itself, but
+        // full decorrelation in all other cases.
+        double zeroRow = 0.0;
+        double rateRow = 0.0;
+        double zeroCol = 0.0;
+        double rateCol = 0.0;
+        if (diff.row == 0 && diff.col == 0)
+        {
+            zeroRow = 1.0;
+            zeroCol = 1.0;
+        }
 
         const six::ErrorStatistics* errorStatistics = getErrorStatisticsBlock();
-        if (errorStatistics)
+        if (errorStatistics && has_value(errorStatistics->unmodeled))
         {
-            types::RowCol<double> diff{std::abs(pixelPt1.row - pixelPt2.row),
-                                       std::abs(pixelPt1.col - pixelPt2.col)};
-            if (has_value(errorStatistics->unmodeled))
+            auto& unmodeled = value(errorStatistics->unmodeled);
+            if (has_value(unmodeled.unmodeledDecorr))
             {
-                auto& unmodeled = value(errorStatistics->unmodeled);
-                if (has_value(unmodeled.unmodeledDecorr))
-                {
-                    double zeroRow =
-                            value(value(unmodeled.unmodeledDecorr).Xrow)
-                                    .corrCoefZero;
-                    double rateRow =
-                            value(value(unmodeled.unmodeledDecorr).Xrow)
-                                    .decorrRate;
-                    double coeffRow = std::min(
-                            1.0, std::max(0.0, zeroRow - rateRow * diff.row));
-                    double zeroCol =
-                            value(value(unmodeled.unmodeledDecorr).Ycol)
-                                    .corrCoefZero;
-                    double rateCol =
-                            value(value(unmodeled.unmodeledDecorr).Ycol)
-                                    .decorrRate;
-                    double coeffCol = std::min(
-                            1.0, std::max(0.0, zeroCol - rateCol * diff.col));
-
-                    unmodeledErrorVec[0] *= coeffRow;
-                    unmodeledErrorVec[1] *= ::sqrt(coeffRow * coeffCol);
-                    unmodeledErrorVec[2] *= ::sqrt(coeffRow * coeffCol);
-                    unmodeledErrorVec[3] *= coeffCol;
-                }
+                zeroRow = value(value(unmodeled.unmodeledDecorr).Xrow)
+                                .corrCoefZero;
+                rateRow = value(value(unmodeled.unmodeledDecorr).Xrow)
+                                .decorrRate;
+                zeroCol = value(value(unmodeled.unmodeledDecorr).Ycol)
+                                .corrCoefZero;
+                rateCol = value(value(unmodeled.unmodeledDecorr).Ycol)
+                                .decorrRate;
             }
         }
+
+        double coeffRow = std::min(
+                1.0, std::max(0.0, zeroRow - rateRow * diff.row));
+        double coeffCol = std::min(
+                1.0, std::max(0.0, zeroCol - rateCol * diff.col));
+        unmodeledErrorVec[0] *= coeffRow;
+        unmodeledErrorVec[1] *= ::sqrt(coeffRow * coeffCol);
+        unmodeledErrorVec[2] *= ::sqrt(coeffRow * coeffCol);
+        unmodeledErrorVec[3] *= coeffCol;
 
         return unmodeledErrorVec;
     }
