@@ -47,6 +47,9 @@ const char* test_cphd_xml_optional_XML =
 "        <ReleaseInfo>Release</ReleaseInfo>\n"
 "        <CountryCode>US,GB,AZ</CountryCode>\n"
 "        <Parameter name=\"param1\">val</Parameter>\n"
+"        <Parameter name=\"ThreeSpaceParam\">   </Parameter>\n"
+"        <Parameter name=\"TrailingSpaceParam\">val </Parameter>\n"
+"        <Parameter name=\"LeadingSpaceParam\"> val</Parameter>\n"
 "    </CollectionID>\n"
 "    <Global>\n"
 "        <DomainType>FX</DomainType>\n"
@@ -890,6 +893,11 @@ TEST_CASE(testOptional)
     xmlParser.parse(cphdStream, cphdStream.available());
     const std::unique_ptr<cphd::Metadata> metadata =
             cphd::CPHDXMLControl().fromXML(xmlParser.getDocument());
+
+    const cphd::CollectionInformation& collectionID = metadata->collectionID;
+    TEST_ASSERT_EQ(collectionID.parameters.findParameter("ThreeSpaceParam").str(), "   ");
+    TEST_ASSERT_EQ(collectionID.parameters.findParameter("TrailingSpaceParam").str(), "val ");
+    TEST_ASSERT_EQ(collectionID.parameters.findParameter("LeadingSpaceParam").str(), " val");
 
     const cphd::SupportArray& supportArray = *(metadata->supportArray);
     TEST_ASSERT_EQ(supportArray.iazArray.size(), static_cast<size_t>(1));

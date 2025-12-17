@@ -501,6 +501,7 @@ std::unique_ptr<Metadata> CPHDXMLControl::fromXML(const std::u8string& xmlString
     io::U8StringStream stringStream;
     stringStream.write(xmlString);
     six::MinidomParser parser;
+    parser.preserveCharacterData(true);
     parser.parse(stringStream);
     return fromXML(&parser.getDocument());
 }
