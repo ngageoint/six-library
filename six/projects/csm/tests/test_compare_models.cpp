@@ -574,6 +574,64 @@ private:
             testPassed = false;
         }
 
+        double offset_m = 10;
+        csm::EcefCoord offsetGroundPt;
+        csm::ImageCoord imPt1c = model1->groundToImage(refPt1,
+                                                      desiredPrecision,
+                                                      &achievedPrecision1,
+                                                      &warnings);
+        offsetGroundPt = refPt1;
+        offsetGroundPt.x += offset_m;
+        csm::ImageCoord imPt1x = model1->groundToImage(offsetGroundPt,
+                                                      desiredPrecision,
+                                                      &achievedPrecision1,
+                                                      &warnings);
+        offsetGroundPt = refPt1;
+        offsetGroundPt.y += offset_m;
+        csm::ImageCoord imPt1y = model1->groundToImage(offsetGroundPt,
+                                                      desiredPrecision,
+                                                      &achievedPrecision1,
+                                                      &warnings);
+        offsetGroundPt = refPt1;
+        offsetGroundPt.z += offset_m;
+        csm::ImageCoord imPt1z = model1->groundToImage(offsetGroundPt,
+                                                      desiredPrecision,
+                                                      &achievedPrecision1,
+                                                      &warnings);
+
+        csm::ImageCoord imPt2c = model2->groundToImage(refPt2,
+                                                      desiredPrecision,
+                                                      &achievedPrecision2,
+                                                      &warnings);
+        offsetGroundPt = refPt2;
+        offsetGroundPt.x += offset_m;
+        csm::ImageCoord imPt2x = model2->groundToImage(offsetGroundPt,
+                                                      desiredPrecision,
+                                                      &achievedPrecision2,
+                                                      &warnings);
+        offsetGroundPt = refPt2;
+        offsetGroundPt.y += offset_m;
+        csm::ImageCoord imPt2y = model2->groundToImage(offsetGroundPt,
+                                                      desiredPrecision,
+                                                      &achievedPrecision2,
+                                                      &warnings);
+        offsetGroundPt = refPt2;
+        offsetGroundPt.z += offset_m;
+        csm::ImageCoord imPt2z = model2->groundToImage(offsetGroundPt,
+                                                      desiredPrecision,
+                                                      &achievedPrecision2,
+                                                      &warnings);
+
+        std::cout << "imPt1c: " << imPt1c.line << " " << imPt1c.samp << std::endl;
+        std::cout << "imPt1x: " << imPt1x.line << " " << imPt1x.samp << std::endl;
+        std::cout << "imPt1y: " << imPt1y.line << " " << imPt1y.samp << std::endl;
+        std::cout << "imPt1z: " << imPt1z.line << " " << imPt1z.samp << std::endl;
+        std::cout << std::endl;
+        std::cout << "imPt2c: " << imPt2c.line << " " << imPt2c.samp << std::endl;
+        std::cout << "imPt2x: " << imPt2x.line << " " << imPt2x.samp << std::endl;
+        std::cout << "imPt2y: " << imPt2y.line << " " << imPt2y.samp << std::endl;
+        std::cout << "imPt2z: " << imPt2z.line << " " << imPt2z.samp << std::endl;
+
         return testPassed;
     }
 
