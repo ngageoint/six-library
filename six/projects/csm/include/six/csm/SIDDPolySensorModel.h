@@ -121,8 +121,8 @@ public:  // RasterGM methods
             double* achievedPrecision,
             csm::WarningList* warnings) const override;
 
-    std::vector<double>
-    computeGroundPartials(const csm::EcefCoord& groundPt) const override;
+    std::vector<double> computeGroundPartials(
+            const csm::EcefCoord& groundPt) const override;
 
     std::vector<double> getUnmodeledCrossCovariance(
             const csm::ImageCoord& pt1,

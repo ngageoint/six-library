@@ -278,23 +278,26 @@ csm::ImageCoordCovar SIDDPolySensorModel::groundToImage(
     }
 }
 
-std::vector<double>
-SIDDPolySensorModel::computeGroundPartials(const csm::EcefCoord& groundPt) const
+std::vector<double> SIDDPolySensorModel::computeGroundPartials(
+        const csm::EcefCoord& groundPt) const
 {
     double offset_m = 0.001;  // meters
     csm::ImageCoord center = groundToImage(groundPt, 0.0, nullptr, nullptr);
 
     csm::EcefCoord offsetGroundPt = groundPt;
     offsetGroundPt.x += offset_m;
-    csm::ImageCoord offset_x = groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
+    csm::ImageCoord offset_x =
+            groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
 
     offsetGroundPt = groundPt;
     offsetGroundPt.y += offset_m;
-    csm::ImageCoord offset_y = groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
+    csm::ImageCoord offset_y =
+            groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
 
     offsetGroundPt = groundPt;
     offsetGroundPt.z += offset_m;
-    csm::ImageCoord offset_z = groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
+    csm::ImageCoord offset_z =
+            groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
 
     std::vector<double> groundPartialsVec(6);
     groundPartialsVec[0] = (offset_x.line - center.line) / offset_m;

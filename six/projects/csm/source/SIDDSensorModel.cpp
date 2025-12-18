@@ -279,7 +279,7 @@ void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
                         ++numSIDD;
                     }
                 }
-                catch (const except::Throwable& )
+                catch (const except::Throwable&)
                 {
                     // Couldn't parse DES as xml -- it's not a sidd so skip it
                 }
@@ -378,7 +378,7 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd,
                     return rigorousProjectionModel;
                 }
             }
-            catch (const except::Throwable& )
+            catch (const except::Throwable&)
             {
                 // Couldn't parse DES as xml -- it's not a sidd so skip it
             }
