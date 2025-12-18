@@ -171,7 +171,7 @@ void SICDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd)
                                            "SICDSensorModel::SICDSensorModel");
                     }
                 }
-                catch(const except::Exception& )
+                catch(const except::Throwable& )
                 {
                     // Couldn't parse DES as xml -- it's not a sicd so skip it
                 }
@@ -248,7 +248,7 @@ bool SICDSensorModel::containsComplexDES(const csm::Nitf21Isd& isd)
                     return false;
                 }
             }
-            catch(const except::Exception& )
+            catch(const except::Throwable& )
             {
                 // Couldn't parse DES as xml -- it's not a sicd so skip it
             }

@@ -207,7 +207,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         SIXSensorModelState empty;
         reinitialize(empty);
     }
-    catch (const except::Exception& ex)
+    catch (const except::Throwable& ex)
     {
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.getMessage(),
@@ -279,7 +279,7 @@ void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
                         ++numSIDD;
                     }
                 }
-                catch(const except::Exception& )
+                catch (const except::Throwable& )
                 {
                     // Couldn't parse DES as xml -- it's not a sidd so skip it
                 }
@@ -313,7 +313,7 @@ void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
         SIXSensorModelState empty;
         reinitialize(empty);
     }
-    catch (const except::Exception& ex)
+    catch (const except::Throwable& ex)
     {
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                          ex.getMessage(),
@@ -378,7 +378,7 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd,
                     return rigorousProjectionModel;
                 }
             }
-            catch(const except::Exception& )
+            catch (const except::Throwable& )
             {
                 // Couldn't parse DES as xml -- it's not a sidd so skip it
             }
@@ -545,7 +545,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
                 &domParser.getDocument(), mSchemaDirs)));
         reinitialize(modelState);
     }
-    catch (const except::Exception& ex)
+    catch (const except::Throwable& ex)
     {
         throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            ex.getMessage(),
