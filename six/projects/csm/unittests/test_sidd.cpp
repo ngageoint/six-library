@@ -322,9 +322,6 @@ TEST_CASE(testImageIndexMapping)
     TestHarness& harness = TestHarness::getInstance();
     const csm::Plugin& plugin = harness.plugin();
 
-    // auto derivedData = harness.fakeDerivedData("3.0.0");
-    // auto standardIsd = harness.isdFromDerived(derivedData);
-    // csm::Des des = standardIsd.fileDess().at(0);
     csm::Des des1(harness.desHdr(), harness.fakeSiddXmlData("3.0.0", "iid1"));
     csm::Des des2(harness.desHdr(), harness.fakeSiddXmlData("3.0.0", "iid2"));
 
@@ -363,8 +360,6 @@ TEST_CASE(testImageIndexMapping)
     TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
                            ->getImageIdentifier(),
                    "iid2");
-    // TODO: test image id or something else to prove we're looking at the
-    // correct DES
 
     isd.clearAllParams();
     isd.addParam("IMAGE_INDEX", "2");

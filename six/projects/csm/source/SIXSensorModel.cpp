@@ -1138,8 +1138,6 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
         const SIXSensorModel& comparisonSIXModel =
                 (const SIXSensorModel&)comparisonModel;
 
-        // const bool selfCovar = getImageIdentifier() ==
-        // comparisonModel.getImageIdentifier();
         const bool selfCovar = (this == &comparisonSIXModel);
         if (selfCovar)
         {

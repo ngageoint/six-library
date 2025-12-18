@@ -367,8 +367,10 @@ private:
             double imageTime2 = model2->getImageTime(imageStart1);
             if (imageTime1 != imageTime2)
             {
-                std::cerr << "getImageTime() returned different values"
+                std::cerr << "getImageTime() returned different values:"
                           << std::endl;
+                std::cerr << "    " << imageTime1 << std::endl;
+                std::cerr << "    " << imageTime2 << std::endl;
                 testPassed = false;
             }
         }
@@ -470,11 +472,15 @@ private:
             testPassed = false;
         }
 
+        double height = 0.0;
+        height = std::min(heightRange1.second, std::max(heightRange1.first, height));
+        height = std::min(heightRange2.second, std::max(heightRange2.first, height));
+
         csm::EcefCoord gndPt1 = model1->imageToGround(
-                imPt1, 0.0, desiredPrecision, &achievedPrecision1, &warnings);
+                imPt1, height, desiredPrecision, &achievedPrecision1, &warnings);
         displayWarnings("imageToGround()", 1, warnings);
         csm::EcefCoord gndPt2 = model2->imageToGround(
-                imPt1, 0.0, desiredPrecision, &achievedPrecision2, &warnings);
+                imPt1, height, desiredPrecision, &achievedPrecision2, &warnings);
         displayWarnings("imageToGround()", 2, warnings);
         if (gndPt1.x != gndPt2.x || gndPt1.y != gndPt2.y ||
             gndPt1.z != gndPt2.z || achievedPrecision1 != achievedPrecision2)
@@ -546,86 +552,28 @@ private:
             testPassed = false;
         }
 
-#if 0
-        six::RowColDouble scpPixel = mDerivedData->measurement->projection->
-                referencePoint.rowCol;
-        six::Vector3 scp = mDerivedData->measurement->projection->
-                referencePoint.ecef;
-
-        // Get height from SCP for conversion
-        scene::ECEFToLLATransform transformer;
-        six::LatLonAlt lla = transformer.transform(scp);
-        const double height = lla.getAlt();
-
-        // The offsets past the first should result in a number farther off
-        // than the others
-        std::vector<double> offsets(4);
-        std::vector<double> imageDifferences(offsets.size());
-        std::vector<double> groundDifferences(offsets.size());
-        offsets[0] = 0;
-        offsets[1] = .5;
-        offsets[2] = -.5;
-        offsets[3] = 1;
-        const double pixelTolerance = 0;
-        const double groundTolerance = .001;
-
-        for (size_t ii = 0; ii < offsets.size(); ++ii)
+        std::vector<double> gndPartials1 = model1->computeGroundPartials(refPt1);
+        std::vector<double> gndPartials2 = model2->computeGroundPartials(refPt2);
+        if (gndPartials1 != gndPartials2)
         {
-            // Find difference between converted and given scpPixel
-            six::RowColDouble convertedImagePoint =
-                    groundToImage(*model, scp, offsets[ii]);
-            six::RowColDouble imagePointDifference = absoluteDifference(
-                    convertedImagePoint, scpPixel);
-
-            // Find difference between converted and given SCP
-            scene::Vector3 convertedGroundPoint =
-                    imageToGround(*model, scpPixel, height, offsets[ii]);
-            scene::Vector3 groundPointDifference = absoluteDifference(
-                    convertedGroundPoint, scp);
-
-            // Just need to check that the greatest difference is
-            // under our tolerance
-            imageDifferences[ii] = std::max(imagePointDifference.row,
-                    imagePointDifference.col);
-
-            groundDifferences[ii] = std::max(groundPointDifference[0],
-                    std::max(groundPointDifference[1],
-                            groundPointDifference[2]));
-        }
-
-        double leastGroundDifference = *std::min_element(
-                groundDifferences.begin(), groundDifferences.end());
-        double leastImageDifference = *std::min_element(
-                imageDifferences.begin(), imageDifferences.end());
-
-        if (leastImageDifference != imageDifferences[0])
-        {
-            std::cerr << "There was an offset better than " <<
-                    offsets[0] << "\n";
+            std::cerr << "computeGroundPartials() returned different values:"
+                      << std::endl;
+            std::cerr << "    " << gndPartials1[0] << " " << gndPartials1[1] << "  " << gndPartials1[2] << " " << gndPartials1[3] << "  " << gndPartials1[4] << " " << gndPartials1[5] << "  " << std::endl;
+            std::cerr << "    " << gndPartials2[0] << " " << gndPartials2[1] << "  " << gndPartials2[2] << " " << gndPartials2[3] << "  " << gndPartials2[4] << " " << gndPartials2[5] << "  " << std::endl;
             testPassed = false;
         }
 
-        if (leastGroundDifference != groundDifferences[0])
+        std::vector<double> unmodeledError1 = model1->getUnmodeledError(imPt1);
+        std::vector<double> unmodeledError2 = model2->getUnmodeledError(imPt2);
+        if (unmodeledError1 != unmodeledError2)
         {
-            std::cerr << "There was an offset better than " <<
-                    offsets[0] << "\n";
+            std::cerr << "getUnmodeledError() returned different values:"
+                      << std::endl;
+            std::cerr << "    " << unmodeledError1[0] << " " << unmodeledError1[1] << "  " << unmodeledError1[2] << " " << unmodeledError1[3] << std::endl;
+            std::cerr << "    " << unmodeledError2[0] << " " << unmodeledError2[1] << "  " << unmodeledError2[2] << " " << unmodeledError2[3] << std::endl;
             testPassed = false;
         }
 
-        if (leastGroundDifference > groundTolerance)
-        {
-            std::cerr << "Converted ground point > " << groundTolerance <<
-                    " away from SCP\n";
-            testPassed = false;
-        }
-
-        if (leastImageDifference > pixelTolerance)
-        {
-            std::cerr << "Converted image point > " << pixelTolerance <<
-                    " away from scpPixel\n";
-            testPassed = false;
-        }
-#endif
         return testPassed;
     }
 

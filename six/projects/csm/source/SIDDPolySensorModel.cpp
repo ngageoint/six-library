@@ -110,6 +110,11 @@ std::string SIDDPolySensorModel::getPedigree() const
     return (mData->getSource() + "_" + NAME + "_SAR");
 }
 
+double SIDDPolySensorModel::getImageTime(const csm::ImageCoord& imagePt) const
+{
+    return 0.0;
+}
+
 csm::EcefCoord SIDDPolySensorModel::imageToGround(
         const csm::ImageCoord& imagePt,
         double height,
@@ -273,6 +278,40 @@ csm::ImageCoordCovar SIDDPolySensorModel::groundToImage(
     }
 }
 
+std::vector<double>
+SIDDPolySensorModel::computeGroundPartials(const csm::EcefCoord& groundPt) const
+{
+    double offset_m = 0.001;  // meters
+    csm::ImageCoord center = groundToImage(groundPt, 0.0, nullptr, nullptr);
+
+    csm::EcefCoord offsetGroundPt = groundPt;
+    offsetGroundPt.x += offset_m;
+    csm::ImageCoord offset_x = groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
+
+    offsetGroundPt = groundPt;
+    offsetGroundPt.y += offset_m;
+    csm::ImageCoord offset_y = groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
+
+    offsetGroundPt = groundPt;
+    offsetGroundPt.z += offset_m;
+    csm::ImageCoord offset_z = groundToImage(offsetGroundPt, 0.0, nullptr, nullptr);
+
+    std::vector<double> groundPartialsVec(6);
+    groundPartialsVec[0] = (offset_x.line - center.line) / offset_m;
+    groundPartialsVec[1] = (offset_y.line - center.line) / offset_m;
+    groundPartialsVec[2] = (offset_z.line - center.line) / offset_m;
+    groundPartialsVec[3] = (offset_x.samp - center.samp) / offset_m;
+    groundPartialsVec[4] = (offset_y.samp - center.samp) / offset_m;
+    groundPartialsVec[5] = (offset_z.samp - center.samp) / offset_m;
+    return groundPartialsVec;
+}
+
+std::vector<double> SIDDPolySensorModel::getUnmodeledCrossCovariance(
+        const csm::ImageCoord& pt1, const csm::ImageCoord& pt2) const
+{
+    return {0.0, 0.0, 0.0, 0.0};
+}
+
 std::pair<csm::ImageCoord, csm::ImageCoord>
 SIDDPolySensorModel::getValidImageRange() const
 {
@@ -286,6 +325,9 @@ SIDDPolySensorModel::getValidImageRange() const
 
 std::pair<double, double> SIDDPolySensorModel::getValidHeightRange() const
 {
+    // If optional rowColToAlt polynomial is provided, evaluate it across a grid
+    // of points to determine the valid height range.  Otherwise, use the SCP
+    // height as the only valid height.
     if (!mPolyProj->rowColToAlt.empty())
     {
         constexpr size_t numPts = 21;

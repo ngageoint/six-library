@@ -94,6 +94,8 @@ public:  // Model methods
     std::string getPedigree() const override;
 
 public:  // RasterGM methods
+    double getImageTime(const csm::ImageCoord& imagePt) const override;
+
     csm::EcefCoord imageToGround(const csm::ImageCoord& imagePt,
                                  double height,
                                  double desiredPrecision,
@@ -118,6 +120,13 @@ public:  // RasterGM methods
             double desiredPrecision,
             double* achievedPrecision,
             csm::WarningList* warnings) const override;
+
+    std::vector<double>
+    computeGroundPartials(const csm::EcefCoord& groundPt) const override;
+
+    std::vector<double> getUnmodeledCrossCovariance(
+            const csm::ImageCoord& pt1,
+            const csm::ImageCoord& pt2) const override;
 
     std::pair<csm::ImageCoord, csm::ImageCoord> getValidImageRange()
             const override;

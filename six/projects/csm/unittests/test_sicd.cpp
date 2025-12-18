@@ -442,19 +442,12 @@ TEST_CASE(testErrorStatistics1)
     model = harness.modelFromComplex(complexData);
     checkCovarianceMatrix(testName, *model);
 
-    /*for (int i = 0; i < 7; i++)
-        std::cout << "parameter " << i << ": "
-                  << model->getParameterCovariance(i, i) << std::endl;*/
-
     csm::ImageCoord ic(5000.5, 5000.5);
     std::vector<double> ue = model->getUnmodeledError(ic);
-    /*for (size_t i = 0; i < ue.size(); i++)
-        std::cout << "ue: " << ue[i] << std::endl;*/
 
     csm::ImageCoord ic2(5100.5, 5100.5);
     std::vector<double> cue = model->getUnmodeledCrossCovariance(ic, ic2);
-    /*for (size_t i = 0; i < cue.size(); i++)
-        std::cout << "cue: " << cue[i] << std::endl;*/
+
     for (size_t i = 0; i < cue.size(); i++)
         TEST_ASSERT_LESSER(std::abs(cue[i]), std::abs(ue[i]));
 }
