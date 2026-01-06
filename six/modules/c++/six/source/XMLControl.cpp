@@ -57,7 +57,7 @@ static void loadDefaultSchemaPath(std::vector<std::string>& schemaPaths)
 
 // prefer SIX_DEFAULT_SCHEMA_PATH, existing scripts use DEFAULT_SCHEMA_PATH
 #if defined(DEFAULT_SCHEMA_PATH) && !defined(SIX_DEFAULT_SCHEMA_PATH)
-#define SIX_DEFAULT_SCHEMA_PATH DEFAULT_SCHEMA_PATH 
+#define SIX_DEFAULT_SCHEMA_PATH DEFAULT_SCHEMA_PATH
 #endif
 #ifndef SIX_DEFAULT_SCHEMA_PATH
 // Don't want to set a dummy schema path to a directory that exists as that causes
@@ -226,17 +226,37 @@ static void validate_(
 
     uniq_schemas.erase(inapplicable_schemas, uniq_schemas.end());
 
-    // detect SIDD with us:gov:ic:ism:201609 and pick the correct schema
-    if (spec == "SIDD")
+    // There are two SIDD 3.0.0 schema sets, the main difference being the
+    // security tag namespace and schema.  Look through the root element
+    // namespace attributes to determine which schema set to use for validation.
+    //
+    // The two schema sets are:
+    // SIDD_V3.0.0_ISM-v13 for use with xmlns:ism="urn:us:gov:ic:ism:13"
+    // SIDD_V3.0.0_ISM-v201609 for use with xmlns:ism="urn:us:gov:ic:ism:201609"
+    if (spec == "SIDD" && version == "3.0.0")
     {
-        const std::string needle("201609");
-        decltype(strPrettyXml) needle8(str::u8FromNative(needle));
+        bool is201609 = false;
+        for (auto attr : rootElement.getAttributes())
+        {
+            // The SIDD can use any namespace name for the security tags, so
+            // check all xml namespaces to see if the contents match the odd
+            // schema set.
+            if (str::starts_with(attr.getQName(), "xmlns"))
+            {
+                if (str::contains(attr.getValue(), "us:gov:ic:ism:201609"))
+                {
+                    is201609 = true;
+                    break;
+                }
+            }
+        }
+        const std::string needle("SIDD_V3.0.0_ISM-v201609");
 
         typename decltype(uniq_schemas)::iterator hitlist;
         auto has_needle = [needle](const coda_oss::filesystem::path& x) {
             return x.string().find(needle) != std::string::npos;
         };
-        if (strPrettyXml.find(needle8) != std::string::npos)
+        if (is201609)
         {
             // Doc is 201609, remove competing schemas
             auto not_has_needle = std::not1(
