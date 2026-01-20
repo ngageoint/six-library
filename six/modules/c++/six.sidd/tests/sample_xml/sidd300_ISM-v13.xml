@@ -567,7 +567,8 @@
 			</SpatialReferenceSystem>
 			<Object>
 				<Point>
-					<sfa:X>2.3999999999999999</sfa:X>
+					<!-- the next value contains the magic string 201609 that is used by a unit test for the validate_ function in XMLControl.cpp -->
+					<sfa:X>2.399201609999999</sfa:X>
 					<sfa:Y>3.5</sfa:Y>
 					<sfa:Z>4.5499999999999998</sfa:Z>
 					<sfa:M>5.7569999999999997</sfa:M>

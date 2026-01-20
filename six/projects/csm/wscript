@@ -86,6 +86,10 @@ def build(bld):
                                source='tests/test_sidd_csm.cpp',
                                use='CSMAPI',
                                name='test_sidd_csm')
+        bld.program_helper(module_deps='scene six.sidd',
+                               source='tests/test_compare_models.cpp',
+                               use='CSMAPI',
+                               name='test_compare_models')
 
 
         # TODO: It seems like instead of this, I should be able to set
@@ -102,6 +106,14 @@ def build(bld):
                     source='unittests/test_sicd.cpp',
                     name='csm_test_sicd',
                     target='csm_test_sicd',
+                    install_path='${PREFIX}/unittests/csm/')
+
+        bld.program(features='cxxprogram test',
+                    use='CSMAPI-static SIX_CSM-static scene-c++ six.sidd-c++',
+                    includes=bld.env['INCLUDES_UNITTEST'],
+                    source='unittests/test_sidd.cpp',
+                    name='csm_test_sidd',
+                    target='csm_test_sidd',
                     install_path='${PREFIX}/unittests/csm/')
 
 def distclean(context):

@@ -22,16 +22,17 @@
 
 #define SIX_CSM_LIBRARY
 
+#include <six/ErrorStatistics.h>
+#include <six/NITFReadControl.h>
+#include <six/csm/SICDSensorModel.h>
+#include <six/csm/SIDDPolySensorModel.h>
+#include <six/csm/SIDDSensorModel.h>
+#include <six/csm/SIXPlugin.h>
+#include <str/Manip.h>
+
 #include <memory>
 
-#include <six/csm/SIXPlugin.h>
-#include <six/csm/SICDSensorModel.h>
-#include <six/csm/SIDDSensorModel.h>
 #include "Error.h"
-
-#include <str/Manip.h>
-#include <six/NITFReadControl.h>
-#include <six/ErrorStatistics.h>
 
 namespace six
 {
@@ -42,6 +43,7 @@ const char SIXPlugin::MANUFACTURER[] = "Arka";
 const char SIXPlugin::RELEASE_DATE[] = "20250301";
 const size_t SIXPlugin::SICD_MODEL_INDEX;
 const size_t SIXPlugin::SIDD_MODEL_INDEX;
+const size_t SIXPlugin::SIDD_POLY_MODEL_INDEX;
 
 const SIXPlugin SIXPlugin::mPlugin;
 
@@ -71,7 +73,7 @@ csm::Version SIXPlugin::getCsmVersion() const
 
 size_t SIXPlugin::getNumModels() const
 {
-    return 2;
+    return 3;
 }
 
 std::string SIXPlugin::getModelName(size_t modelIndex) const
@@ -82,6 +84,8 @@ std::string SIXPlugin::getModelName(size_t modelIndex) const
         return SICDSensorModel::NAME;
     case SIDD_MODEL_INDEX:
         return SIDDSensorModel::NAME;
+    case SIDD_POLY_MODEL_INDEX:
+        return SIDDPolySensorModel::NAME;
     default:
         throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE, "Model index is " + std::to_string(modelIndex), "SIXPlugin::getModelName");
     }
@@ -95,6 +99,8 @@ std::string SIXPlugin::getModelFamily(size_t modelIndex) const
         return SICDSensorModel::FAMILY;
     case SIDD_MODEL_INDEX:
         return SIDDSensorModel::FAMILY;
+    case SIDD_POLY_MODEL_INDEX:
+        return SIDDPolySensorModel::FAMILY;
     default:
         throw csm::Error(csm::Error::INDEX_OUT_OF_RANGE, "Model index is " + std::to_string(modelIndex), "SIXPlugin::getModelFamily");
     }
@@ -109,6 +115,10 @@ csm::Version SIXPlugin::getModelVersion(const std::string& modelName) const
     else if (modelName == SIDDSensorModel::NAME)
     {
         return SIDDSensorModel::VERSION;
+    }
+    else if (modelName == SIDDPolySensorModel::NAME)
+    {
+        return SIDDPolySensorModel::VERSION;
     }
     else
     {
@@ -128,7 +138,8 @@ bool SIXPlugin::canModelBeConstructedFromState(const std::string& modelName,
     // each time prior to really constructing a model, so we'd end up doubling
     // the time it takes).
     return ((modelName == SICDSensorModel::NAME ||
-             modelName == SIDDSensorModel::NAME) &&
+             modelName == SIDDSensorModel::NAME ||
+             modelName == SIDDPolySensorModel::NAME) &&
             str::startsWith(modelState, modelName + " "));
 }
 
@@ -143,6 +154,10 @@ bool SIXPlugin::canModelBeConstructedFromISD(const csm::Isd& imageSupportData,
         modelDataType = six::DataType::COMPLEX;
     }
     else if (modelName == SIDDSensorModel::NAME)
+    {
+        modelDataType = six::DataType::DERIVED;
+    }
+    else if (modelName == SIDDPolySensorModel::NAME)
     {
         modelDataType = six::DataType::DERIVED;
     }
@@ -163,10 +178,22 @@ bool SIXPlugin::canModelBeConstructedFromISD(const csm::Isd& imageSupportData,
         const csm::Nitf21Isd& nitfIsd =
                 (const csm::Nitf21Isd&)imageSupportData;
 
-        return ((modelDataType == six::DataType::COMPLEX &&
-                     SICDSensorModel::containsComplexDES(nitfIsd)) ||
-                (modelDataType == six::DataType::DERIVED &&
-                     SIDDSensorModel::containsDerivedDES(nitfIsd)));
+        if (modelDataType == six::DataType::COMPLEX &&
+            SICDSensorModel::containsComplexDES(nitfIsd))
+        {
+            return true;
+        }
+        if (modelName == SIDDSensorModel::NAME &&
+            SIDDSensorModel::containsDerivedDES(nitfIsd, true))
+        {
+            return true;
+        }
+        if (modelName == SIDDPolySensorModel::NAME &&
+            SIDDPolySensorModel::containsDerivedDES(nitfIsd, false))
+        {
+            return true;
+        }
+        return false;
     }
     else if (format == "FILENAME")
     {
@@ -208,6 +235,10 @@ SIX_CSM_EXPORT_API csm::Model* SIXPlugin::constructModelFromState(
         {
             return new SIDDSensorModel(modelState, getDataDirectory());
         }
+        else if (sensorModelName == SIDDPolySensorModel::NAME)
+        {
+            return new SIDDPolySensorModel(modelState, getDataDirectory());
+        }
     }
     catch (const except::Exception& ex)
     {
@@ -235,6 +266,10 @@ SIX_CSM_EXPORT_API csm::Model* SIXPlugin::constructModelFromISD(
     {
         return new SIDDSensorModel(imageSupportData, getDataDirectory());
     }
+    else if (modelName == SIDDPolySensorModel::NAME)
+    {
+        return new SIDDPolySensorModel(imageSupportData, getDataDirectory());
+    }
     else
     {
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
@@ -254,6 +289,10 @@ std::string SIXPlugin::getModelNameFromModelState(
     else if (str::startsWith(modelState, SIDDSensorModel::NAME))
     {
         return SIDDSensorModel::NAME;
+    }
+    else if (str::startsWith(modelState, SIDDPolySensorModel::NAME))
+    {
+        return SIDDPolySensorModel::NAME;
     }
     else
     {

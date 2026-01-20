@@ -22,7 +22,7 @@
 
 #include <six/Utilities.h>
 #include <six/csm/SIXPlugin.h>
-#include <six/sicd/ComplexXMLControl.h>
+#include <six/sidd/DerivedXMLControl.h>
 #include <str/Encoding.h>
 
 #include <std/filesystem>
@@ -63,90 +63,135 @@ public:
 
     fs::path find(std::string filename)
     {
-        return sys::test::findGITModuleFile("croppedNitfs", "SICD", filename);
+        return sys::test::findGITModuleFile("croppedNitfs", "SIDD", filename);
     }
 
-    std::string fakeSicdXmlData(std::string sicdVersion)
+    std::string fakeSiddXmlData(std::string siddVersion,
+                                std::string productName)
     {
-        // Fake sicd metadata that still should work through projection
+        // Fake sidd metadata that still should work through projection.  Note
+        // that this data may not be internally consistent but it is fine for
+        // limited testing purposes.
 
-        std::string sicdOpen =
-                R"(<SICD xmlns="urn:SICD:)" + sicdVersion + R"(">)";
-        std::string collectionInfo =
-                R"(<CollectionInfo><CollectorName>FAKE</CollectorName><CoreName>FAKE_FAKE</CoreName><CollectType>MONOSTATIC</CollectType><RadarMode><ModeType>SPOTLIGHT</ModeType></RadarMode><Classification>UNCLASSIFIED</Classification></CollectionInfo>)";
-        std::string imageData =
-                R"(<ImageData><PixelType>RE32F_IM32F</PixelType><NumRows>10000</NumRows><NumCols>10000</NumCols><FirstRow>0</FirstRow><FirstCol>0</FirstCol><FullImage><NumRows>10000</NumRows><NumCols>10000</NumCols></FullImage><SCPPixel><Row>5000</Row><Col>5000</Col></SCPPixel></ImageData>)";
+        std::string siddOpen = R"(<SIDD xmlns="urn:SIDD:)" + siddVersion +
+                R"(" xmlns:si="urn:SICommon:1.0" xmlns:sfa="urn:SFA:1.2.0" xmlns:ism="urn:us:gov:ic:ism:13">)";
+        std::string productCreation =
+                R"(<ProductCreation><ProcessorInformation><Application>application</Application><ProcessingDateTime>2024-01-01T00:00:00.000000Z</ProcessingDateTime><Site>site</Site></ProcessorInformation><Classification ism:DESVersion="13" ism:ISMCATCESVersion="1" ism:resourceElement="true" ism:createDate="2024-01-01" ism:compliesWith="USGov" ism:classification="U" ism:ownerProducer="USA"/>)"
+                R"(<ProductName>)" +
+                productName +
+                R"(</ProductName><ProductClass>Detected Image</ProductClass></ProductCreation>)";
+        std::string display =
+                R"(<Display><PixelType>MONO8I</PixelType><NumBands>1</NumBands>)"
+                R"(<NonInteractiveProcessing band="1"><ProductGenerationOptions><DataRemapping><LUTName>PEDF</LUTName><Predefined><DatabaseName>PEDF</DatabaseName></Predefined></DataRemapping></ProductGenerationOptions><RRDS><DownsamplingMethod>MAX PIXEL</DownsamplingMethod></RRDS></NonInteractiveProcessing>)"
+                R"(<InteractiveProcessing band="1">)"
+                R"(<GeometricTransform><Scaling><AntiAlias><FilterName>Antialiasing</FilterName><FilterKernel><Predefined><DatabaseName>BILINEAR</DatabaseName></Predefined></FilterKernel><Operation>CONVOLUTION</Operation></AntiAlias><Interpolation><FilterName>Interpolation</FilterName><FilterBank><Predefined><DatabaseName>LAGRANGE</DatabaseName></Predefined></FilterBank><Operation>CORRELATION</Operation></Interpolation></Scaling><Orientation><ShadowDirection>DOWN</ShadowDirection></Orientation></GeometricTransform>)"
+                R"(<SharpnessEnhancement><ModularTransferFunctionEnhancement><FilterName>MTFE</FilterName><FilterBank><Predefined><FilterFamily>0</FilterFamily><FilterMember>5</FilterMember></Predefined></FilterBank><Operation>CONVOLUTION</Operation></ModularTransferFunctionEnhancement></SharpnessEnhancement>)"
+                R"(<DynamicRangeAdjustment><AlgorithmType>AUTO</AlgorithmType><BandStatsSource>1</BandStatsSource><DRAParameters><Pmin>0</Pmin><Pmax>0.995</Pmax><EminModifier>0</EminModifier><EmaxModifier>0</EmaxModifier></DRAParameters></DynamicRangeAdjustment>)"
+                R"(</InteractiveProcessing>)"
+                R"(</Display>)";
         std::string geoData =
-                R"(<GeoData><EarthModel>WGS_84</EarthModel><SCP><ECF><X>6378137</X><Y>0</Y><Z>0</Z></ECF><LLH><Lat>0</Lat><Lon>0</Lon><HAE>0</HAE></LLH></SCP><ImageCorners><ICP index="1:FRFC"><Lat>0.01</Lat><Lon>-0.01</Lon></ICP><ICP index="2:FRLC"><Lat>0.01</Lat><Lon>0.01</Lon></ICP><ICP index="3:LRLC"><Lat>-0.01</Lat><Lon>0.01</Lon></ICP><ICP index="4:LRFC"><Lat>-0.01</Lat><Lon>-0.01</Lon></ICP></ImageCorners></GeoData>)";
-        std::string grid =
-                R"(<Grid><ImagePlane>SLANT</ImagePlane><Type>RGZERO</Type><TimeCOAPoly order1="0" order2="0"><Coef exponent1="0" exponent2="0">2.5</Coef></TimeCOAPoly><Row><UVectECF><X>-0.70710678</X><Y>0.70710678</Y><Z>0</Z></UVectECF><SS>0.8</SS><ImpRespWid>1.0</ImpRespWid><Sgn>-1</Sgn><ImpRespBW>1</ImpRespBW><KCtr>63.3</KCtr><DeltaK1>-0.5</DeltaK1><DeltaK2>0.5</DeltaK2></Row><Col><UVectECF><X>0</X><Y>0</Y><Z>1</Z></UVectECF><SS>0.8</SS><ImpRespWid>1</ImpRespWid><Sgn>-1</Sgn><ImpRespBW>1</ImpRespBW><KCtr>0</KCtr><DeltaK1>-0.5</DeltaK1><DeltaK2>0.5</DeltaK2></Col></Grid>)";
-        std::string timeline =
-                R"(<Timeline><CollectStart>2000-01-01T00:00:00Z</CollectStart><CollectDuration>5</CollectDuration></Timeline>)";
-        std::string position =
-                R"(<Position><ARPPoly><X order1="1"><Coef exponent1="0">6383137</Coef><Coef exponent1="1">0</Coef></X><Y order1="1"><Coef exponent1="0">-5000</Coef><Coef exponent1="1">0</Coef></Y><Z order1="1"><Coef exponent1="0">-2500</Coef><Coef exponent1="1">1000</Coef></Z></ARPPoly></Position>)";
-        std::string radarCollection =
-                R"(<RadarCollection><TxFrequency><Min>9E9</Min><Max>10E9</Max></TxFrequency><TxPolarization>H</TxPolarization><RcvChannels size="1"><ChanParameters index="1"><TxRcvPolarization>H:H</TxRcvPolarization></ChanParameters></RcvChannels></RadarCollection>)";
-        std::string imageFormation =
-                R"(<ImageFormation><RcvChanProc><NumChanProc>1</NumChanProc><ChanIndex>1</ChanIndex></RcvChanProc><TxRcvPolarizationProc>H:H</TxRcvPolarizationProc><TStartProc>0</TStartProc><TEndProc>5</TEndProc><TxFrequencyProc><MinProc>9E9</MinProc><MaxProc>10E9</MaxProc></TxFrequencyProc><ImageFormAlgo>OTHER</ImageFormAlgo><STBeamComp>SV</STBeamComp><ImageBeamComp>NO</ImageBeamComp><AzAutofocus>NO</AzAutofocus><RgAutofocus>NO</RgAutofocus></ImageFormation>)";
-        std::string scpCoa =
-                R"(<SCPCOA><SCPTime>2.5</SCPTime><ARPPos><X>6383137</X><Y>-5000</Y><Z>0</Z></ARPPos><ARPVel><X>0</X><Y>0</Y><Z>1000</Z></ARPVel><ARPAcc><X>0</X><Y>0</Y><Z>0</Z></ARPAcc><SideOfTrack>R</SideOfTrack><SlantRange>7071</SlantRange><GroundRange>5000</GroundRange><DopplerConeAng>90</DopplerConeAng><GrazeAng>45</GrazeAng><IncidenceAng>45</IncidenceAng><TwistAng>0</TwistAng><SlopeAng>45</SlopeAng><AzimAng>90</AzimAng><LayoverAng>90</LayoverAng></SCPCOA>)";
-        std::string rma =
-                R"(<RMA><RMAlgoType>OMEGA_K</RMAlgoType><ImageType>INCA</ImageType><INCA><TimeCAPoly order1="1"><Coef exponent1="0">2.5</Coef><Coef exponent1="1">0.001</Coef></TimeCAPoly><R_CA_SCP>7071</R_CA_SCP><FreqZero>9.5E9</FreqZero><DRateSFPoly order1="0" order2="0"><Coef exponent1="0" exponent2="0">1</Coef></DRateSFPoly></INCA></RMA>)";
-        std::string sicdClose = R"(</SICD>)";
+                R"(<GeoData><EarthModel>WGS_84</EarthModel><ImageCorners>)"
+                R"(<ICP index="1:FRFC"><si:Lat>0.01</si:Lat><si:Lon>-0.01</si:Lon></ICP>)"
+                R"(<ICP index="2:FRLC"><si:Lat>0.01</si:Lat><si:Lon>0.01</si:Lon></ICP>)"
+                R"(<ICP index="3:LRLC"><si:Lat>-0.01</si:Lat><si:Lon>0.01</si:Lon></ICP>)"
+                R"(<ICP index="4:LRFC"><si:Lat>-0.01</si:Lat><si:Lon>-0.01</si:Lon></ICP>)"
+                R"(</ImageCorners><ValidData size="4">)"
+                R"(<Vertex index="1"><si:Lat>0.01</si:Lat><si:Lon>-0.01</si:Lon></Vertex>)"
+                R"(<Vertex index="2"><si:Lat>0.01</si:Lat><si:Lon>0.01</si:Lon></Vertex>)"
+                R"(<Vertex index="3"><si:Lat>-0.01</si:Lat><si:Lon>0.01</si:Lon></Vertex>)"
+                R"(<Vertex index="4"><si:Lat>-0.01</si:Lat><si:Lon>-0.01</si:Lon></Vertex>)"
+                R"(</ValidData></GeoData>)";
+        std::string measurement =
+                R"(<Measurement>)"
+                R"(<PlaneProjection><ReferencePoint name="SCP"><si:ECEF><si:X>6378137</si:X><si:Y>0</si:Y><si:Z>0</si:Z></si:ECEF><si:Point><si:Row>500</si:Row><si:Col>500</si:Col></si:Point></ReferencePoint><SampleSpacing><si:Row>0.8</si:Row><si:Col>0.8</si:Col></SampleSpacing><TimeCOAPoly order1="0" order2="0"><si:Coef exponent1="0" exponent2="0">10</si:Coef></TimeCOAPoly><ProductPlane><RowUnitVector><si:X>0.9185676191359099</si:X><si:Y>0.015449014240503411</si:Y><si:Z>0.39496184250378258</si:Z></RowUnitVector><ColUnitVector><si:X>-0.31872818071659126</si:X><si:Y>0.61991268778351927</si:Y><si:Z>0.7170220403461145</si:Z></ColUnitVector></ProductPlane></PlaneProjection>)"
+                R"(<PixelFootprint><si:Row>1000</si:Row><si:Col>1000</si:Col></PixelFootprint>)"
+                R"(<ARPPoly><si:X order1="1"><si:Coef exponent1="0">6383137</si:Coef><si:Coef exponent1="1">0</si:Coef></si:X><si:Y order1="1"><si:Coef exponent1="0">-5000</si:Coef><si:Coef exponent1="1">0</si:Coef></si:Y><si:Z order1="1"><si:Coef exponent1="0">-2500</si:Coef><si:Coef exponent1="1">1000</si:Coef></si:Z></ARPPoly>)"
+                R"(<ValidData size="4">)"
+                R"(<Vertex index="1"><si:Row>0</si:Row><si:Col>0</si:Col></Vertex>)"
+                R"(<Vertex index="2"><si:Row>0</si:Row><si:Col>1000</si:Col></Vertex>)"
+                R"(<Vertex index="3"><si:Row>1000</si:Row><si:Col>1000</si:Col></Vertex>)"
+                R"(<Vertex index="4"><si:Row>1000</si:Row><si:Col>0</si:Col></Vertex>)"
+                R"(</ValidData></Measurement>)";
+        std::string exploitationFeatures = R"(<ExploitationFeatures>)"
+                                           R"(<Collection identifier=")" +
+                productName +
+                R"(">)"
+                R"(<Information><SensorName>sensor name</SensorName><RadarMode><si:ModeType>SPOTLIGHT</si:ModeType></RadarMode><CollectionDateTime>2016-01-01T00:00:00.000000Z</CollectionDateTime><CollectionDuration>20</CollectionDuration>)"
+                R"(<Polarization><TxPolarization>H</TxPolarization><RcvPolarization>H</RcvPolarization></Polarization>)"
+                R"(</Information>)"
+                R"(<Geometry><Azimuth>0</Azimuth><Slope>30</Slope><Squint>90</Squint><Graze>30</Graze><Tilt>0</Tilt><DopplerConeAngle>90</DopplerConeAngle></Geometry>)"
+                R"(<Phenomenology><Shadow><si:Angle>90</si:Angle><si:Magnitude>2</si:Magnitude></Shadow><Layover><si:Angle>270</si:Angle><si:Magnitude>0.5</si:Magnitude></Layover><MultiPath>270</MultiPath><GroundTrack>0</GroundTrack></Phenomenology></Collection>)"
+                R"(<Product>)"
+                R"(<Resolution><si:Row>1.0</si:Row><si:Col>1.0</si:Col></Resolution><Ellipticity>1.0</Ellipticity>)"
+                R"(<Polarization><TxPolarizationProc>H</TxPolarizationProc><RcvPolarizationProc>H</RcvPolarizationProc></Polarization><North>90</North>)"
+                R"(</Product>)"
+                R"(</ExploitationFeatures>)";
+        std::string siddClose = R"(</SIDD>)";
 
-        return sicdOpen + collectionInfo + imageData + geoData + grid +
-                timeline + position + radarCollection + imageFormation +
-                scpCoa + rma + sicdClose;
+        return siddOpen + productCreation + display + geoData + measurement +
+                exploitationFeatures + siddClose;
     }
 
-    std::unique_ptr<six::sicd::ComplexData> fakeComplexData(
-            std::string sicdVersion)
+    std::unique_ptr<six::sidd::DerivedData> fakeDerivedData(
+            std::string siddVersion)
     {
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
-        std::string xml = fakeSicdXmlData(sicdVersion);
+        std::string xml = fakeSiddXmlData(siddVersion, "iid1");
 
         logging::NullLogger logger;
         auto data = six::parseDataFromString(xmlRegistry,
                                              xml,
-                                             six::DataType::COMPLEX,
+                                             six::DataType::DERIVED,
                                              {schemaPath()},
                                              logger);
 
-        return std::unique_ptr<six::sicd::ComplexData>(
-                reinterpret_cast<six::sicd::ComplexData*>(data.release()));
+        return std::unique_ptr<six::sidd::DerivedData>(
+                reinterpret_cast<six::sidd::DerivedData*>(data.release()));
     }
 
-    std::unique_ptr<csm::RasterGM> modelFromComplex(
-            std::unique_ptr<six::sicd::ComplexData>& complexData)
+    std::string desHdr()
     {
-        // It only needs to pass inspection as a SICD.  The version numbers
+        // It only needs to pass inspection as a SIDD.  The version numbers
         // specified here are not used within the plugins.
         std::string desHeader =
                 R"(DEXML_DATA_CONTENT         01UUS                                                                                      )"
-                R"(                                                                              077399999XML     2000-01-01T00:00:00Z   )"
-                R"(                                     SICD Volume 1 Design & Implementation Description Document  1.2       2016-04-12T)"
-                R"(00:00:00Zurn:SICD:1.2.0                                                                                               )"
+                R"(                                                                              077399999XML     2024-09-17T16:29:59Z   )"
+                R"(                                     SIDD Volume 1 Design & Implementation Description Document  3.0       2021-11-30T)"
+                R"(00:00:00Zurn:SIDD:3.0.0                                                                                               )"
                 R"(           +00.00000000+000.00000000+00.00000000+000.00000000+00.00000000+000.00000000+00.00000000+000.00000000+00.000)"
                 R"(00000+000.00000000                                                                                                    )"
                 R"(                                                                                                                      )"
                 R"(                                                                                                                      )"
                 R"(                             )";
+        return desHeader;
+    }
 
+    csm::Nitf21Isd isdFromDerived(
+            std::unique_ptr<six::sidd::DerivedData>& derivedData)
+    {
         six::XMLControlRegistry xmlRegistry;
-        xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+        xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
         csm::Des des;
-        des.setSubHeader(desHeader);
+        des.setSubHeader(desHdr());
         des.setData(str::to_native(
-                six::toXMLString(complexData.get(), &xmlRegistry)));
+                six::toXMLString(derivedData.get(), &xmlRegistry)));
 
         csm::Nitf21Isd isd;
         isd.addFileDes(des);
+        isd.addImage(csm::Image("IMSIDD001001", {}));
 
+        return isd;
+    }
+
+    std::unique_ptr<csm::RasterGM> modelFromDerived(
+            std::unique_ptr<six::sidd::DerivedData>& derivedData)
+    {
+        csm::Nitf21Isd isd = isdFromDerived(derivedData);
         std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
-                mPlugin->constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
+                mPlugin->constructModelFromISD(isd, "SIDD_SENSOR_MODEL")));
         return model;
     }
 
@@ -175,7 +220,7 @@ private:
         std::vector<std::filesystem::path> schemaPaths{sicdRootSchemaDir,
                                                        siddRootSchemaDir};
 
-        mSchemaPath = sicdRootSchemaDir.string();
+        mSchemaPath = siddRootSchemaDir.string();
 
         csm::Plugin::setDataDirectory(mSchemaPath);
 
@@ -240,6 +285,132 @@ TEST_CASE(testPluginParams)
     TEST_ASSERT_EQ(plugin.getModelFamily(2), "GeometricRaster");
 }
 
+TEST_CASE(testIID1FormatCheck)
+{
+    TestHarness& harness = TestHarness::getInstance();
+    const csm::Plugin& plugin = harness.plugin();
+
+    auto derivedData = harness.fakeDerivedData("3.0.0");
+    auto standardIsd = harness.isdFromDerived(derivedData);
+    csm::Des des = standardIsd.fileDess().at(0);
+
+    csm::Nitf21Isd isd = csm::Nitf21Isd();
+    isd.addImage(csm::Image("IMSIDD001001", {}));
+    isd.addFileDes(des);
+    plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL");
+
+    std::vector<std::string> invalidIID1s = {
+            "IM          ",
+            "IMSIDD      ",
+            "IMSIDD001   ",
+            "IMSIDD000001",
+    };
+
+    for (std::string invalidIID1 : invalidIID1s)
+    {
+        isd = csm::Nitf21Isd();
+        isd.addImage(csm::Image(invalidIID1, {}));
+        isd.addFileDes(des);
+        TEST_SPECIFIC_EXCEPTION(
+                plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL"),
+                csm::Error);
+    }
+}
+
+TEST_CASE(testImageIndexMapping)
+{
+    TestHarness& harness = TestHarness::getInstance();
+    const csm::Plugin& plugin = harness.plugin();
+
+    csm::Des des1(harness.desHdr(), harness.fakeSiddXmlData("3.0.0", "iid1"));
+    csm::Des des2(harness.desHdr(), harness.fakeSiddXmlData("3.0.0", "iid2"));
+
+    // 1 image, 1 DES
+    csm::Nitf21Isd isd = csm::Nitf21Isd();
+    isd.addImage(csm::Image("IMSIDD001001", {}));
+    isd.addFileDes(des1);
+
+    isd.addParam("IMAGE_INDEX", "0");
+    plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL");
+
+    isd.clearAllParams();
+    isd.addParam("IMAGE_INDEX", "1");
+    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd,
+                                                         "SIDD_SENSOR_MODEL"),
+                            csm::Error);
+
+    isd.clearAllParams();
+    isd.addParam("IMAGE_INDEX", "text");
+    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd,
+                                                         "SIDD_SENSOR_MODEL"),
+                            csm::Error);
+
+    // 2 images, 2 DES's
+    isd = csm::Nitf21Isd();
+    isd.addImage(csm::Image("IMSIDD001001", {}));
+    isd.addImage(csm::Image("IMSIDD002001", {}));
+    isd.addFileDes(des1);
+    isd.addFileDes(des2);
+
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid1");
+
+    isd.addParam("IMAGE_INDEX", "1");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid2");
+
+    isd.clearAllParams();
+    isd.addParam("IMAGE_INDEX", "2");
+    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd,
+                                                         "SIDD_SENSOR_MODEL"),
+                            csm::Error);
+
+    // 5 images, 2 DES's
+    isd = csm::Nitf21Isd();
+    isd.addImage(csm::Image("IMSIDD001001", {}));
+    isd.addImage(csm::Image("IMSIDD001002", {}));
+    isd.addImage(csm::Image("IMSIDD002001", {}));
+    isd.addImage(csm::Image("IMSIDD002002", {}));
+    isd.addImage(csm::Image("IMSIDD002003", {}));
+    isd.addFileDes(des1);
+    isd.addFileDes(des2);
+
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid1");
+
+    isd.addParam("IMAGE_INDEX", "1");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid1");
+
+    isd.clearAllParams();
+    isd.addParam("IMAGE_INDEX", "2");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid2");
+
+    isd.clearAllParams();
+    isd.addParam("IMAGE_INDEX", "3");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid2");
+
+    isd.clearAllParams();
+    isd.addParam("IMAGE_INDEX", "4");
+    TEST_ASSERT_EQ(plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")
+                           ->getImageIdentifier(),
+                   "iid2");
+
+    isd.clearAllParams();
+    isd.addParam("IMAGE_INDEX", "5");
+    TEST_SPECIFIC_EXCEPTION(plugin.constructModelFromISD(isd,
+                                                         "SIDD_SENSOR_MODEL"),
+                            csm::Error);
+}
+
 void testCommon(std::string& testName, csm::RasterGM& model)
 {
     // TODO: add checks for getValidImageRange() if we can identify what the
@@ -249,10 +420,10 @@ void testCommon(std::string& testName, csm::RasterGM& model)
 
     csm::ImageCoord ul = model.getImageStart();
     csm::ImageVector size = model.getImageSize();
-    TEST_ASSERT_EQ(ul.line, 100);
-    TEST_ASSERT_EQ(ul.samp, 100);
+    TEST_ASSERT_EQ(ul.line, 0);
+    TEST_ASSERT_EQ(ul.samp, 0);
     TEST_ASSERT_EQ(size.line, 5);
-    TEST_ASSERT_EQ(size.samp, 5);
+    TEST_ASSERT_EQ(size.line, 5);
 
     // TODO: add more testing using other csm model methods
     /*csm::EcefCoord refpt = model->getReferencePoint();
@@ -262,15 +433,15 @@ void testCommon(std::string& testName, csm::RasterGM& model)
 TEST_CASE(testFromFilenameISD)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const auto sicd = harness.find("cropped_sicd_120.nitf");
+    const auto sidd = harness.find("cropped_sidd.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd(sicd.string());
+    csm::Isd isd(sidd.string());
 
-    TEST_ASSERT(plugin.canModelBeConstructedFromISD(isd, "SICD_SENSOR_MODEL"));
+    TEST_ASSERT(plugin.canModelBeConstructedFromISD(isd, "SIDD_SENSOR_MODEL"));
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
-            plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
+            plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")));
 
     testCommon(testName, *model);
 }
@@ -278,28 +449,29 @@ TEST_CASE(testFromFilenameISD)
 TEST_CASE(testFromNitf21ISD)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const auto sicd = harness.find("cropped_sicd_120.nitf");
+    const auto sidd = harness.find("cropped_sidd.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
     six::XMLControlRegistry xmlRegistry;
     six::NITFReadControl reader;
-    std::unique_ptr<six::sicd::ComplexData> complexData;
+    std::unique_ptr<six::sidd::DerivedData> derivedData;
 
-    // Read in the SICD XML
-    xmlRegistry.addCreator<six::sicd::ComplexXMLControl>();
+    // Read in the SIDD XML
+    xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
 
     reader.setXMLControlRegistry(&xmlRegistry);
 
-    reader.load(sicd.string(),
+    reader.load(sidd.string(),
                 std::vector<std::string>(1, harness.schemaPath()));
-    complexData = six::sicd::Utilities::getComplexData(reader);
+    derivedData.reset(static_cast<six::sidd::DerivedData*>(
+            reader.getContainer()->getData(0)->clone()));
 
-    auto isd = constructIsd(sicd.string(), reader, xmlRegistry);
+    auto isd = constructIsd(sidd.string(), reader, xmlRegistry);
 
-    TEST_ASSERT(plugin.canModelBeConstructedFromISD(*isd, "SICD_SENSOR_MODEL"));
+    TEST_ASSERT(plugin.canModelBeConstructedFromISD(*isd, "SIDD_SENSOR_MODEL"));
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
-            plugin.constructModelFromISD(*isd, "SICD_SENSOR_MODEL")));
+            plugin.constructModelFromISD(*isd, "SIDD_SENSOR_MODEL")));
 
     testCommon(testName, *model);
 }
@@ -307,18 +479,18 @@ TEST_CASE(testFromNitf21ISD)
 TEST_CASE(testFromState)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const auto sicd = harness.find("cropped_sicd_120.nitf");
+    const auto sidd = harness.find("cropped_sidd.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd.string());
+    csm::Isd isd = csm::Isd(sidd.string());
 
-    TEST_ASSERT(plugin.canISDBeConvertedToModelState(isd, "SICD_SENSOR_MODEL"));
-    std::string state = plugin.convertISDToModelState(isd, "SICD_SENSOR_MODEL");
+    TEST_ASSERT(plugin.canISDBeConvertedToModelState(isd, "SIDD_SENSOR_MODEL"));
+    std::string state = plugin.convertISDToModelState(isd, "SIDD_SENSOR_MODEL");
 
     TEST_ASSERT_EQ(plugin.getModelNameFromModelState(state),
-                   "SICD_SENSOR_MODEL");
+                   "SIDD_SENSOR_MODEL");
     TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", state));
+            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", state));
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
             plugin.constructModelFromState(state)));
@@ -340,11 +512,11 @@ void checkCovarianceMatrix(std::string& testName, csm::RasterGM& model)
     TEST_ASSERT(posDefinite);
 }
 
-void addCompositeSCP(six::sicd::ComplexData& complexData)
+void addCompositeSCP(six::sidd::DerivedData& derivedData)
 {
-    if (!complexData.errorStatistics)
-        complexData.errorStatistics.reset(new six::ErrorStatistics());
-    auto& errorStatistics = complexData.errorStatistics;
+    if (!derivedData.errorStatistics)
+        derivedData.errorStatistics.reset(new six::ErrorStatistics());
+    auto& errorStatistics = derivedData.errorStatistics;
 
     errorStatistics->compositeSCP.reset(new six::CompositeSCP());
     errorStatistics->compositeSCP->xErr = 1.0;
@@ -352,13 +524,13 @@ void addCompositeSCP(six::sicd::ComplexData& complexData)
     errorStatistics->compositeSCP->xyErr = 0.2;
 }
 
-void addComponents(six::sicd::ComplexData& complexData,
+void addComponents(six::sidd::DerivedData& derivedData,
                    six::FrameType frameType,
                    bool includeOffDiagonals)
 {
-    if (!complexData.errorStatistics)
-        complexData.errorStatistics.reset(new six::ErrorStatistics());
-    auto& errorStatistics = complexData.errorStatistics;
+    if (!derivedData.errorStatistics)
+        derivedData.errorStatistics.reset(new six::ErrorStatistics());
+    auto& errorStatistics = derivedData.errorStatistics;
 
     errorStatistics->components.reset(new six::Components);
     auto& components = errorStatistics->components;
@@ -395,11 +567,11 @@ void addComponents(six::sicd::ComplexData& complexData,
     components->radarSensor->rangeBias = 0.1;
 }
 
-void addUnmodeled(six::sicd::ComplexData& complexData, bool includeDecorr)
+void addUnmodeled(six::sidd::DerivedData& derivedData, bool includeDecorr)
 {
-    if (!complexData.errorStatistics)
-        complexData.errorStatistics.reset(new six::ErrorStatistics());
-    auto& errorStatistics = complexData.errorStatistics;
+    if (!derivedData.errorStatistics)
+        derivedData.errorStatistics.reset(new six::ErrorStatistics());
+    auto& errorStatistics = derivedData.errorStatistics;
 
     errorStatistics->unmodeled = six::Unmodeled();
     auto& unmodeled = value(errorStatistics->unmodeled);
@@ -422,24 +594,24 @@ TEST_CASE(testErrorStatistics1)
 {
     TestHarness& harness = TestHarness::getInstance();
 
-    auto complexData = harness.fakeComplexData("1.3.0");
+    auto derivedData = harness.fakeDerivedData("3.0.0");
 
-    auto model = harness.modelFromComplex(complexData);
+    auto model = harness.modelFromDerived(derivedData);
 
     checkCovarianceMatrix(testName, *model);
     for (int i = 0; i < 7; i++)
         TEST_ASSERT_EQ(model->getParameterCovariance(i, i),
                        (i < 3) ? 10.0 : 0.1);
 
-    complexData->errorStatistics.reset(new six::ErrorStatistics());
+    derivedData->errorStatistics.reset(new six::ErrorStatistics());
 
     // TODO: this test should be augmented with the many possible permutations
     // of optional metadata available in the ErrorStatistics block
-    //addCompositeSCP(*complexData);
-    addComponents(*complexData, six::FrameType::RIC_ECF, false);
-    addUnmodeled(*complexData, true);
+    // addCompositeSCP(*derivedData);
+    addComponents(*derivedData, six::FrameType::RIC_ECF, false);
+    addUnmodeled(*derivedData, true);
 
-    model = harness.modelFromComplex(complexData);
+    model = harness.modelFromDerived(derivedData);
     checkCovarianceMatrix(testName, *model);
 
     csm::ImageCoord ic(5000.5, 5000.5);
@@ -449,25 +621,25 @@ TEST_CASE(testErrorStatistics1)
     std::vector<double> cue = model->getUnmodeledCrossCovariance(ic, ic2);
 
     for (size_t i = 0; i < cue.size(); i++)
-        TEST_ASSERT_LESSER(std::abs(cue[i]), std::abs(ue[i]));
+        TEST_ASSERT_LESSER(cue[i], ue[i]);
 }
 
 TEST_CASE(testErrorStatistics2)
 {
     TestHarness& harness = TestHarness::getInstance();
 
-    auto complexData = harness.fakeComplexData("1.3.0");
+    auto derivedData = harness.fakeDerivedData("3.0.0");
 
-    addComponents(*complexData, six::FrameType::ECF, true);
-    auto model_ecf = harness.modelFromComplex(complexData);
+    addComponents(*derivedData, six::FrameType::ECF, true);
+    auto model_ecf = harness.modelFromDerived(derivedData);
     checkCovarianceMatrix(testName, *model_ecf);
 
-    addComponents(*complexData, six::FrameType::RIC_ECF, true);
-    auto model_ric_ecf = harness.modelFromComplex(complexData);
+    addComponents(*derivedData, six::FrameType::RIC_ECF, true);
+    auto model_ric_ecf = harness.modelFromDerived(derivedData);
     checkCovarianceMatrix(testName, *model_ric_ecf);
 
-    addComponents(*complexData, six::FrameType::RIC_ECI, true);
-    auto model_ric_eci = harness.modelFromComplex(complexData);
+    addComponents(*derivedData, six::FrameType::RIC_ECI, true);
+    auto model_ric_eci = harness.modelFromDerived(derivedData);
     checkCovarianceMatrix(testName, *model_ric_eci);
 
     for (int i = 0; i < 7; i++)
@@ -485,18 +657,18 @@ TEST_CASE(testErrorStatistics2)
 TEST_CASE(testModelState)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const auto sicd = harness.find("cropped_sicd_120.nitf");
+    const auto sidd = harness.find("cropped_sidd.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd.string());
+    csm::Isd isd = csm::Isd(sidd.string());
 
-    TEST_ASSERT(plugin.canISDBeConvertedToModelState(isd, "SICD_SENSOR_MODEL"));
-    std::string state = plugin.convertISDToModelState(isd, "SICD_SENSOR_MODEL");
+    TEST_ASSERT(plugin.canISDBeConvertedToModelState(isd, "SIDD_SENSOR_MODEL"));
+    std::string state = plugin.convertISDToModelState(isd, "SIDD_SENSOR_MODEL");
 
     TEST_ASSERT_EQ(plugin.getModelNameFromModelState(state),
-                   "SICD_SENSOR_MODEL");
+                   "SIDD_SENSOR_MODEL");
     TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", state));
+            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", state));
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
             plugin.constructModelFromState(state)));
@@ -504,7 +676,7 @@ TEST_CASE(testModelState)
     TEST_ASSERT_EQ(model->getModelState(), state);
 
     std::unique_ptr<csm::RasterGM> model2(reinterpret_cast<csm::RasterGM*>(
-            plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
+            plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")));
     TEST_ASSERT_EQ(model2->getModelState(), state);
 
     model2->replaceModelState(state);
@@ -514,13 +686,13 @@ TEST_CASE(testModelState)
 TEST_CASE(testAdjParamsState)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const auto sicd = harness.find("cropped_sicd_120.nitf");
+    const auto sidd = harness.find("cropped_sidd.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd.string());
+    csm::Isd isd = csm::Isd(sidd.string());
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
-            plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
+            plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")));
 
     TEST_ASSERT_EQ(model->getNumParameters(), 7);
     for (int i = 0; i < 7; i++)
@@ -574,13 +746,13 @@ TEST_CASE(testAdjParamsState)
 TEST_CASE(testAdjParams1)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const auto sicd = harness.find("cropped_sicd_120.nitf");
+    const auto sidd = harness.find("cropped_sidd.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd.string());
+    csm::Isd isd = csm::Isd(sidd.string());
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
-            plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
+            plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")));
 
     csm::ImageCoordCovar ic(4000, 4000, 1.5, 0.3, 1.2);
     double height(300);
@@ -616,13 +788,13 @@ TEST_CASE(testAdjParams1)
 TEST_CASE(testAdjParams2)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const auto sicd = harness.find("cropped_sicd_120.nitf");
+    const auto sidd = harness.find("cropped_sidd.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd.string());
+    csm::Isd isd = csm::Isd(sidd.string());
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
-            plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
+            plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")));
 
     csm::EcefCoordCovar gc(
             4.19186e+06, 901641, 4.70669e+06, 3, 1, 0.5, 4, 0.3, 2);
@@ -652,13 +824,13 @@ TEST_CASE(testAdjParams2)
 TEST_CASE(testImageIdentifier)
 {
     TestHarness& harness = TestHarness::getInstance();
-    const auto sicd = harness.find("cropped_sicd_120.nitf");
+    const auto sidd = harness.find("cropped_sidd.nitf");
     const csm::Plugin& plugin = harness.plugin();
 
-    csm::Isd isd = csm::Isd(sicd.string());
+    csm::Isd isd = csm::Isd(sidd.string());
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
-            plugin.constructModelFromISD(isd, "SICD_SENSOR_MODEL")));
+            plugin.constructModelFromISD(isd, "SIDD_SENSOR_MODEL")));
 
     model->setImageIdentifier("test identifier");
     TEST_ASSERT_EQ(model->getImageIdentifier(), "test identifier");
@@ -668,7 +840,9 @@ TEST_CASE(testImageIdentifier)
     TEST_ASSERT_EQ(model2->getImageIdentifier(), "test identifier");
 }
 
-TEST_MAIN(TEST_CHECK(testPluginParams); TEST_CHECK(testFromFilenameISD);
+TEST_MAIN(TEST_CHECK(testPluginParams); TEST_CHECK(testIID1FormatCheck);
+          TEST_CHECK(testImageIndexMapping);
+          TEST_CHECK(testFromFilenameISD);
           TEST_CHECK(testFromNitf21ISD);
           TEST_CHECK(testFromState);
           TEST_CHECK(testErrorStatistics1);

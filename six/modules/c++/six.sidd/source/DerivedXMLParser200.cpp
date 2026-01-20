@@ -1620,7 +1620,8 @@ xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const 
             collection->information.collectionDuration,
             informationElem);
         // optional
-        if (!Init::isUndefined(collection->information.resolution))
+        if (!Init::isUndefined(collection->information.resolution.rg) &&
+            !Init::isUndefined(collection->information.resolution.az))
         {
             parser.common().createRangeAzimuth("Resolution",
                 collection->information.resolution,

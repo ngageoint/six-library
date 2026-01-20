@@ -44,11 +44,20 @@ namespace CSM
 const csm::Version SIDDSensorModel::VERSION(1, 2, 0);
 const char SIDDSensorModel::NAME[] = "SIDD_SENSOR_MODEL";
 
+SIDDSensorModel::SIDDSensorModel()
+{
+    // protected version for use by SIDDPolySensorModel
+}
+
 SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
                                  const std::string& dataDir)
 {
     setSchemaDir(dataDir);
+    initializeFromISD(isd);
+}
 
+void SIDDSensorModel::initializeFromISD(const csm::Isd& isd)
+{
     // Support multi-segment SIDDs
     // In this case, the ISD should tell us which image it wants to use if it's
     // not the first one
@@ -78,8 +87,7 @@ SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
         //       version of vts, it threw an exception.  Did older versions of
         //       vts not use the /GR flag (they've since reported it worked
         //       fine when our plugin used dynamic_cast)?
-        initializeFromISD((const csm::Nitf21Isd&)isd,
-                          imageIndex);
+        initializeFromNitfISD((const csm::Nitf21Isd&)isd, imageIndex);
     }
     else if (format == "FILENAME")
     {
@@ -92,7 +100,6 @@ SIDDSensorModel::SIDDSensorModel(const csm::Isd& isd,
                            "Unsupported ISD format " + format,
                            "SIDDSensorModel::constructModelFromISD");
     }
-
 }
 
 SIDDSensorModel::SIDDSensorModel(const std::string& sensorModelState,
@@ -107,8 +114,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
 {
     try
     {
-        // create an XML registry
-        // The reason to do this is to avoid adding XMLControlCreators to the
+        // Create an XML registry to avoid adding XMLControlCreators to the
         // XMLControlFactory singleton - this way has more fine-grained control
         six::XMLControlRegistry xmlRegistry;
         xmlRegistry.addCreator<six::sidd::DerivedXMLControl>();
@@ -118,25 +124,79 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         reader.setXMLControlRegistry(&xmlRegistry);
         reader.load(pathname, mSchemaDirs);
 
-        // For multi-image SIDDs, all the SIDD DESs will appear first (in the
-        // case where SICD DESs are also present), so we just have to grab out
-        // the Nth Data object
+        // SIDD files can store one or multiple products, each of which is
+        // stored as one or more segments.  Multiple segments are created for a
+        // product when a NITF field limit would otherwise be exceeded.  The
+        // IID1 field of the NITF image segment subheader is used to identify
+        // which XML DES is associated with which image segment.
+
+        // imageIndex is the 0-based index of the NITF image segment to create a
+        // model for.  We locate the correct image subheader, read its IID1
+        // field, and decode it.  The IID1 field should be in the format
+        // SIDDxxxyyy, where xxx is a 1-based counter of unique products, and
+        // yyy is a 1-based counter of segments within a product.
+
+        // The SIDD file only stores one copy of the XML DES for each product,
+        // regardless of how many segments it may be broken into.  The SIDD XML
+        // DES segments are stored in order, and are stored before any other
+        // type of DES.  So the xxx component of the IID1 field gives the
+        // 1-based index of the XML DES associated with the NITF image segment.
+
         const auto container = reader.getContainer();
-        if (container->getDataType() != six::DataType::DERIVED ||
-            container->size() < imageIndex + 1)
+        if (container->getDataType() != six::DataType::DERIVED)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                               "Not a SIDD",
-                               "SIDDSensorModel::initializeFromFile");
+                             "Not a SIDD.  Did not find a SIDD DES.",
+                             "SIDDSensorModel::initializeFromFile");
         }
 
-        six::Data* const data = container->getData(imageIndex);
-        if (data->getDataType() != six::DataType::DERIVED)
+        const nitf::List images = reader.getRecord().getImages();
+        size_t index = 0;
+        std::string iid1;
+        bool found = false;
+        for (nitf::ImageSegment segment : images)
+        {
+            if (index == imageIndex)
+            {
+                iid1 = segment.getSubheader().imageId();
+                found = true;
+                break;
+            }
+            index++;
+        }
+        if (!found)
         {
             throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                               "Not a SIDD",
-                               "SIDDSensorModel::initializeFromFile");
+                             "Requested IMAGE_INDEX " +
+                                     std::to_string(imageIndex) +
+                                     " but only have " + std::to_string(index) +
+                                     " image subheaders",
+                             "SIDDSensorModel::initializeFromFile");
         }
+        size_t desIndex = extractDesIndexFromIID1(iid1);
+
+        size_t numSIDD = 0;
+        for (size_t idx = 0; idx < container->size(); idx++)
+        {
+            // The SIDD DESs appear first so stop counting if we encounter a
+            // non-SIDD DES
+            if (container->getData(desIndex)->getDataType() !=
+                six::DataType::DERIVED)
+            {
+                break;
+            }
+            numSIDD++;
+        }
+        if (numSIDD < desIndex + 1)
+        {
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                             "Found " + std::to_string(numSIDD) +
+                                     " SIDD DES segments but need DES index " +
+                                     std::to_string(desIndex),
+                             "SIDDSensorModel::initializeFromFile");
+        }
+
+        six::Data* const data = container->getData(desIndex);
 
         // Cast it and grab a copy
         mData.reset(reinterpret_cast<six::sidd::DerivedData*>(data->clone()));
@@ -147,7 +207,7 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
         SIXSensorModelState empty;
         reinitialize(empty);
     }
-    catch (const except::Exception& ex)
+    catch (const except::Throwable& ex)
     {
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
                            ex.getMessage(),
@@ -155,19 +215,40 @@ void SIDDSensorModel::initializeFromFile(const std::string& pathname,
     }
 }
 
-void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
-                                        size_t imageIndex)
+void SIDDSensorModel::initializeFromNitfISD(const csm::Nitf21Isd& isd,
+                                            size_t imageIndex)
 {
     try
     {
-        // Check for the SIDD DES associated with imageIndex and parse it
-        // DES's are always in the same order as the images, so we just have to
-        // find the Nth DES
+        // See the discussion in initializeFromFile() of how imageIndex, image
+        // segments, IID1, and desIndex work.
         const xml::lite::Document* siddXML = nullptr;
         six::MinidomParser domParser;
 
+        const std::vector<csm::Image>& imageList(isd.images());
+        if (imageIndex >= imageList.size())
+        {
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                             "Requested IMAGE_INDEX " +
+                                     std::to_string(imageIndex) +
+                                     " but only have " +
+                                     std::to_string(imageList.size()) +
+                                     " image subheaders",
+                             "SIDDSensorModel::initializeFromNitfISD");
+        }
+        const std::string& subheaderText = imageList.at(imageIndex).subHeader();
+        if (subheaderText.size() < 12)
+        {
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                             "Image subheader text is too short",
+                             "SIDDSensorModel::initializeFromNitfISD");
+        }
+        std::string iid1 =
+                str::trim(imageList.at(imageIndex).subHeader().substr(2, 10));
+        size_t desIndex = extractDesIndexFromIID1(iid1);
+
         size_t numSIDD = 0;
-        const std::vector< csm::Des>& desList(isd.fileDess());
+        const std::vector<csm::Des>& desList(isd.fileDess());
         for (const auto& desListItem : desList)
         {
             DataType dataType = getDataType(desListItem);
@@ -190,7 +271,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
 
                     if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
                     {
-                        if (numSIDD == imageIndex)
+                        if (numSIDD == desIndex)
                         {
                             siddXML = &domParser.getDocument();
                             break;
@@ -198,7 +279,7 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
                         ++numSIDD;
                     }
                 }
-                catch(const except::Exception& )
+                catch (const except::Throwable&)
                 {
                     // Couldn't parse DES as xml -- it's not a sidd so skip it
                 }
@@ -207,9 +288,11 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
 
         if (siddXML == nullptr)
         {
-            const std::string message = (numSIDD == 0) ? "Not a SIDD" :
-                    "Found " + std::to_string(numSIDD) + " SIDD XMLs but requested image index " + std::to_string(imageIndex);
-            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE, message, "SIDDSensorModel::SIDDSensorModel");
+            throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                             "Found " + std::to_string(numSIDD) +
+                                     " SIDD DES segments but need DES index " +
+                                     std::to_string(desIndex),
+                             "SIDDSensorModel::initializeFromNitfISD");
         }
 
         // get xml as string for sensor model state
@@ -230,15 +313,39 @@ void SIDDSensorModel::initializeFromISD(const csm::Nitf21Isd& isd,
         SIXSensorModelState empty;
         reinitialize(empty);
     }
-    catch (const except::Exception& ex)
+    catch (const except::Throwable& ex)
     {
         throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-                           ex.getMessage(),
-                           "SIDDSensorModel::initializeFromISD");
+                         ex.getMessage(),
+                         "SIDDSensorModel::initializeFromNitfISD");
     }
 }
 
-bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
+size_t SIDDSensorModel::extractDesIndexFromIID1(const std::string& iid1)
+{
+    if (!str::startsWith(iid1, "SIDD") || iid1.size() != 10 ||
+        !str::isNumeric(iid1.substr(4, 3)))
+    {
+        throw csm::Error(
+                csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                "Image segment header IID1 field is incorrectly formatted",
+                "SIDDSensorModel::extractDesIndexFromIID1");
+    }
+    size_t oneBasedIndex = str::toType<size_t>(iid1.substr(4, 3));
+    if (oneBasedIndex == 0)
+    {
+        throw csm::Error(csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+                         "Image segment header IID1 field must indicate a DES "
+                         "index greater than 0",
+                         "SIDDSensorModel::extractDesIndexFromIID1");
+    }
+
+    size_t desIndex = oneBasedIndex - 1;
+    return desIndex;
+}
+
+bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd,
+                                         bool rigorousProjectionModel)
 {
     six::MinidomParser domParser;
 
@@ -257,12 +364,21 @@ bool SIDDSensorModel::containsDerivedDES(const csm::Nitf21Isd& isd)
                 domParser.clear();
                 domParser.parse(stream);
 
-                if (getDocument(domParser).getRootElement()->getLocalName() == "SIDD")
+                auto* root = getDocument(domParser).getRootElement();
+                if (root->getLocalName() == "SIDD")
                 {
-                    return true;
+                    std::vector<xml::lite::Element*> children;
+                    root->getElementsByTagName("PolynomialProjection",
+                                               children,
+                                               true);
+                    if (children.size())
+                    {
+                        return !rigorousProjectionModel;
+                    }
+                    return rigorousProjectionModel;
                 }
             }
-            catch(const except::Exception& )
+            catch (const except::Throwable&)
             {
                 // Couldn't parse DES as xml -- it's not a sidd so skip it
             }
@@ -429,7 +545,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
                 &domParser.getDocument(), mSchemaDirs)));
         reinitialize(modelState);
     }
-    catch (const except::Exception& ex)
+    catch (const except::Throwable& ex)
     {
         throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            ex.getMessage(),
@@ -459,10 +575,7 @@ const six::ErrorStatistics* SIDDSensorModel::getErrorStatisticsBlock() const
 
 void SIDDSensorModel::reinitialize(SIXSensorModelState& modelState)
 {
-    // This goofiness is for Sun Studio 11 which can't figure out an auto_ptr
-    // assignment here
-    mGeometry.reset(
-            six::sidd::Utilities::getSceneGeometry(mData.get()).release());
+    mGeometry = six::sidd::Utilities::getSceneGeometry(mData.get());
 
     mProjection = six::sidd::Utilities::getProjectionModel(mData.get());
 

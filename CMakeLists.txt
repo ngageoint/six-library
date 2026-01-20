@@ -14,7 +14,10 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
     elseif (UNIX)
        # warnings as errors
        # (except c++20 compat)
-       add_compile_options(-Werror -Wno-error=c++20-compat -Wno-error=format-truncation)
+       add_compile_options(-Werror)
+       if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0)
+           add_compile_options(-Wno-error=c++20-compat -Wno-error=format-truncation)
+       endif()
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")

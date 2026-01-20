@@ -611,7 +611,8 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             collection->information.collectionDuration,
             informationElem);
         // optional
-        if (!Init::isUndefined(collection->information.resolution))
+        if (!Init::isUndefined(collection->information.resolution.rg) &&
+            !Init::isUndefined(collection->information.resolution.az))
         {
             common().createRangeAzimuth("Resolution",
                 collection->information.resolution,

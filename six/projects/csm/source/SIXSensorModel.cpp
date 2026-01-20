@@ -639,54 +639,62 @@ std::vector<double> SIXSensorModel::getUnmodeledCrossCovariance(
         // Get in the right units
         const types::RowCol<double> ss = getSampleSpacing();
 
+        math::linear::Matrix2D<double> covarP1(unmodeledError1);
+        math::linear::Matrix2D<double> covarP2(unmodeledError2);
+
+        math::linear::Matrix2D<double> crossCovar;
+        math::linear::Matrix2D<double> ssScaling(
+                2, 2, {1. / ss.row, 0., 0., 1. / ss.col});
+        crossCovar = ssScaling * matrixSqrt(covarP1) * matrixSqrt(covarP2) *
+                ssScaling;
+
         std::vector<double> unmodeledErrorVec(4);
-        unmodeledErrorVec[0] =
-                ::sqrt(unmodeledError1[0][0] * unmodeledError2[0][0]) /
-                (ss.row * ss.row);
-        unmodeledErrorVec[1] =
-                ::sqrt(unmodeledError1[0][1] * unmodeledError2[0][1]) /
-                (ss.row * ss.col);
-        unmodeledErrorVec[2] =
-                ::sqrt(unmodeledError1[1][0] * unmodeledError2[1][0]) /
-                (ss.row * ss.col);
-        unmodeledErrorVec[3] =
-                ::sqrt(unmodeledError1[1][1] * unmodeledError2[1][1]) /
-                (ss.col * ss.col);
+        unmodeledErrorVec[0] = crossCovar[0][0];
+        unmodeledErrorVec[1] = crossCovar[0][1];
+        unmodeledErrorVec[2] = crossCovar[1][0];
+        unmodeledErrorVec[3] = crossCovar[1][1];
+
+        types::RowCol<double> diff{std::abs(pixelPt1.row - pixelPt2.row),
+                                   std::abs(pixelPt1.col - pixelPt2.col)};
+
+        // If optional unmodeled decorrelation block is not present, assume full
+        // correlation of the covariance matrix for a point with itself, but
+        // full decorrelation in all other cases.
+        double zeroRow = 0.0;
+        double rateRow = 0.0;
+        double zeroCol = 0.0;
+        double rateCol = 0.0;
+        if (diff.row == 0 && diff.col == 0)
+        {
+            zeroRow = 1.0;
+            zeroCol = 1.0;
+        }
 
         const six::ErrorStatistics* errorStatistics = getErrorStatisticsBlock();
-        if (errorStatistics)
+        if (errorStatistics && has_value(errorStatistics->unmodeled))
         {
-            types::RowCol<double> diff{std::abs(pixelPt1.row - pixelPt2.row),
-                                       std::abs(pixelPt1.col - pixelPt2.col)};
-            if (has_value(errorStatistics->unmodeled))
+            auto& unmodeled = value(errorStatistics->unmodeled);
+            if (has_value(unmodeled.unmodeledDecorr))
             {
-                auto& unmodeled = value(errorStatistics->unmodeled);
-                if (has_value(unmodeled.unmodeledDecorr))
-                {
-                    double zeroRow =
-                            value(value(unmodeled.unmodeledDecorr).Xrow)
-                                    .corrCoefZero;
-                    double rateRow =
-                            value(value(unmodeled.unmodeledDecorr).Xrow)
-                                    .decorrRate;
-                    double coeffRow = std::min(
-                            1.0, std::max(0.0, zeroRow - rateRow * diff.row));
-                    double zeroCol =
-                            value(value(unmodeled.unmodeledDecorr).Ycol)
-                                    .corrCoefZero;
-                    double rateCol =
-                            value(value(unmodeled.unmodeledDecorr).Ycol)
-                                    .decorrRate;
-                    double coeffCol = std::min(
-                            1.0, std::max(0.0, zeroCol - rateCol * diff.col));
-
-                    unmodeledErrorVec[0] *= coeffRow;
-                    unmodeledErrorVec[1] *= ::sqrt(coeffRow * coeffCol);
-                    unmodeledErrorVec[2] *= ::sqrt(coeffRow * coeffCol);
-                    unmodeledErrorVec[3] *= coeffCol;
-                }
+                zeroRow = value(value(unmodeled.unmodeledDecorr).Xrow)
+                                  .corrCoefZero;
+                rateRow =
+                        value(value(unmodeled.unmodeledDecorr).Xrow).decorrRate;
+                zeroCol = value(value(unmodeled.unmodeledDecorr).Ycol)
+                                  .corrCoefZero;
+                rateCol =
+                        value(value(unmodeled.unmodeledDecorr).Ycol).decorrRate;
             }
         }
+
+        double coeffRow =
+                std::min(1.0, std::max(0.0, zeroRow - rateRow * diff.row));
+        double coeffCol =
+                std::min(1.0, std::max(0.0, zeroCol - rateCol * diff.col));
+        unmodeledErrorVec[0] *= coeffRow;
+        unmodeledErrorVec[1] *= ::sqrt(coeffRow * coeffCol);
+        unmodeledErrorVec[2] *= ::sqrt(coeffRow * coeffCol);
+        unmodeledErrorVec[3] *= coeffCol;
 
         return unmodeledErrorVec;
     }
@@ -708,7 +716,8 @@ void SIXSensorModel::setReferencePoint(const csm::EcefCoord& )
 csm::ImageCoord SIXSensorModel::groundToImageImpl(
         const csm::EcefCoord& groundPt,
         double desiredPrecision,
-        double* achievedPrecision) const
+        double* achievedPrecision,
+        csm::WarningList* warnings) const
 {
     const scene::Vector3 sceneGroundPt(toVector3(groundPt));
 
@@ -718,27 +727,39 @@ csm::ImageCoord SIXSensorModel::groundToImageImpl(
             mProjection->sceneToImage(sceneGroundPt);
     const types::RowCol<double> pixelPt = toPixel(imagePt);
 
-    // TODO: Currently no way to determine the actual precision that was
-    //       achieved, so setting it to the desired precision
+    Vector3 groundPlaneNormal(sceneGroundPt);
+    groundPlaneNormal.normalize();
+    scene::Vector3 diff = sceneGroundPt -
+            mProjection->imageToScene(imagePt,
+                                      sceneGroundPt,
+                                      groundPlaneNormal);
+    double dist = diff.norm();
+
     if (achievedPrecision)
     {
-        *achievedPrecision = desiredPrecision;
+        *achievedPrecision = dist;
+    }
+    if (dist > desiredPrecision && warnings)
+    {
+        warnings->push_back(csm::Warning(csm::Warning::PRECISION_NOT_MET,
+                                         "Requested precision not met",
+                                         "SIXSensorModel::groundToImageImpl"));
     }
 
     return toImageCoord(pixelPt);
 }
 
-csm::ImageCoord SIXSensorModel::groundToImage(
-        const csm::EcefCoord& groundPt,
-        double desiredPrecision,
-        double* achievedPrecision,
-        csm::WarningList* ) const
+csm::ImageCoord SIXSensorModel::groundToImage(const csm::EcefCoord& groundPt,
+                                              double desiredPrecision,
+                                              double* achievedPrecision,
+                                              csm::WarningList* warnings) const
 {
     try
     {
         return groundToImageImpl(groundPt,
                                  desiredPrecision,
-                                 achievedPrecision);
+                                 achievedPrecision,
+                                 warnings);
     }
     catch (const except::Exception& ex)
     {
@@ -752,13 +773,14 @@ csm::ImageCoordCovar SIXSensorModel::groundToImage(
         const csm::EcefCoordCovar& groundPt,
         double desiredPrecision,
         double* achievedPrecision,
-        csm::WarningList* ) const
+        csm::WarningList* warnings) const
 {
     try
     {
         const csm::ImageCoord imagePt = groundToImageImpl(groundPt,
                                                           desiredPrecision,
-                                                          achievedPrecision);
+                                                          achievedPrecision,
+                                                          warnings);
         const scene::Vector3 scenePt(toVector3(groundPt));
         types::RowCol<double> pixelPt(fromPixel(imagePt));
         // m^2
@@ -803,27 +825,32 @@ csm::ImageCoordCovar SIXSensorModel::groundToImage(
     }
 }
 
-csm::EcefCoord SIXSensorModel::imageToGround(
-        const csm::ImageCoord& imagePt,
-        double height,
-        double desiredPrecision,
-        double* achievedPrecision,
-        csm::WarningList* ) const
+csm::EcefCoord SIXSensorModel::imageToGround(const csm::ImageCoord& imagePt,
+                                             double height,
+                                             double desiredPrecision,
+                                             double* achievedPrecision,
+                                             csm::WarningList* warnings) const
 {
     try
     {
         const types::RowCol<double> imagePtMeters = fromPixel(imagePt);
 
-        // TODO: imageToScene() supports specifying a height threshold in
-        //       meters but it's not obvious how to convert that to a desired
-        //       precision in pixels.  Likewise, not clear how to determine
-        //       the achieved precision in pixels afterwards.
         const scene::Vector3 groundPt =
                 mProjection->imageToScene(imagePtMeters, height);
 
+        const scene::ECEFToLLATransform ecefToLatLon;
+        const LatLonAlt groundPtLatLon = ecefToLatLon.transform(groundPt);
+
+        const double achievedError = std::abs(groundPtLatLon.getAlt() - height);
         if (achievedPrecision)
         {
-            *achievedPrecision = desiredPrecision;
+            *achievedPrecision = achievedError;
+        }
+        if (achievedError > desiredPrecision && warnings)
+        {
+            warnings->push_back(csm::Warning(csm::Warning::PRECISION_NOT_MET,
+                                             "Requested precision not met",
+                                             "SIXSensorModel::imageToGround"));
         }
 
         return toEcefCoord(groundPt);
@@ -1108,12 +1135,23 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
 
     if (comparisonModel.getPlatformIdentifier() == getPlatformIdentifier())
     {
-        // NOTE: Used dynamic_cast here previously but using it with IAI's
-        //       version of vts, it threw an exception.  Did older versions of
-        //       vts not use the /GR flag (they've since reported it worked
-        //       fine when our plugin used dynamic_cast)?
         const SIXSensorModel& comparisonSIXModel =
                 (const SIXSensorModel&)comparisonModel;
+
+        const bool selfCovar = (this == &comparisonSIXModel);
+        if (selfCovar)
+        {
+            for (size_t jj = 0; jj < paramSetP1.size(); jj++)
+            {
+                for (size_t kk = 0; kk < paramSetP1.size(); kk++)
+                {
+                    returnVal[paramSetP2.size() * paramSetP1[jj] +
+                              paramSetP2[kk]] = getParameterCovariance(jj, kk);
+                }
+            }
+            return returnVal;
+        }
+
         const size_t numGroups = getNumCorrelationParameterGroups();
         const six::DateTime timeP1 = getReferenceDateAndTimeImpl();
         const six::DateTime timeP2 =
@@ -1156,16 +1194,8 @@ std::vector<double> SIXSensorModel::getCrossCovarianceMatrix(
                 }
             }
             math::linear::Matrix2D<double> crossCovar;
-            if (getImageIdentifier() == comparisonModel.getImageIdentifier())
-            {
-                crossCovar = covarP1;
-            }
-            else
-            {
-                crossCovar =
-                        matrixSqrt(covarP1) * matrixSqrt(covarP2);
-                crossCovar.scale(corrCoeff);
-            }
+            crossCovar = matrixSqrt(covarP1) * matrixSqrt(covarP2);
+            crossCovar.scale(corrCoeff);
 
             jjP = 0;
             kkP = 0;

@@ -69,8 +69,8 @@ public:
     SIDDSensorModel(const std::string& sensorModelState,
                     const std::string& dataDir);
 
-    static
-    bool containsDerivedDES(const csm::Nitf21Isd& isd);
+    static bool containsDerivedDES(const csm::Nitf21Isd& isd,
+                                   bool rigorousProjectionModel);
 
 public: // Model methods
     /*
@@ -166,12 +166,18 @@ public: // RasterGM methods
     const six::ErrorStatistics* getErrorStatisticsBlock() const override;
 
 protected:
+    SIDDSensorModel();
+
+    void initializeFromISD(const csm::Isd& isd);
+
     virtual six::DateTime getReferenceDateAndTimeImpl() const;
 
     virtual std::string getXmlString() const
     {
         return mXmlString;
     }
+
+    void replaceModelStateImpl(const std::string& sensorModelState);
 
 private:
     virtual types::RowCol<double> fromPixel(const csm::ImageCoord& pos) const;
@@ -180,19 +186,20 @@ private:
 
     const six::sidd::MeasurableProjection* getProjection() const;
 
-    void replaceModelStateImpl(const std::string& sensorModelState);
-
     void initializeFromFile(const std::string& pathname, size_t imageIndex);
 
-    void initializeFromISD(const csm::Nitf21Isd& isd, size_t imageIndex);
+    void initializeFromNitfISD(const csm::Nitf21Isd& isd, size_t imageIndex);
 
-    void reinitialize(SIXSensorModelState& modelState);
+    virtual void reinitialize(SIXSensorModelState& modelState);
 
     virtual types::RowCol<double> getSampleSpacing() const;
 
-private:
+    size_t extractDesIndexFromIID1(const std::string& iid1);
+
+protected:
     std::unique_ptr<six::sidd::DerivedData> mData;
 
+private:
     std::string mXmlString;
 };
 }

@@ -126,26 +126,42 @@ inline std::string findDllPathname(const std::string& installPathname)
 inline std::unique_ptr<csm::Nitf21Isd> constructIsd(
         const std::string& pathname,
         const six::NITFReadControl& loadedReadControl,
-        const six::Data* data,
         const six::XMLControlRegistry& registry)
 {
     std::unique_ptr<csm::Nitf21Isd> nitfIsd(new csm::Nitf21Isd(pathname));
-    csm::Des des;
 
     // NITRO parsed the subheader into a nice structure - need to grab all
     // the fields and jam them back into a string like CSM wants
-    nitf::DESegment segment =
-            static_cast<nitf::DESegment>(loadedReadControl.getRecord()
-                                                 .getDataExtensions()
-                                                 .getFirst()
-                                                 .getData());
 
-    des.setSubHeader(toString(segment.getSubheader()));
+    nitf::List dataSegments = loadedReadControl.getRecord().getDataExtensions();
+    size_t desIndex = 0;
+    for (nitf::DESegment dataSegment : dataSegments)
+    {
+        csm::Des des;
 
-    // The DES's data is just the XML string
-    const auto xml = six::toXMLString(data, &registry);
-    des.setData(str::to_native(xml));
-    nitfIsd->addFileDes(des);
+        des.setSubHeader(toString(dataSegment.getSubheader()));
+
+        // The DES's data is just the XML string
+        const auto xml = six::toXMLString(
+                loadedReadControl.getContainer()->getData(desIndex), &registry);
+        des.setData(str::to_native(xml));
+
+        nitfIsd->addFileDes(des);
+        desIndex++;
+    }
+
+    nitf::List imageSegments = loadedReadControl.getRecord().getImages();
+    for (nitf::ImageSegment imageSegment : imageSegments)
+    {
+        csm::Image image;
+        // Plugins only use the IID1 field so no need to reconstruct entire
+        // subheader
+        image.setSubHeader(
+                imageSegment.getSubheader().getFilePartType().toString() +
+                imageSegment.getSubheader().getImageId().toString() +
+                imageSegment.getSubheader().getImageDateAndTime().toString());
+        nitfIsd->addImage(image);
+    }
 
     return nitfIsd;
 }

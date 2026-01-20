@@ -67,8 +67,7 @@ public:
 
     bool testNitfISD()
     {
-        return testISD(*constructIsd(mSicdPathname, mReader,
-                mComplexData.get(), mXmlRegistry));
+        return testISD(*constructIsd(mSicdPathname, mReader, mXmlRegistry));
     }
 
 private:

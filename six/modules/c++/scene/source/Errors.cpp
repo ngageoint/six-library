@@ -50,5 +50,6 @@ void Errors::clear()
     mPositionDecorrRate = 0.0;
     mRangeCorrCoefZero = 0.0;
     mRangeDecorrRate = 0.0;
+    mClkSF = 0.0;
 }
 }
