@@ -631,6 +631,7 @@ bool processVTSCommand(int commandNumber,
          saved_state_file = param_array[0];
          _TRY
       		 returned_sensor_model_state = readStateFile(saved_state_file);
+             sensorModelStateSaved = true;
          _CATCH
          if(error_thrown)
          {

@@ -2,7 +2,7 @@
  * This file is part of the CSM SIX Plugin
  * =========================================================================
  *
- * (C) Copyright 2025, Arka Group, L.P.
+ * (C) Copyright 2025 - 2026, Arka Group, L.P.
  *
  * The CSM SIX Plugin is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -57,7 +57,9 @@ namespace six
 {
 namespace CSM
 {
-SIXSensorModelState::SIXSensorModelState() : mOverrideSensorCovariance(false)
+SIXSensorModelState::SIXSensorModelState() :
+        mOverrideSensorCovariance(false),
+        mOverrideAdjParams(false)
 {
     std::fill_n(mAdjustableTypes,
                 static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
@@ -68,8 +70,17 @@ SIXSensorModelState::SIXSensorModelState() : mOverrideSensorCovariance(false)
 }
 
 SIXSensorModelState::SIXSensorModelState(const std::string& stateString,
-                                         std::string& remainder)
+                                         std::string& remainder) :
+        mOverrideSensorCovariance(false),
+        mOverrideAdjParams(false)
 {
+    std::fill_n(mAdjustableTypes,
+                static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
+                csm::param::REAL);
+    std::fill_n(mAdjustableValues,
+                static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
+                0.0);
+
     remainder = initializeFromString(stateString);
 }
 
@@ -82,6 +93,7 @@ std::string SIXSensorModelState::initializeFromString(
     {
         if (remainder.rfind(ADJ_PARAMS_TAG, 0) == 0)
         {
+            mOverrideAdjParams = true;
             remainder = remainder.substr(ADJ_PARAMS_TAG.length());
             for (size_t paramIdx = 0;
                  paramIdx < scene::AdjustableParams::NUM_PARAMS;

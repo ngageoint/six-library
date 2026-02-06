@@ -2,7 +2,7 @@
  * This file is part of the CSM SIX Plugin
  * =========================================================================
  *
- * (C) Copyright 2004 - 2025, Arka Group, L.P.
+ * (C) Copyright 2004 - 2026, Arka Group, L.P.
  *
  * The CSM SIX Plugin is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -161,6 +161,7 @@ std::string SIXSensorModel::getModelState() const
 {
     SIXSensorModelState modelState;
 
+    modelState.setOverrideAdjustableParams(true);
     for (size_t index = 0; index < scene::AdjustableParams::NUM_PARAMS; index++)
     {
         modelState.setAdjustableType(index, mAdjustableTypes[index]);
@@ -1293,11 +1294,14 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
 
 void SIXSensorModel::reinitialize(SIXSensorModelState& state)
 {
-    for (size_t idx = 0; idx < getNumSensorModelParameters(); idx++)
+    if (state.getOverrideAdjustableParams())
     {
-        mProjection->getAdjustableParams().mParams[idx] =
-                state.getAdjustableValue(idx);
-        mAdjustableTypes[idx] = state.getAdjustableType(idx);
+        for (size_t idx = 0; idx < getNumSensorModelParameters(); idx++)
+        {
+            mProjection->getAdjustableParams().mParams[idx] =
+                    state.getAdjustableValue(idx);
+            mAdjustableTypes[idx] = state.getAdjustableType(idx);
+        }
     }
 
     if (state.getOverrideSensorCovariance())

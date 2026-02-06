@@ -2,7 +2,7 @@
  * This file is part of the CSM SIX Plugin
  * =========================================================================
  *
- * (C) Copyright 2025, Arka Group, L.P.
+ * (C) Copyright 2025 - 2026, Arka Group, L.P.
  *
  * The CSM SIX Plugin is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -56,6 +56,16 @@ public:
      * \return Model state string as printable text
      */
     std::string toString() const;
+
+    /* Use overridden adjustable parameters */
+    bool getOverrideAdjustableParams() const
+    {
+        return mOverrideAdjParams;
+    }
+    void setOverrideAdjustableParams(bool override)
+    {
+        mOverrideAdjParams = override;
+    }
 
     /* Adjustable parameter type */
     csm::param::Type getAdjustableType(int index) const
@@ -113,6 +123,8 @@ public:
 
 protected:
     std::string initializeFromString(const std::string& stateString);
+
+    bool mOverrideAdjParams;
 
     csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
 
