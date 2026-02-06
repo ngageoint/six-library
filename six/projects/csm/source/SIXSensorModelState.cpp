@@ -58,8 +58,7 @@ namespace six
 namespace CSM
 {
 SIXSensorModelState::SIXSensorModelState() :
-        mOverrideSensorCovariance(false),
-        mOverrideAdjParams(false)
+        mOverrideSensorCovariance(false)
 {
     std::fill_n(mAdjustableTypes,
                 static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
@@ -71,8 +70,7 @@ SIXSensorModelState::SIXSensorModelState() :
 
 SIXSensorModelState::SIXSensorModelState(const std::string& stateString,
                                          std::string& remainder) :
-        mOverrideSensorCovariance(false),
-        mOverrideAdjParams(false)
+        mOverrideSensorCovariance(false)
 {
     std::fill_n(mAdjustableTypes,
                 static_cast<size_t>(scene::AdjustableParams::NUM_PARAMS),
@@ -93,7 +91,6 @@ std::string SIXSensorModelState::initializeFromString(
     {
         if (remainder.rfind(ADJ_PARAMS_TAG, 0) == 0)
         {
-            mOverrideAdjParams = true;
             remainder = remainder.substr(ADJ_PARAMS_TAG.length());
             for (size_t paramIdx = 0;
                  paramIdx < scene::AdjustableParams::NUM_PARAMS;

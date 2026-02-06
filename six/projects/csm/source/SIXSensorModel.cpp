@@ -161,7 +161,6 @@ std::string SIXSensorModel::getModelState() const
 {
     SIXSensorModelState modelState;
 
-    modelState.setOverrideAdjustableParams(true);
     for (size_t index = 0; index < scene::AdjustableParams::NUM_PARAMS; index++)
     {
         modelState.setAdjustableType(index, mAdjustableTypes[index]);
@@ -1294,14 +1293,11 @@ DataType SIXSensorModel::getDataType(const csm::Des& des)
 
 void SIXSensorModel::reinitialize(SIXSensorModelState& state)
 {
-    if (state.getOverrideAdjustableParams())
+    for (size_t idx = 0; idx < getNumSensorModelParameters(); idx++)
     {
-        for (size_t idx = 0; idx < getNumSensorModelParameters(); idx++)
-        {
-            mProjection->getAdjustableParams().mParams[idx] =
-                    state.getAdjustableValue(idx);
-            mAdjustableTypes[idx] = state.getAdjustableType(idx);
-        }
+        mProjection->getAdjustableParams().mParams[idx] =
+                state.getAdjustableValue(idx);
+        mAdjustableTypes[idx] = state.getAdjustableType(idx);
     }
 
     if (state.getOverrideSensorCovariance())

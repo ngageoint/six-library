@@ -57,16 +57,6 @@ public:
      */
     std::string toString() const;
 
-    /* Use overridden adjustable parameters */
-    bool getOverrideAdjustableParams() const
-    {
-        return mOverrideAdjParams;
-    }
-    void setOverrideAdjustableParams(bool override)
-    {
-        mOverrideAdjParams = override;
-    }
-
     /* Adjustable parameter type */
     csm::param::Type getAdjustableType(int index) const
     {
@@ -123,8 +113,6 @@ public:
 
 protected:
     std::string initializeFromString(const std::string& stateString);
-
-    bool mOverrideAdjParams;
 
     csm::param::Type mAdjustableTypes[scene::AdjustableParams::NUM_PARAMS];
 
