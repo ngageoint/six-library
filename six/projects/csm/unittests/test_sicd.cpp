@@ -509,6 +509,62 @@ TEST_CASE(testModelState)
 
     model2->replaceModelState(state);
     TEST_ASSERT_EQ(model2->getModelState(), state);
+
+    // Confirm that older state strings that do not have various components are
+    // still able to construct a valid model
+
+    std::vector<std::string> parts;
+    size_t pos = 0;
+    for (int part = 0; part < 4; part++)
+    {
+        auto end = state.find_first_of(" ", pos);
+        TEST_ASSERT_NOT_EQ(end, std::string::npos);
+        parts.push_back(state.substr(pos, end - pos));
+        pos = end + 1;
+    }
+    parts.push_back(state.substr(pos));
+
+    // Model tag + SICD xml
+    std::string partial_state = parts[0] + " " + parts[4];
+    TEST_ASSERT(
+            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + ADJ_PARAMS + SICD xml
+    partial_state = parts[0] + " " + parts[1] + " " + parts[4];
+    TEST_ASSERT(
+            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + IID + SICD xml
+    partial_state = parts[0] + " " + parts[2] + " " + parts[4];
+    TEST_ASSERT(
+            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + COV + SICD xml
+    partial_state = parts[0] + " " + parts[3] + " " + parts[4];
+    TEST_ASSERT(
+            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + ADJ_PARAMS + IID + SICD xml
+    partial_state = parts[0] + " " + parts[1] + " " + parts[2] + " " + parts[4];
+    TEST_ASSERT(
+            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + ADJ_PARAMS + COV + SICD xml
+    partial_state = parts[0] + " " + parts[1] + " " + parts[3] + " " + parts[4];
+    TEST_ASSERT(
+            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + IID + COV + SICD xml
+    partial_state = parts[0] + " " + parts[2] + " " + parts[3] + " " + parts[4];
+    TEST_ASSERT(
+            plugin.canModelBeConstructedFromState("SICD_SENSOR_MODEL", partial_state));
+    plugin.constructModelFromState(partial_state);
 }
 
 TEST_CASE(testAdjParamsState)
