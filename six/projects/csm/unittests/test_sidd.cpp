@@ -511,44 +511,44 @@ TEST_CASE(testFromState)
 
     // Model tag + SICD xml
     std::string partial_state = parts[0] + " " + parts[4];
-    TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", partial_state));
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
     plugin.constructModelFromState(partial_state);
 
     // Model tag + ADJ_PARAMS + SICD xml
     partial_state = parts[0] + " " + parts[1] + " " + parts[4];
-    TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", partial_state));
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
     plugin.constructModelFromState(partial_state);
 
     // Model tag + IID + SICD xml
     partial_state = parts[0] + " " + parts[2] + " " + parts[4];
-    TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", partial_state));
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
     plugin.constructModelFromState(partial_state);
 
     // Model tag + COV + SICD xml
     partial_state = parts[0] + " " + parts[3] + " " + parts[4];
-    TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", partial_state));
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
     plugin.constructModelFromState(partial_state);
 
     // Model tag + ADJ_PARAMS + IID + SICD xml
     partial_state = parts[0] + " " + parts[1] + " " + parts[2] + " " + parts[4];
-    TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", partial_state));
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
     plugin.constructModelFromState(partial_state);
 
     // Model tag + ADJ_PARAMS + COV + SICD xml
     partial_state = parts[0] + " " + parts[1] + " " + parts[3] + " " + parts[4];
-    TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", partial_state));
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
     plugin.constructModelFromState(partial_state);
 
     // Model tag + IID + COV + SICD xml
     partial_state = parts[0] + " " + parts[2] + " " + parts[3] + " " + parts[4];
-    TEST_ASSERT(
-            plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL", partial_state));
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
     plugin.constructModelFromState(partial_state);
 }
 
