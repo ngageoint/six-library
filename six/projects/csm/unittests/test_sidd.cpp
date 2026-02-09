@@ -494,6 +494,74 @@ TEST_CASE(testFromState)
 
     std::unique_ptr<csm::RasterGM> model(reinterpret_cast<csm::RasterGM*>(
             plugin.constructModelFromState(state)));
+
+    // Confirm that older state strings that do not have various components are
+    // still able to construct a valid model
+
+    std::vector<std::string> parts;
+    size_t pos = 0;
+    for (int part = 0; part < 4; part++)
+    {
+        auto end = state.find_first_of(" ", pos);
+        TEST_ASSERT_NOT_EQ(end, std::string::npos);
+        parts.push_back(state.substr(pos, end - pos));
+        pos = end + 1;
+    }
+    parts.push_back(state.substr(pos));
+
+    enum
+    {
+        TAG = 0,
+        ADJ_PARAMS = 1,
+        IID = 2,
+        COV = 3,
+        XML = 4
+    };
+
+    // Model tag + SICD xml
+    std::string partial_state = parts[TAG] + " " + parts[XML];
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + ADJ_PARAMS + SICD xml
+    partial_state = parts[TAG] + " " + parts[ADJ_PARAMS] + " " + parts[XML];
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + IID + SICD xml
+    partial_state = parts[TAG] + " " + parts[IID] + " " + parts[XML];
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + COV + SICD xml
+    partial_state = parts[TAG] + " " + parts[COV] + " " + parts[XML];
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + ADJ_PARAMS + IID + SICD xml
+    partial_state = parts[TAG] + " " + parts[ADJ_PARAMS] + " " + parts[IID] +
+            " " + parts[XML];
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + ADJ_PARAMS + COV + SICD xml
+    partial_state = parts[TAG] + " " + parts[ADJ_PARAMS] + " " + parts[COV] +
+            " " + parts[XML];
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
+    plugin.constructModelFromState(partial_state);
+
+    // Model tag + IID + COV + SICD xml
+    partial_state =
+            parts[TAG] + " " + parts[IID] + " " + parts[COV] + " " + parts[XML];
+    TEST_ASSERT(plugin.canModelBeConstructedFromState("SIDD_SENSOR_MODEL",
+                                                      partial_state));
+    plugin.constructModelFromState(partial_state);
 }
 
 void checkCovarianceMatrix(std::string& testName, csm::RasterGM& model)

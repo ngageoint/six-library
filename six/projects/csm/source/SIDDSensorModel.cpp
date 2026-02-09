@@ -400,7 +400,7 @@ std::string SIDDSensorModel::getModelName() const
 
 std::string SIDDSensorModel::getPedigree() const
 {
-    return (mData->getSource() + "_" + NAME + "_SAR");
+    return (mData->getSource() + "_" + getModelName() + "_SAR");
 }
 
 std::string SIDDSensorModel::getImageIdentifier() const
@@ -513,7 +513,7 @@ void SIDDSensorModel::replaceModelStateImpl(const std::string& sensorModelState)
     }
 
     const std::string sensorModelName = sensorModelState.substr(0, idx);
-    if (sensorModelName != NAME)
+    if (sensorModelName != getModelName())
     {
         throw csm::Error(csm::Error::INVALID_SENSOR_MODEL_STATE,
                            "Invalid sensor model state",

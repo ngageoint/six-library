@@ -2,7 +2,7 @@
  * This file is part of the CSM SIX Plugin
  * =========================================================================
  *
- * (C) Copyright 2004 - 2025, Arka Group, L.P.
+ * (C) Copyright 2004 - 2026, Arka Group, L.P.
  *
  * The CSM SIX Plugin is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by

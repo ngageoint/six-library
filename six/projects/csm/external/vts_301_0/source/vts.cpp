@@ -631,6 +631,7 @@ bool processVTSCommand(int commandNumber,
          saved_state_file = param_array[0];
          _TRY
       		 returned_sensor_model_state = readStateFile(saved_state_file);
+             sensorModelStateSaved = true;
          _CATCH
          if(error_thrown)
          {
@@ -5840,9 +5841,9 @@ void processCommand(int commandNumber,
    maxReturnValuesToCompare = 0;
    for(i=0; i<MAXOUTPUTPARAMETERS; i++)
    {
-      comp_answer[1] = 0.0;
+      comp_answer[i] = 0.0;
       pass_fail[i] = true;
-      act_val[1] = 0.0;
+      act_val[i] = 0.0;
    }
 
    if (commandNumber >= BEGIN_SP_NUMBER && commandNumber <= END_SP_NUMBER)
