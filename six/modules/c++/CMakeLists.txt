@@ -13,7 +13,7 @@ if (MSVC)
     add_compile_options(/wd4244) # '...': conversion from '...' to '...', possible loss of data
     add_compile_options(/wd4267) # '...': conversion from '...' to '...', possible loss of data
     
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     #add_compile_options(-Wall -pedantic -Wextra)
     add_compile_options(-Wall -Wextra)
 
