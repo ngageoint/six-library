@@ -506,9 +506,11 @@ PVPBlock::PVPBlock(const Pvp& p, const Data& d) :
     mPvp = p;
     mNumBytesPerVector = d.getNumBytesPVPSet();
     mData.resize(d.getNumChannels());
+    mPvpByteOffset.resize(d.getNumChannels());
     for (size_t ii = 0; ii < d.getNumChannels(); ++ii)
     {
         mData[ii].resize(d.getNumVectors(ii));
+        mPvpByteOffset[ii] = d.channels[ii].pvpArrayByteOffset;
     }
     size_t calculateBytesPerVector = mPvp.getReqSetSize()*sizeof(double);
     if (six::Init::isUndefined<size_t>(mNumBytesPerVector) ||
@@ -643,21 +645,20 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
                      int64_t sizePVP,
                      size_t numThreads)
 {
-    // Allocate the buffers
-    size_t numBytesIn(0);
+    size_t lastByte(0);
 
-    // Compute the PVPBlock size per channel
+    // Compute the last byte of the PVPBlock across all channels
     // (channels aren't necessarily the same size)
     for (size_t ii = 0; ii < mData.size(); ++ii)
     {
-        numBytesIn += getPVPsize(ii);
+        lastByte = std::max(lastByte, mPvpByteOffset[ii] + getPVPsize(ii));
     }
 
-    if (numBytesIn != static_cast<size_t>(sizePVP))
+    if (lastByte > static_cast<size_t>(sizePVP))
     {
         std::ostringstream oss;
-        oss << "PVPBlock::load: calculated PVP size(" << numBytesIn
-            << ") != header PVP_DATA_SIZE(" << sizePVP << ")";
+        oss << "PVPBlock::load: last PVP byte(" << lastByte
+            << ") is past the end of the PVP_DATA_SIZE(" << sizePVP << ")";
         throw except::Exception(Ctxt(oss));
     }
 
@@ -665,7 +666,6 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
 
     // Seek to start of PVPBlock
     size_t totalBytesRead(0);
-    inStream.seek(startPVP, io::Seekable::START);
     std::vector<std::byte> readBuf;
     const size_t numBytesPerVector = getNumBytesPVPSet();
 
@@ -676,8 +676,9 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
         if (!readBuf.empty())
         {
             auto const buf = readBuf.data();
+            inStream.seek(startPVP + mPvpByteOffset[ii], io::Seekable::START);
             ptrdiff_t bytesThisRead = inStream.read(buf, readBuf.size());
-            if (bytesThisRead == io::InputStream::IS_EOF)
+            if (bytesThisRead != (ptrdiff_t)readBuf.size())
             {
                 std::ostringstream oss;
                 oss << "EOF reached during PVP read for channel " << (ii);

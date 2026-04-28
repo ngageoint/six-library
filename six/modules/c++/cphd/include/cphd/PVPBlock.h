@@ -513,12 +513,14 @@ protected:
     SIX_CPHD_API friend std::ostream& operator<< (std::ostream& os, const PVPSet& p);
 
 private:
-    //! The PVP Block [Num Channles][Num Parameters]
+    //! The PVP Block [Num Channels][Num Parameters]
     std::vector<std::vector<PVPSet> > mData;
     //! Number of bytes per PVP vector
     size_t mNumBytesPerVector = 0;
     //! PVP block metadata
     Pvp mPvp;
+    //! Offset into global PVP array [NumChannels]
+    std::vector<size_t> mPvpByteOffset;
 
     /*
      *  Optional parameter flags

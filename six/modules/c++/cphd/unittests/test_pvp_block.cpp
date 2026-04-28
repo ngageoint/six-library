@@ -162,17 +162,17 @@ TEST_CASE(testPvpOptional)
             pvpBlock.setFxN1(fxN1, channel, vector);
             const double fxN2 = cphd::getRandom();
             pvpBlock.setFxN2(fxN2, channel, vector);
-            
+
             const cphd::PvpAntenna txAnt(
                 cphd::getRandomVector3(),
                 cphd::getRandomVector3(),
                 cphd::getRandomVector2());
             pvpBlock.setTxAntenna(txAnt, channel, vector);
-                 
+
             const cphd::PvpAntenna rcvAnt(
                 cphd::getRandomVector3(),
                 cphd::getRandomVector3(),
-                cphd::getRandomVector2()); 
+                cphd::getRandomVector2());
             pvpBlock.setRcvAntenna(rcvAnt, channel, vector);
 
             const double addedParam1 = cphd::getRandom();
@@ -368,10 +368,66 @@ TEST_CASE(testLoadPVPBlockFromMemory)
     TEST_ASSERT_EQ(pvpBlock.getTxPos(0, 0)[2], 9);
 }
 
+TEST_CASE(testPvpArrayByteOffset)
+{
+    // For ease of testing, we make the somewhat specious assumption
+    // that an item of PVP data is equivalent to a double.
+    static_assert(sizeof(double) == cphd::PVPType::WORD_BYTE_SIZE,
+                  "This test is not valid for compilers with "
+                  "sizeof(double) != 8");
+
+    cphd::Pvp pvp;
+    cphd::setPVPXML(pvp);
+    const size_t setSize = pvp.getReqSetSize();
+    const size_t elementsPerChannel = setSize * NUM_VECTORS;
+
+    io::ByteStream file;
+    std::vector<size_t> pvpArrayByteOffsets;
+    for (size_t channel = 0; channel < NUM_CHANNELS; channel++)
+    {
+        pvpArrayByteOffsets.push_back(file.tell());
+        for (size_t ii = 0; ii < elementsPerChannel; ++ii)
+        {
+            double value = channel + ii * NUM_CHANNELS;
+            cphd::byteSwap(&value, sizeof(double), 1, 1);
+            file.write(&value, sizeof(double));
+        }
+    }
+
+    cphd::Data data;
+    data.numBytesPVP = setSize * sizeof(double);
+    for (size_t channel = 0; channel < NUM_CHANNELS; channel++)
+    {
+        // Assign PVP blocks in reverse order (the last PVP block is assigned to
+        // the first channel, etc.)
+        cphd::Data::Channel chan(NUM_VECTORS, 100, 0,
+                                 pvpArrayByteOffsets[NUM_CHANNELS - channel - 1]);
+        data.channels.push_back(chan);
+    }
+
+    cphd::PVPBlock pvpBlock(pvp, data);
+
+    file.seek(0, io::Seekable::START);
+    pvpBlock.load(file, 0, file.size(), 1);
+
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(0, 0), 2);
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(1, 0), 1);
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(2, 0), 0);
+
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(0, 1), 2 + setSize * NUM_CHANNELS);
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(1, 1), 1 + setSize * NUM_CHANNELS);
+    TEST_ASSERT_EQ(pvpBlock.getTxTime(2, 1), 0 + setSize * NUM_CHANNELS);
+
+    TEST_ASSERT_EQ(pvpBlock.getTxPos(2, 0)[0], 3);
+    TEST_ASSERT_EQ(pvpBlock.getTxPos(2, 0)[1], 6);
+    TEST_ASSERT_EQ(pvpBlock.getTxPos(2, 0)[2], 9);
+}
+
 TEST_MAIN(
     TEST_CHECK(testPvpRequired);
     TEST_CHECK(testPvpOptional);
     TEST_CHECK(testPvpThrow);
     TEST_CHECK(testPvpEquality);
     TEST_CHECK(testLoadPVPBlockFromMemory);
+    TEST_CHECK(testPvpArrayByteOffset);
     )
