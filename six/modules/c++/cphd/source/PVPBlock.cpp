@@ -678,7 +678,7 @@ int64_t PVPBlock::load(io::SeekableInputStream& inStream,
             auto const buf = readBuf.data();
             inStream.seek(startPVP + mPvpByteOffset[ii], io::Seekable::START);
             ptrdiff_t bytesThisRead = inStream.read(buf, readBuf.size());
-            if (bytesThisRead != readBuf.size())
+            if (bytesThisRead != (ptrdiff_t)readBuf.size())
             {
                 std::ostringstream oss;
                 oss << "EOF reached during PVP read for channel " << (ii);
