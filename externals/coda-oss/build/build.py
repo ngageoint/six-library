@@ -1526,7 +1526,12 @@ def copytree_tgt(tsk):
         symlinks = tsk.symlinks
     if hasattr(tsk, 'ignore'):
         ignore = tsk.ignore
-    shutil.copytree(tsk.src, dest, symlinks, ignore)
+
+    def copytree_helper(src, dst):
+        Logs.pprint('GREEN', f'- copy {dst} (from {src})')
+        shutil.copy2(src, dst)
+
+    shutil.copytree(tsk.src, dest, symlinks, ignore, copy_function=copytree_helper)
 
 @task_gen
 @feature('install_as_tgt')

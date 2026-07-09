@@ -75,6 +75,9 @@ if (ZIP_HOME)
     target_link_libraries(minizip INTERFACE ${minizip_PATH})
 elseif(ENABLE_ZIP)
     message("ZIP_HOME not specified, so zlib and minizip will be built")
+
+    add_compile_options($<$<CXX_COMPILER_ID:GNU,Clang>:-Wno-implicit-function-declaration>)
+
     coda_fetch_driver(
         NAME ${TARGET_NAME}
         ARCHIVE "zlib-1.2.13.tar"

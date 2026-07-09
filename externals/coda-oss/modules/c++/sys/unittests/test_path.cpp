@@ -4,6 +4,7 @@
  *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  * (C) Copyright 2021, Maxar Technologies, Inc.
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -123,7 +124,7 @@ TEST_CASE(test_std_filesystem_is_absolute)
 
     url = "s3://example.com";  // 2 letters
     TEST_ASSERT_FALSE(url.is_absolute());
-    TEST_ASSERT_TRUE(url.is_relative());  // Should this be false?
+    TEST_ASSERT_TRUE(url.is_relative());
 
     url = "ftp://example.com"; // 3 letters
     TEST_ASSERT_FALSE(url.is_absolute());

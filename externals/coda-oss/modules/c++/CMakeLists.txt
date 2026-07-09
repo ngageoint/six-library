@@ -9,7 +9,7 @@ if (MSVC)
     # > extremely noisy and low-value warnings. In general, the STL does not attempt to be `/Wall` clean.
     string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}") # add_compile_options(/W4)
 
-elseif (UNIX)
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
     #add_compile_options(-Werror) # Make all warnings into errors
     add_compile_options(-Wall -Wextra -Wpedantic -pedantic-errors -Wunused)
@@ -19,8 +19,6 @@ elseif (UNIX)
     add_compile_options(-Wsuggest-override)
     add_compile_options(-Woverloaded-virtual)
     #add_compile_options(-Warray-bounds)
-    add_compile_options(-Wduplicated-branches -Wduplicated-cond)
-    add_compile_options(-Wtrampolines)
     add_compile_options(-Wshadow)
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wold-style-cast")
     #add_compile_options(-Wfloat-equal)
@@ -30,7 +28,12 @@ elseif (UNIX)
     add_compile_options(-Wno-double-promotion) # implicit conversion of `float` to `double` is fine
 
     add_compile_options(-Wno-array-bounds) # TODO: fix the code!
-    add_compile_options(-Wno-maybe-uninitialized) # TODO: fix the code!
+
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_compile_options(-Wduplicated-branches -Wduplicated-cond)
+        add_compile_options(-Wtrampolines)
+        add_compile_options(-Wno-maybe-uninitialized) # TODO: fix the code!
+    endif()
 
     # Need a newer compiler than GCC 9
     #add_compile_options(-Wnrvo)

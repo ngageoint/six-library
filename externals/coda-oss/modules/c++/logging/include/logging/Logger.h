@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * logging-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -141,6 +142,14 @@ struct CODA_OSS_API Logger : public Filterer
     {
         return mName;
     }
+
+    /*!
+     * Returns the current log level of the first handler, if any.  Otherwise
+     * returns LogLevel::LOG_NOTSET.  Note that each handler may have a
+     * different log level.  However, the setLevel function changes the level
+     * of all handlers attached to this logger.
+     */
+    LogLevel getLevel();
 
     //! Removes all handlers
     void reset();
