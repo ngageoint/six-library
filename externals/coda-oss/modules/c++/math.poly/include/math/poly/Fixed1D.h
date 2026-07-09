@@ -137,8 +137,8 @@ public:
         }
     }
 
-    inline size_t order() const { return _Order; }
-    inline size_t size() const { return _Order + 1; }
+    constexpr inline size_t order() const { return _Order; }
+    constexpr inline size_t size() const { return _Order + 1; }
 
     /*!
      *
@@ -181,6 +181,36 @@ public:
         for (size_t i = 0; i <= _Order; i++)
         {
             rv += mCoef[i]*atPower;
+            atPower *= at;
+        }
+        return rv;
+    }
+
+    /*!
+     *  Evaluate the 1st derivative of our polynomial at 'at'
+     */
+    _T velocity(double at) const
+    {
+        _T rv{};
+        double atPower = 1;
+        for (size_t i = 1; i <= _Order; i++)
+        {
+            rv += static_cast<double>(i) * mCoef[i]*atPower;
+            atPower *= at;
+        }
+        return rv;
+    }
+
+    /*!
+     *  Evaluate the 2nd derivative of our polynomial at 'at'
+     */
+    _T acceleration(double at) const
+    {
+        _T rv{};
+        double atPower = 1;
+        for (size_t i = 2; i <= _Order; i++)
+        {
+            rv += static_cast<double>((i - 1) * i) * mCoef[i]*atPower;
             atPower *= at;
         }
         return rv;

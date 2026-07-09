@@ -1,5 +1,7 @@
 set(MODULE_NAME sys)
 
+include(CheckSourceCompiles)
+check_source_compiles(CXX [[ int main() { __builtin_cpu_init(); return 0; } ]] HAVE_BUILTIN_CPU_INIT)
 coda_generate_module_config_header(${MODULE_NAME})
 
 coda_add_module(

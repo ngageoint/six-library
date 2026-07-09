@@ -2,7 +2,7 @@
  * This file is part of mt-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2026, MDA Information Systems LLC
  * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * mt-c++ is free software; you can redistribute it and/or modify
@@ -21,62 +21,54 @@
  *
  */
 
-#ifndef __MT_REQUEST_QUEUE_H__
-#define __MT_REQUEST_QUEUE_H__
+#ifndef __MT_ORDERED_REQUEST_QUEUE_H__
+#define __MT_ORDERED_REQUEST_QUEUE_H__
 
-#include <deque>
+#include <set>
 #include "sys/Thread.h"
 #include "sys/ConditionVar.h"
 #include "sys/Mutex.h"
 #include "sys/Dbg.h"
 
-
 namespace mt
 {
-
-
+template <typename T>
+class AbstractComparator
+{
+ public:
+    virtual bool operator()(const T& lhs, const T& rhs) const
+    {
+        return lhs < rhs;
+    }
+};
 
 /*!
  *
- *  \class RequestQueue
- *  \brief Locked, dual condition request queue
+ *  \class OrderedRequestQueue
+ *  \brief Thread-safe altenrative to request queue
  *
- *  This is a generic class for locked buffers.  Stick
- *  anything in T and it will be protected by a queue lock 
- *  and two condition variables.  When you call dequeue, this
- *  class blocks until there is data (there is a critical section).
- *
- *  This class is the basis for the two provided thread pool APIs,
- *  AbstractThreadPool<Request_T> and BasicThreadPool<RequestHandler_T>
- *
+ *  std::set inserts an element into a thread lock request queue
+ *  that orders its elements based off of the provided operator. 
+ *  Dequeue blocks the thread until an element is avaliable. 
  *
  */
 
-template<typename T>
-struct RequestQueue
+template<typename T, typename CmpFtor = AbstractComparator<T>>
+class OrderedRequestQueue
 {
 public:
     //! Default constructor
-    RequestQueue() :
+    OrderedRequestQueue() :
         mAvailableSpace(&mQueueLock),
         mAvailableItems(&mQueueLock)
     {
     }
 
-    //! Puts the request at the front of the queue
-    void priorityEnqueue(T request)
+    OrderedRequestQueue(const CmpFtor f) :
+        mRequestQueue(f),
+        mAvailableSpace(&mQueueLock),
+        mAvailableItems(&mQueueLock)
     {
-#ifdef THREAD_DEBUG
-        dbg_printf("Locking (enqueue)\n");
-#endif
-        mQueueLock.lock();
-        mRequestQueue.push_front(request);
-#ifdef THREAD_DEBUG
-        dbg_printf("Unlocking (enqueue), new size [%d]\n", mRequestQueue.size());
-#endif
-        mQueueLock.unlock();
-
-        mAvailableItems.signal();
     }
 
     //! Put a (copy of, unless T is a pointer) request on the queue
@@ -86,7 +78,8 @@ public:
         dbg_printf("Locking (enqueue)\n");
 #endif
         mQueueLock.lock();
-        mRequestQueue.push_back(request);
+
+        mRequestQueue.insert(request);
 #ifdef THREAD_DEBUG
         dbg_printf("Unlocking (enqueue), new size [%d]\n", mRequestQueue.size());
 #endif
@@ -107,8 +100,9 @@ public:
             mAvailableItems.wait();
         }
 
-        request = mRequestQueue.front();
-        mRequestQueue.pop_front();
+        auto first = mRequestQueue.begin();
+        request = *first;
+        mRequestQueue.erase(first);
 
 #ifdef THREAD_DEBUG
         dbg_printf("Unlocking (dequeue), new size [%d]\n", mRequestQueue.size());
@@ -127,7 +121,12 @@ public:
         mQueueLock.lock();
         if (mRequestQueue.size() > n)
         {
-            request = mRequestQueue[n];
+            auto iter = mRequestQueue.begin();
+            while (n--)
+            {
+                ++iter;
+            }
+            request = *iter;
         }
         else
         {
@@ -143,8 +142,6 @@ public:
     }
 
     //! Lets the n'th request from the front cut in line and dequeue
-    //! NOTE: The RequestQueue does not prevent changes to the queue between
-    //! when peak() and cutAndDequeue() are called
     void cutAndDequeue(size_t n, T& request)
     {
 #ifdef THREAD_DEBUG
@@ -153,8 +150,13 @@ public:
         mQueueLock.lock();
         if (mRequestQueue.size() > n)
         {
-            request = mRequestQueue[n];
-            mRequestQueue.erase(mRequestQueue.begin()+n);
+            auto iter = mRequestQueue.begin();
+            while (n--)
+            {
+                ++iter;
+            }
+            request = *iter;
+            mRequestQueue.erase(iter);
         }
         else
         {
@@ -162,19 +164,20 @@ public:
             throw except::Exception(Ctxt("Request queue cannot access beyond end of queue"));
         }
         mQueueLock.unlock();
+        mAvailableSpace.signal();
 #ifdef THREAD_DEBUG
         dbg_printf("Unlocking (peek)\n");
 #endif
     }
 
     //! Check to see if its empty
-    inline bool isEmpty() const
+    inline bool isEmpty()
     {
-        return mRequestQueue.empty();
+        return (mRequestQueue.size() == 0);
     }
 
     //! Check the length
-    int length() const
+    inline size_t length()
     {
         return mRequestQueue.size();
     }
@@ -182,16 +185,13 @@ public:
     void clear()
     {
 #ifdef THREAD_DEBUG
-        dbg_printf("Locking (dequeue)\n");
+        dbg_printf("Locking (clear)\n");
 #endif
         mQueueLock.lock();
-        while (!isEmpty())
-        {
-            mRequestQueue.pop_front();
-        }
+        mRequestQueue.clear();
 
 #ifdef THREAD_DEBUG
-        dbg_printf("Unlocking (dequeue), new size [%d]\n", mRequestQueue.size());
+        dbg_printf("Unlocking (clear), new size [%d]\n", mRequestQueue.size());
 #endif
         mQueueLock.unlock();
         mAvailableSpace.signal();
@@ -203,7 +203,7 @@ public:
     {
         mQueueLock.lock();
         AggregateType cumulative = initial;
-        for (typename std::deque<T>::iterator iter = mRequestQueue.begin();
+        for (typename std::set<T>::iterator iter = mRequestQueue.begin();
              iter != mRequestQueue.end();
              ++iter)
         {
@@ -221,7 +221,7 @@ public:
     bool removeRequest(const CmpFunctor& compare)
     {
         mQueueLock.lock();
-        for (typename std::deque<T>::iterator iter = mRequestQueue.begin();
+        for (typename std::set<T>::iterator iter = mRequestQueue.begin();
              iter != mRequestQueue.end();
              ++iter)
         {
@@ -237,13 +237,39 @@ public:
         return false;
     }
 
+    //! Remove the given request from the queue and return the request object
+    // Does nothing if the given request is not in the queue
+    // \return true if an item was removed, false otherwise
+    // request is set the object of the request in the queue
+    template <typename CmpFunctor>
+    bool removeAndGetRequest(const CmpFunctor& compare, T& request)
+    {
+        mQueueLock.lock();
+        for (typename std::set<T>::iterator iter = mRequestQueue.begin();
+             iter != mRequestQueue.end();
+             ++iter)
+        {
+            if (compare(*iter))
+            {
+                request = *iter;
+                mRequestQueue.erase(iter);
+                mQueueLock.unlock();
+                mAvailableSpace.signal();
+                return true;
+            }
+        }
+        mQueueLock.unlock();
+        return false;
+    }
+
 private:
-    RequestQueue(const RequestQueue&) = delete;
-    RequestQueue& operator=(const RequestQueue&) = delete;
+    // Noncopyable
+    OrderedRequestQueue(const OrderedRequestQueue& );
+    const OrderedRequestQueue& operator=(const OrderedRequestQueue& );
 
 private:
     //! The internal data structure
-    std::deque<T> mRequestQueue;
+    std::set<T, CmpFtor> mRequestQueue;
     //! The synchronizer
     sys::Mutex mQueueLock;
     //! This condition is "is there space?"
@@ -252,7 +278,8 @@ private:
     sys::ConditionVar mAvailableItems;
 };
 
-typedef RequestQueue<sys::Runnable*> RunnableRequestQueue;
+template <typename OrderingFtor>
+using RunnableOrderedRequestQueue = OrderedRequestQueue<sys::Runnable*, OrderingFtor>;
 }
 
 #endif // __MT_REQUEST_QUEUE_H__

@@ -81,7 +81,7 @@ DerivedXMLParser300::DerivedXMLParser300(logging::Logger& log, six::sidd300::ISM
     DerivedXMLParser(VERSION,
         std::make_unique<six::SICommonXMLParser10x>(versionToURI(VERSION), false, SI_COMMON_URI, log),
         log)
-    { 
+    {
         mISMVersion = ismVersion;
     }
 
@@ -265,44 +265,48 @@ void DerivedXMLParser300::parseDerivedClassificationFromXML(
     DerivedXMLParser::parseDerivedClassificationFromXML(classificationElem, classification);
     const auto& classificationAttributes = classificationElem->getAttributes();
 
+    std::string prefix = getIsmPrefix(classificationElem);
+    if (!prefix.empty())
+        prefix = prefix + ":";
+
     getAttributeList(classificationAttributes,
-        "ism:compliesWith",
+        prefix + "compliesWith",
         classification.compliesWith);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:exemptFrom",
+        prefix + "exemptFrom",
         classification.exemptFrom);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:joint",
+        prefix + "joint",
         classification.joint);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:atomicEnergyMarkings",
+        prefix + "atomicEnergyMarkings",
         classification.atomicEnergyMarkings);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:displayOnlyTo",
+        prefix + "displayOnlyTo",
         classification.displayOnlyTo);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:noticeType",
+        prefix + "noticeType",
         classification.noticeType);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:noticeReason",
+        prefix + "noticeReason",
         classification.noticeReason);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:noticeDate",
+        prefix + "noticeDate",
         classification.noticeDate);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:unregisteredNoticeType",
+        prefix + "unregisteredNoticeType",
         classification.unregisteredNoticeType);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:externalNotice",
+        prefix + "externalNotice",
         classification.externalNotice);
 }
 
@@ -337,7 +341,7 @@ void DerivedXMLParser300::parseJ2KCompression(const xml::lite::Element& j2kElem,
     for (size_t ii = 0; ii < layerElems.size(); ++ii)
     {
         // In SIDD 3.0, the `index` attribute type changed from `positiveInteger` to `nonNegativeInteger`
-        // (matching C-style indexing).  Since we had a problem with this, use the opportunity to 
+        // (matching C-style indexing).  Since we had a problem with this, use the opportunity to
         // validate the `index` value.
         const auto& attributes = layerElems[ii]->getAttributes();
         std::string strIndex;

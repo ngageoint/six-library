@@ -1,9 +1,8 @@
 set(MODULE_NAME xml.lite)
 
 if(ENABLE_XML)
-    if (UNIX)
-       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-zero-as-null-pointer-constant")
-       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-suggest-override")
+    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+       add_compile_options(-Wno-zero-as-null-pointer-constant -Wno-suggest-override)
     endif()
 
     if(CONAN_PACKAGE_NAME)

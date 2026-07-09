@@ -1,3 +1,6 @@
+env:
+  CTEST_TIMEOUT: 120
+
 name: build_unittest
 
 on:
@@ -46,10 +49,10 @@ jobs:
     - name: test # should run w/o install
       run: |
         cd target-Release
-        ctest -C Release --output-on-failure
+        ctest -C Release --output-on-failure --timeout $env:CTEST_TIMEOUT
         cd ..
         cd target-Debug
-        ctest -C Debug --output-on-failure
+        ctest -C Debug --output-on-failure --timeout $env:CTEST_TIMEOUT
     - name: install
       run: |
         cd target-Release
@@ -132,7 +135,7 @@ jobs:
     # should run w/o install
       run: |
         cd target
-        ctest --output-on-failure
+        ctest --output-on-failure --timeout $CTEST_TIMEOUT
     - name: install
       run: |
         cd target
@@ -141,7 +144,7 @@ jobs:
   build-linux-cmake:
     strategy:
       matrix:
-        os: [ubuntu-22.04]
+        os: [ubuntu-22.04, ubuntu-24.04]
         configuration: [Debug, Release]
         avx: [AVX512F]
     name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
@@ -163,43 +166,45 @@ jobs:
     # should run w/o install
       run: |
         cd out
-        ctest --output-on-failure
-
-  build-waf:
-    strategy:
-      matrix:
-        os: [windows-2019, ubuntu-22.04]
-        python-version: ['3.7']
-        debugging: ['--enable-debugging', '']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
-    runs-on: ${{ matrix.os }}
-    steps:
-    - name: Skip Duplicate Actions
-      uses: fkirc/skip-duplicate-actions@v5.3.1
-    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: Set up Python
-      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: configure_with_swig
-      if: ${{ matrix.os == 'ubuntu-22.04' }}
-      run: |
-        pip install numpy
-        mkdir install${{ matrix.os }}Waf-Github
-        python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
-    - name: configure_without_swig
-      if: ${{ matrix.os == 'windows-2019' }}
-      run: |
-        pip install numpy
-        mkdir install${{ matrix.os }}Waf-Github
-        python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" ${{ matrix.debugging }}
-    - name: build
-      run: |
-        python waf build
-    - name: install
-      run: |
-        python waf install
-    - name: test
-      run: |
-        python waf install --alltests
+        ctest --output-on-failure --timeout $CTEST_TIMEOUT
+# Plan to remove waf soon - disable build and see who complains
+#   build-waf:
+#     strategy:
+#       matrix:
+#         os: [
+#             # BROKEN: windows-latest, 
+#             ubuntu-22.04]
+#         python-version: ['3.7']
+#         debugging: ['--enable-debugging', '']
+#     name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
+#     runs-on: ${{ matrix.os }}
+#     steps:
+#     - name: Skip Duplicate Actions
+#       uses: fkirc/skip-duplicate-actions@v5.3.1
+#     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+#     - name: Set up Python
+#       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
+#       with:
+#         python-version: ${{ matrix.python-version }}
+#     - name: configure_with_swig
+#       if: ${{ matrix.os == 'ubuntu-22.04' }}
+#       run: |
+#         pip install numpy
+#         mkdir install${{ matrix.os }}Waf-Github
+#         python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
+#     - name: configure_without_swig
+#       if: ${{ matrix.os == 'windows-latest' }}
+#       run: |
+#         pip install numpy
+#         mkdir install${{ matrix.os }}Waf-Github
+#         python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" ${{ matrix.debugging }}
+#     - name: build
+#       run: |
+#         python waf build
+#     - name: install
+#       run: |
+#         python waf install
+#     - name: test
+#       run: |
+#         python waf install --alltests
 

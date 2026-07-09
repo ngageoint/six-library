@@ -87,6 +87,9 @@ protected:
     static const char SFA_URI[];
 
     static
+    std::string getIsmPrefix(const xml::lite::Element* element);
+
+    static
     void getAttributeList(const xml::lite::Attributes& attributes,
                           const std::string& attributeName,
                           std::vector<std::string>& values);

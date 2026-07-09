@@ -53,6 +53,36 @@ DerivedXMLParser::DerivedXMLParser(Version siddVersion, std::unique_ptr<six::SIC
     logging::Logger& log) : XMLParser(versionToURI(siddVersion), false, log),
     mCommon(std::move(comParser)) { }
 
+std::string DerivedXMLParser::getIsmPrefix(const xml::lite::Element* element)
+{
+    // This assumes there will only be one ism namespace listed in the xml
+    // document.  It could be possible to have multiple namespaces listed but
+    // only one used.  That case would not be handled properly.
+    while (element->getParent())
+        element = element->getParent();
+
+    static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
+    static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
+    static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
+    static const xml::lite::Uri ism("urn:us:gov:ic:ism");
+
+    for (auto& attribute : element->getAttributes())
+    {
+        xml::lite::Uri uri;
+        attribute.getUri(uri);
+        if (uri != xmlns)
+            continue;
+
+        const xml::lite::Uri uriValue(attribute.getValue());
+        if ((uriValue == ism_201609) || (uriValue == ism_13) || (uriValue == ism))
+        {
+            return attribute.getLocalName();
+        }
+    }
+
+    return "";
+}
+
 void DerivedXMLParser::getAttributeList(
         const xml::lite::Attributes& attributes,
         const std::string& attributeName,
@@ -322,6 +352,10 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
     const XMLAttributes& classificationAttributes
         = classificationElem->getAttributes();
 
+    std::string prefix = getIsmPrefix(classificationElem);
+    if (!prefix.empty())
+        prefix = prefix + ":";
+
     //! from ism:ISMRootNodeAttributeGroup
     // Could do
     // toType<int32_t>(
@@ -331,81 +365,81 @@ void DerivedXMLParser::parseDerivedClassificationFromXML(
     //! from ism:ResourceNodeAttributeGroup
     // NOTE: "resouceElement" is fixed to true so it isn't saved here
     classification.createDate = toType<DateTime>(
-            classificationAttributes.getValue("ism:createDate"));
+            classificationAttributes.getValue(prefix + "createDate"));
     // optional
     getAttributeListIfExists(classificationAttributes,
-                             "ism:compliesWith",
+                             prefix + "compliesWith",
                              classification.compliesWith);
 
     //! from ism:SecurityAttributesGroup
     //  -- referenced in ism::ResourceNodeAttributeGroup
     classification.classification
-            = classificationAttributes.getValue("ism:classification");
+            = classificationAttributes.getValue(prefix + "classification");
     getAttributeList(classificationAttributes,
-        "ism:ownerProducer",
+        prefix + "ownerProducer",
         classification.ownerProducer);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:SCIcontrols",
+        prefix + "SCIcontrols",
         classification.sciControls);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:SARIdentifier",
+        prefix + "SARIdentifier",
         classification.sarIdentifier);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:disseminationControls",
+        prefix + "disseminationControls",
         classification.disseminationControls);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:FGIsourceOpen", classification.fgiSourceOpen);
+        prefix + "FGIsourceOpen", classification.fgiSourceOpen);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:FGIsourceProtected",
+        prefix + "FGIsourceProtected",
         classification.fgiSourceProtected);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:releasableTo",
+        prefix + "releasableTo",
         classification.releasableTo);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:nonICmarkings",
+        prefix + "nonICmarkings",
         classification.nonICMarkings);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:classifiedBy",
+        prefix + "classifiedBy",
         classification.classifiedBy);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:compilationReason",
+        prefix + "compilationReason",
         classification.compilationReason);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:derivativelyClassifiedBy",
+        prefix + "derivativelyClassifiedBy",
         classification.derivativelyClassifiedBy);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:classificationReason",
+        prefix + "classificationReason",
         classification.classificationReason);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:nonUSControls",
+        prefix + "nonUSControls",
         classification.nonUSControls);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:derivedFrom",
+        prefix + "derivedFrom",
         classification.derivedFrom);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:declassDate",
+        prefix + "declassDate",
         classification.declassDate);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:declassEvent",
+        prefix + "declassEvent",
         classification.declassEvent);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:declassException",
+        prefix + "declassException",
         classification.declassException);
 }
 

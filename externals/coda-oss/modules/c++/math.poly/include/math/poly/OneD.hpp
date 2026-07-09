@@ -155,17 +155,32 @@ OneD< math::linear::VectorN<3, double> >::derivative() const
 
 template<typename _T>
 _T
-OneD<_T>::velocity(double x) const
+OneD<_T>::velocity(double at) const
 {
-    return derivative()(x);
+    _T ret{};
+   double atPwr = 1.0;
+   const auto sz = mCoef.size();
+   for (size_t i = 1 ; i < sz; i++)
+   {
+      ret += static_cast<double>(i) * mCoef[i]*atPwr;
+      atPwr *= at;
+   }
+   return ret;
 }
 
 template<typename _T>
 _T
-OneD<_T>::acceleration(double x) const
+OneD<_T>::acceleration(double at) const
 {
-    return derivative().derivative()(x);
-
+    _T ret{};
+   double atPwr = 1.0;
+   const auto sz = mCoef.size();
+   for (size_t i = 2 ; i < sz; i++)
+   {
+      ret += static_cast<double>(i * (i - 1)) * mCoef[i]*atPwr;
+      atPwr *= at;
+   }
+   return ret;
 }
 
 template<typename _T>
