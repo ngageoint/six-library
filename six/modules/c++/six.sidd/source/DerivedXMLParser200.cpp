@@ -321,44 +321,48 @@ void DerivedXMLParser200::parseDerivedClassificationFromXML(
     const XMLAttributes& classificationAttributes
         = classificationElem->getAttributes();
 
+    std::string prefix = getIsmPrefix(classificationElem);
+    if (!prefix.empty())
+        prefix = prefix + ":";
+
     getAttributeList(classificationAttributes,
-        "ism:compliesWith",
+        prefix + "compliesWith",
         classification.compliesWith);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:exemptFrom",
+        prefix + "exemptFrom",
         classification.exemptFrom);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:joint",
+        prefix + "joint",
         classification.joint);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:atomicEnergyMarkings",
+        prefix + "atomicEnergyMarkings",
         classification.atomicEnergyMarkings);
     // optional
     getAttributeListIfExists(classificationAttributes,
-        "ism:displayOnlyTo",
+        prefix + "displayOnlyTo",
         classification.displayOnlyTo);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:noticeType",
+        prefix + "noticeType",
         classification.noticeType);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:noticeReason",
+        prefix + "noticeReason",
         classification.noticeReason);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:noticeDate",
+        prefix + "noticeDate",
         classification.noticeDate);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:unregisteredNoticeType",
+        prefix + "unregisteredNoticeType",
         classification.unregisteredNoticeType);
     // optional
     getAttributeIfExists(classificationAttributes,
-        "ism:externalNotice",
+        prefix + "externalNotice",
         classification.externalNotice);
 }
 

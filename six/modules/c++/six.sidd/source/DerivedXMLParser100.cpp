@@ -162,16 +162,20 @@ void DerivedXMLParser100::parseDerivedClassificationFromXML(
     const ElemAttributes& classificationAttributes
         = classificationElem->getAttributes();
 
+    std::string prefix = getIsmPrefix(classificationElem);
+    if (!prefix.empty())
+        prefix = prefix + ":";
+
     getAttributeListIfExists(classificationAttributes,
-                             "ism:compliesWith",
+                             prefix + "compliesWith",
                              classification.compliesWith);
     // optional
     getAttributeIfExists(classificationAttributes,
-                         "ism:typeOfExemptedSource",
+                         prefix + "typeOfExemptedSource",
                          classification.exemptedSourceType);
     // optional
     getAttributeIfExists(classificationAttributes,
-                         "ism:dateOfExemptedSource",
+                         prefix + "dateOfExemptedSource",
                          classification.exemptedSourceDate);
 }
 
