@@ -1,1 +1,0 @@
-CVEnumISMNotice.att = attribute CVEnumISMNotice { list { "FISA"?, "IMC"?, "CNWDI"?, "RD"?, "FRD"?, "DS"?, "LES"?, "LES-NF"?, "DSEN"?, "DoD-Dist-A"?, "DoD-Dist-B"?, "DoD-Dist-C"?, "DoD-Dist-D"?, "DoD-Dist-E"?, "DoD-Dist-F"?, "DoD-Dist-X"?, "US-Person"?, "pre13526ORCON"?, "POC"?, "COMSEC"?, "SSI"?, "RSEN"? }  } 

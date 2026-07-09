@@ -1,8 +1,22 @@
-cmake_minimum_required(VERSION 3.14)
-project(six-library)
+# - CODA-OSS CMake Build script.
+#
+# Author:  Scott A. Colcord
 
-if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
-    # we are the top-level project and are responsible for configuration
+cmake_minimum_required(VERSION 3.14)
+project(coda-oss VERSION 1.0.0)
+
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # build and package with conan
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+
+    include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
+endif()
+
+if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
+    # this is the top level project
+
+    # Allow other project to set different standard.
     set(CMAKE_CXX_STANDARD 14)
     set(CXX_STANDARD_REQUIRED true)
 
@@ -10,33 +24,35 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
     # we'll dial-back warnings as necessary.
     if (MSVC)
        add_compile_options(/WX) # warnings as errors
-       add_compile_options(/MP) # multi-processor build
-    elseif (UNIX)
+       add_compile_options(/MP) # multi-processor compile
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
        add_compile_options(-Werror) # warnings as errors
+       add_compile_options(-Wno-error=c++20-compat)
     endif()
 
-    if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
-        # use pre-built dependencies from conan packages
-        include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
-        find_package(coda-oss REQUIRED)
-        find_package(nitro REQUIRED)
-        include(CodaBuild)
-        coda_initialize_build()
-    else()
-        # build dependencies ourselves
-        set(CODA_OSS_DIR "coda-oss")
-        list(APPEND CMAKE_MODULE_PATH
-             "${CMAKE_CURRENT_SOURCE_DIR}/externals/${CODA_OSS_DIR}/cmake")
-        include(CodaBuild)
-        coda_initialize_build()
-        add_subdirectory("externals" EXCLUDE_FROM_ALL)
-    endif()
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+    include(CodaBuild)
+
+    coda_initialize_build()
+
+    # install our cmake build modules for downstream use
+    install(DIRECTORY "cmake/"
+            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake/"
+            FILES_MATCHING PATTERN "*.cmake")
+
+    # If the package version is defined, write a version file for find_package
+    set(version_file "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake")
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(${version_file} VERSION ${CMAKE_PROJECT_VERSION} COMPATIBILITY SameMajorVersion)
+    install(FILES ${version_file} DESTINATION "lib/cmake")
+    
 endif()
 
-# needed to run some unit tests from the build directory
-file(COPY "croppedNitfs"
-     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+add_subdirectory("modules")
 
-add_subdirectory(six)
-
-coda_generate_package_config()
+# generate package config, with the following paths exported
+set(JARS_DIR ${CODA_STD_PROJECT_LIB_DIR} CACHE INTERNAL
+    "path to installed jars, needed by downstream projects")
+set(SWIG_INCLUDE_DIR "${CODA_STD_PROJECT_INCLUDE_DIR}/swig" CACHE INTERNAL
+    "path to installed SWIG includes, needed by downstream projects")
+coda_generate_package_config(JARS_DIR SWIG_INCLUDE_DIR)
