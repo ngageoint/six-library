@@ -58,9 +58,6 @@ std::string DerivedXMLParser::getIsmPrefix(const xml::lite::Element* element)
     // This assumes there will only be one ism namespace listed in the xml
     // document.  It could be possible to have multiple namespaces listed but
     // only one used.  That case would not be handled properly.
-    while (element->getParent())
-        element = element->getParent();
-
     static const xml::lite::Uri xmlns("http://www.w3.org/2000/xmlns/");
     static const xml::lite::Uri ism_201609("urn:us:gov:ic:ism:201609");
     static const xml::lite::Uri ism_13("urn:us:gov:ic:ism:13");
@@ -79,6 +76,9 @@ std::string DerivedXMLParser::getIsmPrefix(const xml::lite::Element* element)
             return attribute.getLocalName();
         }
     }
+
+    if (element->getParent())
+        return getIsmPrefix(element->getParent());
 
     return "";
 }
