@@ -29,7 +29,7 @@
 #include <memory>
 #include <vector>
 #include <complex>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 #include <utility>
 #include <algorithm>

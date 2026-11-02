@@ -26,7 +26,7 @@
 
 #include <complex>
 #include <utility>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 #include <memory>
 

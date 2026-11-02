@@ -27,7 +27,7 @@
 
 #include <array>
 #include <memory>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <utility>
 #include <future>
 #include <std/mdspan>

@@ -30,7 +30,7 @@
 #include <std/optional>
 #include <cmath>
 #include <random>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <numeric>
 #include <future>
 

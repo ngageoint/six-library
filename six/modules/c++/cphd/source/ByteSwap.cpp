@@ -26,7 +26,7 @@
 #include <string>
 #include <memory>
 #include <type_traits>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 #include <tuple>
 #include <type_traits>

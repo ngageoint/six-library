@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <std/filesystem>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 
 #include <import/six.h>

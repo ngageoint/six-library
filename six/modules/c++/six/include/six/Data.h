@@ -27,7 +27,7 @@
 
 #include <vector>
 #include <memory>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 
 #include "six/Types.h"

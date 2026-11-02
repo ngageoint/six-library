@@ -22,7 +22,7 @@
 #ifndef __SIX_NITF_IMAGE_INPUT_STREAM_H__
 #define __SIX_NITF_IMAGE_INPUT_STREAM_H__
 
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <scene/sys_Conf.h>
 #include <import/six.h>
