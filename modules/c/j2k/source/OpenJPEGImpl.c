@@ -517,7 +517,6 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
     opj_codestream_info_v2_t* codeStreamInfo = NULL;
     NRT_BOOL rc = NRT_SUCCESS;
     OPJ_UINT32 tileWidth, tileHeight;
-    OPJ_UINT32 imageWidth, imageHeight;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
@@ -553,18 +552,6 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
         goto CATCH_ERROR;
     }
     if (image->numcomps == 0)
-    {
-        nrt_Error_init(error, "No image components found", NRT_CTXT,
-                       NRT_ERR_UNK);
-        goto CATCH_ERROR;
-    }
-
-    /* TODO: We need special handling that's not implemented in readTile() to
-     *       accommodate partial tiles with more than one band. */
-    imageWidth = image->x1 - image->x0;
-    imageHeight = image->y1 - image->y0;
-    if (image->numcomps > 1 &&
-        (imageWidth % tileWidth != 0 || imageHeight % tileHeight != 0))
     {
         nrt_Error_init(error, "No image components found", NRT_CTXT,
                        NRT_ERR_UNK);
@@ -951,27 +938,14 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
              */
             const OPJ_UINT32 thisTileWidth = tileX1 - tileX0;
             const OPJ_UINT32 thisTileHeight = tileY1 - tileY0;
-            if (thisTileWidth < tileWidth)
+            if (thisTileWidth < tileWidth || thisTileHeight < tileHeight)
             {
-                /* TODO: The current approach below only works for single band
-                 *       imagery.  For RGB data, I believe it is stored as all
-                 *       red, then all green, then all blue, so we would need
-                 *       a temp buffer rather than reusing the current buffer.
-                 */
-                if (nComponents != 1)
-                {
-                    nrt_Error_init(
-                        error,
-                        "Partial tile width not implemented for multi-band",
-                        NRT_CTXT, NRT_ERR_UNK);
-                    goto CATCH_ERROR;
-                }
-
                 numBitsPerPixel =
                     j2k_Container_getPrecision(impl->container, error);
                 numBytesPerPixel =
                     (numBitsPerPixel / 8) + (numBitsPerPixel % 8 != 0);
-                fullBufSize = ((uint64_t)tileWidth) * thisTileHeight * numBytesPerPixel;
+                fullBufSize = ((uint64_t)tileWidth) * tileHeight *
+                        numBytesPerPixel * nComponents;
             }
             else
             {
@@ -996,7 +970,8 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                 goto CATCH_ERROR;
             }
 
-            if (thisTileWidth < tileWidth)
+            if (buf != NULL &&
+                (thisTileHeight < tileHeight || thisTileWidth < tileWidth))
             {
                 /* We have a tile that isn't as wide as it "should" be
                  * Need to add in the extra columns ourselves.  By marching
@@ -1005,19 +980,29 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                 const size_t srcStride = thisTileWidth * numBytesPerPixel;
                 const size_t destStride = tileWidth * numBytesPerPixel;
                 const size_t numLeftoverBytes = destStride - srcStride;
-                OPJ_UINT32 lastRow = thisTileHeight - 1;
-                size_t srcOffset = lastRow * srcStride;
-                size_t destOffset = lastRow * destStride;
-                OPJ_UINT32 ii;
-                uint8_t* bufPtr = buf != NULL ? *buf : NULL;
-
-                for (ii = 0;
-                     ii < thisTileHeight;
-                     ++ii, srcOffset -= srcStride, destOffset -= destStride)
+                int comp;
+                for (comp = nComponents - 1; comp >= 0; comp--)
                 {
-                    uint8_t* const dest = bufPtr + destOffset;
-                    memmove(dest, bufPtr + srcOffset, srcStride);
-                    memset(dest + srcStride, 0, numLeftoverBytes);
+                    size_t srcOffset =
+                            (comp * thisTileHeight + thisTileHeight - 1) *
+                            srcStride;
+                    size_t destOffset =
+                            (comp * tileHeight + thisTileHeight - 1) *
+                            destStride;
+                    OPJ_UINT32 ii;
+                    uint8_t* bufPtr = *buf;
+
+                    // Zero remaining rows in block (if any)
+                    memset(bufPtr + destOffset + destStride,
+                           0,
+                           (tileHeight - thisTileHeight) * destStride);
+                    for (ii = 0; ii < thisTileHeight;
+                         ++ii, srcOffset -= srcStride, destOffset -= destStride)
+                    {
+                        uint8_t* const dest = bufPtr + destOffset;
+                        memmove(dest, bufPtr + srcOffset, srcStride);
+                        memset(dest + srcStride, 0, numLeftoverBytes);
+                    }
                 }
             }
         }

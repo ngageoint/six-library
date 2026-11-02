@@ -135,7 +135,6 @@ struct NITRO_NITFCPP_API ExtensionsIterator
 
 private:
     mutable nitf_ExtensionsIterator handle;
-    nitf_Error error;
 };
 
 

@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <memory>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include "TestCase.h"
 
@@ -103,7 +103,7 @@ TEST_CASE(testExceptionWithBacktrace)
     }
     catch (const except::Throwable& t)
     {
-        TEST_ASSERT_EQ(std::ssize(t.getBacktrace()), 0);
+        TEST_ASSERT_EQ(coda_oss::ssize(t.getBacktrace()), 0);
         s = t.toString();
         what = t.what();
     }

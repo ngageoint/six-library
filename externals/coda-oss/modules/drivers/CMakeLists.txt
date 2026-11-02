@@ -9,6 +9,7 @@ if (MSVC)
     string(REGEX REPLACE "/W[0-4]" "/W0" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 elseif (UNIX)
     add_compile_options(-w) # "Inhibit all warning messages"
+    add_compile_options(-Wno-error=deprecated-declarations)  # Don't care about deprecations in external code
 endif()
 
 #add_subdirectory("curl") # this is handled in coda_find_system_dependencies
@@ -22,7 +23,7 @@ if(NOT CONAN_PACKAGE_NAME)
     endif()
 endif()
 
-#add_subdirectory("gsl") # nothing to do
+add_subdirectory("gsl")
 
 set(ENABLE_J2K ON CACHE BOOL "enable J2K library")
 if(NOT CONAN_PACKAGE_NAME)
@@ -77,4 +78,9 @@ set(CODA_HDF5_HOME "" CACHE PATH "path to pre-existing HDF5 installation, if not
 if (CODA_ENABLE_HDF5 OR CODA_HDF5_HOME)
     add_subdirectory("hdf5")
     add_subdirectory("highfive")
+endif()
+
+option(ENABLE_NLOHMANN "enable nlohmann" ON)
+if(ENABLE_NLOHMANN)
+    add_subdirectory(nlohmann)
 endif()

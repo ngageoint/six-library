@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __TIFF_FILE_READER_H__
 #define __TIFF_FILE_READER_H__
 
@@ -64,7 +63,7 @@ struct CODA_OSS_API FileReader
     }
 
     //! Destructor
-    ~FileReader()
+    ~FileReader() noexcept
     {
         close();
     }

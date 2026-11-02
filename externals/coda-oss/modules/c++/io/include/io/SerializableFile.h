@@ -48,7 +48,7 @@ public:
     {
     }
     //! Deconstructor
-    virtual ~SerializableFile()
+    virtual ~SerializableFile() noexcept
     {
     }
 

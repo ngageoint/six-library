@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * logging-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -57,7 +58,7 @@ bool Handler::handle(const LogRecord* record)
     if (filter(record))
     {
         //acquire lock
-        mt::CriticalSection<sys::Mutex> lock(&mHandlerLock);
+        mt::CriticalSection<decltype(mHandlerLock)> lock(&mHandlerLock);
         try
         {
             emitRecord(record);

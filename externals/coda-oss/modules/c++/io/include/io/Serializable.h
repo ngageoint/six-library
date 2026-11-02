@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __IO_SERIALIZABLE_H__
 #define __IO_SERIALIZABLE_H__
 

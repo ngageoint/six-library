@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * logging-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -111,7 +112,7 @@ void StreamHandler::write(const std::string& str)
     if (!str.empty())
     {
         //acquire lock
-        mt::CriticalSection<sys::Mutex> lock(&mHandlerLock);
+        mt::CriticalSection<decltype(mHandlerLock)> lock(&mHandlerLock);
 
         // write to stream
         mStream->write(str);

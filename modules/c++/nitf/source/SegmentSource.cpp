@@ -22,7 +22,7 @@
 
 #include "nitf/SegmentSource.hpp"
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include "nitf/System.hpp"
 

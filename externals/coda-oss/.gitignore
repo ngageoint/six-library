@@ -4,9 +4,9 @@
 __pycache__/
 
 # Build artifacts
-install/
-install-*/
+install*/
 target/
+build*/
 
 # Conan
 modules/drivers/**/build
@@ -52,5 +52,11 @@ project.sln
 **/x64/
 *.vcxproj.user
 
+# VSCode
+.vscode/
+
 # Unit-tests
 TEST_*_TMP*.*
+
+.cache/
+.zed/

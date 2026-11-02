@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,14 +24,17 @@
 #ifndef __MT_REQUEST_QUEUE_H__
 #define __MT_REQUEST_QUEUE_H__
 
-#include <queue>
+#include <deque>
 #include "sys/Thread.h"
 #include "sys/ConditionVar.h"
 #include "sys/Mutex.h"
 #include "sys/Dbg.h"
 
+
 namespace mt
 {
+
+
 
 /*!
  *
@@ -51,6 +55,7 @@ namespace mt
 template<typename T>
 struct RequestQueue
 {
+public:
     //! Default constructor
     RequestQueue() :
         mAvailableSpace(&mQueueLock),
@@ -58,14 +63,14 @@ struct RequestQueue
     {
     }
 
-    // Put a (copy of, unless T is a pointer) request on the queue
-    void enqueue(T request)
+    //! Puts the request at the front of the queue
+    void priorityEnqueue(T request)
     {
 #ifdef THREAD_DEBUG
         dbg_printf("Locking (enqueue)\n");
 #endif
         mQueueLock.lock();
-        mRequestQueue.push(request);
+        mRequestQueue.push_front(request);
 #ifdef THREAD_DEBUG
         dbg_printf("Unlocking (enqueue), new size [%d]\n", mRequestQueue.size());
 #endif
@@ -74,7 +79,23 @@ struct RequestQueue
         mAvailableItems.signal();
     }
 
-    // Retrieve (by reference) T from the queue. blocks until ok
+    //! Put a (copy of, unless T is a pointer) request on the queue
+    void enqueue(T request)
+    {
+#ifdef THREAD_DEBUG
+        dbg_printf("Locking (enqueue)\n");
+#endif
+        mQueueLock.lock();
+        mRequestQueue.push_back(request);
+#ifdef THREAD_DEBUG
+        dbg_printf("Unlocking (enqueue), new size [%d]\n", mRequestQueue.size());
+#endif
+        mQueueLock.unlock();
+
+        mAvailableItems.signal();
+    }
+
+    //! Retrieve (by reference) T from the queue. blocks until ok
     void dequeue(T& request)
     {
 #ifdef THREAD_DEBUG
@@ -87,7 +108,7 @@ struct RequestQueue
         }
 
         request = mRequestQueue.front();
-        mRequestQueue.pop();
+        mRequestQueue.pop_front();
 
 #ifdef THREAD_DEBUG
         dbg_printf("Unlocking (dequeue), new size [%d]\n", mRequestQueue.size());
@@ -95,14 +116,64 @@ struct RequestQueue
         mQueueLock.unlock();
         mAvailableSpace.signal();
     }
+    
+    //! Retrieves a copy of the n'th item from the front of the queue (0 = first item) without removing it
+    T peek(size_t n = 0)
+    {
+        T request;
+#ifdef THREAD_DEBUG
+        dbg_printf("Locking (peek)\n");
+#endif
+        mQueueLock.lock();
+        if (mRequestQueue.size() > n)
+        {
+            request = mRequestQueue[n];
+        }
+        else
+        {
+            mQueueLock.unlock();
+            throw except::Exception(Ctxt("Request queue cannot peek beyond end of queue"));
+        }
+        mQueueLock.unlock();
+#ifdef THREAD_DEBUG
+        dbg_printf("Unlocking (peek)\n");
+#endif
 
-    // Check to see if its empty
-    bool isEmpty() const
+        return request;
+    }
+
+    //! Lets the n'th request from the front cut in line and dequeue
+    //! NOTE: The RequestQueue does not prevent changes to the queue between
+    //! when peak() and cutAndDequeue() are called
+    void cutAndDequeue(size_t n, T& request)
+    {
+#ifdef THREAD_DEBUG
+        dbg_printf("Locking (peek)\n");
+#endif
+        mQueueLock.lock();
+        if (mRequestQueue.size() > n)
+        {
+            request = mRequestQueue[n];
+            mRequestQueue.erase(mRequestQueue.begin()+n);
+        }
+        else
+        {
+            mQueueLock.unlock();
+            throw except::Exception(Ctxt("Request queue cannot access beyond end of queue"));
+        }
+        mQueueLock.unlock();
+#ifdef THREAD_DEBUG
+        dbg_printf("Unlocking (peek)\n");
+#endif
+    }
+
+    //! Check to see if its empty
+    inline bool isEmpty() const
     {
         return mRequestQueue.empty();
     }
 
-    // Check the length
+    //! Check the length
     int length() const
     {
         return mRequestQueue.size();
@@ -116,7 +187,7 @@ struct RequestQueue
         mQueueLock.lock();
         while (!isEmpty())
         {
-            mRequestQueue.pop();
+            mRequestQueue.pop_front();
         }
 
 #ifdef THREAD_DEBUG
@@ -126,12 +197,53 @@ struct RequestQueue
         mAvailableSpace.signal();
     }
 
+    //! Aggregates ProcFunctor of all of the elements of the queue
+    template <typename ProcFunctor, typename AggregateType>
+    AggregateType aggregate(const ProcFunctor& aggregate, const AggregateType& initial)
+    {
+        mQueueLock.lock();
+        AggregateType cumulative = initial;
+        for (typename std::deque<T>::iterator iter = mRequestQueue.begin();
+             iter != mRequestQueue.end();
+             ++iter)
+        {
+            cumulative = aggregate(*iter, cumulative);
+        }
+
+        mQueueLock.unlock();
+        return cumulative;
+    }
+
+    //! Remove the given request from the queue
+    // Does nothing if the given request is not in the queue
+    // \return true if an item was removed, false otherwise
+    template <typename CmpFunctor>
+    bool removeRequest(const CmpFunctor& compare)
+    {
+        mQueueLock.lock();
+        for (typename std::deque<T>::iterator iter = mRequestQueue.begin();
+             iter != mRequestQueue.end();
+             ++iter)
+        {
+            if (compare(*iter))
+            {
+                mRequestQueue.erase(iter);
+                mQueueLock.unlock();
+                mAvailableSpace.signal();
+                return true;
+            }
+        }
+        mQueueLock.unlock();
+        return false;
+    }
+
+private:
     RequestQueue(const RequestQueue&) = delete;
     RequestQueue& operator=(const RequestQueue&) = delete;
 
 private:
     //! The internal data structure
-    std::queue<T> mRequestQueue;
+    std::deque<T> mRequestQueue;
     //! The synchronizer
     sys::Mutex mQueueLock;
     //! This condition is "is there space?"

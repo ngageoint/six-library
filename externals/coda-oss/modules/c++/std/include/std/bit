@@ -20,7 +20,6 @@
  */
 #ifndef CODA_OSS_std_bit_INCLUDED_
 #define CODA_OSS_std_bit_INCLUDED_
-#pragma once
 
 #include "coda_oss/bit.h"
 #include "coda_oss/CPlusPlus.h"

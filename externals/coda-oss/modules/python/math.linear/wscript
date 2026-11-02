@@ -1,4 +1,0 @@
-distclean = options = configure = lambda p: None
-
-def build(bld):
-    bld.swigModule(name = 'math.linear', use = 'math.linear-c++ except-python types-python config-python', package='coda')

@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * logging-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -28,6 +29,8 @@
 #define CODA_OSS_logging_Handler_h_INCLUDED_
 
 #include <string>
+#include <mutex>
+
 #include "config/Exports.h"
 #include "logging/LogRecord.h"
 #include "logging/Formatter.h"
@@ -94,7 +97,7 @@ protected:
     virtual void emitRecord(const LogRecord* record) = 0;
 
     LogLevel mLevel = LogLevel::LOG_NOTSET;
-    sys::Mutex mHandlerLock;
+    std::recursive_mutex mHandlerLock;
     Formatter* mFormatter = nullptr;
     StandardFormatter mDefaultFormatter; 
 };

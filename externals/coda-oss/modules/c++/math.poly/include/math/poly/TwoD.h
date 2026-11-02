@@ -58,7 +58,8 @@ protected:
 
 public:
 
-    std::vector<OneD<_T> >& coeffs(){ return mCoef; }
+    std::vector<OneD<_T> >& coeffs() { return mCoef; }
+    const std::vector<OneD<_T> >& coeffs() const { return mCoef; }
 
     //! The polynomial is invalid (i.e. orderX() and orderY() will throw)
     TwoD() {}  // = default; // error w/ICC and "const" member data

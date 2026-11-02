@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * logging-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -239,3 +240,16 @@ void logging::Logger::reset()
     }
     mHandlers.clear();
 }
+
+logging::LogLevel logging::Logger::getLevel()
+{
+    LogLevel level = LogLevel::LOG_NOTSET;
+    if (!mHandlers.empty())
+    {
+        Handler_T handler = mHandlers.front();
+        level = handler.first->getLevel();
+    }
+
+    return level;
+}
+

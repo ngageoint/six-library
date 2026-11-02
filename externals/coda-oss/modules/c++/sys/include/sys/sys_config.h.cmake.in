@@ -1,6 +1,7 @@
 #ifndef _@tgt_munged_name@_CONFIG_H_
 #define _@tgt_munged_name@_CONFIG_H_
 
+#cmakedefine01 HAVE_BUILTIN_CPU_INIT 
 #cmakedefine HAVE_PTHREAD_H @HAVE_PTHREAD_H@
 #cmakedefine HAVE_EXECINFO_H @HAVE_EXECINFO_H@
 #cmakedefine HAVE_CLOCK_GETTIME @HAVE_CLOCK_GETTIME@

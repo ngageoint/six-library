@@ -22,7 +22,6 @@
  */
 
 
-#pragma once
 #ifndef CODA_OSS_import_std_h_INCLUDED_
 #define CODA_OSS_import_std_h_INCLUDED_
 
@@ -102,7 +101,6 @@ CODA_OSS_disable_warning_system_header_push
 #include <coda_oss/span.h>
 #include <coda_oss/string.h>
 #include <coda_oss/type_traits.h>
-#include <coda_oss/mdspan.h>
 
 CODA_OSS_disable_warning_pop
 

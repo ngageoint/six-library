@@ -50,7 +50,7 @@ struct CODA_OSS_API Range
         mNumElements(numElements)
     {
     }
-
+    // TODO: remove "m" prefix since these are public
     size_t mStartElement = std::numeric_limits<size_t>::max();
     size_t mNumElements = 0;
 

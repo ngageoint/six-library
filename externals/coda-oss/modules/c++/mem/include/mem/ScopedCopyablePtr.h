@@ -22,7 +22,6 @@
 
 #ifndef CODA_OSS_mem_ScopedCopyablePtr_h_INCLUDED_
 #define CODA_OSS_mem_ScopedCopyablePtr_h_INCLUDED_
-#pragma once
 
 #include "mem/ScopedPtr.h"
 

@@ -20,7 +20,8 @@
  *
  */
 
-#pragma once
+#ifndef CODA_OSS_mt_algorithm_h_INCLUDED_
+#define CODA_OSS_mt_algorithm_h_INCLUDED_
 
 #include <algorithm>
 #include <iterator>
@@ -97,3 +98,4 @@ inline OutputIt Transform_par(InputIt first1, InputIt last1, OutputIt d_first, U
 }
 
 }
+#endif

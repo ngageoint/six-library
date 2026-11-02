@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
 
@@ -108,8 +107,8 @@ struct CODA_OSS_API ValidatorXerces : public ValidatorInterface
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
-    ValidatorXerces(ValidatorXerces&&) = default;
-    ValidatorXerces& operator=(ValidatorXerces&&) = default;
+    ValidatorXerces(ValidatorXerces&&) = delete;
+    ValidatorXerces& operator=(ValidatorXerces&&) = delete;
 
     using ValidatorInterface::validate;
 

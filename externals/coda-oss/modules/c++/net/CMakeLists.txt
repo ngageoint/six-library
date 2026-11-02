@@ -18,4 +18,11 @@ if (TARGET re-c++)
         FILTER_LIST "AckMulticastSender.cpp" "AckMulticastSubscriber.cpp"
                     "MulticastSender.cpp" "MulticastSubscriber.cpp"
                     "SerializableTestClient.cpp")
+    
+    if (CURL_FOUND)
+        coda_add_tests(
+            MODULE_NAME ${MODULE_NAME}
+            DIRECTORY "unittests"
+            UNITTEST)
+    endif()
 endif()

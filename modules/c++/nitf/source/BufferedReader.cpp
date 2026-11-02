@@ -26,7 +26,7 @@
 
 #include <chrono>
 
-#include "gsl/gsl.h"
+#include "gsl/narrow"
 
 namespace nitf
 {

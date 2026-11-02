@@ -33,7 +33,7 @@
 #include <io/TempFile.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include <import/nrt.h>
 #include <nitf/ImageBlocker.hpp>

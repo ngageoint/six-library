@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -99,6 +99,48 @@ void sys::File::readInto(void* buffer, size_t size)
     }
 }
 
+void sys::File::readAtInto(sys::Off_T offset, void* buffer, size_t size)
+{
+    static const size_t MAX_READ_SIZE = std::numeric_limits<DWORD>::max();
+    size_t bytesRead = 0;
+    size_t bytesRemaining = size;
+    OVERLAPPED overlapped;
+
+    ::memset(&overlapped, 0, sizeof(OVERLAPPED));
+    sys::byte* bufferPtr = static_cast<sys::byte*>(buffer);
+
+    while (bytesRead < size)
+    {
+        // Determine how many bytes to read
+        const DWORD bytesToRead =
+                static_cast<DWORD>(std::min(MAX_READ_SIZE, bytesRemaining));
+
+        // Read from file
+        DWORD bytesThisRead = 0;
+        sys::Off_T curOffset = offset + bytesRead;
+        overlapped.Offset = curOffset & 0xFFFFFFFF;
+        overlapped.OffsetHigh = curOffset >> 32;
+        if (!ReadFile(mHandle,
+                      bufferPtr + bytesRead,
+                      bytesToRead,
+                      &bytesThisRead,
+                      &overlapped))
+        {
+            throw sys::SystemException(Ctxt("Error reading from file"));
+        }
+        else if (bytesThisRead == 0)
+        {
+            //! ReadFile does not fail when finding the EOF --
+            //  instead it reports 0 bytes read, so this stops an infinite loop
+            //  from Unexpected EOF
+            throw sys::SystemException(Ctxt("Unexpected end of file"));
+        }
+
+        bytesRead += bytesThisRead;
+        bytesRemaining -= bytesThisRead;
+    }
+}
+
 void sys::File::writeFrom(const void* buffer, size_t size)
 {
     static const size_t MAX_WRITE_SIZE = std::numeric_limits<DWORD>::max();
@@ -121,7 +163,7 @@ void sys::File::writeFrom(const void* buffer, size_t size)
                        &bytesThisWrite,
                        nullptr))
         {
-            throw sys::SystemException(Ctxt("Writing from file"));
+            throw sys::SystemException(Ctxt("Writing to file"));
         }
 
         // Accumulate this write until we are done

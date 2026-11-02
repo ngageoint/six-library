@@ -22,7 +22,6 @@
 
 #ifndef __NET_SSL_CONNECTION_CLIENT_FACTORY_H__
 #define __NET_SSL_CONNECTION_CLIENT_FACTORY_H__
-#pragma once
 
 /*!
  *  \file SSLConnectionClientFactory.h
@@ -65,12 +64,19 @@ public:
                                const std::string& caList = "root.pem",
                                bool serverAuth = true, 
                                char* ciphers = nullptr) : 
+#if defined(USE_OPENSSL)
         mClientAuthentication(clientAuth),
+#endif
         mKeyfile(keyfile), mPass(password),
-        mCAList(caList), 
-        mServerAuthentication(serverAuth),
+        mCAList(caList)
+#if defined(USE_OPENSSL)
+        , mServerAuthentication(serverAuth),
         mCiphers(ciphers)
+#endif
     { 
+#if !defined(USE_OPENSSL)
+        (void)clientAuth; (void)serverAuth; (void)ciphers;
+#endif
         initializeContext(); 
     }
     
@@ -108,7 +114,9 @@ private:
     SSL_CTX* mCtx;
 #   endif
     //! Flag for client authentication
+#if defined(USE_OPENSSL)
     bool mClientAuthentication;
+#endif
     //! The key file (.pem)
     std::string mKeyfile;
     //! The current password
@@ -116,9 +124,11 @@ private:
     //! The Trusted CA list (.pem)
     std::string mCAList;
     //! Flag for server authentication
+#if defined(USE_OPENSSL)
     bool mServerAuthentication;
     //! The cipher list
     char *mCiphers;
+#endif
 };
 
 }

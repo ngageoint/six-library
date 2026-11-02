@@ -26,8 +26,8 @@
 #include <math/poly/Fixed1D.h>
 #include "TestCase.h"
 
-static const size_t ORDER = 5;
-typedef math::poly::Fixed1D<ORDER, double> TestFixed1D;
+template<size_t ORDER>
+using Fixed1D = math::poly::Fixed1D<ORDER, double>;
 
 double getRand()
 {
@@ -37,9 +37,10 @@ double getRand()
     return (50.0 * rand() / RAND_MAX - 25.0);
 }
 
-TestFixed1D getRandPoly()
+template<size_t ORDER>
+Fixed1D<ORDER> getRandPoly()
 {
-    TestFixed1D poly;
+    Fixed1D<ORDER> poly;
     for (size_t ii = 0; ii <= ORDER; ++ii)
     {
         poly[ii] = getRand();
@@ -62,11 +63,11 @@ TEST_CASE(testScaleVariable)
     std::vector<double> value;
     getRandValues(value);
 
-    TestFixed1D poly(getRandPoly());
+    auto poly(getRandPoly<5>());
 
     // transformedPoly = poly(x * scale, y * scale)
     const double scale(13.34);
-    TestFixed1D transformedPoly = poly.scaleVariable(scale);
+    auto transformedPoly = poly.scaleVariable(scale);
 
     for (size_t ii = 0; ii < value.size(); ++ii)
     {
@@ -80,6 +81,80 @@ TEST_CASE(testScaleVariable)
     }
 }
 
+TEST_CASE(testVelocity)
+{
+    std::vector<double> values;
+    getRandValues(values);
+
+    // Constant poly should have 0 velocity
+    auto constPoly(getRandPoly<0>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(constPoly.velocity(val), 0.0);
+    }
+
+    // Linear poly should have constant velocity
+    auto linearPoly(getRandPoly<1>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(linearPoly.velocity(val), linearPoly[1]);
+    }
+
+    // Check quadratic and cubic against the derivative
+    auto quadraticPoly(getRandPoly<2>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(quadraticPoly.velocity(val), quadraticPoly.derivative()(val));
+    }
+
+    auto cubicPoly(getRandPoly<3>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(cubicPoly.velocity(val), cubicPoly.derivative()(val));
+    }
+}
+
+TEST_CASE(testAcceleration)
+{
+    std::vector<double> values;
+    getRandValues(values);
+
+    // Constant and linear polys should have 0 acceleration
+    auto constPoly(getRandPoly<0>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(constPoly.acceleration(val), 0.0);
+    }
+
+    auto linearPoly(getRandPoly<1>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(linearPoly.acceleration(val), 0.0);
+    }
+
+    // Quadratic poly should have constant acceleration
+    auto quadraticPoly(getRandPoly<2>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(quadraticPoly.acceleration(val), 2 * quadraticPoly[2]);
+    }
+    
+    // Check cubic and quartic against the 2nd derivative
+    auto cubicPoly(getRandPoly<3>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(cubicPoly.acceleration(val), cubicPoly.derivative().derivative()(val));
+    }
+
+    auto quarticPoly(getRandPoly<4>());
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(quarticPoly.acceleration(val), quarticPoly.derivative().derivative()(val));
+    }
+}
+
 TEST_MAIN(
     TEST_CHECK(testScaleVariable);
+    TEST_CHECK(testVelocity);
+    TEST_CHECK(testAcceleration);
 )

@@ -23,7 +23,6 @@
 
 #ifndef CODA_OSS_sys_ConditionVarWin32_h_INCLUDED_
 #define CODA_OSS_sys_ConditionVarWin32_h_INCLUDED_
-#pragma once
 
 #include <new>
 

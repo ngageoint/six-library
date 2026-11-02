@@ -12,17 +12,22 @@ if (MSVC)
     string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}") # add_compile_options(/W4)
 
     add_compile_options(/wd4996) # '...': This function or variable may be unsafe.
-elseif (UNIX)
+elseif (CMAKE_C_COMPILER_ID MATCHES "GNU|CLang")
     #add_compile_options(-Wall -pedantic -Wextra)
     add_compile_options(-Wall -Wextra)
 
     add_compile_options(-Wno-implicit-fallthrough)
     add_compile_options(-Wno-unused-function)
     add_compile_options(-Wno-sign-compare -Wno-pointer-sign)
-    add_compile_options(-Wno-missing-field-initializers -Wno-maybe-uninitialized)
+    add_compile_options(-Wno-missing-field-initializers)
     add_compile_options(-Wno-unused-parameter)
     add_compile_options(-Wno-cast-function-type)
     add_compile_options(-Wno-misleading-indentation)
+    
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_compile_options(-Wno-maybe-uninitialized)
+    endif()
+
 endif()
 
 add_subdirectory(nrt)

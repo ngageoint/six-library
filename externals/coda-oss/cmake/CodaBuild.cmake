@@ -166,6 +166,9 @@ macro(coda_initialize_build)
         # catch exceptions that bubble through a C-linkage layer
         string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         add_compile_options(/EHs /bigobj)
+        # See https://learn.microsoft.com/en-us/cpp/build/reference/zc-cplusplus?view=msvc-170
+        # Since we depend on the value of the __cplusplus macro, MSVC needs this option to set it "correctly"
+        add_compile_options(/Zc:__cplusplus)
 
         add_definitions(
             -DWIN32_LEAN_AND_MEAN
@@ -275,14 +278,8 @@ function(coda_generate_package_config)
             "cmake/${CMAKE_PROJECT_NAME}Config.cmake.in"
             "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
             INSTALL_DESTINATION "lib/cmake"
-            PATH_VARS ${ARGN}
-        )
-        #write_basic_package_version_file(
-        #    ${CMAKE_CURRENT_BINARY_DIR}/FooConfigVersion.cmake
-        #    VERSION 1.2.3
-        #    COMPATIBILITY SameMajorVersion )
+            PATH_VARS ${ARGN})
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
-                #"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake"
                 DESTINATION "lib/cmake")
     endif()
 endfunction()
@@ -314,25 +311,46 @@ function(coda_fetch_driver)
         message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
     endif()
 
-    set(target_name ${CMAKE_PROJECT_NAME}_${ARG_NAME})
-    # Use 'FetchContent' to download and unpack the files.  Set it up here.
-    FetchContent_Declare(${target_name}
-        URL "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_ARCHIVE}"
-        URL_HASH ${ARG_HASH}
-    )
-    FetchContent_GetProperties(${target_name})
-    # The returned properties use the lower-cased name
-    string(TOLOWER ${target_name} target_name_lc)
-    if (NOT ${target_name_lc}_POPULATED) # This makes sure we only fetch once.
-        message("Populating content for external dependency ${driver_name}")
-        # Now (at configure time) unpack the content.
-        FetchContent_Populate(${target_name})
-        # Remember where we put stuff
-        set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}"
-            CACHE INTERNAL "source directory for ${target_name_lc}")
-        set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}"
-            CACHE INTERNAL "binary directory for ${target_name_lc}")
-    endif()
+    # Use a new policy context so we can set some policy values that prevent
+    # warning messages from printing
+    cmake_policy(PUSH)
+        if (POLICY CMP0135)
+            # Newer cmake versions (>=3.24) change how the timestamps of
+            # extracted files are set.  The new behavior is fine but a warning
+            # is printed if we do not either explicitly set the policy or set
+            # the minimum cmake version.
+            cmake_policy(SET CMP0135 NEW)
+        endif()
+        if (POLICY CMP0169)
+            # Newer cmake versions (>=3.30) have deprecated
+            # FetchContent_Populate and suggest using a different pattern.
+            # The _Populate version calls add_directory() which we do not want,
+            # so we cannot use it.  Until we find a different solution, just
+            # ignore this warning.
+            cmake_policy(SET CMP0169 OLD)
+        endif()
+
+        set(target_name ${CMAKE_PROJECT_NAME}_${ARG_NAME})
+        # Use 'FetchContent' to download and unpack the files.  Set it up here.
+        FetchContent_Declare(${target_name}
+            URL "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_ARCHIVE}"
+            URL_HASH ${ARG_HASH}
+        )
+        FetchContent_GetProperties(${target_name})
+        # The returned properties use the lower-cased name
+        string(TOLOWER ${target_name} target_name_lc)
+        if (NOT ${target_name_lc}_POPULATED) # This makes sure we only fetch once.
+            message("Populating content for external dependency ${driver_name}")
+            # Now (at configure time) unpack the content.
+            FetchContent_Populate(${target_name})
+            # Remember where we put stuff
+            set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}"
+                CACHE INTERNAL "source directory for ${target_name_lc}")
+            set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}"
+                CACHE INTERNAL "binary directory for ${target_name_lc}")
+        endif()
+    cmake_policy(POP)
+
 endfunction()
 
 

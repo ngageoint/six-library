@@ -21,7 +21,7 @@
  */
 
 #include <tuple> // std::ignore
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <types/Complex.h>
 #include <config/compiler_extensions.h>
@@ -64,9 +64,9 @@ TEST_CASE(testUpper)
     TEST_ASSERT_EQ(s, "TEST-SOMETHING1");
 
     //#if _WIN32
-    //s = "<×àa`öo\"øo/þb÷>";
+    //s = "<Ã—Ã a`Ã¶o\"Ã¸o/Ã¾bÃ·>";
     //str::w1252_upper(s);
-    //TEST_ASSERT_EQ(s, "<×ÀA`ÖO\"ØO/ÞB÷>");
+    //TEST_ASSERT_EQ(s, "<Ã—Ã€A`Ã–O\"Ã˜O/ÃžBÃ·>");
     //#endif
 }
 
@@ -102,9 +102,9 @@ TEST_CASE(testLower)
     TEST_ASSERT_EQ(s, "test1");
 
     //#if _WIN32
-    //s = "[×ÀÖØÞ÷]";
+    //s = "[Ã—Ã€Ã–Ã˜ÃžÃ·]";
     //str::w1252_lower(s);
-    //TEST_ASSERT_EQ(s, "[×àöøþ÷]");
+    //TEST_ASSERT_EQ(s, "[Ã—Ã Ã¶Ã¸Ã¾Ã·]");
     //#endif
 }
 
@@ -188,9 +188,9 @@ TEST_CASE(testSplit)
 {
     std::string s = "space delimited values are the best!";
     std::vector<std::string> parts = str::split(s, " ");
-    TEST_ASSERT_EQ(std::ssize(parts), 6);
+    TEST_ASSERT_EQ(coda_oss::ssize(parts), 6);
     parts = str::split(s, " ", 3);
-    TEST_ASSERT_EQ(std::ssize(parts), 3);
+    TEST_ASSERT_EQ(coda_oss::ssize(parts), 3);
     TEST_ASSERT_EQ(parts[2], "values are the best!");
 }
 

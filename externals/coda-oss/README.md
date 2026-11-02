@@ -11,6 +11,8 @@
 CODA is a set of modules, and each module, while complimentary to one another, has
 a very specific and largely independent purpose.
 
+CODA follows [Semantic Versioning](https://semver.org/).
+
 Building CODA
 --------------
 

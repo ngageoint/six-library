@@ -1,9 +1,8 @@
 set(MODULE_NAME xml.lite)
 
 if(ENABLE_XML)
-    if (UNIX)
-       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-zero-as-null-pointer-constant")
-       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-suggest-override")
+    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+       add_compile_options(-Wno-zero-as-null-pointer-constant -Wno-suggest-override)
     endif()
 
     if(CONAN_PACKAGE_NAME)
@@ -34,6 +33,12 @@ if(ENABLE_XML)
         MODULE_NAME ${MODULE_NAME}
         DIRECTORY "unittests"
         UNITTEST)
+
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/unittests/"
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/unittests"
+        FILES_MATCHING PATTERN "*.xml")
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/unittests/embedded_xml.bin"
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/unittests")
 else()
     message("${MODULE_NAME} will not be built since XML is not enabled")
 endif()

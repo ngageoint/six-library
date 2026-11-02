@@ -21,7 +21,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_units_Angles_h_INCLUDED_
 #define CODA_OSS_units_Angles_h_INCLUDED_
 

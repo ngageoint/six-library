@@ -30,7 +30,7 @@
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
-#include "gsl/gsl.h"
+#include "gsl/narrow"
 
 /*!
  *  \file SubWindow.hpp

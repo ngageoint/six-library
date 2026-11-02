@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
- #pragma once
 #ifndef __TYPES_ROW_COL_H__
 #define __TYPES_ROW_COL_H__
 
@@ -29,8 +28,8 @@
 #include <utility>
 #include <limits>
 #include <array>
+#include <gsl/narrow>
 
-#include "gsl/gsl.h"
 
 namespace types
 {

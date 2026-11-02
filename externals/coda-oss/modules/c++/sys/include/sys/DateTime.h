@@ -23,7 +23,6 @@
 
 #ifndef CODA_OSS_sys_DateTime_h_INCLUDED_
 #define CODA_OSS_sys_DateTime_h_INCLUDED_
-#pragma once
 
 #include <time.h>
 #include <stdint.h>

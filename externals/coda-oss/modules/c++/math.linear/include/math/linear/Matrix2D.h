@@ -27,9 +27,9 @@
 #include <functional>
 #include <std/memory>
 #include <cstddef>
+#include <gsl/narrow>
 
 #include <import/sys.h>
-#include <import/gsl.h>
 #include <mem/ScopedArray.h>
 #include <mem/SharedPtr.h>
 #include <math/linear/MatrixMxN.h>

@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __SIO_LITE_FILE_HEADER_H__
 #define __SIO_LITE_FILE_HEADER_H__
 

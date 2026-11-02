@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __TIFF_IMAGE_READER_H__
 #define __TIFF_IMAGE_READER_H__
 
@@ -59,7 +58,7 @@ public:
     }
 
     //! Destructor
-    ~ImageReader()
+    ~ImageReader() noexcept
     {
     }
 

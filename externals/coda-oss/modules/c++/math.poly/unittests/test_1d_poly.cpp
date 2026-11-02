@@ -146,9 +146,83 @@ TEST_CASE(testTransformInput)
     }
 }
 
+TEST_CASE(testVelocity)
+{
+    std::vector<double> values;
+    getRandValues(values);
+
+    // Constant poly should have 0 velocity
+    math::poly::OneD<double> poly(getRandPoly(0));
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.velocity(val), 0.0);
+    }
+
+    // Linear poly should have constant velocity
+    poly = getRandPoly(1);
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.velocity(val), poly[1]);
+    }
+
+    // Check quadratic and cubic against the derivative
+    poly = getRandPoly(2);
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.velocity(val), poly.derivative()(val));
+    }
+
+    poly = getRandPoly(3);
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.velocity(val), poly.derivative()(val));
+    }
+}
+
+TEST_CASE(testAcceleration)
+{
+    std::vector<double> values;
+    getRandValues(values);
+
+    // Constant and linear polys should have 0 acceleration
+    math::poly::OneD<double> poly(getRandPoly(0));
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.acceleration(val), 0.0);
+    }
+
+    poly = getRandPoly(1);
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.acceleration(val), 0);
+    }
+
+    // Quadratic poly should have constant acceleration
+    poly = getRandPoly(2);
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.acceleration(val), 2 * poly[2]);
+    }
+    
+    // Check cubic and quartic against the 2nd derivative
+    poly = getRandPoly(3);
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.acceleration(val), poly.derivative().derivative()(val));
+    }
+
+    poly = getRandPoly(4);
+    for (const auto& val: values)
+    {
+        TEST_ASSERT_EQ(poly.acceleration(val), poly.derivative().derivative()(val));
+    }
+}
+
 TEST_MAIN(
     TEST_CHECK(testScaleVariable);
     TEST_CHECK(testTruncateTo);
     TEST_CHECK(testTruncateToNonZeros);
     TEST_CHECK(testTransformInput);
-    )
+    TEST_CHECK(testVelocity);
+    TEST_CHECK(testAcceleration);
+)

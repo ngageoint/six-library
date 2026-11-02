@@ -253,6 +253,30 @@ public:
      */
     RangeList intersect(const RangeList& other) const;
 
+    bool operator==(const RangeList& rhs) const
+    {
+        const auto& rhsRanges = rhs.getRanges();
+
+        if (mRangeList.size() != rhsRanges.size())
+        {
+            return false;
+        }
+
+        for (size_t idx = 0; idx < mRangeList.size(); idx++)
+        {
+            if (mRangeList[idx] != rhsRanges[idx])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    bool operator!=(const RangeList& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
+
 private:
     using List = std::vector<types::Range>;
     List mRangeList;

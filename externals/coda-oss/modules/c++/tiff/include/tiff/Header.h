@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __TIFF_HEADER_H__
 #define __TIFF_HEADER_H__
 
@@ -87,7 +86,7 @@ public:
     }
 
     //! Destructor
-    ~Header()
+    ~Header() noexcept
     {
     }
 

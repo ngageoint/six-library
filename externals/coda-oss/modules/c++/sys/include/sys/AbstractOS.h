@@ -23,7 +23,6 @@
 
 #ifndef CODA_OSS_sys_AbstractOS_h_INCLUDED_
 #define CODA_OSS_sys_AbstractOS_h_INCLUDED_
-#pragma once
 
 #include <vector>
 #include <string>
@@ -118,7 +117,7 @@ struct CODA_OSS_API AbstractOS
 {
     AbstractOS();
 
-    virtual ~AbstractOS();
+    virtual ~AbstractOS() noexcept;
 
     /*!
      *  Get the name of the platform this was compiled for

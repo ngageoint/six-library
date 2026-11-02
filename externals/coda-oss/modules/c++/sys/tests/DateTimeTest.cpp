@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -34,6 +35,7 @@ int main(int, char**)
     try
     {
         sys::LocalDateTime now;
+        std::cout << "Epoch seconds: " << sys::DateTime::getEpochSeconds() << std::endl;
         std::cout << "Today is: " << now.getMonth() << "/"
                 << now.getDayOfMonth() << "/" << now.getYear() << std::endl;
         std::cout << "Time is: " << now.getHour() << ":" << now.getMinute()

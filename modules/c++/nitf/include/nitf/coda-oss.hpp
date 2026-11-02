@@ -28,7 +28,7 @@
 #include <std/bit>
 #include <std/cstddef>
 #include <std/filesystem>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/optional>
 
 CODA_OSS_disable_warning_push
@@ -58,7 +58,7 @@ CODA_OSS_disable_warning_push
 #include <import/types.h>
 #include <import/mem.h>
 #include <import/math.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <sys/Span.h>
 #include <import/sio/lite.h>
 

@@ -53,8 +53,8 @@ int main(int argc, char* argv[])
         resultSet = myConn->query("SELECT TMODEL_KEY, NAME, OVERVIEW_URL FROM TMODEL");
 
         myRow = resultSet->fetchRow();
-        const char *x = myRow["overview_url"].getData<std::string>().c_str();
         std::string str = myRow["overview_url"].getData<std::string>();
+        const char *x = str.c_str();
         std::string y = myRow["name"].getData<std::string>();
 
         std::cout << "\tChar* is '" << x <<  "'" << std::endl;

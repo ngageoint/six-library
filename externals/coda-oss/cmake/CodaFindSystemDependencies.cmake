@@ -32,10 +32,10 @@ macro(coda_find_system_dependencies)
     #   Python_NumPy_INCLUDE_DIRS   - NumPy include directories
     #
     # see https://cmake.org/cmake/help/latest/module/FindPython.html
-    set(ENABLE_PYTHON ON CACHE BOOL "Enable building Python modules")
     set(PYTHON_VERSION "" CACHE STRING "Hint for which version of Python to find")
     set(PYTHON_HOME "" CACHE PATH "Path to existing Python installation")
-    set(ENABLE_SWIG OFF CACHE BOOL "Enable generation of SWIG bindings")
+    option(ENABLE_PYTHON "Enable building Python modules" OFF)
+    option(ENABLE_SWIG "Enable generation of SWIG bindings" OFF)
     if (PYTHON_HOME)
         # specifying PYTHON_HOME implies ENABLE_PYTHON
         set(ENABLE_PYTHON ON CACHE BOOL "Enable building Python modules" FORCE)
@@ -50,8 +50,7 @@ macro(coda_find_system_dependencies)
             set(Python_FIND_VIRTUALENV FIRST)
             set(Python_FIND_REGISTRY LAST)
         endif()
-        find_package(Python ${PYTHON_VERSION}
-                     COMPONENTS Interpreter Development NumPy)
+        find_package(Python ${PYTHON_VERSION} COMPONENTS Interpreter Development NumPy)
         if (Python_Development_FOUND)
             set(CODA_PYTHON_SITE_PACKAGES
                 "${CODA_STD_PROJECT_LIB_DIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")

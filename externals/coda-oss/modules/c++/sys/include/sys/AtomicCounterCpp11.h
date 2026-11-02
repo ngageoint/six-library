@@ -22,7 +22,6 @@
 
 #ifndef CODA_OSS_sys_AtomicCounterCpp11_h_INCLUDED_
 #define CODA_OSS_sys_AtomicCounterCpp11_h_INCLUDED_
-#pragma once
 
 #include <stddef.h>
 

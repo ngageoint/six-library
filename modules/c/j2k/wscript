@@ -62,3 +62,14 @@ def build(bld):
         bld(features='add_targets', target='j2k-tests',
             targets_to_add=j2k_only_tests + j2k_nitf_tests)
 
+        # j2k/nitf unittests
+        j2k_nitf_unittests = ['test_j2k_nitf_partial_block']
+        for t in j2k_nitf_unittests:
+            exe = bld.program_helper(dir='unittests', source='%s.c' % t,
+                                     use='nitf-c j2k-c J2K', uselib=j2kLayer,
+                                     name=t, target=t, lang='c', env=env.derive())
+            exe.features.append('test')
+
+        bld(features='add_targets', target='j2k-unittests',
+            targets_to_add=j2k_nitf_unittests)
+

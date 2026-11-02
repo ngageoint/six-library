@@ -21,7 +21,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_mem_ComplexView_h_INCLUDED_
 #define CODA_OSS_mem_ComplexView_h_INCLUDED_
 
@@ -142,7 +141,7 @@ private:
  /*!
  *  \class ComplexView
  *  \brief These classes class provide read-only views onto a collection of complex
- * numbers. For the simple case, it's roughtly std::span<const std::complex<T>>. However,
+ * numbers. For the simple case, it's roughtly coda_oss::span<const std::complex<T>>. However,
  * sometimes the data is in two parallel arrays:
  *    const float* reals;
  *    const float* imags;
@@ -175,7 +174,7 @@ struct ComplexInterleavedView final
     ComplexInterleavedView(ComplexInterleavedView&&) = default;
     ComplexInterleavedView& operator=(ComplexInterleavedView&&) = default;
 
-    // This class is almost the same as std::span<const std::complex<T>> ... but
+    // This class is almost the same as coda_oss::span<const std::complex<T>> ... but
     // don't provide data() as ComplexParallelView stores complex numbers in two
     // parallel arrays. Also see reals(), imags() and values(); below.
     // const value_type* data() const noexcept = delete;
@@ -192,7 +191,7 @@ struct ComplexInterleavedView final
     // const& vs. value makes little difference here as cxvalue_type is
     // std::complex<> (copying one pointer vs. two doubles).  But this
     // provides a (subtle) way for clients to know what "view style" they're
-    // using, should that be needed; it also more closely matches std::span<>.
+    // using, should that be needed; it also more closely matches coda_oss::span<>.
     constexpr const cxvalue_t_& index(size_type idx) const noexcept // i.e., std::complex<float>
     {
         return data_[idx];
@@ -244,7 +243,7 @@ public:
     }
 
 private:
-    span_t_ data_; // i.e., std::span<const std::complex<float>>
+    span_t_ data_; // i.e., coda_oss::span<const std::complex<float>>
 };
 template <typename T>
 inline auto make_ComplexInterleavedView(coda_oss::span<const std::complex<T>> s)
@@ -344,7 +343,7 @@ struct ComplexParallelView final // Two parallel arrays, absolutely nothing to t
     }
 
 private:
-    span_t_ reals_; // i.e., std::span<const float>
+    span_t_ reals_; // i.e., coda_oss::span<const float>
     span_t_ imags_;
 };
 template <typename T>

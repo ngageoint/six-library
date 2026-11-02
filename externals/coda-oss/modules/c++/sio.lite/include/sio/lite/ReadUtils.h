@@ -27,7 +27,7 @@
 #include <memory>
 #include <vector>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include <types/RowCol.h>

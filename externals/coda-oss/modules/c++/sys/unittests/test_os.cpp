@@ -401,6 +401,7 @@ TEST_CASE(testFsFileSize)
     }
 }
 
+// TODO: Many tests depend on files that may not exist
 static sys::File makeFile_()
 {
 #ifdef _WIN32

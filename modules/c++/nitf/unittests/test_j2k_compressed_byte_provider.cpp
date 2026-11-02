@@ -35,7 +35,7 @@
 #include <std/optional>
 
 #include <types/RowCol.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <io/FileOutputStream.h>
 #include <io/ReadUtils.h>
 #include <math/Round.h>

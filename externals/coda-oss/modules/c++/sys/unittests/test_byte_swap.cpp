@@ -24,11 +24,11 @@
 
 #include <array>
 #include <vector>
-#include <std/bit> // std::endian
-#include <std/cstddef>
-#include <std/span>
 #include <type_traits>
 
+#include <std/bit> // std::endian
+#include <std/cstddef>
+#include <coda_oss/span.h>
 #include <sys/Conf.h>
 #include <sys/Span.h>
 
@@ -81,8 +81,8 @@ static std::vector<T> make_origValues(size_t NUM_PIXELS)
     std::vector<T> retval(NUM_PIXELS);
     for (size_t ii = 0; ii < NUM_PIXELS; ++ii)
     {
-        const auto value = static_cast<float>(::rand()) / RAND_MAX *
-                std::numeric_limits<uint64_t>::max();
+        const auto value = static_cast<float>(::rand()) / static_cast<float>(RAND_MAX) *
+                static_cast<float>(std::numeric_limits<uint64_t>::max());
         retval[ii] = static_cast<T>(value);
     }
     return retval;
@@ -143,7 +143,7 @@ TEST_CASE(testByteSwapCxV)
 }
 
 template<typename T>
-inline std::span<const T> as_span(const std::vector<std::byte>& bytes)
+inline coda_oss::span<const T> as_span(const std::vector<std::byte>& bytes)
 {
     const void* const pBytes_ = bytes.data();
     auto const p = static_cast<const T*>(pBytes_);
@@ -184,9 +184,6 @@ CODA_OSS_define_byte(x22);
 CODA_OSS_define_byte(x33);
 CODA_OSS_define_byte(x44);
 CODA_OSS_define_byte(x55);
-CODA_OSS_define_byte(x66);
-CODA_OSS_define_byte(x77);
-CODA_OSS_define_byte(x88);
 CODA_OSS_define_byte(x99);
 CODA_OSS_define_byte(xAA);
 CODA_OSS_define_byte(xBB);
@@ -199,7 +196,6 @@ CODA_OSS_define_byte(xFF);
 static constexpr std::byte two_bytes[]{x00, xFF};
 static constexpr std::byte four_bytes[]{x00, x11, xEE, xFF};
 static constexpr std::byte eight_bytes[]{x00, x11, x22, x33, xCC, xDD, xEE, xFF};
-static constexpr std::byte sixteen_bytes[]{x00, x11, x22, x33, x44, x55, x66, x77, x88, x99, xAA, xBB, xCC, xDD, xEE, xFF};
 
 template<typename TByteSpanLike1, typename TByteSpanLike2>
 static void test_assert_eq_swapped(const std::string& testName, size_t sz,

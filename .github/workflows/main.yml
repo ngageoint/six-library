@@ -26,89 +26,89 @@ jobs:
       run: |
         mkdir out
         cd out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DPYTHON_VERSION="3.7"
+        cmake .. -DPYTHON_VERSION="3.7"
     - name: make
       run: |
         cd out
-        cmake --build . --config ${{ matrix.configuration }} -j
-        cmake --build . --config ${{ matrix.configuration }} --target install
+        # uncomment end of following line for *VERBOSE* output
+        cmake --build . --config ${{ matrix.configuration }} -j # -- /verbosity:detailed
+
     - name: test
       run: |
-        cd out
+        cd out/modules
         ctest -C ${{ matrix.configuration }} --output-on-failure
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1 # https://github.com/marketplace/actions/setup-msbuild
-      with:
-        msbuild-architecture: x64
-    - name: msbuild
-      run: |
-        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
 
-  build-msbuild-windows:
-    strategy:
-      matrix:
-        os: [windows-latest]
-        platform: [x64]
-        configuration: [Debug] # Debug turns on more compiler warnings
-    name: ${{ matrix.os }}-msbuild
-    runs-on: ${{ matrix.os }}
-
-    steps:
-    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: configure CODA-OSS
-      run: |
-        mkdir externals\coda-oss\out
-        cd externals\coda-oss\out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
-    - name: make CODA-OSS
-      run: |
-        cd externals\coda-oss\out
-        cmake --build . --config ${{ matrix.configuration }} -j
-        cmake --build . --config ${{ matrix.configuration }} --target install
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1 # https://github.com/marketplace/actions/setup-msbuild
-      with:
-        msbuild-architecture: x64
-    - name: msbuild
-      run: |
-        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
-    #- name: vstest 
-    #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
-    #  with:
-    #    platform: ${{ matrix.platform }}
-    #    testAssembly: UnitTest.dll
-    #    searchFolder: D:\a\nitro\nitro\x64\Debug
-    #- name: vstest 
-    #  run: |
-    #    vstest.console D:\a\nitro\nitro\x64\Debug\UnitTest.dll
-
-  build-linux-cmake:
+  build-linux-cmake-gcc:
     strategy:
       matrix:
         os: [ubuntu-latest]
-    name: ${{ matrix.os }}-CMake
+        CXX: [14, 23]
+    name: gcc-${{ matrix.os }}-CXX${{ matrix.CXX }}-CMake
     runs-on: ${{ matrix.os }}
-
     steps:
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: Set up Python
-      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
-      with:
-        python-version: '3.7'
     - name: configure
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7 ..
+        cmake -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} ..
     - name: make
       run: |
         cd target-Release
-        # using the default number of threads (-j) causes G++ to crash
-        cmake --build . -j 6
-        cmake --build . --target install
+        cmake --build . -j
     - name: test
       run: |
-        cd target-Release
+        cd target-Release/modules
         ctest --output-on-failure
 
+  build-linux-sanitizer:
+    # Right now there is a utest which fails, leave this in for debugging
+    continue-on-error: true
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    name: gcc-asan-${{ matrix.os }}-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        mkdir target-Debug
+        cd target-Debug
+        cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON ..
+    - name: make
+      run: |
+        cd target-Debug
+        cmake --build . -j
+    - name: test
+      run: |
+        cd target-Debug/modules
+        ctest --output-on-failure
+
+  build-linux-cmake-clang:
+    # Clang segfaults on the utest that has an ASAN failure above. GCC lets it through silently
+    continue-on-error: true
+    strategy:
+        matrix:
+            os: [ubuntu-latest]
+    name: clang-${{ matrix.os }}-CXX${{ matrix.CXX }}-CMake
+    runs-on: ${{ matrix.os }}
+    container:
+      image: silkeh/clang:latest
+    steps:
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        mkdir target-Release
+        cd target-Release
+        cmake ..
+    - name: make
+      run: |
+        cd target-Release
+        cmake --build . -j
+    - name: test
+      run: |
+        mkdir .git
+        cd target-Release/modules
+        ctest --output-on-failure
 

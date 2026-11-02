@@ -38,6 +38,13 @@ coda_add_tests(
         test_j2k_read_region.c
         test_j2k_read_tile.c)
 
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "unittests"
+    UNITTEST
+    SOURCES
+        test_j2k_nitf_partial_block.c)
+
 # Build all J2KCompress and J2KDecompress
 set(j2k_shared_srcs  J2KCompress J2KDecompress)
 foreach(j2k_shared ${j2k_shared_srcs})
@@ -52,4 +59,4 @@ foreach(j2k_shared ${j2k_shared_srcs})
     set_target_properties(${j2k_shared} PROPERTIES PREFIX "")
 endforeach()
 
-install(TARGETS ${j2k_shared_srcs} DESTINATION "share/nitf/plugins")
+install(TARGETS ${j2k_shared_srcs} DESTINATION "share/nitf/plugins" OPTIONAL)

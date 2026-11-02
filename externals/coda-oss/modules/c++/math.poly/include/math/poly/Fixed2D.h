@@ -23,6 +23,7 @@
 #ifndef __MATH_POLY_FIXED_2D_H__
 #define __MATH_POLY_FIXED_2D_H__
 
+#include <array>
 #include <math/poly/Fixed1D.h>
 #include <math/poly/TwoD.h>
 #include <math/poly/Utils.h>
@@ -40,7 +41,7 @@ namespace poly
 template<size_t _OrderX, size_t _OrderY, typename _T=double> class Fixed2D
 {
 protected:
-    Fixed1D<_OrderY, _T> mCoef[_OrderX+1];
+    std::array<Fixed1D<_OrderY, _T>, _OrderX+1> mCoef;
 public:
     Fixed2D() {}
 
@@ -55,8 +56,6 @@ public:
         }
     }
 
-
-
     Fixed2D(const TwoD<_T>& coeff)
     {
 
@@ -67,10 +66,15 @@ public:
         }
     }
 
+    Fixed2D(const std::array<Fixed1D<_OrderY, _T>, _OrderX + 1>& coeff)
+    {
+        mCoef = coeff;
+    }
+
     Fixed2D<_OrderX, _OrderY, _T>& operator=(const TwoD<_T>& coeff)
     {
 
-        size_t sizeC = std::min<unsigned int>(coeff.orderX(), _OrderX);
+        size_t sizeC = std::min<size_t>(coeff.orderX(), _OrderX);
         for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
@@ -91,12 +95,24 @@ public:
         return *this;
     }
 
-    size_t orderX() const { return _OrderX; }
-    size_t orderY() const { return _OrderY; }
+    static constexpr size_t orderX() { return _OrderX; }
+    static constexpr size_t orderY() { return _OrderY; }
+    static constexpr size_t sizeX() { return _OrderX + 1; }
+    static constexpr size_t sizeY() { return _OrderY + 1; }
+
+    inline const std::array<Fixed1D<_OrderY, _T>, _OrderX+1>& coeffs() const
+    {
+        return mCoef;
+    }
+
+    inline std::array<Fixed1D<_OrderY, _T>, _OrderX+1>& coeffs()
+    {
+        return mCoef;
+    }
 
     inline _T operator()(double atX, double atY) const
     {
-        _T rv(0);
+        _T rv{};
         double atXPower(1);
 
         for (size_t i = 0; i <= _OrderX; i++)
@@ -109,7 +125,7 @@ public:
     }
     _T integrate(double startX, double endX, double startY, double endY) const
     {
-        _T rv(0);
+        _T rv{};
         double div(0);
         double endAtPower = endX;
         double startAtPower = startX;
@@ -302,6 +318,16 @@ public:
             copy[i] /= cv;
         }
         return copy;
+    }
+
+    bool operator == (const Fixed2D<_OrderX, _OrderY, _T>& other) const 
+    {
+        return (mCoef == other.coeffs());
+    }
+
+    bool operator != (const Fixed2D<_OrderX, _OrderY, _T>& other) const 
+    {
+        return !(*this == other);
     }
 
     /*!

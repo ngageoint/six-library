@@ -83,6 +83,8 @@ public:
     {
     }
 
+    //! copy constructor
+    OneD(const OneD&) = default;
     //! assignment operator
     OneD& operator=(const OneD& o) = default;
 
@@ -122,6 +124,11 @@ public:
     inline bool empty() const
     {
         return mCoef.empty();
+    }
+
+    inline std::vector<_T>& coeffs()
+    {
+        return mCoef;
     }
 
     inline const std::vector<_T>& coeffs() const

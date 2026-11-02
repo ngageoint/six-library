@@ -33,8 +33,8 @@
 #include <string>
 #include <cctype>
 #include <array>
+#include <gsl/narrow>
 
-#include "gsl/gsl.h"
 
 #include "str/Convert.h"
 #include "str/Encoding.h"
@@ -341,32 +341,32 @@ inline char to_w1252_upper_(char ch)
     // See chart at: https://en.wikipedia.org/wiki/Windows-1252
     const auto u8 = static_cast<uint8_t>(ch);
 
-    constexpr uint8_t s_with_caron = 0x9a /* š */;
-    constexpr uint8_t oe = 0x9c /* œ */;
-    constexpr uint8_t z_with_caron = 0x9e /* ž */;
+    constexpr uint8_t s_with_caron = 0x9a /* Å¡ */;
+    constexpr uint8_t oe = 0x9c /* Å“ */;
+    constexpr uint8_t z_with_caron = 0x9e /* Å¾ */;
     if ((u8 == s_with_caron) || (u8 == oe) || (u8 == z_with_caron))
     {
         return ch ^ 0x10;    
     }
 
-    constexpr uint8_t a_with_grave = 0xe0 /* à */;
-    constexpr uint8_t o_with_diaeresis = 0xf6 /* ö */;
+    constexpr uint8_t a_with_grave = 0xe0 /* Ã  */;
+    constexpr uint8_t o_with_diaeresis = 0xf6 /* Ã¶ */;
     if ((u8 >= a_with_grave) && (u8 <= o_with_diaeresis))
     {
         return ch ^ 0x20;
     }
-    // U+00F7 ÷ DIVISION SIGN
-    constexpr uint8_t o_with_slash = 0xf8 /* ø */;
-    constexpr uint8_t small_thorn = 0xfe /* þ */;
+    // U+00F7 Ã· DIVISION SIGN
+    constexpr uint8_t o_with_slash = 0xf8 /* Ã¸ */;
+    constexpr uint8_t small_thorn = 0xfe /* Ã¾ */;
     if ((u8 >= o_with_slash) && (u8 <= small_thorn))
     {
         return ch ^ 0x20;
     }
 
-    constexpr uint8_t y_with_diaeresis = 0xff /* ÿ */;
+    constexpr uint8_t y_with_diaeresis = 0xff /* Ã¿ */;
     if (u8 == y_with_diaeresis)
     {
-        constexpr uint8_t Y_with_diaeresis = 0x9f /* Ÿ */;
+        constexpr uint8_t Y_with_diaeresis = 0x9f /* Å¸ */;
         return Y_with_diaeresis;
     }
 
@@ -388,30 +388,30 @@ inline char to_w1252_lower_(char ch)
     // See chart at: https://en.wikipedia.org/wiki/Windows-1252
     const auto u8 = static_cast<uint8_t>(ch);
 
-    constexpr uint8_t S_with_caron = 0x8a /* Š */;
-    constexpr uint8_t OE = 0x8c /*Œ */;
-    constexpr uint8_t Z_with_caron = 0x8e /* Ž */;
+    constexpr uint8_t S_with_caron = 0x8a /* Å  */;
+    constexpr uint8_t OE = 0x8c /* Å’ */;
+    constexpr uint8_t Z_with_caron = 0x8e /* Å½ */;
     if ((u8 == S_with_caron) || (u8 == OE) || (u8 == Z_with_caron))
     {
         return ch | 0x10;
     }
 
-    constexpr uint8_t Y_with_diaeresis = 0x9f /* Ÿ */;
+    constexpr uint8_t Y_with_diaeresis = 0x9f /* Å¸ */;
     if (u8 == Y_with_diaeresis)
     {
-        constexpr uint8_t y_with_diaeresis = 0xff /* ÿ */;
+        constexpr uint8_t y_with_diaeresis = 0xff /* Ã¿ */;
         return y_with_diaeresis;
     }
 
-    constexpr uint8_t A_with_grave = 0xc0 /* À */;
-    constexpr uint8_t O_with_diaeresis = 0xd6 /* Ö */;
+    constexpr uint8_t A_with_grave = 0xc0 /* Ã€ */;
+    constexpr uint8_t O_with_diaeresis = 0xd6 /* Ã– */;
     if ((u8 >= A_with_grave) && (u8 <= O_with_diaeresis))
     {
         return ch | 0x20;
     }
-    // U+00D7 × MULTIPLICATION SIGN 
-    constexpr uint8_t O_with_slash = 0xd8 /* Ø */;
-    constexpr uint8_t capital_thorn = 0xde /* Þ */;
+    // U+00D7 Ã— MULTIPLICATION SIGN 
+    constexpr uint8_t O_with_slash = 0xd8 /* Ã˜ */;
+    constexpr uint8_t capital_thorn = 0xde /* Ãž */;
     if ((u8 >= O_with_slash) && (u8 <= capital_thorn))
     {
         return ch | 0x20;
@@ -513,7 +513,7 @@ class ci_char_traits final : public std::char_traits<char>
         return toupperCheck(ch);
     }
 
-    static int compare(const char* s1, const char* s2, std::size_t n) noexcept
+    static int compare(const char* s1, const char* s2, size_t n) noexcept
     {
         while (n-- != 0)
         {

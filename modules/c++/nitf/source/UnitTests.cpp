@@ -37,11 +37,6 @@ static inline std::string Configuration() // "Configuration" is typically "Debug
 {
 	return os.getSpecialEnv("Configuration");
 }
-static inline std::string Platform()
-{
-	return os.getSpecialEnv("Platform"); // e.g., "x64" on Windows
-}
-
 static const fs::path& getCurrentExecutable()
 {
 	static const auto exec = fs::absolute(os.getCurrentExecutable());
@@ -51,11 +46,6 @@ static fs::path current_path()
 {
 	// the current working directory can change while a program is running
 	return fs::absolute(fs::current_path());
-}
-
-static inline std::string PlatformToolset()
-{
-	return os.getSpecialEnv("PlatformToolset"); // e.g.,  "v143" on Windows
 }
 
 // Depending on the unittest we're running, how we're running it and what platform we're on, there could
@@ -128,7 +118,7 @@ static fs::path make_waf_install(const fs::path& p)
 {
 	// just "install" on Linux; "install-Debug-x64.v142" on Windows
 #ifdef _WIN32
-	const auto configuration_and_platform = Configuration() + "-" + Platform() + "." + PlatformToolset();
+	const auto configuration_and_platform = Configuration() + "-" + os.getSpecialEnv("Platform") + "." + os.getSpecialEnv("PlatformToolset");
 	return p / ("install-" + configuration_and_platform);
 #else
 	// Linux

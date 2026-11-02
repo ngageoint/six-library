@@ -133,7 +133,6 @@ struct Pair final : public nitf::Object<nitf_Pair>
 
 private:
     Pair() = default;
-    nitf_Error error{};
 };
 
 }

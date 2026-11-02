@@ -22,7 +22,6 @@
 
 #ifndef CODA_OSS_xml_lite_Validator_h_INCLUDED_
 #define CODA_OSS_xml_lite_Validator_h_INCLUDED_
-#pragma once
 
 #include "xml/lite/xml_lite_config.h"
 

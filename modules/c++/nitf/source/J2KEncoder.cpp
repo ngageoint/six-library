@@ -29,7 +29,7 @@
 
 #include <except/Exception.h>
 #include <sys/Conf.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #undef min
 #undef max

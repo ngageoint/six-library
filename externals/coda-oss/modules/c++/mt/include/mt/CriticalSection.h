@@ -23,7 +23,6 @@
 
 #ifndef CODA_OSS_mt_CriticalSection_h_INCLUDED_
 #define CODA_OSS_mt_CriticalSection_h_INCLUDED_
-#pragma once
 
 /*!
  *  \file

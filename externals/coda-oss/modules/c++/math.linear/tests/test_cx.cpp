@@ -67,15 +67,15 @@ int main()
     const unsigned int seed =
         static_cast<unsigned int>(sys::LocalDateTime().getTimeInMillis());
     ::srand(seed);
-    A(0, 0) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
-    A(0, 1) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
-    A(0, 2) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
-    A(1, 0) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
-    A(1, 1) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
-    A(1, 2) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
-    A(2, 0) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
-    A(2, 1) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
-    A(2, 2) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(0, 0) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
+    A(0, 1) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
+    A(0, 2) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
+    A(1, 0) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
+    A(1, 1) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
+    A(1, 2) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
+    A(2, 0) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
+    A(2, 1) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
+    A(2, 2) = _Cf((float)rand()/(float)RAND_MAX, (float)rand()/(float)RAND_MAX);
     A.scale(10);
 
     std::cout << "A: " << A << std::endl;

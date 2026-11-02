@@ -20,7 +20,6 @@
  *
  */
  
-#pragma once
 #ifndef CODA_OSS_logging_Setup_h_INCLUDED_
 #define CODA_OSS_logging_Setup_h_INCLUDED_
 

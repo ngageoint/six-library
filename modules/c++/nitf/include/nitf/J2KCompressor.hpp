@@ -27,13 +27,13 @@
 
 #include <std/cstddef> // std::byte
 #include <vector>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <io/SeekableStreams.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <types/Range.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include "nitf/exports.hpp"
 #include "nitf/J2KCompressionParameters.hpp"
