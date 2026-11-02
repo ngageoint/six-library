@@ -25,7 +25,7 @@
 """
 
 from nitf import *
-import os, sys, logging, glob
+import os, sys, logging, glob, uuid
 from PIL import Image
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout,
@@ -41,7 +41,7 @@ def dump_image(subheader, index, imageReader, outDir=None, baseName=None):
     bandData = imageReader.read(window)
 
     if not outDir: outDir = os.getcwd()
-    if not baseName: baseName = os.path.basename(os.tempnam())
+    if not baseName: baseName = os.path.basename(uuid.uuid4().hex)
 
     outNames = []
     for band, data in enumerate(bandData):

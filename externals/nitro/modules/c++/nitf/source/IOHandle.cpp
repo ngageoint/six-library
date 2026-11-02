@@ -22,7 +22,7 @@
 
 #include <nitf/IOHandle.hpp>
 
-#include "gsl/gsl.h"
+#include "gsl/narrow"
 
 namespace nitf
 {

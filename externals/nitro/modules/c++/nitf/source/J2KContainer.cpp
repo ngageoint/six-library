@@ -23,7 +23,7 @@
 
 #include "nitf/J2KContainer.hpp"
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 j2k::details::Container::Container(j2k_Container* x)
 {

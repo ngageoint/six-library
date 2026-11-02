@@ -27,7 +27,7 @@
 
 #include <memory>
 #include <std/filesystem>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include "j2k/j2k_Reader.h"
 

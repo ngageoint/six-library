@@ -25,7 +25,7 @@
 
 #include <stdexcept>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include "nitf/J2KContainer.hpp"
 

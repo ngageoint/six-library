@@ -25,7 +25,7 @@
 #include <string>
 #include <std/filesystem>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include <import/nitf.hpp>
 #include <nitf/UnitTests.hpp>

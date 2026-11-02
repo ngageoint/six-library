@@ -25,7 +25,7 @@
 
 #include <string.h>
 #include <string>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 
 #include "nitf/BandSource.h"

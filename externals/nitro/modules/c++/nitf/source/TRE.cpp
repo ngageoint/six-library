@@ -24,7 +24,7 @@
 #include <string.h>
 #include "nitf/TREUtils.h"
 
-#include "gsl/gsl.h"
+#include "gsl/narrow"
 
 using namespace nitf;
 

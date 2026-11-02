@@ -84,6 +84,11 @@ coda_add_tests(
         test_zero_field.c
         )
 
+include(CheckCCompilerFlag)
+check_c_compiler_flag(-Wcalloc-transposed-args HAS_CALLOC_TRANSPOSED_ARGS_FLAG)
+if (HAS_CALLOC_TRANSPOSED_ARGS_FLAG)
+    target_compile_options(${MODULE_NAME}_test_image_io PRIVATE -Wno-error=calloc-transposed-args)
+endif()
 
 # Build all the TRE
 set(ENABLE_STATIC_TRES OFF CACHE BOOL "Build static libraries for each TRE")
@@ -105,6 +110,7 @@ set(tre_srcs  ACCHZB
               CLCTNA
               CLCTNB
               CMETAA
+              CSATTB
               CSCCGA
               CSCRNA
               CSDIDA
@@ -173,6 +179,7 @@ set(tre_srcs  ACCHZB
               RSMPCA
               RSMPIA
               SECTGA
+              SECURA
               SENSRA
               SENSRB
               SNSPSB
@@ -206,8 +213,12 @@ foreach(tre ${tre_srcs})
         install(TARGETS ${tre_static}
             EXPORT ${CODA_EXPORT_SET_NAME}
             LIBRARY DESTINATION "lib"
-            ARCHIVE DESTINATION "lib")
+            ARCHIVE DESTINATION "lib"
+            OPTIONAL)
     endif()
 endforeach()
 
-install(TARGETS ${tre_srcs} DESTINATION "share/nitf/plugins")
+install(TARGETS ${tre_srcs} DESTINATION "share/nitf/plugins" OPTIONAL)
+
+add_custom_target(nitro-plugins)
+add_dependencies(nitro-plugins ${tre_srcs})

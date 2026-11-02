@@ -30,7 +30,7 @@
 #include <vector>
 #include <string>
 
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef> // std::byte
 
 #include "nitf/coda-oss.hpp"

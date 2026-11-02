@@ -22,7 +22,7 @@
 
 #include "nitf/SubWindow.hpp"
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include "nitf/ImageSubheader.hpp"
 

@@ -22,7 +22,7 @@
 
 #include "nitf/ComponentInfo.hpp"
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 using namespace nitf;
 
