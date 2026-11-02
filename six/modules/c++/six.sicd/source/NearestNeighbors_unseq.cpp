@@ -29,7 +29,7 @@
 #include <algorithm>
 #include <functional>
 #include <std/numbers>
-#include <std/mdspan>
+#include <experimental/mdspan>
 
 #include <gsl/gsl.h>
 #include <sys/Span.h>
@@ -528,7 +528,7 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
         const auto test = count_GT_zero && c_LT_v;
         first = simd_select(test, ++it, first); // first = ++it;
         auto count_ = count; count_ -= step + 1;  // count -= step + 1;
-        count = simd_select(test, count_, step); // `count -= step + 1` —<OR>— `count = step`
+        count = simd_select(test, count_, step); // `count -= step + 1` ï¿½<OR>ï¿½ `count = step`
     }
     return first;
 }
@@ -646,7 +646,7 @@ struct mdspan_iterator final
     using iterator_category = std::random_access_iterator_tag;
 
     mdspan_iterator() = default;
-    mdspan_iterator(coda_oss::mdspan<T, TExtents> md, difference_type row = 0) : md_(md), row_(row) {}
+    mdspan_iterator(std::experimental::mdspan<T, TExtents> md, difference_type row = 0) : md_(md), row_(row) {}
 
     value_type operator*() const
     {
@@ -682,7 +682,7 @@ struct mdspan_iterator final
     }
 
 private:
-    coda_oss::mdspan<T, TExtents> md_;
+    std::experimental::mdspan<T, TExtents> md_;
     difference_type row_ = 0;
 
     auto make_span() const
@@ -693,12 +693,12 @@ private:
     }
 };
 template<typename TValueType, typename T, typename TExtents>
-auto begin(coda_oss::mdspan<T, TExtents> md)
+auto begin(std::experimental::mdspan<T, TExtents> md)
 {
     return mdspan_iterator<T, TExtents, TValueType>(md, 0);
 }
 template<typename T, typename TExtents>
-auto end(coda_oss::mdspan<T, TExtents> md)
+auto end(std::experimental::mdspan<T, TExtents> md)
 {
     return mdspan_iterator<T, TExtents>(md, md.extent(0));
 }
@@ -706,12 +706,12 @@ auto end(coda_oss::mdspan<T, TExtents> md)
 template<typename T, typename TExtents>
 using const_mdspan_iterator = mdspan_iterator<std::add_const_t<T>, TExtents>;
 template<typename T, typename TExtents>
-auto cbegin(coda_oss::mdspan<T, TExtents> md)
+auto cbegin(std::experimental::mdspan<T, TExtents> md)
 {
     return const_mdspan_iterator<T, TExtents>(md, 0);
 }
 template<typename T, typename TExtents>
-auto cend(coda_oss::mdspan<T, TExtents> md)
+auto cend(std::experimental::mdspan<T, TExtents> md)
 {
     return const_mdspan_iterator<T, TExtents>(md, md.extent(0));
 }
@@ -793,14 +793,14 @@ void six::sicd::NearestNeighbors::nearest_neighbors_T(execution_policy policy,
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
     // using `nearest_neighbors_unseq_T()`, above.
-    using extents_t = coda_oss::dextents<size_t, 2>; // two dimensions: M×N
+    using extents_t = std::experimental::dextents<size_t, 2>; // two dimensions: M x N
     const extents_t extents{ inputs.size() / elements_per_iteration, elements_per_iteration };
-    const coda_oss::mdspan<const zfloat, extents_t> md_inputs(inputs.data(), extents);
+    const std::experimental::mdspan<const zfloat, extents_t> md_inputs(inputs.data(), extents);
     assert(md_inputs.size() <= inputs.size());
     auto const b = cbegin(md_inputs);
     auto const e = cend(md_inputs);
 
-    const coda_oss::mdspan<AMP8I_PHS8I, extents_t> md_results(results.data(), extents);
+    const std::experimental::mdspan<AMP8I_PHS8I, extents_t> md_results(results.data(), extents);
     assert(md_results.size() <= results.size());
     auto const d = begin<mdspan_iterator_value>(md_results);
 
