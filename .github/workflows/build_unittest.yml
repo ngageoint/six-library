@@ -1,0 +1,166 @@
+env:
+  CTEST_TIMEOUT: 120
+
+name: build_unittest
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+  schedule:
+    # Runs at 09:00 UTC every Saturday
+    - cron: '0 9 * * 6'
+  workflow_dispatch: # Optional: allows manual triggering for testing
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build-windows:
+    strategy:
+      matrix:
+        config: [Release]
+    name: windows-latest-${{ matrix.config }}
+    runs-on: windows-latest
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        ls env:
+        cmake -B target
+    - name: build
+      run: |
+        cmake --build target -j --config ${{ matrix.config }}
+    - name: test # should run w/o install
+      run: |
+        ctest --test-dir target -C ${{ matrix.config }} --output-on-failure --timeout $env:CTEST_TIMEOUT
+
+# Since MSBUILD solutions can be generated from CMake within VS, no point testing in build.
+
+  build-ubuntu:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04, ubuntu-26.04]
+        avx: [AVX512F]
+        config: [Release]
+    name: ${{ matrix.os }}-${{ matrix.config }}-${{ matrix.avx }}
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        cmake -B out -DENABLE_${{ matrix.avx }}=ON -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+    - name: build
+      run: |
+        cmake --build out -j
+    - name: test
+    # should run w/o install
+      run: |
+        ctest --test-dir out --output-on-failure --timeout $CTEST_TIMEOUT
+
+  build-rocky:
+    strategy:
+      matrix:
+        version: [8, 9, 10]
+        config: [Release]
+    name: rockylinux-${{ matrix.version }}-${{ matrix.config }}
+    runs-on: ubuntu-24.04
+    container:
+      image: rockylinux/rockylinux:${{ matrix.version }}-minimal
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - name: setup system
+      run: |
+        microdnf install -y gcc gcc-c++ tar gzip cmake
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        cmake -B target -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+    - name: build
+      run: |
+        cmake --build target -j
+    - name: test
+    # should run w/o install
+      run: |
+        # Setup test variables and files
+        touch ~/.bashrc
+        export USER=github
+        mkdir .git
+        ctest --test-dir target --output-on-failure
+
+  build-sanitizers:
+    strategy:
+      matrix:
+        sanitizer: [thread, address]
+    name: ubuntu-24.04-${{ matrix.sanitizer }}-sanitizer
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: cmake -B target -DCMAKE_BUILD_TYPE=Debug
+            -DCMAKE_CXX_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
+            -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}"
+    - name: build
+      run: cmake --build target -j
+    - name: test
+      run: ctest --test-dir target --output-on-failure
+
+  build-other-cpp:
+    strategy:
+      matrix:
+        standard: [17, 20, 23, 26]
+        config: [Release]
+    name: ubuntu-26.04-CXX${{ matrix.standard }}
+    runs-on: ubuntu-26.04
+    container:
+      image: gcc:latest
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: setup system
+      run: apt update && apt install cmake -y
+    - name: configure
+      run: cmake -B target -DCMAKE_CXX_STANDARD=${{ matrix.standard }} -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+    - name: build
+      run: cmake --build target -j
+    - name: test
+      run: |
+        # Setup test variable and files
+        touch ~/.bashrc
+        export USER=github
+        ctest --test-dir target --output-on-failure
+
+  build-clang:
+    strategy:
+      matrix:
+        config: [Release]
+        version: [21, 22]
+    name: ubuntu-26.04-clang-${{ matrix.version }}
+    runs-on: ubuntu-26.04
+    container:
+      image: silkeh/clang:${{ matrix.version }}
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: cmake -B target -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+    - name: build
+      run: cmake --build target -j
+    - name: test
+      run: |
+        # Setup test variable and files
+        touch ~/.bashrc
+        export USER=github
+        mkdir .git
+        ctest --test-dir target --output-on-failure

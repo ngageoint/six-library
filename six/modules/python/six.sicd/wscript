@@ -1,6 +1,0 @@
-distclean = options = configure = lambda p: None
-
-def build(bld):
-  bld.swigModule(name = 'six.sicd',
-                 use = 'six.sicd-c++ numpyutils-c++ six-python',
-                 package = 'pysix')

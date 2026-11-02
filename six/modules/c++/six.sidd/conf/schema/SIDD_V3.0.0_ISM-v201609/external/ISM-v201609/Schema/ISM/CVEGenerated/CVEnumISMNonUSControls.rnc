@@ -1,1 +1,0 @@
-CVEnumISMNonUSControls.att = attribute CVEnumISMNonUSControls { list { "ATOMAL"?, "BOHEMIA"?, "BALK"? }  } 

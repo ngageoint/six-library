@@ -1,6 +1,0 @@
-#ifndef NITF_CONFIG_H
-#define NITF_CONFIG_H
-
-#define NITF_LIB_VERSION "@NITRO_VERSION@"
-
-#endif
