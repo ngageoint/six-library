@@ -139,16 +139,16 @@ constexpr std::array<size_t, 2> lookupDims{ AmplitudeTableSize, AmplitudeTableSi
 template<typename TToComplexFunc>
 static auto createLookup(TToComplexFunc toComplex)
 {
-    std::vector<six::zfloat> retval(lookupDims[0] * lookupDims[1]); 
-    std::experimental::mdspan<six::zfloat, std::dextents<size_t, 2>> values(retval.data(), lookupDims);
+    std::vector<six::zfloat> retval(AmplitudeTableSize * AmplitudeTableSize); 
 
     // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
     // complex<float> value.
-    for (const auto amplitude : Utilities::iota_0_256())
+    auto idxs = Utilities::iota_0_256();
+    for (const auto amplitude : idxs)
     {
-        for (const auto phase : Utilities::iota_0_256())
+        for (const auto phase : idxs)
         {
-            values(amplitude, phase) = toComplex(amplitude, phase);
+            retval[amplitude * AmplitudeTableSize + phase] = toComplex(amplitude, phase);
         }
     }
 

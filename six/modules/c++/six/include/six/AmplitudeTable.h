@@ -163,7 +163,9 @@ struct SIX_SIX_API LUT
  // Store the computed `six::zfloat` for every possible 
  // amp/phs pair, a total of 256*256 values.
 static constexpr size_t AmplitudeTableSize = 256; // "This is a fixed size (256-element) LUT"
-using Amp8iPhs8iLookup_t = std::experimental::mdspan<const six::zfloat, std::experimental::dextents<size_t, 2>>;
+using Lookup_ext = std::experimental::extents<size_t, AmplitudeTableSize, AmplitudeTableSize>;
+using Amp8iPhs8iLookup_t = std::experimental::mdspan<const six::zfloat, Lookup_ext>;
+
  
  // More descriptive than std::pair<uint8_t, uint8_t>
 struct SIX_SIX_API AMP8I_PHS8I_t final
