@@ -3,21 +3,29 @@ project(six-library)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
     # we are the top-level project and are responsible for configuration
-    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD 14 CACHE STRING "Requested C++ standard")
     set(CXX_STANDARD_REQUIRED true)
 
     # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
     # we'll dial-back warnings as necessary.
     if (MSVC)
-       add_compile_options(/WX) # warnings as errors
-       add_compile_options(/MP) # multi-processor build
+        add_compile_options(/WX) # warnings as errors
+        add_compile_options(/MP) # multi-processor build
     elseif (UNIX)
-       # warnings as errors
-       # (except c++20 compat)
-       add_compile_options(-Werror)
-       if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0)
-           add_compile_options(-Wno-error=c++20-compat -Wno-error=format-truncation)
-       endif()
+        # warnings as errors
+        add_compile_options(-Werror)
+
+        include(CheckCXXCompilerFlag)
+        check_cxx_compiler_flag("-Wc++2a-compat" HAS_CPP20_FLAG)
+        if (HAS_CPP20_FLAG)
+            add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-Wno-error=c++2a-compat>")
+        endif()
+
+        check_cxx_compiler_flag("-Wformat-truncation" HAS_FMT_TRUNC_FLAG)
+        if (HAS_FMT_TRUNC_FLAG)
+            add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-Wno-error=format-truncation>")
+        endif()
+
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
