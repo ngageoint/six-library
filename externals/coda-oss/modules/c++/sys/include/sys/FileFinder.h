@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef __SYS_FILE_FINDER_H__
 #define __SYS_FILE_FINDER_H__
 

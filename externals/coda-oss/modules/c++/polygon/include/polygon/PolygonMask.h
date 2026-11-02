@@ -21,7 +21,6 @@
  */
 #ifndef CODA_OSS_polygon_PolygonMask_h_INCLUDED_
 #define CODA_OSS_polygon_PolygonMask_h_INCLUDED_
-#pragma once
 
 #include <vector>
 #include <memory>

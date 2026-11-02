@@ -21,7 +21,7 @@
  */
 
 #include <limits>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <vector>
 
 #include "TestCase.h"
@@ -35,7 +35,7 @@ TEST_CASE(testNaNsAreNotEqual)
     TEST_ASSERT_NOT_EQ(std::numeric_limits<float>::quiet_NaN(),
         std::numeric_limits<float>::quiet_NaN());
 
-    TEST_ASSERT_NOT_EQ(std::numeric_limits<float>::quiet_NaN(), 3.4);
+    TEST_ASSERT_NOT_EQ(std::numeric_limits<float>::quiet_NaN(), 3.4f);
 
 }
 
@@ -67,26 +67,26 @@ TEST_CASE(test_ssize)
 
     // Works with containers
     std::vector<int> v{3, 1, 4};
-    TEST_ASSERT_EQ(std::size(v), 3);
+    TEST_ASSERT_EQ(coda_oss::size(v), 3);
 
     // And works with built-in arrays too
     int a[]{-5, 10, 15};
     // Returns the number of elements (not bytes) as opposed to sizeof
-    TEST_ASSERT_EQ(std::size(a), 3);
+    TEST_ASSERT_EQ(coda_oss::size(a), 3);
     static_assert(sizeof(a) == 12, "sizeof(a)");
 
     // Provides a safe way (compared to sizeof) of getting string buffer size
     const char str[] = "12345";
     // These are fine and give the correct result
-    TEST_ASSERT_EQ(std::size(str), 6);
+    TEST_ASSERT_EQ(coda_oss::size(str), 6);
     static_assert(sizeof(str) == 6, "sizeof(str)");
 
     // But use of sizeof here is a common source of bugs
     const char* str_decayed = "12345";
     static_assert(sizeof(str_decayed) == sizeof(void*), "sizeof(void*)");
 
-    // Since C++20 the signed size (std::ssize) is available
-    auto i = std::ssize(v);
+    // Since C++20 the signed size (coda_oss::ssize) is available
+    auto i = coda_oss::ssize(v);
     for (--i; i != -1; --i) { }
     TEST_ASSERT_EQ(i, -1);
 }

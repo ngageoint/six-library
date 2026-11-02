@@ -1,0 +1,1 @@
+From https://www.github.com/nlohmann/json commit 11e75a5 for C++26 compatibility

@@ -20,7 +20,6 @@
  */
 #ifndef CODA_OSS_sys_filesystem_h_INCLUDED_
 #define CODA_OSS_sys_filesystem_h_INCLUDED_
-#pragma once
 
 // always implement sys::filesystem::path
 #include "sys/sys_filesystem.h"

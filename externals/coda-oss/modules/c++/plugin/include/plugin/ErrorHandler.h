@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __PLUGIN_ERROR_HANDLER_H__
 #define __PLUGIN_ERROR_HANDLER_H__
 

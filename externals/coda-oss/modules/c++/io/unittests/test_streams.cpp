@@ -20,7 +20,7 @@
  *
  */
 
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 
 #include <import/io.h>
@@ -80,10 +80,10 @@ TEST_CASE(testByteStream)
 
     stream.seek(2, io::Seekable::END);
     TEST_ASSERT_EQ(stream.tell(), 18);
-    TEST_ASSERT_EQ(std::ssize(stream), 20);
+    TEST_ASSERT_EQ(coda_oss::ssize(stream), 20);
 
     stream.write("abcdef");
-    TEST_ASSERT_EQ(std::ssize(stream), 24);
+    TEST_ASSERT_EQ(coda_oss::ssize(stream), 24);
 
      const std::string test("test");
     {
@@ -99,12 +99,12 @@ TEST_CASE(testByteStream)
     }
     {
         stream.clear();
-        const std::span<const std::string::value_type> test_span(test.data(), test.size());
+        const coda_oss::span<const std::string::value_type> test_span(test.data(), test.size());
         stream.write(test_span);
         stream.seek(0, io::Seekable::START);
         TEST_ASSERT_EQ(stream.available(), 4);
         std::byte buf[255];
-        stream.read(std::span<std::byte>(buf, 4));
+        stream.read(coda_oss::span<std::byte>(buf, 4));
         buf[4] = std::byte(0);
         const void* pBuf = buf;
         auto pStrBuf = static_cast<std::string::const_pointer>(pBuf);

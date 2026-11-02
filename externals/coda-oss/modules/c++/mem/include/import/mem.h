@@ -22,7 +22,7 @@
 
 #ifndef __IMPORT_MEM_H__
 #define __IMPORT_MEM_H__
-#pragma once
+
 
 #include <mem/BufferView.h>
 #include <mem/ScopedAlignedArray.h>

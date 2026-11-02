@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_sys_DirectoryEntry_h_INCLUDED_
 #define CODA_OSS_sys_DirectoryEntry_h_INCLUDED_
 
@@ -67,7 +66,7 @@ struct DirectoryEntry
         mFirst.reset(this);
         mLast.reset(nullptr);
     }
-    virtual ~DirectoryEntry() = default;
+    virtual ~DirectoryEntry() noexcept(false) = default;
     virtual void next()
     {
         mCurrent = mDir.findNextFile();

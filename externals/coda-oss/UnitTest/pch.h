@@ -29,7 +29,7 @@
 #include <std/filesystem>
 #include <std/numbers>
 #include <std/optional>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/string>
 #include <std/type_traits>
 

@@ -19,7 +19,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_coda_oss_optional__h_INCLUDED_
 #define CODA_OSS_coda_oss_optional__h_INCLUDED_
 

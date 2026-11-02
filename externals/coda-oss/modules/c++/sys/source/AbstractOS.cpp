@@ -45,7 +45,7 @@ namespace sys
 {
 AbstractOS::AbstractOS() = default;
 
-AbstractOS::~AbstractOS() = default;
+AbstractOS::~AbstractOS() noexcept = default;
 
 std::vector<std::string>
 AbstractOS::search(const std::vector<std::string>& searchPaths,

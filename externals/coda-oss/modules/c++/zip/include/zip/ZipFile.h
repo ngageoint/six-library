@@ -23,7 +23,7 @@
 #ifndef __ZIP_ZIP_FILE_H__
 #define __ZIP_ZIP_FILE_H__
 
-#include "gsl/gsl.h"
+#include <gsl/narrow>
 
 #include "zip/ZipEntry.h"
 
@@ -62,9 +62,6 @@ class ZipFile
     //!  Compressed data buffer (yes we eat the whole file)
     sys::ubyte* mCompressed;
     sys::Size_T mCompressedLength;
-
-    sys::Uint16_T mDiskNum;
-    sys::Uint16_T mDiskWithCentralDir;
 
     sys::Uint32_T mCentralDirSize;
     sys::Uint32_T mCentralDirOffset;

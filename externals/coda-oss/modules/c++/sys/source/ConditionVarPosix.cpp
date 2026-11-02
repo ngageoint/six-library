@@ -22,7 +22,7 @@
 
 #include <sys/ConditionVarPosix.h>
 
-#include "gsl/gsl.h"
+#include <gsl/narrow>
 
 #if CODA_OSS_POSIX_SOURCE
 

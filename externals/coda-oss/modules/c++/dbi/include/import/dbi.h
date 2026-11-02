@@ -21,7 +21,7 @@
  */
 
 #ifndef __IMPORT_DBI__H__
-#define __IMPORT_DBI_H__
+#define __IMPORT_DBI__H__
 
 /*!
  *  \file dbi.h

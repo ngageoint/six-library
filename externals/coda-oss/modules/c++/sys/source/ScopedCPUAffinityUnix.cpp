@@ -23,10 +23,10 @@
 #ifndef _WIN32
 
 #include <errno.h>
+#include <gsl/narrow>
 
 #include <sys/Conf.h>
 #include <except/Exception.h>
-#include <gsl/gsl.h>
 
 #include <sys/ScopedCPUAffinityUnix.h>
 

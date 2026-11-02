@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <sstream>
+#include <gsl/narrow>
 
 #include <sys/Conf.h>
 #include <sys/Runnable.h>
@@ -32,7 +33,6 @@
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
 #include <types/Range.h>
-#include <gsl/gsl.h>
 
 namespace mt
 {

@@ -18,6 +18,7 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
+ * © 2026 The Stratagem Group, LLC, a CACI, INC. - FEDERAL Company
  */
 
 #ifndef __NET_CURL_HANDLE_H__
@@ -28,6 +29,7 @@
 #ifdef NET_CURL_SUPPORT
 #include <curl/curl.h>
 #include <string>
+#include <vector>
 
 namespace net
 {
@@ -100,6 +102,28 @@ public:
     void setProxyPort(size_t port);
 
     /*
+     * \func setHttpHeaders
+     * \brief Sets custom HTTP headers for the request.
+     * 
+     * \param headers Vector of header strings in the "Header: Value" format.
+     */
+    void setHttpHeaders(const std::vector<std::string>& headers);
+
+    /*
+     * \func setPutRequest
+     * \brief Configures the handle to make PUT request.
+     */
+    void setPutRequest();
+
+    /*
+     * \func getHeaders
+     * \brief Gets the current HTTP headers list.
+     * 
+     * \return Vector of header strings. Empty vector if no headers are set.
+     */
+    std::vector<std::string> getHeaders() const;
+
+    /*
      *  \func perform
      *  \brief Performs the underlying CURL call. Before call this, at a
      *         minimum you must also call setURL and setWriteBuffer.
@@ -125,6 +149,7 @@ private:
                                size_t nmemb,
                                std::string* writerData);
     CURL* const mHandle;
+    curl_slist* mHeaders;
 };
 }
 

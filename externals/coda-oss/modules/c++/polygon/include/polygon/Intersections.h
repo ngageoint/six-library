@@ -25,9 +25,9 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <gsl/narrow>
 
 #include <types/RowCol.h>
-#include <gsl/gsl.h>
 
 namespace polygon
 {

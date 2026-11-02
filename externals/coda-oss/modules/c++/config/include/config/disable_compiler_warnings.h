@@ -21,7 +21,6 @@
  */
 #ifndef CODA_OSS_config_disable_compiler_warnings_h_INCLUDED_
 #define CODA_OSS_config_disable_compiler_warnings_h_INCLUDED_
-#pragma once
 
 #include "compiler_extensions.h"
 

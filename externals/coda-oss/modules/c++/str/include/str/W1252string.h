@@ -21,7 +21,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_str_W1252string_h_INCLUDED_
 #define CODA_OSS_str_W1252string_h_INCLUDED_
 

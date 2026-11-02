@@ -33,18 +33,18 @@ bool
 testAlignedAlloc(const size_t numBytes_, const size_t alignment)
 {
     // Allocate an aligned buffer
-    void* const ptr = sys::alignedAlloc(numBytes_, alignment);
+    void* ptr = sys::alignedAlloc(numBytes_, alignment);
 
     // Confirm it's a multiple of alignment
-    bool const isAligned(reinterpret_cast<size_t>(ptr) % alignment == 0);
+    const bool isAligned(reinterpret_cast<size_t>(ptr) % alignment == 0);
 
     sys::alignedFree(ptr);
 
     if (!isAligned)
     {
-        std::cerr << "Error: buffer " << ptr
-                  << " isn't aligned as expected!\n";
+        std::cerr << "Error: buffer isn't aligned as expected!\n";
     }
+
     return isAligned;
 }
 

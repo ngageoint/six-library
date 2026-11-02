@@ -18,7 +18,6 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#pragma once 
 #ifndef CODA_OSS_coda_oss_numbers_h_INCLUDED_
 #define CODA_OSS_coda_oss_numbers_h_INCLUDED_
 

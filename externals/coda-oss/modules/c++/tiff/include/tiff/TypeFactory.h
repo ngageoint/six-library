@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __TIFF_TYPE_FACTORY_H__
 #define __TIFF_TYPE_FACTORY_H__
 

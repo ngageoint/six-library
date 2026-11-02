@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_zip_GZipInputStream_h_INCLUDED_
 #define CODA_OSS_zip_GZipInputStream_h_INCLUDED_
 

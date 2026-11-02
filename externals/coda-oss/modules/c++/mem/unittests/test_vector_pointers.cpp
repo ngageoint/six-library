@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <complex>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <type_traits>
 
 #include <mem/VectorOfPointers.h>
@@ -170,7 +170,7 @@ static const std::vector<cx_float>& cx_data()
 
 TEST_CASE(testSpanCxFloat)
 {
-    const std::span<const cx_float> view(cx_data().data(), cx_data().size());
+    const coda_oss::span<const cx_float> view(cx_data().data(), cx_data().size());
     TEST_ASSERT_EQ(cx_data().size(), view.size());
     test_cx_view(testName, view);
 }

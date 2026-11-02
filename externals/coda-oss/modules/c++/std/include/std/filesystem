@@ -20,7 +20,6 @@
  */
 #ifndef CODA_OSS_std_filesystem_INCLUDED_
 #define CODA_OSS_std_filesystem_INCLUDED_
-#pragma once
 
 #include "sys/filesystem.h"
 #include "coda_oss/CPlusPlus.h"

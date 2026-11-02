@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef __LOGGING_ENUMS_H__
 #define __LOGGING_ENUMS_H__
 

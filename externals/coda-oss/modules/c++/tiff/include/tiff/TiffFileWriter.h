@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __TIFF_FILE_WRITER_H__
 #define __TIFF_FILE_WRITER_H__
 
@@ -66,7 +65,7 @@ struct CODA_OSS_API FileWriter
     }
 
     //! Destructor
-    ~FileWriter();
+    ~FileWriter() noexcept;
 
     void openFile(const std::string& fileName);
     void close();

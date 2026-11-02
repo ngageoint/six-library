@@ -19,11 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <gsl/narrow>
 #include "io/PipeStream.h"
 #undef min
 #undef max
 
-#include "gsl/gsl.h"
 
 using namespace io;
 

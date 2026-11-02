@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_xml_lite_QName_h_INCLLUDED_
 #define CODA_OSS_xml_lite_QName_h_INCLLUDED_
 
@@ -221,13 +220,13 @@ namespace literals  // c.f. std::literals
     // about extensive use outside of test code.
 
     // https://en.cppreference.com/w/cpp/language/user_literal
-    inline xml::lite::Uri operator"" _u(const char* str, std::size_t len)
+    inline xml::lite::Uri operator""_u(const char* str, size_t len)
     {
         // https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s
         return xml::lite::Uri(std::string(str, len));
     }
     // https://en.cppreference.com/w/cpp/language/user_literal
-    inline xml::lite::QName operator"" _q(const char* str, std::size_t len)
+    inline xml::lite::QName operator""_q(const char* str, size_t len)
     {
         // https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s
         return xml::lite::QName(std::string(str, len));

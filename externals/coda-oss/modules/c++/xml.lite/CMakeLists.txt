@@ -33,6 +33,12 @@ if(ENABLE_XML)
         MODULE_NAME ${MODULE_NAME}
         DIRECTORY "unittests"
         UNITTEST)
+
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/unittests/"
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/unittests"
+        FILES_MATCHING PATTERN "*.xml")
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/unittests/embedded_xml.bin"
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/unittests")
 else()
     message("${MODULE_NAME} will not be built since XML is not enabled")
 endif()

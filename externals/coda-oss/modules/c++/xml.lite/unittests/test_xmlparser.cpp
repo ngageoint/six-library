@@ -23,7 +23,7 @@
 #include <std/string>
 #include <std/filesystem>
 #include <std/optional>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include "io/StringStream.h"
 #include "io/FileInputStream.h"
@@ -60,7 +60,7 @@ static const std::u8string& text8()
 
 static const auto& iso88591Text1252()
 {
-    static const auto retval = str::make_string<str::W1252string>("T\xc9XT");  // ISO8859-1, "TÉXT"
+    static const auto retval = str::make_string<str::W1252string>("T\xc9XT");  // ISO8859-1, "TÃ‰XT"
     return retval;
 }
 static auto pIso88591Text_()
@@ -71,10 +71,10 @@ static auto pIso88591Text_()
 
 static const auto& utf8Text8()
 {
-    static const auto retval = str::make_string<coda_oss::u8string>("T\xc3\x89XT"); // UTF-8,  "TÉXT"
+    static const auto retval = str::make_string<coda_oss::u8string>("T\xc3\x89XT"); // UTF-8,  "TÃ‰XT"
     return retval;
 } 
-static const auto pUtf8Text_()
+static auto pUtf8Text_()
 {
     static const auto retval = str::c_str<std::string>(utf8Text8());
     return retval;
@@ -106,7 +106,7 @@ static std::filesystem::path find_unittest_file(const std::filesystem::path& nam
 static void test_a_element(const std::string& testName, const xml::lite::Element& root)
 {
     const auto aElements = root.getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(std::ssize(aElements), 1);
+    TEST_ASSERT_EQ(coda_oss::ssize(aElements), 1);
     const auto& a = *(aElements[0]);
 
     const auto characterData = a.getCharacterData();
@@ -125,7 +125,7 @@ TEST_CASE(testXmlParseSimple)
         
     const auto docElements = root.getElementsByTagName("doc");
     TEST_ASSERT_FALSE(docElements.empty());
-    TEST_ASSERT_EQ(std::ssize(docElements), 1);
+    TEST_ASSERT_EQ(coda_oss::ssize(docElements), 1);
     test_a_element(testName, *docElements[0]);
 }
 
@@ -366,7 +366,7 @@ static void testReadXmlFile(const std::string& testName, const std::string& xmlF
     const auto& root = getRootElement(getDocument(xmlParser));
 
     const auto aElements = root.getElementsByTagName("a", true /*recurse*/);
-    TEST_ASSERT_EQ(std::ssize(aElements), 1);
+    TEST_ASSERT_EQ(coda_oss::ssize(aElements), 1);
     const auto& a = *(aElements[0]);
 
     auto characterData = a.getCharacterData();
@@ -443,8 +443,8 @@ TEST_CASE(testReadEmbeddedXml)
     const auto& classificationXML = root.getElementByTagName("Classification", true /*recurse*/);
 
      // UTF-8 characters in 50x50.nitf
-    const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
-    const std::string classificationText_utf_8("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+    const std::string classificationText_iso8859_1("NON CLASSIFI\xc9 / UNCLASSIFIED");  // ISO8859-1 "NON CLASSIFIÃ‰ / UNCLASSIFIED"
+    const std::string classificationText_utf_8("NON CLASSIFI\xc3\x89 / UNCLASSIFIED");  // UTF-8 "NON CLASSIFIÃ‰ / UNCLASSIFIED"
     const auto classificationText_platform = sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8 : classificationText_iso8859_1;
     const auto characterData = classificationXML.getCharacterData();
     TEST_ASSERT_EQ(characterData, classificationText_platform);

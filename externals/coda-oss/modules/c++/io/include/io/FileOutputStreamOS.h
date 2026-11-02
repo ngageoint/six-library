@@ -22,7 +22,6 @@
 
 #ifndef CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
 #define CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
-#pragma once
 
 #include <string>
 

@@ -45,7 +45,7 @@ public:
     }
 
     //! Deconstructor
-    virtual ~TypeInterface()
+    virtual ~TypeInterface() noexcept
     {
     }
 
@@ -117,7 +117,7 @@ public:
     }
 
     //! Deconstructor
-    virtual ~GenericType()
+    virtual ~GenericType() noexcept
     {
     }
 

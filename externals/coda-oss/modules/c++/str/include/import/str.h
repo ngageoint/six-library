@@ -24,7 +24,6 @@
 
 #ifndef CODA_OSS_str_import_str_h_INCLUDED_
 #define CODA_OSS_str_import_str_h_INCLUDED_
-#pragma once
 
 /*!
  *  \file str.h

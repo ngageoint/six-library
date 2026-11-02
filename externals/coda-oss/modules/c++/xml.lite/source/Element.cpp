@@ -416,13 +416,10 @@ void xml::lite::Element::changeURI(Element* element,
             element->mAttributes[i].setUri(uri);
         }
     }
-
-    // the "i++" is unreachable because of the "break"
-    const auto s = element->mChildren.size();
-    for (size_t i = 0; i < s; i++)
+    // Used to be a loop that would only run once. Now just an 'if' condition
+    if (element->mChildren.size())
     {
-        changeURI(element->mChildren[i], prefix, uri);
-        break;
+        changeURI(element->mChildren[0], prefix, uri);
     }
 }
 #if _MSC_VER

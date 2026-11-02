@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
 #ifndef CODA_OSS_json_mem_h_INCLUDED_
 #define CODA_OSS_json_mem_h_INCLUDED_
 

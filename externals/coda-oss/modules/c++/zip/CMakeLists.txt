@@ -19,6 +19,9 @@ if (TARGET z AND TARGET minizip)
         MODULE_NAME ${MODULE_NAME}
         DIRECTORY "unittests"
         UNITTEST)
+    
+    file(COPY "unittests/test.gz" "unittests/test.zip" "unittests/text.txt"
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/unittests")
 else()
     message("zip will not be build since zlib + minizip were not enabled")
 endif()

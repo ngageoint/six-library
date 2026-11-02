@@ -20,8 +20,8 @@
  *
  */
 
+#include <gsl/narrow>
 #include "xml/lite/Attributes.h"
-#include "gsl/gsl.h"
 
 xml::lite::AttributeNode::AttributeNode(const xml::lite::AttributeNode& node)
 {

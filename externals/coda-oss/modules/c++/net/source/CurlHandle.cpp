@@ -18,6 +18,7 @@
  * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
+ * © 2026 The Stratagem Group, LLC, a CACI, INC. - FEDERAL Company
  */
 
 #include <net/CurlHandle.h>
@@ -29,7 +30,8 @@
 namespace net
 {
 CurlHandle::CurlHandle() :
-    mHandle(curl_easy_init())
+    mHandle(curl_easy_init()),
+    mHeaders(nullptr)
 {
     if (mHandle == nullptr)
     {
@@ -39,6 +41,10 @@ CurlHandle::CurlHandle() :
 
 CurlHandle::~CurlHandle()
 {
+    if (mHeaders != nullptr)
+    {
+        curl_slist_free_all(mHeaders);
+    }
     curl_easy_cleanup(mHandle);
 }
 
@@ -82,6 +88,44 @@ void CurlHandle::setProxyPort(size_t port)
 {
     verify(curl_easy_setopt(mHandle, CURLOPT_PROXYPORT, static_cast<long>(port)),
             "Setting proxy port");
+}
+
+void CurlHandle::setHttpHeaders(const std::vector<std::string>& headers)
+{
+    if (mHeaders != nullptr)
+    {
+        curl_slist_free_all(mHeaders);
+        mHeaders = nullptr;
+    }
+
+    for (const auto& header : headers)
+    {
+        mHeaders = curl_slist_append(mHeaders, header.c_str());
+    }
+
+    if (mHeaders != nullptr)
+    {
+        verify(curl_easy_setopt(mHandle, CURLOPT_HTTPHEADER, mHeaders),
+                "Setting HTTP headers");
+    }
+}
+
+void CurlHandle::setPutRequest()
+{
+    verify(curl_easy_setopt(mHandle, CURLOPT_CUSTOMREQUEST, "PUT"),
+            "Setting PUT request");
+}
+
+std::vector<std::string> CurlHandle::getHeaders() const
+{
+    std::vector<std::string> result;
+    curl_slist* current = mHeaders;
+    while (current != nullptr)
+    {
+        result.push_back(std::string(current->data));
+        current = current->next;
+    }
+    return result;
 }
 
 void CurlHandle::perform()

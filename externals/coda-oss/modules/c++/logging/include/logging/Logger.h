@@ -25,7 +25,6 @@
 //  Logger.h
 ///////////////////////////////////////////////////////////
 
-#pragma once
 #ifndef CODA_OSS_logging_Logger_h_INCLUDED_
 #define CODA_OSS_logging_Logger_h_INCLUDED_
 

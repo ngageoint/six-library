@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
 #ifndef __TIFF_IMAGE_WRITER_H__
 #define __TIFF_IMAGE_WRITER_H__
 
@@ -67,7 +66,7 @@ public:
     {
     }
 
-    ~ImageWriter() = default;
+    ~ImageWriter() noexcept = default;
 
     /**
      *****************************************************************

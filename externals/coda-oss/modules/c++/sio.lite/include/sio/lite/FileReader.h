@@ -19,6 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once
-#include "sio/lite/SioFileReader.h"
+#ifndef CODA_OSS_sio_lite_FileReader_h_INCLUDED_
+#define CODA_OSS_sio_lite_FileReader_h_INCLUDED_
 
+#include "sio/lite/SioFileReader.h"
+#endif

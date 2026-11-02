@@ -24,8 +24,6 @@
 #ifndef __SYS_READ_WRITE_MUTEX_INTERFACE_H__
 #define __SYS_READ_WRITE_MUTEX_INTERFACE_H__
 
-#include <import/gsl.h>
-
 #if !defined(__APPLE_CC__)
 
 #include "sys/Dbg.h"
@@ -44,7 +42,7 @@ namespace sys
 struct ReadWriteMutex
 {
     //!  Constructor
-        ReadWriteMutex(int maxReaders) : mSem(gsl::narrow<unsigned int>(maxReaders))
+        ReadWriteMutex(int maxReaders) : mSem(gsl::narrow_cast<unsigned int>(maxReaders))
     {
         mMaxReaders = maxReaders;
         dbg_printf("Creating a read/write mutex\n");

@@ -24,7 +24,7 @@
 
 #include <sstream>
 #include <fstream>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <import/cli.h>
 #include <import/mem.h>
@@ -54,7 +54,7 @@ TEST_CASE(testValue)
     {
         TEST_ASSERT_ALMOST_EQ(v.at<float>(i), 10.0f * i);
     }
-    TEST_ASSERT_EQ(std::ssize(v), 10);
+    TEST_ASSERT_EQ(coda_oss::ssize(v), 10);
 
     // strings
     v.setContainer(strings);
@@ -62,7 +62,7 @@ TEST_CASE(testValue)
     {
         TEST_ASSERT_EQ(v.at<std::string>(i), std::to_string(i));
     }
-    TEST_ASSERT_EQ(std::ssize(v), 10);
+    TEST_ASSERT_EQ(coda_oss::ssize(v), 10);
 }
 
 TEST_CASE(testChoices)
@@ -162,7 +162,7 @@ TEST_CASE(testIterate)
     std::vector<std::string> keys;
     for(auto it = results->begin(); it != results->end(); ++it)
         keys.push_back(it->first);
-    TEST_ASSERT_EQ(std::ssize(keys), 2);
+    TEST_ASSERT_EQ(coda_oss::ssize(keys), 2);
     // std::map returns keys in alphabetical order...
     TEST_ASSERT_EQ(keys[0], "config");
     TEST_ASSERT_EQ(keys[1], "verbose");
