@@ -32,7 +32,7 @@
 #include <stdexcept>
 
 #include <mt/Algorithm.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <math/Utilities.h>
 #include <units/Angles.h>
 

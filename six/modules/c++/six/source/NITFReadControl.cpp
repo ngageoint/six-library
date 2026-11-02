@@ -27,7 +27,7 @@
 #include <string>
 #include <std/memory>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include <six/NITFReadControl.h>
 #include <six/XMLControlFactory.h>

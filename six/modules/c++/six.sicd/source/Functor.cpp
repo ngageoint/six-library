@@ -24,7 +24,7 @@
 #include <iostream>
 #include <vector>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <math/Bessel.h>
 #include <six/sicd/Functor.h>
 

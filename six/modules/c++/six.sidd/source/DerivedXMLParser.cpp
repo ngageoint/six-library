@@ -28,7 +28,7 @@
 #include <std/memory>
 #include <str/Manip.h>
 #include <except/Exception.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <six/sidd/DerivedDataBuilder.h>
 
 namespace

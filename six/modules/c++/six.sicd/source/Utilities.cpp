@@ -41,7 +41,7 @@
 #include <math/Utilities.h>
 #include <math/poly/Fit.h>
 #include <mem/ScopedAlignedArray.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <str/Manip.h>
 #include <str/Encoding.h>
 #include <sys/Conf.h>

@@ -27,7 +27,7 @@
 #include <stdexcept>
 #include <tuple>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include <six/SICommonXMLParser10x.h>
 #include <six/sidd/DerivedDataBuilder.h>

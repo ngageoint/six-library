@@ -30,7 +30,7 @@
 #include <logging/NullLogger.h>
 #include <mem/ScopedArray.h>
 #include <xml/lite/MinidomParser.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <sys/Path.h>
 
 #include <six/XmlLite.h>

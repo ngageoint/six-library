@@ -28,7 +28,7 @@
 #include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <six/NITFHeaderCreator.h>
 #include <six/WriteControl.h>
 #include <six/XMLControlFactory.h>

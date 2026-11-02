@@ -30,7 +30,7 @@
 #include <future>
 #include <experimental/mdspan>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <mt/Algorithm.h>
 #include <sys/Span.h>
 
@@ -140,7 +140,7 @@ template<typename TToComplexFunc>
 static auto createLookup(TToComplexFunc toComplex)
 {
     std::vector<six::zfloat> retval(lookupDims[0] * lookupDims[1]); 
-    std::mdspan<six::zfloat, std::dextents<size_t, 2>> values(retval.data(), lookupDims);
+    std::experimental::mdspan<six::zfloat, std::dextents<size_t, 2>> values(retval.data(), lookupDims);
 
     // For all possible amp/phase values (there are "only" 256*256=65536), get and save the
     // complex<float> value.

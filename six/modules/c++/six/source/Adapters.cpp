@@ -26,7 +26,7 @@
 
 #include <std/cstddef>
 #include <stdexcept>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <std/memory>
 
 #include <sys/Span.h>
@@ -299,7 +299,7 @@ NewMemoryWriteHandler::NewMemoryWriteHandler(const NITFSegmentInfo& info,
     : NewMemoryWriteHandler(info, cast(buffer), firstRow, data, doByteSwap)
 {
     // Each pixel is stored as a pair of numbers that represent the real and imaginary 
-    // components. Each component is stored in a 16-bit signed integer in 2’s 
+    // components. Each component is stored in a 16-bit signed integer in 2ï¿½s 
     // complement format (2 bytes per component, 4 bytes per pixel). 
     if (data.getPixelType() != six::PixelType::RE16I_IM16I)
     {

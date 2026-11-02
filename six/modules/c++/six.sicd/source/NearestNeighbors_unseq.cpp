@@ -31,7 +31,7 @@
 #include <std/numbers>
 #include <experimental/mdspan>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <sys/Span.h>
 #include <mt/Algorithm.h>
 

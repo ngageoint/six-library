@@ -3,7 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- * © Copyright 2024, Maxar Technologies, Inc.
+ * ï¿½ Copyright 2024, Maxar Technologies, Inc.
  *
  * six.sicd-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -33,7 +33,7 @@
 #include <stdexcept>
 
 #include <mt/Algorithm.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include "six/sicd/ImageData.h"
 
