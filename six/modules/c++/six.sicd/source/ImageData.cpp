@@ -134,7 +134,6 @@ bool ImageData::validate(const GeoData& geoData, logging::Logger& log) const
     return valid;
 }
 
-constexpr std::array<size_t, 2> lookupDims{ AmplitudeTableSize, AmplitudeTableSize }; // size 256 x 256 matrix of complex values.
 template<typename TToComplexFunc>
 static auto createLookup(TToComplexFunc toComplex)
 {
@@ -192,7 +191,7 @@ six::Amp8iPhs8iLookup_t ImageData::getLookup(const six::AmplitudeTable* pAmplitu
         pLookup = amplitudeTable.getLookup();
     }
     assert(pLookup != nullptr);
-    return six::Amp8iPhs8iLookup_t(pLookup->data(), lookupDims[0], lookupDims[1]);
+    return six::Amp8iPhs8iLookup_t(pLookup->data());
 }
 
 void ImageData::toComplex(six::Amp8iPhs8iLookup_t values, std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results)
