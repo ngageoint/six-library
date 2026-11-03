@@ -28,7 +28,6 @@
 #include <algorithm>
 #include <iterator>
 #include <future>
-#include <experimental/mdspan>
 
 #include <gsl/narrow>
 #include <mt/Algorithm.h>
@@ -193,7 +192,7 @@ six::Amp8iPhs8iLookup_t ImageData::getLookup(const six::AmplitudeTable* pAmplitu
         pLookup = amplitudeTable.getLookup();
     }
     assert(pLookup != nullptr);
-    return six::Amp8iPhs8iLookup_t(pLookup->data(), lookupDims);
+    return six::Amp8iPhs8iLookup_t(pLookup->data(), lookupDims[0], lookupDims[1]);
 }
 
 void ImageData::toComplex(six::Amp8iPhs8iLookup_t values, std::span<const AMP8I_PHS8I_t> inputs, std::span<six::zfloat> results)

@@ -31,7 +31,7 @@
 #include <string>
 #include <memory>
 #include <array>
-#include <experimental/mdspan>
+#include <coda_oss/span.h>
 
 #include <import/except.h>
 #include <coda_oss/CPlusPlus.h>
@@ -163,8 +163,37 @@ struct SIX_SIX_API LUT
  // Store the computed `six::zfloat` for every possible 
  // amp/phs pair, a total of 256*256 values.
 static constexpr size_t AmplitudeTableSize = 256; // "This is a fixed size (256-element) LUT"
-using Lookup_ext = std::experimental::extents<size_t, AmplitudeTableSize, AmplitudeTableSize>;
-using Amp8iPhs8iLookup_t = std::experimental::mdspan<const six::zfloat, Lookup_ext>;
+
+// A simple, read-only 2-D view over a contiguous `AmplitudeTableSize` x `AmplitudeTableSize`
+// table of `six::zfloat`, indexed as `lookup(amplitude, phase)`. This replaces
+// `std::experimental::mdspan`, which is overkill for this one fixed-size 2-D use-case.
+class Amp8iPhs8iLookup_t final
+{
+public:
+    Amp8iPhs8iLookup_t() = default;
+    Amp8iPhs8iLookup_t(const six::zfloat* data, size_t rows, size_t cols) noexcept :
+        data_(data, rows * cols), cols_(cols)
+    {
+    }
+
+    const six::zfloat& operator()(size_t row, size_t col) const noexcept
+    {
+        return data_[row * cols_ + col];
+    }
+
+    size_t extent(size_t dim) const noexcept
+    {
+        return dim == 0 ? (cols_ == 0 ? 0 : data_.size() / cols_) : cols_;
+    }
+    size_t size() const noexcept
+    {
+        return data_.size();
+    }
+
+private:
+    coda_oss::span<const six::zfloat> data_;
+    size_t cols_ = 0;
+};
 
  
  // More descriptive than std::pair<uint8_t, uint8_t>

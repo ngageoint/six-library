@@ -30,7 +30,6 @@
 #include <coda_oss/span.h>
 #include <utility>
 #include <future>
-#include <experimental/mdspan>
 
 #include "logging/Logger.h"
 #include "types/Complex.h"
