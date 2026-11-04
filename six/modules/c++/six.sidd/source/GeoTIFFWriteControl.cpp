@@ -293,7 +293,7 @@ void GeoTIFFWriteControl::save(const BufferList& sources,
     const std::string& toFile,
     const std::vector<std::string>& schemaPaths)
 {
-    save(sources, toFile, schemaPaths);
+    save<BufferList>(sources, toFile, schemaPaths);
 }
 
 void GeoTIFFWriteControl::addCharArray(tiff::IFD* ifd, const std::string &tag,

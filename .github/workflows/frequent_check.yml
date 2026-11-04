@@ -79,22 +79,22 @@ jobs:
       run: |
         msbuild six.sln /p:configuration=${{ matrix.configuration }}
         msbuild six.sln /p:configuration=${{ matrix.configuration }} /t:Clean
-    #- name: vstest 
+    #- name: vstest
     #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
     #  with:
     #    platform: ${{ matrix.platform }}
     #    testAssembly: UnitTest.dll
     #    searchFolder: D:\a\nitro\nitro\x64\Debug
-    #- name: vstest 
+    #- name: vstest
     #  run: |
     #    vstest.console D:\a\nitro\nitro\x64\Debug\UnitTest.dll
 
-  build-linux-cmake:
+  build-gcc-cmake:
     strategy:
       matrix:
         os: [ubuntu-22.04]
         python-version: ['3.7']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
+    name: ${{ matrix.os }}-gcc-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
     - name: Skip Duplicate Actions
@@ -118,3 +118,22 @@ jobs:
       run: |
         cd target/six
         ctest --output-on-failure
+
+  build-clang-cmake:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    name: ${{ matrix.os }}-clang-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - uses: egor-tensin/setup-clang@v2
+    - name: configure
+      run: cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -B target
+    - name: build
+      run: cmake --build target -j 8
+    - name: test
+      continue-on-error: true
+      run: ctest --output-on-failure --test-dir target/six

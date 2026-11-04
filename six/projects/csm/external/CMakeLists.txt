@@ -6,6 +6,9 @@ if (MSVC)
     add_compile_options(/wd4996) # '...': This function or variable may be unsafe
     add_compile_options(/wd4244) # 'return': conversion from '...' to '...'
     add_compile_options(/wd4005) # '...': macro redefinition
+elseif (UNIX)
+    # This is not our code, so we are not going to change it to eliminate these problems
+    add_compile_options(-Wno-error=header-guard)
 endif()
 
 set(TARGET_NAME CSMAPI)
