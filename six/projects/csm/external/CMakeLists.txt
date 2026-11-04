@@ -8,7 +8,9 @@ if (MSVC)
     add_compile_options(/wd4005) # '...': macro redefinition
 elseif (UNIX)
     # This is not our code, so we are not going to change it to eliminate these problems
-    add_compile_options(-Wno-error=header-guard)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        add_compile_options(-Wno-error=header-guard)
+    endif()
 endif()
 
 set(TARGET_NAME CSMAPI)
