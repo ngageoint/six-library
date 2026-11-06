@@ -62,15 +62,13 @@ bool PFA::operator==(const PFA& rhs) const
 
 void PFA::fillDerivedFields(const Position& position)
 {
-    /*
     if (!Init::isUndefined(position.arpPoly) &&
         !Init::isUndefined(polarAngleRefTime))
     {
         // This doesn't actually do anything currently.
         // Requires re-implemenation of polyfit, pfa_polar_coords, and bsxfun
-        const Vector3 polRefPos = position.arpPoly(polarAngleRefTime);
+        // const Vector3 polRefPos = position.arpPoly(polarAngleRefTime);
     }
-    */
 }
 
 void PFA::fillDefaultFields(const GeoData& geoData,
