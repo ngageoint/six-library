@@ -169,7 +169,6 @@ static constexpr size_t AmplitudeTableSize = 256; // "This is a fixed size (256-
 class Amp8iPhs8iLookup_t final
 {
 public:
-    Amp8iPhs8iLookup_t() = default;
     explicit Amp8iPhs8iLookup_t(const six::zfloat* data) noexcept :
         data_(data, AmplitudeTableSize * AmplitudeTableSize)
     {
