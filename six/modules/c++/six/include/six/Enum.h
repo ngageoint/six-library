@@ -191,12 +191,12 @@ namespace details
     #ifdef SWIGPYTHON
        // Normal C++ code shouldn't use these constructors; use toType() or cast() instead
        #define SIX_Enum_constructors_SWIGPYTHON_(name) explicit name(int i) : name(static_cast<values>(i)) { } \
-           explicit name(const std::string& s) { *this = std::move(toType(s)); }
+           explicit name(const std::string& s) { *this = toType(s); }
     #else
        #define SIX_Enum_constructors_SWIGPYTHON_(name)
     #endif
     #define SIX_Enum_constructors_(name) SIX_Enum_default_ctor_assign_(name); SIX_Enum_constructors_SWIGPYTHON_(name); \
-        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = std::move(name(v)); return *this; }
+        name(values v) : Enum(static_cast<int>(v)) {} name& operator=(values v) { *this = name(v); return *this; }
     #define SIX_Enum_BEGIN_enum enum values {
     #define SIX_Enum_BEGIN_DEFINE(name) struct name final : public six::details::Enum<name> { 
     #define SIX_Enum_END_DEFINE(name)  SIX_Enum_constructors_(name); }

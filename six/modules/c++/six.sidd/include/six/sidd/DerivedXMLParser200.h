@@ -89,13 +89,13 @@ protected:
         const xml::lite::Element* exploitationFeaturesElem,
         ExploitationFeatures* exploitationFeatures) const;
 
-    virtual void parseCompressionFromXML(const xml::lite::Element* compressionElem,
+    void parseCompressionFromXML(const xml::lite::Element* compressionElem,
                                          Compression& compression) const;
 
     virtual XMLElem convertDisplayToXML(const Display& display,
                                         XMLElem parent = nullptr) const override;
 
-    virtual void parseDisplayFromXML(const xml::lite::Element* displayElem,
+    void parseDisplayFromXML(const xml::lite::Element* displayElem,
                                      Display& display) const;
 
     virtual XMLElem convertMeasurementToXML(

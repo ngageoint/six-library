@@ -17,11 +17,14 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     #add_compile_options(-Wall -pedantic -Wextra)
     add_compile_options(-Wall -Wextra)
 
-    add_compile_options(-Wno-deprecated-copy)
-    add_compile_options(-Wno-class-memaccess)
-    add_compile_options(-Wno-sizeof-pointer-div)
     add_compile_options(-Wno-unused-parameter)
     add_compile_options(-Wno-ignored-qualifiers)
+
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_compile_options(-Wno-deprecated-copy)
+        add_compile_options(-Wno-class-memaccess)
+        add_compile_options(-Wno-sizeof-pointer-div)
+    endif()
 endif()
 
 add_subdirectory(scene)

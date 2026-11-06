@@ -26,6 +26,17 @@ if (${CMAKE_PROJECT_NAME} STREQUAL six-library)
             add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-Wno-error=format-truncation>")
         endif()
 
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            add_compile_options(
+                -Wno-error=inconsistent-missing-override
+                -Wno-error=defaulted-function-deleted
+                -Wno-error=nontrivial-memcall
+                -Wno-error=deprecated-copy-with-user-provided-copy
+                -Wno-error=unused-function
+                -Wno-error=string-plus-int
+            )
+        endif()
+
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")

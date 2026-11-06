@@ -155,8 +155,9 @@ bool operator==(const nitf::LookupTable& lhs, const nitf::LookupTable& rhs)
     }
     else
     {
+        const size_t length = lhs.getTables() * lhs.getEntries();
         isEqual = isEqual &&  std::equal(lhs.getTable(),
-            lhs.getTable() + sizeof lhs.getTable() / sizeof *lhs.getTable(),
+            lhs.getTable() + length,
             rhs.getTable());
     }
     return isEqual;
