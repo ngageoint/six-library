@@ -154,11 +154,11 @@ TEST_CASE(valid_six_50x50)
 
 inline static std::string classificationText_asIso8859_1()
 {
-    return "NON CLASSIFI\xc9 / UNCLASSIFIED";  // ISO8859-1 "NON CLASSIFI� / UNCLASSIFIED"
+    return "NON CLASSIFI\xc9 / UNCLASSIFIED";  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"
 }
 inline static std::string classificationText_asUtf8()
 {
-    return "NON CLASSIFI\xc3\x89 / UNCLASSIFIED";  // UTF-8 "NON CLASSIFI� / UNCLASSIFIED"
+    return "NON CLASSIFI\xc3\x89 / UNCLASSIFIED";  // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
 }
 
 TEST_CASE(sicd_French_xml)
