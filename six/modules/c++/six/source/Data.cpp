@@ -20,7 +20,7 @@
  *
  */
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include "six/Data.h"
 

@@ -20,7 +20,6 @@
  */
 #ifndef CODA_OSS_sys_sys_filesystem_h_INCLUDED_
 #define CODA_OSS_sys_sys_filesystem_h_INCLUDED_
-#pragma once
 
 //
 // For now, these are just some wrappers around the CODA-OSS routines ...
@@ -34,7 +33,6 @@
 #include <cstdint>
 
 #include "sys/CPlusPlus.h"
-#include "coda_oss/namespace_.h" // get something in the "coda_oss" namespace
 #include "config/Exports.h"
 
 namespace sys // should be in coda_oss/, but implementation needs sys::Path

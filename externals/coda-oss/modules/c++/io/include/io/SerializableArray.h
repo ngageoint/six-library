@@ -58,7 +58,7 @@ public:
     {
     }
 
-    virtual ~SerializableArray()
+    virtual ~SerializableArray() noexcept
     {
     }
 

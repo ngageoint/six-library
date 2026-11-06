@@ -27,7 +27,7 @@
 
 #include <except/Exception.h>
 #include <sys/Conf.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 j2k::Image::Image(const types::RowCol<size_t>& rawImageDims)
 {

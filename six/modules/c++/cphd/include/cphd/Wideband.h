@@ -36,7 +36,7 @@
 #include <mem/BufferView.h>
 #include <mem/ScopedArray.h>
 #include <sys/Conf.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <types/RowCol.h>
 
 namespace cphd

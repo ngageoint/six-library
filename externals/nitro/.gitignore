@@ -9,7 +9,6 @@ CMakeFiles/
 CMakeCache.txt
 CMakeSettings.json
 # ignore build directories ...
-build/
 # ... but not coda-oss/build
 !/externals/coda-oss/build/
 
@@ -17,8 +16,9 @@ externals/coda-oss/modules/c++/**/Makefile
 modules/**/Makefile
 
 # Build artifacts
-target/
-install/
+/build*
+/target*/
+/install*/
 **/install-*/
 test_package/build/
 *.pyc

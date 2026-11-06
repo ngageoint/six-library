@@ -21,7 +21,6 @@
  */
 #ifndef CODA_OSS_math_linear_VectorN_h_INCLUDED_
 #define CODA_OSS_math_linear_VectorN_h_INCLUDED_
-#pragma once
 
 #include <cmath>
 
@@ -75,13 +74,13 @@ public:
     }
 
     /*!
-     *  Initialize from a one dimensional
-     *  row vector matrix
+     *  Initialize from a one dimensional column vector matrix
      */
     VectorN(const MatrixMxN<_ND, 1, _T>& mx)
     {
         mRaw = mx;
     }
+
     /*!
      *  Copy a vector from a raw STL vector
      *  which must be sized with at least _ND
@@ -175,7 +174,7 @@ public:
 
     }
 
-    constexpr size_t size() const noexcept { return _ND; }
+    static constexpr size_t size() noexcept { return _ND; }
 
     _T dot(const VectorN<_ND>& vec) const
     {
@@ -369,6 +368,12 @@ template<size_t _MD, size_t _ND, typename _T>
               const math::linear::VectorN<_ND, _T>& v)
 {
     return math::linear::VectorN<_MD, _T>(m * v.matrix());
+}
+
+template<size_t _MD, size_t _ND, typename _T> 
+math::linear::VectorN<_ND, _T> operator*(const math::linear::VectorN<_MD, _T>& v, const math::linear::MatrixMxN<_MD, _ND, _T>& m)
+{
+    return math::linear::VectorN<_ND, _T>(v.matrix().transpose() * m);
 }
 
 template<size_t _ND, typename _T> math::linear::VectorN<_ND, _T>

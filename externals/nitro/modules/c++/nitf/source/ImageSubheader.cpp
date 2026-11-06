@@ -25,7 +25,7 @@
 #include <nitf/Object.hpp>
 #include <nitf/NITFException.hpp>
 
-#include "gsl/gsl.h"
+#include "gsl/narrow"
 
 namespace nitf
 {

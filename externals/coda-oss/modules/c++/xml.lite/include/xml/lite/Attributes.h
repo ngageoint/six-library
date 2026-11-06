@@ -20,19 +20,18 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_xml_lite_Attributes_h_INCLUDED_
 #define CODA_OSS_xml_lite_Attributes_h_INCLUDED_
 
 #include <string>
 #include <vector>
+#include <gsl/narrow>
 
 #include <config/Exports.h>
 
 #include "sys/Conf.h"
 #include "except/Exception.h"
 #include "str/Convert.h"
-#include "gsl/gsl.h"
 
 #include "xml/lite/QName.h"
 /*!

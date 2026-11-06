@@ -25,7 +25,7 @@
 #include <cmath>
 #include <std/filesystem>
 #include <vector>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <types/Complex.h>
 #include <import/six.h>

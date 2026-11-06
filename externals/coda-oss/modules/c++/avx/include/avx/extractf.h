@@ -22,7 +22,6 @@
  */
 #ifndef CODA_OSS_avx_extractf_h_INCLUDED_
 #define CODA_OSS_avx_extractf_h_INCLUDED_
-#pragma once
 
 #include <config/compiler_extensions.h>
 
@@ -30,25 +29,22 @@
     #define CODA_OSS_mm256_extractf_DEFINED_ 1
 
     #include <immintrin.h>
-    //This looks awful, but almost all of these intrinsics simply reinterpret bits and generate no actual instructions.
-    #define CODA_OSS_sys_MM256_EXTRACTF_(ymm_,i_) _mm256_cvtss_f32(_mm256_castsi256_ps(_mm256_set1_epi32(_mm256_extract_epi32(_mm256_castps_si256(ymm_),i_))))
     namespace avx
     {
+        // Extract the i'th 32-bit float lane from a 256-bit AVX register.
+        // AVX intrinsics such as _mm256_extract_epi32() require a compile-time
+        // constant index, which doesn't work for a run-time "i" parameter; a
+        // simple reinterpret_cast avoids that restriction and generates
+        // equivalent code on GCC, Clang and MSVC.
         template <typename T>
-        inline T& mm256_extractf_(T& ymm, int i)
+        inline float& mm256_extractf_(T& ymm, int i)
         {
-            return CODA_OSS_sys_MM256_EXTRACTF_(ymm, i);
+            return reinterpret_cast<float*>(&ymm)[i];
         }
         template <typename T>
         inline float& mm256_extractf(T& ymm, int i)
         {
-            #if defined(__GNUC__)
-                return ymm[i];
-            #elif defined(_MSC_VER)
-                return ymm.m256_f32[i];
-            #else
-                return mm256_extractf_(ymm, i);
-            #endif
+            return mm256_extractf_(ymm, i);
         }
     }
 

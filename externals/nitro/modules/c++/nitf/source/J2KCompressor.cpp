@@ -33,7 +33,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <iterator>
 #include <std/memory>
 #include <std/cstddef> // std::byte
@@ -42,10 +42,10 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <iterator>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <except/Exception.h>
 #include <sys/Conf.h>
 #include <io/ByteStream.h>
@@ -57,7 +57,7 @@
 #include <io/SeekableStreams.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <except/Exception.h>
 #include <sys/Conf.h>
 #include <mem/ScopedArray.h>

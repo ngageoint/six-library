@@ -23,7 +23,6 @@
  
 #ifndef __NET_SSL_CONNECTION_H__
 #define __NET_SSL_CONNECTION_H__
-#pragma once
 
 #include <net/ssl/net_ssl_config.h>
 #include "sys/Conf.h"

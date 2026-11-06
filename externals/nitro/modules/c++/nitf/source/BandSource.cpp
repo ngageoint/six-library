@@ -23,7 +23,7 @@
 #include "nitf/BandSource.hpp"
 #include "nitf/Utils.hpp"
 
-#include "gsl/gsl.h"
+#include "gsl/narrow"
 
 nitf::MemorySource::MemorySource(const void* data,
                                  size_t size,

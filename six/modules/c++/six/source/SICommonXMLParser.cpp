@@ -25,7 +25,7 @@
 #include <string>
 
 #include <str/Convert.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include <six/Utilities.h>
 #include <six/CollectionInformation.h>

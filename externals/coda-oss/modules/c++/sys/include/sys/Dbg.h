@@ -22,7 +22,6 @@
  *
  */
 
-#pragma once 
 #ifndef CODA_OSS_sys_Dbg_h_INCLUDED_
 #define CODA_OSS_sys_Dbg_h_INCLUDED_
 

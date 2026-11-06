@@ -21,7 +21,6 @@
  */
 #ifndef CODA_OSS_config_compiler_extentions_h_INCLUDED_
 #define CODA_OSS_config_compiler_extentions_h_INCLUDED_
-#pragma once
 
 #ifndef CODA_OSS_attribute_noinline_DEFINED_
     #define CODA_OSS_attribute_noinline_DEFINED_ 1

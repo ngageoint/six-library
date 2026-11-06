@@ -27,14 +27,14 @@
 #include <vector>
 #include <string>
 #include <std/filesystem>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <numeric>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <str/Format.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>

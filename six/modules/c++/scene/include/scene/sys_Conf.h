@@ -7,7 +7,7 @@
 #include <std/filesystem>
 #include <std/memory>
 #include <std/optional>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/string>
 
 #include <sys/Conf.h>

@@ -24,7 +24,7 @@
 #define SIX_six_WriteControl_h_INCLUDED_
 
 #include <memory>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <vector>
 #include <std/filesystem>
 #include <complex>

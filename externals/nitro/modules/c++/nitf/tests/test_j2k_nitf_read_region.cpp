@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <std/span>
+#include <coda_oss/span.h>
 
 #if _WIN32
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
@@ -38,7 +38,7 @@
 #endif // _WIN32
 
 #include <str/Format.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include <import/nitf.hpp>
 #include <nitf/J2KReader.hpp>

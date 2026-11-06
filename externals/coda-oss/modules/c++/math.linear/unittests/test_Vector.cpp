@@ -1,4 +1,25 @@
-#include <std/span>
+/* =========================================================================
+ * This file is part of math.linear-c++ 
+ * =========================================================================
+ * 
+ * © 2012 MDA Information Systems LLC
+ *
+ * math.linear-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this program; If not, 
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+#include <coda_oss/span.h>
 #include <cstdlib>
 #include "TestCase.h"
 #include "math/linear/Vector.h"
@@ -257,8 +278,8 @@ TEST_CASE(testOperatorMinusEquals)
     Vector<double> v2(5, -5);
 
     v2 -= v1;
-    TEST_ASSERT_EQ(std::ssize(v1), 5);
-    TEST_ASSERT_EQ(std::ssize(v2), 5);
+    TEST_ASSERT_EQ(coda_oss::ssize(v1), 5);
+    TEST_ASSERT_EQ(coda_oss::ssize(v2), 5);
     for (int i = 0; i < 5; i++)
         TEST_ASSERT_EQ(v2[i], -18);
     for (int i = 0; i < 5; i++)
@@ -348,9 +369,9 @@ TEST_CASE(testOperatorMinus)
     Vector<double> v3(v2 - v1);
     // TODO: Test what happens if v1 & v2 are of different lengths.
 
-    TEST_ASSERT_EQ(std::ssize(v1), 4);
-    TEST_ASSERT_EQ(std::ssize(v2), 4);
-    TEST_ASSERT_EQ(std::ssize(v3), 4);
+    TEST_ASSERT_EQ(coda_oss::ssize(v1), 4);
+    TEST_ASSERT_EQ(coda_oss::ssize(v2), 4);
+    TEST_ASSERT_EQ(coda_oss::ssize(v3), 4);
 
     for (int i = 0; i < 4; i++)
     {

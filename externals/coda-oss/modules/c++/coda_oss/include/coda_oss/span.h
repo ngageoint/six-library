@@ -19,104 +19,99 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#pragma once 
 #ifndef CODA_OSS_coda_oss_span_h_INCLUDED_
 #define CODA_OSS_coda_oss_span_h_INCLUDED_
 
-#include <stdint.h>
-#include <stdlib.h>
-#include<stddef.h>
-
+#include <cstdint>
+#include <cstdlib>
 #include <cstddef>
 #include <type_traits>
+#include <gsl/narrow>
 
 #include "coda_oss/CPlusPlus.h"
-#include "coda_oss/namespace_.h"
-#include "coda_oss/span_.h"
 #include "coda_oss/cstddef.h" // byte
 
-// Need a fairly decent C++ compiler to use the real GSL.  This brings in more than 
-// we really need for span (e.g., gsl::narrow()), but it keeps things simple.
-#include "gsl/gsl.h"  // not gsl/span; need #pragma here to turn off warnings
-
 // This logic needs to be here rather than <std/span> so that `coda_oss::span` will
-// be the same as `std::span`.
+// be the same as `coda_oss::span`.
 #ifndef CODA_OSS_HAVE_std_span_
     #define CODA_OSS_HAVE_std_span_ 0  // assume no <span>
 #endif
 #if CODA_OSS_cpp17 // C++17 for `__has_include()`
-    #if __has_include(<span>) && __cpp_lib_span // Some versions of G++ say they're C++20 but don't have <span>
+    #if __has_include(<span>) && __cpp_lib_span && CODA_OSS_cpp20 // Some versions of G++ say they're C++20 but don't have <span>
         #include <span>
         #undef CODA_OSS_HAVE_std_span_
         #define CODA_OSS_HAVE_std_span_ 1  // provided by the implementation, probably C++20
     #endif
 #endif // CODA_OSS_cpp17
 
+
+#if ! CODA_OSS_HAVE_std_span_
+#include <gsl/span>
+#endif
 namespace coda_oss
 {
     #if CODA_OSS_HAVE_std_span_
-        using std::span; // coda_oss::span == std::span
-    #elif defined(GSL_SPAN_H) // the above #include'd gsl/span
-	    using gsl::span;
+        using std::span;
+        using std::as_bytes;
+        using std::as_writable_bytes;
+        using std::dynamic_extent;
     #else
-	    using details::span; // no std::span or gsl::span, use our own
-    #endif 
+        using gsl::span;
+        using gsl::as_bytes;
+        using gsl::as_writable_bytes;
+        using gsl::dynamic_extent;
+    #endif
 
+    // https://en.cppreference.com/cpp/feature_test#cpp_lib_nonmember_container_access
+    #if !__cpp_lib_nonmember_container_access
+    // https://en.cppreference.com/w/cpp/iterator/size
+    template <typename C>
+    constexpr size_t size(const C& c)
+    {
+        return c.size();
+    }
+    template <typename T, size_t N>
+    constexpr size_t size(const T (&)[N]) noexcept
+    {
+        return N;
+    }
+    #else
+    using std::size;
+    #endif
 
-// Even if `span` is `std::span`, these are still in the `coda_oss` namespace.
-
-// https://en.cppreference.com/w/cpp/container/span/as_bytes
-template <typename T>
-inline auto as_bytes(span<const T> s) noexcept
-{
-    // https://en.cppreference.com/w/cpp/types/is_trivially_copyable "... serialized to/from binary files ..."
-    static_assert(std::is_trivially_copyable<T>::value, "must be 'trivially' copyable.");
-
-    const void* const p_ = s.data();
-    auto const p = static_cast<const byte*>(p_);
-    return span<const byte>(p, s.size_bytes());
-}
-template <typename T>
-inline auto as_bytes(span<T> s) noexcept
-{
-    const span<const T> s_(s.data(), s.size());
-    return as_bytes(s_);
-}
-template <typename T>
-inline span<byte> as_writable_bytes(span<T> s) noexcept
-{
-    // https://en.cppreference.com/w/cpp/types/is_trivially_copyable "... serialized to/from binary files ..."
-    static_assert(std::is_trivially_copyable<T>::value, "must be 'trivially' copyable.");
-
-    static_assert(!std::is_const<T>::value, "T cannot be 'const'");
-
-    void* const p_ = s.data();
-    auto const p = static_cast<byte*>(p_);
-    return span<byte>(p, s.size_bytes());
-}
-
-// https://en.cppreference.com/w/cpp/iterator/size
-template <typename C>
-constexpr size_t size(const C& c)
-{
-    return c.size();
-}
-template <typename C>
-constexpr ptrdiff_t ssize(const C& c)
-{
-    return gsl::narrow<ptrdiff_t>(c.size());
+    //https://en.cppreference.com/cpp/feature_test#cpp_lib_ssize
+    #if !__cpp_lib_ssize
+    template <typename C>
+    constexpr ptrdiff_t ssize(const C& c)
+    {
+        return gsl::narrow<ptrdiff_t>(c.size());
+    }
+    template <typename T, ptrdiff_t N>
+    constexpr ptrdiff_t ssize(const T (&)[N]) noexcept
+    {
+        return N;
+    }
+    #else
+    using std::ssize;
+    #endif
 }
 
-template <typename T, size_t N>
-constexpr size_t size(const T (&)[N]) noexcept
+// Downstream projects use this alias even when std does not support various features.
+// Preserve this until relevant projects are upgraded to high enough C++ version.
+namespace std
 {
-    return N;
-}
-template <typename T, ptrdiff_t N>
-constexpr ptrdiff_t ssize(const T (&)[N]) noexcept
-{
-    return N;
-}
+using coda_oss::span;
+using coda_oss::as_bytes;
+using coda_oss::as_writable_bytes;
+using coda_oss::dynamic_extent;
+
+#if !__cpp_lib_nonmember_container_access
+using coda_oss::size;
+#endif
+
+#if !__cpp_lib_ssize
+using coda_oss::ssize;
+#endif
 
 }
 

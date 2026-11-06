@@ -36,7 +36,7 @@ namespace sys
 struct OSUnix final : public AbstractOS
 {
     OSUnix() = default;
-    virtual ~OSUnix() = default;
+    virtual ~OSUnix() noexcept = default;
 
     virtual std::string getPlatformName() const override;
 
@@ -245,7 +245,7 @@ protected:
 struct DirectoryUnix final : public AbstractDirectory
 {
     DirectoryUnix() = default;
-    virtual ~DirectoryUnix()
+    virtual ~DirectoryUnix() noexcept(false)
     {
         close();
     }

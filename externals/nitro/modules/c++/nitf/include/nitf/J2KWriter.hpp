@@ -26,7 +26,7 @@
 #pragma once
 
 #include <std/filesystem>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include "config/compiler_extensions.h"
 

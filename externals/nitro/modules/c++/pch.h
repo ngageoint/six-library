@@ -21,7 +21,7 @@ CODA_OSS_disable_warning_pop
 #include <std/bit>
 #include <std/cstddef>
 #include <std/filesystem>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/optional>
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers

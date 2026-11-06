@@ -99,7 +99,6 @@ void ZipFile::readCentralDir()
     sys::ubyte* p = mCompressed + mCompressedLength - 4;
 
     sys::ubyte* eocd = nullptr;
-    auto i = mCompressedLength - 4;
     while (p >= start)
     {
         if (*p == 0x50)
@@ -111,7 +110,6 @@ void ZipFile::readCentralDir()
             }
         }
         p--;
-        i--;
     }
     if (p < start)
     {

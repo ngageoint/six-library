@@ -1,3 +1,23 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * © 2022 Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
 #include "sys/sys_filesystem.h"
 
 #include <stdlib.h>
@@ -13,9 +33,9 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <gsl/narrow>
 
 #include "sys/Path.h"
-#include "gsl/gsl.h"
 
 namespace fs = sys::filesystem;
 
@@ -35,10 +55,6 @@ static inline std::string make_what(const char* curfile, const int lineNum, cons
     std::ostringstream what;
     what << "ERROR: " << curfile << ", Line " << lineNum << ": " << msg;
     return what.str();
-}
-static inline std::string make_what(const char* curfile, const int lineNum, const std::ostringstream& msg)
-{
-    return make_what(curfile, lineNum, msg.str());
 }
 // A macro for conveniently throwing errors.
 // Need "throw" to be visible, not hidden inside of a function, so that code-analysis tools can see it.

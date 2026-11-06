@@ -1,2 +1,2 @@
-HighFive (HDF5 header-only C++ library) from https://github.com/BlueBrain/HighFive
+HighFive from https://github.com/highfive-devs/highfive/releases/tag/v3.3.0
 

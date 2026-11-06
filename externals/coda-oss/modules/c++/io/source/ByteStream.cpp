@@ -20,7 +20,7 @@
  *
  */
 
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include "io/ByteStream.h"
 
@@ -35,13 +35,13 @@ sys::Off_T io::ByteStream::seek(sys::Off_T offset, Whence whence)
         mPosition = offset;
         break;
     case END:
-        if (offset > std::ssize(mData))
+        if (offset > coda_oss::ssize(mData))
         {
             mPosition = 0;
         }
         else
         {
-            mPosition = std::ssize(mData) - offset;
+            mPosition = coda_oss::ssize(mData) - offset;
         }
         break;
     case CURRENT:
@@ -50,7 +50,7 @@ sys::Off_T io::ByteStream::seek(sys::Off_T offset, Whence whence)
         break;
     }
 
-    if (mPosition > std::ssize(mData))
+    if (mPosition > coda_oss::ssize(mData))
         mPosition = -1;
     return tell();
 }
@@ -61,7 +61,7 @@ sys::Off_T io::ByteStream::available()
         throw except::Exception(Ctxt("Invalid available bytes on eof"));
 
     sys::Off_T where = mPosition;
-    sys::Off_T until = std::ssize(mData);
+    sys::Off_T until = coda_oss::ssize(mData);
     sys::Off_T diff = until - where;
     return (diff < 0) ? 0 : diff;
 }

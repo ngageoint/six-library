@@ -25,7 +25,7 @@
 
 #include <algorithm>
 
-#include <import/gsl.h>
+#include <gsl/narrow>
 
 #include <io/InputStream.h>
 #include <io/OutputStream.h>

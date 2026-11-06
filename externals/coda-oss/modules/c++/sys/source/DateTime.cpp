@@ -27,12 +27,12 @@
 #include <vector>
 #include <mutex>
 #include <stdexcept>
+#include <gsl/narrow>
 
 #include "except/Exception.h"
 #include "sys/Conf.h"
 #include "str/Convert.h"
 #include "str/Manip.h"
-#include "gsl/gsl.h"
 
 #if CODA_OSS_POSIX_SOURCE
 #include <sys/time.h>
@@ -119,8 +119,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
         case '%':              // "%%" is converted to "%".
             bc = *bp++;
             if (bc != '%')
-                throw except::Exception(Ctxt(
-                        "Value does not match format (%%):  " + bc));
+                throw except::Exception(Ctxt("Value does not match format (%%):  " + str::toString(bc)));
             break;
 
         /*
@@ -338,7 +337,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
 
         default:               // Unknown/unsupported conversion.
             throw except::Exception(Ctxt(
-                    "Unknown/unsupported format type:  %" + fc));
+                    "Unknown/unsupported format type:  %" + str::toString(fc)));
         }
     }
 
@@ -418,18 +417,18 @@ std::string sys::DateTime::monthToString(int month)
 {
     switch (month)
     {
-        case 1: { return "January"; }break;
-        case 2: { return "February"; }break;
-        case 3: { return "March"; }break;
-        case 4: { return "April"; }break;
-        case 5: { return "May"; }break;
-        case 6: { return "June"; }break;
-        case 7: { return "July"; }break;
-        case 8: { return "August"; }break;
-        case 9: { return "September"; }break;
-        case 10: { return "October"; }break;
-        case 11: { return "November"; }break;
-        case 12: { return "December"; }break;
+        case 1: return "January";
+        case 2: return "February";
+        case 3: return "March";
+        case 4: return "April";
+        case 5: return "May";
+        case 6: return "June";
+        case 7: return "July";
+        case 8: return "August";
+        case 9: return "September";
+        case 10: return "October";
+        case 11: return "November";
+        case 12: return "December";
         default: throw except::InvalidArgumentException(
                         "Value not in the valid range {1:12}");
     }
@@ -439,13 +438,13 @@ std::string sys::DateTime::dayOfWeekToString(int dayOfWeek)
 {
     switch (dayOfWeek)
     {
-        case 1: { return "Sunday"; }break;
-        case 2: { return "Monday"; }break;
-        case 3: { return "Tuesday"; }break;
-        case 4: { return "Wednesday"; }break;
-        case 5: { return "Thursday"; }break;
-        case 6: { return "Friday"; }break;
-        case 7: { return "Saturday"; }break;
+        case 1: return "Sunday";
+        case 2: return "Monday";
+        case 3: return "Tuesday";
+        case 4: return "Wednesday";
+        case 5: return "Thursday";
+        case 6: return "Friday";
+        case 7: return "Saturday";
         default: throw except::InvalidArgumentException(
                         "Value not in the valid range {1:7}");
     }

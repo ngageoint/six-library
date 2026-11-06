@@ -26,7 +26,7 @@
 
 #include <string>
 #include <vector>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/cstddef>
 #include <functional>
 #include <memory>

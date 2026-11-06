@@ -8,203 +8,159 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    # Runs at 09:00 UTC every Saturday
+    - cron: '0 9 * * 6'
+  workflow_dispatch: # Optional: allows manual triggering for testing
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-  build-cmake-windows:
+  build-windows:
     strategy:
       matrix:
-        os: [windows-latest]
-        python-version: ['3.7']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
-    runs-on: ${{ matrix.os }}
+        config: [Release]
+    name: windows-latest-${{ matrix.config }}
+    runs-on: windows-latest
     steps:
     - name: Skip Duplicate Actions
       uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: Set up Python
-      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install python dependencies
-      run: |
-        pip install numpy
     - name: configure
       run: |
         ls env:
-        mkdir target-Release
-        cd target-Release
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
-        cd ..
-        mkdir target-Debug
-        cd target-Debug
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DENABLE_PYTHON=OFF
+        cmake -B target
     - name: build
       run: |
-        cd target-Release
-        cmake --build . --config Release -j
-        cd ..
-        cd target-Debug
-        cmake --build . --config Debug -j
+        cmake --build target -j --config ${{ matrix.config }}
     - name: test # should run w/o install
       run: |
-        cd target-Release
-        ctest -C Release --output-on-failure --timeout $env:CTEST_TIMEOUT
-        cd ..
-        cd target-Debug
-        ctest -C Debug --output-on-failure --timeout $env:CTEST_TIMEOUT
-    - name: install
-      run: |
-        cd target-Release
-        cmake --build . --config Release --target install
-        cd ..
-        cd target-Debug
-        cmake --build . --config Debug --target install
-        cd ..
+        ctest --test-dir target -C ${{ matrix.config }} --output-on-failure --timeout $env:CTEST_TIMEOUT
 
-  build-msbuild-windows:
+# Since MSBUILD solutions can be generated from CMake within VS, no point testing in build.
+
+  build-ubuntu:
     strategy:
       matrix:
-        os: [windows-latest]
-        platform: [x64]
-        configuration: [Debug] # Debug turns on more compiler warnings
+        os: [ubuntu-22.04, ubuntu-24.04, ubuntu-26.04]
         avx: [AVX512F]
-    name: ${{ matrix.os }}-${{ matrix.avx }}-msbuild
+        config: [Release]
+    name: ${{ matrix.os }}-${{ matrix.config }}-${{ matrix.avx }}
     runs-on: ${{ matrix.os }}
-
     steps:
     - name: Skip Duplicate Actions
       uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure
       run: |
-        ls env:
-        mkdir out
-        cd out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON
+        cmake -B out -DENABLE_${{ matrix.avx }}=ON -DCMAKE_BUILD_TYPE=${{ matrix.config }}
     - name: build
       run: |
-        cd out
-        cmake --build . --config ${{ matrix.configuration }} -j
-        cmake --build . --config ${{ matrix.configuration }} --target install
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1 # https://github.com/marketplace/actions/setup-msbuild
-      with:
-        msbuild-architecture: x64
-    - name: msbuild
-      run: |
-        msbuild coda-oss.sln /p:configuration=${{ matrix.configuration }}
-    # Can't figure out how to make this work :-(
-    #- name: vstest 
-    #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
-    #  with:
-    #      testAssembly: UnitTest.dll
-    #      searchFolder: D:\a\nitro\nitro\${{ matrix.platform }}\${{ matrix.configuration }}
-    #      runInParallel: true  
-
-  build-linux-cmake-default:
-    strategy:
-      matrix:
-        os: [ubuntu-22.04]
-        python-version: ['3.7']
-    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
-    runs-on: ${{ matrix.os }}
-    steps:
-    - name: Skip Duplicate Actions
-      uses: fkirc/skip-duplicate-actions@v5.3.1
-    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: Set up Python
-      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install python dependencies
-      run: |
-        pip install numpy
-    - name: configure
-      run: |
-        env
-        which python
-        mkdir target && cd target
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
-    - name: build
-      run: |
-        cd target
-        # "-j" spawns too many processes causing GCC to crash
-        cmake --build . -j 12
+        cmake --build out -j
     - name: test
     # should run w/o install
       run: |
-        cd target
-        ctest --output-on-failure --timeout $CTEST_TIMEOUT
-    - name: install
-      run: |
-        cd target
-        cmake --build . --target install
+        ctest --test-dir out --output-on-failure --timeout $CTEST_TIMEOUT
 
-  build-linux-cmake:
+  build-rocky:
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-        configuration: [Debug, Release]
-        avx: [AVX512F]
-    name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
-    runs-on: ${{ matrix.os }}
+        version: [8, 9, 10]
+        config: [Release]
+    name: rockylinux-${{ matrix.version }}-${{ matrix.config }}
+    runs-on: ubuntu-24.04
+    container:
+      image: rockylinux/rockylinux:${{ matrix.version }}-minimal
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - name: setup system
+      run: |
+        microdnf install -y gcc gcc-c++ tar gzip cmake
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        cmake -B target -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+    - name: build
+      run: |
+        cmake --build target -j
+    - name: test
+    # should run w/o install
+      run: |
+        # Setup test variables and files
+        touch ~/.bashrc
+        export USER=github
+        mkdir .git
+        ctest --test-dir target --output-on-failure
+
+  build-sanitizers:
+    strategy:
+      matrix:
+        sanitizer: [thread, address]
+    name: ubuntu-24.04-${{ matrix.sanitizer }}-sanitizer
+    runs-on: ubuntu-24.04
     steps:
     - name: Skip Duplicate Actions
       uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure
-      run: |
-        mkdir out && cd out
-        cmake .. -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON -DCMAKE_INSTALL_PREFIX=${{ matrix.configuration }}
+      run: cmake -B target -DCMAKE_BUILD_TYPE=Debug
+            -DCMAKE_CXX_FLAGS="-fsanitize=${{ matrix.sanitizer }}" \
+            -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=${{ matrix.sanitizer }}"
     - name: build
-      run: |
-        cd out
-        # "-j" spawns too many processes causing GCC to crash
-        cmake --build . -j 12
+      run: cmake --build target -j
     - name: test
-    # should run w/o install
-      run: |
-        cd out
-        ctest --output-on-failure --timeout $CTEST_TIMEOUT
-# Plan to remove waf soon - disable build and see who complains
-#   build-waf:
-#     strategy:
-#       matrix:
-#         os: [
-#             # BROKEN: windows-latest, 
-#             ubuntu-22.04]
-#         python-version: ['3.7']
-#         debugging: ['--enable-debugging', '']
-#     name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
-#     runs-on: ${{ matrix.os }}
-#     steps:
-#     - name: Skip Duplicate Actions
-#       uses: fkirc/skip-duplicate-actions@v5.3.1
-#     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-#     - name: Set up Python
-#       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
-#       with:
-#         python-version: ${{ matrix.python-version }}
-#     - name: configure_with_swig
-#       if: ${{ matrix.os == 'ubuntu-22.04' }}
-#       run: |
-#         pip install numpy
-#         mkdir install${{ matrix.os }}Waf-Github
-#         python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
-#     - name: configure_without_swig
-#       if: ${{ matrix.os == 'windows-latest' }}
-#       run: |
-#         pip install numpy
-#         mkdir install${{ matrix.os }}Waf-Github
-#         python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" ${{ matrix.debugging }}
-#     - name: build
-#       run: |
-#         python waf build
-#     - name: install
-#       run: |
-#         python waf install
-#     - name: test
-#       run: |
-#         python waf install --alltests
+      run: ctest --test-dir target --output-on-failure
 
+  build-other-cpp:
+    strategy:
+      matrix:
+        standard: [17, 20, 23, 26]
+        config: [Release]
+    name: ubuntu-26.04-CXX${{ matrix.standard }}
+    runs-on: ubuntu-26.04
+    container:
+      image: gcc:latest
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: setup system
+      run: apt update && apt install cmake -y
+    - name: configure
+      run: cmake -B target -DCMAKE_CXX_STANDARD=${{ matrix.standard }} -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+    - name: build
+      run: cmake --build target -j
+    - name: test
+      run: |
+        # Setup test variable and files
+        touch ~/.bashrc
+        export USER=github
+        ctest --test-dir target --output-on-failure
+
+  build-clang:
+    strategy:
+      matrix:
+        config: [Release]
+        version: [21, 22]
+    name: ubuntu-26.04-clang-${{ matrix.version }}
+    runs-on: ubuntu-26.04
+    container:
+      image: silkeh/clang:${{ matrix.version }}
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: cmake -B target -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+    - name: build
+      run: cmake --build target -j
+    - name: test
+      run: |
+        # Setup test variable and files
+        touch ~/.bashrc
+        export USER=github
+        mkdir .git
+        ctest --test-dir target --output-on-failure

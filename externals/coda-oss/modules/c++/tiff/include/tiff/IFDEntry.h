@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef __TIFF_IFD_ENTRY_H__
 #define __TIFF_IFD_ENTRY_H__
 
@@ -97,7 +96,7 @@ public:
     }
 
     //! Deconstructor
-    ~IFDEntry()
+    ~IFDEntry() noexcept
     {
         for (sys::Uint32_T i = 0; i < mValues.size(); ++i)
             delete mValues[i];
@@ -305,12 +304,7 @@ public:
      * @param tiffType
      *   the type of the value to use.  defaults to ascii.
      *****************************************************************/
-    void addValues(const char* str, int tiffType = Const::Type::ASCII);
-
-    void addValues(const std::string& str, int tiffType = Const::Type::ASCII)
-    {
-        addValues(str.c_str(), tiffType);
-    }
+    void addValues(const std::string& str, int tiffType = Const::Type::ASCII);
 
     /**
      *****************************************************************

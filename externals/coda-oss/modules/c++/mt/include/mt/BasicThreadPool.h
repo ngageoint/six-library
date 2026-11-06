@@ -49,7 +49,7 @@ struct BasicThreadPool
     }
 
     //! Destructor
-    virtual ~BasicThreadPool()
+    virtual ~BasicThreadPool() noexcept(false)
     {
         //destroy(static_cast<unsigned short>(mPool.size()));
         shutdown();

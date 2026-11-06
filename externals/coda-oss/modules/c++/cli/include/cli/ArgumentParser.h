@@ -22,7 +22,6 @@
 
 #ifndef CODA_OSS_cli_ArgumentParser_h_INCLUDED_
 #define CODA_OSS_cli_ArgumentParser_h_INCLUDED_
-#pragma once
 
 #include <memory>
 #include <iostream>

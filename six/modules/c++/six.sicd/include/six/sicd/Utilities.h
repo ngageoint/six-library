@@ -27,7 +27,7 @@
 #include <std/string>
 #include <vector>
 #include <utility>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <std/filesystem>
 
 #include <scene/SceneGeometry.h>

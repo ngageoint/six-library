@@ -166,6 +166,9 @@ macro(coda_initialize_build)
         # catch exceptions that bubble through a C-linkage layer
         string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         add_compile_options(/EHs /bigobj)
+        # See https://learn.microsoft.com/en-us/cpp/build/reference/zc-cplusplus?view=msvc-170
+        # Since we depend on the value of the __cplusplus macro, MSVC needs this option to set it "correctly"
+        add_compile_options(/Zc:__cplusplus)
 
         add_definitions(
             -DWIN32_LEAN_AND_MEAN

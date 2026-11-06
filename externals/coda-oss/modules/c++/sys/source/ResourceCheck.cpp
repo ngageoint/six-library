@@ -22,7 +22,7 @@
 
 #include <algorithm>
 #include <sys/ResourceCheck.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 namespace sys
 {

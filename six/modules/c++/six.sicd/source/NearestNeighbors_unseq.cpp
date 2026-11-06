@@ -29,9 +29,9 @@
 #include <algorithm>
 #include <functional>
 #include <std/numbers>
-#include <std/mdspan>
+#include <coda_oss/span.h>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <sys/Span.h>
 #include <mt/Algorithm.h>
 
@@ -528,7 +528,7 @@ inline auto lower_bound(std::span<const float> magnitudes, const FloatV& v)
         const auto test = count_GT_zero && c_LT_v;
         first = simd_select(test, ++it, first); // first = ++it;
         auto count_ = count; count_ -= step + 1;  // count -= step + 1;
-        count = simd_select(test, count_, step); // `count -= step + 1` —<OR>— `count = step`
+        count = simd_select(test, count_, step); // `count -= step + 1` ï¿½<OR>ï¿½ `count = step`
     }
     return first;
 }
@@ -628,13 +628,18 @@ struct AMP8I_PHS8I_unseq final
     IntV phase;
 };
 
-// This isn't someplace more widely available because:
-// 1. there is no standard iteration for `mdspan` (not even in C++23), and
-// 2. the particular needs are quite varied and require a lot of parameterization.
+// This isn't someplace more widely available because the particular needs are
+// quite varied and require a lot of parameterization.
 //
 // Keep things simple for now and do this "in place."
-template<typename T, typename TExtents, typename TValueType = std::span<T>>
-struct mdspan_iterator final
+//
+// Views a flat `coda_oss::span<T>` as consecutive, fixed-size "rows" (chunks)
+// and iterates over those rows, producing a `coda_oss::span<T>` (or `TValueType`)
+// per row. Uses `coda_oss::span` (see coda_oss/span.h) rather than `std::span`
+// directly for backward compat with compilers/standard libraries that don't
+// yet provide `std::span`.
+template<typename T, typename TValueType = coda_oss::span<T>>
+struct chunked_span_iterator final
 {
     using difference_type = std::ptrdiff_t;
     using size_type = size_t;
@@ -645,75 +650,77 @@ struct mdspan_iterator final
     using const_reference = const TValueType;
     using iterator_category = std::random_access_iterator_tag;
 
-    mdspan_iterator() = default;
-    mdspan_iterator(coda_oss::mdspan<T, TExtents> md, difference_type row = 0) : md_(md), row_(row) {}
+    chunked_span_iterator() = default;
+    chunked_span_iterator(coda_oss::span<T> s, size_t chunk_size, difference_type row = 0) noexcept :
+        s_(s), chunk_size_(chunk_size), row_(row) {}
 
     value_type operator*() const
     {
         return make_span();
     }
 
-    mdspan_iterator& operator++() noexcept
+    chunked_span_iterator& operator++() noexcept
     {
         ++row_;
         return *this;
     }
 
-    mdspan_iterator& operator+=(const difference_type n) noexcept
+    chunked_span_iterator& operator+=(const difference_type n) noexcept
     {
         row_ += n;
         return *this;
     }
-    mdspan_iterator operator+(const difference_type n) const noexcept
+    chunked_span_iterator operator+(const difference_type n) const noexcept
     {
         auto ret = *this;
         ret += n;
         return ret;
     }
 
-    difference_type operator-(const mdspan_iterator& rhs) const noexcept
+    difference_type operator-(const chunked_span_iterator& rhs) const noexcept
     {
         return row_ - rhs.row_;
     }
 
-    bool operator!=(const mdspan_iterator& rhs) const noexcept
+    bool operator!=(const chunked_span_iterator& rhs) const noexcept
     {
         return row_ != rhs.row_;
     }
 
 private:
-    coda_oss::mdspan<T, TExtents> md_;
+    coda_oss::span<T> s_;
+    size_t chunk_size_ = 0;
     difference_type row_ = 0;
 
     auto make_span() const
     {
-        // We know our mdspan is contiguous, so this is OK
-        auto&& v = md_(row_, 0); // beginning of the the current row
-        return std::span<T>(&v, md_.extent(1)); // span for the whole row
+        // We know our data is contiguous, so this is OK
+        const auto offset = gsl::narrow<size_t>(row_) * chunk_size_; // beginning of the current row
+        return coda_oss::span<T>(s_.data() + offset, chunk_size_); // span for the whole row
     }
 };
-template<typename TValueType, typename T, typename TExtents>
-auto begin(coda_oss::mdspan<T, TExtents> md)
+template<typename TValueType, typename T>
+auto begin(coda_oss::span<T> s, size_t chunk_size)
 {
-    return mdspan_iterator<T, TExtents, TValueType>(md, 0);
+    return chunked_span_iterator<T, TValueType>(s, chunk_size, 0);
 }
-template<typename T, typename TExtents>
-auto end(coda_oss::mdspan<T, TExtents> md)
+template<typename T>
+auto end(coda_oss::span<T> s, size_t chunk_size)
 {
-    return mdspan_iterator<T, TExtents>(md, md.extent(0));
+    return chunked_span_iterator<T>(s, chunk_size, gsl::narrow<std::ptrdiff_t>(s.size() / chunk_size));
 }
 
-template<typename T, typename TExtents>
-using const_mdspan_iterator = mdspan_iterator<std::add_const_t<T>, TExtents>;
-template<typename T, typename TExtents>
-auto cbegin(coda_oss::mdspan<T, TExtents> md)
+template<typename T>
+using const_chunked_span_iterator = chunked_span_iterator<std::add_const_t<T>>;
+template<typename T>
+auto cbegin(coda_oss::span<T> s, size_t chunk_size)
 {
-    return const_mdspan_iterator<T, TExtents>(md, 0);
+    return const_chunked_span_iterator<T>(s, chunk_size, 0);
 }
-template<typename T, typename TExtents>
-auto cend(coda_oss::mdspan<T, TExtents> md)
+template<typename T>
+auto cend(coda_oss::span<T> s, size_t chunk_size)
 {
-    return const_mdspan_iterator<T, TExtents>(md, md.extent(0));
+    return const_chunked_span_iterator<T>(s, chunk_size, gsl::narrow<std::ptrdiff_t>(s.size() / chunk_size));
 }
 
 // Inside of `std::transform()`, there is an assignment; something like
@@ -737,13 +744,13 @@ inline void assign(size_t, AMP8I_PHS8I& lhs, const AMP8I_PHS8I_unseq<sisd_intv>&
 }
 #endif
 
-struct mdspan_iterator_value final
+struct chunk_iterator_value final
 {
-    std::span<AMP8I_PHS8I> p_;
+    coda_oss::span<AMP8I_PHS8I> p_;
 
-    mdspan_iterator_value(std::span<AMP8I_PHS8I> s) : p_(s) {}
+    chunk_iterator_value(coda_oss::span<AMP8I_PHS8I> s) : p_(s) {}
     template<typename IntV>
-    mdspan_iterator_value& operator=(const AMP8I_PHS8I_unseq<IntV>& other) {
+    chunk_iterator_value& operator=(const AMP8I_PHS8I_unseq<IntV>& other) {
         //assert(p_.size() <= size(other.amplitude));
         for (size_t i = 0; i < p_.size(); i++)
         {
@@ -793,16 +800,13 @@ void six::sicd::NearestNeighbors::nearest_neighbors_T(execution_policy policy,
     // View the data as chunks of *elements_per_iteration*.  This allows iterating
     // to go *elements_per_iteration* at a time; and each chunk can be processed
     // using `nearest_neighbors_unseq_T()`, above.
-    using extents_t = coda_oss::dextents<size_t, 2>; // two dimensions: M×N
-    const extents_t extents{ inputs.size() / elements_per_iteration, elements_per_iteration };
-    const coda_oss::mdspan<const zfloat, extents_t> md_inputs(inputs.data(), extents);
-    assert(md_inputs.size() <= inputs.size());
-    auto const b = cbegin(md_inputs);
-    auto const e = cend(md_inputs);
+    const auto num_elements = (inputs.size() / elements_per_iteration) * elements_per_iteration;
+    const auto chunked_inputs = inputs.first(num_elements);
+    auto const b = cbegin(chunked_inputs, elements_per_iteration);
+    auto const e = cend(chunked_inputs, elements_per_iteration);
 
-    const coda_oss::mdspan<AMP8I_PHS8I, extents_t> md_results(results.data(), extents);
-    assert(md_results.size() <= results.size());
-    auto const d = begin<mdspan_iterator_value>(md_results);
+    const auto chunked_results = results.first(num_elements);
+    auto const d = begin<chunk_iterator_value>(chunked_results, elements_per_iteration);
 
     const auto func = [&](const auto& v)
     {

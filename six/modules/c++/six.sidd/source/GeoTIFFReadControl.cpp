@@ -26,7 +26,7 @@
 
 #include <str/Convert.h>
 #include <str/Encoding.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <mem/ScopedArray.h>
 #include "six/sidd/GeoTIFFReadControl.h"
 #include "six/XMLControlFactory.h"

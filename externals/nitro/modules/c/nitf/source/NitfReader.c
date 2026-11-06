@@ -466,7 +466,7 @@ NITFAPI(void) nitf_Reader_destruct(nitf_Reader** reader)
 {
     /*  If the reader has already been destructed, or was never  */
     /*  Inited, dont dump core                                   */
-    if (*reader)
+    if (reader && *reader)
     {
         nitf_ListIterator iter;
         nitf_ListIterator end;

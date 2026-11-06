@@ -24,7 +24,6 @@
 //  LoggerFactory.h
 ///////////////////////////////////////////////////////////
 
-#pragma once
 #ifndef CODA_OSS_logging_LoggerFactory_h_INCLUDED_
 #define CODA_OSS_logging_LoggerFactory_h_INCLUDED_
 

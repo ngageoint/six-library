@@ -1141,6 +1141,8 @@ static NRT_BOOL preloadTRE(nitf_TREPreloaded preloadedTREs[],
     const nitf_TREPreloaded* plugin = findPreloadedTRE(preloadedTREs, keyName);
     if (plugin == NULL)
     {
+        // cleanup zombie dll; not real, doesn't need unload
+        nitf_DLL_destruct(&dll);
         return NITF_FAILURE;
     }
     dll->dsoMain = (NRT_DLL_FUNCTION_PTR)plugin->handler;

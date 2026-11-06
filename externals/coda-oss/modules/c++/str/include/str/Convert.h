@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_str_Convert_h_INCLUDED_
 #define CODA_OSS_str_Convert_h_INCLUDED_
 
@@ -34,6 +33,7 @@
 #include <sstream>
 #include <string>
 #include <typeinfo>
+#include <gsl/narrow>
 
 #include "config/Exports.h"
 #include "coda_oss/string.h"
@@ -41,7 +41,6 @@
 #include "coda_oss/cstddef.h"
 #include "types/Complex.h"
 #include "import/except.h"
-#include "gsl/gsl.h"
 #include "str/Encoding.h"
 
 namespace str
@@ -179,7 +178,7 @@ T toType(const std::string& s)
                                 std::string(""),
                                 std::string("Empty string")));
 
-    T value;
+    T value{};
 
     std::stringstream buf(s);
     buf.precision(str::getPrecision(value));

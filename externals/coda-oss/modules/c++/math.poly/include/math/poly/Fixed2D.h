@@ -95,10 +95,10 @@ public:
         return *this;
     }
 
-    constexpr size_t orderX() const { return _OrderX; }
-    constexpr size_t orderY() const { return _OrderY; }
-    constexpr size_t sizeX() const { return _OrderX + 1; }
-    constexpr size_t sizeY() const { return _OrderY + 1; }
+    static constexpr size_t orderX() { return _OrderX; }
+    static constexpr size_t orderY() { return _OrderY; }
+    static constexpr size_t sizeX() { return _OrderX + 1; }
+    static constexpr size_t sizeY() { return _OrderY + 1; }
 
     inline const std::array<Fixed1D<_OrderY, _T>, _OrderX+1>& coeffs() const
     {

@@ -21,7 +21,7 @@
  */
 #include "six/NITFImageInputStream.h"
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 six::NITFImageInputStream::NITFImageInputStream(nitf::ImageSubheader subheader,
         nitf::ImageReader imageReader) :

@@ -25,9 +25,9 @@
 
 #include <memory>
 #include <vector>
-#include <std/span>
+#include <coda_oss/span.h>
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include "six/CollectionInformation.h"
 #include "six/Data.h"

@@ -31,7 +31,7 @@
 #include "nitf/RESegment.hpp"
 #include "nitf/LabelSegment.hpp"
 
-#include "gsl/gsl.h"
+#include "gsl/narrow"
 
 namespace nitf
 {

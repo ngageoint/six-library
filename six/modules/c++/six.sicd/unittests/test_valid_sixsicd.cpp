@@ -25,7 +25,7 @@
 
 #include <string>
 #include <std/filesystem>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <io/FileInputStream.h>
 #include <logging/NullLogger.h>

@@ -1,0 +1,7 @@
+set(GSL_INSTALL ON)
+set(GSL_DISABLE_DEPRECATED ON)
+FetchContent_Declare(gsl
+    URL "${CMAKE_CURRENT_SOURCE_DIR}/GSL-5.0.1.tar.gz"
+    URL_HASH "SHA256=733a87a7eea56db075ee060735ba7616a27c1c55955f264d5473bf9e83294ad0"
+)
+FetchContent_MakeAvailable(gsl)

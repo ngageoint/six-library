@@ -9,7 +9,7 @@
 #include <assert.h>
 
 #include <iostream>
-#include <std/span>
+#include <coda_oss/span.h>
 #include <algorithm>
 #include <vector>
 #include <tuple>

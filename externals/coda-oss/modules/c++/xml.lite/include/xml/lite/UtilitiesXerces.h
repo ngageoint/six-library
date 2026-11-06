@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_UtilitiesXerces_h_INCLUDED_
 

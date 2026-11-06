@@ -26,8 +26,7 @@
 #include <limits>
 #include <cmath>
 #include <utility>
-
-#include "gsl/gsl.h"
+#include <gsl/narrow>
 
 namespace types
 {
@@ -48,7 +47,6 @@ template<typename T> class RgAz
     template <typename U, typename Other_T>
     static U cast(const Other_T& t)
     {
-        // return static_cast<T>(t);
         return gsl::narrow_cast<U>(t);
     }
 

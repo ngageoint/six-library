@@ -26,7 +26,7 @@
 
 #include <array>
 #include <std/cstddef> // std::byte
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <sys/ByteSwap.h>
 
@@ -43,8 +43,8 @@ static std::vector<uint64_t> make_origValues_(size_t count)
     std::vector<uint64_t> retval(count);
     for (size_t ii = 0; ii < count; ++ii)
     {
-        const auto value = static_cast<float>(::rand()) / RAND_MAX *
-                std::numeric_limits<uint64_t>::max();
+        const auto value = static_cast<float>(::rand()) / static_cast<float>(RAND_MAX) *
+                static_cast<float>(std::numeric_limits<uint64_t>::max());
         retval[ii] = static_cast<uint64_t>(value);
     }
     return retval;

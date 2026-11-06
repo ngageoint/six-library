@@ -153,14 +153,14 @@ void sys::File::writeFrom(const void* buffer, size_t size)
 
     do
     {
-        const SSize_T bytesThisRead = ::write(mHandle,
+        const SSize_T bytesThisWrite = ::write(mHandle,
                                               bufferPtr + bytesActuallyWritten,
                                               size - bytesActuallyWritten);
-        if (bytesThisRead == -1)
+        if (bytesThisWrite == -1)
         {
             throw sys::SystemException(Ctxt("Writing to file"));
         }
-        bytesActuallyWritten += bytesThisRead;
+        bytesActuallyWritten += bytesThisWrite;
     }
     while (bytesActuallyWritten < size);
 }

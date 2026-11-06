@@ -27,7 +27,7 @@
 #include <vector>
 #include <std/bit>
 #include <std/cstddef> // std::byte
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>

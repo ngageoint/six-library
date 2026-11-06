@@ -31,7 +31,7 @@
 #include <std/optional>
 #include <memory>
 
-#include <import/gsl.h>
+#include <gsl/narrow>
 #include <xml/lite/Element.h>
 #include <xml/lite/QName.h>
 

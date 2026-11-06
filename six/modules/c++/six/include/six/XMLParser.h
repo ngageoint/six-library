@@ -30,7 +30,7 @@
 #include <std/optional>
 #include <memory>
 
-#include <import/gsl.h>
+#include <gsl/narrow>
 
 #include <six/Types.h>
 #include <six/Init.h>

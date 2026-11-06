@@ -9,6 +9,7 @@ if (MSVC)
     string(REGEX REPLACE "/W[0-4]" "/W0" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 elseif (UNIX)
     add_compile_options(-w) # "Inhibit all warning messages"
+    add_compile_options(-Wno-error=deprecated-declarations)  # Don't care about deprecations in external code
 endif()
 
 #add_subdirectory("curl") # this is handled in coda_find_system_dependencies
@@ -22,7 +23,7 @@ if(NOT CONAN_PACKAGE_NAME)
     endif()
 endif()
 
-#add_subdirectory("gsl") # nothing to do
+add_subdirectory("gsl")
 
 set(ENABLE_J2K ON CACHE BOOL "enable J2K library")
 if(NOT CONAN_PACKAGE_NAME)

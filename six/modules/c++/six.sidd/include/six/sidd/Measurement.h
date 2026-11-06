@@ -22,7 +22,7 @@
 #ifndef __SIX_SIDD_MEASUREMENT_H__
 #define __SIX_SIDD_MEASUREMENT_H__
 
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 
 #include <six/Types.h>
 #include <six/Init.h>

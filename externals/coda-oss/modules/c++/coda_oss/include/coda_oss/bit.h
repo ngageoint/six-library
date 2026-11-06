@@ -18,7 +18,6 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#pragma once 
 #ifndef CODA_OSS_coda_oss_bit_h_INCLUDED_
 #define CODA_OSS_coda_oss_bit_h_INCLUDED_
 
@@ -30,7 +29,6 @@
 
 #include <type_traits>
 
-#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
     // https://en.cppreference.com/w/cpp/types/endian

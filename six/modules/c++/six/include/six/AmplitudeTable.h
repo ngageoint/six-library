@@ -31,7 +31,7 @@
 #include <string>
 #include <memory>
 #include <array>
-#include <std/mdspan>
+#include <coda_oss/span.h>
 
 #include <import/except.h>
 #include <coda_oss/CPlusPlus.h>
@@ -160,11 +160,35 @@ struct SIX_SIX_API LUT
  *  double precision amplitude value
  */
 
- // Store the computed `six::zfloat` for every possible 
- // amp/phs pair, a total of 256*256 values.
+ // Store the computed `six::zfloat` for every possible amp/phs pair, a total of 256*256 values.
 static constexpr size_t AmplitudeTableSize = 256; // "This is a fixed size (256-element) LUT"
-using Amp8iPhs8iLookup_t = std::mdspan<const six::zfloat, std::dextents<size_t, 2>>;
- 
+
+// A simple, read-only 2-D view over a contiguous `AmplitudeTableSize` x `AmplitudeTableSize`
+// table of `six::zfloat`, indexed as `lookup(amplitude, phase)`. This replaces
+// `std::experimental::mdspan`, which is overkill for this one fixed-size 2-D use-case.
+class Amp8iPhs8iLookup_t final
+{
+public:
+    explicit Amp8iPhs8iLookup_t(const six::zfloat* data) noexcept :
+        data_(data, AmplitudeTableSize * AmplitudeTableSize)
+    {
+    }
+
+    const six::zfloat& operator()(size_t row, size_t col) const noexcept
+    {
+        return data_[row * AmplitudeTableSize + col];
+    }
+
+    size_t size() const noexcept
+    {
+        return data_.size();
+    }
+
+private:
+    coda_oss::span<const six::zfloat, AmplitudeTableSize * AmplitudeTableSize> data_;
+};
+
+
  // More descriptive than std::pair<uint8_t, uint8_t>
 struct SIX_SIX_API AMP8I_PHS8I_t final
 {
@@ -252,7 +276,7 @@ namespace details
 
 /*!
  * \brief A utility that's used to convert complex values into 8-bit amplitude and phase values.
- * 
+ *
  * *** Implemetned in SIX.SICD ***
  */
 class ComplexToAMP8IPHS8I final
@@ -309,7 +333,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
         LUT(AmplitudeTableSize /*i.e., 256*/, elementSize)
     {
     }
-    AmplitudeTable() noexcept(false) :  AmplitudeTable(sizeof(double)) 
+    AmplitudeTable() noexcept(false) :  AmplitudeTable(sizeof(double))
     {
     }
     AmplitudeTable(const nitf::LookupTable& lookupTable) noexcept(false) : LUT(lookupTable)
@@ -404,7 +428,7 @@ struct SIX_SIX_API AmplitudeTable final : public LUT
 
 private:
     mutable std::vector<zfloat> lookup;
-    mutable std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pFromComplex;    
+    mutable std::unique_ptr<sicd::details::ComplexToAMP8IPHS8I> pFromComplex;
 };
 
 }

@@ -32,7 +32,7 @@
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
-#include "gsl/gsl.h"
+#include "gsl/narrow"
 
 #undef min
 #undef max

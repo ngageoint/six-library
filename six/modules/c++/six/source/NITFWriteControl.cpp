@@ -33,7 +33,7 @@
 #include <io/ByteStream.h>
 #include <math/Round.h>
 #include <mem/ScopedArray.h>
-#include <gsl/gsl.h>
+#include <gsl/narrow>
 #include <sys/Span.h>
 #include <sys/Path.h>
 

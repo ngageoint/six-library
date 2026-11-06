@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_xml_lite_xerces_h_INCLUDED_
 #define CODA_OSS_xml_lite_xerces_h_INCLUDED_
 
@@ -56,9 +55,13 @@ CODA_OSS_disable_warning(-Wsuggest-override)
 CODA_OSS_disable_warning(-Wzero-as-null-pointer-constant)
 CODA_OSS_disable_warning(-Wmisleading-indentation)
 CODA_OSS_disable_warning(-Wsign-compare)
+#if defined(__GNUC__) && !defined(__clang__)
 CODA_OSS_disable_warning(-Wformat-overflow=)
+#endif
 CODA_OSS_disable_warning(-Wunused-value)
+#if defined(__GNUC__) && !defined(__clang__)
 CODA_OSS_disable_warning(-Walloc-size-larger-than=)
+#endif
 #endif
 
 #include <xercesc/dom/DOM.hpp>

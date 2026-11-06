@@ -48,8 +48,8 @@ struct DataStream: public io::Serializable
 {
     DataStream() = default;
 
-    //! Deconstructor
-    virtual ~DataStream()
+    //! Destructor
+    virtual ~DataStream() noexcept
     {
     }
 

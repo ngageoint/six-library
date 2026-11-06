@@ -108,7 +108,7 @@ FILE* ExecPipe::openPipe(const std::string& command,
 
             //! exit the subprocess once it has completed
             exit(127);
-        }break;
+        }
     }
 
     //! this is executed on the parent process

@@ -27,7 +27,7 @@
 #include <string>
 #include <memory>
 #include <thread>
-#include <std/span>
+#include <coda_oss/span.h>
 
 #include <nitf/coda-oss.hpp>
 #include <types/RowCol.h>

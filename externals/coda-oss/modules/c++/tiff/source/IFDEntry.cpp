@@ -192,15 +192,11 @@ void tiff::IFDEntry::addValue(double value)
                                        tiff::Const::Type::DOUBLE));
 }
 
-void tiff::IFDEntry::addValues(const char* str, int tiffType)
+void tiff::IFDEntry::addValues(const std::string& str, int tiffType)
 {
-    const unsigned char* const strPtr =
-        reinterpret_cast<const unsigned char *>(str);
-
-    for (size_t ii = 0, len = ::strlen(str) + 1; ii < len; ++ii)
+    for (const unsigned char chr: str)
     {
-        std::unique_ptr<tiff::TypeInterface>
-            value(tiff::TypeFactory::create(strPtr + ii, static_cast<unsigned short>(tiffType)));
+        std::unique_ptr<tiff::TypeInterface> value(tiff::TypeFactory::create(&chr, static_cast<unsigned short>(tiffType)));
         addValue(value.release());
     }
 }

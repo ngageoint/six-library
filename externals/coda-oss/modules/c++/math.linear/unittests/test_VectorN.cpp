@@ -1,32 +1,23 @@
-/*
- * test_VectorN.cpp
+/* =========================================================================
+ * This file is part of math.linear-c++ 
+ * =========================================================================
+ * 
+ * © 2012 MDA Information Systems LLC
  *
- *  Created on: Sep 20, 2012
- *      Author: dunstan
+ * math.linear-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
  *
- *  Notes:
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *    - Array subscripting is only checked if MATH_LINEAR_BOUNDS is defined
- *      at compile time.  If bounds checking is enabled it is done via an
- *      assert() call.  BUT assert itself is disabled if NDEBUG is defined.
- *      So you might think you're doing bounds checking when you really
- *      aren't.
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this program; If not, 
+ * see <http://www.gnu.org/licenses/>.
  *
- *    - As of 21 Sept 2012 not all methods are tested.  The following are
- *      not yet tested:
- *
- *      VectorN<,double>(Matrix2D) constructor.
- *      VectorN<,double>& operator=(const Matrix2D<_T>& mx)
- *      Matrix2D<_T>& matrix()
- *      const Matrix2D<_T>& matrix() const
- *      const std::vector<_T>& vec() const
- *      template<typename VectorN<,double>_T> bool operator==(const VectorN<,double>_T& v) const
- *      template<typename VectorN<,double>_T> bool operator!=(const VectorN<,double>_T& v) const
- *      template<typename _T> VectorN<,double><_T> cross(const VectorN<,double><_T>& u, const VectorN<,double><_T>& v)
- *      template<typename _T> VectorN<,double><_T> constantVectorN<,double>(size_t sz, _T cv = 0)
- *      template<typename _T> math::linear::VectorN<,double><_T> operator*(const math::linear::Matrix2D<_T>& m, const math::linear::VectorN<,double><_T>& v)
- *      template<typename _T> math::linear::VectorN<,double><_T> operator*(_T scalar, const math::linear::VectorN<,double><_T>& v)
- *      template<typename _T> std::ostream& operator<<(std::ostream& os, const math::linear::VectorN<,double><_T>& v)
  */
 
 #include <cstdlib>

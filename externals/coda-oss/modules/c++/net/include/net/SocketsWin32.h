@@ -20,7 +20,6 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_net_SocketsWin32_h_INCLUDED_
 #define CODA_OSS_net_SocketsWin32_h_INCLUDED_
 

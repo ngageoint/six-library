@@ -24,13 +24,13 @@
 #define CODA_OSS_io_BufferViewStream_h_INCLUDED_
 
 #include <string.h>
+#include <gsl/narrow>
 
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
 #include <except/Error.h>
 #include <except/Exception.h>
 #include <io/SeekableStreams.h>
-#include <gsl/gsl.h>
 
 /*!
  *  \file

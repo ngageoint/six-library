@@ -83,6 +83,8 @@ public:
     {
     }
 
+    //! copy constructor
+    OneD(const OneD&) = default;
     //! assignment operator
     OneD& operator=(const OneD& o) = default;
 
