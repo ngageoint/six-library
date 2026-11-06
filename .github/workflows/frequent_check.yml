@@ -11,14 +11,13 @@ jobs:
   build-cmake-windows:
     strategy:
       matrix:
-        os: [windows-2022]
+        os: [windows-latest]
         platform: [x64]
         python-version: ['3.7']
         configuration: [Release]
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: ilammy/msvc-dev-cmd@v1
     - name: Skip Duplicate Actions
       uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
