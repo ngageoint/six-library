@@ -434,7 +434,11 @@ six::PolarizationSequenceType _convertDualPolarization(six::DualPolarizationType
         case six::DualPolarizationType::OTHER_RHC:
         case six::DualPolarizationType::OTHER_LHC:
         case six::DualPolarizationType::OTHER_OTHER:
-            return six::PolarizationSequenceType::OTHER;
+        {
+            auto asString = six::toString(pol);
+            auto split = str::split(asString, ":");
+            return six::toType<PolarizationSequenceType>(split[0]);
+        }
 
         case six::DualPolarizationType::V_V:
         case six::DualPolarizationType::V_H:
@@ -541,7 +545,11 @@ six::PolarizationSequenceType _convertDualPolarization(six::DualPolarizationType
     case six::DualPolarizationType::E_OTHER:
     case six::DualPolarizationType::RHC_OTHER:
     case six::DualPolarizationType::LHC_OTHER:
-        return six::PolarizationSequenceType::OTHER;
+    {
+        auto asString = six::toString(pol);
+        auto split = str::split(asString, ":");
+        return six::toType<PolarizationSequenceType>(split[1]);
+    }
 
     case six::DualPolarizationType::OTHER_V:
     case six::DualPolarizationType::V_V:
@@ -874,7 +882,7 @@ static void initProductCreation(six::sidd::ProductCreation& productCreation, Ver
     }
     else
     {
-        productCreation.classification.desVersion = getDESVersion(ismVersion);        
+        productCreation.classification.desVersion = getDESVersion(ismVersion);
     }
     productCreation.classification.createDate = six::DateTime();
     productCreation.classification.classification = "U";
@@ -1502,7 +1510,7 @@ static std::unique_ptr<DerivedData> createFakeDerivedData_(const Version* pSiddV
         else
         {
             data->setSIDDVersion(*pSiddVersion);
-        }       
+        }
     }
 
     data->productCreation->classification.classification = "U";

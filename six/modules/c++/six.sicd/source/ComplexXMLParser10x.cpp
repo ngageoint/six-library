@@ -82,7 +82,7 @@ XMLElem ComplexXMLParser10x::convertRadarCollectionToXML(
     createWaveform(radar, radarXML);
 
     //! required in 1.0
-    createString("TxPolarization", radar->txPolarization, radarXML);
+    createString("TxPolarization", six::toString(radar->txPolarization), radarXML);
 
     createTxSequence(radar, radarXML);
     createRcvChannels(radar, radarXML);

@@ -1649,10 +1649,10 @@ xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const 
             auto& polElem = parser.newElement("Polarization", informationElem);
 
             parser.createString("TxPolarization",
-                p->txPolarization,
+                six::toString(p->txPolarization),
                 polElem);
             parser.createString("RcvPolarization",
-                p->rcvPolarization,
+                six::toString(p->rcvPolarization),
                 polElem);
             // optional
             if (!Init::isUndefined(p->rcvPolarizationOffset))
@@ -1763,11 +1763,11 @@ xml::lite::Element& DerivedXMLParser200::convertExploitationFeaturesToXML(const 
         for (size_t jj = 0; jj < product.polarization.size(); ++jj)
         {
             auto& polarizationElem = parser.newElement("Polarization", productElem);
-            parser.createStringFromEnum("TxPolarizationProc",
-                                 product.polarization[jj].txPolarizationProc,
+            parser.createString("TxPolarizationProc",
+                                 six::toString(product.polarization[jj].txPolarizationProc),
                                  polarizationElem);
-            parser.createStringFromEnum("RcvPolarizationProc",
-                                 product.polarization[jj].rcvPolarizationProc,
+            parser.createString("RcvPolarizationProc",
+                                 six::toString(product.polarization[jj].rcvPolarizationProc),
                                  polarizationElem);
         }
 
