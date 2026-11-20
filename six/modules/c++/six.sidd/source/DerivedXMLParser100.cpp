@@ -640,10 +640,10 @@ XMLElem DerivedXMLParser100::convertExploitationFeaturesToXML(
             XMLElem polElem = newElement("Polarization", informationElem);
 
             createString("TxPolarization",
-                p->txPolarization,
+                six::toString(p->txPolarization),
                 polElem);
             createString("RcvPolarization",
-                p->rcvPolarization,
+                six::toString(p->rcvPolarization),
                 polElem);
             // optional
             if (!Init::isUndefined(p->rcvPolarizationOffset))

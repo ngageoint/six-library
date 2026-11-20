@@ -484,7 +484,7 @@ XMLElem ComplexXMLParser::createTxSequence(const RadarCollection* radar,
             }
             if (tx->txPolarization != PolarizationType::NOT_SET)
             {
-                createString("TxPolarization", tx->txPolarization, txStepXML);
+                createString("TxPolarization", six::toString(tx->txPolarization), txStepXML);
             }
         }
 
