@@ -411,8 +411,8 @@ void Utilities::setCollectionValues(Vector3 arpVel,
     }
 }
 
-six::PolarizationSequenceType _convertDualPolarization(six::DualPolarizationType pol,
-                                               bool useFirst)
+std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
+    Utilities::convertDualPolarization(six::DualPolarizationType pol)
 {
     if (pol == six::DualPolarizationType::UNKNOWN)
     {
@@ -420,236 +420,23 @@ six::PolarizationSequenceType _convertDualPolarization(six::DualPolarizationType
                                      "corresponding PolarizationType"));
     }
 
-    if (useFirst)
-    {
-        switch (pol)
-        {
-        case six::DualPolarizationType::OTHER:
-        case six::DualPolarizationType::OTHER_V:
-        case six::DualPolarizationType::OTHER_H:
-        case six::DualPolarizationType::OTHER_X:
-        case six::DualPolarizationType::OTHER_Y:
-        case six::DualPolarizationType::OTHER_S:
-        case six::DualPolarizationType::OTHER_E:
-        case six::DualPolarizationType::OTHER_RHC:
-        case six::DualPolarizationType::OTHER_LHC:
-        case six::DualPolarizationType::OTHER_OTHER:
-        {
-            auto asString = six::toString(pol);
-            auto split = str::split(asString, ":");
-            return six::toType<PolarizationSequenceType>(split[0]);
-        }
-
-        case six::DualPolarizationType::V_V:
-        case six::DualPolarizationType::V_H:
-        case six::DualPolarizationType::V_X:
-        case six::DualPolarizationType::V_Y:
-        case six::DualPolarizationType::V_S:
-        case six::DualPolarizationType::V_E:
-        case six::DualPolarizationType::V_RHC:
-        case six::DualPolarizationType::V_LHC:
-        case six::DualPolarizationType::V_OTHER:
-            return six::PolarizationSequenceType::V;
-
-        case six::DualPolarizationType::H_V:
-        case six::DualPolarizationType::H_H:
-        case six::DualPolarizationType::H_X:
-        case six::DualPolarizationType::H_Y:
-        case six::DualPolarizationType::H_S:
-        case six::DualPolarizationType::H_E:
-        case six::DualPolarizationType::H_RHC:
-        case six::DualPolarizationType::H_LHC:
-        case six::DualPolarizationType::H_OTHER:
-            return six::PolarizationSequenceType::H;
-
-        case six::DualPolarizationType::X_V:
-        case six::DualPolarizationType::X_H:
-        case six::DualPolarizationType::X_X:
-        case six::DualPolarizationType::X_Y:
-        case six::DualPolarizationType::X_S:
-        case six::DualPolarizationType::X_E:
-        case six::DualPolarizationType::X_RHC:
-        case six::DualPolarizationType::X_LHC:
-        case six::DualPolarizationType::X_OTHER:
-            return six::PolarizationSequenceType::X;
-
-        case six::DualPolarizationType::Y_V:
-        case six::DualPolarizationType::Y_H:
-        case six::DualPolarizationType::Y_X:
-        case six::DualPolarizationType::Y_Y:
-        case six::DualPolarizationType::Y_S:
-        case six::DualPolarizationType::Y_E:
-        case six::DualPolarizationType::Y_RHC:
-        case six::DualPolarizationType::Y_LHC:
-        case six::DualPolarizationType::Y_OTHER:
-            return six::PolarizationSequenceType::Y;
-
-        case six::DualPolarizationType::S_V:
-        case six::DualPolarizationType::S_H:
-        case six::DualPolarizationType::S_X:
-        case six::DualPolarizationType::S_Y:
-        case six::DualPolarizationType::S_S:
-        case six::DualPolarizationType::S_E:
-        case six::DualPolarizationType::S_RHC:
-        case six::DualPolarizationType::S_LHC:
-        case six::DualPolarizationType::S_OTHER:
-            return six::PolarizationSequenceType::S;
-
-        case six::DualPolarizationType::E_V:
-        case six::DualPolarizationType::E_H:
-        case six::DualPolarizationType::E_X:
-        case six::DualPolarizationType::E_Y:
-        case six::DualPolarizationType::E_S:
-        case six::DualPolarizationType::E_E:
-        case six::DualPolarizationType::E_RHC:
-        case six::DualPolarizationType::E_LHC:
-        case six::DualPolarizationType::E_OTHER:
-            return six::PolarizationSequenceType::E;
-
-        case six::DualPolarizationType::RHC_V:
-        case six::DualPolarizationType::RHC_H:
-        case six::DualPolarizationType::RHC_X:
-        case six::DualPolarizationType::RHC_Y:
-        case six::DualPolarizationType::RHC_S:
-        case six::DualPolarizationType::RHC_E:
-        case six::DualPolarizationType::RHC_RHC:
-        case six::DualPolarizationType::RHC_LHC:
-        case six::DualPolarizationType::RHC_OTHER:
-            return six::PolarizationSequenceType::RHC;
-
-        case six::DualPolarizationType::LHC_V:
-        case six::DualPolarizationType::LHC_H:
-        case six::DualPolarizationType::LHC_X:
-        case six::DualPolarizationType::LHC_Y:
-        case six::DualPolarizationType::LHC_S:
-        case six::DualPolarizationType::LHC_E:
-        case six::DualPolarizationType::LHC_RHC:
-        case six::DualPolarizationType::LHC_LHC:
-        case six::DualPolarizationType::LHC_OTHER:
-            return six::PolarizationSequenceType::LHC;
-
-        default:
-            return six::PolarizationSequenceType::NOT_SET;
-        }
-    }
-
-    switch (pol)
-    {
-    case six::DualPolarizationType::OTHER:
-    case six::DualPolarizationType::OTHER_OTHER:
-    case six::DualPolarizationType::V_OTHER:
-    case six::DualPolarizationType::H_OTHER:
-    case six::DualPolarizationType::X_OTHER:
-    case six::DualPolarizationType::Y_OTHER:
-    case six::DualPolarizationType::S_OTHER:
-    case six::DualPolarizationType::E_OTHER:
-    case six::DualPolarizationType::RHC_OTHER:
-    case six::DualPolarizationType::LHC_OTHER:
-    {
-        auto asString = six::toString(pol);
-        auto split = str::split(asString, ":");
-        return six::toType<PolarizationSequenceType>(split[1]);
-    }
-
-    case six::DualPolarizationType::OTHER_V:
-    case six::DualPolarizationType::V_V:
-    case six::DualPolarizationType::H_V:
-    case six::DualPolarizationType::X_V:
-    case six::DualPolarizationType::Y_V:
-    case six::DualPolarizationType::S_V:
-    case six::DualPolarizationType::E_V:
-    case six::DualPolarizationType::RHC_V:
-    case six::DualPolarizationType::LHC_V:
-        return six::PolarizationSequenceType::V;
-
-    case six::DualPolarizationType::OTHER_H:
-    case six::DualPolarizationType::V_H:
-    case six::DualPolarizationType::H_H:
-    case six::DualPolarizationType::X_H:
-    case six::DualPolarizationType::Y_H:
-    case six::DualPolarizationType::S_H:
-    case six::DualPolarizationType::E_H:
-    case six::DualPolarizationType::RHC_H:
-    case six::DualPolarizationType::LHC_H:
-        return six::PolarizationSequenceType::H;
-
-    case six::DualPolarizationType::OTHER_X:
-    case six::DualPolarizationType::V_X:
-    case six::DualPolarizationType::H_X:
-    case six::DualPolarizationType::X_X:
-    case six::DualPolarizationType::Y_X:
-    case six::DualPolarizationType::S_X:
-    case six::DualPolarizationType::E_X:
-    case six::DualPolarizationType::RHC_X:
-    case six::DualPolarizationType::LHC_X:
-        return six::PolarizationSequenceType::X;
-
-    case six::DualPolarizationType::OTHER_Y:
-    case six::DualPolarizationType::V_Y:
-    case six::DualPolarizationType::H_Y:
-    case six::DualPolarizationType::X_Y:
-    case six::DualPolarizationType::Y_Y:
-    case six::DualPolarizationType::S_Y:
-    case six::DualPolarizationType::E_Y:
-    case six::DualPolarizationType::RHC_Y:
-    case six::DualPolarizationType::LHC_Y:
-        return six::PolarizationSequenceType::Y;
-
-    case six::DualPolarizationType::OTHER_S:
-    case six::DualPolarizationType::V_S:
-    case six::DualPolarizationType::H_S:
-    case six::DualPolarizationType::X_S:
-    case six::DualPolarizationType::Y_S:
-    case six::DualPolarizationType::S_S:
-    case six::DualPolarizationType::E_S:
-    case six::DualPolarizationType::RHC_S:
-    case six::DualPolarizationType::LHC_S:
-        return six::PolarizationSequenceType::S;
-
-    case six::DualPolarizationType::OTHER_E:
-    case six::DualPolarizationType::V_E:
-    case six::DualPolarizationType::H_E:
-    case six::DualPolarizationType::X_E:
-    case six::DualPolarizationType::Y_E:
-    case six::DualPolarizationType::S_E:
-    case six::DualPolarizationType::E_E:
-    case six::DualPolarizationType::RHC_E:
-    case six::DualPolarizationType::LHC_E:
-        return six::PolarizationSequenceType::E;
-
-    case six::DualPolarizationType::OTHER_RHC:
-    case six::DualPolarizationType::V_RHC:
-    case six::DualPolarizationType::H_RHC:
-    case six::DualPolarizationType::X_RHC:
-    case six::DualPolarizationType::Y_RHC:
-    case six::DualPolarizationType::S_RHC:
-    case six::DualPolarizationType::E_RHC:
-    case six::DualPolarizationType::RHC_RHC:
-    case six::DualPolarizationType::LHC_RHC:
-        return six::PolarizationSequenceType::RHC;
-
-    case six::DualPolarizationType::OTHER_LHC:
-    case six::DualPolarizationType::V_LHC:
-    case six::DualPolarizationType::H_LHC:
-    case six::DualPolarizationType::X_LHC:
-    case six::DualPolarizationType::Y_LHC:
-    case six::DualPolarizationType::S_LHC:
-    case six::DualPolarizationType::E_LHC:
-    case six::DualPolarizationType::RHC_LHC:
-    case six::DualPolarizationType::LHC_LHC:
-        return six::PolarizationSequenceType::LHC;
-
-    default:
-        return six::PolarizationSequenceType::NOT_SET;
-    }
-}
-
-std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType>
-    Utilities::convertDualPolarization(six::DualPolarizationType pol)
-{
     std::pair<six::PolarizationSequenceType, six::PolarizationSequenceType> pols;
-    pols.first = _convertDualPolarization(pol, true);
-    pols.second = _convertDualPolarization(pol, false);
+    if (pol == six::DualPolarizationType::OTHER)
+    {
+        pols.first = six::PolarizationSequenceType::OTHER;
+        pols.second = six::PolarizationSequenceType::OTHER;
+        return pols;
+    }
+
+    auto asString = six::toString(pol);
+    auto splits = str::split(asString, ":");
+    if (splits.size() != 2)
+    {
+        throw except::Exception(Ctxt("Unsupported dual polarization type to sequence type"));
+    }
+
+    pols.first = six::toType<PolarizationSequenceType>(splits[0]);
+    pols.second = six::toType<PolarizationSequenceType>(splits[1]);
     return pols;
 }
 
