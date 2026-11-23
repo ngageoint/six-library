@@ -58,6 +58,20 @@ TEST_CASE(DualPolarization)
     }
 }
 
+TEST_CASE(OtherTypes)
+{
+    auto fromToType = six::toType<six::DualPolarizationType>("OTHER");
+    auto asPair = six::sidd::Utilities::convertDualPolarization(fromToType);
+    TEST_ASSERT_EQ(asPair.first.toString(), "OTHER");
+    TEST_ASSERT_EQ(asPair.second.toString(), "OTHER");
+
+    fromToType = six::toType<six::DualPolarizationType>("OTHERabc:OTHERdef");
+    asPair = six::sidd::Utilities::convertDualPolarization(fromToType);
+    TEST_ASSERT_EQ(six::toString(asPair.first), "OTHERabc");
+    TEST_ASSERT_EQ(six::toString(asPair.second), "OTHERdef");
+}
+
 TEST_MAIN(
     TEST_CHECK(DualPolarization);
+    TEST_CHECK(OtherTypes);
     )
